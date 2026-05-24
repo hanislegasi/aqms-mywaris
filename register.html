@@ -91,6 +91,88 @@ setDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+const firebaseConfig = {
+  apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+  authDomain: "alqawthar-mywaris.firebaseapp.com",
+  projectId: "alqawthar-mywaris",
+  storageBucket: "alqawthar-mywaris.firebasestorage.app",
+  messagingSenderId: "3498810778",
+  appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+ document
+.getElementById("registerForm")
+.addEventListener("submit", async (e)=>{
+
+e.preventDefault();
+
+const nama =
+document.getElementById("nama").value;
+
+const ic =
+document.getElementById("ic").value;
+
+const email =
+document.getElementById("email").value;
+
+const telefon =
+document.getElementById("telefon").value;
+
+const password =
+document.getElementById("password").value;
+
+const referral =
+document.getElementById("referral").value;
+
+try{
+
+const userCredential =
+await createUserWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+const uid =
+userCredential.user.uid;
+
+await setDoc(
+doc(db,"users",uid),
+{
+nama,
+ic,
+email,
+telefon,
+referral,
+role:"customer",
+createdAt:new Date()
+}
+);
+
+alert("Pendaftaran berjaya!");
+
+window.location.href =
+"login.html";
+
+}
+catch(error){
+
+alert(error.message);
+
+}
+
+}); 
+
+  
 </script>
   
 </body>
