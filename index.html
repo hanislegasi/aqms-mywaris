@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Primary Meta Tags -->
+
+<meta name="description" content="Perkhidmatan perancangan harta pusaka Islam meliputi Wasiat, Hibah, Faraid, Harta Sepencarian dan Pengurusan Pusaka di Mahkamah. Elakkan harta beku dan lindungi waris anda hari ini.">
+
+<meta name="keywords" content="
+wasiat,
+hibah,
+faraid,
+urus pusaka,
+pengurusan pusaka islam,
+harta pusaka,
+harta beku,
+perancang pusaka,
+perunding hibah,
+wasiat malaysia,
+hibah malaysia,
+pengurusan harta pusaka,
+surat kuasa mentadbir,
+pusaka kecil,
+mahkamah pusaka,
+harta sepencarian,
+pewarisan islam,
+perancangan harta,
+pewarisan harta islam
+">
+
+<meta name="author" content="Al-Qawthar Mawaris Synergy">
+<meta name="robots" content="index, follow">
+<meta name="language" content="Malay">
+<meta name="revisit-after" content="7 days">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Perancang Harta Pusaka Islam">
+<meta property="og:description" content="Bantu urus Wasiat, Hibah, Faraid dan Pengurusan Pusaka bagi mengelakkan harta beku serta memudahkan waris anda.">
+<meta property="og:image" content="https://i.postimg.cc/JhLc8szZ/Copy-of-A.png">
+<meta property="og:url" content="https://www.alqawthar.my">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Perancang Harta Pusaka Islam">
+<meta name="twitter:description" content="Perkhidmatan Wasiat, Hibah, Faraid & Pengurusan Pusaka di Malaysia.">
+<meta name="twitter:image" content="https://i.postimg.cc/JhLc8szZ/Copy-of-A.png">
+
+<!-- Canonical -->
+<link rel="canonical" href="https://www.alqawthar.my">
+
+  
+  <title>Perancang Harta Pusaka Islam | Wasiat, Hibah & Pengurusan Pusaka</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .font-inter { font-family: 'Inter', sans-serif; }
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans bg-gray-50 selection:bg-[#d8ae81] selection:text-[#153638]">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 shadow-md font-inter" style="background-color: #153638;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-24">
+        
+        <!-- Logo Area -->
+        <div id="header-logo-container" class="flex items-center cursor-pointer h-full py-2" onclick="setActiveTab('utama')">
+          <img id="header-logo" src="https://i.postimg.cc/JhLc8szZ/Copy-of-A.png" alt="AQMS Logo" class="h-full max-h-20 w-auto object-contain" onerror="handleLogoError()">
+        </div>
+        
+        <nav id="desktop-nav" class="hidden md:flex space-x-1 items-center"></nav>
+
+<!-- Login Register -->
+<div class="hidden md:flex items-center gap-3">
+
+  <button onclick="window.location.href='login.html'"
+    class="px-4 py-2 border border-[#d8ae81] text-[#d8ae81] rounded-lg hover:bg-[#d8ae81] hover:text-[#153638] transition">
+    Login
+  </button>
+
+  <button onclick="window.location.href='register.html'"
+    class="px-4 py-2 bg-[#d8ae81] text-[#153638] font-semibold rounded-lg hover:opacity-90 transition">
+    Daftar Akaun
+  </button>
+
+</div>
+
+        
+        <!-- Mobile Menu Toggle -->
+        <div class="md:hidden">
+          <button onclick="toggleMobileMenu()" class="p-2" id="mobile-menu-btn">
+            <i data-lucide="menu" class="h-7 w-7 text-white"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Mobile Nav Area -->
+    <div id="mobile-nav" class="hidden"></div>
+  </header>
+
+  <!-- HERO BANNER -->
+  <div class="relative pt-16 pb-20 lg:pt-24 lg:pb-28 overflow-hidden font-inter" style="background-color: #153638;">
+    
+     <!-- LATAR BELAKANG GAMBAR (Telah dibaiki: Opacity 55% supaya gambar nampak jelas) -->
+    <div id="hero-bg-image" class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-50 transition-all duration-700"></div>
+    
+    <!-- Lapisan penggelap (gradient) dari bawah ke atas supaya teks putih mudah dibaca -->
+    <div class="absolute inset-0 z-0 bg-gradient-to-t from-[#153638] via-[#153638]/60 to-transparent opacity-60"></div>
+
+
+    <div class="relative max-w-7xl mx-auto px-4 text-center z-10">
+      <div id="hero-media"></div>
+      <h1 class="text-3xl tracking-tight font-extrabold text-white sm:text-5xl lg:text-6xl mb-6">
+        <span class="block" id="hero-title"></span>
+        <span class="block mt-2 text-2xl md:text-3xl font-medium" style="color: #d8ae81;" id="hero-subtitle"></span>
+      </h1>
+      <p class="mt-3 max-w-md mx-auto text-base text-gray-300 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl" id="hero-desc"></p>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="flex-grow -mt-10 z-10 relative mb-12 font-inter">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100 p-8 sm:p-12">
+        <div class="flex flex-col md:flex-row gap-10">
+          <div class="flex-1">
+            <!-- Dynamic Details -->
+            <div id="content-details" class="prose prose-lg max-w-none text-gray-600"></div>
+            
+            <!-- BUTANG HUBUNGI PERUNDING DENGAN PEMETAAN DINAMIK -->
+            <div id="contact-button-container" class="mt-10 pt-6 border-t border-gray-100">
+              <button onclick="hubungiPerunding()"
+                class="inline-flex items-center px-8 py-3 font-bold rounded-xl shadow-lg text-white transition-all hover:scale-105 active:scale-95"
+                style="background-color: #153638;">
+                Hubungi Perunding Sekarang 
+                <i data-lucide="chevron-right" class="ml-2 w-5 h-5" style="color: #d8ae81;"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Sidebar Nav -->
+          <aside class="hidden md:block w-64 flex-shrink-0">
+            <div class="bg-gray-50 rounded-xl p-5 border border-gray-100 sticky top-32">
+              <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">Navigasi Pantas</h4>
+              <ul id="sidebar-nav" class="space-y-2"></ul>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-auto py-16 font-inter" style="background-color: #0f292a; color: #f8f9fa;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
+        <div class="flex flex-col items-center md:items-start">
+          <div class="flex items-center space-x-4 mb-6">
+            <div class="bg-green p-2 rounded-none-lg h-14 flex items-center justify-center">
+              <img src="https://i.postimg.cc/N0n5P1R7/LOGO-HANS-LEGASI-BARU-transparent.png" alt="Hans Legasi" class="h-full object-contain" />
+            </div>
+            <div class="bg-green p-2 rounded-none-lg h-14 flex items-center justify-center">
+              <img src="https://i.postimg.cc/JhLc8szZ/Copy-of-A.png" alt="AQMS" class="h-full object-contain" />
+            </div>
+          </div>
+          <p class="text-gray-400 text-sm leading-relaxed mb-4 text-justify">
+            <strong>Rakan Strategik Hans Legasi Resources Sdn. Bhd.</strong><br/>
+            Hans Legasi Resources Sdn. Bhd. (1338627-W) merupakan sebuah syarikat pakar perunding & perancang harta dan pusaka yang beroperasi di Sitiawan, Perak bermula pada tahun 2019. 
+          </p>
+        </div>
+        <div>
+          <h4 class="text-lg font-bold mb-6 border-b border-white/10 pb-2 inline-block" style="color: #d8ae81;">Hubungi Kami</h4>
+          <ul class="space-y-4 text-sm text-gray-300">
+            <li class="flex items-center justify-center md:justify-start">
+              <i data-lucide="phone" class="w-5 h-5 mr-3" style="color: #d8ae81;"></i> +60 12-9443846
+            </li>
+            <li class="flex items-center justify-center md:justify-start">
+              <i data-lucide="mail" class="w-5 h-5 mr-3" style="color: #d8ae81;"></i> alqawthar.hanslegasi@gmail.com
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-lg font-bold mb-6 border-b border-white/10 pb-2 inline-block" style="color: #d8ae81;">Lokasi Utama</h4>
+          <ul class="space-y-4 text-sm text-gray-300">
+            <li class="flex items-start justify-center md:justify-start">
+              <i data-lucide="map-pin" class="w-5 h-5 mr-3 mt-1" style="color: #d8ae81;"></i> 
+              <span>Lot 3259, Jalan Kenari Kg Bukit Kuching<br/>45800 Jeram, Selangor, Malaysia.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-12 pt-8 border-t border-white/5 text-center text-xs text-gray-500 font-bold uppercase tracking-widest">
+        &copy; <span id="current-year"></span> Al-Qawthar Mawaris Synergy. HCH @ Hak Cipta Terpelihara.
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT UNTUK DATA, LOGIK & RENDER -->
+  <script>
+    // CONFIGURATION URL LOGO & CONFIG
+    const LOGO_URLS = {
+      main: "https://i.postimg.cc/JhLc8szZ/Copy-of-A.png"
+    };
+
+    const URL_CONFIG = {
+      kalkulator: "https://fin-think.github.io/myTADBIR/",
+      wasiat: "https://wasiatku.my?cid=252"
+    };
+
+    const theme = {
+      primary: '#153638', 
+      accent: '#d8ae81',  
+      light: '#f8f9fa',
+      dark: '#0f292a'
+    };
+
+    // CONTENT DATA
+    const contentData = {
+      utama: {
+        id: 'utama',
+        bgImage: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=2000', // Gambar sign dokumen umum
+        title: 'Laman Utama',
+        iconName: 'book-open',
+        hero: 'Pakar Perundingan Pewarisan Islam Anda',
+        description: 'Selamat datang ke Al-Qawthar Mawaris Synergy, rakan strategik anda dalam merancang dan menguruskan harta pusaka berlandaskan syariat Islam.',
+        details: `
+          <div class="space-y-4 text-gray-700 leading-relaxed font-inter text-justify">
+            <p>
+              Pengurusan harta pusaka yang baik bermula dengan perancangan yang rapi ketika hayat. Di <strong>Al-Qawthar Mawaris Synergy (AQMS)</strong>, kami komited untuk memberikan khidmat nasihat, perancangan, dan pelaksanaan yang terbaik demi melindungi masa depan waris dan keluarga yang anda sayangi.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+              <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                <i data-lucide="shield-check" class="w-10 h-10 mx-auto mb-4" style="color: ${theme.accent}"></i>
+                <h4 class="font-bold text-[#153638] mb-2 font-inter">Patuh Syariah</h4>
+                <p class="text-sm text-gray-500">Semua perancangan berlandaskan hukum Faraid dan fatwa terkini.</p>
+              </div>
+              <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                <i data-lucide="users" class="w-10 h-10 mx-auto mb-4" style="color: ${theme.accent}"></i>
+                <h4 class="font-bold text-[#153638] mb-2 font-inter">Pakar Berpengalaman</h4>
+                <p class="text-sm text-gray-500">Rangkaian perunding, peguam syarie dan pakar kewangan.</p>
+              </div>
+              <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                <i data-lucide="briefcase" class="w-10 h-10 mx-auto mb-4" style="color: ${theme.accent}"></i>
+                <h4 class="font-bold text-[#153638] mb-2 font-inter">Solusi Menyeluruh</h4>
+                <p class="text-sm text-gray-500">Dari perancangan sehinggalah pentadbiran harta pusaka.</p>
+              </div>
+              </div>
+              <div class="mt-8">
+              <img 
+              src="https://i.postimg.cc/rwj4Sfry/Chat-GPT-Image-May-20-2026-03-22-41-PM.png" 
+              alt="Pengurusan Pusaka" 
+              class="w-full h-auto rounded"
+               />
+              <p class="text-sm text-gray-500 mt-2 text-center">
+              Ilustrasi pengurusan harta pusaka secara sistematik
+              </div>
+              <div class="space-y-4 text-gray-700 leading-relaxed font-inter text-justify">
+            <p>
+              Dapatkan khidmat nasihat mengenai Perancangan Harta Pusaka
+Rundingan PERCUMA bersama Perunding kami. Sila lengkapkan borang berikut (sila isi tarikh ikut kelapangan anda):
+            </p>
+            </div>
+            <form id="leadFormWasiat" class="space-y-3 mt-6">
+
+    <input type="text" name="nama" placeholder="Nama" required class="w-full p-3 border rounded-lg">
+
+<input type="email" name="email" placeholder="Email" required class="w-full p-3 border rounded-lg">
+
+<input type="text" name="telefon" placeholder="Telefon" required class="w-full p-3 border rounded-lg">
+
+<!-- PERKHIDMATAN (Dropdown) -->
+<select name="perkhidmatan" required class="w-full p-3 border rounded-lg">
+  <option value="" disabled selected>Pilih Perkhidmatan</option>
+  <option value="Wasiat">Wasiat</option>
+  <option value="Hibah">Hibah</option>
+  <option value="Faraid">Faraid</option>
+  <option value="Harta Sepencarian">Harta Sepencarian</option>
+  <option value="Urus Pusaka">Urus Pusaka</option>
+  <option value="Tunai Amanah">Tunai Amanah</option>
+  <option value="Takaful">Takaful</option>
+  <option value="Unit Amanah">Unit Amanah</option>
+  <option value="Pembiayaan">Pembiayaan</option>
+  <option value="RAK">Rakan Agensi Korporat</option>
+  <option value="Kerjaya">Kerjaya Perunding</option>
+</select>
+
+<!-- KAEDAH HUBUNGI (Dropdown) -->
+<select name="kaedah" required class="w-full p-3 border rounded-lg">
+  <option value="" disabled selected>Pilih Kaedah Dihubungi</option>
+  <option value="WhatsApp">WhatsApp</option>
+  <option value="Call">Call</option>
+  <option value="Email">Email</option>
+</select>
+
+
+
+    <button type="submit" class="w-full bg-[#153638] text-white py-3 rounded-lg font-bold">
+      Hantar
+    </button>
+
+  </form>
+          </div>
+<div class="mt-6">
+        <div class="space-y-4 text-gray-700 leading-relaxed font-inter text-justify">
+            <p>
+              Atau; anda boleh berurusan dengan perunding kami dengan menekan butang di bawah. <p><strong>INGAT!!!</strong> Rancang sekarang untuk elakkan harta beku, lindungi keluarga anda sebelum terlambat.
+            </p>  
+        `
+      },
+      wasiat: {
+        id: 'wasiat',
+        bgImage: 'https://i.postimg.cc/FHygMn4G/Chat-GPT-Image-May-20-2026-12-33-45-PM.png', // Gambar penulisan/pen
+        title: 'Wasiat',
+        iconName: 'scroll-text',
+        hero: 'Rancang Agihan Harta & Pesanan Terakhir',
+        description: 'Dokumen perancangan untuk mengagihkan sehingga 1/3 harta kepada bukan waris dan melantik pentadbir amanah.',
+        details: `
+          <div class="space-y-6 text-gray-700 leading-relaxed font-inter text-justify">
+<p class="text-sm text-gray-700">
+    <p><strong>WASIAT</strong> merupakan satu instrumen penting dalam perancangan harta Islam yang membolehkan seseorang menyatakan hasrat agihan harta serta melantik pentadbir yang dipercayai. Ia juga membantu memastikan urusan selepas kematian berjalan lancar dan teratur mengikut kehendak syarak.
+
+    <p>Dokumen wasiat yang kami sediakan melibatkan 3 perkara utama iaitu pewasiat akan melantik wasi, menetapkan wasiat 1/3 daripada hartanya dan yang terakhir menyampaikan pesanan kepada waris-warisnya.
+  </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="p-4 border rounded-xl bg-gray-50">
+                <h4 class="font-bold text-[#153638] mb-2">1. Wasiat Lantik Wasi</h4>
+                <p class="text-sm text-gray-700">Melantik pentadbir (Wasi) yang dipercayai untuk menguruskan pembahagian harta dan melangsaikan hutang.</p>
+              </div>
+              <div class="p-4 border rounded-xl bg-gray-50">
+                <h4 class="font-bold text-[#153638] mb-2">2. Wasiat 1/3</h4>
+                <p class="text-sm text-gray-700">Pemberian sebahagian harta (maksimum 1/3) kepada pihak bukan waris seperti anak angkat atau badan kebajikan.</p>
+              </div>
+              <div class="p-4 border rounded-xl bg-gray-50">
+                <h4 class="font-bold text-[#153638] mb-2">3. Wasiat Pesanan</h4>
+                <p class="text-sm text-gray-600">Pesanan moral atau agama kepada ahli keluarga untuk mengekalkan keharmonian.</p>
+              </div>
+            </div>
+            <div class="bg-[#fdfaf6] p-5 border-l-4 rounded-r-lg" style="border-color: ${theme.accent}">
+              <h4 class="font-bold mb-2 flex items-center"><i data-lucide="info" class="w-4 h-4 mr-2"></i> Contoh Wasiat Pesanan</h4>
+              <p class="text-sm italic">"Saya berpesan kepada semua anak-anak saya agar sentiasa menjaga solat, mengekalkan silaturahim sesama adik-beradik, dan tidak bertelingkah atas harta dunia yang ditinggalkan."</p>
+            </div>
+
+            <div class="space-y-4 text-gray-700 leading-relaxed font-inter text-justify">
+            <p>
+              Kami juga menawarkan dokumen wasiat secara online dan anda boleh mendapatkannya dengan menekan butang di bawah.
+            </p>  
+
+            <div class="mt-6">
+              <a href="${URL_CONFIG.wasiat}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-6 py-3 rounded-lg text-white font-bold transition-all shadow-md hover:shadow-lg" style="background-color: ${theme.primary}">
+                Sediakan Wasiat Online (eWasiat)<i data-lucide="external-link" class="ml-2 w-4 h-4"></i>
+              </a>
+              </div>
+
+              <div class="mt-6">
+        <div class="space-y-4 text-gray-700 leading-relaxed font-inter text-justify">
+            <p>
+              Atau; anda boleh berurusan dengan perunding kami dengan menekan butang di bawah. <p><strong>INGAT!!!</strong> Lindungi orang tersayang sebelum terlambat.
+Tanpa wasiat, harta anda boleh dibekukan dan proses pembahagian jadi lebih rumit serta memakan masa bertahun.
+            </p>  
+
+          </div>
+        `
+      },
+       hibah: {
+        id: 'hibah',
+        bgImage: 'https://i.postimg.cc/mZPnvR67/Chat-GPT-Image-May-20-2026-12-34-20-PM.png', // Gambar keluarga/tangan (kasih sayang)
+        title: 'Hibah',
+        iconName: 'gift',
+        hero: 'Hadiah Kasih Sayang Tanpa Syarat',
+        description: 'Pemberian harta secara sukarela semasa hidup yang terkeluar daripada sistem pembahagian Faraid.',
+        details: `
+<div class="space-y-6 text-gray-700 font-inter text-justify">
+<p class="text-sm text-gray-700">
+    <p><strong>HARTA</strong> yang anda kumpul bertahun-tahun… boleh jadi punca pergaduhan selepas anda tiada.
+
+    <p> Ramai tidak sedar, tanpa perancangan awal, harta boleh menjadi punca perebutan antara waris sendiri.
+      Hibah ialah cara <strong>pemberian harta semasa hidup</strong> yang diiktiraf dalam Islam.
+    </p>
+
+    <ul class="list-disc pl-6 space-y-2">
+      <li>Menentukan siapa penerima harta anda</li>
+      <li>Mengelakkan pertikaian Faraid selepas kematian</li>
+      <li>Melindungi pasangan, anak atau insan tersayang lebih awal</li>
+    </ul>
+ 
+    <p> Hibah bukan sekadar pemberian… ia adalah perancangan kasih sayang.
+    </p>
+  </div>
+
+  </div>
+  
+  </p>
+  
+          <div class="space-y-6 font-inter mt-8 ">
+            <h3 class="text-xl font-bold" style="color: ${theme.primary}">3 Jenis Hibah Utama</h3>
+            <div class="space-y-4">
+              <div class="flex items-start p-4 bg-white border rounded-xl shadow-sm">
+                <i data-lucide="check-circle-2" class="w-6 h-6 mr-3 flex-shrink-0" style="color: ${theme.accent}"></i>
+                <div>
+                  <h4 class="font-bold">Hibah Mutlak</h4>
+                  <p class="text-sm text-gray-600">Pemberian harta secara serta-merta tanpa sebarang syarat.</p>
+                </div>
+              </div>
+              <div class="flex items-start p-4 bg-white border rounded-xl shadow-sm">
+                <i data-lucide="check-circle-2" class="w-6 h-6 mr-3 flex-shrink-0" style="color: ${theme.accent}"></i>
+                <div>
+                  <h4 class="font-bold">Hibah Amanah</h4>
+                  <p class="text-sm text-gray-600">Melibatkan pelantikan pemegang amanah untuk pengurusan harta.</p>
+                </div>
+              </div>
+              <div class="flex items-start p-4 bg-white border rounded-xl shadow-sm">
+                <i data-lucide="check-circle-2" class="w-6 h-6 mr-3 flex-shrink-0" style="color: ${theme.accent}"></i>
+                <div>
+                  <h4 class="font-bold">Hibah Bersyarat / Takaful</h4>
+                  <p class="text-sm text-gray-600">Manfaat diberikan selepas kematian pemberi.</p>
+                </div>
+                </div>
+     <p class="text-justify leading-relaxed">Oleh itu, umat Islam diseru untuk tidak memandang ringan soal perancangan harta. Ambillah langkah bijak dengan merancang hibah dari sekarang agar harta yang dimiliki menjadi asbab kebaikan, bukan punca perpecahan.
+   </p>
+<p class="text-justify leading-relaxed"><strong>INGAT!!!</strong> Jangan biarkan orang tersayang menunggu proses yang panjang untuk mendapatkan apa yang anda niatkan untuk mereka.
+              </div>
+            </div>
+          </div>
+        `
+      },
+      harta_sepencarian: {
+        id: 'harta_sepencarian',
+        bgImage: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=2000', // Gambar rumah/pasangan (harta bersama)
+        title: 'Harta Sepencarian',
+        iconName: 'users',
+        hero: 'Hak Bersama Suami Isteri',
+        description: 'Tuntutan hak ke atas harta yang diperoleh bersama sepanjang tempoh perkahwinan.',
+        details: `
+          <div class="space-y-4 text-gray-700 font-inter text-justify">
+            <p>Tahukah anda bahawa sumbangan anda dalam rumahtangga mungkin tidak diiktiraf jika tiada perancangan yang jelas?</p>
+            <p>Harta sepencarian ialah hak yang diiktiraf dalam Islam bagi memastikan setiap usaha suami dan isteri—sama ada dari segi kewangan, tenaga atau pengorbanan—diberi nilai yang sewajarnya.</p>
+            <p>Dengan memahami dan merancang tuntutan harta sepencarian lebih awal, anda dapat melindungi hak diri, mengelakkan pertikaian, serta memastikan keadilan terlaksana mengikut syariat.</p>
+            <p>Setelah mahkamah membuat keputusan dan hak pasangan yang masih hidup diiktiraf, barulah harta pusaka tersebut boleh dibahagikan mengikut hukum faraid yang telah ditetapkan.</p>
+            <p><strong>Ambil langkah hari ini—dapatkan khidmat nasihat dan rancang harta sepencarian anda sebelum terlambat.</strong></p>
+          </div>
+        `
+      },
+      faraid: {
+        id: 'faraid',
+         bgImage: 'https://i.postimg.cc/ZqDcHvZC/Chat-GPT-Image-May-20-2026-12-38-10-PM.png', // Gambar undang-undang/neraca (scale)
+        title: 'Faraid',
+        iconName: 'scale',
+        hero: 'Hukum Pembahagian Syarak',
+        description: 'Sistem perundangan Islam dalam mengagihkan harta pusaka si mati kepada waris-waris yang berhak.',
+        details: `
+          <div class="space-y-4 text-gray-700 font-inter text-justify">
+            <p><strong>FARAID</strong> merupakan kaedah pembahagian harta pusaka dalam Islam yang telah ditetapkan dengan jelas, di mana setiap waris menerima bahagian tertentu berdasarkan hubungan kekeluargaan.</p>
+            <p>Agihan ini melibatkan waris seperti pasangan (suami/isteri), anak-anak, ibu bapa dan waris lain yang layak.</p>
+          <p>Sebagaimana firman Allah SWT dalam Surah An-Nisa ayat 11:<br/>
+            <strong>"Allah mensyariatkan bagimu tentang (pembahagian pusaka untuk) anak-anakmu, iaitu bahagian seorang anak lelaki sama dengan bahagian dua orang anak perempuan..."</strong></p>
+          </div>
+
+
+
+          <!-- KALKULATOR FARAID MINI - RESTRUKTUR: ATAS KE BAWAH -->
+          <div class="mt-8 space-y-4">
+            <h3 class="text-xl font-bold mb-4 flex items-center" style="color: #153638">
+              <i data-lucide="calculator" class="mr-2"></i> Anggaran Pembahagian Faraid
+            </h3>
+            
+            <div class="flex flex-col space-y-4">
+                <!-- 1. MAKLUMAT SI MATI -->
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <h4 class="font-bold text-[#153638] text-sm mb-3 border-b border-gray-200 pb-2">1. Maklumat Si Mati</h4>
+                    <div class="flex items-center justify-between">
+                        <label class="font-medium text-sm text-gray-600">Jantina Si Mati</label>
+                        <select id="far_jantina" class="border border-gray-300 rounded-lg px-3 py-1.5 w-36 text-sm focus:ring-2 focus:ring-[#d8ae81] outline-none" onchange="document.getElementById('label_pasangan').innerText = this.value === 'lelaki' ? 'Bilangan Isteri' : 'Suami (Ada/Tiada)'; toggleWaris();">
+                            <option value="lelaki">Lelaki</option>
+                            <option value="perempuan">Perempuan</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- 2. SENARAI WARIS UTAMA -->
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <h4 class="font-bold text-[#153638] text-sm mb-3 border-b border-gray-200 pb-2">2. Senarai Waris Utama</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label id="label_pasangan" class="font-medium text-sm text-gray-600">Bilangan Isteri</label>
+                            <input type="number" id="far_pasangan" min="0" max="4" value="1" class="border border-gray-300 rounded-lg px-3 py-1 w-20 text-center text-sm focus:ring-2 focus:ring-[#d8ae81] outline-none" oninput="toggleWaris()">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="font-medium text-sm text-gray-600">Bapa (Ada: 1, Tiada: 0)</label>
+                            <input type="number" id="far_bapa" min="0" max="1" value="0" class="border border-gray-300 rounded-lg px-3 py-1 w-20 text-center text-sm focus:ring-2 focus:ring-[#d8ae81] outline-none" oninput="toggleWaris()">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="font-medium text-sm text-gray-600">Ibu (Ada: 1, Tiada: 0)</label>
+                            <input type="number" id="far_ibu" min="0" max="1" value="0" class="border border-gray-300 rounded-lg px-3 py-1 w-20 text-center text-sm focus:ring-2 focus:ring-[#d8ae81] outline-none" oninput="toggleWaris()">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="font-medium text-sm text-gray-600">Anak Lelaki (Bilangan)</label>
+                            <input type="number" id="far_al" min="0" value="0" class="border border-gray-300 rounded-lg px-3 py-1 w-20 text-center text-sm focus:ring-2 focus:ring-[#d8ae81] outline-none" oninput="toggleWaris()">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="font-medium text-sm text-gray-600">Anak Perempuan (Bilangan)</label>
+                            <input type="number" id="far_ap" min="0" value="1" class="border border-gray-300 rounded-lg px-3 py-1 w-20 text-center text-sm focus:ring-2 focus:ring-[#d8ae81] outline-none" oninput="toggleWaris()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. WARIS GANTI / KEDUA -->
+                <div id="extended_waris_section" class="bg-orange-50 p-4 rounded-xl border border-orange-100 hidden">
+                    <h4 class="font-bold text-orange-800 text-xs mb-3 uppercase tracking-tight flex items-center">
+                       <i data-lucide="info" class="w-3 h-3 mr-1"></i> Waris Ganti / Lapis Kedua
+                    </h4>
+                    <p class="text-[11px] text-orange-700 leading-tight mb-4">Disebabkan ketiadaan Anak Lelaki dan Ibu/Bapa, sila isi waris ganti (Datuk/Nenek) atau waris lapis kedua (Adik-beradik) jika ada.</p>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="font-medium text-xs text-orange-900">Datuk (Ganti Bapa)</label>
+                            <input type="number" id="far_datuk" min="0" max="1" value="0" class="border border-orange-300 rounded-lg px-3 py-1 w-20 text-center text-sm focus:ring-2 focus:ring-[#d8ae81] outline-none" oninput="toggleWaris()">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="font-medium text-xs text-orange-900">Nenek (Ganti Ibu)</label>
+                            <input type="number" id="far_nenek" min="0" max="2" value="0" class="border border-orange-300 rounded-lg px-3 py-1 w-20 text-center text-sm focus:ring-2 focus:ring-[#d8ae81] outline-none" oninput="toggleWaris()">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="font-medium text-xs text-orange-900">Adik Beradik Lelaki</label>
+                            <input type="number" id="far_alb" min="0" value="0" class="border border-orange-300 rounded-lg px-3 py-1 w-20 text-center text-sm focus:ring-2 focus:ring-[#d8ae81] outline-none" oninput="toggleWaris()">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="font-medium text-xs text-orange-900">Adik Beradik Perempuan</label>
+                            <input type="number" id="far_apb" min="0" value="0" class="border border-orange-300 rounded-lg px-3 py-1 w-20 text-center text-sm focus:ring-2 focus:ring-[#d8ae81] outline-none" oninput="toggleWaris()">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 4. KEPUTUSAN JADUAL PREMIUM -->
+                <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+                    <h4 class="font-bold text-[#153638] text-sm p-4 bg-gray-50 border-b border-gray-200">3. Ringkasan Agihan</h4>
+                    <div id="pokok-waris-result" class="w-full">
+                        <!-- Jadual Agihan akan dijana di sini -->
+                    </div>
+                    <div class="p-3 bg-gray-50 text-[10px] text-gray-400 italic text-center">
+                        Tuntutan sebenar tertakluk kepada Sijil Faraid Mahkamah Syariah.
+                    </div>
+                </div>
+            </div>
+          </div>
+        `
+      },
+      urus_pusaka: {
+        id: 'urus_pusaka',
+        bgImage: 'https://i.postimg.cc/d3QV03kL/Chat-GPT-Image-May-20-2026-12-42-32-PM.png', // Gambar fail/dokumen pengurusan
+        title: 'Urus Pusaka',
+        iconName: 'briefcase',
+        hero: 'Kemudahan Pentadbiran Pusaka',
+        description: 'Kami memudahkan urusan birokrasi dan pentadbiran pusaka agar waris tidak terbeban.',
+details: `
+          <div class="space-y-4 text-gray-700 font-inter text-justify">
+              <p class="text-[#C8A97E] font-semibold tracking-[0.2em] uppercase mb-3">
+      Tahukah Anda?
+    </p>
+
+    <h2 class="text-lg md:text-lg font-bold leading-tight mb-6">
+      Lebih RM90 Bilion<br>
+      Harta Pusaka Masih Beku Di Malaysia
+    </h2>
+
+<p class="text-md text-gray-700 leading-relaxed mb-8 text-justify">
+  Ramai hanya mula urus pusaka selepas kematian berlaku.
+  Ketika itu proses menjadi lebih rumit, memakan masa dan
+  boleh menyebabkan konflik sesama waris.
+</p>
+
+<div class="grid md:grid-cols-3 gap-4 mb-10">
+
+   <div class="bg-[#153638] p-5 rounded-2xl shadow-md">
+    <p class="text-md text-white leading-relaxed text-center">
+      Rumah tidak boleh dipindah milik
+    </p>
+  </div>
+
+  <div class="bg-[#153638] p-5 rounded-2xl shadow-md">
+    <p class="text-md text-white leading-relaxed text-center">
+      Akaun bank dibekukan
+    </p>
+  </div>
+
+  <div class="bg-[#153638] p-5 rounded-2xl shadow-md">
+    <p class="text-md text-white leading-relaxed text-center">
+      Waris terpaksa urus di mahkamah
+    </p>
+  </div>
+
+</div>
+
+<div class="bg-white/10 border border-gray-200 rounded-2xl p-6 mb-10 space-y-5">
+
+  <p class="text-md text-gray-700 leading-relaxed text-justify">
+    Sama ada anda ingin membuat perancangan awal
+    atau harta keluarga sudah pun menjadi harta beku,
+    kami sedia membantu anda mengurus proses pusaka
+    dengan lebih mudah, teratur dan mengikut syarak.
+  </p>
+
+  <p class="text-md text-gray-700 leading-relaxed text-justify">
+    Kami membantu dari penyediaan Surat Kuasa Mentadbir
+    sehinggalah pengagihan aset kepada waris.
+  </p>
+
+  <ul class="space-y-4">
+
+    <li class="flex items-start space-x-3">
+      <span class="mt-2 w-2 h-2 rounded-full bg-[#153638] flex-shrink-0"></span>
+
+      <p class="text-md text-gray-700 leading-relaxed text-justify">
+        <strong>Pengurusan Pusaka – Kaunseling Waris:</strong>
+        Memberikan perkhidmatan kaunseling yang komprehensif kepada pihak waris atau ahli keluarga bagi membantu mereka memahami segala aspek berkaitan pengurusan pusaka. <br><br>Ini termasuk penerangan mengenai prosedur, hak waris, pembahagian harta serta langkah-langkah yang perlu diambil bagi memastikan proses berjalan dengan lancar.
+      </p>
+    </li>
+
+    <li class="flex items-start space-x-3">
+      <span class="mt-2 w-2 h-2 rounded-full bg-[#153638] flex-shrink-0"></span>
+
+      <p class="text-md text-gray-700 leading-relaxed text-justify">
+        <strong>Pengurusan Pentadbiran:</strong>
+        Mengurus dan menyelaras segala urusan pentadbiran berkaitan tuntutan dan pembahagian pusaka sama ada di Pejabat Pusaka Kecil atau Mahkamah Tinggi. <br><br>Perkhidmatan ini merangkumi penyediaan dokumen, pemfailan kes, pemantauan proses serta komunikasi dengan pihak berkuasa berkaitan.
+      </p>
+    </li>
+
+  </ul>
+
+</div>
+        `
+      },
+      mytadbir: {
+        id: 'mytadbir',
+        bgImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000', // Gambar kalkulator / komputer rancangan kewangan
+        title: 'MyTadbir',
+        iconName: 'calculator',
+        hero: 'Sistem Pengurusan Harta Pintar',
+        description: 'Aplikasi kalkulator ringkas untuk anggaran perancangan & pengurusan harta pusaka anda.',
+        details: `
+          <div class="space-y-6 text-gray-700 font-inter">
+            <div class="bg-white border rounded-2xl p-6 shadow-lg">
+              <h3 class="text-xl font-bold mb-4 flex items-center" style="color: ${theme.primary}">
+                <i data-lucide="calculator" class="mr-2"></i> Apa yang boleh dikira?
+              </h3>
+              <ul class="list-disc pl-5 space-y-2 text-justify">
+                <li class="flex items-start space-x-2"><span><strong>Profil & Keluarga:</strong> Mengumpul data asas (umur, jantina, komposisi anak). Ini adalah nadi sistem kerana pengiraan Faraid dan unjuran masa depan berubah mengikut siapa waris anda.</span></li>
+                <li class="flex items-start space-x-2"><span><strong>Harta Semasa (Net Worth):</strong> Merekod aset cair (simpanan), aset fizikal (hartanah), dan semua hutang. Tujuannya adalah untuk mengetahui Nilai Harta Bersih anda yang sebenar pada hari ini.</span></li>
+                <li class="flex items-start space-x-2"><span><strong>Unjuran Bersara & Pendidikan:</strong> Melakukan simulasi sama ada simpanan anda cukup untuk hari tua dan kos universiti anak. Ia memberitahu bila duit anda akan habis dengan mengambil kira faktor inflasi.</span></li>
+                <li class="flex items-start space-x-2"><span><strong>Penyucian Harta (Zakat):</strong> Kalkulator automatik untuk Zakat Simpanan (2.5%). Tujuannya untuk memastikan harta yang dikumpul bersih dan mengikut syariat Islam semasa hidup.</span></li>
+                <li class="flex items-start space-x-2"><span><strong>Senario Mati (Faraid):</strong> Simulasi aliran harta selepas kematian—menolak kos jenazah, harta sepencarian, dan hutang sebelum baki dibahagikan mengikut Hukum Faraid. Ia menunjukkan siapa yang berhak dan siapa yang terhalang.</span></li>
+                <li class="flex items-start space-x-2"><span><strong>Pelindung (Hibah Takaful):</strong> Menganalisis jurang kewangan waris untuk tempoh 10 tahun akan datang. Ia bertujuan mencadangkan nilai Hibah Takaful yang tepat untuk menutup kekurangan dana (Income Replacement) bagi pasangan dan anak-anak.</span></li>
+              </ul>
+            </div>
+            <div class="text-center py-6">
+              <a href="${URL_CONFIG.kalkulator}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-10 py-4 text-lg font-bold rounded-2xl shadow-xl text-white transition-all hover:scale-105 active:scale-95" style="background-color: ${theme.primary}">
+                Buka Kalkulator MyTadbir <i data-lucide="external-link" class="ml-2 w-5 h-5" style="color: ${theme.accent}"></i>
+              </a>
+            </div>
+          </div>
+        `
+      },
+      lain_lain: {
+        id: 'lain_lain',
+        bgImage: 'https://i.postimg.cc/wv7WYcFk/Chat-GPT-Image-May-20-2026-12-36-18-PM.png', // Gambar mesyuarat/korporat
+        title: 'Lain-lain Servis',
+        iconName: 'file-text',
+        hero: 'Penyelesaian Holistik & Korporat',
+        description: 'Melengkapi keperluan spesifik anda dengan pelbagai perkhidmatan amanah.',
+        details: 
+             `
+    <div class="space-y-4 text-gray-700 text-justify">
+
+      <p>
+        Kami menyediakan penyelesaian menyeluruh bagi memenuhi keperluan spesifik individu dan organisasi — daripada perancangan harta semasa hidup hingga pengurusan amanah selepas ketiadaan anda.
+
+Antara perkhidmatan yang ditawarkan:
+      </p>
+
+      <ul class="space-y-3">
+
+        <li class="flex items-start space-x-2">
+          <span class="mt-1 flex-shrink-0">&bull;</span>
+          <span>
+            <strong>Tunai Amanah:</strong>
+            Penyimpanan dan pengagihan dana secara terancang mengikut hasrat anda.
+
+Berfungsi sebagai jaringan keselamatan kewangan, di mana wang tunai ditempatkan dalam amanah untuk penerima yang dinamakan (al-Mauhub Lahu). Dana ini juga tidak tertakluk kepada faraid dan boleh terus diagihkan kepada penerima seperti pasangan atau anak-anak dengan lebih cepat dan teratur.
+          </span>
+        </li>
+
+        <li class="flex items-start space-x-2">
+          <span class="mt-1 flex-shrink-0">&bull;</span>
+          <span>
+            <strong>Takaful:</strong>
+            Perlindungan kewangan patuh syariah bagi memastikan kesinambungan kewangan keluarga. Manfaat boleh dirancang untuk tujuan pewarisan, perlindungan pendapatan serta penyelesaian komitmen selepas ketiadaan anda.
+          </span>
+        </li>
+
+        <li class="flex items-start space-x-2">
+          <span class="mt-1 flex-shrink-0">&bull;</span>
+          <span>
+            <strong>Unit Amanah:</strong>
+           elaburan strategik untuk pertumbuhan aset jangka panjang. Sesuai dijadikan dana terkumpul bagi tujuan pewarisan dan kestabilan kewangan generasi seterusnya.
+          </span>
+        </li>
+
+        <li class="flex items-start space-x-2">
+          <span class="mt-1 flex-shrink-0">&bull;</span>
+          <span>
+            <strong>Pembiayaan:</strong>
+           Penyelesaian pembiayaan untuk menyusun, mengembangkan dan mengoptimumkan kedudukan kewangan anda sebagai persediaan ketiadaan anda nanti. Kami boleh membantu anda dalam urusan LPPSA, Pembiayaan Peribadi, Penyatuan Hutang dan Pembiayaan Semula.
+          </span>
+        </li>
+
+        <li class="flex items-start space-x-2">
+          <span class="mt-1 flex-shrink-0">&bull;</span>
+          <span>
+            <strong>Rakan Agensi & Korporat:</strong>
+           Kami membuka peluang kerjasama strategik bersama agensi, organisasi, institusi dan syarikat korporat dalam menyediakan solusi perancangan dan pengurusan harta secara patuh syariah.
+
+Melalui kolaborasi ini, kami membantu menyediakan perkhidmatan perwarisan Islam yang komprehensif kepada staf dan komuniti anda, termasuk sesi penerangan, konsultasi serta penyediaan dokumentasi yang berkaitan.
+
+Pendekatan ini bukan sahaja meningkatkan kesedaran dan literasi kewarisan, malah memberi nilai tambah kepada kebajikan serta kesejahteraan jangka panjang warga organisasi.
+          </span>
+        </li>
+
+      </ul>
+
+    </div>
+  `
+}
+    };
+
+    
+
+    const navItems = Object.keys(contentData);
+
+    // STATE PENGURUSAN
+    let activeTab = 'utama';
+    let isMobileMenuOpen = false;
+    let logoError = false;
+
+    // FUNGSI HUBUNGI PERUNDING (PEMETAAN KUMPULAN)
+    function hubungiPerunding() {
+      let nomborTelefon = "60129443846"; // Default (Kumpulan 1)
+
+      // Pemetaan Nombor
+      if (['utama', 'wasiat', 'hibah', 'mytadbir'].includes(activeTab)) {
+        nomborTelefon = "60129443846"; // Kumpulan 1
+      } else if (['harta_sepencarian', 'lain_lain'].includes(activeTab)) {
+        nomborTelefon = "60108182937"; // Kumpulan 2
+      } else if (['faraid', 'urus_pusaka'].includes(activeTab)) {
+        nomborTelefon = "60142374988"; // Kumpulan 3
+      }
+
+      const mesejTeks = encodeURIComponent('Saya nak tanya tentang perwarisan harta Islam');
+      window.open(`https://wa.me/${nomborTelefon}?text=${mesejTeks}`, '_blank');
+    }
+
+
+    // FUNGSI RENDER
+    function renderApp() {
+      const currentContent = contentData[activeTab];
+
+// SET HERO BACKGROUND IMAGE
+const heroBg = document.getElementById('hero-bg-image');
+heroBg.style.backgroundImage = `url('${currentContent.bgImage}')`;
+
+      // 1. Render Desktop Nav
+      const desktopNav = document.getElementById('desktop-nav');
+      desktopNav.innerHTML = navItems.map(key => {
+        const isActive = activeTab === key;
+        const classes = isActive 
+          ? `bg-[#0f292a] text-[#d8ae81] border-b-2 border-[#d8ae81]` 
+          : `text-gray-300 hover:bg-[#0f292a] hover:text-[#d8ae81]`;
+        return `<button onclick="setActiveTab('${key}')" class="px-3 py-2 rounded-md text-sm font-bold transition-all duration-200 ${classes}">${contentData[key].title}</button>`;
+      }).join('');
+
+      // 2. Render Mobile Nav
+      const mobileNav = document.getElementById('mobile-nav');
+      const mobileBtn = document.getElementById('mobile-menu-btn');
+      
+      if (isMobileMenuOpen) {
+        mobileBtn.innerHTML = `<i data-lucide="x" class="h-7 w-7 text-white"></i>`;
+        mobileNav.innerHTML = `
+          <div class="md:hidden bg-[#0f292a] border-t border-[#1a4346]">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+              ${navItems.map(key => {
+                const isActive = activeTab === key;
+                const classes = isActive ? 'bg-[#153638] text-white border-l-4 border-[#d8ae81]' : 'text-gray-300';
+                return `
+                <button onclick="setActiveTab('${key}'); toggleMobileMenu(false);" class="flex items-center w-full px-3 py-3 rounded-md text-base font-bold ${classes}">
+                  <span class="mr-3" style="color: ${theme.accent}"><i data-lucide="${contentData[key].iconName}" class="w-6 h-6"></i></span>
+                  ${contentData[key].title}
+                </button>`;
+
+                
+              }).join('')}
+ <!-- LOGIN REGISTER -->
+      <div class="border-t border-white/10 mt-3 pt-3 px-3">
+
+        <button
+          onclick="window.location.href='login.html'"
+          class="w-full py-3 mb-2 rounded-lg border border-[#d8ae81] text-[#d8ae81] font-semibold">
+          Login
+        </button>
+
+        <button
+          onclick="window.location.href='register.html'"
+          class="w-full py-3 rounded-lg bg-[#d8ae81] text-[#153638] font-bold">
+          Daftar Akaun
+        </button>
+
+      </div>
+
+            </div>
+          </div>
+        `;
+        mobileNav.classList.remove('hidden');
+      } else {
+        mobileBtn.innerHTML = `<i data-lucide="menu" class="h-7 w-7 text-white"></i>`;
+        mobileNav.classList.add('hidden');
+      }
+
+      // 3. Render Hero Content
+      document.getElementById('hero-title').innerText = currentContent.title;
+      document.getElementById('hero-subtitle').innerText = currentContent.hero;
+      document.getElementById('hero-desc').innerText = currentContent.description;
+      
+      const heroMedia = document.getElementById('hero-media');
+      heroMedia.innerHTML = `
+        <div class="flex justify-center mb-6">
+          <div class="p-4 rounded-full bg-white/5 border border-white/10 shadow-lg text-[#d8ae81] scale-150 transform transition-transform">
+            <i data-lucide="${currentContent.iconName}" class="w-6 h-6"></i>
+          </div>
+        </div>
+      `;
+
+      // 4. Render Main Details & Sidebar
+      document.getElementById('content-details').innerHTML = currentContent.details;
+
+      const sidebarNav = document.getElementById('sidebar-nav');
+      sidebarNav.innerHTML = navItems.map(key => {
+        const isActive = activeTab === key;
+        const activeClass = isActive ? 'bg-white shadow-md font-bold' : 'text-gray-600 hover:bg-gray-100';
+        const inlineStyle = isActive ? `border-left: 4px solid ${theme.accent}; color: ${theme.primary};` : ``;
+        const iconColor = isActive ? theme.accent : 'inherit';
+        
+        return `
+        <li>
+          <button onclick="setActiveTab('${key}')" class="w-full flex items-center text-left px-3 py-3 text-sm rounded-lg transition-all ${activeClass}" style="${inlineStyle}">
+            <span class="mr-3" style="color: ${iconColor}"><i data-lucide="${contentData[key].iconName}" class="w-4 h-4"></i></span>
+            ${contentData[key].title}
+          </button>
+        </li>`;
+      }).join('');
+
+      // Refresh Lucide Icons after DOM changes
+      lucide.createIcons();
+
+      // Semak jika tab Faraid aktif, jalankan kalkulator
+      if (activeTab === 'faraid') {
+        setTimeout(() => {
+          if (typeof toggleWaris === 'function') toggleWaris();
+        }, 100);
+      }
+    }
+
+    // INTERAKSI PENGGUNA
+    function setActiveTab(tab) {
+      activeTab = tab;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      renderApp();
+    }
+
+    function toggleMobileMenu(forceState) {
+      if (typeof forceState === 'boolean') {
+        isMobileMenuOpen = forceState;
+      } else {
+        isMobileMenuOpen = !isMobileMenuOpen;
+      }
+      renderApp();
+    }
+
+    function handleLogoError() {
+      if (!logoError) {
+        logoError = true;
+        document.getElementById('header-logo-container').innerHTML = `
+          <div class="flex flex-col"><span class="text-2xl font-bold tracking-wide text-white">AQ<span style="color: ${theme.accent}">MS</span></span></div>
+        `;
+      }
+    }
+
+    // INIT
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('current-year').innerText = new Date().getFullYear();
+      renderApp();
+    });
+
+    // ===============================
+// FUNGSI KIRA FARAID (FIXED VERSION)
+// ===============================
+function calculateFaraid() {
+    const jantina = document.getElementById('far_jantina').value;
+
+    const isteriCount = jantina === 'lelaki'
+        ? (parseInt(document.getElementById('far_pasangan').value) || 0)
+        : 0;
+
+    const suamiCount = jantina === 'perempuan'
+        ? (parseInt(document.getElementById('far_pasangan').value) || 0)
+        : 0;
+
+    const bapa = parseInt(document.getElementById('far_bapa').value) || 0;
+    const ibu = parseInt(document.getElementById('far_ibu').value) || 0;
+
+    const al = parseInt(document.getElementById('far_al').value) || 0; // anak lelaki
+    const ap = parseInt(document.getElementById('far_ap').value) || 0; // anak perempuan
+
+    const datuk = parseInt(document.getElementById("far_datuk")?.value) || 0;
+    const nenek = parseInt(document.getElementById("far_nenek")?.value) || 0;
+
+    const adikLelaki = parseInt(document.getElementById("far_alb")?.value) || 0;
+    const adikPerempuan = parseInt(document.getElementById("far_apb")?.value) || 0;
+
+    const hasChild = (al + ap) > 0;
+    const hasSiblings = (adikLelaki + adikPerempuan) >= 2;
+
+    let results = [];
+    let BASE = 24;
+
+    // ===============================
+    // 1. FARDU (SPOUSE + PARENTS)
+    // ===============================
+    if (isteriCount > 0) {
+        results.push({
+            name: isteriCount > 1 ? `${isteriCount} Isteri` : 'Isteri',
+            share: hasChild ? 3 : 6, // 1/8 or 1/4
+            base: BASE,
+            type: 'Fardu',
+            color: 'bg-teal-500'
+        });
+    }
+
+    if (suamiCount > 0) {
+        results.push({
+            name: 'Suami',
+            share: hasChild ? 6 : 12, // 1/4 or 1/2
+            base: BASE,
+            type: 'Fardu',
+            color: 'bg-teal-500'
+        });
+    }
+
+    if (ibu > 0) {
+        let ibuShare = (hasChild || hasSiblings) ? 4 : 8; // 1/6 or 1/3
+        results.push({
+            name: 'Ibu',
+            share: ibuShare,
+            base: BASE,
+            type: 'Fardu',
+            color: 'bg-blue-500'
+        });
+    } else if (nenek > 0) {
+        results.push({
+            name: 'Nenek',
+            share: 4, // 1/6
+            base: BASE,
+            type: 'Waris Ganti (Ibu)',
+            color: 'bg-blue-400'
+        });
+    }
+
+    if (bapa > 0) {
+        results.push({
+            name: 'Bapa',
+            share: 4, // 1/6
+            base: BASE,
+            type: 'Fardu',
+            color: 'bg-blue-600'
+        });
+    } else if (datuk > 0) {
+        results.push({
+            name: 'Datuk',
+            share: 4, // 1/6
+            base: BASE,
+            type: 'Waris Ganti (Bapa)',
+            color: 'bg-indigo-400'
+        });
+    }
+
+    let sumFardu = results.reduce((acc, r) => acc + r.share, 0);
+    let remaining = BASE - sumFardu;
+
+    // AUL (Penyebut meningkat jika jumlah fardu melebihi asalnya)
+    if (remaining < 0) {
+        results.forEach(r => r.base = sumFardu);
+        remaining = 0;
+        BASE = sumFardu;
+    }
+
+    // ===============================
+    // 2. ANAK-ANAK (ASABAH/FARDU)
+    // ===============================
+    if (al > 0 || ap > 0) {
+
+        if (al === 0) {
+            // hanya anak perempuan (Fardu)
+            let share = ap === 1 ? 12 : 16; // 1/2 or 2/3
+            
+            // Pengiraan semula kes Aul (ika baki kurang dari apa yang anak patut dapat)
+            if (remaining < share) {
+                sumFardu += share;
+                results.push({
+                    name: ap > 1 ? `${ap} Anak Perempuan` : 'Anak Perempuan',
+                    share: share, base: sumFardu, type: 'Fardu', color: 'bg-pink-500'
+                });
+                results.forEach(r => r.base = sumFardu);
+                BASE = sumFardu;
+                remaining = 0;
+            } else {
+                results.push({
+                    name: ap > 1 ? `${ap} Anak Perempuan` : 'Anak Perempuan',
+                    share: share, base: BASE, type: 'Fardu', color: 'bg-pink-500'
+                });
+                remaining -= share;
+            }
+
+        } else {
+            // lelaki + perempuan Asabah Bil Ghayr (2:1)
+            let totalParts = (al * 2) + ap;
+
+            if (remaining > 0 && totalParts > 0) {
+
+                let shareAL = (remaining * (al * 2)) / totalParts;
+                let shareAP = (remaining * ap) / totalParts;
+
+                if (al > 0) {
+                    results.push({
+                        name: al > 1 ? `${al} Anak Lelaki` : 'Anak Lelaki',
+                        share: shareAL,
+                        base: BASE,
+                        type: 'Asabah',
+                        color: 'bg-indigo-500'
+                    });
+                }
+
+                if (ap > 0) {
+                    results.push({
+                        name: ap > 1 ? `${ap} Anak Perempuan` : 'Anak Perempuan',
+                        share: shareAP,
+                        base: BASE,
+                        type: 'Asabah',
+                        color: 'bg-pink-500'
+                    });
+                }
+
+                remaining = 0;
+            }
+        }
+    }
+
+    // ===============================
+    // 3. BAKI (ASABAH LAIN / BAITULMAL)
+    // ===============================
+    if (remaining > 0) {
+        
+        if (bapa > 0) {
+            let b = results.find(r => r.name === 'Bapa');
+            b.share += remaining;
+            b.type = 'Fardu + Asabah';
+            remaining = 0;
+            
+        } else if (datuk > 0) {
+            let d = results.find(r => r.name === 'Datuk');
+            d.share += remaining;
+            d.type = 'Fardu + Asabah';
+            remaining = 0;
+            
+        } else if (adikLelaki > 0 || adikPerempuan > 0) {
+
+            let totalParts = (adikLelaki * 2) + adikPerempuan;
+
+            if (totalParts > 0) {
+
+                if (adikLelaki > 0) {
+                    results.push({
+                        name: adikLelaki > 1 ? `${adikLelaki} Adik Beradik Lelaki` : 'Adik Beradik Lelaki',
+                        share: (remaining * (adikLelaki * 2)) / totalParts,
+                        base: BASE,
+                        type: 'Asabah (Waris Kedua)',
+                        color: 'bg-purple-600'
+                    });
+                }
+
+                if (adikPerempuan > 0) {
+                    results.push({
+                        name: adikPerempuan > 1 ? `${adikPerempuan} Adik Beradik Perempuan` : 'Adik Beradik Perempuan',
+                        share: (remaining * adikPerempuan) / totalParts,
+                        base: BASE,
+                        type: 'Asabah (Waris Kedua)',
+                        color: 'bg-purple-400'
+                    });
+                }
+                
+                remaining = 0;
+            }
+
+        } else {
+            results.push({
+                name: 'Baitulmal',
+                share: remaining,
+                base: BASE,
+                type: 'Baki',
+                color: 'bg-slate-400'
+            });
+            remaining = 0;
+        }
+    }
+
+    renderFaraidTable(results);
+}
+
+
+// ===============================
+// RENDER TABLE (FIXED FRACTION)
+// ===============================
+function renderFaraidTable(results) {
+    const resultContainer = document.getElementById('pokok-waris-result');
+    if (!resultContainer) return;
+
+    if (results.length === 0) {
+        resultContainer.innerHTML = `
+            <div class="p-8 text-center text-gray-400 text-sm">
+                Sila kemaskini maklumat waris untuk melihat agihan.
+            </div>`;
+        return;
+    }
+
+    let html = `
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-50 text-[10px] uppercase font-bold text-gray-500 tracking-wider">
+                    <th class="px-4 py-3">Waris / Kategori</th>
+                    <th class="px-4 py-3 text-center">Pecahan</th>
+                    <th class="px-4 py-3 text-right">Peratus</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+    `;
+
+    results.forEach(r => {
+
+        let perc = ((r.share / r.base) * 100).toFixed(1);
+
+        html += `
+            <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-4 py-3">
+                    <div class="flex flex-col">
+                        <span class="font-bold text-[#153638] text-xs md:text-sm">${r.name}</span>
+                        <span class="text-[9px] font-semibold text-gray-400 uppercase">${r.type}</span>
+                    </div>
+                </td>
+
+                <td class="px-4 py-3 text-center">
+                    <span class="inline-block bg-gray-100 text-[#153638] font-mono font-bold px-2 py-0.5 rounded text-xs">
+                        ${Math.round(r.share * 100) / 100}/${r.base}
+                    </span>
+                </td>
+
+                <td class="px-4 py-3 text-right">
+                    <div class="flex flex-col items-end">
+                        <span class="font-bold text-gray-700 text-xs">${perc}%</span>
+                        <div class="w-10 h-1 bg-gray-100 rounded-full mt-1 overflow-hidden">
+                            <div class="${r.color} h-full" style="width:${perc}%"></div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+
+    html += `</tbody></table>`;
+    resultContainer.innerHTML = html;
+
+    lucide.createIcons();
+}
+
+
+// ===============================
+// TOGGLE WARIS EXTENDED
+// ===============================
+function toggleWaris() {
+    let al = parseInt(document.getElementById('far_al').value) || 0;
+    let bapa = parseInt(document.getElementById('far_bapa').value) || 0;
+    let ibu = parseInt(document.getElementById('far_ibu').value) || 0;
+
+    let extWaris = document.getElementById('extended_waris_section');
+
+    if (extWaris) {
+        // Tunjuk panel waris ganti jika ketiadaan anak lelaki DAN ketiadaan bapa/ibu
+        if (al === 0 && (bapa === 0 || ibu === 0)) {
+            extWaris.classList.remove('hidden');
+        } else {
+            extWaris.classList.add('hidden');
+        }
+    }
+
+    calculateFaraid();
+}
+
+  </script>
+  <script>
+document.addEventListener("submit", function(e) {
+
+  if (e.target && e.target.id === "leadFormWasiat") {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    fetch("https://script.google.com/macros/s/AKfycbxTQJGoneHXIe4CSL4pjgP5EW7ogedrKzywydLuUFbC2P24-gb0kefO8fvOFnnZsIUH3A/exec", {
+      method: "POST",
+      body: formData,
+      mode: "no-cors"
+    });
+
+    alert("Berjaya hantar!");
+    form.reset();
+  }
+});
+</script>
+</body>
+</html>
