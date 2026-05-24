@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Pengurusan Pusaka | MyWaris</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- HEADER -->
+  <div class="bg-[#153638] text-white p-5 shadow">
+
+    <h1 class="text-2xl font-bold">
+      Pengurusan Pusaka
+    </h1>
+
+    <p class="text-gray-200">
+      Lengkapkan maklumat pengurusan pusaka
+    </p>
+
+  </div>
+
+  <!-- FORM -->
+  <div class="max-w-3xl mx-auto p-5">
+
+    <form
+      id="pusakaForm"
+      class="bg-white p-6 rounded-2xl shadow space-y-6">
+
+      <!-- SI MATI -->
+      <div>
+
+        <h2 class="font-bold text-xl mb-4">
+          Maklumat Si Mati
+        </h2>
+
+        <div class="space-y-4">
+
+          <input
+            type="text"
+            id="namaSiMati"
+            placeholder="Nama Si Mati"
+            class="w-full border rounded-lg p-3">
+
+          <input
+            type="text"
+            id="icSiMati"
+            placeholder="No Kad Pengenalan"
+            class="w-full border rounded-lg p-3">
+
+          <input
+            type="date"
+            id="tarikhKematian"
+            class="w-full border rounded-lg p-3">
+
+          <input
+            type="text"
+            id="statusPerkahwinan"
+            placeholder="Status Perkahwinan"
+            class="w-full border rounded-lg p-3">
+
+        </div>
+
+      </div>
+
+      <!-- WARIS -->
+      <div>
+
+        <h2 class="font-bold text-xl mb-4">
+          Senarai Waris
+        </h2>
+
+        <textarea
+          id="waris"
+          rows="5"
+          placeholder="Senaraikan nama waris"
+          class="w-full border rounded-lg p-3"></textarea>
+
+      </div>
+
+      <!-- HARTA -->
+      <div>
+
+        <h2 class="font-bold text-xl mb-4">
+          Senarai Harta
+        </h2>
+
+        <textarea
+          id="harta"
+          rows="5"
+          placeholder="Senaraikan harta / aset"
+          class="w-full border rounded-lg p-3"></textarea>
+
+      </div>
+
+      <!-- DOKUMEN -->
+      <div>
+
+        <h2 class="font-bold text-xl mb-4">
+          Lokasi Dokumen Berkaitan
+        </h2>
+
+        <textarea
+          id="dokumen"
+          rows="4"
+          placeholder="Contoh: Geran rumah disimpan di..."
+          class="w-full border rounded-lg p-3"></textarea>
+
+      </div>
+
+      <!-- CATATAN -->
+      <div>
+
+        <h2 class="font-bold text-xl mb-4">
+          Catatan Tambahan
+        </h2>
+
+        <textarea
+          id="catatan"
+          rows="4"
+          placeholder="Catatan tambahan"
+          class="w-full border rounded-lg p-3"></textarea>
+
+      </div>
+
+      <!-- BUTTON -->
+      <div class="space-y-3">
+
+        <button
+          type="submit"
+          class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-lg font-semibold">
+
+          Simpan Maklumat Pusaka
+
+        </button>
+
+        <a
+          href="dashboard.html"
+          class="block text-center bg-gray-200 hover:bg-gray-300 transition text-gray-700 py-3 rounded-lg font-semibold">
+
+          ← Kembali ke Dashboard
+
+        </a>
+
+      </div>
+
+      <!-- STATUS -->
+      <p
+        id="status"
+        class="text-center text-green-600 font-medium">
+      </p>
+
+    </form>
+
+  </div>
+
+  <!-- FIREBASE -->
+  <script type="module">
+
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+      authDomain: "alqawthar-mywaris.firebaseapp.com",
+
+      projectId: "alqawthar-mywaris",
+
+      storageBucket: "alqawthar-mywaris.firebasestorage.app",
+
+      messagingSenderId: "3498810778",
+
+      appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+
+    };
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    const auth =
+      getAuth(app);
+
+    const db =
+      getFirestore(app);
+
+    let currentUser = null;
+
+    // CHECK LOGIN
+    onAuthStateChanged(auth, async(user)=>{
+
+      if(!user){
+
+        window.location.href =
+          "login.html";
+
+        return;
+
+      }
+
+      currentUser = user;
+
+      // LOAD DATA
+      const docSnap =
+      await getDoc(
+        doc(
+          db,
+          "users",
+          currentUser.uid,
+          "pusaka",
+          "maklumat"
+        )
+      );
+
+      if(docSnap.exists()){
+
+        const data = docSnap.data();
+
+        document.getElementById("namaSiMati").value =
+          data.namaSiMati || "";
+
+        document.getElementById("icSiMati").value =
+          data.icSiMati || "";
+
+        document.getElementById("tarikhKematian").value =
+          data.tarikhKematian || "";
+
+        document.getElementById("statusPerkahwinan").value =
+          data.statusPerkahwinan || "";
+
+        document.getElementById("waris").value =
+          data.waris || "";
+
+        document.getElementById("harta").value =
+          data.harta || "";
+
+        document.getElementById("dokumen").value =
+          data.dokumen || "";
+
+        document.getElementById("catatan").value =
+          data.catatan || "";
+
+      }
+
+    });
+
+    // SUBMIT FORM
+    document
+      .getElementById("pusakaForm")
+      .addEventListener("submit", async(e)=>{
+
+        e.preventDefault();
+
+        try{
+
+          await setDoc(
+
+            doc(
+              db,
+              "users",
+              currentUser.uid,
+              "pusaka",
+              "maklumat"
+            ),
+
+            {
+
+              namaSiMati:
+              document.getElementById("namaSiMati").value,
+
+              icSiMati:
+              document.getElementById("icSiMati").value,
+
+              tarikhKematian:
+              document.getElementById("tarikhKematian").value,
+
+              statusPerkahwinan:
+              document.getElementById("statusPerkahwinan").value,
+
+              waris:
+              document.getElementById("waris").value,
+
+              harta:
+              document.getElementById("harta").value,
+
+              dokumen:
+              document.getElementById("dokumen").value,
+
+              catatan:
+              document.getElementById("catatan").value,
+
+              createdAt:
+              new Date()
+
+            }
+
+          );
+
+          document.getElementById(
+            "status"
+          ).innerHTML =
+
+          "Maklumat pusaka berjaya disimpan.";
+
+        }
+
+        catch(error){
+
+          document.getElementById(
+            "status"
+          ).innerHTML =
+
+          error.message;
+
+        }
+
+      });
+
+  </script>
+
+</body>
+</html>
