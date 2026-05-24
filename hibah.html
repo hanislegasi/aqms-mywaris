@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Hibah | MyWaris</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- HEADER -->
+  <div class="bg-[#153638] text-white p-5 shadow">
+
+    <h1 class="text-2xl font-bold">
+      Hibah
+    </h1>
+
+    <p class="text-gray-200">
+      Lengkapkan maklumat hibah anda
+    </p>
+
+  </div>
+
+  <!-- FORM -->
+  <div class="max-w-3xl mx-auto p-5">
+
+    <form
+      id="hibahForm"
+      class="bg-white p-6 rounded-2xl shadow space-y-6">
+
+      <!-- PEMBERI HIBAH -->
+      <div>
+
+        <h2 class="font-bold text-xl mb-4">
+          Maklumat Pemberi Hibah
+        </h2>
+
+        <div class="space-y-4">
+
+          <input
+            type="text"
+            id="pemberiNama"
+            placeholder="Nama Pemberi Hibah"
+            class="w-full border rounded-lg p-3">
+
+          <input
+            type="text"
+            id="pemberiIc"
+            placeholder="No Kad Pengenalan"
+            class="w-full border rounded-lg p-3">
+
+          <input
+            type="text"
+            id="pemberiTelefon"
+            placeholder="No Telefon"
+            class="w-full border rounded-lg p-3">
+
+        </div>
+
+      </div>
+
+      <!-- PENERIMA -->
+      <div>
+
+        <h2 class="font-bold text-xl mb-4">
+          Maklumat Penerima Hibah
+        </h2>
+
+        <div class="space-y-4">
+
+          <input
+            type="text"
+            id="penerimaNama"
+            placeholder="Nama Penerima Hibah"
+            class="w-full border rounded-lg p-3">
+
+          <input
+            type="text"
+            id="hubungan"
+            placeholder="Hubungan Dengan Penerima"
+            class="w-full border rounded-lg p-3">
+
+        </div>
+
+      </div>
+
+      <!-- ASET -->
+      <div>
+
+        <h2 class="font-bold text-xl mb-4">
+          Maklumat Aset / Harta
+        </h2>
+
+        <textarea
+          id="aset"
+          rows="5"
+          placeholder="Senaraikan aset / harta yang ingin dihibahkan"
+          class="w-full border rounded-lg p-3"></textarea>
+
+      </div>
+
+      <!-- NILAI -->
+      <div>
+
+        <h2 class="font-bold text-xl mb-4">
+          Nilai Aset
+        </h2>
+
+        <input
+          type="text"
+          id="nilaiAset"
+          placeholder="Contoh: RM500,000"
+          class="w-full border rounded-lg p-3">
+
+      </div>
+
+      <!-- CATATAN -->
+      <div>
+
+        <h2 class="font-bold text-xl mb-4">
+          Catatan Tambahan
+        </h2>
+
+        <textarea
+          id="catatan"
+          rows="4"
+          placeholder="Catatan tambahan"
+          class="w-full border rounded-lg p-3"></textarea>
+
+      </div>
+
+      <!-- BUTTON -->
+      <button
+        type="submit"
+        class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-lg font-semibold">
+
+        Simpan Hibah
+
+      </button>
+
+      <!-- STATUS -->
+      <p
+        id="status"
+        class="text-center text-green-600 font-medium">
+      </p>
+
+    </form>
+
+  </div>
+
+  <!-- FIREBASE -->
+  <script type="module">
+
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+      authDomain: "alqawthar-mywaris.firebaseapp.com",
+
+      projectId: "alqawthar-mywaris",
+
+      storageBucket: "alqawthar-mywaris.firebasestorage.app",
+
+      messagingSenderId: "3498810778",
+
+      appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+
+    };
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    const auth =
+      getAuth(app);
+
+    const db =
+      getFirestore(app);
+
+    let currentUser = null;
+
+    // CHECK LOGIN
+    onAuthStateChanged(auth, async(user)=>{
+
+      if(!user){
+
+        window.location.href =
+          "login.html";
+
+        return;
+
+      }
+
+      currentUser = user;
+
+      // LOAD DATA
+      const docSnap =
+      await getDoc(
+        doc(
+          db,
+          "users",
+          currentUser.uid,
+          "hibah",
+          "maklumat"
+        )
+      );
+
+      if(docSnap.exists()){
+
+        const data = docSnap.data();
+
+        document.getElementById("pemberiNama").value =
+          data.pemberiNama || "";
+
+        document.getElementById("pemberiIc").value =
+          data.pemberiIc || "";
+
+        document.getElementById("pemberiTelefon").value =
+          data.pemberiTelefon || "";
+
+        document.getElementById("penerimaNama").value =
+          data.penerimaNama || "";
+
+        document.getElementById("hubungan").value =
+          data.hubungan || "";
+
+        document.getElementById("aset").value =
+          data.aset || "";
+
+        document.getElementById("nilaiAset").value =
+          data.nilaiAset || "";
+
+        document.getElementById("catatan").value =
+          data.catatan || "";
+
+      }
+
+    });
+
+    // SUBMIT FORM
+    document
+      .getElementById("hibahForm")
+      .addEventListener("submit", async(e)=>{
+
+        e.preventDefault();
+
+        try{
+
+          await setDoc(
+
+            doc(
+              db,
+              "users",
+              currentUser.uid,
+              "hibah",
+              "maklumat"
+            ),
+
+            {
+
+              pemberiNama:
+              document.getElementById("pemberiNama").value,
+
+              pemberiIc:
+              document.getElementById("pemberiIc").value,
+
+              pemberiTelefon:
+              document.getElementById("pemberiTelefon").value,
+
+              penerimaNama:
+              document.getElementById("penerimaNama").value,
+
+              hubungan:
+              document.getElementById("hubungan").value,
+
+              aset:
+              document.getElementById("aset").value,
+
+              nilaiAset:
+              document.getElementById("nilaiAset").value,
+
+              catatan:
+              document.getElementById("catatan").value,
+
+              createdAt:
+              new Date()
+
+            }
+
+          );
+
+          document.getElementById(
+            "status"
+          ).innerHTML =
+
+          "Maklumat hibah berjaya disimpan.";
+
+        }
+
+        catch(error){
+
+          document.getElementById(
+            "status"
+          ).innerHTML =
+
+          error.message;
+
+        }
+
+      });
+
+  </script>
+
+</body>
+</html>
