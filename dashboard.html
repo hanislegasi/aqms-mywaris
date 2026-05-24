@@ -64,5 +64,80 @@ Logout
 
 </div>
 
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain: "alqawthar-mywaris.firebaseapp.com",
+projectId: "alqawthar-mywaris",
+storageBucket: "alqawthar-mywaris.firebasestorage.app",
+messagingSenderId: "3498810778",
+appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user){
+
+window.location.href="login.html";
+return;
+
+}
+
+const docSnap =
+await getDoc(
+doc(db,"users",user.uid)
+);
+
+if(docSnap.exists()){
+
+document.getElementById(
+"namaUser"
+).innerHTML =
+"Selamat datang, "
++ docSnap.data().nama;
+
+}
+
+});
+
+document
+.getElementById("logoutBtn")
+.addEventListener("click",()=>{
+
+signOut(auth);
+
+});
+
+</script>
+  
 </body>
 </html>
