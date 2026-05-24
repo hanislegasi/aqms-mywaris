@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
 <meta charset="UTF-8">
-<title>Login</title>
+<title>Login Akaun</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -11,18 +11,20 @@
 <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
 
 <h2 class="text-2xl font-bold mb-6 text-center">
-Login
+Login Akaun
 </h2>
 
 <form id="loginForm" class="space-y-4">
 
 <input
+id="email"
 type="email"
 placeholder="Email"
 class="w-full border p-3 rounded-lg"
 required>
 
 <input
+id="password"
 type="password"
 placeholder="Password"
 class="w-full border p-3 rounded-lg"
@@ -38,11 +40,73 @@ Login
 
 <div class="text-center mt-4">
 <a href="register.html" class="text-blue-600">
-Daftar Akaun Baru
+Belum ada akaun?
 </a>
 </div>
 
 </div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+signInWithEmailAndPassword
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+  authDomain: "alqawthar-mywaris.firebaseapp.com",
+  projectId: "alqawthar-mywaris",
+  storageBucket: "alqawthar-mywaris.firebasestorage.app",
+  messagingSenderId: "3498810778",
+  appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+document
+.getElementById("loginForm")
+.addEventListener("submit", async(e)=>{
+
+e.preventDefault();
+
+const email =
+document.getElementById("email").value;
+
+const password =
+document.getElementById("password").value;
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+alert("Login berjaya");
+
+window.location.href =
+"dashboard.html";
+
+}
+catch(error){
+
+alert(error.message);
+
+}
+
+});
+
+</script>
 
 </body>
 </html>
