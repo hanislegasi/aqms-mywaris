@@ -79,10 +79,13 @@ document
 e.preventDefault();
 
 const email =
-document.getElementById("email").value;
+document.getElementById("email").value.trim();
 
 const password =
 document.getElementById("password").value;
+
+console.log("EMAIL:", email);
+console.log("PASSWORD:", password);
 
 try{
 
@@ -100,9 +103,12 @@ window.location.href =
 }
 catch(error){
 
-console.log(error);
+console.error(error);
 
-alert(error.code);
+alert(
+"Code: " + error.code +
+"\nMessage: " + error.message
+);
 
 }
 
