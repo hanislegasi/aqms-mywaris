@@ -157,7 +157,8 @@
     import {
       getFirestore,
       doc,
-      setDoc
+      setDoc,
+      getDoc
     }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -189,7 +190,7 @@
     let currentUser = null;
 
     // CHECK LOGIN
-    onAuthStateChanged(auth,(user)=>{
+    onAuthStateChanged(auth, async(user)=>{
 
       if(!user){
 
@@ -202,6 +203,44 @@
 
       currentUser = user;
 
+const docSnap =
+await getDoc(
+  doc(
+    db,
+    "users",
+    currentUser.uid,
+    "wasiat",
+    "maklumat"
+  )
+);
+
+if(docSnap.exists()){
+
+  const data = docSnap.data();
+
+  document.getElementById("nama").value =
+    data.nama || "";
+
+  document.getElementById("ic").value =
+    data.ic || "";
+
+  document.getElementById("telefon").value =
+    data.telefon || "";
+
+  document.getElementById("pasangan").value =
+    data.pasangan || "";
+
+  document.getElementById("anak").value =
+    data.anak || "";
+
+  document.getElementById("wasi").value =
+    data.wasi || "";
+
+  document.getElementById("harta").value =
+    data.harta || "";
+
+}
+      
     });
 
     // SUBMIT FORM
