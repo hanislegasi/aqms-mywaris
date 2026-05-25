@@ -78,9 +78,23 @@ class="bg-white p-5 rounded-xl shadow hover:shadow-lg transition">
 
 <a
 href="pusaka.html"
-class="bg-white p-5 rounded-xl shadow">
+class="bg-white p-5 rounded-xl shadow hover:shadow-lg transition">
 
-Pengurusan Pusaka
+<div>
+
+  <p class="text-lg font-semibold">
+    Pengurusan Pusaka
+  </p>
+
+  <p
+    id="pusakaStatus"
+    class="text-sm text-gray-500 mt-1">
+
+    Memuatkan status...
+
+  </p>
+
+</div>
 
 </a>
 
@@ -252,6 +266,55 @@ else{
   ).innerHTML =
 
   "Belum Diisi";
+
+}
+
+// GET PUSAKA STATUS
+const pusakaSnap =
+await getDoc(
+  doc(
+    db,
+    "users",
+    user.uid,
+    "pusaka",
+    "maklumat"
+  )
+);
+
+if(pusakaSnap.exists()){
+
+  const pusakaData =
+  pusakaSnap.data();
+
+  if(pusakaData.status){
+
+    document.getElementById(
+      "pusakaStatus"
+    ).innerHTML =
+
+    pusakaData.status;
+
+  }
+
+  else{
+
+    document.getElementById(
+      "pusakaStatus"
+    ).innerHTML =
+
+    "DRAFT";
+
+  }
+
+}
+
+else{
+
+  document.getElementById(
+    "pusakaStatus"
+  ).innerHTML =
+
+    "Belum Diisi";
 
 }
   
