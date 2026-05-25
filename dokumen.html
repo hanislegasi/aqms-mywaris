@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Dokumen Saya | MyWaris</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- HEADER -->
+  <div class="bg-[#153638] text-white p-5 shadow">
+
+    <h1 class="text-2xl font-bold">
+      Dokumen Saya
+    </h1>
+
+    <p class="text-gray-200">
+      Muat naik dokumen berkaitan
+    </p>
+
+  </div>
+
+  <!-- CONTENT -->
+  <div class="max-w-3xl mx-auto p-5">
+
+    <div class="bg-white p-6 rounded-2xl shadow space-y-6">
+
+      <!-- FILE -->
+      <div>
+
+        <label class="font-semibold block mb-2">
+
+          Pilih Dokumen
+
+        </label>
+
+        <input
+          type="file"
+          id="fileInput"
+          class="w-full border rounded-lg p-3">
+
+      </div>
+
+      <!-- BUTTON -->
+      <div class="space-y-3">
+
+        <button
+          id="uploadBtn"
+          class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-lg font-semibold">
+
+          Muat Naik Dokumen
+
+        </button>
+
+        <a
+          href="dashboard.html"
+          class="block text-center bg-gray-200 hover:bg-gray-300 transition text-gray-700 py-3 rounded-lg font-semibold">
+
+          ← Kembali ke Dashboard
+
+        </a>
+
+      </div>
+
+      <!-- STATUS -->
+      <p
+        id="status"
+        class="text-center text-green-600 font-medium">
+      </p>
+
+      <!-- FILE LIST -->
+      <div>
+
+        <h2 class="text-xl font-bold mb-4">
+          Senarai Dokumen
+        </h2>
+
+        <div
+          id="fileList"
+          class="space-y-3">
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FIREBASE -->
+  <script type="module">
+
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      getDocs
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    import {
+      getStorage,
+      ref,
+      uploadBytes,
+      getDownloadURL
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+      authDomain: "alqawthar-mywaris.firebaseapp.com",
+
+      projectId: "alqawthar-mywaris",
+
+      storageBucket: "alqawthar-mywaris.firebasestorage.app",
+
+      messagingSenderId: "3498810778",
+
+      appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+
+    };
+
+    const app =
+    initializeApp(firebaseConfig);
+
+    const auth =
+    getAuth(app);
+
+    const db =
+    getFirestore(app);
+
+    const storage =
+    getStorage(app);
+
+    let currentUser = null;
+
+    // LOGIN CHECK
+    onAuthStateChanged(auth, async(user)=>{
+
+      if(!user){
+
+        window.location.href =
+        "login.html";
+
+        return;
+
+      }
+
+      currentUser = user;
+
+      loadFiles();
+
+    });
+
+    // UPLOAD
+    document
+    .getElementById("uploadBtn")
+    .addEventListener("click", async()=>{
+
+      const file =
+      document.getElementById("fileInput")
+      .files[0];
+
+      if(!file){
+
+        alert("Sila pilih fail.");
+        return;
+
+      }
+
+      try{
+
+        // STORAGE PATH
+        const storageRef =
+        ref(
+          storage,
+          "documents/" +
+          currentUser.uid +
+          "/" +
+          file.name
+        );
+
+        // UPLOAD
+        await uploadBytes(
+          storageRef,
+          file
+        );
+
+        // GET URL
+        const downloadURL =
+        await getDownloadURL(
+          storageRef
+        );
+
+        // SAVE FIRESTORE
+        await addDoc(
+
+          collection(
+            db,
+            "users",
+            currentUser.uid,
+            "documents"
+          ),
+
+          {
+
+            fileName:
+            file.name,
+
+            fileURL:
+            downloadURL,
+
+            createdAt:
+            new Date()
+
+          }
+
+        );
+
+        document.getElementById(
+          "status"
+        ).innerHTML =
+
+        "Dokumen berjaya dimuat naik.";
+
+        loadFiles();
+
+      }
+
+      catch(error){
+
+        document.getElementById(
+          "status"
+        ).innerHTML =
+
+        error.message;
+
+      }
+
+    });
+
+    // LOAD FILES
+    async function loadFiles(){
+
+      const snapshot =
+      await getDocs(
+
+        collection(
+          db,
+          "users",
+          currentUser.uid,
+          "documents"
+        )
+
+      );
+
+      let html = "";
+
+      snapshot.forEach((doc)=>{
+
+        const data =
+        doc.data();
+
+        html += `
+
+        <div class="border rounded-xl p-4 flex items-center justify-between">
+
+          <div>
+
+            <p class="font-semibold">
+              ${data.fileName}
+            </p>
+
+          </div>
+
+          <a
+            href="${data.fileURL}"
+            target="_blank"
+            class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
+            Lihat
+
+          </a>
+
+        </div>
+
+        `;
+
+      });
+
+      document.getElementById(
+        "fileList"
+      ).innerHTML = html;
+
+    }
+
+  </script>
+
+</body>
+</html>
