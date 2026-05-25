@@ -206,6 +206,55 @@ else{
 
 }
 
+// GET HIBAH STATUS
+const hibahSnap =
+await getDoc(
+  doc(
+    db,
+    "users",
+    user.uid,
+    "hibah",
+    "maklumat"
+  )
+);
+
+if(hibahSnap.exists()){
+
+  const hibahData =
+  hibahSnap.data();
+
+  if(hibahData.status){
+
+    document.getElementById(
+      "hibahStatus"
+    ).innerHTML =
+
+    hibahData.status;
+
+  }
+
+  else{
+
+    document.getElementById(
+      "hibahStatus"
+    ).innerHTML =
+
+    "DRAFT";
+
+  }
+
+}
+
+else{
+
+  document.getElementById(
+    "hibahStatus"
+  ).innerHTML =
+
+  "Belum Diisi";
+
+}
+  
 }
 
 });
