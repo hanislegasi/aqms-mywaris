@@ -123,6 +123,34 @@
 
       </div>
 
+<!-- LAMPIRAN -->
+<div class="space-y-3">
+
+  <h2 class="text-xl font-bold text-[#153638]">
+    Lampiran Dokumen
+  </h2>
+
+  <input
+    type="file"
+    id="fileInput"
+    class="w-full border rounded-lg p-3">
+
+  <button
+    type="button"
+    id="uploadBtn"
+    class="bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-5 py-3 rounded-lg">
+
+    Muat Naik Lampiran
+
+  </button>
+
+  <div
+    id="fileList"
+    class="space-y-2">
+  </div>
+
+</div>
+      
       <!-- BUTTON -->
       <button
         type="submit"
@@ -173,9 +201,19 @@
       getFirestore,
       doc,
       setDoc,
-      getDoc
+      getDoc,
+      collection,
+      addDoc
     }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
     const firebaseConfig = {
 
@@ -201,6 +239,9 @@
 
     const db =
       getFirestore(app);
+
+    const storage =
+getStorage(app);
 
     let currentUser = null;
 
@@ -258,6 +299,103 @@ if(docSnap.exists()){
       
     });
 
+// UPLOAD FILE
+document
+.getElementById("uploadBtn")
+.addEventListener("click", async()=>{
+
+  const file =
+  document.getElementById("fileInput")
+  .files[0];
+
+  if(!file){
+
+    alert("Sila pilih fail.");
+    return;
+
+  }
+
+  try{
+
+    const storageRef =
+    ref(
+      storage,
+      "wasiat/" +
+      currentUser.uid +
+      "/" +
+      file.name
+    );
+
+    await uploadBytes(
+      storageRef,
+      file
+    );
+
+    const downloadURL =
+    await getDownloadURL(
+      storageRef
+    );
+
+// SAVE FILE INFO
+await addDoc(
+
+  collection(
+    db,
+    "users",
+    currentUser.uid,
+    "wasiatDocuments"
+  ),
+
+  {
+
+    fileName:
+    file.name,
+
+    fileURL:
+    downloadURL,
+
+    createdAt:
+    new Date()
+
+  }
+
+);
+    
+    const fileHTML = `
+    
+    <div class="bg-gray-100 p-3 rounded-lg flex justify-between items-center">
+
+      <p class="text-sm text-gray-700">
+        ${file.name}
+      </p>
+
+      <a
+        href="${downloadURL}"
+        target="_blank"
+        class="text-[#153638] font-semibold">
+
+        Lihat
+
+      </a>
+
+    </div>
+    
+    `;
+
+    document.getElementById(
+      "fileList"
+    ).innerHTML += fileHTML;
+
+  }
+
+  catch(error){
+
+    console.log(error);
+
+  }
+
+});
+    
     // SUBMIT FORM
     document
       .getElementById("wasiatForm")
