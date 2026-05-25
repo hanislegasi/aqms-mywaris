@@ -6,7 +6,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 min-h-screen">
 
 <div class="bg-[#153638] text-white p-5">
 
@@ -26,13 +26,32 @@ Memuatkan...
 Perkhidmatan
 </h2>
 
-<div class="grid grid-cols-1 gap-4">
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
 
 <a
 href="ewasiat.html"
-class="bg-white p-5 rounded-xl shadow hover:shadow-lg transition">
+class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-gray-100">
 
-<div class="flex items-center justify-between">
+<div class="flex items-center gap-4">
+
+  <!-- ICON -->
+  <div class="bg-[#153638]/10 p-3 rounded-xl">
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+      class="w-6 h-6 text-[#153638]"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor">
+
+      <path
+         stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="1.8"
+  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+
+    </svg>
+
+  </div>
 
   <div>
 
@@ -56,8 +75,29 @@ class="bg-white p-5 rounded-xl shadow hover:shadow-lg transition">
 
 <a
 href="hibah.html"
-class="bg-white p-5 rounded-xl shadow hover:shadow-lg transition">
+class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-gray-100">
 
+<div class="flex items-center gap-4">
+
+  <!-- ICON -->
+  <div class="bg-[#153638]/10 p-3 rounded-xl">
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+      class="w-6 h-6 text-[#153638]"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor">
+
+      <path
+        stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="1.8"
+  d="M12 11c0-3-1.5-5-4-5S4 8 4 11c0 3 2 5 4 5s4-2 4-5zm0 0c0-3 1.5-5 4-5s4 2 4 5c0 3-2 5-4 5s-4-2-4-5z"/>
+
+    </svg>
+
+  </div>  
+  
 <div>
 
   <p class="text-lg font-semibold">
@@ -74,12 +114,35 @@ class="bg-white p-5 rounded-xl shadow hover:shadow-lg transition">
 
 </div>
 
+</div>
+
 </a>
 
 <a
 href="pusaka.html"
-class="bg-white p-5 rounded-xl shadow hover:shadow-lg transition">
+class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-gray-100">
 
+<div class="flex items-center gap-4">
+
+  <!-- ICON -->
+  <div class="bg-[#153638]/10 p-3 rounded-xl">
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+      class="w-6 h-6 text-[#153638]"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor">
+
+      <path
+        stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="1.8"
+  d="M3 10l9-7 9 7v9a2 2 0 01-2 2h-4v-6H9v6H5a2 2 0 01-2-2v-9z"/>
+
+    </svg>
+
+  </div>  
+  
 <div>
 
   <p class="text-lg font-semibold">
@@ -96,11 +159,13 @@ class="bg-white p-5 rounded-xl shadow hover:shadow-lg transition">
 
 </div>
 
+</div>
+
 </a>
 
 <a
 href="dokumen.html"
-class="bg-white p-5 rounded-xl shadow hover:shadow-lg transition">
+class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-gray-100">
 
 <div class="flex items-center gap-4">
 
@@ -135,13 +200,17 @@ class="bg-white p-5 rounded-xl shadow hover:shadow-lg transition">
 
 </div>
 
+</div>
+
 </a>
   
 </div>
 
+<div class="flex justify-end">
+  
 <button
 id="logoutBtn"
-class="mt-8 bg-red-600 text-white px-5 py-3 rounded-lg">
+class="bg-red-600 hover:bg-red-700 transition text-white px-8 py-3 rounded-xl">
 
 Logout
 
