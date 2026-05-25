@@ -30,9 +30,27 @@ Perkhidmatan
 
 <a
 href="ewasiat.html"
-class="bg-white p-5 rounded-xl shadow">
+class="bg-white p-5 rounded-xl shadow hover:shadow-lg transition">
 
-e-Wasiat
+<div class="flex items-center justify-between">
+
+  <div>
+
+    <p class="text-lg font-semibold">
+      e-Wasiat
+    </p>
+
+    <p
+      id="wasiatStatus"
+      class="text-sm text-gray-500 mt-1">
+
+      Memuatkan status...
+
+    </p>
+
+  </div>
+
+</div>
 
 </a>
 
@@ -124,6 +142,53 @@ document.getElementById(
 ).innerHTML =
 "Selamat datang, "
 + docSnap.data().nama;
+
+// GET WASIAT STATUS
+const wasiatSnap =
+await getDoc(
+  doc(
+    db,
+    "users",
+    user.uid,
+    "wasiat",
+    "maklumat"
+  )
+);
+
+if(wasiatSnap.exists()){
+
+  const wasiatData =
+  wasiatSnap.data();
+
+  if(wasiatData.status){
+
+    document.getElementById(
+      "wasiatStatus"
+    ).innerHTML =
+
+    wasiatData.status;
+
+  }
+
+  else{
+
+    document.getElementById(
+      "wasiatStatus"
+    ).innerHTML =
+
+    "DRAFT";
+
+  }
+
+}
+
+else{
+
+  document.getElementById(
+    "wasiatStatus"
+  ).innerHTML =
+
+  "Belum Diisi";
 
 }
 
