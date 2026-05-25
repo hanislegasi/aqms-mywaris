@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Preview Pusaka | MyWaris</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- HEADER -->
+  <div class="bg-[#153638] text-white p-5 shadow">
+
+    <h1 class="text-2xl font-bold">
+      Preview Pengurusan Pusaka
+    </h1>
+
+    <p class="text-gray-200">
+      Sila semak maklumat sebelum menghantar permohonan
+    </p>
+
+  </div>
+
+  <!-- DOCUMENT -->
+  <div class="max-w-4xl mx-auto p-5">
+
+    <div class="bg-white rounded-2xl shadow p-8 space-y-8">
+
+      <!-- TITLE -->
+      <div class="text-center border-b pb-6">
+
+        <h1 class="text-3xl font-bold text-[#153638]">
+          DOKUMEN PENGURUSAN PUSAKA
+        </h1>
+
+      </div>
+
+      <!-- SI MATI -->
+      <div>
+
+        <h2 class="text-2xl font-bold text-[#153638] mb-4">
+          Maklumat Si Mati
+        </h2>
+
+        <div class="space-y-3 text-gray-700">
+
+          <p>
+            <strong>Nama:</strong>
+            <span id="namaSiMati"></span>
+          </p>
+
+          <p>
+            <strong>No IC:</strong>
+            <span id="icSiMati"></span>
+          </p>
+
+          <p>
+            <strong>Tarikh Kematian:</strong>
+            <span id="tarikhKematian"></span>
+          </p>
+
+          <p>
+            <strong>Status Perkahwinan:</strong>
+            <span id="statusPerkahwinan"></span>
+          </p>
+
+        </div>
+
+      </div>
+
+      <!-- WARIS -->
+      <div>
+
+        <h2 class="text-2xl font-bold text-[#153638] mb-4">
+          Senarai Waris
+        </h2>
+
+        <p
+          id="waris"
+          class="text-gray-700 whitespace-pre-line">
+        </p>
+
+      </div>
+
+      <!-- HARTA -->
+      <div>
+
+        <h2 class="text-2xl font-bold text-[#153638] mb-4">
+          Senarai Harta
+        </h2>
+
+        <p
+          id="harta"
+          class="text-gray-700 whitespace-pre-line">
+        </p>
+
+      </div>
+
+      <!-- DOKUMEN -->
+      <div>
+
+        <h2 class="text-2xl font-bold text-[#153638] mb-4">
+          Lokasi Dokumen
+        </h2>
+
+        <p
+          id="dokumen"
+          class="text-gray-700 whitespace-pre-line">
+        </p>
+
+      </div>
+
+      <!-- CATATAN -->
+      <div>
+
+        <h2 class="text-2xl font-bold text-[#153638] mb-4">
+          Catatan Tambahan
+        </h2>
+
+        <p
+          id="catatan"
+          class="text-gray-700 whitespace-pre-line">
+        </p>
+
+      </div>
+
+      <!-- ACTION -->
+      <div class="pt-6 border-t space-y-3">
+
+        <button
+          id="submitBtn"
+          class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-lg font-semibold">
+
+          Hantar Permohonan
+
+        </button>
+
+        <a
+          href="pusaka.html"
+          class="block text-center bg-gray-200 hover:bg-gray-300 transition text-gray-700 py-3 rounded-lg font-semibold">
+
+          ← Kembali Edit Borang
+
+        </a>
+
+      </div>
+
+      <!-- STATUS -->
+      <p
+        id="status"
+        class="text-center text-green-600 font-medium">
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- FIREBASE -->
+  <script type="module">
+
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      updateDoc
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+      authDomain: "alqawthar-mywaris.firebaseapp.com",
+
+      projectId: "alqawthar-mywaris",
+
+      storageBucket: "alqawthar-mywaris.firebasestorage.app",
+
+      messagingSenderId: "3498810778",
+
+      appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+
+    };
+
+    const app =
+    initializeApp(firebaseConfig);
+
+    const auth =
+    getAuth(app);
+
+    const db =
+    getFirestore(app);
+
+    let currentUser = null;
+
+    onAuthStateChanged(auth, async(user)=>{
+
+      if(!user){
+
+        window.location.href =
+        "login.html";
+
+        return;
+
+      }
+
+      currentUser = user;
+
+      // GET DATA
+      const docRef =
+      doc(
+        db,
+        "users",
+        currentUser.uid,
+        "pusaka",
+        "maklumat"
+      );
+
+      const docSnap =
+      await getDoc(docRef);
+
+      if(docSnap.exists()){
+
+        const data =
+        docSnap.data();
+
+        document.getElementById("namaSiMati").innerHTML =
+        data.namaSiMati || "";
+
+        document.getElementById("icSiMati").innerHTML =
+        data.icSiMati || "";
+
+        document.getElementById("tarikhKematian").innerHTML =
+        data.tarikhKematian || "";
+
+        document.getElementById("statusPerkahwinan").innerHTML =
+        data.statusPerkahwinan || "";
+
+        document.getElementById("waris").innerHTML =
+        data.waris || "";
+
+        document.getElementById("harta").innerHTML =
+        data.harta || "";
+
+        document.getElementById("dokumen").innerHTML =
+        data.dokumen || "";
+
+        document.getElementById("catatan").innerHTML =
+        data.catatan || "";
+
+      }
+
+      // SUBMIT
+      document
+      .getElementById("submitBtn")
+      .addEventListener("click", async()=>{
+
+        try{
+
+          await updateDoc(
+
+            doc(
+              db,
+              "users",
+              currentUser.uid,
+              "pusaka",
+              "maklumat"
+            ),
+
+            {
+
+              status:
+              "SUBMITTED"
+
+            }
+
+          );
+
+          document.getElementById(
+            "status"
+          ).innerHTML =
+
+          "Permohonan pusaka berjaya dihantar.";
+
+        }
+
+        catch(error){
+
+          document.getElementById(
+            "status"
+          ).innerHTML =
+
+          error.message;
+
+        }
+
+      });
+
+    });
+
+  </script>
+
+</body>
+</html>
