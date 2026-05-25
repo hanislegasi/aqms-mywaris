@@ -203,7 +203,8 @@
       setDoc,
       getDoc,
       collection,
-      addDoc
+      addDoc,
+      getDocs
     }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -258,6 +259,7 @@ getStorage(app);
       }
 
       currentUser = user;
+      loadFiles();
 
 const docSnap =
 await getDoc(
@@ -299,6 +301,57 @@ if(docSnap.exists()){
       
     });
 
+// LOAD FILES
+async function loadFiles(){
+
+  const snapshot =
+  await getDocs(
+
+    collection(
+      db,
+      "users",
+      currentUser.uid,
+      "wasiatDocuments"
+    )
+
+  );
+
+  let html = "";
+
+  snapshot.forEach((doc)=>{
+
+    const data =
+    doc.data();
+
+    html += `
+    
+    <div class="bg-gray-100 p-3 rounded-lg flex justify-between items-center">
+
+      <p class="text-sm text-gray-700">
+        ${data.fileName}
+      </p>
+
+      <a
+        href="${data.fileURL}"
+        target="_blank"
+        class="text-[#153638] font-semibold">
+
+        Lihat
+
+      </a>
+
+    </div>
+    
+    `;
+
+  });
+
+  document.getElementById(
+    "fileList"
+  ).innerHTML = html;
+
+}
+    
 // UPLOAD FILE
 document
 .getElementById("uploadBtn")
