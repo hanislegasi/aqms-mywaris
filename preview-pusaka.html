@@ -299,6 +299,54 @@ snapshot.forEach((doc)=>{
 
   lampiranHTML += `
 
+<div class="bg-gray-100 p-4 rounded-xl space-y-3">
+
+  <div class="flex justify-between items-center">
+
+    <p class="text-sm font-medium text-gray-700">
+      ${file.fileName}
+    </p>
+
+    <a
+      href="${file.fileURL}"
+      target="_blank"
+      class="text-[#153638] font-semibold">
+
+      Buka
+
+    </a>
+
+  </div>
+
+  ${
+    file.fileName.endsWith(".pdf")
+
+    ?
+
+    `
+
+    <iframe
+      src="${file.fileURL}"
+      class="w-full h-96 rounded-lg border">
+    </iframe>
+
+    `
+
+    :
+
+    `
+
+    <img
+      src="${file.fileURL}"
+      class="w-full rounded-lg border">
+
+    `
+  }
+
+</div>
+
+`; `
+
   <div class="bg-gray-100 p-3 rounded-lg flex justify-between items-center">
 
     <p class="text-sm text-gray-700">
