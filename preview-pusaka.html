@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Preview Pusaka | MyWaris</title>
+  <title>Preview Harta Sepencarian | MyWaris</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -16,7 +16,7 @@
   <div class="bg-[#153638] text-white p-5 shadow">
 
     <h1 class="text-2xl font-bold">
-      Preview Pengurusan Pusaka
+      Preview Harta Sepencarian
     </h1>
 
     <p class="text-gray-200">
@@ -34,100 +34,118 @@
       <div class="text-center border-b pb-6">
 
         <h1 class="text-3xl font-bold text-[#153638]">
-          DOKUMEN PENGURUSAN PUSAKA
+          DOKUMEN HARTA SEPENCARIAN
         </h1>
 
       </div>
 
-      <!-- SI MATI -->
-      <div>
+      <div class="space-y-6">
 
-        <h2 class="text-2xl font-bold text-[#153638] mb-4">
-          Maklumat Si Mati
-        </h2>
+  <div>
 
-        <div class="space-y-3 text-gray-700">
+    <p class="text-sm text-gray-500">
+      Nama Suami
+    </p>
 
-          <p>
-            <strong>Nama:</strong>
-            <span id="namaSiMati"></span>
-          </p>
+    <p
+      id="namaSuami"
+      class="font-semibold text-lg">
+    </p>
 
-          <p>
-            <strong>No IC:</strong>
-            <span id="icSiMati"></span>
-          </p>
+  </div>
 
-          <p>
-            <strong>Tarikh Kematian:</strong>
-            <span id="tarikhKematian"></span>
-          </p>
+  <div>
 
-          <p>
-            <strong>Status Perkahwinan:</strong>
-            <span id="statusPerkahwinan"></span>
-          </p>
+    <p class="text-sm text-gray-500">
+      Nama Isteri
+    </p>
 
-        </div>
+    <p
+      id="namaIsteri"
+      class="font-semibold text-lg">
+    </p>
 
-      </div>
+  </div>
 
-      <!-- WARIS -->
-      <div>
+  <div>
 
-        <h2 class="text-2xl font-bold text-[#153638] mb-4">
-          Senarai Waris
-        </h2>
+    <p class="text-sm text-gray-500">
+      Status Perkahwinan
+    </p>
 
-        <p
-          id="waris"
-          class="text-gray-700 whitespace-pre-line">
-        </p>
+    <p
+      id="statusPerkahwinan"
+      class="font-semibold text-lg">
+    </p>
 
-      </div>
+  </div>
 
-      <!-- HARTA -->
-      <div>
+  <div>
 
-        <h2 class="text-2xl font-bold text-[#153638] mb-4">
-          Senarai Harta
-        </h2>
+    <p class="text-sm text-gray-500">
+      Senarai Harta
+    </p>
 
-        <p
-          id="harta"
-          class="text-gray-700 whitespace-pre-line">
-        </p>
+    <p
+      id="senaraiHarta"
+      class="font-semibold text-lg whitespace-pre-line">
+    </p>
 
-      </div>
+  </div>
 
-      <!-- DOKUMEN -->
-      <div>
+  <div>
 
-        <h2 class="text-2xl font-bold text-[#153638] mb-4">
-          Lokasi Dokumen
-        </h2>
+    <p class="text-sm text-gray-500">
+      Sumbangan Suami
+    </p>
 
-        <p
-          id="dokumen"
-          class="text-gray-700 whitespace-pre-line">
-        </p>
+    <p
+      id="sumbanganSuami"
+      class="font-semibold text-lg whitespace-pre-line">
+    </p>
 
-      </div>
+  </div>
 
-      <!-- CATATAN -->
-      <div>
+  <div>
 
-        <h2 class="text-2xl font-bold text-[#153638] mb-4">
-          Catatan Tambahan
-        </h2>
+    <p class="text-sm text-gray-500">
+      Sumbangan Isteri
+    </p>
 
-        <p
-          id="catatan"
-          class="text-gray-700 whitespace-pre-line">
-        </p>
+    <p
+      id="sumbanganIsteri"
+      class="font-semibold text-lg whitespace-pre-line">
+    </p>
 
-      </div>
+  </div>
 
+  <div>
+
+    <p class="text-sm text-gray-500">
+      Tuntutan
+    </p>
+
+    <p
+      id="tuntutan"
+      class="font-semibold text-lg whitespace-pre-line">
+    </p>
+
+  </div>
+
+  <div>
+
+    <p class="text-sm text-gray-500">
+      Catatan
+    </p>
+
+    <p
+      id="catatan"
+      class="font-semibold text-lg whitespace-pre-line">
+    </p>
+
+  </div>
+
+</div>
 <!-- LAMPIRAN -->
 <div>
 
@@ -253,29 +271,45 @@
         const data =
         docSnap.data();
 
-        document.getElementById("namaSiMati").innerHTML =
-        data.namaSiMati || "";
+        document.getElementById(
+  "namaSuami"
+).innerHTML =
+data.namaSuami || "";
 
-        document.getElementById("icSiMati").innerHTML =
-        data.icSiMati || "";
+document.getElementById(
+  "namaIsteri"
+).innerHTML =
+data.namaIsteri || "";
 
-        document.getElementById("tarikhKematian").innerHTML =
-        data.tarikhKematian || "";
+document.getElementById(
+  "statusPerkahwinan"
+).innerHTML =
+data.statusPerkahwinan || "";
 
-        document.getElementById("statusPerkahwinan").innerHTML =
-        data.statusPerkahwinan || "";
+document.getElementById(
+  "senaraiHarta"
+).innerHTML =
+data.senaraiHarta || "";
 
-        document.getElementById("waris").innerHTML =
-        data.waris || "";
+document.getElementById(
+  "sumbanganSuami"
+).innerHTML =
+data.sumbanganSuami || "";
 
-        document.getElementById("harta").innerHTML =
-        data.harta || "";
+document.getElementById(
+  "sumbanganIsteri"
+).innerHTML =
+data.sumbanganIsteri || "";
 
-        document.getElementById("dokumen").innerHTML =
-        data.dokumen || "";
+document.getElementById(
+  "tuntutan"
+).innerHTML =
+data.tuntutan || "";
 
-        document.getElementById("catatan").innerHTML =
-        data.catatan || "";
+document.getElementById(
+  "catatan"
+).innerHTML =
+data.catatan || "";
 
 // LOAD LAMPIRAN
 const snapshot =
@@ -345,26 +379,6 @@ snapshot.forEach((doc)=>{
 
 </div>
 
-`; `
-
-  <div class="bg-gray-100 p-3 rounded-lg flex justify-between items-center">
-
-    <p class="text-sm text-gray-700">
-      ${file.fileName}
-    </p>
-
-    <a
-      href="${file.fileURL}"
-      target="_blank"
-      class="text-[#153638] font-semibold">
-
-      Lihat
-
-    </a>
-
-  </div>
-
-  `;
 
 });
 
@@ -404,7 +418,7 @@ document.getElementById(
             "status"
           ).innerHTML =
 
-          "Permohonan pusaka berjaya dihantar.";
+          "Permohonan harta sepencarian berjaya dihantar.";
 
         }
 
