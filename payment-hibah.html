@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pembayaran</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-5">
+
+<div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl">
+
+<h1 class="text-3xl font-bold text-[#153638] mb-2">
+hibah
+</h1>
+
+<p class="text-gray-500 mb-8">
+Bayaran Pendaftaran
+</p>
+
+<div class="bg-gray-100 rounded-2xl p-5 mb-8">
+
+<div class="flex justify-between mb-3">
+
+<span>
+Produk
+</span>
+
+<span class="font-semibold">
+hibah
+</span>
+
+</div>
+
+<div class="flex justify-between">
+
+<span>
+Jumlah
+</span>
+
+<span class="text-2xl font-bold text-[#153638]">
+RM2500
+</span>
+
+</div>
+
+</div>
+
+<button
+id="payBtn"
+class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-4 rounded-2xl font-semibold">
+
+Bayar Sekarang
+
+</button>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+updateDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain: "alqawthar-mywaris.firebaseapp.com",
+projectId: "alqawthar-mywaris",
+storageBucket: "alqawthar-mywaris.firebasestorage.app",
+messagingSenderId: "3498810778",
+appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+let currentUser = null;
+
+onAuthStateChanged(auth,(user)=>{
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+currentUser = user;
+
+});
+
+document
+.getElementById("payBtn")
+.addEventListener("click", async()=>{
+
+try{
+
+await updateDoc(
+
+doc(
+db,
+"users",
+currentUser.uid
+),
+
+{
+
+paymentStatus:
+"paid"
+
+}
+
+);
+
+alert(
+"Pembayaran berjaya"
+);
+
+window.location.href =
+"dashboard.html";
+
+}
+
+catch(error){
+
+console.log(error);
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
