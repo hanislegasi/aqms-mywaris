@@ -78,7 +78,8 @@ class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-
 </a>
 
 <a
-href="hibah.html"
+id="hibahButton"
+href="payment-hibah.html"
 class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-gray-100 min-h-[120px]">
 
 <div class="flex items-center gap-4">
@@ -309,6 +310,29 @@ else{
 
 }
 
+// HIBAH PAYMENT
+if(userData.hibahPaymentStatus === "paid"){
+
+  document.getElementById(
+    "hibahButton"
+  ).href = "hibah.html";
+
+}
+
+else{
+
+  document.getElementById(
+    "hibahButton"
+  ).href = "payment-hibah.html";
+
+  document.getElementById(
+    "hibahStatus"
+  ).innerHTML =
+
+  "Bayar RM2500";
+
+}
+  
 // GET WASIAT STATUS
 const wasiatSnap =
 await getDoc(
