@@ -282,6 +282,32 @@ document.getElementById(
 "Selamat datang, "
 + docSnap.data().nama;
 
+// PAYMENT STATUS
+const userData =
+docSnap.data();
+
+if(userData.paymentStatus === "paid"){
+
+  document.getElementById(
+    "wasiatButton"
+  ).href = "ewasiat.html";
+
+}
+
+else{
+
+  document.getElementById(
+    "wasiatButton"
+  ).href = "payment.html";
+
+  document.getElementById(
+    "wasiatStatus"
+  ).innerHTML =
+
+  "Bayar RM500";
+
+}
+
 // GET WASIAT STATUS
 const wasiatSnap =
 await getDoc(
