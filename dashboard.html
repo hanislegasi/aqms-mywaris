@@ -496,14 +496,26 @@ if(pusakaSnap.exists()){
 
 else{
 
-  document.getElementById(
-    "pusakaStatus"
-  ).innerHTML =
+  if(userData.pusakaPaymentStatus === "paid"){
 
-    "Belum Diisi";
+    document.getElementById(
+      "pusakaStatus"
+    ).innerHTML =
 
-}
-  
+    "DRAFT";
+
+  }
+
+  else{
+
+    document.getElementById(
+      "pusakaStatus"
+    ).innerHTML =
+
+    "Bayar RM1000";
+
+  }
+
 }
 
 });
