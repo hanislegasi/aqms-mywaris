@@ -434,9 +434,27 @@ else{
 
 document
 .getElementById("logoutBtn")
-.addEventListener("click",()=>{
+.addEventListener("click", async()=>{
 
-signOut(auth);
+  try{
+
+    await signOut(auth);
+
+    localStorage.clear();
+
+    sessionStorage.clear();
+
+    window.location.replace(
+      "index.html"
+    );
+
+  }
+
+  catch(error){
+
+    console.log(error);
+
+  }
 
 });
 
