@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Pengurusan Pusaka | MyWaris</title>
+  <title>Harta Sepencarian | MyWaris</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -16,11 +16,11 @@
   <div class="bg-[#153638] text-white p-5 shadow">
 
     <h1 class="text-2xl font-bold">
-      Pengurusan Pusaka
+      Harta Sepencarian
     </h1>
 
     <p class="text-gray-200">
-      Lengkapkan maklumat pengurusan pusaka
+      Lengkapkan maklumat tuntutan harta sepencarian
     </p>
 
   </div>
@@ -32,102 +32,122 @@
       id="pusakaForm"
       class="bg-white p-6 rounded-2xl shadow space-y-6">
 
-      <!-- SI MATI -->
-      <div>
+     <!-- MAKLUMAT SUAMI -->
+<div>
 
-        <h2 class="font-bold text-xl mb-4">
-          Maklumat Si Mati
-        </h2>
+  <label class="block font-semibold mb-2">
+    Nama Suami
+  </label>
 
-        <div class="space-y-4">
+  <input
+    id="namaSuami"
+    type="text"
+    placeholder="Nama Suami"
+    class="w-full border border-gray-200 p-4 rounded-xl"
+    required>
 
-          <input
-            type="text"
-            id="namaSiMati"
-            placeholder="Nama Si Mati"
-            class="w-full border rounded-lg p-3">
+</div>
 
-          <input
-            type="text"
-            id="icSiMati"
-            placeholder="No Kad Pengenalan"
-            class="w-full border rounded-lg p-3">
+<!-- MAKLUMAT ISTERI -->
+<div>
 
-          <input
-            type="date"
-            id="tarikhKematian"
-            class="w-full border rounded-lg p-3">
+  <label class="block font-semibold mb-2">
+    Nama Isteri
+  </label>
 
-          <input
-            type="text"
-            id="statusPerkahwinan"
-            placeholder="Status Perkahwinan"
-            class="w-full border rounded-lg p-3">
+  <input
+    id="namaIsteri"
+    type="text"
+    placeholder="Nama Isteri"
+    class="w-full border border-gray-200 p-4 rounded-xl"
+    required>
 
-        </div>
+</div>
 
-      </div>
+<!-- STATUS PERKAHWINAN -->
+<div>
 
-      <!-- WARIS -->
-      <div>
+  <label class="block font-semibold mb-2">
+    Status Perkahwinan
+  </label>
 
-        <h2 class="font-bold text-xl mb-4">
-          Senarai Waris
-        </h2>
+  <input
+    id="statusPerkahwinan"
+    type="text"
+    placeholder="Contoh: Masih Berkahwin / Dalam Perceraian"
+    class="w-full border border-gray-200 p-4 rounded-xl">
 
-        <textarea
-          id="waris"
-          rows="5"
-          placeholder="Senaraikan nama waris"
-          class="w-full border rounded-lg p-3"></textarea>
+</div>
 
-      </div>
+<!-- SENARAI HARTA -->
+<div>
 
-      <!-- HARTA -->
-      <div>
+  <label class="block font-semibold mb-2">
+    Senarai Harta
+  </label>
 
-        <h2 class="font-bold text-xl mb-4">
-          Senarai Harta
-        </h2>
+  <textarea
+    id="senaraiHarta"
+    placeholder="Nyatakan semua harta berkaitan"
+    class="w-full border border-gray-200 p-4 rounded-xl h-32"></textarea>
 
-        <textarea
-          id="harta"
-          rows="5"
-          placeholder="Senaraikan harta / aset"
-          class="w-full border rounded-lg p-3"></textarea>
+</div>
 
-      </div>
+<!-- SUMBANGAN SUAMI -->
+<div>
 
-      <!-- DOKUMEN -->
-      <div>
+  <label class="block font-semibold mb-2">
+    Sumbangan Suami
+  </label>
 
-        <h2 class="font-bold text-xl mb-4">
-          Lokasi Dokumen Berkaitan
-        </h2>
+  <textarea
+    id="sumbanganSuami"
+    placeholder="Nyatakan sumbangan suami"
+    class="w-full border border-gray-200 p-4 rounded-xl h-32"></textarea>
 
-        <textarea
-          id="dokumen"
-          rows="4"
-          placeholder="Contoh: Geran rumah disimpan di..."
-          class="w-full border rounded-lg p-3"></textarea>
+</div>
 
-      </div>
+<!-- SUMBANGAN ISTERI -->
+<div>
 
-      <!-- CATATAN -->
-      <div>
+  <label class="block font-semibold mb-2">
+    Sumbangan Isteri
+  </label>
 
-        <h2 class="font-bold text-xl mb-4">
-          Catatan Tambahan
-        </h2>
+  <textarea
+    id="sumbanganIsteri"
+    placeholder="Nyatakan sumbangan isteri"
+    class="w-full border border-gray-200 p-4 rounded-xl h-32"></textarea>
 
-        <textarea
-          id="catatan"
-          rows="4"
-          placeholder="Catatan tambahan"
-          class="w-full border rounded-lg p-3"></textarea>
+</div>
 
-      </div>
+<!-- TUNTUTAN -->
+<div>
 
+  <label class="block font-semibold mb-2">
+    Tuntutan
+  </label>
+
+  <textarea
+    id="tuntutan"
+    placeholder="Nyatakan tuntutan harta sepencarian"
+    class="w-full border border-gray-200 p-4 rounded-xl h-32"></textarea>
+
+</div>
+
+<!-- CATATAN -->
+<div>
+
+  <label class="block font-semibold mb-2">
+    Catatan Tambahan
+  </label>
+
+  <textarea
+    id="catatan"
+    placeholder="Maklumat tambahan"
+    class="w-full border border-gray-200 p-4 rounded-xl h-32"></textarea>
+
+</div>
 <!-- LAMPIRAN -->
 <div class="space-y-3">
 
@@ -285,33 +305,50 @@ getStorage(app);
 
       if(docSnap.exists()){
 
-        const data = docSnap.data();
+  const data =
+  docSnap.data();
 
-        document.getElementById("namaSiMati").value =
-          data.namaSiMati || "";
+  document.getElementById(
+    "namaSuami"
+  ).value =
+  data.namaSuami || "";
 
-        document.getElementById("icSiMati").value =
-          data.icSiMati || "";
+  document.getElementById(
+    "namaIsteri"
+  ).value =
+  data.namaIsteri || "";
 
-        document.getElementById("tarikhKematian").value =
-          data.tarikhKematian || "";
+  document.getElementById(
+    "statusPerkahwinan"
+  ).value =
+  data.statusPerkahwinan || "";
 
-        document.getElementById("statusPerkahwinan").value =
-          data.statusPerkahwinan || "";
+  document.getElementById(
+    "senaraiHarta"
+  ).value =
+  data.senaraiHarta || "";
 
-        document.getElementById("waris").value =
-          data.waris || "";
+  document.getElementById(
+    "sumbanganSuami"
+  ).value =
+  data.sumbanganSuami || "";
 
-        document.getElementById("harta").value =
-          data.harta || "";
+  document.getElementById(
+    "sumbanganIsteri"
+  ).value =
+  data.sumbanganIsteri || "";
 
-        document.getElementById("dokumen").value =
-          data.dokumen || "";
+  document.getElementById(
+    "tuntutan"
+  ).value =
+  data.tuntutan || "";
 
-        document.getElementById("catatan").value =
-          data.catatan || "";
+  document.getElementById(
+    "catatan"
+  ).value =
+  data.catatan || "";
 
-      }
+}
 
     });
 
@@ -489,34 +526,34 @@ document
 
             {
 
-              namaSiMati:
-              document.getElementById("namaSiMati").value,
+namaSuami:
+document.getElementById("namaSuami").value,
 
-              icSiMati:
-              document.getElementById("icSiMati").value,
+namaIsteri:
+document.getElementById("namaIsteri").value,
 
-              tarikhKematian:
-              document.getElementById("tarikhKematian").value,
+statusPerkahwinan:
+document.getElementById("statusPerkahwinan").value,
 
-              statusPerkahwinan:
-              document.getElementById("statusPerkahwinan").value,
+senaraiHarta:
+document.getElementById("senaraiHarta").value,
 
-              waris:
-              document.getElementById("waris").value,
+sumbanganSuami:
+document.getElementById("sumbanganSuami").value,
 
-              harta:
-              document.getElementById("harta").value,
+sumbanganIsteri:
+document.getElementById("sumbanganIsteri").value,
 
-              dokumen:
-              document.getElementById("dokumen").value,
+tuntutan:
+document.getElementById("tuntutan").value,
 
-              catatan:
-              document.getElementById("catatan").value,
+catatan:
+document.getElementById("catatan").value,
 
-              createdAt:
-              new Date()
+status:
+"SUBMITTED"
 
-            }
+}
 
           );
 
@@ -524,7 +561,7 @@ document
             "status"
           ).innerHTML =
 
-          "Maklumat pusaka berjaya disimpan.";
+          "Maklumat harta sepencarian berjaya disimpan.";
 
         }
 
