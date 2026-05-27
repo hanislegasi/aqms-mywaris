@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Generate Wasiat PDF
+</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+</head>
+
+<body class="bg-gray-200 p-5">
+
+<div class="max-w-4xl mx-auto">
+
+<button
+id="downloadBtn"
+class="mb-5 bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-6 py-3 rounded-xl font-semibold">
+
+Download PDF
+
+</button>
+
+<!-- TEMPLATE -->
+<div
+id="pdfContent"
+class="bg-white p-10 space-y-10">
+
+<!-- COVER -->
+
+<div class="text-center space-y-6">
+
+<h1 class="text-5xl font-bold text-[#153638]">
+Hans Legacy
+</h1>
+
+<h2 class="text-3xl font-bold">
+DOKUMEN PEWARISAN LENGKAP
+</h2>
+
+<div class="border mt-10">
+
+<div class="grid grid-cols-3 border-b">
+
+<div class="p-3 border-r font-semibold">
+NAMA
+</div>
+
+<div
+id="nama"
+class="p-3 col-span-2 text-left">
+-
+</div>
+
+</div>
+
+<div class="grid grid-cols-3 border-b">
+
+<div class="p-3 border-r font-semibold">
+KAD PENGENALAN
+</div>
+
+<div
+id="ic"
+class="p-3 col-span-2 text-left">
+-
+</div>
+
+</div>
+
+<div class="grid grid-cols-3 border-b">
+
+<div class="p-3 border-r font-semibold">
+ALAMAT
+</div>
+
+<div
+id="alamat"
+class="p-3 col-span-2 text-left">
+-
+</div>
+
+</div>
+
+<div class="grid grid-cols-3">
+
+<div class="p-3 border-r font-semibold">
+NO TELEFON
+</div>
+
+<div
+id="telefon"
+class="p-3 col-span-2 text-left">
+-
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- PAGE -->
+
+<div class="space-y-6">
+
+<h2 class="text-3xl font-bold text-center">
+DOKUMEN WASIAT
+</h2>
+
+<p class="leading-8 text-justify">
+
+Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani.
+
+Segala puji bagi Allah S.W.T yang kekal selamanya.
+
+Ini adalah Dokumen Pewarisan Lengkap bagi diri saya.
+
+</p>
+
+<div class="border">
+
+<div class="grid grid-cols-3 border-b">
+
+<div class="p-3 border-r font-semibold">
+NAMA
+</div>
+
+<div
+id="nama2"
+class="p-3 col-span-2">
+-
+</div>
+
+</div>
+
+<div class="grid grid-cols-3 border-b">
+
+<div class="p-3 border-r font-semibold">
+KAD PENGENALAN
+</div>
+
+<div
+id="ic2"
+class="p-3 col-span-2">
+-
+</div>
+
+</div>
+
+<div class="grid grid-cols-3 border-b">
+
+<div class="p-3 border-r font-semibold">
+ALAMAT
+</div>
+
+<div
+id="alamat2"
+class="p-3 col-span-2">
+-
+</div>
+
+</div>
+
+<div class="grid grid-cols-3">
+
+<div class="p-3 border-r font-semibold">
+NO TELEFON
+</div>
+
+<div
+id="telefon2"
+class="p-3 col-span-2">
+-
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:
+"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+authDomain:
+"alqawthar-mywaris.firebaseapp.com",
+
+projectId:
+"alqawthar-mywaris",
+
+storageBucket:
+"alqawthar-mywaris.firebasestorage.app",
+
+messagingSenderId:
+"3498810778",
+
+appId:
+"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const auth =
+getAuth(app);
+
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+const docSnap =
+await getDoc(
+doc(
+db,
+"users",
+user.uid
+)
+);
+
+if(docSnap.exists()){
+
+const data =
+docSnap.data();
+
+document.getElementById(
+"nama"
+).innerText =
+data.nama || "-";
+
+document.getElementById(
+"ic"
+).innerText =
+data.ic || "-";
+
+document.getElementById(
+"alamat"
+).innerText =
+data.alamat || "-";
+
+document.getElementById(
+"telefon"
+).innerText =
+data.telefon || "-";
+
+document.getElementById(
+"nama2"
+).innerText =
+data.nama || "-";
+
+document.getElementById(
+"ic2"
+).innerText =
+data.ic || "-";
+
+document.getElementById(
+"alamat2"
+).innerText =
+data.alamat || "-";
+
+document.getElementById(
+"telefon2"
+).innerText =
+data.telefon || "-";
+
+}
+
+});
+
+// DOWNLOAD PDF
+document
+.getElementById("downloadBtn")
+.addEventListener("click", ()=>{
+
+const element =
+document.getElementById(
+"pdfContent"
+);
+
+html2pdf()
+.set({
+
+margin: 0,
+
+filename:
+"dokumen-wasiat.pdf",
+
+image: {
+type: "jpeg",
+quality: 1
+},
+
+html2canvas: {
+scale: 2
+},
+
+jsPDF: {
+unit: "mm",
+format: "a4",
+orientation: "portrait"
+}
+
+})
+.from(element)
+.save();
+
+});
+
+</script>
+
+</body>
+</html>
