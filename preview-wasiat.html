@@ -365,47 +365,6 @@ document.getElementById(
         
       }
 
-// DOWNLOAD PDF
-document
-.getElementById("downloadBtn")
-.addEventListener("click", ()=>{
-
-  const element =
-  document.getElementById(
-    "pdfContent"
-  );
-
-  const options = {
-
-    margin: 0.5,
-
-    filename:
-    "Wasiat.pdf",
-
-    image: {
-      type: "jpeg",
-      quality: 1
-    },
-
-    html2canvas: {
-      scale: 2
-    },
-
-    jsPDF: {
-      unit: "in",
-      format: "a4",
-      orientation: "portrait"
-    }
-
-  };
-
-  html2pdf()
-  .set(options)
-  .from(element)
-  .save();
-
-});
-      
       // SUBMIT
       document
       .getElementById("submitBtn")
