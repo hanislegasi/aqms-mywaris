@@ -172,6 +172,84 @@ if(docSnap.exists()){
 const user =
 docSnap.data();
 
+// WASIAT STATUS
+const wasiatSnap =
+await getDoc(
+doc(
+db,
+"users",
+userId,
+"wasiat",
+"maklumat"
+)
+);
+
+let wasiatStatus =
+"BELUM DIISI";
+
+if(wasiatSnap.exists()){
+
+const wasiatData =
+wasiatSnap.data();
+
+wasiatStatus =
+wasiatData.status ||
+"DRAFT";
+
+}
+
+// HIBAH STATUS
+const hibahSnap =
+await getDoc(
+doc(
+db,
+"users",
+userId,
+"hibah",
+"maklumat"
+)
+);
+
+let hibahStatus =
+"BELUM DIISI";
+
+if(hibahSnap.exists()){
+
+const hibahData =
+hibahSnap.data();
+
+hibahStatus =
+hibahData.status ||
+"DRAFT";
+
+}
+
+// PUSAKA STATUS
+const pusakaSnap =
+await getDoc(
+doc(
+db,
+"users",
+userId,
+"pusaka",
+"maklumat"
+)
+);
+
+let pusakaStatus =
+"BELUM DIISI";
+
+if(pusakaSnap.exists()){
+
+const pusakaData =
+pusakaSnap.data();
+
+pusakaStatus =
+pusakaData.status ||
+"DRAFT";
+
+}
+
 document.getElementById(
 "customerInfo"
 ).innerHTML = `
@@ -211,9 +289,7 @@ e-Wasiat
 </p>
 
 <p class="font-semibold">
-${user.paymentStatus === "paid"
-? "PAID"
-: "UNPAID"}
+${wasiatStatus}
 </p>
 
 </div>
@@ -225,12 +301,22 @@ Hibah
 </p>
 
 <p class="font-semibold">
-${user.hibahPaymentStatus === "paid"
-? "PAID"
-: "UNPAID"}
+${hibahStatus}
 </p>
 
 </div>
+
+</div>
+
+<div class="bg-gray-100 p-4 rounded-xl">
+
+<p class="text-sm text-gray-500">
+Harta Sepencarian
+</p>
+
+<p class="font-semibold">
+${pusakaStatus}
+</p>
 
 </div>
 
