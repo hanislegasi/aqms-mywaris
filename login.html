@@ -58,6 +58,13 @@ signInWithEmailAndPassword
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+import {
+getFirestore,
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  
 const firebaseConfig = {
   apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
   authDomain: "alqawthar-mywaris.firebaseapp.com",
@@ -98,8 +105,34 @@ password
 
 alert("Login berjaya");
 
-window.location.href =
-"dashboard.html";
+const db =
+getFirestore(app);
+
+const userDoc =
+await getDoc(
+  doc(
+    db,
+    "users",
+    auth.currentUser.uid
+  )
+);
+
+const userData =
+userDoc.data();
+
+if(userData.role === "admin"){
+
+  window.location.href =
+  "admin-dashboard.html";
+
+}
+
+else{
+
+  window.location.href =
+  "dashboard.html";
+
+}
 
 }
 catch(error){
