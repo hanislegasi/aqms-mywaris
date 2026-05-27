@@ -8,6 +8,8 @@
   <title>Preview Harta Sepencarian | MyWaris</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 
 <body class="bg-gray-100 min-h-screen">
@@ -26,8 +28,10 @@
   </div>
 
   <!-- DOCUMENT -->
-  <div class="max-w-4xl mx-auto p-5">
-
+  <div
+id="pdfContent"
+class="max-w-4xl mx-auto p-5">
+    
     <div class="bg-white rounded-2xl shadow p-8 space-y-8">
 
       <!-- TITLE -->
@@ -163,6 +167,14 @@
       <!-- ACTION -->
       <div class="pt-6 border-t space-y-3">
 
+<button
+id="downloadBtn"
+class="w-full bg-black hover:bg-gray-800 transition text-white py-3 rounded-lg font-semibold">
+
+Download PDF
+
+</button>
+        
         <button
           id="submitBtn"
           class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-lg font-semibold">
@@ -389,6 +401,47 @@ document.getElementById(
         
       }
 
+ // DOWNLOAD PDF
+document
+.getElementById("downloadBtn")
+.addEventListener("click", ()=>{
+
+  const element =
+  document.getElementById(
+    "pdfContent"
+  );
+
+  const options = {
+
+    margin: 0.5,
+
+    filename:
+    "Harta-Sepencarian.pdf",
+
+    image: {
+      type: "jpeg",
+      quality: 1
+    },
+
+    html2canvas: {
+      scale: 2
+    },
+
+    jsPDF: {
+      unit: "in",
+      format: "a4",
+      orientation: "portrait"
+    }
+
+  };
+
+  html2pdf()
+  .set(options)
+  .from(element)
+  .save();
+
+});
+      
       // SUBMIT
       document
       .getElementById("submitBtn")
