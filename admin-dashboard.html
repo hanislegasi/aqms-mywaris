@@ -118,7 +118,9 @@ doc.data();
 
 html += `
 
-<div class="bg-white p-5 rounded-2xl shadow">
+<a
+href="customer-details.html?id=${doc.id}"
+class="block bg-white p-5 rounded-2xl shadow hover:shadow-lg transition">
 
 <div class="flex justify-between items-center">
 
@@ -131,6 +133,52 @@ ${user.nama || "-"}
 <p class="text-gray-500 text-sm">
 ${user.email || "-"}
 </p>
+
+<div class="mt-4 grid grid-cols-3 gap-3">
+
+<div class="bg-gray-100 p-3 rounded-xl">
+
+<p class="text-xs text-gray-500">
+e-Wasiat
+</p>
+
+<p class="font-semibold">
+${user.paymentStatus === "paid"
+? "PAID"
+: "UNPAID"}
+</p>
+
+</div>
+
+<div class="bg-gray-100 p-3 rounded-xl">
+
+<p class="text-xs text-gray-500">
+Hibah
+</p>
+
+<p class="font-semibold">
+${user.hibahPaymentStatus === "paid"
+? "PAID"
+: "UNPAID"}
+</p>
+
+</div>
+
+<div class="bg-gray-100 p-3 rounded-xl">
+
+<p class="text-xs text-gray-500">
+Harta Sepencarian
+</p>
+
+<p class="font-semibold">
+${user.pusakaPaymentStatus === "paid"
+? "PAID"
+: "UNPAID"}
+</p>
+
+</div>
+
+</div>
 
 </div>
 
@@ -149,6 +197,8 @@ ${user.telefon || "-"}
 </div>
 
 </div>
+
+</a>
 
 `;
 
