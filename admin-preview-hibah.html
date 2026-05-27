@@ -2,10 +2,15 @@
 <html lang="ms">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Admin Preview Hibah</title>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Admin Preview Hibah
+</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -49,7 +54,7 @@ class="inline-block bg-gray-200 hover:bg-gray-300 transition text-gray-700 px-5 
 <div class="text-center border-b pb-6">
 
 <h1 class="text-3xl font-bold text-[#153638]">
-DOKUMEN e-WASIAT
+DOKUMEN HIBAH
 </h1>
 
 <p class="text-gray-500 mt-2">
@@ -58,85 +63,94 @@ Al-Qawthar Mawaris Synergy
 
 </div>
 
-<!-- PEWASIAT -->
+<!-- PEMBERI -->
 <div>
 
 <h2 class="text-2xl font-bold text-[#153638] mb-4">
-Maklumat Pewasiat
+Maklumat Pemberi Hibah
 </h2>
 
 <div class="space-y-3 text-gray-700">
 
 <p>
 <strong>Nama:</strong>
-<span id="nama"></span>
+<span id="pemberiNama"></span>
 </p>
 
 <p>
 <strong>No IC:</strong>
-<span id="ic"></span>
+<span id="pemberiIc"></span>
 </p>
 
 <p>
 <strong>No Telefon:</strong>
-<span id="telefon"></span>
+<span id="pemberiTelefon"></span>
 </p>
 
 </div>
 
 </div>
 
-<!-- PASANGAN -->
+<!-- PENERIMA -->
 <div>
 
 <h2 class="text-2xl font-bold text-[#153638] mb-4">
-Maklumat Pasangan
+Maklumat Penerima Hibah
 </h2>
 
-<p
-id="pasangan"
-class="text-gray-700">
+<div class="space-y-3 text-gray-700">
+
+<p>
+<strong>Nama:</strong>
+<span id="penerimaNama"></span>
+</p>
+
+<p>
+<strong>Hubungan:</strong>
+<span id="hubungan"></span>
 </p>
 
 </div>
 
-<!-- ANAK -->
+</div>
+
+<!-- ASET -->
 <div>
 
 <h2 class="text-2xl font-bold text-[#153638] mb-4">
-Maklumat Anak
+Maklumat Aset
 </h2>
 
 <p
-id="anak"
+id="aset"
 class="text-gray-700 whitespace-pre-line">
 </p>
 
 </div>
 
-<!-- WASI -->
+<!-- NILAI -->
 <div>
 
 <h2 class="text-2xl font-bold text-[#153638] mb-4">
-Maklumat Wasi
+Nilai Aset
 </h2>
 
 <p
-id="wasi"
+id="nilaiAset"
 class="text-gray-700">
 </p>
 
 </div>
 
-<!-- HARTA -->
+<!-- CATATAN -->
 <div>
 
 <h2 class="text-2xl font-bold text-[#153638] mb-4">
-Senarai Harta
+Catatan Tambahan
 </h2>
 
 <p
-id="harta"
+id="catatan"
 class="text-gray-700 whitespace-pre-line">
 </p>
 
@@ -303,7 +317,7 @@ doc(
 db,
 "users",
 userId,
-"wasiat",
+"hibah",
 "maklumat"
 );
 
@@ -315,26 +329,29 @@ if(docSnap.exists()){
 const data =
 docSnap.data();
 
-document.getElementById("nama").innerHTML =
-data.nama || "";
+document.getElementById("pemberiNama").innerHTML =
+data.pemberiNama || "";
 
-document.getElementById("ic").innerHTML =
-data.ic || "";
+document.getElementById("pemberiIc").innerHTML =
+data.pemberiIc || "";
 
-document.getElementById("telefon").innerHTML =
-data.telefon || "";
+document.getElementById("pemberiTelefon").innerHTML =
+data.pemberiTelefon || "";
 
-document.getElementById("pasangan").innerHTML =
-data.pasangan || "";
+document.getElementById("penerimaNama").innerHTML =
+data.penerimaNama || "";
 
-document.getElementById("anak").innerHTML =
-data.anak || "";
+document.getElementById("hubungan").innerHTML =
+data.hubungan || "";
 
-document.getElementById("wasi").innerHTML =
-data.wasi || "";
+document.getElementById("aset").innerHTML =
+data.aset || "";
 
-document.getElementById("harta").innerHTML =
-data.harta || "";
+document.getElementById("nilaiAset").innerHTML =
+data.nilaiAset || "";
+
+document.getElementById("catatan").innerHTML =
+data.catatan || "";
 
 // LOAD LAMPIRAN
 const snapshot =
@@ -344,7 +361,7 @@ collection(
 db,
 "users",
 userId,
-"wasiatDocuments"
+"hibahDocuments"
 )
 
 );
@@ -431,7 +448,7 @@ const options = {
 margin: 0.5,
 
 filename:
-"Wasiat.pdf",
+"Hibah.pdf",
 
 image: {
 type: "jpeg",
@@ -470,7 +487,7 @@ doc(
 db,
 "users",
 userId,
-"wasiat",
+"hibah",
 "maklumat"
 ),
 
@@ -487,7 +504,7 @@ document.getElementById(
 "status"
 ).innerHTML =
 
-"Permohonan berjaya diluluskan.";
+"Permohonan hibah berjaya diluluskan.";
 
 }
 
@@ -512,7 +529,7 @@ doc(
 db,
 "users",
 userId,
-"wasiat",
+"hibah",
 "maklumat"
 ),
 
@@ -529,7 +546,7 @@ document.getElementById(
 "status"
 ).innerHTML =
 
-"Permohonan berjaya ditolak.";
+"Permohonan hibah berjaya ditolak.";
 
 }
 
