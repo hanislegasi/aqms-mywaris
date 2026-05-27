@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Customer Details
+</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+</head>
+
+<body
+class="bg-gray-100 min-h-screen"
+style="font-family: Inter, sans-serif;">
+
+<!-- HEADER -->
+<div class="bg-[#153638] text-white p-5 shadow">
+
+<h1 class="text-2xl font-bold">
+Customer Details
+</h1>
+
+<p class="text-gray-200">
+Admin Review Center
+</p>
+
+</div>
+
+<!-- CONTENT -->
+<div class="p-5 max-w-5xl mx-auto">
+
+<div
+id="customerInfo"
+class="bg-white rounded-2xl shadow p-6">
+
+<p class="text-gray-500">
+Memuatkan data...
+</p>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:
+"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+authDomain:
+"alqawthar-mywaris.firebaseapp.com",
+
+projectId:
+"alqawthar-mywaris",
+
+storageBucket:
+"alqawthar-mywaris.firebasestorage.app",
+
+messagingSenderId:
+"3498810778",
+
+appId:
+"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+// GET ID
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const userId =
+params.get("id");
+
+// LOAD USER
+const docSnap =
+await getDoc(
+doc(db,"users",userId)
+);
+
+if(docSnap.exists()){
+
+const user =
+docSnap.data();
+
+document.getElementById(
+"customerInfo"
+).innerHTML = `
+
+<div class="space-y-6">
+
+<div>
+
+<h2 class="text-3xl font-bold text-[#153638]">
+${user.nama || "-"}
+</h2>
+
+<p class="text-gray-500">
+${user.email || "-"}
+</p>
+
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+<div class="bg-gray-100 p-4 rounded-xl">
+
+<p class="text-sm text-gray-500">
+Telefon
+</p>
+
+<p class="font-semibold">
+${user.telefon || "-"}
+</p>
+
+</div>
+
+<div class="bg-gray-100 p-4 rounded-xl">
+
+<p class="text-sm text-gray-500">
+e-Wasiat
+</p>
+
+<p class="font-semibold">
+${user.paymentStatus === "paid"
+? "PAID"
+: "UNPAID"}
+</p>
+
+</div>
+
+<div class="bg-gray-100 p-4 rounded-xl">
+
+<p class="text-sm text-gray-500">
+Hibah
+</p>
+
+<p class="font-semibold">
+${user.hibahPaymentStatus === "paid"
+? "PAID"
+: "UNPAID"}
+</p>
+
+</div>
+
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+<a
+href="preview-wasiat.html"
+target="_blank"
+class="block bg-[#153638] hover:bg-[#1d4a4d] transition text-white text-center py-3 rounded-xl font-semibold">
+
+View Wasiat
+
+</a>
+
+<a
+href="preview-hibah.html"
+target="_blank"
+class="block bg-[#153638] hover:bg-[#1d4a4d] transition text-white text-center py-3 rounded-xl font-semibold">
+
+View Hibah
+
+</a>
+
+<a
+href="preview-pusaka.html"
+target="_blank"
+class="block bg-[#153638] hover:bg-[#1d4a4d] transition text-white text-center py-3 rounded-xl font-semibold">
+
+View Harta Sepencarian
+
+</a>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+</script>
+
+</body>
+</html>
