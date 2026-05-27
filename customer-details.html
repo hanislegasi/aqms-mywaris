@@ -75,8 +75,7 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
 getFirestore,
 doc,
-getDoc,
-updateDoc
+getDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -266,110 +265,12 @@ View Harta Sepencarian
 
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-</a>
-
-<button
-id="approveBtn"
-class="w-full bg-green-600 hover:bg-green-700 transition text-white py-3 rounded-xl font-semibold">
-
-Approve Permohonan
-
-</button>
-
-<button
-id="rejectBtn"
-class="w-full bg-red-600 hover:bg-red-700 transition text-white py-3 rounded-xl font-semibold">
-
-Reject Permohonan
-
-</button>
-
-</div>
-
 </div>
 
 `;
 
 }
 
-// APPROVE
-document
-.getElementById("approveBtn")
-.addEventListener("click", async()=>{
-
-  try{
-
-    await updateDoc(
-
-      doc(
-        db,
-        "users",
-        userId
-      ),
-
-      {
-
-        adminStatus:
-        "APPROVED"
-
-      }
-
-    );
-
-    alert(
-      "Permohonan diluluskan"
-    );
-
-  }
-
-  catch(error){
-
-    console.log(error);
-
-  }
-
-});
-
-// REJECT
-document
-.getElementById("rejectBtn")
-.addEventListener("click", async()=>{
-
-  try{
-
-    await updateDoc(
-
-      doc(
-        db,
-        "users",
-        userId
-      ),
-
-      {
-
-        adminStatus:
-        "REJECTED"
-
-      }
-
-    );
-
-    alert(
-      "Permohonan ditolak"
-    );
-
-  }
-
-  catch(error){
-
-    console.log(error);
-
-  }
-
-});
-  
 </script>
 
 </body>
