@@ -47,13 +47,13 @@ Al-Qawthar Mawaris Synergy
 <!-- CONTENT -->
 <div class="p-5">
 
-<a
-href="dashboard.html"
-class="inline-block mb-5 bg-gray-200 hover:bg-gray-300 transition text-gray-700 px-5 py-3 rounded-xl font-semibold">
+<button
+id="logoutBtn"
+class="inline-block mb-5 bg-red-500 hover:bg-red-600 transition text-white px-5 py-3 rounded-xl font-semibold">
 
-← Kembali ke Dashboard
+Logout
 
-</a>
+</button>
   
 <h2 class="text-xl font-bold mb-5">
 Senarai Pelanggan
@@ -87,10 +87,11 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
 getAuth,
-onAuthStateChanged
+onAuthStateChanged,
+signOut
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+  
 const firebaseConfig = {
 
 apiKey:
@@ -154,9 +155,9 @@ onAuthStateChanged(auth, async(user)=>{
     window.location.href =
     "dashboard.html";
 
+ return;
+    
   }
-
-});
 
 // LOAD CUSTOMERS
 const snapshot =
@@ -260,7 +261,23 @@ ${user.telefon || "-"}
 document.getElementById(
 "customerList"
 ).innerHTML = html;
+  
+});
 
+
+
+// LOGOUT
+document
+.getElementById("logoutBtn")
+.addEventListener("click", async()=>{
+
+await signOut(auth);
+
+window.location.href =
+"index.html";
+
+});
+  
 </script>
 
 </body>
