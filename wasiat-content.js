@@ -19,7 +19,7 @@ DOKUMEN WASIAT
 
 <div
 style="
-font-family:'Cinzel', serif;
+font-family:'Times New Roman', serif;
 font-size:15px;
 line-height:1.4;
 text-align:justify;
