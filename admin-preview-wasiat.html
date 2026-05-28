@@ -38,18 +38,22 @@
         .a4-page {
             width: 210mm;
             height: 296.5mm; /* Dikurangkan sikit dari 297mm untuk elak blank page ke-3 */
-            position: relative;
-            overflow: visible;
-            background-color: white;
+            background:white;
             margin:20px auto;
-box-sizing:border-box;
-            page-break-after: always; /* Paksa page break yang sekata */
+            box-sizing:border-box;
+            position:relative;
+            overflow:visible;
+            page-break-after:always; /* Paksa page break yang sekata */
         }
         
         .a4-page:last-child {
             page-break-after: auto; /* Tiada pemisah selepas page terakhir */
         }
 
+        .a4-page{
+padding-bottom:25mm !important;
+}
+        
         .page-break {
     page-break-before: always;
 }
@@ -72,6 +76,22 @@ box-sizing:border-box;
     font-size: 16px;
     margin-bottom: 18px;
     text-align: justify;
+}
+
+        .pdf-footer{
+position:absolute;
+bottom:10mm;
+left:18mm;
+right:18mm;
+display:flex;
+justify-content:space-between;
+font-size:12px;
+color:#666;
+font-family:'Times New Roman', serif;
+}
+
+.a4-page{
+position:relative;
 }
 
         /* Melancarkan transisi skala untuk mobile view */
@@ -133,6 +153,19 @@ box-sizing:border-box;
                     <p id="approvedDate" class="absolute bottom-[3%] right-[3%] text-white text-sm font-cinzel tracking-widest drop-shadow-sm">
                         24 MEI 2026
                     </p>
+
+<div class="pdf-footer">
+
+<span>
+DOC REF: AQMS-WST-2026-001
+</span>
+
+<span class="page-number">
+1
+</span>
+
+</div>
+                    
                 </div>
 
                 <!-- PAGE 2 (MAKLUMAT) -->
@@ -166,7 +199,19 @@ box-sizing:border-box;
                             <td id="kodTable" class="border border-gray-300 p-5 font-medium">-</td>
                         </tr>
                     </table>
-                                                        
+
+<div class="pdf-footer">
+
+<span>
+DOC REF: AQMS-WST-2026-001
+</span>
+
+<span class="page-number">
+2
+</span>
+
+</div>
+                    
                 </div>
 
             </div>
@@ -174,13 +219,25 @@ box-sizing:border-box;
    
 
     <!-- PAGE 3 -->
-<div class="a4-page p-[18mm] bg-white p-16">
+<div class="a4-page p-[18mm] bg-white">
 
 <div
 id="sectionWasiat"
 class="wasiat-section">
 </div>
 
+<div class="pdf-footer">
+
+<span>
+DOC REF: AQMS-WST-2026-001
+</span>
+
+<span class="page-number">
+3
+</span>
+
+</div>
+    
 </div>
 
  </main>
