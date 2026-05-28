@@ -35,22 +35,26 @@ Semakan Dokumen Customer
 <!-- DOCUMENT -->
 <div
 id="pdfContent"
-class="w-[210mm] mx-auto bg-white">
+class="mx-auto bg-white"
+style="
+width:210mm;
+">
 
 <!-- PAGE 1 -->
 <div
 class="relative"
 style="
 width:210mm;
-height:297mm;
+min-height:297mm;
 overflow:hidden;
+page-break-after:always;
 ">
 
 <img
 src="images/wasiat-cover.png"
 class="absolute inset-0 w-full h-full"
 style="
-object-fit: contain;
+object-fit: cover;
 ">
 
 <!-- DOC REF -->
@@ -463,7 +467,7 @@ scale: 4
 },
 
 jsPDF: {
-unit: "in",
+unit: "mm",
 format: "a4",
 orientation: "portrait"
 }
