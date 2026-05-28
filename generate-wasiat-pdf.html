@@ -18,9 +18,9 @@ Generate Wasiat PDF
 
 </head>
 
-<body class="bg-gray-200 p-5">
+<body class="bg-gray-300 py-10">
 
-<div class="max-w-4xl mx-auto">
+<div class="w-[210mm] min-h-[297mm] mx-auto">
 
 <button
 id="downloadBtn"
@@ -33,10 +33,10 @@ Download PDF
 <!-- TEMPLATE -->
 <div
 id="pdfContent"
-class="bg-white min-h-screen">
+class="bg-white w-full min-h-[297mm] shadow-2xl">
 
 <!-- COVER PAGE -->
-<div class="min-h-screen flex flex-col justify-between p-16">
+<div class="min-h-[297mm] flex flex-col justify-between p-20">
 
 <!-- TOP -->
 <div>
@@ -48,8 +48,7 @@ class="bg-white min-h-screen">
 <h1 class="text-5xl font-bold text-[#153638] leading-tight">
 AL-QAWTHAR
 <br>
-MAWARIS
-SYNERGY
+MAWARIS SYNERGY
 </h1>
 
 <p class="mt-4 text-gray-500 text-lg">
@@ -58,11 +57,9 @@ Pakar Pengurusan Wasiat Islam
 
 </div>
 
-<div class="text-right">
+<div class="w-36 h-36 border-4 border-[#153638] rounded-full flex items-center justify-center">
 
-<div class="w-28 h-28 border-4 border-[#153638] rounded-full flex items-center justify-center">
-
-<span class="text-[#153638] font-bold text-xl">
+<span class="text-[#153638] font-bold text-2xl">
 AQMS
 </span>
 
@@ -72,17 +69,16 @@ AQMS
 
 </div>
 
-</div>
-
 <!-- CENTER -->
-<div class="text-center py-20">
+<div class="text-center py-24">
 
-<h2 class="text-6xl font-bold text-[#153638] mb-6">
+<h2 class="text-7xl font-bold text-[#153638] leading-tight mb-8">
 DOKUMEN
+<br>
 e-WASIAT
 </h2>
 
-<div class="w-40 h-1 bg-[#153638] mx-auto mb-8">
+<div class="w-52 h-1 bg-[#153638] mx-auto mb-10">
 </div>
 
 <p class="text-2xl text-gray-600">
@@ -92,11 +88,11 @@ Dokumen Pengurusan Wasiat Islam
 </div>
 
 <!-- BOTTOM -->
-<div class="space-y-6">
+<div class="space-y-8">
 
 <div class="border-t-2 border-[#153638] pt-8">
 
-<div class="grid grid-cols-3 gap-5">
+<div class="grid grid-cols-3 gap-10">
 
 <div>
 
@@ -106,7 +102,7 @@ NAMA
 
 <p
 id="nama"
-class="font-bold text-lg">
+class="font-bold text-xl">
 -
 </p>
 
@@ -120,7 +116,7 @@ NO IC
 
 <p
 id="ic"
-class="font-bold text-lg">
+class="font-bold text-xl">
 -
 </p>
 
@@ -134,7 +130,7 @@ TELEFON
 
 <p
 id="telefon"
-class="font-bold text-lg">
+class="font-bold text-xl">
 -
 </p>
 
@@ -153,90 +149,6 @@ Al-Qawthar Mawaris Synergy
 <p id="tarikhHariIni">
 -
 </p>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- PAGE -->
-
-<div class="space-y-6">
-
-<h2 class="text-3xl font-bold text-center">
-DOKUMEN WASIAT
-</h2>
-
-<p class="leading-8 text-justify">
-
-Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani.
-
-Segala puji bagi Allah S.W.T yang kekal selamanya.
-
-Ini adalah Dokumen Pewarisan Lengkap bagi diri saya.
-
-</p>
-
-<div class="border">
-
-<div class="grid grid-cols-3 border-b">
-
-<div class="p-3 border-r font-semibold">
-NAMA
-</div>
-
-<div
-id="nama2"
-class="p-3 col-span-2">
--
-</div>
-
-</div>
-
-<div class="grid grid-cols-3 border-b">
-
-<div class="p-3 border-r font-semibold">
-KAD PENGENALAN
-</div>
-
-<div
-id="ic2"
-class="p-3 col-span-2">
--
-</div>
-
-</div>
-
-<div class="grid grid-cols-3 border-b">
-
-<div class="p-3 border-r font-semibold">
-ALAMAT
-</div>
-
-<div
-id="alamat2"
-class="p-3 col-span-2">
--
-</div>
-
-</div>
-
-<div class="grid grid-cols-3">
-
-<div class="p-3 border-r font-semibold">
-NO TELEFON
-</div>
-
-<div
-id="telefon2"
-class="p-3 col-span-2">
--
-</div>
-
-</div>
 
 </div>
 
