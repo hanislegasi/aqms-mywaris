@@ -15,6 +15,19 @@
 href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap"
 rel="stylesheet">
 
+<style>
+
+.pdf-page{
+page-break-after: always;
+break-after: page;
+}
+
+#pdfContent{
+background:white;
+}
+
+</style>
+  
 </head>
 
 <body class="bg-gray-100 min-h-screen">
@@ -42,7 +55,7 @@ width:210mm;
 
 <!-- PAGE 1 -->
 <div
-class="relative"
+class="relative pdf-page"
 style="
 width:210mm;
 height:297mm;
@@ -125,7 +138,7 @@ letter-spacing:1px;
 
 <!-- PAGE 2 -->
 <div
-class="bg-white"
+class="bg-white pdf-page"
 style="
 width:210mm;
 height:297mm;
@@ -228,8 +241,13 @@ class="border p-5">
 
 </table>
 
+</div>
+
+</div>
+
 <!-- ACTION -->
-<div class="mt-6 space-y-4">
+<div
+class="max-w-5xl mx-auto p-5 space-y-4">
 
 <button
 id="downloadBtn"
@@ -256,10 +274,6 @@ class="bg-red-600 hover:bg-red-700 transition text-white py-4 rounded-xl font-se
 Reject Permohonan
 
 </button>
-
-</div>
-
-</div>
 
 </div>
 
@@ -478,11 +492,13 @@ quality: 1
 },
 
 html2canvas: {
-scale: 4
+scale: 2,
+useCORS: true,
+scrollY: 0
 },
 
 pagebreak: {
-mode: ['css']
+mode: ['avoid-all', 'css', 'legacy']
 },
   
 jsPDF: {
