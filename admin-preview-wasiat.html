@@ -45,9 +45,8 @@ width:210mm;
 class="relative"
 style="
 width:210mm;
-min-height:297mm;
+height:297mm;
 overflow:hidden;
-page-break-after:always;
 ">
 
 <img
@@ -125,13 +124,25 @@ letter-spacing:1px;
 </div>
 
 <!-- PAGE 2 -->
-<div class="w-[210mm] min-h-[297mm] bg-white p-16">
+<div
+class="bg-white"
+style="
+width:210mm;
+height:297mm;
+padding:25mm;
+overflow:hidden;
+font-family:'Cinzel', serif;
+">
 
 <div class="border-b-2 border-[#153638] pb-4 mb-10">
 
 <p
 id="docRef2"
-class="text-[#153638] text-xl font-bold">
+class="text-[#153638] text-xl font-bold"
+style="
+font-family:'Cinzel', serif;
+letter-spacing:1px;
+">
 
 DOC REF: AQMS-WST-2026-001
 
@@ -139,7 +150,11 @@ DOC REF: AQMS-WST-2026-001
 
 </div>
 
-<table class="w-full border border-gray-300 text-lg">
+<table
+class="w-full border border-gray-300 text-lg"
+style="
+font-family:'Cinzel', serif;
+">
 
 <tr>
 
@@ -214,7 +229,7 @@ class="border p-5">
 </table>
 
 <!-- ACTION -->
-<div class="mt-10 space-y-4">
+<div class="mt-6 space-y-4">
 
 <button
 id="downloadBtn"
@@ -466,6 +481,10 @@ html2canvas: {
 scale: 4
 },
 
+pagebreak: {
+mode: ['css']
+},
+  
 jsPDF: {
 unit: "mm",
 format: "a4",
