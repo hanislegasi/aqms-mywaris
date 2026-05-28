@@ -11,6 +11,10 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
+<link
+href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap"
+rel="stylesheet">
+
 </head>
 
 <body class="bg-gray-100 min-h-screen">
@@ -34,16 +38,29 @@ id="pdfContent"
 class="w-[210mm] mx-auto bg-white">
 
 <!-- PAGE 1 -->
-<div class="relative w-[210mm] h-[297mm]">
+<div
+class="relative"
+style="
+width:210mm;
+height:297mm;
+overflow:hidden;
+">
 
 <img
 src="images/wasiat-cover.png"
-class="absolute inset-0 w-full h-full object-cover">
+class="absolute inset-0 w-full h-full"
+style="
+object-fit: contain;
+">
 
 <!-- DOC REF -->
 <p
 id="docRef"
-class="absolute top-[55px] left-[60px] text-[#d8c08f] text-xl">
+class="absolute top-[5%] left-[8%] text-[#d8c08f] text-xl"
+style="
+font-family:'Cinzel', serif;
+letter-spacing:1px;
+">
 
 AQMS-WST-2026-001
 
@@ -52,16 +69,20 @@ AQMS-WST-2026-001
 <!-- YEAR -->
 <p
 id="tahun"
-class="absolute top-[40px] right-[70px] text-white text-6xl font-bold">
+class="absolute top-[5%] right-[8%] text-white text-4xl font-bold">
 
 2026
 
 </p>
-
-<!-- NAMA -->
+  
+<!--nama-->
 <p
 id="namaCover"
-class="absolute top-[800px] left-[110px] text-white text-2xl font-bold uppercase">
+class="absolute top-[63%] left-[12%] text-white text-2xl font-bold uppercase"
+style="
+font-family:'Cinzel', serif;
+letter-spacing:1px;
+">
 
 ALI BIN ABU
 
@@ -70,7 +91,11 @@ ALI BIN ABU
 <!-- IC -->
 <p
 id="icCover"
-class="absolute top-[935px] left-[110px] text-white text-2xl font-bold">
+class="absolute top-[69%] left-[12%] text-white text-2xl font-bold"
+style="
+font-family:'Cinzel', serif;
+letter-spacing:1px;
+">
 
 000000-00-0000
 
@@ -79,7 +104,7 @@ class="absolute top-[935px] left-[110px] text-white text-2xl font-bold">
 <!-- APPROVED DATE -->
 <p
 id="approvedDate"
-class="absolute bottom-[70px] right-[60px] text-white text-lg">
+class="absolute bottom-[4%] right-[6%] text-white text-lg">
 
 24 MEI 2026
 
@@ -338,9 +363,9 @@ document.getElementById(
 
 // YEAR
 const approvedDate =
-new Date(
 data.approvedAt
-);
+? new Date(data.approvedAt)
+: new Date();
 
 document.getElementById(
 "tahun"
@@ -415,7 +440,7 @@ document.getElementById(
 
 const options = {
 
-margin: 0.5,
+margin: 0,
 
 filename:
 "Wasiat.pdf",
@@ -426,7 +451,7 @@ quality: 1
 },
 
 html2canvas: {
-scale: 2
+scale: 4
 },
 
 jsPDF: {
