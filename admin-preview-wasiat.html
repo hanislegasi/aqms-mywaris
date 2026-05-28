@@ -29,7 +29,6 @@ Semakan Dokumen Customer
 </div>
 
 <!-- DOCUMENT -->
-<!-- DOCUMENT -->
 <div
 id="pdfContent"
 class="w-[210mm] mx-auto bg-white">
@@ -44,7 +43,7 @@ class="absolute inset-0 w-full h-full object-cover">
 <!-- DOC REF -->
 <p
 id="docRef"
-class="absolute top-[60px] left-[60px] text-[#d8c08f] text-xl font-semibold">
+class="absolute top-[55px] left-[60px] text-[#d8c08f] text-xl">
 
 AQMS-WST-2026-001
 
@@ -53,7 +52,7 @@ AQMS-WST-2026-001
 <!-- YEAR -->
 <p
 id="tahun"
-class="absolute top-[50px] right-[70px] text-white text-6xl font-bold">
+class="absolute top-[40px] right-[70px] text-white text-6xl font-bold">
 
 2026
 
@@ -62,7 +61,7 @@ class="absolute top-[50px] right-[70px] text-white text-6xl font-bold">
 <!-- NAMA -->
 <p
 id="namaCover"
-class="absolute top-[820px] left-[80px] text-white text-2xl font-bold uppercase">
+class="absolute top-[800px] left-[110px] text-white text-2xl font-bold uppercase">
 
 ALI BIN ABU
 
@@ -71,13 +70,13 @@ ALI BIN ABU
 <!-- IC -->
 <p
 id="icCover"
-class="absolute top-[955px] left-[80px] text-white text-2xl font-bold">
+class="absolute top-[935px] left-[110px] text-white text-2xl font-bold">
 
 000000-00-0000
 
 </p>
 
-<!-- DATE -->
+<!-- APPROVED DATE -->
 <p
 id="approvedDate"
 class="absolute bottom-[70px] right-[60px] text-white text-lg">
@@ -91,7 +90,7 @@ class="absolute bottom-[70px] right-[60px] text-white text-lg">
 <!-- PAGE 2 -->
 <div class="w-[210mm] min-h-[297mm] bg-white p-16">
 
-<div class="border-b-2 border-[#153638] pb-5 mb-10">
+<div class="border-b-2 border-[#153638] pb-4 mb-10">
 
 <p
 id="docRef2"
@@ -103,7 +102,7 @@ DOC REF: AQMS-WST-2026-001
 
 </div>
 
-<table class="w-full border border-gray-300">
+<table class="w-full border border-gray-300 text-lg">
 
 <tr>
 
@@ -177,6 +176,39 @@ class="border p-5">
 
 </table>
 
+<!-- ACTION -->
+<div class="mt-10 space-y-4">
+
+<button
+id="downloadBtn"
+class="w-full bg-black hover:bg-gray-800 transition text-white py-4 rounded-xl font-semibold">
+
+Download PDF
+
+</button>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+<button
+id="approveBtn"
+class="bg-green-600 hover:bg-green-700 transition text-white py-4 rounded-xl font-semibold">
+
+Approve Permohonan
+
+</button>
+
+<button
+id="rejectBtn"
+class="bg-red-600 hover:bg-red-700 transition text-white py-4 rounded-xl font-semibold">
+
+Reject Permohonan
+
+</button>
+
+</div>
+
+</div>
+
 </div>
 
 </div>
@@ -237,13 +269,6 @@ window.location.search
 const userId =
 params.get("id");
 
-// BACK BUTTON
-document
-.getElementById("backBtn")
-.href =
-
-`customer-details.html?id=${userId}`;
-
 // CHECK LOGIN
 onAuthStateChanged(auth, async(user)=>{
 
@@ -298,107 +323,86 @@ if(docSnap.exists()){
 const data =
 docSnap.data();
 
-document.getElementById("nama").innerHTML =
-data.nama || "";
+// DOC REF
+document.getElementById(
+"docRef"
+).innerHTML =
 
-document.getElementById("ic").innerHTML =
-data.ic || "";
-
-document.getElementById("telefon").innerHTML =
-data.telefon || "";
-
-document.getElementById("pasangan").innerHTML =
-data.pasangan || "";
-
-document.getElementById("anak").innerHTML =
-data.anak || "";
-
-document.getElementById("wasi").innerHTML =
-data.wasi || "";
-
-document.getElementById("harta").innerHTML =
-data.harta || "";
-
-// LOAD LAMPIRAN
-const snapshot =
-await getDocs(
-
-collection(
-db,
-"users",
-userId,
-"wasiatDocuments"
-)
-
-);
-
-let lampiranHTML = "";
-
-snapshot.forEach((doc)=>{
-
-const file =
-doc.data();
-
-lampiranHTML += `
-
-<div class="bg-gray-100 p-4 rounded-xl space-y-3">
-
-<div class="flex justify-between items-center">
-
-<p class="text-sm font-medium text-gray-700">
-${file.fileName}
-</p>
-
-<a
-href="${file.fileURL}"
-target="_blank"
-class="text-[#153638] font-semibold">
-
-Buka
-
-</a>
-
-</div>
-
-${
-file.fileName.endsWith(".pdf")
-
-?
-
-`
-
-<iframe
-src="${file.fileURL}"
-class="w-full h-96 rounded-lg border">
-</iframe>
-
-`
-
-:
-
-`
-
-<img
-src="${file.fileURL}"
-class="w-full rounded-lg border">
-
-`
-}
-
-</div>
-
-`;
-
-});
+data.docRef || "-";
 
 document.getElementById(
-"lampiranList"
-).innerHTML = lampiranHTML;
+"docRef2"
+).innerHTML =
+
+`DOC REF: ${data.docRef || "-"}`;
+
+// YEAR
+const approvedDate =
+new Date(
+data.approvedAt
+);
+
+document.getElementById(
+"tahun"
+).innerHTML =
+
+approvedDate.getFullYear();
+
+// COVER
+document.getElementById(
+"namaCover"
+).innerHTML =
+
+(data.nama || "-").toUpperCase();
+
+document.getElementById(
+"icCover"
+).innerHTML =
+
+data.ic || "-";
+
+// DATE
+document.getElementById(
+"approvedDate"
+).innerHTML =
+
+approvedDate.toLocaleDateString(
+"ms-MY",
+{
+day: "numeric",
+month: "long",
+year: "numeric"
+}
+);
+
+// TABLE
+document.getElementById(
+"namaTable"
+).innerHTML =
+data.nama || "-";
+
+document.getElementById(
+"icTable"
+).innerHTML =
+data.ic || "-";
+
+document.getElementById(
+"telefonTable"
+).innerHTML =
+data.telefon || "-";
+
+document.getElementById(
+"alamatTable"
+).innerHTML =
+data.alamat || "-";
+
+document.getElementById(
+"kodTable"
+).innerHTML =
+data.referral || "-";
 
 }
-
-});
-
+  
 // DOWNLOAD PDF
 document
 .getElementById("downloadBtn")
@@ -581,6 +585,8 @@ catch(error){
 console.log(error);
 
 }
+
+});
 
 });
 
