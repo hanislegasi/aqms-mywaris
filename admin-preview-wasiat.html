@@ -56,9 +56,11 @@ Semakan Dokumen Customer
 <!-- DOCUMENT -->
 <div
 id="pdfContent"
-class="mx-auto bg-white"
+class="bg-white"
 style="
 width:210mm;
+margin:0;
+padding:0;
 ">
 
 <!-- PAGE 1 -->
@@ -68,11 +70,13 @@ style="
 width:210mm;
 height:297mm;
 overflow:hidden;
+margin:0;
+padding:0;
 ">
 
 <img
 src="images/wasiat-cover.png"
-class="absolute inset-0"
+class="absolute top-0 left-0"
 style="
 width:210mm;
 height:297mm;
@@ -502,7 +506,7 @@ quality: 1
 },
 
 html2canvas: {
-scale: 2,
+scale: 1,
 useCORS: true,
 scrollY: 0
 },
