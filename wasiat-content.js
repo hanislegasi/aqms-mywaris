@@ -2,7 +2,7 @@ const wasiatContent = `
 
 <div class="page-break"></div>
 
-<div class="mt-20 px-16">
+<div class="mt-20 px-10">
 
 <h2
 style="
