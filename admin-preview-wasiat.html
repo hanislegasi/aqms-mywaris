@@ -17,8 +17,21 @@ rel="stylesheet">
 
 <style>
 
+@page{
+size:A4;
+margin:0;
+}
+
+html,
+body{
+margin:0;
+padding:0;
+background:#f3f4f6;
+}
+
 #pdfContent{
 background:white;
+width:210mm;
 }
 
 </style>
@@ -63,7 +76,7 @@ class="absolute inset-0"
 style="
 width:210mm;
 height:297mm;
-object-cover;
+object-fit:cover;
 ">
 
 <!-- DOC REF -->
@@ -138,7 +151,7 @@ letter-spacing:1px;
 class="bg-white"
 style="
 width:210mm;
-height:297mm;
+min-height:297mm;
 padding:18mm;
 overflow:hidden;
 font-family:'Cinzel', serif;
@@ -495,7 +508,7 @@ scrollY: 0
 },
 
 pagebreak: {
-mode: ['avoid-all', 'css', 'legacy']
+mode: ['css']
 },
   
 jsPDF: {
