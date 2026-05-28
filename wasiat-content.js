@@ -1,5 +1,7 @@
 const wasiatContent = `
 
+<div class="page-break"></div>
+
 <div class="mt-20 px-16">
 
 <h2
@@ -28,7 +30,7 @@ Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani.
 </p>
 
 <p>
-Segala puji bagi Allah S.W.T yang kekal selamanya. Tiada tuhan melainkan Allah S.W.T, Nabi Muhammad S.A.W itu adalah pesuruh Allah.
+Segala puji bagi Allah S.W.T yang kekal selamanya. Tiada tuhan melainkan Allah S.W.T, Nabi Muhammad S.A.W itu adalah pesuruh Allah. Kematian adalah benar, kebangkitan semula adalah benar, semua yang disampaikan oleh Rasulullah S.A.W (semoga kesejahteraan dan rahmat Allah S.W.T dilimpahkan terhadapnya, keluarganya, para sahabat dan pengikut-pengikut) adalah benar, tiada keraguan bahawa Hari Penghakiman akan tiba dan Allah S.W.T, akan membangkitkan semua yang di dalam kubur.
 </p>
 
 <p>
@@ -40,7 +42,7 @@ Ini adalah Dokumen Pewarisan Lengkap bagi diri saya.
 </h3>
 
 <p>
-Dengan disaksikan oleh saksi-saksi yang bertandatangan dibawah, saya mengakui bahawa saya adalah seorang Islam yang cukup umur, berada di dalam keadaan sihat tubuh badan dan waras akal fikiran.
+Dengan disaksikan oleh saksi-saksi yang bertandatangan dibawah, saya mengakui bahawa saya adalah seorang Islam yang cukup umur, berada di dalam keadaan sihat tubuh badan dan waras akal fikiran dengan tanpa sebarang paksaan. Saya juga mengakui bahawa saya memahami sepenuhnya bentuk dokumen ini serta akibat yang mungkin berbangkit darinya. Maka saya dengan ini menyempurnakan dokumen ini semata-mata kerana Allah SWT, semoga Allah SWT mengampuni saya.
 </p>
 
 <p>
