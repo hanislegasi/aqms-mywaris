@@ -36,10 +36,15 @@
 
         .a4-page {
             width: 210mm;
-            height: 297mm; /* Ketinggian tepat A4 */
+            height: 296.5mm; /* Dikurangkan sikit dari 297mm untuk elak blank page ke-3 */
             position: relative;
             overflow: hidden;
             background-color: white;
+            page-break-after: always; /* Paksa page break yang sekata */
+        }
+        
+        .a4-page:last-child {
+            page-break-after: auto; /* Tiada pemisah selepas page terakhir */
         }
 
         /* Melancarkan transisi skala untuk mobile view */
@@ -102,9 +107,6 @@
                         24 MEI 2026
                     </p>
                 </div>
-
-                <!-- PEMISAH HALAMAN (Wajib untuk html2pdf hasilkan 2 muka surat) -->
-                <div class="html2pdf__page-break"></div>
 
                 <!-- PAGE 2 (MAKLUMAT) -->
                 <div class="a4-page p-[18mm]">
@@ -204,16 +206,19 @@
             const wrapper = document.getElementById('scale-wrapper');
             const element = document.getElementById("pdfContent");
 
-            // 1. Simpan tetapan skala asal
+            // 1. Simpan tetapan skala dan margin asal
             const originalTransform = wrapper.style.transform;
-            const originalMargin = wrapper.style.marginBottom;
+            const originalMarginBottom = wrapper.style.marginBottom;
+            const originalMargin = element.style.margin;
 
-            // 2. Buang skala sementara supaya html2canvas dapat saiz A4 yang sempurna
+            // 2. Buang skala sementara & paksa kedudukan paksi kiri (PUNCA ruang kosong)
             wrapper.style.transform = 'scale(1)';
             wrapper.style.marginBottom = '0px';
+            wrapper.style.transformOrigin = 'top left'; 
+            element.style.margin = '0'; // Buang margin auto sementara
 
             // 3. Beri masa kepada browser untuk kemaskini DOM
-            await new Promise(r => setTimeout(r, 100));
+            await new Promise(r => setTimeout(r, 150));
 
             const options = {
                 margin: 0,
@@ -223,7 +228,8 @@
                     scale: 2, 
                     useCORS: true, 
                     scrollY: 0,
-                    letterRendering: true
+                    scrollX: 0, // Set koordinat X ke 0
+                    windowWidth: document.documentElement.offsetWidth
                 },
                 pagebreak: { mode: ['css', 'legacy'] }, // Pastikan html2pdf__page-break berfungsi
                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
@@ -231,9 +237,11 @@
 
             // 4. Proses render PDF
             html2pdf().set(options).from(element).save().then(() => {
-                // 5. Kembalikan skala asal untuk paparan skrin
+                // 5. Kembalikan semua tetapan asal
                 wrapper.style.transform = originalTransform;
-                wrapper.style.marginBottom = originalMargin;
+                wrapper.style.marginBottom = originalMarginBottom;
+                wrapper.style.transformOrigin = 'top center';
+                element.style.margin = originalMargin || '0 auto';
             });
         });
 
