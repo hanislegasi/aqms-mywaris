@@ -31,7 +31,8 @@
         #pdfContent {
             width: 210mm;
             background: white;
-            margin: 0 auto;
+            margin-left: auto;
+    margin-right: auto;
         }
 
         .a4-page {
@@ -46,6 +47,30 @@
         .a4-page:last-child {
             page-break-after: auto; /* Tiada pemisah selepas page terakhir */
         }
+
+        .page-break {
+    page-break-before: always;
+}
+
+.wasiat-section {
+    font-family: 'Cinzel', serif;
+    margin-top: 40px;
+    line-height: 2;
+    color: #222;
+}
+
+.wasiat-section h2 {
+    font-size: 28px;
+    margin-bottom: 25px;
+    color: #153638;
+    font-weight: bold;
+}
+
+.wasiat-section p {
+    font-size: 16px;
+    margin-bottom: 18px;
+    text-align: justify;
+}
 
         /* Melancarkan transisi skala untuk mobile view */
         #scale-wrapper {
@@ -64,7 +89,7 @@
     </div>
 
     <!-- MAIN CONTENT & PDF PREVIEW WRAPPER -->
-    <main class="flex-grow flex flex-col items-center pt-8 pb-4 overflow-hidden">
+    <main class="flex-grow flex flex-col items-center pt-8 pb-4 overflow-auto">
         
         <!-- WRAPPER UNTUK SKALA (Bagi paparan mobile cantik) -->
         <div id="scale-wrapper" class="drop-shadow-2xl">
@@ -139,6 +164,12 @@
                             <td id="kodTable" class="border border-gray-300 p-5 font-medium">-</td>
                         </tr>
                     </table>
+                    
+                    <div
+id="sectionWasiat"
+class="wasiat-section">
+</div>
+                    
                 </div>
 
             </div>
@@ -231,7 +262,7 @@
                     scrollX: 0, // Set koordinat X ke 0
                     windowWidth: document.documentElement.offsetWidth
                 },
-                pagebreak: { mode: ['css', 'legacy'] }, // Pastikan html2pdf__page-break berfungsi
+                pagebreak: { mode: ['css'] }, // Pastikan html2pdf__page-break berfungsi
                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
             };
 
@@ -307,6 +338,7 @@
                         document.getElementById("telefonTable").innerHTML = data.telefon || "-";
                         document.getElementById("alamatTable").innerHTML = data.alamat || "-";
                         document.getElementById("kodTable").innerHTML = data.referral || "-";
+                        document.getElementById("sectionWasiat").innerHTML = wasiatContent;
                     }
                 }
             } catch (error) {
@@ -364,5 +396,8 @@
             }
         });
     </script>
+
+<script src="wasiat-content.js"></script>
+    
 </body>
 </html>
