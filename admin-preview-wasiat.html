@@ -157,7 +157,7 @@ position:relative;
 <div class="pdf-footer">
 
 <span>
-DOC REF: AQMS-WST-2026-001
+-
 </span>
 
 <span class="page-number">
@@ -203,7 +203,7 @@ DOC REF: AQMS-WST-2026-001
 <div class="pdf-footer">
 
 <span>
-DOC REF: AQMS-WST-2026-001
+-
 </span>
 
 <span class="page-number">
@@ -229,7 +229,7 @@ class="wasiat-section">
 <div class="pdf-footer">
 
 <span>
-DOC REF: AQMS-WST-2026-001
+-
 </span>
 
 <span class="page-number">
@@ -409,6 +409,10 @@ DOC REF: AQMS-WST-2026-001
                         document.getElementById("alamatTable").innerHTML = data.alamat || "-";
                         document.getElementById("kodTable").innerHTML = data.referral || "-";
                         document.getElementById("sectionWasiat").innerHTML = wasiatContent;
+
+                        document.getElementById("footerDocRef1").innerText = generatedDocRef;
+                        document.getElementById("footerDocRef2").innerText = generatedDocRef;
+                        document.getElementById("footerDocRef3").innerText = generatedDocRef;
                     }
                 }
             } catch (error) {
