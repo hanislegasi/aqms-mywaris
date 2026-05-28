@@ -21,7 +21,7 @@ DOKUMEN WASIAT
 style="
 font-family:'Cinzel', serif;
 font-size:15px;
-line-height:2.4;
+line-height:1.4;
 text-align:justify;
 color:#222;
 ">
