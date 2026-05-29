@@ -579,10 +579,141 @@ data.telefonWasi2 || "";
 document.getElementById("pesananWasiat").value =
 data.pesananWasiat || "";
   
-}
       
-    });
+// LOAD SECTION 3
+if(data.wasiatSatuPerTiga){
 
+document.getElementById(
+"wasiatContainer"
+).innerHTML = "";
+
+data.wasiatSatuPerTiga.forEach(item=>{
+
+document.getElementById(
+"wasiatContainer"
+).insertAdjacentHTML(
+"beforeend",
+`
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hartaWasiat"
+value="${item.harta || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bahagianWasiat"
+value="${item.bahagian || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penerimaWasiat"
+value="${item.penerima || ''}">
+
+<textarea
+class="w-full border rounded-lg p-3 notaWasiat">${item.nota || ''}</textarea>
+
+</div>
+`
+);
+
+});
+
+}
+
+if(data.waris){
+
+document.getElementById(
+"warisContainer"
+).innerHTML = "";
+
+data.waris.forEach(item=>{
+
+document.getElementById(
+"warisContainer"
+).insertAdjacentHTML(
+"beforeend",
+`
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaWaris"
+value="${item.nama || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icWaris"
+value="${item.ic || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganWaris"
+value="${item.hubungan || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 telefonWaris"
+value="${item.telefon || ''}">
+
+<select
+class="w-full border rounded-lg p-3 statusWaris">
+
+<option value="dewasa"
+${item.status==="dewasa"?"selected":""}>
+Dewasa
+</option>
+
+<option value="bawah18"
+${item.status==="bawah18"?"selected":""}>
+Bawah 18 Tahun
+</option>
+
+<option value="oku"
+${item.status==="oku"?"selected":""}>
+OKU
+</option>
+
+</select>
+
+</div>
+`
+);
+
+});
+
+}   
+
+/*
+if(data.hartaAlih){
+
+document.getElementById(
+"hartaAlihContainer"
+).innerHTML = "";
+
+data.hartaAlih.forEach(item=>{
+
+document.getElementById(
+"hartaAlihContainer"
+).insertAdjacentHTML(
+"beforeend",
+`
+.......
+`
+);
+
+});
+
+setupKategoriAlih();
+
+}
+*/
+
+}
+
+});
+    
 // LOAD FILES
 async function loadFiles(){
 
