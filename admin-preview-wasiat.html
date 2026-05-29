@@ -37,7 +37,7 @@
 
         .a4-page {
             width: 210mm;
-            height: 296.5mm; /* Dikurangkan sikit dari 297mm untuk elak blank page ke-3 */
+            min-height: 296.5mm; /* Dikurangkan sikit dari 297mm untuk elak blank page ke-3 */
             background:white;
             margin:20px auto;
             box-sizing:border-box;
@@ -156,9 +156,7 @@ position:relative;
 
 <div class="pdf-footer">
 
-<span>
--
-</span>
+<span id="footerDocRef1">-</span>
 
 <span class="page-number">
 1
@@ -202,9 +200,7 @@ position:relative;
 
 <div class="pdf-footer">
 
-<span>
--
-</span>
+<span id="footerDocRef2">-</span>
 
 <span class="page-number">
 2
@@ -212,13 +208,9 @@ position:relative;
 
 </div>
                     
-                </div>
+</div>
 
-            </div>
-        </div>
-   
-
-    <!-- PAGE 3 -->
+<!-- PAGE 3 -->
 <div class="a4-page p-[18mm]">
 
 <div
@@ -228,9 +220,7 @@ class="wasiat-section">
 
 <div class="pdf-footer">
 
-<span>
--
-</span>
+<span id="footerDocRef3">-</span>
 
 <span class="page-number">
 3
@@ -240,6 +230,9 @@ class="wasiat-section">
     
 </div>
 
+</div>
+</div>
+                
  </main>
         
     <div class="max-w-[210mm] mx-auto mt-6 mb-20">
@@ -410,6 +403,7 @@ class="wasiat-section">
                         document.getElementById("kodTable").innerHTML = data.referral || "-";
                         document.getElementById("sectionWasiat").innerHTML = wasiatContent;
 
+                        const currentDocRef = data.docRef || "-";
                         document.getElementById("footerDocRef1").innerText = generatedDocRef;
                         document.getElementById("footerDocRef2").innerText = generatedDocRef;
                         document.getElementById("footerDocRef3").innerText = generatedDocRef;
