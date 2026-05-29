@@ -363,18 +363,7 @@ class="w-full border rounded-lg p-3 mt-3 namaCustomAlih"
 placeholder="Nama Orang Lain">
 
 </div>
-
-
-    
-<input
-type="text"
-class="w-full border rounded-lg p-3 hubunganPenerimaAlih"
-placeholder="Hubungan">
-
-<input
-type="text"
-class="w-full border rounded-lg p-3 icPenerimaAlih"
-placeholder="No IC">
+ 
 
 <input
 type="text"
@@ -701,6 +690,8 @@ OKU
 );
 
 });
+  
+populateWarisDropdown();
 
 }   
 
@@ -781,20 +772,27 @@ Harta Sepencarian
 
 <div class="detailKategoriAlih hidden mt-3">
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 namaPenerimaAlih"
-placeholder="Nama Penerima">
+<select
+class="w-full border rounded-lg p-3 namaPenerimaAlih">
+
+<option value="">
+Pilih Penerima
+</option>
+
+<option value="custom">
++ Orang Lain
+</option>
+
+</select>
+
+<div class="customPenerimaAlih hidden">
 
 <input
 type="text"
-class="w-full border rounded-lg p-3 hubunganPenerimaAlih"
-placeholder="Hubungan">
+class="w-full border rounded-lg p-3 mt-3 namaCustomAlih"
+placeholder="Nama Orang Lain">
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 icPenerimaAlih"
-placeholder="No IC">
+</div>
 
 <input
 type="text"
@@ -1248,6 +1246,8 @@ document
 html
 );
 
+populateWarisDropdown();
+  
 });
 
 document
@@ -1323,15 +1323,6 @@ placeholder="Nama Orang Lain">
 
 </div>
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 mb-3 hubunganPenerimaAlih"
-placeholder="Hubungan">
-
-<input
-type="text"
-class="w-full border rounded-lg p-3 mb-3 icPenerimaAlih"
-placeholder="No IC">
 
 <input
 type="text"
@@ -1351,6 +1342,7 @@ html
 );
 
 setupKategoriAlih();
+populateWarisDropdown();
   
 });
 
