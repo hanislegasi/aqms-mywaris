@@ -773,7 +773,7 @@ Harta Sepencarian
 <div class="detailKategoriAlih hidden mt-3">
 
 <select
-class="w-full border rounded-lg p-3 namaPenerimaAlih">
+class="w-full border rounded-lg p-3 namaPenerimaAlih"
 data-selected="${item.penerimaNama || ''}">
 
 <option value="">
@@ -810,7 +810,7 @@ placeholder="Peratusan (%)">
 });
 
 setupKategoriAlih();
-
+populateWarisDropdown();
 
   
 }
@@ -1050,6 +1050,16 @@ document.querySelectorAll(".nilaiAlih")[index].value,
 kategori:
 document.querySelectorAll(".kategoriAlih")[index].value
 
+penerimaNama:
+document.querySelectorAll(
+".namaPenerimaAlih"
+)[index]?.value || "",
+
+peratusan:
+document.querySelectorAll(
+".peratusanPenerimaAlih"
+)[index]?.value || ""
+  
 });
 
 });          
