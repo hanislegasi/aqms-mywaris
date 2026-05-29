@@ -1164,6 +1164,43 @@ document.querySelectorAll(
 });
 
 });          
+
+const hartaTakAlih = [];
+
+document
+.querySelectorAll(".namaHartaTakAlih")
+.forEach((item,index)=>{
+
+hartaTakAlih.push({
+
+nama:
+document.querySelectorAll(".namaHartaTakAlih")[index].value,
+
+rujukan:
+document.querySelectorAll(".noRujukanTakAlih")[index].value,
+
+pemilikan:
+document.querySelectorAll(".pemilikanTakAlih")[index].value,
+
+nilai:
+document.querySelectorAll(".nilaiTakAlih")[index].value,
+
+alamat:
+document.querySelectorAll(".alamatTakAlih")[index].value,
+
+kategori:
+document.querySelectorAll(".kategoriTakAlih")[index].value,
+
+penerimaNama:
+document.querySelectorAll(".namaPenerimaTakAlih")[index]?.value || "",
+
+peratusan:
+document.querySelectorAll(".peratusanPenerimaTakAlih")[index]?.value || ""
+
+});
+
+});
+          
           await setDoc(
 
             doc(
@@ -1227,7 +1264,10 @@ waris:
 waris,      
 
 hartaAlih:
-hartaAlih,              
+hartaAlih,        
+
+hartaTakAlih: 
+hartaTakAlih,              
               
   createdAt:
   new Date()
@@ -1295,6 +1335,7 @@ html
 );
 
 populateWarisDropdown();
+populateWarisDropdownTakAlih();
   
 });
 
@@ -1359,6 +1400,7 @@ html
 );
 
 populateWarisDropdown();
+populateWarisDropdownTakAlih();
   
 });
 
@@ -1559,11 +1601,68 @@ select.value = savedValue;
 });
 
 }    
-
-    
+  
 setupKategoriAlih();
 populateWarisDropdown();
 
+function populateWarisDropdownTakAlih(){
+
+const waris = [];
+
+document
+.querySelectorAll(".namaWaris")
+.forEach((item,index)=>{
+
+waris.push({
+
+nama:item.value,
+
+hubungan:
+document.querySelectorAll(
+".hubunganWaris"
+)[index].value
+
+});
+
+});
+
+document
+.querySelectorAll(".namaPenerimaTakAlih")
+.forEach(select=>{
+
+const currentValue =
+select.value;
+
+select.innerHTML = `
+<option value="">
+Pilih Penerima
+</option>
+
+<option value="custom">
++ Orang Lain
+</option>
+`;
+
+waris.forEach(w=>{
+
+if(w.nama){
+
+select.innerHTML += `
+<option value="${w.nama}">
+${w.nama} (${w.hubungan})
+</option>
+`;
+
+}
+
+});
+
+select.value = currentValue;
+
+});
+
+}
+    
 document
 .getElementById("addHartaTakAlihBtn")
 .addEventListener("click",()=>{
@@ -1641,7 +1740,6 @@ placeholder="Nama Orang Lain">
 <input
 type="text"
 class="w-full border rounded-lg p-3 peratusanPenerimaTakAlih"
-value="${item.peratusan || ''}"
 placeholder="Peratusan (%)">
 
 </div>
