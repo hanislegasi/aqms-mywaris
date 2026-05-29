@@ -774,6 +774,7 @@ Harta Sepencarian
 
 <select
 class="w-full border rounded-lg p-3 namaPenerimaAlih">
+data-selected="${item.penerimaNama || ''}">
 
 <option value="">
 Pilih Penerima
@@ -1438,8 +1439,10 @@ ${w.nama}
 
 });
 
-select.value =
-currentValue;
+const savedValue =
+select.dataset.selected || currentValue;
+
+select.value = savedValue;
 
 });
 
