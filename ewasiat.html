@@ -326,8 +326,21 @@ placeholder="Anggaran Nilai">
 
 <select
 class="w-full border rounded-lg p-3 kategoriAlih">
+  
+<option value="faraid">
+Faraid
+</option>
 
-  <div class="detailKategoriAlih hidden">
+<option value="hibah">
+Hibah
+</option>
+
+<option value="sepencarian">
+Harta Sepencarian
+</option>
+
+</select>
+  <div class="detailKategoriAlih hidden mt-3">
 
 <input
 type="text"
@@ -350,20 +363,6 @@ class="w-full border rounded-lg p-3 peratusanPenerimaAlih"
 placeholder="Peratusan (%)">
 
 </div>
-
-<option value="faraid">
-Faraid
-</option>
-
-<option value="hibah">
-Hibah
-</option>
-
-<option value="sepencarian">
-Harta Sepencarian
-</option>
-
-</select>
 
 </div>
 
@@ -1033,8 +1032,7 @@ placeholder="No Akaun / Rujukan">
 <select
 class="w-full border rounded-lg p-3 pemilikanAlih">
 
-<option value="">
-Pemilikan</option>
+<option value="">Pemilikan</option>
 
 <option value="milikPenuh">
 Milik Penuh
@@ -1054,24 +1052,41 @@ placeholder="Anggaran Nilai">
 <select
 class="w-full border rounded-lg p-3 kategoriAlih">
 
-<option value="faraid">
-Faraid
-</option>
+<option value="">Pilih Kategori</option>
 
-<option value="hibah">
-Hibah
-</option>
-
-<option value="sepencarian">
-Harta Sepencarian
-</option>
+<option value="faraid">Faraid</option>
+<option value="hibah">Hibah</option>
+<option value="sepencarian">Harta Sepencarian</option>
 
 </select>
+
+<div class="detailKategoriAlih hidden mt-3">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 mb-3 namaPenerimaAlih"
+placeholder="Nama Penerima">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 mb-3 hubunganPenerimaAlih"
+placeholder="Hubungan">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 mb-3 icPenerimaAlih"
+placeholder="No IC">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 peratusanPenerimaAlih"
+placeholder="Peratusan (%)">
+
+</div>
 
 </div>
 
 `;
-
 document
 .getElementById("hartaAlihContainer")
 .insertAdjacentHTML(
