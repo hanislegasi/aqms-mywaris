@@ -1048,7 +1048,7 @@ nilai:
 document.querySelectorAll(".nilaiAlih")[index].value,
 
 kategori:
-document.querySelectorAll(".kategoriAlih")[index].value
+document.querySelectorAll(".kategoriAlih")[index].value,
 
 penerimaNama:
 document.querySelectorAll(
@@ -1338,6 +1338,7 @@ placeholder="Nama Orang Lain">
 <input
 type="text"
 class="w-full border rounded-lg p-3 peratusanPenerimaAlih"
+value="${item.peratusan || ''}"
 placeholder="Peratusan (%)">
 
 </div>
