@@ -387,7 +387,108 @@ class="bg-[#153638] text-white px-4 py-2 rounded-lg">
 
 </div>
 
-      
+<!-- SECTION 7B -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 7B : Harta Tak Alih
+</h2>
+
+<div id="hartaTakAlihContainer">
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaHartaTakAlih"
+placeholder="Nama Harta">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 noRujukanTakAlih"
+placeholder="No Geran / Rujukan">
+
+<select
+class="w-full border rounded-lg p-3 pemilikanTakAlih">
+
+<option value="">
+Pemilikan
+</option>
+
+<option value="milikPenuh">
+Milik Penuh
+</option>
+
+<option value="perkongsian">
+Perkongsian Nama
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 nilaiTakAlih"
+placeholder="Anggaran Nilai">
+
+<textarea
+class="w-full border rounded-lg p-3 alamatTakAlih"
+rows="3"
+placeholder="Alamat Harta">
+</textarea>
+
+<select
+class="w-full border rounded-lg p-3 kategoriTakAlih">
+
+<option value="faraid">
+Faraid
+</option>
+
+<option value="hibah">
+Hibah
+</option>
+
+<option value="sepencarian">
+Harta Sepencarian
+</option>
+
+</select>
+
+<div class="detailKategoriTakAlih hidden mt-3">
+
+<select
+class="w-full border rounded-lg p-3 mb-3 namaPenerimaTakAlih">
+
+<option value="">
+Pilih Penerima
+</option>
+
+<option value="custom">
++ Orang Lain
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 peratusanPenerimaTakAlih"
+placeholder="Peratusan (%)">
+
+</div>
+
+</div>
+
+</div>
+
+<button
+type="button"
+id="addHartaTakAlihBtn"
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
++ Tambah Harta Tak Alih
+
+</button>
+
+</div>      
       
 <!-- LAMPIRAN -->
 <div class="space-y-3">
@@ -1463,6 +1564,144 @@ select.value = savedValue;
 setupKategoriAlih();
 populateWarisDropdown();
 
+document
+.getElementById("addHartaTakAlihBtn")
+.addEventListener("click",()=>{
+
+const html = `
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaHartaTakAlih"
+placeholder="Nama Harta">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 noRujukanTakAlih"
+placeholder="No Akaun / Rujukan">
+
+<select
+class="w-full border rounded-lg p-3 pemilikanTakAlih">
+
+<option value="">Pemilikan</option>
+
+<option value="milikPenuh">
+Milik Penuh
+</option>
+
+<option value="perkongsian">
+Perkongsian Nama
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 nilaiTakAlih"
+placeholder="Anggaran Nilai">
+
+<select
+class="w-full border rounded-lg p-3 kategoriTakAlih">
+
+<option value="">Pilih Kategori</option>
+
+<option value="faraid">Faraid</option>
+<option value="hibah">Hibah</option>
+<option value="sepencarian">Harta Sepencarian</option>
+
+</select>
+
+<div class="detailKategoriTakAlih hidden mt-3">
+
+<select
+class="w-full border rounded-lg p-3 namaPenerimaTakAlih">
+
+<option value="">
+Pilih Penerima
+</option>
+
+<option value="custom">
++ Orang Lain
+</option>
+
+</select>
+
+<div class="customPenerimaTakAlih hidden">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 mt-3 namaCustomTakAlih"
+placeholder="Nama Orang Lain">
+
+</div>
+
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 peratusanPenerimaTakAlih"
+value="${item.peratusan || ''}"
+placeholder="Peratusan (%)">
+
+</div>
+
+</div>
+
+`;
+
+document
+.getElementById(
+"hartaTakAlihContainer"
+)
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+setupKategoriTakAlih();
+populateWarisDropdownTakAlih();
+
+});
+
+function setupKategoriTakAlih(){
+
+document
+.querySelectorAll(".kategoriTakAlih")
+.forEach((select,index)=>{
+
+select.addEventListener(
+"change",
+()=>{
+
+const detail =
+document.querySelectorAll(
+".detailKategoriTakAlih"
+)[index];
+
+if(
+select.value==="hibah" ||
+select.value==="sepencarian"
+){
+
+detail.classList.remove(
+"hidden"
+);
+
+}
+else{
+
+detail.classList.add(
+"hidden"
+);
+
+}
+
+});
+
+});
+
+}    
     
   </script>
 
