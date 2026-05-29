@@ -685,7 +685,6 @@ OKU
 
 }   
 
-/*
 if(data.hartaAlih){
 
 document.getElementById(
@@ -699,7 +698,94 @@ document.getElementById(
 ).insertAdjacentHTML(
 "beforeend",
 `
-.......
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaHartaAlih"
+value="${item.nama || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 noRujukanAlih"
+value="${item.rujukan || ''}">
+
+<select
+class="w-full border rounded-lg p-3 pemilikanAlih">
+
+<option value="">
+Pemilikan
+</option>
+
+<option
+value="milikPenuh"
+${item.pemilikan==="milikPenuh"?"selected":""}>
+Milik Penuh
+</option>
+
+<option
+value="perkongsian"
+${item.pemilikan==="perkongsian"?"selected":""}>
+Perkongsian Nama
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 nilaiAlih"
+value="${item.nilai || ''}">
+
+<select
+class="w-full border rounded-lg p-3 kategoriAlih">
+
+<option
+value="faraid"
+${item.kategori==="faraid"?"selected":""}>
+Faraid
+</option>
+
+<option
+value="hibah"
+${item.kategori==="hibah"?"selected":""}>
+Hibah
+</option>
+
+<option
+value="sepencarian"
+${item.kategori==="sepencarian"?"selected":""}>
+Harta Sepencarian
+</option>
+
+</select>
+
+<div class="detailKategoriAlih hidden mt-3">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaPenerimaAlih"
+placeholder="Nama Penerima">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganPenerimaAlih"
+placeholder="Hubungan">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icPenerimaAlih"
+placeholder="No IC">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 peratusanPenerimaAlih"
+placeholder="Peratusan (%)">
+
+</div>
+
+</div>
+
 `
 );
 
@@ -708,7 +794,6 @@ document.getElementById(
 setupKategoriAlih();
 
 }
-*/
 
 }
 
