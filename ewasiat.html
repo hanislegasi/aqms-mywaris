@@ -1175,8 +1175,6 @@ placeholder="Nota"></textarea>
 
 </div>
 
-populateWarisDropdown();
-
 `;
 
 document
@@ -1186,6 +1184,8 @@ document
 html
 );
 
+populateWarisDropdown();
+  
 });
 
 document
@@ -1301,10 +1301,27 @@ class="w-full border rounded-lg p-3 kategoriAlih">
 
 <div class="detailKategoriAlih hidden mt-3">
 
+<select
+class="w-full border rounded-lg p-3 namaPenerimaAlih">
+
+<option value="">
+Pilih Penerima
+</option>
+
+<option value="custom">
++ Orang Lain
+</option>
+
+</select>
+
+<div class="customPenerimaAlih hidden">
+
 <input
 type="text"
-class="w-full border rounded-lg p-3 mb-3 namaPenerimaAlih"
-placeholder="Nama Penerima">
+class="w-full border rounded-lg p-3 mt-3 namaCustomAlih"
+placeholder="Nama Orang Lain">
+
+</div>
 
 <input
 type="text"
