@@ -32,97 +32,356 @@
       id="wasiatForm"
       class="bg-white p-6 rounded-2xl shadow space-y-6">
 
-      <!-- MAKLUMAT DIRI -->
-      <div>
+      <!-- SECTION 1 -->
+<div>
 
-        <h2 class="font-bold text-xl mb-4">
-          Maklumat Diri
-        </h2>
+<h2 class="font-bold text-xl mb-4">
+Section 1 : Butiran Pewasiat
+</h2>
 
-        <div class="space-y-4">
+<div class="space-y-4">
 
-          <input
-            type="text"
-            id="nama"
-            placeholder="Nama Penuh"
-            class="w-full border rounded-lg p-3">
+<input
+type="text"
+id="nama"
+placeholder="Nama Penuh"
+class="w-full border rounded-lg p-3">
 
-          <input
-            type="text"
-            id="ic"
-            placeholder="No Kad Pengenalan"
-            class="w-full border rounded-lg p-3">
+<input
+type="text"
+id="ic"
+placeholder="No Kad Pengenalan"
+class="w-full border rounded-lg p-3">
 
-          <input
-            type="text"
-            id="telefon"
-            placeholder="No Telefon"
-            class="w-full border rounded-lg p-3">
+<textarea
+id="alamat"
+rows="3"
+placeholder="Alamat"
+class="w-full border rounded-lg p-3"></textarea>
 
-        </div>
+<input
+type="text"
+id="telefon"
+placeholder="No Telefon"
+class="w-full border rounded-lg p-3">
 
-      </div>
+</div>
 
-      <!-- PASANGAN -->
-      <div>
+</div>
 
-        <h2 class="font-bold text-xl mb-4">
-          Maklumat Pasangan
-        </h2>
+<!-- SECTION 2 -->
+<div>
 
-        <input
-          type="text"
-          id="pasangan"
-          placeholder="Nama Pasangan"
-          class="w-full border rounded-lg p-3">
+<h2 class="font-bold text-xl mb-4">
+Section 2 : Pelantikan Wasi
+</h2>
 
-      </div>
+<h3 class="font-semibold mb-2">
+Maklumat Wasi Pertama
+</h3>
 
-      <!-- ANAK -->
-      <div>
+<input
+type="text"
+id="namaWasi1"
+placeholder="Nama Wasi"
+class="w-full border rounded-lg p-3 mb-3">
 
-        <h2 class="font-bold text-xl mb-4">
-          Maklumat Anak
-        </h2>
+<input
+type="text"
+id="icWasi1"
+placeholder="No IC"
+class="w-full border rounded-lg p-3 mb-3">
 
-        <textarea
-          id="anak"
-          rows="4"
-          placeholder="Senaraikan nama anak"
-          class="w-full border rounded-lg p-3"></textarea>
+<input
+type="text"
+id="hubunganWasi1"
+placeholder="Hubungan"
+class="w-full border rounded-lg p-3 mb-3">
 
-      </div>
+<textarea
+id="alamatWasi1"
+rows="2"
+placeholder="Alamat"
+class="w-full border rounded-lg p-3 mb-3"></textarea>
 
-      <!-- WASI -->
-      <div>
+<input
+type="text"
+id="telefonWasi1"
+placeholder="No Telefon"
+class="w-full border rounded-lg p-3">
 
-        <h2 class="font-bold text-xl mb-4">
-          Maklumat Wasi
-        </h2>
+<hr class="my-6">
 
-        <input
-          type="text"
-          id="wasi"
-          placeholder="Nama Wasi"
-          class="w-full border rounded-lg p-3">
+<h3 class="font-semibold mb-2">
+Maklumat Wasi Kedua (Wasi Gantian)
+</h3>
 
-      </div>
+<input
+type="text"
+id="namaWasi2"
+placeholder="Nama Wasi Kedua"
+class="w-full border rounded-lg p-3 mb-3">
 
-      <!-- HARTA -->
-      <div>
+<input
+type="text"
+id="icWasi2"
+placeholder="No IC"
+class="w-full border rounded-lg p-3 mb-3">
 
-        <h2 class="font-bold text-xl mb-4">
-          Senarai Harta
-        </h2>
+<input
+type="text"
+id="hubunganWasi2"
+placeholder="Hubungan"
+class="w-full border rounded-lg p-3 mb-3">
 
-        <textarea
-          id="harta"
-          rows="5"
-          placeholder="Senaraikan aset / harta"
-          class="w-full border rounded-lg p-3"></textarea>
+<textarea
+id="alamatWasi2"
+rows="2"
+placeholder="Alamat"
+class="w-full border rounded-lg p-3 mb-3"></textarea>
 
-      </div>
+<input
+type="text"
+id="telefonWasi2"
+placeholder="No Telefon"
+class="w-full border rounded-lg p-3">
+  
+</div>
 
+<!-- SECTION 3 -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 3 : Wasiat 1/3
+</h2>
+
+<div id="wasiatContainer">
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hartaWasiat"
+placeholder="Butiran Harta">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bahagianWasiat"
+placeholder="Bahagian (RM atau %)">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penerimaWasiat"
+placeholder="Penerima">
+
+<textarea
+class="w-full border rounded-lg p-3 notaWasiat"
+rows="3"
+placeholder="Nota"></textarea>
+
+</div>
+
+</div>
+
+<button
+type="button"
+id="addWasiatBtn"
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
++ Tambah Wasiat
+
+</button>
+
+</div>
+      
+<!-- SECTION 4 -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 4 : Pesanan Wasiat
+</h2>
+
+<textarea
+id="pesananWasiat"
+rows="10"
+placeholder="Taip atau paste pesanan wasiat di sini..."
+class="w-full border rounded-lg p-3">
+</textarea>
+
+<p class="text-sm text-gray-500 mt-2">
+Anda juga boleh copy & paste kandungan daripada dokumen Word.
+</p>
+
+</div>     
+
+<!-- SECTION 6 -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 6 : Senarai Waris
+</h2>
+
+<div id="warisContainer">
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaWaris"
+placeholder="Nama Waris">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icWaris"
+placeholder="No IC">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganWaris"
+placeholder="Hubungan">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 telefonWaris"
+placeholder="No Telefon">
+
+<select
+class="w-full border rounded-lg p-3 statusWaris">
+
+<option value="">
+Status Waris
+</option>
+
+<option value="dewasa">
+Dewasa
+</option>
+
+<option value="bawah18">
+Bawah 18 Tahun
+</option>
+
+<option value="oku">
+OKU
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<button
+type="button"
+id="addWarisBtn"
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
++ Tambah Waris
+
+</button>
+
+</div>
+
+<!-- SECTION 7A -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 7A : Harta Alih
+</h2>
+
+<div id="hartaAlihContainer">
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaHartaAlih"
+placeholder="Nama Harta">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 noRujukanAlih"
+placeholder="No Akaun / Rujukan">
+
+<select
+class="w-full border rounded-lg p-3 pemilikanAlih">
+
+<option value="">
+Pemilikan
+</option>
+
+<option value="milikPenuh">
+Milik Penuh
+</option>
+
+<option value="perkongsian">
+Perkongsian Nama
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 nilaiAlih"
+placeholder="Anggaran Nilai">
+
+<select
+class="w-full border rounded-lg p-3 kategoriAlih">
+
+  <div class="detailKategoriAlih hidden">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaPenerimaAlih"
+placeholder="Nama Penerima">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganPenerimaAlih"
+placeholder="Hubungan">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icPenerimaAlih"
+placeholder="No IC">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 peratusanPenerimaAlih"
+placeholder="Peratusan (%)">
+
+</div>
+
+<option value="faraid">
+Faraid
+</option>
+
+<option value="hibah">
+Hibah
+</option>
+
+<option value="sepencarian">
+Harta Sepencarian
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<button
+type="button"
+id="addHartaAlihBtn"
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
++ Tambah Harta Alih
+
+</button>
+
+</div>
+
+      
+      
 <!-- LAMPIRAN -->
 <div class="space-y-3">
 
@@ -285,18 +544,42 @@ if(docSnap.exists()){
   document.getElementById("telefon").value =
     data.telefon || "";
 
-  document.getElementById("pasangan").value =
-    data.pasangan || "";
+  document.getElementById("alamat").value =
+data.alamat || "";
 
-  document.getElementById("anak").value =
-    data.anak || "";
+document.getElementById("namaWasi1").value =
+data.namaWasi1 || "";
 
-  document.getElementById("wasi").value =
-    data.wasi || "";
+document.getElementById("icWasi1").value =
+data.icWasi1 || "";
 
-  document.getElementById("harta").value =
-    data.harta || "";
+document.getElementById("hubunganWasi1").value =
+data.hubunganWasi1 || "";
 
+document.getElementById("alamatWasi1").value =
+data.alamatWasi1 || "";
+
+document.getElementById("telefonWasi1").value =
+data.telefonWasi1 || "";
+
+document.getElementById("namaWasi2").value =
+data.namaWasi2 || "";
+
+document.getElementById("icWasi2").value =
+data.icWasi2 || "";
+
+document.getElementById("hubunganWasi2").value =
+data.hubunganWasi2 || "";
+
+document.getElementById("alamatWasi2").value =
+data.alamatWasi2 || "";
+
+document.getElementById("telefonWasi2").value =
+data.telefonWasi2 || "";
+
+document.getElementById("pesananWasiat").value =
+data.pesananWasiat || "";
+  
 }
       
     });
@@ -458,6 +741,83 @@ await addDoc(
 
         try{
 
+const wasiatSatuPerTiga = [];
+
+document
+.querySelectorAll(".hartaWasiat")
+.forEach((item,index)=>{
+
+wasiatSatuPerTiga.push({
+
+harta:
+document.querySelectorAll(".hartaWasiat")[index].value,
+
+bahagian:
+document.querySelectorAll(".bahagianWasiat")[index].value,
+
+penerima:
+document.querySelectorAll(".penerimaWasiat")[index].value,
+
+nota:
+document.querySelectorAll(".notaWasiat")[index].value
+
+});
+
+});
+
+const waris = [];
+
+document
+.querySelectorAll(".namaWaris")
+.forEach((item,index)=>{
+
+waris.push({
+
+nama:
+document.querySelectorAll(".namaWaris")[index].value,
+
+ic:
+document.querySelectorAll(".icWaris")[index].value,
+
+hubungan:
+document.querySelectorAll(".hubunganWaris")[index].value,
+
+telefon:
+document.querySelectorAll(".telefonWaris")[index].value,
+
+status:
+document.querySelectorAll(".statusWaris")[index].value
+
+});
+
+});          
+
+const hartaAlih = [];
+
+document
+.querySelectorAll(".namaHartaAlih")
+.forEach((item,index)=>{
+
+hartaAlih.push({
+
+nama:
+document.querySelectorAll(".namaHartaAlih")[index].value,
+
+rujukan:
+document.querySelectorAll(".noRujukanAlih")[index].value,
+
+pemilikan:
+document.querySelectorAll(".pemilikanAlih")[index].value,
+
+nilai:
+document.querySelectorAll(".nilaiAlih")[index].value,
+
+kategori:
+document.querySelectorAll(".kategoriAlih")[index].value
+
+});
+
+});          
           await setDoc(
 
             doc(
@@ -469,32 +829,63 @@ await addDoc(
             ),
 
             {
+  nama:
+  document.getElementById("nama").value,
 
-              nama:
-              document.getElementById("nama").value,
+  ic:
+  document.getElementById("ic").value,
 
-              ic:
-              document.getElementById("ic").value,
+  alamat:
+  document.getElementById("alamat").value,
 
-              telefon:
-              document.getElementById("telefon").value,
+  telefon:
+  document.getElementById("telefon").value,
 
-              pasangan:
-              document.getElementById("pasangan").value,
+  namaWasi1:
+  document.getElementById("namaWasi1").value,
 
-              anak:
-              document.getElementById("anak").value,
+  icWasi1:
+  document.getElementById("icWasi1").value,
 
-              wasi:
-              document.getElementById("wasi").value,
+  hubunganWasi1:
+  document.getElementById("hubunganWasi1").value,
 
-              harta:
-              document.getElementById("harta").value,
+  alamatWasi1:
+  document.getElementById("alamatWasi1").value,
 
-              createdAt:
-              new Date()
+  telefonWasi1:
+  document.getElementById("telefonWasi1").value,
 
-            }
+  namaWasi2:
+document.getElementById("namaWasi2").value,
+
+icWasi2:
+document.getElementById("icWasi2").value,
+
+hubunganWasi2:
+document.getElementById("hubunganWasi2").value,
+
+alamatWasi2:
+document.getElementById("alamatWasi2").value,
+
+telefonWasi2:
+document.getElementById("telefonWasi2").value,
+
+wasiatSatuPerTiga:
+wasiatSatuPerTiga,  
+
+pesananWasiat:
+document.getElementById("pesananWasiat").value,  
+
+waris: 
+waris,      
+
+hartaAlih:
+hartaAlih,              
+              
+  createdAt:
+  new Date()
+}
 
           );
 
@@ -518,6 +909,221 @@ await addDoc(
 
       });
 
+document
+.getElementById("addWasiatBtn")
+.addEventListener("click", ()=>{
+
+const html = `
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hartaWasiat"
+placeholder="Butiran Harta">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bahagianWasiat"
+placeholder="Bahagian (RM atau %)">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penerimaWasiat"
+placeholder="Penerima">
+
+<textarea
+class="w-full border rounded-lg p-3 notaWasiat"
+rows="3"
+placeholder="Nota"></textarea>
+
+</div>
+
+`;
+
+document
+.getElementById("wasiatContainer")
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+});
+
+document
+.getElementById("addWarisBtn")
+.addEventListener("click", ()=>{
+
+const html = `
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaWaris"
+placeholder="Nama Waris">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icWaris"
+placeholder="No IC">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganWaris"
+placeholder="Hubungan">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 telefonWaris"
+placeholder="No Telefon">
+
+<select
+class="w-full border rounded-lg p-3 statusWaris">
+
+<option value="">
+Status Waris
+</option>
+
+<option value="dewasa">
+Dewasa
+</option>
+
+<option value="bawah18">
+Bawah 18 Tahun
+</option>
+
+<option value="oku">
+OKU
+</option>
+
+</select>
+
+</div>
+
+`;
+
+document
+.getElementById("warisContainer")
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+});
+
+document
+.getElementById("addHartaAlihBtn")
+.addEventListener("click", ()=>{
+
+const html = `
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaHartaAlih"
+placeholder="Nama Harta">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 noRujukanAlih"
+placeholder="No Akaun / Rujukan">
+
+<select
+class="w-full border rounded-lg p-3 pemilikanAlih">
+
+<option value="">
+Pemilikan</option>
+
+<option value="milikPenuh">
+Milik Penuh
+</option>
+
+<option value="perkongsian">
+Perkongsian Nama
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 nilaiAlih"
+placeholder="Anggaran Nilai">
+
+<select
+class="w-full border rounded-lg p-3 kategoriAlih">
+
+<option value="faraid">
+Faraid
+</option>
+
+<option value="hibah">
+Hibah
+</option>
+
+<option value="sepencarian">
+Harta Sepencarian
+</option>
+
+</select>
+
+</div>
+
+`;
+
+document
+.getElementById("hartaAlihContainer")
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+setupKategoriAlih();
+  
+});
+
+function setupKategoriAlih(){
+
+document
+.querySelectorAll(".kategoriAlih")
+.forEach((select,index)=>{
+
+select.addEventListener(
+"change",
+()=>{
+
+const detail =
+document.querySelectorAll(
+".detailKategoriAlih"
+)[index];
+
+if(
+select.value === "hibah" ||
+select.value === "sepencarian"
+){
+
+detail.classList.remove(
+"hidden"
+);
+
+}
+else{
+
+detail.classList.add(
+"hidden"
+);
+
+}
+
+});
+
+});
+
+}
+
+setupKategoriAlih();
+    
   </script>
 
 </body>
