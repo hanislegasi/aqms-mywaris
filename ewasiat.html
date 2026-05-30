@@ -1118,34 +1118,31 @@ Harta Sepencarian
 
 <div class="detailKategoriTakAlih hidden mt-3">
 
-<select
-class="w-full border rounded-lg p-3 namaPenerimaTakAlih"
-data-selected="${item.penerimaNama || ''}">
+<div class="hibahSectionTakAlih hidden">
 
-<option value="">
-Pilih Penerima
-</option>
+<div class="hibahPenerimaContainerTakAlih">
+</div>
 
-<option value="custom">
-+ Orang Lain
-</option>
+<button
+type="button"
+class="addPenerimaHibaTakAlihhBtn bg-green-600 text-white px-3 py-2 rounded-lg mt-3">
 
-</select>
++ Tambah Penerima
 
-<div class="customPenerimaAlih hidden">
-
-<input
-type="text"
-class="w-full border rounded-lg p-3 mt-3 namaCustomAlih"
-placeholder="Nama Orang Lain">
+</button>
 
 </div>
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 mt-3 peratusanPenerimaTakAlih"
-value="${item.peratusan || ''}"
-placeholder="Peratusan (%)">
+<div class="sepencarianSectionTakAlih hidden">
+
+<select
+class="w-full border rounded-lg p-3 namaPenerimaSepencarianTakAlih">
+
+<option value="">
+Pilih Pasangan
+</option>
+
+</select>
 
 </div>
 
@@ -1157,7 +1154,8 @@ placeholder="Peratusan (%)">
 });
 
 setupKategoriTakAlih();
-populateWarisDropdownTakAlih();
+populateWarisDropdownHibahTakAlih();
+populatePasanganDropdownTakAlih();  
 
 document
 .querySelectorAll(".kategoriTakAlih")
@@ -1487,15 +1485,21 @@ document.querySelectorAll(".alamatTakAlih")[index].value,
 kategori:
 document.querySelectorAll(".kategoriTakAlih")[index].value,
 
-penerimaNama:
-document.querySelectorAll(".namaPenerimaTakAlih")[index]?.value || "",
+penerimaHibahTakAlih:
+penerimaHibahTakAlih,
 
-peratusan:
-document.querySelectorAll(".peratusanPenerimaTakAlih")[index]?.value || ""
+penerimaSepencarianTakAlih:
+document
+.querySelectorAll(
+".namaPenerimaSepencarian"
+)
+[index]
+?.value || ""
 
 });
 
 });
+
           
           await setDoc(
 
@@ -2394,7 +2398,7 @@ html
 );
 
 setupKategoriTakAlih();
-populateWarisDropdownTakAlih();
+populateWarisDropdownHibahTakAlih();
 populatePasanganDropdownTakAlih();
   
 });
