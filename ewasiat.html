@@ -340,37 +340,33 @@ Harta Sepencarian
 </option>
 
 </select>
-  <div class="detailKategoriAlih hidden mt-3">
+<div class="detailKategoriAlih hidden mt-3">
+
+<div class="hibahSection hidden">
+
+<div class="hibahPenerimaContainer">
+</div>
+
+<button
+type="button"
+class="addPenerimaHibahBtn bg-green-600 text-white px-3 py-2 rounded-lg mt-3">
+
++ Tambah Penerima
+
+</button>
+
+</div>
+
+<div class="sepencarianSection hidden">
 
 <select
-class="w-full border rounded-lg p-3 namaPenerimaAlih">
+class="w-full border rounded-lg p-3 namaPenerimaSepencarian">
 
 <option value="">
-Pilih Penerima
-</option>
-
-<option value="custom">
-+ Orang Lain
+Pilih Pasangan
 </option>
 
 </select>
-
-<div class="customPenerimaAlih hidden">
-
-<input
-type="text"
-class="w-full border rounded-lg p-3 mt-3 namaCustomAlih"
-placeholder="Nama Orang Lain">
-
-</div>
- 
-
-<input
-type="text"
-class="w-full border rounded-lg p-3 mt-3 peratusanPenerimaAlih"
-placeholder="Peratusan (%)">
-
-</div>
 
 </div>
 
@@ -1294,6 +1290,38 @@ document
 .querySelectorAll(".namaHartaAlih")
 .forEach((item,index)=>{
 
+const penerimaHibah = [];
+
+document
+.querySelectorAll(
+".detailKategoriAlih"
+)
+[index]
+.querySelectorAll(
+".penerimaHibah"
+)
+.forEach((select,pIndex)=>{
+
+penerimaHibah.push({
+
+nama: select.value,
+
+peratus:
+document
+.querySelectorAll(
+".detailKategoriAlih"
+)
+[index]
+.querySelectorAll(
+".peratusHibah"
+)
+[pIndex]
+?.value || ""
+
+});
+
+});
+
 hartaAlih.push({
 
 nama:
@@ -1320,41 +1348,11 @@ document
 ".namaPenerimaSepencarian"
 )
 [index]
-?.value || "",  
-
-const penerimaHibah = [];
-
-document
-.querySelectorAll(
-".detailKategoriAlih"
-)
-[index]
-.querySelectorAll(
-".penerimaHibah"
-)
-.forEach((select,pIndex)=>{
-
-penerimaHibah.push({
-
-nama:
-select.value,
-
-peratus:
-document
-.querySelectorAll(
-".detailKategoriAlih"
-)
-[index]
-.querySelectorAll(
-".peratusHibah"
-)
-[pIndex]
 ?.value || ""
 
 });
 
-});          
-
+});
 const hartaTakAlih = [];
 
 document
