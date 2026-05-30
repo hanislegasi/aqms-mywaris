@@ -1125,7 +1125,7 @@ Harta Sepencarian
 
 <button
 type="button"
-class="addPenerimaHibaTakAlihhBtn bg-green-600 text-white px-3 py-2 rounded-lg mt-3">
+class="addPenerimaHibaTakAlihBtn bg-green-600 text-white px-3 py-2 rounded-lg mt-3">
 
 + Tambah Penerima
 
@@ -1161,16 +1161,36 @@ document
 .querySelectorAll(".kategoriTakAlih")
 .forEach((select,index)=>{
 
-if(
-select.value==="hibah" ||
-select.value==="sepencarian"
-){
+if(select.value==="hibah"){
 
 document
 .querySelectorAll(
 ".detailKategoriTakAlih"
 )[index]
 .classList.remove("hidden");
+
+document
+.querySelectorAll(
+".hibahSectionTakAlih"
+)[index]
+.classList.remove("hidden");
+
+}
+
+if(select.value==="sepencarian"){
+
+document
+.querySelectorAll(
+".detailKategoriTakAlih"
+)[index]
+.classList.remove("hidden");
+
+document
+.querySelectorAll(
+".sepencarianSectionTakAlih"
+)[index]
+.classList.remove("hidden");
+
 
 }
 
