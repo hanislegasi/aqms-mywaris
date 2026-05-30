@@ -1311,16 +1311,46 @@ document.querySelectorAll(".nilaiAlih")[index].value,
 kategori:
 document.querySelectorAll(".kategoriAlih")[index].value,
 
-penerimaNama:
-document.querySelectorAll(
-".namaPenerimaAlih"
-)[index]?.value || "",
+penerimaHibah:
+penerimaHibah,
 
-peratusan:
-document.querySelectorAll(
-".peratusanPenerimaAlih"
-)[index]?.value || ""
-  
+penerimaSepencarian:
+document
+.querySelectorAll(
+".namaPenerimaSepencarian"
+)
+[index]
+?.value || "",  
+
+const penerimaHibah = [];
+
+document
+.querySelectorAll(
+".detailKategoriAlih"
+)
+[index]
+.querySelectorAll(
+".penerimaHibah"
+)
+.forEach((select,pIndex)=>{
+
+penerimaHibah.push({
+
+nama:
+select.value,
+
+peratus:
+document
+.querySelectorAll(
+".detailKategoriAlih"
+)
+[index]
+.querySelectorAll(
+".peratusHibah"
+)
+[pIndex]
+?.value || ""
+
 });
 
 });          
