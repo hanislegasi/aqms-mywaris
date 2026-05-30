@@ -1485,6 +1485,38 @@ document
 .querySelectorAll(".namaHartaTakAlih")
 .forEach((item,index)=>{
 
+const penerimaHibahTakAlih = [];
+
+document
+.querySelectorAll(
+".detailKategoriTakAlih"
+)
+[index]
+.querySelectorAll(
+".penerimaHibahTakAlih"
+)
+.forEach((select,pIndex)=>{
+
+penerimaHibahTakAlih.push({
+
+nama: select.value,
+
+peratus:
+document
+.querySelectorAll(
+".detailKategoriTakAlih"
+)
+[index]
+.querySelectorAll(
+".peratusHibahTakAlih"
+)
+[pIndex]
+?.value || ""
+
+});
+
+});
+  
 hartaTakAlih.push({
 
 nama:
@@ -1511,7 +1543,7 @@ penerimaHibahTakAlih,
 penerimaSepencarianTakAlih:
 document
 .querySelectorAll(
-".namaPenerimaSepencarian"
+".namaPenerimaSepencarianTakAlih"
 )
 [index]
 ?.value || ""
