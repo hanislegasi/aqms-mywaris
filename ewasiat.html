@@ -913,9 +913,161 @@ placeholder="Peratusan (%)">
 setupKategoriAlih();
 populateWarisDropdown();
 
+document
+.querySelectorAll(".kategoriAlih")
+.forEach((select,index)=>{
+
+if(
+select.value==="hibah" ||
+select.value==="sepencarian"
+){
+
+document
+.querySelectorAll(
+".detailKategoriAlih"
+)[index]
+.classList.remove("hidden");
+
+}
+
+});
   
 }
 
+if(data.hartaTakAlih){
+
+document.getElementById(
+"hartaTakAlihContainer"
+).innerHTML = "";
+
+data.hartaTakAlih.forEach(item=>{
+
+document.getElementById(
+"hartaTakAlihContainer"
+).insertAdjacentHTML(
+"beforeend",
+`
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaHartaTakAlih"
+value="${item.nama || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 noRujukanTakAlih"
+value="${item.rujukan || ''}">
+
+<select
+class="w-full border rounded-lg p-3 pemilikanTakAlih">
+
+<option value="">
+Pemilikan
+</option>
+
+<option
+value="milikPenuh"
+${item.pemilikan==="milikPenuh"?"selected":""}>
+Milik Penuh
+</option>
+
+<option
+value="perkongsian"
+${item.pemilikan==="perkongsian"?"selected":""}>
+Perkongsian Nama
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 nilaiTakAlih"
+value="${item.nilai || ''}">
+
+<textarea
+class="w-full border rounded-lg p-3 alamatTakAlih"
+rows="3">${item.alamat || ''}</textarea>
+
+<select
+class="w-full border rounded-lg p-3 kategoriTakAlih">
+
+<option
+value="faraid"
+${item.kategori==="faraid"?"selected":""}>
+Faraid
+</option>
+
+<option
+value="hibah"
+${item.kategori==="hibah"?"selected":""}>
+Hibah
+</option>
+
+<option
+value="sepencarian"
+${item.kategori==="sepencarian"?"selected":""}>
+Harta Sepencarian
+</option>
+
+</select>
+
+<div class="detailKategoriTakAlih hidden mt-3">
+
+<select
+class="w-full border rounded-lg p-3 mb-3 namaPenerimaTakAlih"
+data-selected="${item.penerimaNama || ''}">
+
+<option value="">
+Pilih Penerima
+</option>
+
+<option value="custom">
++ Orang Lain
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 peratusanPenerimaTakAlih"
+value="${item.peratusan || ''}"
+placeholder="Peratusan (%)">
+
+</div>
+
+</div>
+
+`
+);
+
+});
+
+setupKategoriTakAlih();
+populateWarisDropdownTakAlih();
+
+document
+.querySelectorAll(".kategoriTakAlih")
+.forEach((select,index)=>{
+
+if(
+select.value==="hibah" ||
+select.value==="sepencarian"
+){
+
+document
+.querySelectorAll(
+".detailKategoriTakAlih"
+)[index]
+.classList.remove("hidden");
+
+}
+
+});
+  
+}
+  
 }
 
 });
@@ -1442,6 +1594,12 @@ type="text"
 class="w-full border rounded-lg p-3 nilaiAlih"
 placeholder="Anggaran Nilai">
 
+<textarea
+class="w-full border rounded-lg p-3 alamatTakAlih"
+rows="3"
+placeholder="Alamat Harta">
+</textarea>
+
 <select
 class="w-full border rounded-lg p-3 kategoriAlih">
 
@@ -1481,7 +1639,6 @@ placeholder="Nama Orang Lain">
 <input
 type="text"
 class="w-full border rounded-lg p-3 peratusanPenerimaAlih"
-value="${item.peratusan || ''}"
 placeholder="Peratusan (%)">
 
 </div>
@@ -1657,7 +1814,10 @@ ${w.nama} (${w.hubungan})
 
 });
 
-select.value = currentValue;
+const savedValue =
+select.dataset.selected || currentValue;
+
+select.value = savedValue;
 
 });
 
