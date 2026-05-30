@@ -2415,21 +2415,35 @@ document.querySelectorAll(
 ".detailKategoriTakAlih"
 )[index];
 
-if(
-select.value==="hibah" ||
-select.value==="sepencarian"
-){
-
-detail.classList.remove(
-"hidden"
+const hibah =
+detail.querySelector(
+".hibahSectionTakAlih"
 );
+
+const sepencarian =
+detail.querySelector(
+".sepencarianSectionTakAlih"
+);
+
+detail.classList.add("hidden");
+
+hibah.classList.add("hidden");
+
+sepencarian.classList.add("hidden");
+
+if(select.value==="hibah"){
+
+detail.classList.remove("hidden");
+
+hibah.classList.remove("hidden");
 
 }
-else{
 
-detail.classList.add(
-"hidden"
-);
+if(select.value==="sepencarian"){
+
+detail.classList.remove("hidden");
+
+sepencarian.classList.remove("hidden");
 
 }
 
