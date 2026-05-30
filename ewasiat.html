@@ -899,6 +899,7 @@ placeholder="Nama Orang Lain">
 <input
 type="text"
 class="w-full border rounded-lg p-3 mt-3 peratusanPenerimaAlih"
+value="${item.peratusan || ''}"
 placeholder="Peratusan (%)">
 
 </div>
@@ -1016,7 +1017,7 @@ Harta Sepencarian
 <div class="detailKategoriTakAlih hidden mt-3">
 
 <select
-class="w-full border rounded-lg p-3 mb-3 namaPenerimaTakAlih"
+class="w-full border rounded-lg p-3 namaPenerimaTakAlih"
 data-selected="${item.penerimaNama || ''}">
 
 <option value="">
@@ -1029,9 +1030,18 @@ Pilih Penerima
 
 </select>
 
+<div class="customPenerimaAlih hidden">
+
 <input
 type="text"
-class="w-full border rounded-lg p-3 peratusanPenerimaTakAlih"
+class="w-full border rounded-lg p-3 mt-3 namaCustomAlih"
+placeholder="Nama Orang Lain">
+
+</div>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 mt-3 peratusanPenerimaTakAlih"
 value="${item.peratusan || ''}"
 placeholder="Peratusan (%)">
 
@@ -1594,12 +1604,6 @@ type="text"
 class="w-full border rounded-lg p-3 nilaiAlih"
 placeholder="Anggaran Nilai">
 
-<textarea
-class="w-full border rounded-lg p-3 alamatTakAlih"
-rows="3"
-placeholder="Alamat Harta">
-</textarea>
-
 <select
 class="w-full border rounded-lg p-3 kategoriAlih">
 
@@ -1822,6 +1826,9 @@ select.value = savedValue;
 });
 
 }
+
+setupKategoriTakAlih();
+populateWarisDropdownTakAlih();
     
 document
 .getElementById("addHartaTakAlihBtn")
@@ -1860,6 +1867,12 @@ Perkongsian Nama
 type="text"
 class="w-full border rounded-lg p-3 nilaiTakAlih"
 placeholder="Anggaran Nilai">
+
+<textarea
+class="w-full border rounded-lg p-3 alamatTakAlih"
+rows="3"
+placeholder="Alamat Harta">
+</textarea>
 
 <select
 class="w-full border rounded-lg p-3 kategoriTakAlih">
