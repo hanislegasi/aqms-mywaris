@@ -910,6 +910,44 @@ setupKategoriAlih();
 populateWarisDropdown();
 populatePasanganDropdown();
 
+document
+.querySelectorAll(".kategoriAlih")
+.forEach((select,index)=>{
+
+if(select.value==="hibah"){
+
+document
+.querySelectorAll(
+".detailKategoriAlih"
+)[index]
+.classList.remove("hidden");
+
+document
+.querySelectorAll(
+".hibahSection"
+)[index]
+.classList.remove("hidden");
+
+}
+
+if(select.value==="sepencarian"){
+
+document
+.querySelectorAll(
+".detailKategoriAlih"
+)[index]
+.classList.remove("hidden");
+
+document
+.querySelectorAll(
+".sepencarianSection"
+)[index]
+.classList.remove("hidden");
+
+}
+
+});
+
 data.hartaAlih.forEach((item,index)=>{
 
 // RESTORE HIBAH
@@ -984,25 +1022,6 @@ select.value =
 item.penerimaSepencarian || "";
 
 }
-
-}
-
-});
- 
-document
-.querySelectorAll(".kategoriAlih")
-.forEach((select,index)=>{
-
-if(
-select.value==="hibah" ||
-select.value==="sepencarian"
-){
-
-document
-.querySelectorAll(
-".detailKategoriAlih"
-)[index]
-.classList.remove("hidden");
 
 }
 
