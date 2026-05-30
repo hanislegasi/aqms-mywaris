@@ -2352,33 +2352,31 @@ class="w-full border rounded-lg p-3 kategoriTakAlih">
 
 <div class="detailKategoriTakAlih hidden mt-3">
 
-<select
-class="w-full border rounded-lg p-3 namaPenerimaTakAlih">
+<div class="hibahSectionTakAlih hidden">
 
-<option value="">
-Pilih Penerima
-</option>
+<div class="hibahPenerimaContainerTakAlih">
+</div>
 
-<option value="custom">
-+ Orang Lain
-</option>
+<button
+type="button"
+class="addPenerimaHibahTakAlihBtn bg-green-600 text-white px-3 py-2 rounded-lg mt-3">
 
-</select>
++ Tambah Penerima
 
-<div class="customPenerimaTakAlih hidden">
-
-<input
-type="text"
-class="w-full border rounded-lg p-3 mt-3 namaCustomTakAlih"
-placeholder="Nama Orang Lain">
+</button>
 
 </div>
 
+<div class="sepencarianSectionTakAlih hidden">
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 peratusanPenerimaTakAlih"
-placeholder="Peratusan (%)">
+<select
+class="w-full border rounded-lg p-3 namaPenerimaSepencarianTakAlih">
+
+<option value="">
+Pilih Pasangan
+</option>
+
+</select>
 
 </div>
 
@@ -2397,7 +2395,8 @@ html
 
 setupKategoriTakAlih();
 populateWarisDropdownTakAlih();
-
+populatePasanganDropdownTakAlih();
+  
 });
 
 function setupKategoriTakAlih(){
