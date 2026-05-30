@@ -1195,7 +1195,82 @@ document
 }
 
 });
-  
+
+data.hartaTakAlih.forEach((item,index)=>{
+
+// RESTORE HIBAH
+if(
+item.kategori === "hibah"
+&&
+item.penerimaHibahTakAlih
+){
+
+const detail =
+document.querySelectorAll(
+".detailKategoriTakAlih"
+)[index];
+
+const hibahContainer =
+detail.querySelector(
+".hibahPenerimaContainerTakAlih"
+);
+
+item.penerimaHibahTakAlih.forEach(()=>{
+
+addPenerimaHibahTakAlih(
+hibahContainer
+);
+
+});
+
+const selects =
+hibahContainer.querySelectorAll(
+".penerimaHibahTakAlih"
+);
+
+const peratus =
+hibahContainer.querySelectorAll(
+".peratusHibahTakAlih"
+);
+
+item.penerimaHibahTakAlih.forEach(
+(p,i)=>{
+
+if(selects[i]){
+selects[i].value =
+p.nama || "";
+}
+
+if(peratus[i]){
+peratus[i].value =
+p.peratus || "";
+}
+
+});
+
+}
+
+// RESTORE SEPENCARIAN
+if(
+item.kategori === "sepencarian"
+){
+
+const pasangan =
+document.querySelectorAll(
+".namaPenerimaSepencarianTakAlih"
+)[index];
+
+if(pasangan){
+
+pasangan.value =
+item.penerimaSepencarianTakAlih || "";
+
+}
+
+}
+
+});
+
 }
   
 }
