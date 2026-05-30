@@ -910,6 +910,7 @@ Pilih Pasangan
 
 setupKategoriAlih();
 populateWarisDropdown();
+populatePasanganDropdown();
 
 document
 .querySelectorAll(".kategoriAlih")
@@ -1560,6 +1561,8 @@ html
 
 populateWarisDropdown();
 populateWarisDropdownTakAlih();
+populateWarisDropdownHibah();
+populatePasanganDropdown();
   
 });
 
@@ -1614,33 +1617,31 @@ class="w-full border rounded-lg p-3 kategoriAlih">
 
 <div class="detailKategoriAlih hidden mt-3">
 
-<select
-class="w-full border rounded-lg p-3 namaPenerimaAlih">
+<div class="hibahSection hidden">
 
-<option value="">
-Pilih Penerima
-</option>
+<div class="hibahPenerimaContainer">
+</div>
 
-<option value="custom">
-+ Orang Lain
-</option>
+<button
+type="button"
+class="addPenerimaHibahBtn bg-green-600 text-white px-3 py-2 rounded-lg mt-3">
 
-</select>
++ Tambah Penerima
 
-<div class="customPenerimaAlih hidden">
-
-<input
-type="text"
-class="w-full border rounded-lg p-3 mt-3 namaCustomAlih"
-placeholder="Nama Orang Lain">
+</button>
 
 </div>
 
+<div class="sepencarianSection hidden">
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 peratusanPenerimaAlih"
-placeholder="Peratusan (%)">
+<select
+class="w-full border rounded-lg p-3 namaPenerimaSepencarian">
+
+<option value="">
+Pilih Pasangan
+</option>
+
+</select>
 
 </div>
 
@@ -1656,6 +1657,7 @@ html
 
 setupKategoriAlih();
 populateWarisDropdown();
+populatePasanganDropdown();
   
 });
 
@@ -1665,14 +1667,7 @@ document
 .querySelectorAll(".kategoriAlih")
 .forEach((select,index)=>{
 
-select.addEventListener(
-"change",
-()=>{
-
-const detail =
-document.querySelectorAll(
-".detailKategoriAlih"
-)[index];
+select.onchange = ()=>{
 
 const detail =
 document.querySelectorAll(
@@ -1690,7 +1685,9 @@ detail.querySelector(
 );
 
 detail.classList.add("hidden");
+
 hibah.classList.add("hidden");
+
 sepencarian.classList.add("hidden");
 
 if(select.value==="hibah"){
@@ -1707,22 +1704,11 @@ detail.classList.remove("hidden");
 
 sepencarian.classList.remove("hidden");
 
-}
-
-detail.classList.remove(
-"hidden"
-);
-
-}
-else{
-
-detail.classList.add(
-"hidden"
-);
+populatePasanganDropdown();
 
 }
 
-});
+};
 
 });
 
@@ -1792,6 +1778,7 @@ select.value = savedValue;
   
 setupKategoriAlih();
 populateWarisDropdown();
+populatePasanganDropdown();
 
 function addPenerimaHibah(container){
 
