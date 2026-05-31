@@ -495,7 +495,79 @@ class="bg-[#153638] text-white px-4 py-2 rounded-lg">
 </button>
 
 </div>      
-      
+
+<!-- SECTION 7C -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 7C : Harta Berpenama
+</h2>
+
+<div id="hartaBerpenamaContainer">
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<select
+class="w-full border rounded-lg p-3 jenisBerpenama">
+
+<option value="">
+Pilih Jenis
+</option>
+
+<option value="KWSP">
+KWSP
+</option>
+
+<option value="Tabung Haji">
+Tabung Haji
+</option>
+
+<option value="ASB">
+ASB
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 akaunBerpenama"
+placeholder="No Akaun">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penamaBerpenama"
+placeholder="Nama Penama">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icPenamaBerpenama"
+placeholder="No IC">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganPenamaBerpenama"
+placeholder="Hubungan">
+
+<input
+type="number"
+class="w-full border rounded-lg p-3 bahagianBerpenama"
+placeholder="Bahagian (%)">
+
+</div>
+
+</div>
+
+<button
+type="button"
+id="addBerpenamaBtn"
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
++ Tambah Harta Berpenama
+
+</button>
+
+</div>
+  
 <!-- LAMPIRAN -->
 <div class="space-y-3">
 
@@ -1661,6 +1733,35 @@ document
 
 });
 
+const hartaBerpenama = [];
+
+document
+.querySelectorAll(".jenisBerpenama")
+.forEach((item,index)=>{
+
+hartaBerpenama.push({
+
+jenis:
+document.querySelectorAll(".jenisBerpenama")[index].value,
+
+akaun:
+document.querySelectorAll(".akaunBerpenama")[index].value,
+
+penama:
+document.querySelectorAll(".penamaBerpenama")[index].value,
+
+ic:
+document.querySelectorAll(".icPenamaBerpenama")[index].value,
+
+hubungan:
+document.querySelectorAll(".hubunganPenamaBerpenama")[index].value,
+
+bahagian:
+document.querySelectorAll(".bahagianBerpenama")[index].value
+
+});
+
+});
           
           await setDoc(
 
@@ -1728,7 +1829,10 @@ hartaAlih:
 hartaAlih,        
 
 hartaTakAlih: 
-hartaTakAlih,              
+hartaTakAlih,   
+
+hartaBerpenama:
+hartaBerpenama,             
               
   createdAt:
   new Date()
@@ -2564,6 +2668,73 @@ populatePasanganDropdownTakAlih();
   
 });
 
+document
+.getElementById("addBerpenamaBtn")
+.addEventListener("click",()=>{
+
+const html = `
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<select
+class="w-full border rounded-lg p-3 jenisBerpenama">
+
+<option value="">
+Pilih Jenis
+</option>
+
+<option value="KWSP">
+KWSP
+</option>
+
+<option value="Tabung Haji">
+Tabung Haji
+</option>
+
+<option value="ASB">
+ASB
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 akaunBerpenama"
+placeholder="No Akaun">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penamaBerpenama"
+placeholder="Nama Penama">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icPenamaBerpenama"
+placeholder="No IC">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganPenamaBerpenama"
+placeholder="Hubungan">
+
+<input
+type="number"
+class="w-full border rounded-lg p-3 bahagianBerpenama"
+placeholder="Bahagian (%)">
+
+</div>
+
+`;
+
+document
+.getElementById("hartaBerpenamaContainer")
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+});
+    
 function setupKategoriTakAlih(){
 
 document
