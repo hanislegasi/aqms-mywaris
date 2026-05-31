@@ -1661,6 +1661,110 @@ Padam
 });
 
 }  
+
+if(data.pemiutang){
+
+document.getElementById(
+"pemiutangContainer"
+).innerHTML = "";
+
+data.pemiutang.forEach(item=>{
+
+document.getElementById(
+"pemiutangContainer"
+).insertAdjacentHTML(
+"beforeend",
+`
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaPemiutang"
+value="${item.nama || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 jenisHutangPemiutang"
+value="${item.jenis || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bakiHutangPemiutang"
+value="${item.baki || ''}">
+
+<textarea
+class="w-full border rounded-lg p-3 kaedahPenyelesaianPemiutang"
+rows="3">${item.kaedah || ''}</textarea>
+
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam
+
+</button>
+
+</div>
+
+`
+);
+
+});
+
+}
+
+if(data.penghutang){
+
+document.getElementById(
+"penghutangContainer"
+).innerHTML = "";
+
+data.penghutang.forEach(item=>{
+
+document.getElementById(
+"penghutangContainer"
+).insertAdjacentHTML(
+"beforeend",
+`
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaPenghutang"
+value="${item.nama || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 jenisHutangPenghutang"
+value="${item.jenis || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bakiHutangPenghutang"
+value="${item.baki || ''}">
+
+<textarea
+class="w-full border rounded-lg p-3 kaedahPenyelesaianPenghutang"
+rows="3">${item.kaedah || ''}</textarea>
+
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam
+
+</button>
+
+</div>
+
+`
+);
+
+});
+
+}  
   
 }
 
