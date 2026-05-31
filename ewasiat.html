@@ -1305,20 +1305,49 @@ async function loadFiles(){
 
     html += `
     
-    <div class="bg-gray-100 p-3 rounded-lg flex justify-between items-center">
+    <div class="bg-gray-100 p-4 rounded-xl space-y-3">
 
-      <p class="text-sm text-gray-700">
-        ${data.fileName}
-      </p>
+      <div class="flex justify-between items-center">
 
-      <a
-        href="${data.fileURL}"
-        target="_blank"
-        class="text-[#153638] font-semibold">
+        <p class="text-sm font-medium text-gray-700">
+          ${data.fileName}
+        </p>
 
-        Lihat
+        <a
+          href="${data.fileURL}"
+          target="_blank"
+          class="text-[#153638] font-semibold">
 
-      </a>
+          Buka
+
+        </a>
+
+      </div>
+
+      ${
+        data.fileName.endsWith(".pdf")
+
+        ?
+
+        `
+
+        <iframe
+          src="${data.fileURL}"
+          class="w-full h-96 rounded-lg border">
+        </iframe>
+
+        `
+
+        :
+
+        `
+
+        <img
+          src="${data.fileURL}"
+          class="w-full rounded-lg border">
+
+        `
+      }
 
     </div>
     
@@ -1331,6 +1360,7 @@ async function loadFiles(){
   ).innerHTML = html;
 
 }
+
     
 // UPLOAD FILE
 document
