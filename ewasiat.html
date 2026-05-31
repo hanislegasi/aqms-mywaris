@@ -3147,6 +3147,88 @@ html
 );
 
 });
+
+document
+.getElementById("addPemiutangBtn")
+.addEventListener("click",()=>{
+
+const html = `
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaPemiutang"
+placeholder="Nama Pemiutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 jenisHutangPemiutang"
+placeholder="Jenis Hutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bakiHutangPemiutang"
+placeholder="Baki Hutang">
+
+<textarea
+class="w-full border rounded-lg p-3 kaedahPenyelesaianPemiutang"
+rows="3"
+placeholder="Kaedah Penyelesaian"></textarea>
+
+</div>
+
+`;
+
+document
+.getElementById("pemiutangContainer")
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+});
+
+document
+.getElementById("addPenghutangBtn")
+.addEventListener("click",()=>{
+
+const html = `
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaPenghutang"
+placeholder="Nama Penghutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 jenisHutangPenghutang"
+placeholder="Jenis Hutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bakiHutangPenghutang"
+placeholder="Baki Hutang">
+
+<textarea
+class="w-full border rounded-lg p-3 kaedahPenyelesaianPenghutang"
+rows="3"
+placeholder="Kaedah Penyelesaian"></textarea>
+
+</div>
+
+`;
+
+document
+.getElementById("penghutangContainer")
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+});    
     
 function setupKategoriTakAlih(){
 
