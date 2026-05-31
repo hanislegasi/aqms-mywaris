@@ -2105,6 +2105,70 @@ document.querySelectorAll(".bahagianTakaful")[index].value
 });
 
 });         
+
+const pemiutang = [];
+
+document
+.querySelectorAll(".namaPemiutang")
+.forEach((item,index)=>{
+
+pemiutang.push({
+
+nama:
+document.querySelectorAll(
+".namaPemiutang"
+)[index].value,
+
+jenis:
+document.querySelectorAll(
+".jenisHutangPemiutang"
+)[index].value,
+
+baki:
+document.querySelectorAll(
+".bakiHutangPemiutang"
+)[index].value,
+
+kaedah:
+document.querySelectorAll(
+".kaedahPenyelesaianPemiutang"
+)[index].value
+
+});
+
+});
+
+const penghutang = [];
+
+document
+.querySelectorAll(".namaPenghutang")
+.forEach((item,index)=>{
+
+penghutang.push({
+
+nama:
+document.querySelectorAll(
+".namaPenghutang"
+)[index].value,
+
+jenis:
+document.querySelectorAll(
+".jenisHutangPenghutang"
+)[index].value,
+
+baki:
+document.querySelectorAll(
+".bakiHutangPenghutang"
+)[index].value,
+
+kaedah:
+document.querySelectorAll(
+".kaedahPenyelesaianPenghutang"
+)[index].value
+
+});
+
+});          
           
           await setDoc(
 
@@ -2178,7 +2242,13 @@ hartaBerpenama:
 hartaBerpenama,   
 
 takaful:
-takaful,              
+takaful,     
+
+pemiutang:
+pemiutang,
+
+penghutang:
+penghutang,              
               
   createdAt:
   new Date()
