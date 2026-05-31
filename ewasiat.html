@@ -567,6 +567,62 @@ class="bg-[#153638] text-white px-4 py-2 rounded-lg">
 </button>
 
 </div>
+
+<!-- SECTION 7D -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 7D : Maklumat Takaful
+</h2>
+
+<div id="takafulContainer">
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 syarikatTakaful"
+placeholder="Nama Syarikat">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 polisiTakaful"
+placeholder="Nama Polisi">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penerimaTakaful"
+placeholder="Nama Penerima Pampasan">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icPenerimaTakaful"
+placeholder="No IC">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganTakaful"
+placeholder="Hubungan">
+
+<input
+type="number"
+class="w-full border rounded-lg p-3 bahagianTakaful"
+placeholder="Bahagian (%)">
+
+</div>
+
+</div>
+
+<button
+type="button"
+id="addTakafulBtn"
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
++ Tambah Takaful
+
+</button>
+
+</div>
   
 <!-- LAMPIRAN -->
 <div class="space-y-3">
@@ -1762,6 +1818,36 @@ document.querySelectorAll(".bahagianBerpenama")[index].value
 });
 
 });
+
+ const takaful = [];
+
+document
+.querySelectorAll(".syarikatTakaful")
+.forEach((item,index)=>{
+
+takaful.push({
+
+syarikat:
+document.querySelectorAll(".syarikatTakaful")[index].value,
+
+polisi:
+document.querySelectorAll(".polisiTakaful")[index].value,
+
+penerima:
+document.querySelectorAll(".penerimaTakaful")[index].value,
+
+ic:
+document.querySelectorAll(".icPenerimaTakaful")[index].value,
+
+hubungan:
+document.querySelectorAll(".hubunganTakaful")[index].value,
+
+bahagian:
+document.querySelectorAll(".bahagianTakaful")[index].value
+
+});
+
+});         
           
           await setDoc(
 
@@ -1832,7 +1918,10 @@ hartaTakAlih:
 hartaTakAlih,   
 
 hartaBerpenama:
-hartaBerpenama,             
+hartaBerpenama,   
+
+takaful:
+takaful,              
               
   createdAt:
   new Date()
@@ -2728,6 +2817,57 @@ placeholder="Bahagian (%)">
 
 document
 .getElementById("hartaBerpenamaContainer")
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+});
+
+document
+.getElementById("addTakafulBtn")
+.addEventListener("click",()=>{
+
+const html = `
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 syarikatTakaful"
+placeholder="Nama Syarikat">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 polisiTakaful"
+placeholder="Nama Polisi">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penerimaTakaful"
+placeholder="Nama Penerima Pampasan">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icPenerimaTakaful"
+placeholder="No IC">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganTakaful"
+placeholder="Hubungan">
+
+<input
+type="number"
+class="w-full border rounded-lg p-3 bahagianTakaful"
+placeholder="Bahagian (%)">
+
+</div>
+
+`;
+
+document
+.getElementById("takafulContainer")
 .insertAdjacentHTML(
 "beforeend",
 html
