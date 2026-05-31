@@ -1404,6 +1404,135 @@ item.penerimaSepencarianTakAlih || "";
 });
 
 }
+
+if(data.hartaBerpenama){
+
+document.getElementById(
+"hartaBerpenamaContainer"
+).innerHTML = "";
+
+data.hartaBerpenama.forEach(item=>{
+
+document.getElementById(
+"hartaBerpenamaContainer"
+).insertAdjacentHTML(
+"beforeend",
+`
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<select
+class="w-full border rounded-lg p-3 jenisBerpenama">
+
+<option value="">
+Pilih Jenis
+</option>
+
+<option value="KWSP"
+${item.jenis==="KWSP"?"selected":""}>
+KWSP
+</option>
+
+<option value="Tabung Haji"
+${item.jenis==="Tabung Haji"?"selected":""}>
+Tabung Haji
+</option>
+
+<option value="ASB"
+${item.jenis==="ASB"?"selected":""}>
+ASB
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 akaunBerpenama"
+value="${item.akaun || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penamaBerpenama"
+value="${item.penama || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icPenamaBerpenama"
+value="${item.ic || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganPenamaBerpenama"
+value="${item.hubungan || ''}">
+
+<input
+type="number"
+class="w-full border rounded-lg p-3 bahagianBerpenama"
+value="${item.bahagian || ''}">
+
+</div>
+
+`
+);
+
+});
+
+}
+
+if(data.takaful){
+
+document.getElementById(
+"takafulContainer"
+).innerHTML = "";
+
+data.takaful.forEach(item=>{
+
+document.getElementById(
+"takafulContainer"
+).insertAdjacentHTML(
+"beforeend",
+`
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 syarikatTakaful"
+value="${item.syarikat || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 polisiTakaful"
+value="${item.polisi || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penerimaTakaful"
+value="${item.penerima || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icPenerimaTakaful"
+value="${item.ic || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganTakaful"
+value="${item.hubungan || ''}">
+
+<input
+type="number"
+class="w-full border rounded-lg p-3 bahagianTakaful"
+value="${item.bahagian || ''}">
+
+</div>
+
+`
+);
+
+});
+
+}  
   
 }
 
