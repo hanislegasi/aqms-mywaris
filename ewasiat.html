@@ -609,6 +609,14 @@ type="number"
 class="w-full border rounded-lg p-3 bahagianTakaful"
 placeholder="Bahagian (%)">
 
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam
+
+</button>
+
 </div>
 
 </div>
@@ -1948,7 +1956,7 @@ document.querySelectorAll(".bahagianBerpenama")[index].value
 
 });
 
- const takaful = [];
+const takaful = [];
 
 document
 .querySelectorAll(".syarikatTakaful")
@@ -2991,6 +2999,14 @@ type="number"
 class="w-full border rounded-lg p-3 bahagianTakaful"
 placeholder="Bahagian (%)">
 
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam
+
+</button>
+
 </div>
 
 `;
@@ -3099,6 +3115,18 @@ container
 );
 
 }
+
+if(
+e.target.classList.contains(
+"deleteRowBtn"
+)
+){
+
+e.target
+.closest(".border")
+.remove();
+
+}  
   
 });
     
