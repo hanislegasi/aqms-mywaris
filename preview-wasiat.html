@@ -473,7 +473,30 @@ document.getElementById(
 ).innerHTML = takafulHTML;
 
 let pemiutangHTML = "";
-data.pemiutang?.forEach(item=>{ ... });
+
+data.pemiutang?.forEach(item=>{
+
+pemiutangHTML += `
+
+<div class="border p-3 rounded-lg mb-3">
+
+<p><strong>Nama:</strong>
+${item.nama}</p>
+
+<p><strong>Jenis:</strong>
+${item.jenis}</p>
+
+<p><strong>Baki:</strong>
+${item.baki}</p>
+
+<p><strong>Kaedah:</strong>
+${item.kaedah}</p>
+
+</div>
+
+`;
+
+});
 
 document.getElementById(
 "pemiutangPreview"
@@ -481,7 +504,30 @@ document.getElementById(
 
 
 let penghutangHTML = "";
-data.penghutang?.forEach(item=>{ ... });
+
+data.penghutang?.forEach(item=>{
+
+penghutangHTML += `
+
+<div class="border p-3 rounded-lg mb-3">
+
+<p><strong>Nama:</strong>
+${item.nama}</p>
+
+<p><strong>Jenis:</strong>
+${item.jenis}</p>
+
+<p><strong>Baki:</strong>
+${item.baki}</p>
+
+<p><strong>Kaedah:</strong>
+${item.kaedah}</p>
+
+</div>
+
+`;
+
+});
 
 document.getElementById(
 "penghutangPreview"
