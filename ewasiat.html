@@ -1185,6 +1185,73 @@ checkPemegangAmanah();
 
 }   
 
+
+if(data.pemegangAmanah){
+
+document.getElementById(
+"pilihanPemegangAmanah"
+).value =
+data.pemegangAmanah.pilihan || "";
+
+if(
+data.pemegangAmanah.pilihan === "ya"
+){
+
+document
+.getElementById(
+"pemegangAmanahDetail"
+)
+.classList.remove(
+"hidden"
+);
+
+}
+
+document.getElementById(
+"jenisPemegangAmanah"
+).value =
+data.pemegangAmanah.jenis || "";
+
+if(
+data.pemegangAmanah.jenis === "lain"
+){
+
+document
+.getElementById(
+"pemegangAmanahLain"
+)
+.classList.remove(
+"hidden"
+);
+
+}
+
+document.getElementById(
+"namaPemegangAmanah"
+).value =
+data.pemegangAmanah.nama || "";
+
+document.getElementById(
+"icPemegangAmanah"
+).value =
+data.pemegangAmanah.ic || "";
+
+document.getElementById(
+"hubunganPemegangAmanah"
+).value =
+data.pemegangAmanah.hubungan || "";
+
+document.getElementById(
+"alamatPemegangAmanah"
+).value =
+data.pemegangAmanah.alamat || "";
+
+document.getElementById(
+"telefonPemegangAmanah"
+).value =
+data.pemegangAmanah.telefon || "";
+
+}
   
 if(data.hartaAlih){
 
