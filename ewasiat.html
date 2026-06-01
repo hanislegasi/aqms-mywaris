@@ -342,6 +342,22 @@ Orang Lain
 </select>
 
 <div
+id="pemegangAmanahPasangan"
+class="hidden mt-3">
+
+<select
+id="namaPemegangAmanahPasangan"
+class="w-full border rounded-lg p-3">
+
+<option value="">
+Pilih Pasangan
+</option>
+
+</select>
+
+</div>
+  
+<div
 id="pemegangAmanahLain"
 class="hidden space-y-3">
 
@@ -1180,7 +1196,8 @@ populateWarisDropdown();
 populateWarisDropdownTakAlih();
 populateWarisDropdownHibah();
 populatePasanganDropdown();
-
+populatePemegangAmanahPasangan();
+  
 checkPemegangAmanah();
 
 }   
@@ -1211,6 +1228,26 @@ document.getElementById(
 "jenisPemegangAmanah"
 ).value =
 data.pemegangAmanah.jenis || "";
+
+if(
+data.pemegangAmanah.jenis ===
+"pasangan"
+){
+
+document
+.getElementById(
+"pemegangAmanahPasangan"
+)
+.classList.remove(
+"hidden"
+);
+
+document.getElementById(
+"namaPemegangAmanahPasangan"
+).value =
+data.pemegangAmanah.nama || "";
+
+}  
 
 if(
 data.pemegangAmanah.jenis === "lain"
@@ -2031,14 +2068,42 @@ document
 if(this.value==="lain"){
 
 document
-.getElementById("pemegangAmanahLain")
-.classList.remove("hidden");
-
-}else{
+.getElementById(
+"pemegangAmanahLain"
+).classList.remove("hidden");
 
 document
-.getElementById("pemegangAmanahLain")
-.classList.add("hidden");
+.getElementById(
+"pemegangAmanahPasangan"
+).classList.add("hidden");
+
+}
+
+else if(this.value==="pasangan"){
+
+document
+.getElementById(
+"pemegangAmanahPasangan"
+).classList.remove("hidden");
+
+document
+.getElementById(
+"pemegangAmanahLain"
+).classList.add("hidden");
+
+}
+
+else{
+
+document
+.getElementById(
+"pemegangAmanahPasangan"
+).classList.add("hidden");
+
+document
+.getElementById(
+"pemegangAmanahLain"
+).classList.add("hidden");
 
 }
 
@@ -2602,6 +2667,19 @@ document.getElementById(
 ).value,
 
 nama:
+
+document.getElementById(
+"jenisPemegangAmanah"
+).value === "pasangan"
+
+?
+
+document.getElementById(
+"namaPemegangAmanahPasangan"
+)?.value || ""
+
+:
+
 document.getElementById(
 "namaPemegangAmanah"
 )?.value || "",
@@ -2851,6 +2929,7 @@ populateWarisDropdown();
 populateWarisDropdownTakAlih();
 populateWarisDropdownHibah();
 populatePasanganDropdown();
+populatePemegangAmanahPasangan();
 
 checkPemegangAmanah();  
   
@@ -3149,6 +3228,57 @@ html
 );
 
 populateWarisDropdownHibahTakAlih();
+
+}
+
+function populatePemegangAmanahPasangan(){
+
+const select =
+document.getElementById(
+"namaPemegangAmanahPasangan"
+);
+
+if(!select)return;
+
+select.innerHTML = `
+<option value="">
+Pilih Pasangan
+</option>
+`;
+
+document
+.querySelectorAll(".hubunganWaris")
+.forEach((hub,index)=>{
+
+if(
+hub.value
+.toLowerCase()
+.includes("isteri")
+||
+hub.value
+.toLowerCase()
+.includes("suami")
+){
+
+const nama =
+document
+.querySelectorAll(".namaWaris")
+[index]
+?.value || "";
+
+if(nama){
+
+select.innerHTML += `
+<option value="${nama}">
+${nama}
+</option>
+`;
+
+}
+
+}
+
+});
 
 }
 
