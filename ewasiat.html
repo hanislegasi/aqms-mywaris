@@ -218,7 +218,7 @@ Anda juga boleh copy & paste kandungan daripada dokumen Word.
 <div>
 
 <h2 class="font-bold text-xl mb-4">
-Section 6 : Senarai Waris
+Section 5 : Senarai Waris
 </h2>
 
 <div id="warisContainer">
@@ -289,7 +289,7 @@ class="bg-[#153638] text-white px-4 py-2 rounded-lg">
 </div>
 
 <!-- SECTION 6 -->
-<div id="sectionPemegangAmanah">
+<div id="sectionPemegangAmanah" class="hidden">
 
 <h2 class="font-bold text-xl mb-4">
 Section 6 : Pemegang Amanah
@@ -1971,6 +1971,46 @@ document
 }
 
 });
+
+function checkPemegangAmanah(){
+
+let perluPemegangAmanah = false;
+
+document
+.querySelectorAll(".statusWaris")
+.forEach(select=>{
+
+if(
+select.value === "bawah18" ||
+select.value === "oku"
+){
+
+perluPemegangAmanah = true;
+
+}
+
+});
+
+const section =
+document.getElementById(
+"sectionPemegangAmanah"
+);
+
+if(perluPemegangAmanah){
+
+section.classList.remove(
+"hidden"
+);
+
+}else{
+
+section.classList.add(
+"hidden"
+);
+
+}
+
+}
     
 // LOAD FILES
 async function loadFiles(){
@@ -2697,6 +2737,8 @@ populateWarisDropdown();
 populateWarisDropdownTakAlih();
 populateWarisDropdownHibah();
 populatePasanganDropdown();
+
+checkPemegangAmanah();  
   
 });
 
@@ -3788,6 +3830,23 @@ e.target
 }  
   
 });
+
+document
+.addEventListener(
+"change",
+function(e){
+
+if(
+e.target.classList.contains(
+"statusWaris"
+)
+){
+
+checkPemegangAmanah();
+
+}
+
+});    
     
   </script>
 
