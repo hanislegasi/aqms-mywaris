@@ -76,6 +76,16 @@ class="max-w-4xl mx-auto p-5">
 
       </div>
 
+<div>
+
+<h2 class="text-2xl font-bold text-[#153638] mb-4">
+Senarai Waris
+</h2>
+
+<div id="warisPreview"></div>
+
+</div>
+      
       <!-- PASANGAN -->
       <div>
 
@@ -287,6 +297,30 @@ Generate PDF Rasmi
         document.getElementById("harta").innerHTML =
         data.harta || "";
 
+let warisHTML = "";
+
+data.waris?.forEach(w=>{
+
+warisHTML += `
+<div class="border p-3 rounded-lg mb-3">
+
+<p><strong>Nama:</strong> ${w.nama}</p>
+
+<p><strong>IC:</strong> ${w.ic}</p>
+
+<p><strong>Hubungan:</strong> ${w.hubungan}</p>
+
+<p><strong>Status:</strong> ${w.status}</p>
+
+</div>
+`;
+
+});
+
+document.getElementById(
+"warisPreview"
+).innerHTML = warisHTML;
+        
 // LOAD LAMPIRAN
 const snapshot =
 await getDocs(
