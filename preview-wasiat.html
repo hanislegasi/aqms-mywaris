@@ -519,7 +519,7 @@ ${item.kategori}</p>
 if(
 item.kategori === "hibah"
 &&
-item.penerimaHibah
+item.penerimaHibahTakAlih
 ?.length
 ){
 
@@ -530,9 +530,9 @@ hartaAlihHTML += `
 <ul class="list-disc ml-6">
 `;
 
-item.penerimaHibah.forEach(p=>{
+item.penerimaHibahTakAlih.forEach(p=>{
 
-hartaAlihHTML += `
+hartaTakAlihHTML += `
 <li>
 ${p.nama}
 (${p.peratus}%)
@@ -541,7 +541,7 @@ ${p.nama}
 
 });
 
-hartaAlihHTML += `
+hartaTakAlihHTML += `
 </ul>
 `;
 
@@ -554,7 +554,7 @@ item.kategori === "sepencarian"
 hartaAlihHTML += `
 <p class="mt-2">
 <strong>Penerima Sepencarian:</strong>
-${item.penerimaSepencarianAlih || "-"}
+${item.penerimaSepencarianTakAlih || "-"}
 </p>
 `;
 
