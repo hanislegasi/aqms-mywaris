@@ -442,6 +442,50 @@ ${item.kategori}</p>
 <p><strong>Pemilikan:</strong>
 ${item.pemilikan || "-"}</p>
 
+if(
+item.kategori === "hibah"
+&&
+item.penerimaHibah
+?.length
+){
+
+hartaAlihHTML += `
+<p class="mt-2">
+<strong>Penerima Hibah:</strong>
+</p>
+<ul class="list-disc ml-6">
+`;
+
+item.penerimaHibah.forEach(p=>{
+
+hartaAlihHTML += `
+<li>
+${p.nama}
+(${p.peratus}%)
+</li>
+`;
+
+});
+
+hartaAlihHTML += `
+</ul>
+`;
+
+}
+
+if(
+item.kategori === "sepencarian"
+){
+
+hartaAlihHTML += `
+<p class="mt-2">
+<strong>Penerima Sepencarian:</strong>
+${item.penerimaSepencarianAlih || "-"}
+</p>
+`;
+
+}
+
 </div>
 
 `;
@@ -471,6 +515,50 @@ ${item.nilai}</p>
 
 <p><strong>Kategori:</strong>
 ${item.kategori}</p>
+
+if(
+item.kategori === "hibah"
+&&
+item.penerimaHibah
+?.length
+){
+
+hartaAlihHTML += `
+<p class="mt-2">
+<strong>Penerima Hibah:</strong>
+</p>
+<ul class="list-disc ml-6">
+`;
+
+item.penerimaHibah.forEach(p=>{
+
+hartaAlihHTML += `
+<li>
+${p.nama}
+(${p.peratus}%)
+</li>
+`;
+
+});
+
+hartaAlihHTML += `
+</ul>
+`;
+
+}
+
+if(
+item.kategori === "sepencarian"
+){
+
+hartaAlihHTML += `
+<p class="mt-2">
+<strong>Penerima Sepencarian:</strong>
+${item.penerimaSepencarianAlih || "-"}
+</p>
+`;
+
+}
 
 </div>
 
