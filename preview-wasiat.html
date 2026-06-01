@@ -442,17 +442,19 @@ ${item.kategori}</p>
 <p><strong>Pemilikan:</strong>
 ${item.pemilikan || "-"}</p>
 
+`;
+
 if(
 item.kategori === "hibah"
 &&
-item.penerimaHibah
-?.length
+item.penerimaHibah?.length
 ){
 
 hartaAlihHTML += `
 <p class="mt-2">
 <strong>Penerima Hibah:</strong>
 </p>
+
 <ul class="list-disc ml-6">
 `;
 
@@ -479,22 +481,21 @@ item.kategori === "sepencarian"
 
 hartaAlihHTML += `
 <p class="mt-2">
+
 <strong>Penerima Sepencarian:</strong>
-${item.penerimaSepencarianAlih || "-"}
+
+${item.penerimaSepencarian || "-"}
+
 </p>
 `;
 
 }
 
+hartaAlihHTML += `
 </div>
-
 `;
 
-});
-
-document.getElementById(
-"hartaAlihPreview"
-).innerHTML = hartaAlihHTML;        
+});       
 
 let hartaTakAlihHTML = "";
 
@@ -516,17 +517,22 @@ ${item.nilai}</p>
 <p><strong>Kategori:</strong>
 ${item.kategori}</p>
 
+<p><strong>Pemilikan:</strong>
+${item.pemilikan || "-"}</p>
+
+`;
+
 if(
 item.kategori === "hibah"
 &&
-item.penerimaHibahTakAlih
-?.length
+item.penerimaHibahTakAlih?.length
 ){
 
-hartaAlihHTML += `
+hartaTakAlihHTML += `
 <p class="mt-2">
 <strong>Penerima Hibah:</strong>
 </p>
+
 <ul class="list-disc ml-6">
 `;
 
@@ -551,24 +557,23 @@ if(
 item.kategori === "sepencarian"
 ){
 
-hartaAlihHTML += `
+hartaTakAlihHTML += `
 <p class="mt-2">
+
 <strong>Penerima Sepencarian:</strong>
+
 ${item.penerimaSepencarianTakAlih || "-"}
+
 </p>
 `;
 
 }
 
+hartaTakAlihHTML += `
 </div>
-
 `;
 
 });
-
-document.getElementById(
-"hartaTakAlihPreview"
-).innerHTML = hartaTakAlihHTML;
 
 let berpenamaHTML = "";
 
