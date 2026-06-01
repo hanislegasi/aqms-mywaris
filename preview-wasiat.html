@@ -85,62 +85,56 @@ Senarai Waris
 <div id="warisPreview"></div>
 
 </div>
+
+<div>
+<h2 class="text-2xl font-bold text-[#153638] mb-4">
+Pemegang Amanah
+</h2>
+<div id="pemegangAmanahPreview"></div>
+</div>
+
+<div>
+<h2 class="text-2xl font-bold text-[#153638] mb-4">
+Harta Alih
+</h2>
+<div id="hartaAlihPreview"></div>
+</div>
+
+<div>
+<h2 class="text-2xl font-bold text-[#153638] mb-4">
+Harta Tak Alih
+</h2>
+<div id="hartaTakAlihPreview"></div>
+</div>
+
+<div>
+<h2 class="text-2xl font-bold text-[#153638] mb-4">
+Harta Berpenama
+</h2>
+<div id="hartaBerpenamaPreview"></div>
+</div>
+
+<div>
+<h2 class="text-2xl font-bold text-[#153638] mb-4">
+Maklumat Takaful
+</h2>
+<div id="takafulPreview"></div>
+</div>
+
+<div>
+<h2 class="text-2xl font-bold text-[#153638] mb-4">
+Pemiutang
+</h2>
+<div id="pemiutangPreview"></div>
+</div>
+
+<div>
+<h2 class="text-2xl font-bold text-[#153638] mb-4">
+Penghutang
+</h2>
+<div id="penghutangPreview"></div>
+</div>
       
-      <!-- PASANGAN -->
-      <div>
-
-        <h2 class="text-2xl font-bold text-[#153638] mb-4">
-          Maklumat Pasangan
-        </h2>
-
-        <p
-          id="pasangan"
-          class="text-gray-700">
-        </p>
-
-      </div>
-
-      <!-- ANAK -->
-      <div>
-
-        <h2 class="text-2xl font-bold text-[#153638] mb-4">
-          Maklumat Anak
-        </h2>
-
-        <p
-          id="anak"
-          class="text-gray-700 whitespace-pre-line">
-        </p>
-
-      </div>
-
-      <!-- WASI -->
-      <div>
-
-        <h2 class="text-2xl font-bold text-[#153638] mb-4">
-          Maklumat Wasi
-        </h2>
-
-        <p
-          id="wasi"
-          class="text-gray-700">
-        </p>
-
-      </div>
-
-      <!-- HARTA -->
-      <div>
-
-        <h2 class="text-2xl font-bold text-[#153638] mb-4">
-          Senarai Harta
-        </h2>
-
-        <p
-          id="harta"
-          class="text-gray-700 whitespace-pre-line">
-        </p>
-
-      </div>
 
 <!-- LAMPIRAN -->
 <div>
@@ -320,6 +314,178 @@ warisHTML += `
 document.getElementById(
 "warisPreview"
 ).innerHTML = warisHTML;
+
+// PEMEGANG AMANAH
+
+let pemegangHTML = "";
+
+if(data.pemegangAmanah){
+
+pemegangHTML = `
+
+<div class="border p-3 rounded-lg">
+
+<p><strong>Pilihan:</strong>
+${data.pemegangAmanah.pilihan || "-"}</p>
+
+<p><strong>Jenis:</strong>
+${data.pemegangAmanah.jenis || "-"}</p>
+
+<p><strong>Nama:</strong>
+${data.pemegangAmanah.nama || "-"}</p>
+
+<p><strong>IC:</strong>
+${data.pemegangAmanah.ic || "-"}</p>
+
+<p><strong>Hubungan:</strong>
+${data.pemegangAmanah.hubungan || "-"}</p>
+
+<p><strong>Telefon:</strong>
+${data.pemegangAmanah.telefon || "-"}</p>
+
+</div>
+`;
+
+}
+
+document.getElementById(
+"pemegangAmanahPreview"
+).innerHTML = pemegangHTML;    
+
+let hartaAlihHTML = "";
+
+data.hartaAlih?.forEach(item=>{
+
+hartaAlihHTML += `
+
+<div class="border p-3 rounded-lg mb-3">
+
+<p><strong>Nama:</strong>
+${item.nama}</p>
+
+<p><strong>Rujukan:</strong>
+${item.rujukan}</p>
+
+<p><strong>Nilai:</strong>
+${item.nilai}</p>
+
+<p><strong>Kategori:</strong>
+${item.kategori}</p>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"hartaAlihPreview"
+).innerHTML = hartaAlihHTML;        
+
+let hartaTakAlihHTML = "";
+
+data.hartaTakAlih?.forEach(item=>{
+
+hartaTakAlihHTML += `
+
+<div class="border p-3 rounded-lg mb-3">
+
+<p><strong>Nama:</strong>
+${item.nama}</p>
+
+<p><strong>Geran:</strong>
+${item.rujukan}</p>
+
+<p><strong>Nilai:</strong>
+${item.nilai}</p>
+
+<p><strong>Kategori:</strong>
+${item.kategori}</p>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"hartaTakAlihPreview"
+).innerHTML = hartaTakAlihHTML;
+
+let berpenamaHTML = "";
+
+data.hartaBerpenama?.forEach(item=>{
+
+berpenamaHTML += `
+
+<div class="border p-3 rounded-lg mb-3">
+
+<p><strong>Jenis:</strong>
+${item.jenis}</p>
+
+<p><strong>No Akaun:</strong>
+${item.akaun}</p>
+
+<p><strong>Penama:</strong>
+${item.penama}</p>
+
+<p><strong>Bahagian:</strong>
+${item.bahagian}%</p>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"hartaBerpenamaPreview"
+).innerHTML = berpenamaHTML;
+
+let takafulHTML = "";
+
+data.takaful?.forEach(item=>{
+
+takafulHTML += `
+
+<div class="border p-3 rounded-lg mb-3">
+
+<p><strong>Syarikat:</strong>
+${item.syarikat}</p>
+
+<p><strong>Polisi:</strong>
+${item.polisi}</p>
+
+<p><strong>Penerima:</strong>
+${item.penerima}</p>
+
+<p><strong>Bahagian:</strong>
+${item.bahagian}%</p>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"takafulPreview"
+).innerHTML = takafulHTML;
+
+let pemiutangHTML = "";
+data.pemiutang?.forEach(item=>{ ... });
+
+document.getElementById(
+"pemiutangPreview"
+).innerHTML = pemiutangHTML;
+
+
+let penghutangHTML = "";
+data.penghutang?.forEach(item=>{ ... });
+
+document.getElementById(
+"penghutangPreview"
+).innerHTML = penghutangHTML;
         
 // LOAD LAMPIRAN
 const snapshot =
