@@ -359,7 +359,7 @@ Pilih Pasangan
   
 <div
 id="pemegangAmanahLain"
-class="hidden space-y-3">
+class="space-y-3">
 
 <input
 type="text"
@@ -2068,6 +2068,28 @@ document
 if(this.value==="lain"){
 
 document
+.getElementById("namaPemegangAmanah")
+.readOnly = false;
+
+document
+.getElementById("icPemegangAmanah")
+.readOnly = false;
+
+document
+.getElementById("hubunganPemegangAmanah")
+.readOnly = false;
+
+document
+.getElementById("telefonPemegangAmanah")
+.readOnly = false;
+
+document
+.getElementById("namaPemegangAmanah").value = "";
+document.getElementById("icPemegangAmanah").value = "";
+document.getElementById("hubunganPemegangAmanah").value = "";
+document.getElementById("telefonPemegangAmanah").value = "";  
+
+document
 .getElementById(
 "pemegangAmanahLain"
 ).classList.remove("hidden");
@@ -2081,6 +2103,22 @@ document
 
 else if(this.value==="pasangan"){
 
+document
+.getElementById("namaPemegangAmanah")
+.readOnly = true;
+
+document
+.getElementById("icPemegangAmanah")
+.readOnly = true;
+
+document
+.getElementById("hubunganPemegangAmanah")
+.readOnly = true;
+
+document
+.getElementById("telefonPemegangAmanah")
+.readOnly = true;
+  
 document
 .getElementById(
 "pemegangAmanahPasangan"
@@ -2108,6 +2146,52 @@ document
 }
 
 });
+
+document
+.getElementById(
+"namaPemegangAmanahPasangan"
+)
+.addEventListener(
+"change",
+function(){
+
+const index = this.value;
+
+if(index==="") return;
+
+document.getElementById(
+"namaPemegangAmanah"
+).value =
+document
+.querySelectorAll(".namaWaris")
+[index]
+?.value || "";
+
+document.getElementById(
+"icPemegangAmanah"
+).value =
+document
+.querySelectorAll(".icWaris")
+[index]
+?.value || "";
+
+document.getElementById(
+"hubunganPemegangAmanah"
+).value =
+document
+.querySelectorAll(".hubunganWaris")
+[index]
+?.value || "";
+
+document.getElementById(
+"telefonPemegangAmanah"
+).value =
+document
+.querySelectorAll(".telefonWaris")
+[index]
+?.value || "";
+
+});    
 
 function checkPemegangAmanah(){
 
@@ -3269,7 +3353,7 @@ document
 if(nama){
 
 select.innerHTML += `
-<option value="${nama}">
+<option value="${index}">
 ${nama}
 </option>
 `;
