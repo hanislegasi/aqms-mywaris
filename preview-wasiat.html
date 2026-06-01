@@ -83,6 +83,26 @@ class="max-w-4xl mx-auto p-5">
 
 <div>
 
+<div>
+
+<h2 class="text-2xl font-bold text-[#153638] mb-4">
+Maklumat Wasi Pertama
+</h2>
+
+<div id="wasi1Preview"></div>
+
+</div>
+
+<div>
+
+<h2 class="text-2xl font-bold text-[#153638] mb-4">
+Maklumat Wasi Kedua
+</h2>
+
+<div id="wasi2Preview"></div>
+
+</div>
+  
 <h2 class="text-2xl font-bold text-[#153638] mb-4">
 Senarai Waris
 </h2>
@@ -287,6 +307,51 @@ Generate PDF Rasmi
         document.getElementById("alamat").innerHTML =
         data.alamat || "";
 
+document.getElementById(
+"wasi1Preview"
+).innerHTML = `
+
+<div class="border p-3 rounded-lg">
+
+<p><strong>Nama:</strong>
+${data.namaWasi1 || "-"}</p>
+
+<p><strong>IC:</strong>
+${data.icWasi1 || "-"}</p>
+
+<p><strong>Hubungan:</strong>
+${data.hubunganWasi1 || "-"}</p>
+
+<p><strong>Telefon:</strong>
+${data.telefonWasi1 || "-"}</p>
+
+</div>
+
+`;
+
+document.getElementById(
+"wasi2Preview"
+).innerHTML = `
+
+<div class="border p-3 rounded-lg">
+
+<p><strong>Nama:</strong>
+${data.namaWasi2 || "-"}</p>
+
+<p><strong>IC:</strong>
+${data.icWasi2 || "-"}</p>
+
+<p><strong>Hubungan:</strong>
+${data.hubunganWasi2 || "-"}</p>
+
+<p><strong>Telefon:</strong>
+${data.telefonWasi2 || "-"}</p>
+
+</div>
+
+`;
+        
+
 let warisHTML = "";
 
 data.waris?.forEach(w=>{
@@ -367,6 +432,9 @@ ${item.nilai}</p>
 
 <p><strong>Kategori:</strong>
 ${item.kategori}</p>
+
+<p><strong>Pemilikan:</strong>
+${item.pemilikan || "-"}</p>
 
 </div>
 
