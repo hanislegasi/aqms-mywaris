@@ -72,6 +72,11 @@ class="max-w-4xl mx-auto p-5">
             <span id="telefon"></span>
           </p>
 
+<p>
+            <strong>Alamat:</strong>
+            <span id="alamat"></span>
+          </p>
+          
         </div>
 
       </div>
@@ -279,17 +284,8 @@ Generate PDF Rasmi
         document.getElementById("telefon").innerHTML =
         data.telefon || "";
 
-        document.getElementById("pasangan").innerHTML =
-        data.pasangan || "";
-
-        document.getElementById("anak").innerHTML =
-        data.anak || "";
-
-        document.getElementById("wasi").innerHTML =
-        data.wasi || "";
-
-        document.getElementById("harta").innerHTML =
-        data.harta || "";
+        document.getElementById("alamat").innerHTML =
+        data.alamat || "";
 
 let warisHTML = "";
 
