@@ -437,10 +437,22 @@ ${item.rujukan}</p>
 ${item.nilai}</p>
 
 <p><strong>Kategori:</strong>
-${item.kategori}</p>
+${
+item.kategori === "hibah"
+? "Hibah"
+: item.kategori === "sepencarian"
+? "Harta Sepencarian"
+: "Faraid"
+}
+</p>
 
 <p><strong>Pemilikan:</strong>
-${item.pemilikan || "-"}</p>
+${
+item.pemilikan === "milikPenuh"
+? "Milik Penuh"
+: "Perkongsian Nama"
+}
+</p>
 
 `;
 
@@ -519,10 +531,22 @@ ${item.rujukan}</p>
 ${item.nilai}</p>
 
 <p><strong>Kategori:</strong>
-${item.kategori}</p>
+${
+item.kategori === "hibah"
+? "Hibah"
+: item.kategori === "sepencarian"
+? "Harta Sepencarian"
+: "Faraid"
+}
+</p>
 
 <p><strong>Pemilikan:</strong>
-${item.pemilikan || "-"}</p>
+${
+item.pemilikan === "milikPenuh"
+? "Milik Penuh"
+: "Perkongsian Nama"
+}
+</p>
 
 `;
 
