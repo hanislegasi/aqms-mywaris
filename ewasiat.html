@@ -2522,6 +2522,45 @@ document.querySelectorAll(
 
 });          
           
+const pemegangAmanah = {
+
+pilihan:
+document.getElementById(
+"pilihanPemegangAmanah"
+).value,
+
+jenis:
+document.getElementById(
+"jenisPemegangAmanah"
+).value,
+
+nama:
+document.getElementById(
+"namaPemegangAmanah"
+)?.value || "",
+
+ic:
+document.getElementById(
+"icPemegangAmanah"
+)?.value || "",
+
+hubungan:
+document.getElementById(
+"hubunganPemegangAmanah"
+)?.value || "",
+
+alamat:
+document.getElementById(
+"alamatPemegangAmanah"
+)?.value || "",
+
+telefon:
+document.getElementById(
+"telefonPemegangAmanah"
+)?.value || ""
+
+}; 
+          
           await setDoc(
 
             doc(
@@ -2600,7 +2639,10 @@ pemiutang:
 pemiutang,
 
 penghutang:
-penghutang,              
+penghutang,    
+
+pemegangAmanah:
+pemegangAmanah,              
               
   createdAt:
   new Date()
