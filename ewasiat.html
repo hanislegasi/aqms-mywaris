@@ -288,6 +288,101 @@ class="bg-[#153638] text-white px-4 py-2 rounded-lg">
 
 </div>
 
+<!-- SECTION 6 -->
+<div id="sectionPemegangAmanah">
+
+<h2 class="font-bold text-xl mb-4">
+Section 6 : Pemegang Amanah
+</h2>
+
+<div class="border rounded-xl p-4 space-y-3">
+
+<p class="text-sm text-gray-600">
+Adakah anda ingin melantik Pemegang Amanah?
+</p>
+
+<select
+id="pilihanPemegangAmanah"
+class="w-full border rounded-lg p-3">
+
+<option value="">
+Pilih
+</option>
+
+<option value="tidak">
+Tidak
+</option>
+
+<option value="ya">
+Ya
+</option>
+
+</select>
+
+<div
+id="pemegangAmanahDetail"
+class="hidden space-y-3">
+
+<select
+id="jenisPemegangAmanah"
+class="w-full border rounded-lg p-3">
+
+<option value="">
+Pilih Pemegang Amanah
+</option>
+
+<option value="pasangan">
+Pasangan
+</option>
+
+<option value="lain">
+Orang Lain
+</option>
+
+</select>
+
+<div
+id="pemegangAmanahLain"
+class="hidden space-y-3">
+
+<input
+type="text"
+id="namaPemegangAmanah"
+class="w-full border rounded-lg p-3"
+placeholder="Nama">
+
+<input
+type="text"
+id="icPemegangAmanah"
+class="w-full border rounded-lg p-3"
+placeholder="No IC">
+
+<input
+type="text"
+id="hubunganPemegangAmanah"
+class="w-full border rounded-lg p-3"
+placeholder="Hubungan">
+
+<textarea
+id="alamatPemegangAmanah"
+class="w-full border rounded-lg p-3"
+rows="3"
+placeholder="Alamat"></textarea>
+
+<input
+type="text"
+id="telefonPemegangAmanah"
+class="w-full border rounded-lg p-3"
+placeholder="No Telefon">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+      
 <!-- SECTION 7A -->
 <div>
 
@@ -1085,6 +1180,7 @@ populateWarisDropdown();
 
 }   
 
+  
 if(data.hartaAlih){
 
 document.getElementById(
@@ -1835,6 +1931,46 @@ Padam
 }
 
 });
+
+document
+.getElementById("pilihanPemegangAmanah")
+.addEventListener("change",function(){
+
+if(this.value==="ya"){
+
+document
+.getElementById("pemegangAmanahDetail")
+.classList.remove("hidden");
+
+}else{
+
+document
+.getElementById("pemegangAmanahDetail")
+.classList.add("hidden");
+
+}
+
+});
+
+document
+.getElementById("jenisPemegangAmanah")
+.addEventListener("change",function(){
+
+if(this.value==="lain"){
+
+document
+.getElementById("pemegangAmanahLain")
+.classList.remove("hidden");
+
+}else{
+
+document
+.getElementById("pemegangAmanahLain")
+.classList.add("hidden");
+
+}
+
+});
     
 // LOAD FILES
 async function loadFiles(){
@@ -2013,7 +2149,8 @@ await addDoc(
   }
 
 });
-    
+
+   
     // SUBMIT FORM
     document
       .getElementById("wasiatForm")
