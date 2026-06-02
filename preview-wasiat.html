@@ -372,10 +372,10 @@ warisHTML += `
 <p><strong>Hubungan:</strong> ${w.hubungan}</p>
 
 <p><strong>Status:</strong> ${
-item.status === "bawah18"
+w.status === "bawah18"
 ? "Bawah 18 Tahun"
 :
-item.status === "oku"
+w.status === "oku"
 ? "OKU"
 :
 "Dewasa"
@@ -402,7 +402,16 @@ pemegangHTML = `
 <div class="border p-3 rounded-lg">
 
 <p><strong>Pilihan:</strong>
-${data.pemegangAmanah.pilihan || "-"}</p>
+${
+data.pemegangAmanah.pilihan === "ya"
+? "Ya"
+:
+data.pemegangAmanah.pilihan === "tidak"
+? "Tidak"
+:
+"-"
+}
+</p>
 
 <p><strong>Jenis:</strong>
 ${
@@ -642,6 +651,12 @@ ${item.akaun}</p>
 <p><strong>Penama:</strong>
 ${item.penama}</p>
 
+<p><strong>IC:</strong>
+${item.ic}</p>
+
+<p><strong>Hubungan:</strong>
+${item.hubungan}</p>
+
 <p><strong>Bahagian:</strong>
 ${item.bahagian}%</p>
 
@@ -671,6 +686,12 @@ ${item.polisi}</p>
 
 <p><strong>Penerima:</strong>
 ${item.penerima}</p>
+
+<p><strong>IC:</strong>
+${item.ic}</p>
+
+<p><strong>Hubungan:</strong>
+${item.hubungan}</p>
 
 <p><strong>Bahagian:</strong>
 ${item.bahagian}%</p>
