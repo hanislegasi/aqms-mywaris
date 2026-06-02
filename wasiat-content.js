@@ -174,7 +174,7 @@ margin-bottom:18px;
 
 <td
 style="
-width:65px;
+width:55px;
 padding:0;
 font-weight:bold;
 vertical-align:top;
@@ -208,7 +208,7 @@ margin-bottom:18px;
 
 <td
 style="
-width:65px;
+width:55px;
 padding:0;
 font-weight:bold;
 vertical-align:top;
