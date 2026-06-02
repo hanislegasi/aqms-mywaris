@@ -19,6 +19,16 @@ DOKUMEN WASIAT
 
 <div
 style="
+text-align:center;
+font-size:28px;
+margin-bottom:20px;
+font-family:'Amiri', serif;
+">
+بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
+</div>
+
+<div
+style="
 font-family:'Times New Roman', serif;
 font-size:15px;
 line-height:1.4;
