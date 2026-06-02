@@ -150,11 +150,11 @@ Sepanjang proses pentadbiran harta pusaka saya berjalan, saya memberi kuasa kepa
 <strong>3.10
 Pengurusan bahagian untuk waris di bawah umur dan waris tidak waras akal fikiran (unsound mind)</strong></p>
 <p>
-Sekiranya Wasi dan Pemegang Amanah saya mendapati waris di bawah umur dan / atau waris tidak waras akal fikiran (unsound mind) dan terdapat wang tunai (cash) dari harta pusaka, maka saya dengan ini mengarahkan Wasi dan Pemegang Amanah individu ini untuk melepaskan hak sebagai Wasi dan Pemegang Amanah harta kepada Syarikat Amanah yang difikirkan sesuai oleh Wasi saya.
+Sekiranya Wasi dan Pemegang Amanah saya mendapati waris di bawah umur dan/ atau waris tidak waras akal fikiran (unsound mind) dan terdapat wang tunai (cash) dari harta pusaka, maka saya dengan ini mengarahkan Wasi dan Pemegang Amanah individu ini untuk melepaskan hak sebagai Wasi dan Pemegang Amanah harta kepada Syarikat Amanah yang difikirkan sesuai oleh Wasi saya.
 </p>
 <p>Syarikat Amanah akan menjadi Wasi bagi urusan harta pusaka saya dan Pemegang Amanah harta bagi waris saya yang ketika agihan harta pusaka ingin dibuat berada di bawah umur lapan belas (18) tahun (minor). Syarikat Amanah hendaklah memegang secara amanah (hold on trust) bahagian tersebut sehingga waris ini mencapai umur majoriti (lebih dari umur 18 tahun).
 </p>
-<p>Syarikat Amanah juga akan menjadi Pemegang Amanah harta bagi waris saya telah disahkan sebagai tidak waras fikiran ( unsound mind ) yang mempunyai kad pengesahan OKU dari agensi yang berkenaan atau sekiranya tiada kad berkenaan, pada pandangan Syarikat Amanah selepas penyiasatan terperinci dilakukan, mendapati bahawa terdapat bukti kukuh bahawa waris berkenaan adalah di dalam kategori tidak waras fikiran, maka saya dengan ini mengarahkan Syarikat Amanah untuk memegang bahagian harta waris ini secara amanah (hold on trust).
+<p>Syarikat Amanah juga akan menjadi Pemegang Amanah harta bagi waris saya telah disahkan sebagai tidak waras fikiran (unsound mind) yang mempunyai kad pengesahan OKU dari agensi yang berkenaan atau sekiranya tiada kad berkenaan, pada pandangan Syarikat Amanah selepas penyiasatan terperinci dilakukan, mendapati bahawa terdapat bukti kukuh bahawa waris berkenaan adalah di dalam kategori tidak waras fikiran, maka saya dengan ini mengarahkan Syarikat Amanah untuk memegang bahagian harta waris ini secara amanah (hold on trust).
 Syarikat Amanah hendaklah berurusan hanya dengan penjaga sah (hadhanah) yang telah diberikan hak oleh Mahkamah Syariah atau waris yang diyakini (selepas penyiasatan dilakukan) menjaga waris di atas, bagi tujuan membayar apa-apa peruntukan perbelanjaan saradiri, kesihatan, kebajikan atau apa-apa perbelanjaan yang difikirkan munasabah untuk waris berkenaan. Jumlah bayaran dan pemasaan (timing) bayaran adalah di atas budibicara Syarikat Amanah.
 </p>
 
@@ -162,13 +162,25 @@ Syarikat Amanah hendaklah berurusan hanya dengan penjaga sah (hadhanah) yang tel
 Walau apa pun (notwithstanding) klausa arahan di atas hanya berkuatkuasa di dalam keadaan:
 </p>
 
-<p>
-3.10.1
+<p
+style="
+padding-left:70px;
+text-indent:-70px;
+text-align:justify;
+line-height:1.8;
+">
+<strong>3.10.1</strong>
 Wasi dan Pemegang Amanah individu yang dilantik di dalam dokumen ini bersetuju menyerahkan kuasa sebagai Wasi dan Pemegang Amanah kepada Syarikat Amanah dan kes pusaka saya dibicarakan di Mahkamah Tinggi Sivil. Sekiranya Wasi dan Pemegang Amanah adalah terdiri dari individu seperti yang saya nyatakan di dalam dokumen ini, maka arahan untuk memegang bahagian waris di bawah umur dan waris Orang Kelainan Upaya ini tertakluk kepada perintah berkaitan yang dikeluarkan oleh Mahkamah Tinggi Sivil.
 </p>
 
-<p>
-3.10.2
+<p
+style="
+padding-left:70px;
+text-indent:-70px;
+text-align:justify;
+line-height:1.8;
+">
+<strong>3.10.2</strong>
 Jika kes pusaka saya dibicarakan di Pejabat Pusaka Kecil, maka arahan untuk memegang bahagian waris di bawah umur dan waris Orang Kelainan Upaya ini adalah tertakluk sepenuhnya kepada perintah berkaitan yang dikeluarkan oleh Pejabat Pusaka Kecil berdasarkan peruntukan Akta Pembahagian Pesaka Kecil 1955.
 </p>
 
