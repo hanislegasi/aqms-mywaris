@@ -206,7 +206,7 @@ Saya dengan ini mengakui bahawa saya faham yang permintaan pembahagian saya sepe
 </h3>
 
 <p>
-${pesananWasiat}
+Saya dengan ini berpesan kepada waris agar mereka bertanggungjawab terhadap harta pusaka yang mereka terima. Sesungguhnya harta pusaka yang diterima itu datang bersamanya ialah tanggungjawab yang besar dan bukan nikmat yang perlu disyukuri semata-mata. Tunaikanlah dengan penuh amanah.
 </p>
 
 </div>
