@@ -86,52 +86,62 @@ Mengumpulkan waris-waris Faraid secepat mungkin untuk berbincang tentang penguru
 
 <p>
 3.3
-Mengumpulkan dan menguruskan harta-harta tunai.
+Mengumpulkan dan menguruskan harta-harta tunai.</p>
+<p>
 Saya mengarahkan Wasi dan pemegang amanah saya untuk mengumpulkan kesemua harta tunai saya yang mempunyai penama (Dana Pantas) untuk digunakan sebagai perbelanjaan pentadbiran harta pusaka serta digunakan oleh waris-waris Faraid bagi melangsungkan kehidupan mereka mengikut hak mereka dan arahan saya (jika semua waris yang berhak mengikut hukum Faraid bersetuju). Wasi saya juga perlu memperuntukkan jumlah wang tunai yang cukup untuk melunaskan hutang-hutang saya seperti di dalam Klausa (3.5).
 </p>
 
 <p>
 3.4
-Menjelaskan belanja pengebumian saya.
+Menjelaskan belanja pengebumian saya.</p>
+<p>
 Wasi saya diberi mandat untuk menjelaskan belanja pengebumian saya dari harta pusaka saya dengan kadar yang segera.
 </p>
 
 <p>
 3.5
-Melunaskan hutang.
+Melunaskan hutang.</p>
+<p>
 Saya mengarahkan Wasi saya untuk membayar semua hutang saya meliputi hutang kepada Allah SWT seperti zakat harta, nazar, kaffarah dan upah haji (sekiranya saya meninggal dunia sebelum menunaikan haji) mahupun hutang kepada manusia dan organisasi seperti bank, koperasi, syarikat atau apa-apa sahaja entiti yang mungkin saya terhutang sepanjang hayat saya.
 </p>
 
 <p>
 3.6
-Memungut hutang.
+Memungut hutang.</p>
+<p>
 Wasi saya juga perlu untuk memungut hutang saya dari penghutang-penghutang yang masih belum melunaskan hutang mereka kepada saya (Sekiranya ada) untuk ditadbirkan sebagai sebahagian harta pusaka saya.
 </p>
 
 <p>
 3.7
-Mengumpulkan Harta Pusaka.
+Mengumpulkan Harta Pusaka.</p>
+<p>
 Wasi saya juga perlu memainkan peranan aktif untuk mengumpul serta mengenal pasti kedudukan harta-harta saya supaya tidak ada harta yang tertinggal di dalam pentadbiran harta pusaka saya.
 </p>
 
 <p>
 3.8
-Bahagian untuk waris tanpa hadir.
+Bahagian untuk waris tanpa hadir.</p>
+<p>
 Sekiranya terdapat mana-mana waris saya tidak dapat hadir atau sukar dihubungi (selepas ini dirujuk sebagai waris tanpa hadir) pada bila-bila masa proses pentadbiran pusaka berjalan, wasi saya diberikan kuasa untuk membahagikan harta pusaka saya kepada waris-waris yang hadir terdahulu. Bahagian waris tanpa hadir boleh dipegang oleh wasi atau diamanahkan kepada Syarikat Amanah seperti yang difikirkan sesuai oleh wasi. Sekiranya bahagian ini diserahkan kepada Syarikat Amanah, maka sebarang perbelanjaan yang mungkin timbul dari urusan ini bolehlah ditolak dari bahagian waris tersebut.
 </p>
 
 <p>
 3.9
-Menjaga harta pusaka berbentuk hartanah.
+Menjaga harta pusaka berbentuk hartanah.</p>
+<p>
 Sepanjang proses pentadbiran harta pusaka saya berjalan, saya memberi kuasa kepada Wasi dan Pemegang Amanah saya untuk membuat pertimbangan bagi mengambil tindakan untuk mendapatkan perlindungan takaful bagi tujuan menjaga keselamatan harta pusaka saya yang berbentuk hartanah dari risiko kerosakan, kebakaran atau kemusnahan. Kos untuk langganan perlindungan takaful ini hendaklah ditolak dari harta pusaka saya.
 </p>
 
 <p>
 3.10
-Pengurusan bahagian untuk waris di bawah umur dan waris tidak waras akal fikiran (unsound mind)
+Pengurusan bahagian untuk waris di bawah umur dan waris tidak waras akal fikiran (unsound mind)</p>
+<p>
 Sekiranya Wasi dan Pemegang Amanah saya mendapati waris di bawah umur dan / atau waris tidak waras akal fikiran (unsound mind) dan terdapat wang tunai (cash) dari harta pusaka, maka saya dengan ini mengarahkan Wasi dan Pemegang Amanah individu ini untuk melepaskan hak sebagai Wasi dan Pemegang Amanah harta kepada Syarikat Amanah yang difikirkan sesuai oleh Wasi saya.
-Syarikat Amanah akan menjadi Wasi bagi urusan harta pusaka saya dan Pemegang Amanah harta bagi waris saya yang ketika agihan harta pusaka ingin dibuat berada di bawah umur lapan belas (18) tahun (minor). Syarikat Amanah hendaklah memegang secara amanah (hold on trust) bahagian tersebut sehingga waris ini mencapai umur majoriti (lebih dari umur 18 tahun).
-Syarikat Amanah juga akan menjadi Pemegang Amanah harta bagi waris saya telah disahkan sebagai tidak waras fikiran ( unsound mind ) yang mempunyai kad pengesahan OKU dari agensi yang berkenaan atau sekiranya tiada kad berkenaan, pada pandangan Syarikat Amanah selepas penyiasatan terperinci dilakukan, mendapati bahawa terdapat bukti kukuh bahawa waris berkenaan adalah di dalam kategori tidak waras fikiran, maka saya dengan ini mengarahkan Syarikat Amanah untuk memegang bahagian harta waris ini secara amanah (hold on trust).
+</p>
+<p>Syarikat Amanah akan menjadi Wasi bagi urusan harta pusaka saya dan Pemegang Amanah harta bagi waris saya yang ketika agihan harta pusaka ingin dibuat berada di bawah umur lapan belas (18) tahun (minor). Syarikat Amanah hendaklah memegang secara amanah (hold on trust) bahagian tersebut sehingga waris ini mencapai umur majoriti (lebih dari umur 18 tahun).
+</p>
+<p>Syarikat Amanah juga akan menjadi Pemegang Amanah harta bagi waris saya telah disahkan sebagai tidak waras fikiran ( unsound mind ) yang mempunyai kad pengesahan OKU dari agensi yang berkenaan atau sekiranya tiada kad berkenaan, pada pandangan Syarikat Amanah selepas penyiasatan terperinci dilakukan, mendapati bahawa terdapat bukti kukuh bahawa waris berkenaan adalah di dalam kategori tidak waras fikiran, maka saya dengan ini mengarahkan Syarikat Amanah untuk memegang bahagian harta waris ini secara amanah (hold on trust).
 Syarikat Amanah hendaklah berurusan hanya dengan penjaga sah (hadhanah) yang telah diberikan hak oleh Mahkamah Syariah atau waris yang diyakini (selepas penyiasatan dilakukan) menjaga waris di atas, bagi tujuan membayar apa-apa peruntukan perbelanjaan saradiri, kesihatan, kebajikan atau apa-apa perbelanjaan yang difikirkan munasabah untuk waris berkenaan. Jumlah bayaran dan pemasaan (timing) bayaran adalah di atas budibicara Syarikat Amanah.
 </p>
 
@@ -151,21 +161,24 @@ Jika kes pusaka saya dibicarakan di Pejabat Pusaka Kecil, maka arahan untuk meme
 
 <p>
 3.11
-Kos pentadbiran harta pusaka
+Kos pentadbiran harta pusaka</p>
+<p>
 Wasi dan Pemegang Amanah saya hendaklah menjelaskan segala perbelanjaan yang berkaitan dengan pentadbiran harta pusaka ini dari harta pusaka saya. Sekiranya ada waris yang telah mendahulukan wang mereka bagi tujuan tanggungan kos tersebut, maka Wasi dan Pemegang Amanah hendaklah membayar semula perbelanjaan tersebut dari harta pusaka saya. Walaupun begitu, sekiranya waris tersebut tidak mahu membuat sebarang tuntutan, Wasi dan Pemegang Amanah saya tidak perlu menggantikannya dan hanya Allah SWT sahaja yang mampu membalas jasa waris tersebut.
 Di dalam apa keadaan sekalipun, kos pentadbiran harta pusaka (jika ada) hendaklah ditolak terlebih dahulu dari harta pusaka saya sebelum diagih kepada waris yang berhak mengikut Hukum Faraid.
 </p>
 
 <p>
 3.12
-Pentadbiran Harta Pusaka.
+Pentadbiran Harta Pusaka.</p>
+<p>
 Wasi saya hendaklah menjalankan tanggungjawab mentadbir harta pusaka saya dengan amanah, jujur dan ikhlas serta memastikan kehendak Syariah di dalam urusan ini diikuti dengan sebaiknya.
 Kesemua senarai pemiutang (dengan siapa saya berhutang), Penghutang (siapa yang berhutang dengan saya), Harta dan Waris saya akan lampirkan bersama dokumen ini dan akan dikemaskini dari masa ke semasa.
 </p>
 
 <p>
 3.13
-Kaedah Pembahagian Harta Pusaka
+Kaedah Pembahagian Harta Pusaka</p>
+<p>
 Selepas ditolak hutang, obligasi-obligasi lain yang tertunggak ke atasnya, dan apa-apa bentuk agihan dan hak keatas harta saya mengikut Undang-Undang Syariah, harta pusaka saya hendaklah diagihkan oleh Wasi dan Pemegang Amanah saya kepada waris-waris yang berhak mengikut Hukum Faraid. Walaupun demikian, sekiranya terdapat permuafakatan di antara waris-waris tentang bagaimana harta pusaka ingin diagihkan, maka kaedah agihan permuafakatan itulah yang akan digunapakai.
 </p>
 
