@@ -908,6 +908,21 @@ lampiranHartaTakAlih
 "{{PESANAN_WASIAT}}",
 pesananHTML
 )
+
+.replaceAll(
+"{{NAMA_PEWASIAT}}",
+data.nama || "-"
+)
+
+.replaceAll(
+"{{NO_IC_PEWASIAT}}",
+data.ic || "-"
+)
+
+.replaceAll(
+"{{ALAMAT_PEWASIAT}}",
+data.alamat || "-"
+)
                             
 .replaceAll(
 "{{HUBUNGAN_WASI1}}",
