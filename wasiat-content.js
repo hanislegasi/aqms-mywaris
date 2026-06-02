@@ -205,9 +205,9 @@ Saya dengan ini mengakui bahawa saya faham yang permintaan pembahagian saya sepe
 <strong>6. PESANAN KEPADA WARIS</strong>
 </h3>
 
-<p>
+
 {{PESANAN_WASIAT}}
-</p>
+
 
 </div>
 
