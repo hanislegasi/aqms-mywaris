@@ -264,4 +264,14 @@ LAMPIRAN C : HARTA ALIH
 {{LAMPIRAN_HARTA_ALIH}}
 </div>
 
+<div class="page-break"></div>
+
+<h2>
+LAMPIRAN D : HARTA TAK ALIH
+</h2>
+
+<div>
+{{LAMPIRAN_HARTA_TAK_ALIH}}
+</div>
+
 `;
