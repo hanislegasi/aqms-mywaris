@@ -206,7 +206,7 @@ Saya dengan ini mengakui bahawa saya faham yang permintaan pembahagian saya sepe
 </h3>
 
 <p>
-Saya dengan ini berpesan kepada waris agar mereka bertanggungjawab terhadap harta pusaka yang mereka terima. Sesungguhnya harta pusaka yang diterima itu datang bersamanya ialah tanggungjawab yang besar dan bukan nikmat yang perlu disyukuri semata-mata. Tunaikanlah dengan penuh amanah.
+{{PESANAN_WASIAT}}
 </p>
 
 </div>
@@ -265,6 +265,14 @@ LAMPIRAN C : HARTA ALIH
 </div>
 
 <div class="page-break"></div>
+
+<h2
+style="
+font-family:'Cinzel', serif;
+font-size:28px;
+margin-top:30px;
+margin-bottom:20px;
+color:#153638;
 
 <h2>
 LAMPIRAN D : HARTA TAK ALIH
