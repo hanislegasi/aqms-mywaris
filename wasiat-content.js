@@ -20,7 +20,7 @@ DOKUMEN WASIAT
 <div
 style="
 text-align:center;
-font-size:28px;
+font-size:30px;
 margin-bottom:20px;
 font-family:'Amiri', serif;
 ">
@@ -136,14 +136,17 @@ Wasi saya juga perlu memainkan peranan aktif untuk mengumpul serta mengenal past
 <strong>3.8
 Bahagian untuk waris tanpa hadir</strong></p>
 <p>
-Sekiranya terdapat mana-mana waris saya tidak dapat hadir atau sukar dihubungi (selepas ini dirujuk sebagai waris tanpa hadir) pada bila-bila masa proses pentadbiran pusaka berjalan, wasi saya diberikan kuasa untuk membahagikan harta pusaka saya kepada waris-waris yang hadir terdahulu. Bahagian waris tanpa hadir boleh dipegang oleh wasi atau diamanahkan kepada Syarikat Amanah seperti yang difikirkan sesuai oleh wasi. Sekiranya bahagian ini diserahkan kepada Syarikat Amanah, maka sebarang perbelanjaan yang mungkin timbul dari urusan ini bolehlah ditolak dari bahagian waris tersebut.
+Sekiranya terdapat mana-mana waris saya tidak dapat hadir atau sukar dihubungi (selepas ini dirujuk sebagai waris tanpa hadir) pada bila-bila masa proses pentadbiran pusaka berjalan, Wasi saya diberikan kuasa untuk membahagikan harta pusaka saya kepada waris-waris yang hadir terdahulu. 
+Bahagian waris tanpa hadir boleh dipegang oleh Wasi atau diamanahkan kepada Syarikat Amanah seperti yang difikirkan sesuai oleh Wasi. 
+Sekiranya bahagian ini diserahkan kepada Syarikat Amanah, maka sebarang perbelanjaan yang mungkin timbul dari urusan ini bolehlah ditolak dari bahagian waris tersebut.
 </p>
 
 <p>
 <strong>3.9
 Menjaga harta pusaka berbentuk hartanah</strong></p>
 <p>
-Sepanjang proses pentadbiran harta pusaka saya berjalan, saya memberi kuasa kepada Wasi dan Pemegang Amanah saya untuk membuat pertimbangan bagi mengambil tindakan untuk mendapatkan perlindungan takaful bagi tujuan menjaga keselamatan harta pusaka saya yang berbentuk hartanah dari risiko kerosakan, kebakaran atau kemusnahan. Kos untuk langganan perlindungan takaful ini hendaklah ditolak dari harta pusaka saya.
+Sepanjang proses pentadbiran harta pusaka saya berjalan, saya memberi kuasa kepada Wasi dan Pemegang Amanah saya untuk membuat pertimbangan bagi mengambil tindakan untuk mendapatkan perlindungan takaful bagi tujuan menjaga keselamatan harta pusaka saya yang berbentuk hartanah dari risiko kerosakan, kebakaran atau kemusnahan. 
+Kos untuk langganan perlindungan takaful ini hendaklah ditolak dari harta pusaka saya.
 </p>
 
 <p>
@@ -154,12 +157,13 @@ Sekiranya Wasi dan Pemegang Amanah saya mendapati waris di bawah umur dan/ atau 
 </p>
 <p>Syarikat Amanah akan menjadi Wasi bagi urusan harta pusaka saya dan Pemegang Amanah harta bagi waris saya yang ketika agihan harta pusaka ingin dibuat berada di bawah umur lapan belas (18) tahun (minor). Syarikat Amanah hendaklah memegang secara amanah (hold on trust) bahagian tersebut sehingga waris ini mencapai umur majoriti (lebih dari umur 18 tahun).
 </p>
-<p>Syarikat Amanah juga akan menjadi Pemegang Amanah harta bagi waris saya telah disahkan sebagai tidak waras fikiran (unsound mind) yang mempunyai kad pengesahan OKU dari agensi yang berkenaan atau sekiranya tiada kad berkenaan, pada pandangan Syarikat Amanah selepas penyiasatan terperinci dilakukan, mendapati bahawa terdapat bukti kukuh bahawa waris berkenaan adalah di dalam kategori tidak waras fikiran, maka saya dengan ini mengarahkan Syarikat Amanah untuk memegang bahagian harta waris ini secara amanah (hold on trust).
+<p>Syarikat Amanah juga akan menjadi Pemegang Amanah harta bagi waris saya telah disahkan sebagai tidak waras fikiran (unsound mind) yang mempunyai kad pengesahan OKU dari agensi yang berkenaan atau sekiranya tiada kad berkenaan, pada pandangan Syarikat Amanah selepas penyiasatan terperinci dilakukan, mendapati bahawa terdapat bukti kukuh bahawa waris berkenaan adalah di dalam kategori tidak waras fikiran, maka saya dengan ini mengarahkan Syarikat Amanah untuk memegang bahagian harta waris ini secara amanah (hold on trust).</p>
+<p>
 Syarikat Amanah hendaklah berurusan hanya dengan penjaga sah (hadhanah) yang telah diberikan hak oleh Mahkamah Syariah atau waris yang diyakini (selepas penyiasatan dilakukan) menjaga waris di atas, bagi tujuan membayar apa-apa peruntukan perbelanjaan saradiri, kesihatan, kebajikan atau apa-apa perbelanjaan yang difikirkan munasabah untuk waris berkenaan. Jumlah bayaran dan pemasaan (timing) bayaran adalah di atas budibicara Syarikat Amanah.
 </p>
 
 <p>
-Walau apa pun (notwithstanding) klausa arahan di atas hanya berkuatkuasa di dalam keadaan:
+Walau apa pun (notwithstanding) Klausa arahan di atas hanya berkuatkuasa di dalam keadaan:
 </p>
 
 <table
@@ -234,7 +238,8 @@ Jika kes pusaka saya dibicarakan di Pejabat Pusaka Kecil, maka arahan untuk meme
 <strong>3.11
 Kos pentadbiran harta pusaka</strong></p>
 <p>
-Wasi dan Pemegang Amanah saya hendaklah menjelaskan segala perbelanjaan yang berkaitan dengan pentadbiran harta pusaka ini dari harta pusaka saya. Sekiranya ada waris yang telah mendahulukan wang mereka bagi tujuan tanggungan kos tersebut, maka Wasi dan Pemegang Amanah hendaklah membayar semula perbelanjaan tersebut dari harta pusaka saya. Walaupun begitu, sekiranya waris tersebut tidak mahu membuat sebarang tuntutan, Wasi dan Pemegang Amanah saya tidak perlu menggantikannya dan hanya Allah SWT sahaja yang mampu membalas jasa waris tersebut.
+Wasi dan Pemegang Amanah saya hendaklah menjelaskan segala perbelanjaan yang berkaitan dengan pentadbiran harta pusaka ini dari harta pusaka saya. Sekiranya ada waris yang telah mendahulukan wang mereka bagi tujuan tanggungan kos tersebut, maka Wasi dan Pemegang Amanah hendaklah membayar semula perbelanjaan tersebut dari harta pusaka saya. 
+<p>Walaupun begitu, sekiranya waris tersebut tidak mahu membuat sebarang tuntutan, Wasi dan Pemegang Amanah saya tidak perlu menggantikannya dan hanya Allah SWT sahaja yang mampu membalas jasa waris tersebut.</p>
 Di dalam apa keadaan sekalipun, kos pentadbiran harta pusaka (jika ada) hendaklah ditolak terlebih dahulu dari harta pusaka saya sebelum diagih kepada waris yang berhak mengikut Hukum Faraid.
 </p>
 
@@ -258,7 +263,9 @@ Selepas ditolak hutang, obligasi-obligasi lain yang tertunggak ke atasnya, dan a
 </h3>
 
 <p>
-Harta Pusaka saya hendaklah dibahagikan mengikut pembahagian yang dinyatakan di dalam dokumen wasiat ini kepada waris-waris saya yang sah dan layak untuk menerima harta pusaka tersebut. Senarai waris-waris saya pada masa dokumen wasiat ini dibuat dilampirkan bersama dokumen wasiat ini sebagai Lampiran Waris. Pembahagian yang saya nyatakan adalah selepas ditolak bahagian yang saya nyatakan dalam wasiat 1/3 saya kepada bukan waris (jika ada). Maka pembahagian harta pusaka saya adalah seperti berikut:
+Harta Pusaka saya hendaklah dibahagikan mengikut pembahagian yang dinyatakan di dalam dokumen wasiat ini kepada waris-waris saya yang sah dan layak untuk menerima harta pusaka tersebut. 
+Senarai waris-waris saya pada masa dokumen wasiat ini dibuat dilampirkan bersama dokumen wasiat ini sebagai Lampiran A. 
+Pembahagian yang saya nyatakan adalah selepas ditolak bahagian yang saya nyatakan dalam wasiat 1/3 saya kepada bukan waris (jika ada). Maka pembahagian harta pusaka saya adalah seperti berikut:
 </p>
 
 <h3 style="margin-top:50px; margin-bottom:20px;">
@@ -516,7 +523,7 @@ margin-top:50px;
 
 <h2
 style="
-font-family:'Cinzel', serif;
+font-family:'Times New Roman', serif;
 font-size:28px;
 margin-top:30px;
 margin-bottom:20px;
@@ -533,7 +540,7 @@ LAMPIRAN A : SENARAI WARIS
 
 <h2
 style="
-font-family:'Cinzel', serif;
+font-family:'Times New Roman', serif;
 font-size:28px;
 margin-top:30px;
 margin-bottom:20px;
@@ -550,7 +557,7 @@ LAMPIRAN B : PEMEGANG AMANAH
 
 <h2
 style="
-font-family:'Cinzel', serif;
+font-family:'Times New Roman', serif;
 font-size:28px;
 margin-top:30px;
 margin-bottom:20px;
@@ -577,7 +584,7 @@ LAMPIRAN D : HARTA TAK ALIH
 
 <h2
 style="
-font-family:'Cinzel', serif;
+font-family:'Times New Roman', serif;
 font-size:28px;
 margin-top:30px;
 margin-bottom:20px;
@@ -594,7 +601,7 @@ LAMPIRAN E : HARTA BERPENAMA
 
 <h2
 style="
-font-family:'Cinzel', serif;
+font-family:'Times New Roman', serif;
 font-size:28px;
 margin-top:30px;
 margin-bottom:20px;
@@ -611,7 +618,7 @@ LAMPIRAN F : TAKAFUL
 
 <h2
 style="
-font-family:'Cinzel', serif;
+font-family:'Times New Roman', serif;
 font-size:28px;
 margin-top:30px;
 margin-bottom:20px;
@@ -628,7 +635,7 @@ LAMPIRAN G : PEMIUTANG
 
 <h2
 style="
-font-family:'Cinzel', serif;
+font-family:'Times New Roman', serif;
 font-size:28px;
 margin-top:30px;
 margin-bottom:20px;
