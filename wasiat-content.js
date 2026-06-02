@@ -361,206 +361,146 @@ Tarikh
 
 </div>
 
+<table
+style="
+width:100%;
+margin-top:50px;
+">
+
+<tr valign="top">
+
+<td width="45%">
+
 <p>.......................................</p>
 
 <p>Tandatangan saksi 1</p>
 
-<table
-style="
-margin-top:15px;
-font-size:14px;
-">
+<table style="margin-top:15px;">
 
 <tr>
-<td width="80">
-Nama
-</td>
-
-<td width="20">
-:
-</td>
-
-<td>
-</td>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
 </tr>
 
 <tr>
-<td>
-No. K/P
-</td>
-
-<td>
-:
-</td>
-
-<td>
-</td>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
 </tr>
 
 <tr>
-<td>
-Tarikh
-</td>
-
-<td>
-:
-</td>
-
-<td>
-</td>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
 </tr>
 
 </table>
+
+</td>
+
+<td width="10%"></td>
+
+<td width="45%">
 
 <p>.......................................</p>
 
 <p>Tandatangan saksi 2</p>
 
-<table
-style="
-margin-top:15px;
-font-size:14px;
-">
+<table style="margin-top:15px;">
 
 <tr>
-<td width="80">
-Nama
-</td>
-
-<td width="20">
-:
-</td>
-
-<td>
-</td>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
 </tr>
 
 <tr>
-<td>
-No. K/P
-</td>
-
-<td>
-:
-</td>
-
-<td>
-</td>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
 </tr>
 
 <tr>
-<td>
-Tarikh
-</td>
-
-<td>
-:
-</td>
-
-<td>
-</td>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
 </tr>
 
 </table>
+
+</td>
+
+</tr>
+
+<tr>
+<td colspan="3" height="60"></td>
+</tr>
+
+<tr valign="top">
+
+<td>
 
 <p>.......................................</p>
 
 <p>Tandatangan saksi 3</p>
 
-<table
-style="
-margin-top:15px;
-font-size:14px;
-">
+<table style="margin-top:15px;">
 
 <tr>
-<td width="80">
-Nama
-</td>
-
-<td width="20">
-:
-</td>
-
-<td>
-</td>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
 </tr>
 
 <tr>
-<td>
-No. K/P
-</td>
-
-<td>
-:
-</td>
-
-<td>
-</td>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
 </tr>
 
 <tr>
-<td>
-Tarikh
-</td>
-
-<td>
-:
-</td>
-
-<td>
-</td>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
 </tr>
 
 </table>
+
+</td>
+
+<td></td>
+
+<td>
 
 <p>.......................................</p>
 
 <p>Tandatangan saksi 4</p>
 
-<table
-style="
-margin-top:15px;
-font-size:14px;
-">
+<table style="margin-top:15px;">
 
 <tr>
-<td width="80">
-Nama
-</td>
-
-<td width="20">
-:
-</td>
-
-<td>
-</td>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
 </tr>
 
 <tr>
-<td>
-No. K/P
-</td>
-
-<td>
-:
-</td>
-
-<td>
-</td>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
 </tr>
 
 <tr>
-<td>
-Tarikh
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
 </td>
 
-<td>
-:
-</td>
-
-<td>
-</td>
 </tr>
 
 </table>
