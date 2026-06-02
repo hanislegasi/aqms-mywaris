@@ -162,27 +162,65 @@ Syarikat Amanah hendaklah berurusan hanya dengan penjaga sah (hadhanah) yang tel
 Walau apa pun (notwithstanding) klausa arahan di atas hanya berkuatkuasa di dalam keadaan:
 </p>
 
-<p
+<table
 style="
-padding-left:70px;
-text-indent:-70px;
-text-align:justify;
-line-height:1.8;
+width:100%;
+border-collapse:collapse;
+margin-top:0;
+margin-bottom:0;
 ">
-<strong>3.10.1</strong>
-Wasi dan Pemegang Amanah individu yang dilantik di dalam dokumen ini bersetuju menyerahkan kuasa sebagai Wasi dan Pemegang Amanah kepada Syarikat Amanah dan kes pusaka saya dibicarakan di Mahkamah Tinggi Sivil. Sekiranya Wasi dan Pemegang Amanah adalah terdiri dari individu seperti yang saya nyatakan di dalam dokumen ini, maka arahan untuk memegang bahagian waris di bawah umur dan waris Orang Kelainan Upaya ini tertakluk kepada perintah berkaitan yang dikeluarkan oleh Mahkamah Tinggi Sivil.
-</p>
 
-<p
+<tr valign="top">
+
+<td
 style="
-padding-left:70px;
-text-indent:-70px;
+width:70px;
+font-weight:bold;
+">
+3.10.1
+</td>
+
+<td
+style="
 text-align:justify;
 line-height:1.8;
 ">
-<strong>3.10.2</strong>
+Wasi dan Pemegang Amanah individu yang dilantik di dalam dokumen ini bersetuju menyerahkan kuasa sebagai Wasi dan Pemegang Amanah kepada Syarikat Amanah dan kes pusaka saya dibicarakan di Mahkamah Tinggi Sivil. Sekiranya Wasi dan Pemegang Amanah adalah terdiri dari individu seperti yang saya nyatakan di dalam dokumen ini, maka arahan untuk memegang bahagian waris di bawah umur dan waris Orang Kelainan Upaya ini tertakluk kepada perintah berkaitan yang dikeluarkan oleh Mahkamah Tinggi Sivil.
+</td>
+
+</tr>
+
+</table>
+
+<table
+style="
+width:100%;
+border-collapse:collapse;
+margin-top:0;
+margin-bottom:0;
+">
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+font-weight:bold;
+">
+3.10.2
+</td>
+
+<td
+style="
+text-align:justify;
+line-height:1.8;
+">
 Jika kes pusaka saya dibicarakan di Pejabat Pusaka Kecil, maka arahan untuk memegang bahagian waris di bawah umur dan waris Orang Kelainan Upaya ini adalah tertakluk sepenuhnya kepada perintah berkaitan yang dikeluarkan oleh Pejabat Pusaka Kecil berdasarkan peruntukan Akta Pembahagian Pesaka Kecil 1955.
-</p>
+</td>
+
+</tr>
+
+</table>
 
 <p>
 <strong>3.11
@@ -252,7 +290,7 @@ font-style:italic;
 ">
 (Ruangan ini sengaja dibiarkan kosong)
 </p>
-(Ruangan ini sengaja dibiarkan kosong)
+
 
 
 </div>
