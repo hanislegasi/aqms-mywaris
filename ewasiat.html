@@ -2155,9 +2155,15 @@ document
 "change",
 function(){
 
-const index = this.value;
+const namaDipilih = this.value;
 
-if(index==="") return;
+const index =
+[...document.querySelectorAll(".namaWaris")]
+.findIndex(
+x => x.value === namaDipilih
+);
+
+if(index < 0) return;
 
 document.getElementById(
 "namaPemegangAmanah"
@@ -2751,19 +2757,6 @@ document.getElementById(
 ).value,
 
 nama:
-
-document.getElementById(
-"jenisPemegangAmanah"
-).value === ""
-
-?
-
-document.getElementById(
-"namaPemegangAmanah"
-)?.value || ""
-
-:
-
 document.getElementById(
 "namaPemegangAmanah"
 )?.value || "",
@@ -3353,8 +3346,8 @@ document
 if(nama){
 
 select.innerHTML += `
-<option value="${index}">
-${nama}
+<option value="${nama}">
+${nama} (${hub.value})
 </option>
 `;
 
