@@ -892,6 +892,11 @@ lampiranHartaTakAlih
 .replaceAll("{{LAMPIRAN_TAKAFUL}}", lampiranTakaful)
 .replaceAll("{{LAMPIRAN_PEMIUTANG}}", lampiranPemiutang)
 .replaceAll("{{LAMPIRAN_PENGHUTANG}}", lampiranPenghutang)                            
+
+.replaceAll(
+"{{PESANAN_WASIAT}}",
+data.pesananWasiat || "Tiada pesanan khusus."
+)
                             
 .replaceAll(
 "{{HUBUNGAN_WASI1}}",
