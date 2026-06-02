@@ -401,7 +401,43 @@ class="wasiat-section">
                         document.getElementById("telefonTable").innerHTML = data.telefon || "-";
                         document.getElementById("alamatTable").innerHTML = data.alamat || "-";
                         document.getElementById("kodTable").innerHTML = data.referral || "-";
-                        document.getElementById("sectionWasiat").innerHTML = wasiatContent;
+                        let finalContent =
+wasiatContent
+
+.replaceAll(
+"{{HUBUNGAN_WASI1}}",
+data.hubunganWasi1 || "-"
+)
+
+.replaceAll(
+"{{NAMA_WASI1}}",
+data.namaWasi1 || "-"
+)
+
+.replaceAll(
+"{{NO_IC_WASI1}}",
+data.icWasi1 || "-"
+)
+
+.replaceAll(
+"{{HUBUNGAN_WASI2}}",
+data.hubunganWasi2 || "-"
+)
+
+.replaceAll(
+"{{NAMA_WASI2}}",
+data.namaWasi2 || "-"
+)
+
+.replaceAll(
+"{{NO_IC_WASI2}}",
+data.icWasi2 || "-"
+);
+
+document.getElementById(
+"sectionWasiat"
+).innerHTML =
+finalContent;
 
                         const currentDocRef =
 data.docRef || "-";
