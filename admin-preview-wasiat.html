@@ -864,6 +864,12 @@ ${item.catatan || "-"}
 lampiranPenghutang += `
 </table>
 `;
+
+const pesananHTML =
+(data.pesananWasiat || "Tiada pesanan khusus.")
+.split("\n\n")
+.map(p=>`<p>${p}</p>`)
+.join("");
                         
                         let finalContent =
 wasiatContent
@@ -895,7 +901,7 @@ lampiranHartaTakAlih
 
 .replaceAll(
 "{{PESANAN_WASIAT}}",
-data.pesananWasiat || "Tiada pesanan khusus."
+pesananHTML
 )
                             
 .replaceAll(
