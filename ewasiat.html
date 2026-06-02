@@ -379,12 +379,6 @@ id="hubunganPemegangAmanah"
 class="w-full border rounded-lg p-3"
 placeholder="Hubungan">
 
-<textarea
-id="alamatPemegangAmanah"
-class="w-full border rounded-lg p-3"
-rows="3"
-placeholder="Alamat"></textarea>
-
 <input
 type="text"
 id="telefonPemegangAmanah"
@@ -1277,11 +1271,6 @@ document.getElementById(
 "hubunganPemegangAmanah"
 ).value =
 data.pemegangAmanah.hubungan || "";
-
-document.getElementById(
-"alamatPemegangAmanah"
-).value =
-data.pemegangAmanah.alamat || "";
 
 document.getElementById(
 "telefonPemegangAmanah"
@@ -2769,11 +2758,6 @@ document.getElementById(
 hubungan:
 document.getElementById(
 "hubunganPemegangAmanah"
-)?.value || "",
-
-alamat:
-document.getElementById(
-"alamatPemegangAmanah"
 )?.value || "",
 
 telefon:
