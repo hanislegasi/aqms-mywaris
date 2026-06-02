@@ -371,7 +371,15 @@ warisHTML += `
 
 <p><strong>Hubungan:</strong> ${w.hubungan}</p>
 
-<p><strong>Status:</strong> ${w.status}</p>
+<p><strong>Status:</strong> ${
+item.status === "bawah18"
+? "Bawah 18 Tahun"
+:
+item.status === "oku"
+? "OKU"
+:
+"Dewasa"
+}
 
 </div>
 `;
@@ -396,7 +404,15 @@ pemegangHTML = `
 ${data.pemegangAmanah.pilihan || "-"}</p>
 
 <p><strong>Jenis:</strong>
-${data.pemegangAmanah.jenis || "-"}</p>
+${
+data.pemegangAmanah.jenis === "pasangan"
+? "Pasangan"
+:
+data.pemegangAmanah.jenis === "lain"
+? "Orang Lain"
+:
+"-"
+}
 
 <p><strong>Nama:</strong>
 ${data.pemegangAmanah.nama || "-"}</p>
