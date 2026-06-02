@@ -300,6 +300,147 @@ font-style:italic;
 </p>
 
 
+<div class="page-break"></div>
+
+<div style="margin-top:80px;">
+
+<p>.......................................</p>
+
+<p>
+(Tandatangan Pewasiat)
+</p>
+
+<table
+style="
+margin-top:20px;
+font-size:14px;
+">
+
+<tr>
+<td width="100">
+Nama
+</td>
+
+<td width="20">
+:
+</td>
+
+<td>
+<strong>{{NAMA_PEWASIAT}}</strong>
+</td>
+</tr>
+
+<tr>
+<td>
+No. K/P
+</td>
+
+<td>
+:
+</td>
+
+<td>
+<strong>{{NO_IC_PEWASIAT}}</strong>
+</td>
+</tr>
+
+<tr>
+<td>
+Tarikh
+</td>
+
+<td>
+:
+</td>
+
+<td>
+</td>
+</tr>
+
+</table>
+
+</div>
+
+<table
+style="
+width:100%;
+margin-top:50px;
+">
+
+<tr valign="top">
+
+<td width="45%">
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 1</p>
+
+<p>Nama&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+
+<p>No. K/P&nbsp;&nbsp;:</p>
+
+<p>Tarikh&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+
+</td>
+
+<td width="10%"></td>
+
+<td width="45%">
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 2</p>
+
+<p>Nama&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+
+<p>No. K/P&nbsp;&nbsp;:</p>
+
+<p>Tarikh&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+
+</td>
+
+</tr>
+
+<tr><td colspan="3" height="40"></td></tr>
+
+<tr valign="top">
+
+<td>
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 3</p>
+
+<p>Nama&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+
+<p>No. K/P&nbsp;&nbsp;:</p>
+
+<p>Tarikh&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+
+</td>
+
+<td></td>
+
+<td>
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 4</p>
+
+<p>Nama&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+
+<p>No. K/P&nbsp;&nbsp;:</p>
+
+<p>Tarikh&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+
+</td>
+
+</tr>
+
+</table>
+
+
+
 
 </div>
 
