@@ -166,24 +166,28 @@ Walau apa pun (notwithstanding) klausa arahan di atas hanya berkuatkuasa di dala
 style="
 width:100%;
 border-collapse:collapse;
-margin-top:0;
-margin-bottom:0;
+margin-top:12px;
+margin-bottom:18px;
 ">
 
 <tr valign="top">
 
 <td
 style="
-width:70px;
+width:65px;
+padding:0;
 font-weight:bold;
+vertical-align:top;
 ">
 3.10.1
 </td>
 
 <td
 style="
+padding:0;
 text-align:justify;
 line-height:1.8;
+vertical-align:top;
 ">
 Wasi dan Pemegang Amanah individu yang dilantik di dalam dokumen ini bersetuju menyerahkan kuasa sebagai Wasi dan Pemegang Amanah kepada Syarikat Amanah dan kes pusaka saya dibicarakan di Mahkamah Tinggi Sivil. Sekiranya Wasi dan Pemegang Amanah adalah terdiri dari individu seperti yang saya nyatakan di dalam dokumen ini, maka arahan untuk memegang bahagian waris di bawah umur dan waris Orang Kelainan Upaya ini tertakluk kepada perintah berkaitan yang dikeluarkan oleh Mahkamah Tinggi Sivil.
 </td>
@@ -196,24 +200,28 @@ Wasi dan Pemegang Amanah individu yang dilantik di dalam dokumen ini bersetuju m
 style="
 width:100%;
 border-collapse:collapse;
-margin-top:0;
-margin-bottom:0;
+margin-top:12px;
+margin-bottom:18px;
 ">
 
 <tr valign="top">
 
 <td
 style="
-width:70px;
+width:65px;
+padding:0;
 font-weight:bold;
+vertical-align:top;
 ">
 3.10.2
 </td>
 
 <td
 style="
+padding:0;
 text-align:justify;
 line-height:1.8;
+vertical-align:top;
 ">
 Jika kes pusaka saya dibicarakan di Pejabat Pusaka Kecil, maka arahan untuk memegang bahagian waris di bawah umur dan waris Orang Kelainan Upaya ini adalah tertakluk sepenuhnya kepada perintah berkaitan yang dikeluarkan oleh Pejabat Pusaka Kecil berdasarkan peruntukan Akta Pembahagian Pesaka Kecil 1955.
 </td>
