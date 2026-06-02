@@ -702,11 +702,11 @@ ${item.jenis || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.noAkaun || "-"}
+${item.akaun || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.nama || "-"}
+${item.penama || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
@@ -755,11 +755,11 @@ ${item.syarikat || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.noPolisi || "-"}
+${item.polisi || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.nama || "-"}
+${item.penerima || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
@@ -832,8 +832,9 @@ lampiranPemiutang += `
 
 <tr>
 <th style="border:1px solid #000;padding:8px;">Penghutang</th>
-<th style="border:1px solid #000;padding:8px;">Jumlah Hutang</th>
-<th style="border:1px solid #000;padding:8px;">Catatan</th>
+<th style="border:1px solid #000;padding:8px;">Jenis Hutang</th>
+<th style="border:1px solid #000;padding:8px;">Baki</th>
+<th style="border:1px solid #000;padding:8px;">Kaedah Penyelesaian</th>
 </tr>
 `;                       
 
@@ -848,11 +849,15 @@ ${item.nama || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.jumlah || "-"}
+${item.jenis || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.catatan || "-"}
+${item.baki || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${item.kaedah || "-"}
 </td>
 
 </tr>
