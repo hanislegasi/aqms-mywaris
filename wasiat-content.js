@@ -230,4 +230,21 @@ LAMPIRAN A : SENARAI WARIS
 {{LAMPIRAN_WARIS}}
 </div>
 
+<div class="page-break"></div>
+
+<h2
+style="
+font-family:'Cinzel', serif;
+font-size:28px;
+margin-top:30px;
+margin-bottom:20px;
+color:#153638;
+">
+LAMPIRAN B : PEMEGANG AMANAH
+</h2>
+
+<div>
+{{LAMPIRAN_PEMEGANG_AMANAH}}
+</div>
+
 `;
