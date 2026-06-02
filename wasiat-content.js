@@ -57,7 +57,7 @@ Saya memahami sepenuhnya dokumen ini serta kesannya menurut hukum syarak dan und
 <p>
 Maka saya dengan ini:
 </p>
-<p>
+
 <p>
 Melantik {{HUBUNGAN_WASI1}} saya iaitu {{NAMA_WASI1}} No. K/P {{NO_IC_WASI1}} sebagai WASI PERTAMA dan pemegang amanah bagi harta pusaka saya..
 </p>
