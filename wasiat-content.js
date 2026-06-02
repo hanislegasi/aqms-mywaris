@@ -39,7 +39,7 @@ Ini adalah Dokumen Pewarisan Lengkap bagi diri saya.
 </p>
 
 <h3 style="margin-top:50px; margin-bottom:20px;">
-<strong>1. Pengisytiharan Keadaan Diri</strong>
+<strong>1. PENGISYTIHARAN KEADAAN DIRI</strong>
 </h3>
 
 <p>
