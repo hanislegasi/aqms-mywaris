@@ -274,4 +274,72 @@ LAMPIRAN D : HARTA TAK ALIH
 {{LAMPIRAN_HARTA_TAK_ALIH}}
 </div>
 
+<div class="page-break"></div>
+
+<h2
+style="
+font-family:'Cinzel', serif;
+font-size:28px;
+margin-top:30px;
+margin-bottom:20px;
+color:#153638;
+">
+LAMPIRAN E : HARTA BERPENAMA
+</h2>
+
+<div>
+{{LAMPIRAN_BERPENAMA}}
+</div>
+
+<div class="page-break"></div>
+
+<h2
+style="
+font-family:'Cinzel', serif;
+font-size:28px;
+margin-top:30px;
+margin-bottom:20px;
+color:#153638;
+">
+LAMPIRAN F : TAKAFUL
+</h2>
+
+<div>
+{{LAMPIRAN_TAKAFUL}}
+</div>
+
+<div class="page-break"></div>
+
+<h2
+style="
+font-family:'Cinzel', serif;
+font-size:28px;
+margin-top:30px;
+margin-bottom:20px;
+color:#153638;
+">
+LAMPIRAN G : PEMIUTANG
+</h2>
+
+<div>
+{{LAMPIRAN_PEMIUTANG}}
+</div>
+
+<div class="page-break"></div>
+
+<h2
+style="
+font-family:'Cinzel', serif;
+font-size:28px;
+margin-top:30px;
+margin-bottom:20px;
+color:#153638;
+">
+LAMPIRAN H : PENGHUTANG
+</h2>
+
+<div>
+{{LAMPIRAN_PENGHUTANG}}
+</div>
+
 `;
