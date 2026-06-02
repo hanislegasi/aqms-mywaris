@@ -230,6 +230,30 @@ Saya dengan ini mengakui bahawa saya faham yang permintaan pembahagian saya sepe
 
 {{PESANAN_WASIAT}}
 
+<h3 style="margin-top:50px; margin-bottom:20px;">
+<strong>6. PEMBATALAN DOKUMEN SEBELUM INI</strong>
+</h3>
+<p>
+Seperti di dalam ikrar permulaan Dokumen ini, saya dengan ini memaklumkan bahawa apa-apa sahaja dokumen wasiat saya yang terdahulu yang telah saya buat sebelum ini dan sebelum Dokumen Wasiat ini dibuat adalah terbatal sendirinya.
+</p>
+<div
+style="
+margin-top:60px;
+border-top:1px solid #000;
+width:100%;
+">
+</div>
+
+<p
+style="
+text-align:center;
+margin-top:10px;
+font-style:italic;
+">
+(Ruangan ini sengaja dibiarkan kosong)
+</p>
+(Ruangan ini sengaja dibiarkan kosong)
+
 
 </div>
 
