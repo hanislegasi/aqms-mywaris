@@ -69,14 +69,14 @@ Maka saya dengan ini:
 </p>
 
 <p>
-Melantik {{HUBUNGAN_WASI1}} saya iaitu {{NAMA_WASI1}} No. K/P {{NO_IC_WASI1}} sebagai WASI PERTAMA dan pemegang amanah bagi harta pusaka saya..
+Melantik <strong>{{HUBUNGAN_WASI1}}</strong> saya iaitu <strong>{{NAMA_WASI1}}</strong> No. K/P <strong>{{NO_IC_WASI1}}</strong> sebagai <strong>WASI PERTAMA</strong> untuk menguruskan harta pusaka saya.
 </p>
 
 </p>
 <p>
 Sekiranya, dalam apa jua keadaan di mana Wasi Pertama di atas telah meninggal dunia atau hilang upaya daripada menjalankan tanggungjawab sebagai Wasi, 
 ATAU tidak dapat memulakan (initiate) proses pentadbiran bagi harta pusaka saya dalam masa 60 hari selepas kematian saya, 
-maka saya dengan ini melantik {{HUBUNGAN_WASI2}} saya iaitu {{NAMA_WASI2}} No. K/P {{NO_IC_WASI2}} sebagai Pentadbir gantian.
+maka saya dengan ini melantik <strong>{{HUBUNGAN_WASI2}}</strong> saya iaitu <strong>{{NAMA_WASI2}}</strong> No. K/P <strong>{{NO_IC_WASI2}}</strong> sebagai <strong>PENTADBIR GANTIAN</strong>.
 </p>
 
 <h3 style="margin-top:50px; margin-bottom:20px;">
