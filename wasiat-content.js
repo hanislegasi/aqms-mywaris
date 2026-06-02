@@ -247,4 +247,21 @@ LAMPIRAN B : PEMEGANG AMANAH
 {{LAMPIRAN_PEMEGANG_AMANAH}}
 </div>
 
+<div class="page-break"></div>
+
+<h2
+style="
+font-family:'Cinzel', serif;
+font-size:28px;
+margin-top:30px;
+margin-bottom:20px;
+color:#153638;
+">
+LAMPIRAN C : HARTA ALIH
+</h2>
+
+<div>
+{{LAMPIRAN_HARTA_ALIH}}
+</div>
+
 `;
