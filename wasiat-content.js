@@ -45,7 +45,7 @@ Segala puji bagi Allah S.W.T yang kekal selamanya. Tiada tuhan melainkan Allah S
 </p>
 
 <p>
-Ini adalah Dokumen Pewarisan Lengkap bagi diri saya.
+Ini adalah Dokumen Pewarisan Lengkap bagi diri saya <strong>{{NAMA_PEWASIAT}}</strong>, nombor kad pengenalan <strong>{{NO_IC_PEWASIAT}}</strong> yang beralamat di <strong>{{ALAMAT_PEWASIAT}}</strong>.
 </p>
 
 <h3 style="margin-top:50px; margin-bottom:20px;">
