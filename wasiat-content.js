@@ -202,7 +202,7 @@ Saya dengan ini mengakui bahawa saya faham yang permintaan pembahagian saya sepe
 </p>
 
 <h3 style="margin-top:50px; margin-bottom:20px;">
-6. Pesanan Kepada Waris
+<strong>6. PESANAN KEPADA WARIS</strong>
 </h3>
 
 <p>
@@ -265,14 +265,6 @@ LAMPIRAN C : HARTA ALIH
 </div>
 
 <div class="page-break"></div>
-
-<h2
-style="
-font-family:'Cinzel', serif;
-font-size:28px;
-margin-top:30px;
-margin-bottom:20px;
-color:#153638;
 
 <h2>
 LAMPIRAN D : HARTA TAK ALIH
