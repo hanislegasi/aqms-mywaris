@@ -530,7 +530,84 @@ ${data.pemegangAmanah?.telefon || "-"}
 
 </table>
 `;
-                      
+
+let lampiranHartaAlih = `
+<table
+style="
+width:100%;
+border-collapse:collapse;
+font-size:12px;
+">
+
+<tr>
+<th style="border:1px solid #000;padding:8px;">Nama Harta</th>
+<th style="border:1px solid #000;padding:8px;">Rujukan</th>
+<th style="border:1px solid #000;padding:8px;">Nilai</th>
+<th style="border:1px solid #000;padding:8px;">Pemilikan</th>
+<th style="border:1px solid #000;padding:8px;">Kategori</th>
+</tr>
+`;
+                        
+ data.hartaAlih?.forEach(item=>{
+
+let pemilikanText = "-";
+
+if(item.pemilikan==="milikPenuh"){
+pemilikanText = "Milik Penuh";
+}
+
+if(item.pemilikan==="perkongsian"){
+pemilikanText = "Perkongsian Nama";
+}
+
+let kategoriText = item.kategori;
+
+if(item.kategori==="hibah"){
+kategoriText = "Hibah";
+}
+
+if(item.kategori==="sepencarian"){
+kategoriText = "Harta Sepencarian";
+}
+
+if(item.kategori==="faraid"){
+kategoriText = "Faraid";
+}
+
+lampiranHartaAlih += `
+
+<tr>
+
+<td style="border:1px solid #000;padding:8px;">
+${item.nama || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${item.rujukan || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${item.nilai || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${pemilikanText}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${kategoriText}
+</td>
+
+</tr>
+
+`;
+
+});
+
+lampiranHartaAlih += `
+</table>
+`;
+                        
                         let finalContent =
 wasiatContent
 
