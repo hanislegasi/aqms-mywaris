@@ -403,10 +403,23 @@ class="wasiat-section">
                         document.getElementById("kodTable").innerHTML = data.referral || "-";
                         document.getElementById("sectionWasiat").innerHTML = wasiatContent;
 
-                        const currentDocRef = data.docRef || "-";
-                        document.getElementById("footerDocRef1").innerText = generatedDocRef;
-                        document.getElementById("footerDocRef2").innerText = generatedDocRef;
-                        document.getElementById("footerDocRef3").innerText = generatedDocRef;
+                        const currentDocRef =
+data.docRef || "-";
+
+document.getElementById(
+"footerDocRef1"
+).innerText =
+currentDocRef;
+
+document.getElementById(
+"footerDocRef2"
+).innerText =
+currentDocRef;
+
+document.getElementById(
+"footerDocRef3"
+).innerText =
+currentDocRef;
                     }
                 }
             } catch (error) {
