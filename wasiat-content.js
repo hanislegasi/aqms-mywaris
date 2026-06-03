@@ -536,7 +536,7 @@ margin-top:50px;
 
 </div>
 
-
+</div>
 
 
 
@@ -624,6 +624,7 @@ LAMPIRAN C : HARTA ALIH
 
 <div class="a4-page p-[18mm]">
 
+
 <h2
 style="
 font-family:'Times New Roman', serif;
@@ -632,7 +633,6 @@ margin-top:30px;
 margin-bottom:20px;
 color:#153638;
 ">
-<h2>
 LAMPIRAN D : HARTA TAK ALIH
 </h2>
 
