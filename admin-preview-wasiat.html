@@ -54,8 +54,9 @@
 padding-bottom:25mm !important;
 }
         
-        .page-break {
-    page-break-before: always;
+        .page-break{
+page-break-before:always;
+break-before:page;
 }
 
 .wasiat-section {
@@ -875,6 +876,8 @@ const pesananHTML =
 .split("\n\n")
 .map(p=>`<p>${p}</p>`)
 .join("");
+
+
                         
                         let finalContent =
 wasiatContent
