@@ -536,6 +536,16 @@ LAMPIRAN A : SENARAI WARIS
 {{LAMPIRAN_WARIS}}
 </div>
 
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
 <div class="page-break"></div>
 
 <h2
@@ -551,6 +561,16 @@ LAMPIRAN B : PEMEGANG AMANAH
 
 <div>
 {{LAMPIRAN_PEMEGANG_AMANAH}}
+</div>
+
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
 </div>
 
 <div class="page-break"></div>
@@ -570,6 +590,16 @@ LAMPIRAN C : HARTA ALIH
 {{LAMPIRAN_HARTA_ALIH}}
 </div>
 
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
 <div class="page-break"></div>
 
 <h2>
@@ -578,6 +608,16 @@ LAMPIRAN D : HARTA TAK ALIH
 
 <div>
 {{LAMPIRAN_HARTA_TAK_ALIH}}
+</div>
+
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
 </div>
 
 <div class="page-break"></div>
@@ -597,6 +637,16 @@ LAMPIRAN E : HARTA BERPENAMA
 {{LAMPIRAN_BERPENAMA}}
 </div>
 
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
 <div class="page-break"></div>
 
 <h2
@@ -612,6 +662,16 @@ LAMPIRAN F : TAKAFUL
 
 <div>
 {{LAMPIRAN_TAKAFUL}}
+</div>
+
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
 </div>
 
 <div class="page-break"></div>
@@ -631,6 +691,16 @@ LAMPIRAN G : PEMIUTANG
 {{LAMPIRAN_PEMIUTANG}}
 </div>
 
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
 <div class="page-break"></div>
 
 <h2
@@ -646,6 +716,16 @@ LAMPIRAN H : PENGHUTANG
 
 <div>
 {{LAMPIRAN_PENGHUTANG}}
+</div>
+
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
 </div>
 
 `;
