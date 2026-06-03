@@ -62,7 +62,7 @@ Saya memahami sepenuhnya dokumen ini serta kesannya menurut hukum syarak dan und
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
@@ -118,7 +118,7 @@ Saya mengarahkan Wasi dan pemegang amanah saya untuk mengumpulkan kesemua harta 
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
@@ -167,7 +167,7 @@ Sekiranya bahagian ini diserahkan kepada Syarikat Amanah, maka sebarang perbelan
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
@@ -200,7 +200,7 @@ Syarikat Amanah hendaklah berurusan hanya dengan penjaga sah (hadhanah) yang tel
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
@@ -293,7 +293,7 @@ Di dalam apa keadaan sekalipun, kos pentadbiran harta pusaka (jika ada) hendakla
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
@@ -338,7 +338,7 @@ Saya dengan ini mengakui bahawa saya faham yang permintaan pembahagian saya sepe
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
@@ -381,7 +381,7 @@ font-style:italic;
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
@@ -601,7 +601,7 @@ margin-top:50px;
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
@@ -633,7 +633,7 @@ LAMPIRAN A : SENARAI WARIS
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
@@ -660,7 +660,7 @@ LAMPIRAN B : PEMEGANG AMANAH
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
@@ -687,7 +687,7 @@ LAMPIRAN C : HARTA ALIH
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
@@ -715,7 +715,7 @@ LAMPIRAN D : HARTA TAK ALIH
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
@@ -742,7 +742,7 @@ LAMPIRAN E : HARTA BERPENAMA
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
@@ -769,7 +769,7 @@ LAMPIRAN F : TAKAFUL
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
@@ -796,7 +796,7 @@ LAMPIRAN G : PEMIUTANG
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
@@ -823,7 +823,7 @@ LAMPIRAN H : PENGHUTANG
 
 <div class="pdf-footer">
 
-<span class="footer-docref"></span>
+<span class="docRef"></span>
 
 <span class="page-number"></span>
 
