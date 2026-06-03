@@ -72,7 +72,7 @@ Maka saya dengan ini:
 Melantik <strong>{{HUBUNGAN_WASI1}}</strong> saya iaitu <strong>{{NAMA_WASI1}}</strong> No. K/P <strong>{{NO_IC_WASI1}}</strong> sebagai <strong>WASI PERTAMA</strong> untuk menguruskan harta pusaka saya.
 </p>
 
-</p>
+
 <p>
 Sekiranya, dalam apa jua keadaan di mana Wasi Pertama di atas telah meninggal dunia atau hilang upaya daripada menjalankan tanggungjawab sebagai Wasi, 
 ATAU tidak dapat memulakan (initiate) proses pentadbiran bagi harta pusaka saya dalam masa 60 hari selepas kematian saya, 
@@ -284,7 +284,7 @@ Saya dengan ini mengakui bahawa saya faham yang permintaan pembahagian saya sepe
 {{PESANAN_WASIAT}}
 
 <h3 style="margin-top:50px; margin-bottom:20px;">
-<strong>6. PEMBATALAN DOKUMEN SEBELUM INI</strong>
+<strong>7. PEMBATALAN DOKUMEN SEBELUM INI</strong>
 </h3>
 <p>
 Seperti di dalam ikrar permulaan Dokumen ini, saya dengan ini memaklumkan bahawa apa-apa sahaja dokumen wasiat saya yang terdahulu yang telah saya buat sebelum ini dan sebelum Dokumen Wasiat ini dibuat adalah terbatal sendirinya.
@@ -317,7 +317,7 @@ font-style:italic;
 
 </div>
 
-</div>
+
 
 
 
