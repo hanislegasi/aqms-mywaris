@@ -307,7 +307,7 @@ font-style:italic;
 </p>
 
 
-<div class="page-break"></div>
+<div class="a4-page p-[18mm]">
 
 <div style="margin-top:80px;">
 
@@ -512,6 +512,15 @@ margin-top:50px;
 
 </table>
 
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
 
 
 
@@ -519,7 +528,7 @@ margin-top:50px;
 
 </div>
 
-<div class="page-break"></div>
+<div class="a4-page p-[18mm]">
 
 <h2
 style="
@@ -546,7 +555,7 @@ LAMPIRAN A : SENARAI WARIS
 
 </div>
 
-<div class="page-break"></div>
+<div class="a4-page p-[18mm]">
 
 <h2
 style="
@@ -573,7 +582,7 @@ LAMPIRAN B : PEMEGANG AMANAH
 
 </div>
 
-<div class="page-break"></div>
+<div class="a4-page p-[18mm]">
 
 <h2
 style="
@@ -600,7 +609,7 @@ LAMPIRAN C : HARTA ALIH
 
 </div>
 
-<div class="page-break"></div>
+<div class="a4-page p-[18mm]">
 
 <h2>
 LAMPIRAN D : HARTA TAK ALIH
@@ -620,7 +629,7 @@ LAMPIRAN D : HARTA TAK ALIH
 
 </div>
 
-<div class="page-break"></div>
+<div class="a4-page p-[18mm]">
 
 <h2
 style="
@@ -647,7 +656,7 @@ LAMPIRAN E : HARTA BERPENAMA
 
 </div>
 
-<div class="page-break"></div>
+<div class="a4-page p-[18mm]">
 
 <h2
 style="
@@ -674,7 +683,7 @@ LAMPIRAN F : TAKAFUL
 
 </div>
 
-<div class="page-break"></div>
+<div class="a4-page p-[18mm]">
 
 <h2
 style="
@@ -701,7 +710,7 @@ LAMPIRAN G : PEMIUTANG
 
 </div>
 
-<div class="page-break"></div>
+<div class="a4-page p-[18mm]">
 
 <h2
 style="
