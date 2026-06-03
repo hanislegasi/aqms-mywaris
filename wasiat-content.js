@@ -60,6 +60,8 @@ Dengan disaksikan oleh saksi-saksi yang bertandatangan dibawah, saya mengakui ba
 Saya memahami sepenuhnya dokumen ini serta kesannya menurut hukum syarak dan undang-undang Malaysia.
 </p>
 
+<div class="a4-page p-[18mm]">
+
 <h3 style="margin-top:50px; margin-bottom:20px;">
 <strong>2. PELANTIKAN WASI</strong>
 </h3>
@@ -104,6 +106,8 @@ Mengumpulkan dan menguruskan harta-harta tunai</strong></p>
 Saya mengarahkan Wasi dan pemegang amanah saya untuk mengumpulkan kesemua harta tunai saya yang mempunyai penama (Dana Pantas) untuk digunakan sebagai perbelanjaan pentadbiran harta pusaka serta digunakan oleh waris-waris Faraid bagi melangsungkan kehidupan mereka mengikut hak mereka dan arahan saya (jika semua waris yang berhak mengikut hukum Faraid bersetuju). Wasi saya juga perlu memperuntukkan jumlah wang tunai yang cukup untuk melunaskan hutang-hutang saya seperti di dalam Klausa (3.5).
 </p>
 
+<div class="a4-page p-[18mm]">
+
 <p>
 <strong>3.4
 Menjelaskan belanja pengebumian saya</strong></p>
@@ -141,6 +145,8 @@ Bahagian waris tanpa hadir boleh dipegang oleh Wasi atau diamanahkan kepada Syar
 Sekiranya bahagian ini diserahkan kepada Syarikat Amanah, maka sebarang perbelanjaan yang mungkin timbul dari urusan ini bolehlah ditolak dari bahagian waris tersebut.
 </p>
 
+<div class="a4-page p-[18mm]">
+
 <p>
 <strong>3.9
 Menjaga harta pusaka berbentuk hartanah</strong></p>
@@ -161,6 +167,8 @@ Sekiranya Wasi dan Pemegang Amanah saya mendapati waris di bawah umur dan/ atau 
 <p>
 Syarikat Amanah hendaklah berurusan hanya dengan penjaga sah (hadhanah) yang telah diberikan hak oleh Mahkamah Syariah atau waris yang diyakini (selepas penyiasatan dilakukan) menjaga waris di atas, bagi tujuan membayar apa-apa peruntukan perbelanjaan saradiri, kesihatan, kebajikan atau apa-apa perbelanjaan yang difikirkan munasabah untuk waris berkenaan. Jumlah bayaran dan pemasaan (timing) bayaran adalah di atas budibicara Syarikat Amanah.
 </p>
+
+<div class="a4-page p-[18mm]">
 
 <p>
 Walau apa pun (notwithstanding) Klausa arahan di atas hanya berkuatkuasa di dalam keadaan:
@@ -243,6 +251,8 @@ Wasi dan Pemegang Amanah saya hendaklah menjelaskan segala perbelanjaan yang ber
 Di dalam apa keadaan sekalipun, kos pentadbiran harta pusaka (jika ada) hendaklah ditolak terlebih dahulu dari harta pusaka saya sebelum diagih kepada waris yang berhak mengikut Hukum Faraid.
 </p>
 
+<div class="a4-page p-[18mm]">
+
 <p>
 <strong>3.12
 Pentadbiran Harta Pusaka</strong></p>
@@ -275,6 +285,8 @@ Pembahagian yang saya nyatakan adalah selepas ditolak bahagian yang saya nyataka
 <p>
 Saya dengan ini mengakui bahawa saya faham yang permintaan pembahagian saya seperti di atas adalah tertakluk kepada persetujuan waris-waris saya yang sah dan layak mengikut Hukum Faraid. Sekiranya ada di antara mereka yang tidak bersetuju, maka hak mereka seperti yang tertakluk di bawah Hukum Faraid hendaklah diserahkan kepada mereka. Bagi waris-waris yang sah dan layak yang lain yang bersetuju, maka pembahagian untuk mereka yang lain akan mengikut formula seperti yang saya minta.
 </p>
+
+<div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:50px; margin-bottom:20px;">
 <strong>6. PESANAN KEPADA WARIS</strong>
