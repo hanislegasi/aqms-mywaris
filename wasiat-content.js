@@ -321,8 +321,7 @@ font-style:italic;
 
 
 
-<div class="page-break avoid-break" style="margin-top:50px;">
-    
+   
 <div class="a4-page p-[18mm]">
 
 <div class="mt-12 px-8">
