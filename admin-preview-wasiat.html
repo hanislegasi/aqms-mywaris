@@ -961,8 +961,11 @@ document.getElementById(
 "sectionWasiat"
 ).innerHTML =
 finalContent;
+          
 
-// CHECK BERAPA PAGE YANG WUJUD
+const currentDocRef =
+data.docRef || "-";
+
 const pages =
 document.querySelectorAll(
 ".a4-page"
@@ -991,11 +994,8 @@ of ${pages.length}
 
 `;
 
-});                      
-
-                        const currentDocRef =
-data.docRef || "-";
-
+});        
+                        
 /*
 document.getElementById(
 "footerDocRef1"
