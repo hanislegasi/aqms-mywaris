@@ -1,6 +1,6 @@
 const wasiatContent = `
 
-<div class="page-break"></div>
+<div class="a4-page p-[18mm]">
 
 <div class="mt-12 px-8">
 
@@ -305,6 +305,17 @@ font-style:italic;
 ">
 (Ruangan ini sengaja dibiarkan kosong)
 </p>
+
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
 
 
 <div class="a4-page p-[18mm]">
