@@ -962,6 +962,17 @@ document.getElementById(
 ).innerHTML =
 finalContent;
 
+// CHECK BERAPA PAGE YANG WUJUD
+const pages =
+document.querySelectorAll(
+".a4-page"
+);
+
+console.log(
+"Jumlah Page:",
+pages.length
+);                        
+
                         const currentDocRef =
 data.docRef || "-";
 
