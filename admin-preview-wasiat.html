@@ -968,14 +968,35 @@ document.querySelectorAll(
 ".a4-page"
 );
 
-console.log(
-"Jumlah Page:",
-pages.length
-);                        
+pages.forEach(
+(page,index)=>{
+
+const footer =
+page.querySelector(
+".pdf-footer"
+);
+
+if(!footer) return;
+
+footer.innerHTML = `
+
+<span>
+${currentDocRef}
+</span>
+
+<span>
+Page ${index + 1}
+of ${pages.length}
+</span>
+
+`;
+
+});                      
 
                         const currentDocRef =
 data.docRef || "-";
 
+/*
 document.getElementById(
 "footerDocRef1"
 ).innerText =
@@ -990,6 +1011,7 @@ document.getElementById(
 "footerDocRef3"
 ).innerText =
 currentDocRef;
+*/
                     }
                 }
             } catch (error) {
