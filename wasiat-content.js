@@ -323,7 +323,7 @@ font-style:italic;
 
 <div class="a4-page p-[18mm]">
 
-<div class="mt-12 px-8">
+<div style="margin-top:80px;">
 
 <p>.......................................</p>
 
@@ -536,7 +536,7 @@ margin-top:50px;
 
 </div>
 
-
+</div>
 
 
 
