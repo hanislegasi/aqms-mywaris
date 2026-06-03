@@ -323,7 +323,7 @@ font-style:italic;
 
 <div class="a4-page p-[18mm]">
 
-<div class="margin-top:80px">
+<div class="mt-12 px-8">
 
 <p>.......................................</p>
 
@@ -333,7 +333,7 @@ font-style:italic;
 
 <table
 style="
-margin-top:20px;
+margin-top:30px;
 font-size:14px;
 ">
 
