@@ -233,7 +233,10 @@ style="
 width:70px;
 padding:0;
 font-weight:bold;
+font-size:15px;
+line-height:1.6;
 vertical-align:top;
+padding-top:1px;
 ">
 3.10.1
 </td>
@@ -261,9 +264,12 @@ style="
 width:70px;
 padding:0;
 font-weight:bold;
+font-size:15px;
+line-height:1.6;
 vertical-align:top;
+padding-top:1px;
 ">
-3.10.2
+3.10.1
 </td>
 
 <td
