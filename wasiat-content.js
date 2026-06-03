@@ -230,7 +230,7 @@ margin-bottom:18px;
 
 <td
 style="
-width:55px;
+width:70px;
 padding:0;
 font-weight:bold;
 vertical-align:top;
@@ -258,7 +258,7 @@ Wasi dan Pemegang Amanah individu yang dilantik di dalam dokumen ini bersetuju m
 
 <td
 style="
-width:55px;
+width:70px;
 padding:0;
 font-weight:bold;
 vertical-align:top;
