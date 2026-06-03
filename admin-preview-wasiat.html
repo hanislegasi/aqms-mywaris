@@ -949,7 +949,11 @@ finalContent;
           
 
 const currentDocRef =
-data.docRef || "-";
+data.docRef ||
+data.docRefNo ||
+document.getElementById("docRef1")?.innerText ||
+document.getElementById("docRef2")?.innerText ||
+"-";
 
 const pages =
 document.querySelectorAll(
