@@ -250,15 +250,9 @@ Wasi dan Pemegang Amanah individu yang dilantik di dalam dokumen ini bersetuju m
 
 </tr>
 
-</table>
-
-<table
-style="
-width:100%;
-border-collapse:collapse;
-margin-top:12px;
-margin-bottom:18px;
-">
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
 
 <tr valign="top">
 
