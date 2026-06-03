@@ -307,17 +307,7 @@ font-style:italic;
 (Ruangan ini sengaja dibiarkan kosong)
 </p>
 
-<div class="pdf-footer">
 
-<span class="footer-docref"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
-
-</div>
 
 
 
