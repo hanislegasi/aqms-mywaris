@@ -31,7 +31,7 @@ font-family:'Amiri', serif;
 style="
 font-family:'Times New Roman', serif;
 font-size:15px;
-line-height:1.4;
+line-height:1.6;
 text-align:justify;
 color:#222;
 ">
@@ -48,7 +48,7 @@ Segala puji bagi Allah S.W.T yang kekal selamanya. Tiada tuhan melainkan Allah S
 Ini adalah Dokumen Pewarisan Lengkap bagi diri saya <strong>{{NAMA_PEWASIAT}}</strong>, nombor kad pengenalan <strong>{{NO_IC_PEWASIAT}}</strong> yang beralamat di <strong>{{ALAMAT_PEWASIAT}}</strong> yang dibuat dengan kerelaan hati tanpa sebarang paksaan daripada mana-mana pihak.
 </p>
 
-<h3 style="margin-top:50px; margin-bottom:20px;">
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>1. PENGISYTIHARAN KEADAAN DIRI</strong>
 </h3>
 
@@ -76,7 +76,7 @@ Saya memahami sepenuhnya dokumen ini serta kesannya menurut hukum syarak dan und
 
 <div class="a4-page p-[18mm]">
 
-<h3 style="margin-top:50px; margin-bottom:20px;">
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>2. PELANTIKAN WASI</strong>
 </h3>
 
@@ -95,7 +95,7 @@ ATAU tidak dapat memulakan (initiate) proses pentadbiran bagi harta pusaka saya 
 maka saya dengan ini melantik <strong>{{HUBUNGAN_WASI2}}</strong> saya iaitu <strong>{{NAMA_WASI2}}</strong> No. K/P <strong>{{NO_IC_WASI2}}</strong> sebagai <strong>PENTADBIR GANTIAN</strong>.
 </p>
 
-<h3 style="margin-top:50px; margin-bottom:20px;">
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>3. TANGGUNGJAWAB WASI</strong>
 </h3>
 
@@ -322,7 +322,7 @@ Kaedah Pembahagian Harta Pusaka</strong></p>
 Selepas ditolak hutang, obligasi-obligasi lain yang tertunggak ke atasnya, dan apa-apa bentuk agihan dan hak keatas harta saya mengikut Undang-Undang Syariah, harta pusaka saya hendaklah diagihkan oleh Wasi dan Pemegang Amanah saya kepada waris-waris yang berhak mengikut Hukum Faraid. Walaupun demikian, sekiranya terdapat permuafakatan di antara waris-waris tentang bagaimana harta pusaka ingin diagihkan, maka kaedah agihan permuafakatan itulah yang akan digunapakai.
 </p>
 
-<h3 style="margin-top:50px; margin-bottom:20px;">
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>4. PEMBAHAGIAN HARTA PUSAKA SAYA</strong>
 </h3>
 
@@ -332,7 +332,7 @@ Senarai waris-waris saya pada masa dokumen wasiat ini dibuat dilampirkan bersama
 Pembahagian yang saya nyatakan adalah selepas ditolak bahagian yang saya nyatakan dalam wasiat 1/3 saya kepada bukan waris (jika ada). Maka pembahagian harta pusaka saya adalah seperti berikut:
 </p>
 
-<h3 style="margin-top:50px; margin-bottom:20px;">
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>5. KEBOLEHASINGAN (SEVERABILITY)</strong>
 </h3>
 
@@ -352,14 +352,14 @@ Saya dengan ini mengakui bahawa saya faham yang permintaan pembahagian saya sepe
 
 <div class="a4-page p-[18mm]">
 
-<h3 style="margin-top:50px; margin-bottom:20px;">
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>6. PESANAN KEPADA WARIS</strong>
 </h3>
 
 
 {{PESANAN_WASIAT}}
 
-<h3 style="margin-top:50px; margin-bottom:20px;">
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>7. PEMBATALAN DOKUMEN SEBELUM INI</strong>
 </h3>
 <p>
