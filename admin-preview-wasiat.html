@@ -373,6 +373,10 @@ position:relative;
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
+
+                        console.log("FULL DATA");
+                        console.log(data);
+                        console.log(Object.keys(data));
                         console.log("STATUS =", data.status);
                         console.log("DOCREF =", data.docRef);
                         console.log("DOCNUMBER =", data.docNumber);
