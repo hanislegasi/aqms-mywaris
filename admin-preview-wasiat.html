@@ -380,11 +380,8 @@ position:relative;
                         
                         
                         // UPDATE UI
-                        document.getElementById("docRef").innerHTML =
-"AQMS-WST-TEST-001";
-
-document.getElementById("docRef2").innerHTML =
-"DOC REF: AQMS-WST-TEST-001";
+                        document.getElementById("docRef").innerHTML = data.docRef || "-";
+                        document.getElementById("docRef2").innerHTML = `DOC REF: ${data.docRef || "-"}`;
                         
                         const approvedDate = data.approvedAt ? new Date(data.approvedAt) : new Date();
                         document.getElementById("tahun").innerHTML = approvedDate.getFullYear();
