@@ -62,7 +62,7 @@ Saya memahami sepenuhnya dokumen ini serta kesannya menurut hukum syarak dan und
 
 <div class="pdf-footer">
 
-<span class="docRef"></span>
+<span class="footer-docref"></span>
 
 <span class="page-number"></span>
 
@@ -122,7 +122,7 @@ Saya mengarahkan Wasi dan pemegang amanah saya untuk mengumpulkan kesemua harta 
 
 <div class="pdf-footer">
 
-<span class="docRef"></span>
+<span class="footer-docref"></span>
 
 <span class="page-number"></span>
 
