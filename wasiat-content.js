@@ -9,7 +9,8 @@ style="
 font-family:'Times New Roman', serif;
 font-size:42px;
 font-weight:700;
-margin-bottom:50px;
+margin-top:0;
+margin-bottom:25px;
 color:#153638;
 text-align:center;
 letter-spacing:1px;
@@ -21,7 +22,7 @@ DOKUMEN WASIAT
 style="
 text-align:center;
 font-size:30px;
-margin-bottom:20px;
+margin-bottom:10px;
 font-family:'Amiri', serif;
 ">
 بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
