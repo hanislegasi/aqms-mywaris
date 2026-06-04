@@ -201,7 +201,7 @@ position:relative;
 
 <div class="pdf-footer">
 
-<span id="docRef2">-</span>
+
 
 <span class="page-number">
 2
@@ -213,7 +213,7 @@ position:relative;
 
 <!-- PAGE 3 -->
 
-               
+<div class="a4-page p-[18mm]">               
 <div
 <div id="sectionWasiat" class="wasiat-section">
 </div>
@@ -373,9 +373,10 @@ position:relative;
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
-                        console.log("docRef =", data.docRef);
-                        console.log("data =", data);
-
+                        console.log("STATUS =", data.status);
+                        console.log("DOCREF =", data.docRef);
+                        console.log("DOCNUMBER =", data.docNumber);
+                        
                         // UPDATE UI
                         document.getElementById("docRef").innerHTML = data.docRef || "-";
                         document.getElementById("docRef2").innerHTML = `DOC REF: ${data.docRef || "-"}`;
@@ -975,13 +976,12 @@ if(!footer) return;
 
 footer.innerHTML = `
 
-<span>
+<span class="footer-docref">
 ${currentDocRef}
 </span>
 
-<span>
-Page ${index + 1}
-of ${pages.length}
+<span class="page-number">
+Page ${index + 1} of ${pages.length}
 </span>
 
 `;
