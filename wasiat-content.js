@@ -2,7 +2,7 @@ const wasiatContent = `
 
 <div class="a4-page p-[18mm]">
 
-<div class="mt-0">
+
 
 <h2
 style="
@@ -10,7 +10,7 @@ font-family:'Times New Roman', serif;
 font-size:42px;
 font-weight:700;
 margin-top:0;
-margin-bottom:25px;
+margin-bottom:20px;
 color:#153638;
 text-align:center;
 letter-spacing:1px;
