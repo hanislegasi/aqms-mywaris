@@ -359,6 +359,18 @@ Saya dengan ini mengakui bahawa saya faham yang permintaan pembahagian saya sepe
 
 {{PESANAN_WASIAT}}
 
+<div class="pdf-footer">
+
+<span class="docRef"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
+
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>7. PEMBATALAN DOKUMEN SEBELUM INI</strong>
 </h3>
