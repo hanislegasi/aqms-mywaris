@@ -373,6 +373,9 @@ position:relative;
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
+                        console.log("docRef =", data.docRef);
+                        console.log("data =", data);
+
                         // UPDATE UI
                         document.getElementById("docRef").innerHTML = data.docRef || "-";
                         document.getElementById("docRef2").innerHTML = `DOC REF: ${data.docRef || "-"}`;
