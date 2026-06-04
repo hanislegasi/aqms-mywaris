@@ -867,63 +867,78 @@ lampiranPenghutang += `
 const pesananText =
 data.pesananWasiat || "Tiada pesanan khusus.";
 
+const paragraphs = pesananText
+.split("\n\n")
+.filter(p => p.trim() !== "");
+
 const maxCharsPerPage = 1800;
 
-const chunks = [];
+let currentPageLength = 0;
+let currentPageContent = [];
+let pagesPesanan = [];
 
-for(let i=0; i<pesananText.length; i += maxCharsPerPage){
+paragraphs.forEach(paragraph => {
 
-    chunks.push(
-        pesananText.substring(
-            i,
-            i + maxCharsPerPage
-        )
+    if (
+        currentPageLength + paragraph.length >
+        maxCharsPerPage
+    ) {
+
+        pagesPesanan.push(
+            currentPageContent.join("")
+        );
+
+        currentPageContent = [];
+        currentPageLength = 0;
+    }
+
+    currentPageContent.push(`
+        <p style="
+            margin-bottom:12px;
+            line-height:1.6;
+            text-align:justify;
+        ">
+            ${paragraph}
+        </p>
+    `);
+
+    currentPageLength += paragraph.length;
+});
+
+if(currentPageContent.length){
+    pagesPesanan.push(
+        currentPageContent.join("")
     );
-
 }
 
-// PASTE STEP 2 DI SINI
+let pesananHTML = pagesPesanan[0] || "";
 
-let pesananHTML = "";
-
-chunks.forEach((chunk,index)=>{
+for(let i=1; i<pagesPesanan.length; i++){
 
     pesananHTML += `
 
-    ${
-    index > 0
-    ?
-    `</div>
+<div class="pdf-footer">
+</div>
 
-    <div class="a4-page p-[18mm]">
+</div>
 
-    <h3 style="
-    margin-top:40px;
-    margin-bottom:15px;
-    font-weight:bold;
-    ">
+<div class="a4-page p-[18mm]">
 
-    <strong>
-    6. PESANAN KEPADA WARIS (SAMBUNGAN)
-    </strong>
+<h3 style="
+margin-top:40px;
+margin-bottom:15px;
+font-weight:bold;
+">
+<strong>
+6. PESANAN KEPADA WARIS (SAMBUNGAN)
+</strong>
+</h3>
 
-    </h3>
-    `
-    :
-    ""
-    }
+${pagesPesanan[i]}
 
-    <p style="
-    text-align:justify;
-    line-height:1.6;
-    margin-bottom:12px;
-    ">
-    ${chunk}
-    </p>
+`;
 
-    `;
-
-});
+}
                         
                         
                         let finalContent =
