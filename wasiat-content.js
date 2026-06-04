@@ -2,7 +2,7 @@ const wasiatContent = `
 
 <div class="a4-page p-[18mm]">
 
-<div class="mt-8">
+<div class="mt-0">
 
 <h2
 style="
