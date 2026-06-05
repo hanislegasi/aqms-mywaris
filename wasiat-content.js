@@ -7,7 +7,7 @@ const wasiatContent = `
 <h2
 style="
 font-family:'Times New Roman', serif;
-font-size:35px;
+font-size:32px;
 font-weight:700;
 margin-top:0;
 margin-bottom:20px;
@@ -21,7 +21,7 @@ DOKUMEN WASIAT
 <div
 style="
 text-align:center;
-font-size:30px;
+font-size:24px;
 margin-bottom:10;
 font-family:'Amiri', serif;
 ">
