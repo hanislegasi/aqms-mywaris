@@ -77,7 +77,7 @@ Saya memahami sepenuhnya dokumen ini serta kesannya menurut hukum syarak dan und
 
 <div class="a4-page p-[18mm]">
 
-
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>2. PELANTIKAN WASI</strong>
 </h3>
 
@@ -330,7 +330,7 @@ Selepas ditolak hutang, obligasi-obligasi lain yang tertunggak ke atasnya, dan a
 
 <div class="a4-page p-[18mm]">
 
-
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>4. PEMBAHAGIAN HARTA PUSAKA SAYA</strong>
 </h3>
 
@@ -362,7 +362,7 @@ Saya dengan ini mengakui bahawa saya faham yang permintaan pembahagian saya sepe
 
 <div class="a4-page p-[18mm]">
 
-
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>6. PESANAN KEPADA WARIS</strong>
 </h3>
 
@@ -381,7 +381,7 @@ Saya dengan ini mengakui bahawa saya faham yang permintaan pembahagian saya sepe
 
 <div class="a4-page p-[18mm]">
 
-
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>7. PEMBATALAN DOKUMEN SEBELUM INI</strong>
 </h3>
 <p>
