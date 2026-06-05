@@ -489,7 +489,7 @@ Tarikh
 </table>
 
 </div>
-<br><br>
+<br>
 <strong>PENGESAHAN SAKSI</strong>
 <p>
 Kami yang bertandatangan di bawah mengesahkan bahawa Pewasiat telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
