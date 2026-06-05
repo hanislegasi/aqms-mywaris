@@ -427,10 +427,9 @@ font-style:italic;
 <strong>PENGAKUAN PEWASIAT</strong>
 <p>
 Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Wasiat ini adalah benar dan tepat mengikut pengetahuan saya.
+Saya memahami sepenuhnya kandungan Wasiat ini dan bersetuju bahawa dokumen ini menjadi rekod hasrat serta kehendak saya berhubung pengurusan harta dan urusan selepas kematian saya, tertakluk kepada hukum syarak dan peruntukan undang-undang yang berkuat kuasa.
 </p>
-<p>Saya memahami sepenuhnya kandungan Wasiat ini dan bersetuju bahawa dokumen ini menjadi rekod hasrat serta kehendak saya berhubung pengurusan harta dan urusan selepas kematian saya, tertakluk kepada hukum syarak dan peruntukan undang-undang yang berkuat kuasa.
-</p>
-
+<br>
 
 
 <p>.......................................</p>
