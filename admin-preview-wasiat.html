@@ -374,6 +374,11 @@ Reject Permohonan
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
+                        const userDoc = await getDoc(
+    doc(db, "users", userId)
+);
+
+const userData = userDoc.data();
 
                         console.log("FULL DATA");
                         console.log(data);
@@ -395,7 +400,7 @@ Reject Permohonan
                         document.getElementById("icTable").innerHTML = data.ic || "-";
                         document.getElementById("telefonTable").innerHTML = data.telefon || "-";
                         document.getElementById("alamatTable").innerHTML = data.alamat || "-";
-                        document.getElementById("kodTable").innerHTML = data.referral || "-";
+                        document.getElementById("kodTable").innerHTML = userData?.referral || "-";
 
 let lampiranWaris = `
 <table
