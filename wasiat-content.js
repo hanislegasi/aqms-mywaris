@@ -7,7 +7,7 @@ const wasiatContent = `
 <h2
 style="
 font-family:'Times New Roman', serif;
-font-size:42px;
+font-size:35px;
 font-weight:700;
 margin-top:0;
 margin-bottom:20px;
@@ -61,21 +61,7 @@ Dengan disaksikan oleh saksi-saksi yang bertandatangan dibawah, saya mengakui ba
 Saya memahami sepenuhnya dokumen ini serta kesannya menurut hukum syarak dan undang-undang Malaysia.
 </p>
 
-<div class="pdf-footer">
 
-<span class="footer-docref"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>2. PELANTIKAN WASI</strong>
@@ -95,6 +81,22 @@ Sekiranya, dalam apa jua keadaan di mana Wasi Pertama di atas telah meninggal du
 ATAU tidak dapat memulakan (initiate) proses pentadbiran bagi harta pusaka saya dalam masa 60 hari selepas kematian saya, 
 maka saya dengan ini melantik <strong>{{HUBUNGAN_WASI2}}</strong> saya iaitu <strong>{{NAMA_WASI2}}</strong> No. K/P <strong>{{NO_IC_WASI2}}</strong> sebagai <strong>PENTADBIR GANTIAN</strong>.
 </p>
+
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>3. TANGGUNGJAWAB WASI</strong>
@@ -154,6 +156,18 @@ Memungut hutang</strong></p>
 Wasi saya juga perlu untuk memungut hutang saya dari penghutang-penghutang yang masih belum melunaskan hutang mereka kepada saya (Sekiranya ada) untuk ditadbirkan sebagai sebahagian harta pusaka saya.
 </p>
 
+<div class="pdf-footer">
+
+<span class="docRef"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
+
 <p>
 <strong>3.7
 Mengumpulkan Harta Pusaka</strong></p>
@@ -170,17 +184,7 @@ Bahagian waris tanpa hadir boleh dipegang oleh Wasi atau diamanahkan kepada Syar
 Sekiranya bahagian ini diserahkan kepada Syarikat Amanah, maka sebarang perbelanjaan yang mungkin timbul dari urusan ini bolehlah ditolak dari bahagian waris tersebut.
 </p>
 
-<div class="pdf-footer">
 
-<span class="docRef"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
-
-<div class="a4-page p-[18mm]">
 
 <p>
 <strong>3.9
