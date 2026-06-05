@@ -7,7 +7,7 @@ const wasiatContent = `
 <h2
 style="
 font-family:'Times New Roman', serif;
-font-size:32px;
+font-size:42px;
 font-weight:700;
 margin-top:0;
 margin-bottom:20px;
@@ -21,7 +21,7 @@ DOKUMEN WASIAT
 <div
 style="
 text-align:center;
-font-size:24px;
+font-size:30px;
 margin-bottom:10;
 font-family:'Amiri', serif;
 ">
@@ -61,7 +61,21 @@ Dengan disaksikan oleh saksi-saksi yang bertandatangan dibawah, saya mengakui ba
 Saya memahami sepenuhnya dokumen ini serta kesannya menurut hukum syarak dan undang-undang Malaysia.
 </p>
 
+<div class="pdf-footer">
 
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>2. PELANTIKAN WASI</strong>
@@ -82,21 +96,7 @@ ATAU tidak dapat memulakan (initiate) proses pentadbiran bagi harta pusaka saya 
 maka saya dengan ini melantik <strong>{{HUBUNGAN_WASI2}}</strong> saya iaitu <strong>{{NAMA_WASI2}}</strong> No. K/P <strong>{{NO_IC_WASI2}}</strong> sebagai <strong>PENTADBIR GANTIAN</strong>.
 </p>
 
-<div class="pdf-footer">
 
-<span class="footer-docref"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>3. TANGGUNGJAWAB WASI</strong>
@@ -130,7 +130,17 @@ Menjelaskan belanja pengebumian saya</strong></p>
 Wasi saya diberi mandat untuk menjelaskan belanja pengebumian saya dari harta pusaka saya dengan kadar yang segera.
 </p>
 
+<div class="pdf-footer">
 
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
 
 <p>
 <strong>3.5
@@ -146,17 +156,7 @@ Memungut hutang</strong></p>
 Wasi saya juga perlu untuk memungut hutang saya dari penghutang-penghutang yang masih belum melunaskan hutang mereka kepada saya (Sekiranya ada) untuk ditadbirkan sebagai sebahagian harta pusaka saya.
 </p>
 
-<div class="pdf-footer">
 
-<span class="footer-docref"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
-
-<div class="a4-page p-[18mm]">
 
 <p>
 <strong>3.7
