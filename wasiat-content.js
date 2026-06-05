@@ -37,7 +37,7 @@ text-align:justify;
 color:#222;
 ">
 
-<p style="text-align:center; margin-bottom:40px;">
+<p style="text-align:center; margin-bottom:20px;">
 <strong>Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani</strong>
 </p>
 
