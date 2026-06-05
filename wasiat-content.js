@@ -61,7 +61,21 @@ Dengan disaksikan oleh saksi-saksi yang bertandatangan dibawah, saya mengakui ba
 Saya memahami sepenuhnya dokumen ini serta kesannya menurut hukum syarak dan undang-undang Malaysia.
 </p>
 
+<div class="pdf-footer">
 
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>2. PELANTIKAN WASI</strong>
@@ -82,21 +96,7 @@ ATAU tidak dapat memulakan (initiate) proses pentadbiran bagi harta pusaka saya 
 maka saya dengan ini melantik <strong>{{HUBUNGAN_WASI2}}</strong> saya iaitu <strong>{{NAMA_WASI2}}</strong> No. K/P <strong>{{NO_IC_WASI2}}</strong> sebagai <strong>PENTADBIR GANTIAN</strong>.
 </p>
 
-<div class="pdf-footer">
 
-<span class="footer-docref"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>3. TANGGUNGJAWAB WASI</strong>
@@ -123,6 +123,13 @@ Mengumpulkan dan menguruskan harta-harta tunai</strong></p>
 Saya mengarahkan Wasi dan pemegang amanah saya untuk mengumpulkan kesemua harta tunai saya yang mempunyai penama (Dana Pantas) untuk digunakan sebagai perbelanjaan pentadbiran harta pusaka serta digunakan oleh waris-waris Faraid bagi melangsungkan kehidupan mereka mengikut hak mereka dan arahan saya (jika semua waris yang berhak mengikut hukum Faraid bersetuju). Wasi saya juga perlu memperuntukkan jumlah wang tunai yang cukup untuk melunaskan hutang-hutang saya seperti di dalam Klausa (3.5).
 </p>
 
+<p>
+<strong>3.4
+Menjelaskan belanja pengebumian saya</strong></p>
+<p>
+Wasi saya diberi mandat untuk menjelaskan belanja pengebumian saya dari harta pusaka saya dengan kadar yang segera.
+</p>
+
 <div class="pdf-footer">
 
 <span class="footer-docref"></span>
@@ -134,13 +141,6 @@ Saya mengarahkan Wasi dan pemegang amanah saya untuk mengumpulkan kesemua harta 
 </div>
 
 <div class="a4-page p-[18mm]">
-
-<p>
-<strong>3.4
-Menjelaskan belanja pengebumian saya</strong></p>
-<p>
-Wasi saya diberi mandat untuk menjelaskan belanja pengebumian saya dari harta pusaka saya dengan kadar yang segera.
-</p>
 
 <p>
 <strong>3.5
@@ -156,17 +156,6 @@ Memungut hutang</strong></p>
 Wasi saya juga perlu untuk memungut hutang saya dari penghutang-penghutang yang masih belum melunaskan hutang mereka kepada saya (Sekiranya ada) untuk ditadbirkan sebagai sebahagian harta pusaka saya.
 </p>
 
-<div class="pdf-footer">
-
-<span class="docRef"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
-
-<div class="a4-page p-[18mm]">
 
 <p>
 <strong>3.7
@@ -184,8 +173,6 @@ Bahagian waris tanpa hadir boleh dipegang oleh Wasi atau diamanahkan kepada Syar
 Sekiranya bahagian ini diserahkan kepada Syarikat Amanah, maka sebarang perbelanjaan yang mungkin timbul dari urusan ini bolehlah ditolak dari bahagian waris tersebut.
 </p>
 
-
-
 <p>
 <strong>3.9
 Menjaga harta pusaka berbentuk hartanah</strong></p>
@@ -193,6 +180,18 @@ Menjaga harta pusaka berbentuk hartanah</strong></p>
 Sepanjang proses pentadbiran harta pusaka saya berjalan, saya memberi kuasa kepada Wasi dan Pemegang Amanah saya untuk membuat pertimbangan bagi mengambil tindakan untuk mendapatkan perlindungan takaful bagi tujuan menjaga keselamatan harta pusaka saya yang berbentuk hartanah dari risiko kerosakan, kebakaran atau kemusnahan. 
 Kos untuk langganan perlindungan takaful ini hendaklah ditolak dari harta pusaka saya.
 </p>
+
+<div class="pdf-footer">
+
+<span class="docRef"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
 
 <p>
 <strong>3.10
@@ -207,17 +206,6 @@ Sekiranya Wasi dan Pemegang Amanah saya mendapati waris di bawah umur dan/ atau 
 Syarikat Amanah hendaklah berurusan hanya dengan penjaga sah (hadhanah) yang telah diberikan hak oleh Mahkamah Syariah atau waris yang diyakini (selepas penyiasatan dilakukan) menjaga waris di atas, bagi tujuan membayar apa-apa peruntukan perbelanjaan saradiri, kesihatan, kebajikan atau apa-apa perbelanjaan yang difikirkan munasabah untuk waris berkenaan. Jumlah bayaran dan pemasaan (timing) bayaran adalah di atas budibicara Syarikat Amanah.
 </p>
 
-<div class="pdf-footer">
-
-<span class="docRef"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
-
-<div class="a4-page p-[18mm]">
 
 <p>
 Walau apa pun (notwithstanding) Klausa arahan di atas hanya berkuatkuasa di dalam keadaan:
@@ -264,6 +252,19 @@ Wasi dan Pemegang Amanah individu yang dilantik di dalam dokumen ini bersetuju m
 
 <tr valign="top">
 
+<div class="pdf-footer">
+
+<span class="docRef"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
+
+
 <td
 style="
 width:70px;
@@ -300,17 +301,7 @@ Wasi dan Pemegang Amanah saya hendaklah menjelaskan segala perbelanjaan yang ber
 Di dalam apa keadaan sekalipun, kos pentadbiran harta pusaka (jika ada) hendaklah ditolak terlebih dahulu dari harta pusaka saya sebelum diagih kepada waris yang berhak mengikut Hukum Faraid.
 </p>
 
-<div class="pdf-footer">
 
-<span class="docRef"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
-
-<div class="a4-page p-[18mm]">
 
 <p>
 <strong>3.12
@@ -326,6 +317,18 @@ Kaedah Pembahagian Harta Pusaka</strong></p>
 <p>
 Selepas ditolak hutang, obligasi-obligasi lain yang tertunggak ke atasnya, dan apa-apa bentuk agihan dan hak keatas harta saya mengikut Undang-Undang Syariah, harta pusaka saya hendaklah diagihkan oleh Wasi dan Pemegang Amanah saya kepada waris-waris yang berhak mengikut Hukum Faraid. Walaupun demikian, sekiranya terdapat permuafakatan di antara waris-waris tentang bagaimana harta pusaka ingin diagihkan, maka kaedah agihan permuafakatan itulah yang akan digunapakai.
 </p>
+
+<div class="pdf-footer">
+
+<span class="docRef"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>4. PEMBAHAGIAN HARTA PUSAKA SAYA</strong>
