@@ -386,6 +386,39 @@ const userData = userDoc.data();
 
                         console.log("WASIAT 1/3");
 console.log(data.wasiatSatuPerTiga);
+
+const huruf = "abcdefghijklmnopqrstuvwxyz";
+
+const wasiat13Html = (data.wasiatSatuPerTiga || [])
+.map((item,index)=>`
+<table style="
+width:100%;
+border-collapse:collapse;
+margin-bottom:8px;
+">
+<tr valign="top">
+
+<td style="
+width:35px;
+font-weight:bold;
+">
+${huruf[index]})
+</td>
+
+<td style="
+text-align:justify;
+line-height:1.7;
+">
+${item.bahagian} daripada ${item.harta}
+hendaklah diberikan kepada
+<strong>${item.penerima}</strong>
+${item.nota ? `, ${item.nota}` : ""}.
+</td>
+
+</tr>
+</table>
+`)
+.join("");
                         
                         // UPDATE UI
                         document.getElementById("docRef").innerHTML = data.docRef || "-";
