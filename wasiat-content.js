@@ -424,6 +424,16 @@ font-style:italic;
 
 <div class="mt-8">
 
+<strong>PENGAKUAN PEWASIAT</strong>
+<p>
+Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Wasiat ini adalah benar dan tepat mengikut pengetahuan saya.
+</p>
+<p>Saya memahami sepenuhnya kandungan Wasiat ini dan bersetuju bahawa dokumen ini menjadi rekod hasrat serta kehendak saya berhubung pengurusan harta dan urusan selepas kematian saya, tertakluk kepada hukum syarak dan peruntukan undang-undang yang berkuat kuasa.
+</p>
+<p>Saya juga mengesahkan bahawa saya berada dalam keadaan waras, sempurna akal fikiran serta mempunyai keupayaan untuk membuat keputusan ketika Wasiat ini ditandatangani.
+</p>
+
+
 <p>.......................................</p>
 
 <p>
@@ -480,6 +490,12 @@ Tarikh
 </table>
 
 </div>
+
+<strong>PENGESAHAN SAKSI</strong>
+<p>
+Kami yang bertandatangan di bawah mengesahkan bahawa Pewasiat telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
+Pewasiat berada dalam keadaan waras serta membuat Wasiat ini secara sukarela.
+</p>
 
 <table
 style="
