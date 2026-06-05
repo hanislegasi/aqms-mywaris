@@ -106,7 +106,7 @@ Wasi dan pemegang amanah saya yang telah dilantik perlu menjalankan tanggungjawa
 
 <p>
 <strong>3.1
-Menghubungi Hans Legasi atau wakil mereka</strong> untuk mendapatkan khidmat nasihat tentang pengurusan harta pusaka secara PERCUMA.
+Menghubungi Al-Qawthar Mawaris Synergy atau wakil mereka</strong> untuk mendapatkan khidmat nasihat tentang pengurusan harta pusaka secara PERCUMA.
 </p>
 
 <p>
