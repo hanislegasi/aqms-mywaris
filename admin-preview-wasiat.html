@@ -251,7 +251,7 @@ Reject Permohonan
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, collection, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, getDocs, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // Konfigurasi Responsif untuk Viewport Desktop & Mobile
         function updateScale() {
@@ -1154,6 +1154,17 @@ currentDocRef;
 
                 await setDoc(counterRef, { wasiatCounter: currentNumber }, { merge: true });
 
+await addDoc(
+    collection(db, "users", userId, "notifications"),
+    {
+        title: "Dokumen Wasiat Diluluskan",
+        message: `Dokumen Wasiat anda (${docRefNo}) telah diluluskan dan sedia untuk dilihat.`,
+        type: "WASIAT_APPROVED",
+        read: false,
+        createdAt: today.toISOString()
+    }
+);
+                
                 alert("Dokumen berjaya diluluskan");
                 location.reload();
             } catch (error) {
