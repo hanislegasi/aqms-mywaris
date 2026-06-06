@@ -1778,17 +1778,7 @@ item.penerimaSepencarianTakAlih || "";
 }
 
 if(data.hartaBerpenama){
-
-console.log(
-  "HARTA BERPENAMA DATA:",
-  data.hartaBerpenama
-);
-
-console.log(
-  "JUMLAH:",
-  data.hartaBerpenama.length
-);
-  
+ 
 document.getElementById(
 "hartaBerpenamaContainer"
 ).innerHTML = "";
@@ -1830,27 +1820,27 @@ ASB
 <input
 type="text"
 class="w-full border rounded-lg p-3 akaunBerpenama"
-value="${item.akaun || ''}">
+value="${item.akaun || ''}"placeholder="No Akaun">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 penamaBerpenama"
-value="${item.penama || ''}">
+value="${item.penama || ''}"placeholder="Nama Penama">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 icPenamaBerpenama"
-value="${item.ic || ''}">
+value="${item.ic || ''}"placeholder="No IC">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 hubunganPenamaBerpenama"
-value="${item.hubungan || ''}">
+value="${item.hubungan || ''}"placeholder="Hubungan">
 
 <input
 type="number"
 class="w-full border rounded-lg p-3 bahagianBerpenama"
-value="${item.bahagian || ''}">
+value="${item.bahagian || ''}"placeholder="Bahagian (%)">
 
 <button
 type="button"
