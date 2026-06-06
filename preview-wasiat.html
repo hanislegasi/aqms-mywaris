@@ -1,899 +1,1149 @@
 <!DOCTYPE html>
 <html lang="ms">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview Wasiat</title>
 
-  <title>Preview Wasiat | MyWaris</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- HTML2PDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        .tracking-widest {
+            letter-spacing: 0.1em;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* * Struktur A4 tepat untuk di-render oleh html2pdf. 
+         * Size sebenar dipertahankan, dan skala (scale) hanya dibuat secara visual.
+         */
+        #pdfContent {
+            width: 210mm;
+            background: white;
+            margin-left: auto;
+    margin-right: auto;
+        }
+
+        .a4-page {
+            width: 210mm;
+            height: 296.5mm; /* Dikurangkan sikit dari 297mm untuk elak blank page ke-3 */
+            background:white;
+            margin:0 auto;
+            box-sizing:border-box;
+            position:relative;
+            overflow:hidden;
+            page-break-after:auto; /* Paksa page break yang sekata */
+        }
+        
+        .a4-page:last-child {
+            page-break-after: auto; /* Tiada pemisah selepas page terakhir */
+        }
+
+        .a4-page:not(:first-child){
+padding-bottom:25mm !important;
+}
+        
+        .page-break{
+page-break-before:always;
+break-before:page;
+}
+
+#sectionWasiat{
+    font-family:'Times New Roman', serif;
+    line-height:1.7;
+    color:#222;
+}
+
+#sectionWasiat p{
+    font-size:16px;
+    text-align:justify;
+    line-height:1.7;
+    margin-top:0;
+    margin-bottom:14px;
+}
+#sectionWasiat td,
+#sectionWasiat li{
+    text-align:justify !important;
+    font-size:16px;
+}
+
     
+        .pdf-footer{
+position:absolute;
+bottom:5mm;
+left:18mm;
+right:18mm;
+display:flex;
+justify-content:space-between;
+font-size:12px;
+color:#666;
+font-family:'Times New Roman', serif;
+}
+
+.a4-page{
+position:relative;
+}
+
+        /* Melancarkan transisi skala untuk mobile view */
+        #scale-wrapper {
+            transform-origin: top center;
+            transition: transform 0.2s ease, margin-bottom 0.2s ease;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100 min-h-screen">
+<body class="min-h-screen flex flex-col font-sans">
 
-  <!-- HEADER -->
-  <div class="bg-[#153638] text-white p-5 shadow">
-
-    <h1 class="text-2xl font-bold">
-      Preview Wasiat
-    </h1>
-
-    <p class="text-gray-200">
-      Sila semak maklumat sebelum menghantar permohonan
-    </p>
-
-  </div>
-
-  <!-- DOCUMENT -->
-  <div
-id="pdfContent"
-class="max-w-4xl mx-auto p-5">
-
-    <div class="bg-white rounded-2xl shadow p-8 space-y-8">
-
-      <!-- TITLE -->
-      <div class="text-center border-b pb-6">
-
-        <h1 class="text-3xl font-bold text-[#153638]">
-          DOKUMEN e-WASIAT
-        </h1>
-
-        <p class="text-gray-500 mt-2">
-          Al-Qawthar Mawaris Synergy
-        </p>
-
-        </div>
-
-      <!-- PEWASIAT -->
-      <div>
-
-        <h2 class="text-2xl font-bold text-[#153638] mb-4">
-          Maklumat Pewasiat
-        </h2>
-
-        <div class="space-y-3 text-gray-700">
-
-          <p>
-            <strong>Nama:</strong>
-            <span id="nama"></span>
-          </p>
-
-          <p>
-            <strong>No IC:</strong>
-            <span id="ic"></span>
-          </p>
-
-          <p>
-            <strong>No Telefon:</strong>
-            <span id="telefon"></span>
-          </p>
-
-<p>
-            <strong>Alamat:</strong>
-            <span id="alamat"></span>
-          </p>
-          
-        </div>
-
-      </div>
-
-<div>
-
-<div>
-
-<h2 class="text-2xl font-bold text-[#153638] mb-4">
-Maklumat Wasi Pertama
-</h2>
-
-<div id="wasi1Preview"></div>
-
-</div>
-
-<div>
-
-<h2 class="text-2xl font-bold text-[#153638] mb-4">
-Maklumat Wasi Kedua
-</h2>
-
-<div id="wasi2Preview"></div>
-
-</div>
-  
-<h2 class="text-2xl font-bold text-[#153638] mb-4">
-Senarai Waris
-</h2>
-
-<div id="warisPreview"></div>
-
-</div>
-
-<div>
-<h2 class="text-2xl font-bold text-[#153638] mb-4">
-Pemegang Amanah
-</h2>
-<div id="pemegangAmanahPreview"></div>
-</div>
-
-<div>
-<h2 class="text-2xl font-bold text-[#153638] mb-4">
-Harta Alih
-</h2>
-<div id="hartaAlihPreview"></div>
-</div>
-
-<div>
-<h2 class="text-2xl font-bold text-[#153638] mb-4">
-Harta Tak Alih
-</h2>
-<div id="hartaTakAlihPreview"></div>
-</div>
-
-<div>
-<h2 class="text-2xl font-bold text-[#153638] mb-4">
-Harta Berpenama
-</h2>
-<div id="hartaBerpenamaPreview"></div>
-</div>
-
-<div>
-<h2 class="text-2xl font-bold text-[#153638] mb-4">
-Maklumat Takaful
-</h2>
-<div id="takafulPreview"></div>
-</div>
-
-<div>
-<h2 class="text-2xl font-bold text-[#153638] mb-4">
-Pemiutang
-</h2>
-<div id="pemiutangPreview"></div>
-</div>
-
-<div>
-<h2 class="text-2xl font-bold text-[#153638] mb-4">
-Penghutang
-</h2>
-<div id="penghutangPreview"></div>
-</div>
-      
-
-<!-- LAMPIRAN -->
-<div>
-
-  <h2 class="text-2xl font-bold text-[#153638] mb-4">
-    Lampiran Dokumen
-  </h2>
-
-  <div
-    id="lampiranList"
-    class="space-y-3">
-  </div>
-
-</div>
-      
-      <!-- ACTION -->
-      <div class="pt-6 border-t space-y-3">
-
-        <a
-href="generate-wasiat-pdf.html"
-class="block w-full bg-black hover:bg-gray-800 transition text-white py-3 rounded-lg font-semibold text-center">
-
-Generate PDF Rasmi
-
-</a>
-
-        <button
-          id="submitBtn"
-          class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-lg font-semibold">
-
-          Hantar Permohonan
-
-        </button>
-
-        <a
-          href="ewasiat.html"
-          class="block text-center bg-gray-200 hover:bg-gray-300 transition text-gray-700 py-3 rounded-lg font-semibold">
-
-          ← Kembali Edit Borang
-
-        </a>
-
-      </div>
-
-      <!-- STATUS -->
-      <p
-        id="status"
-        class="text-center text-green-600 font-medium">
-      </p>
-
+    <!-- HEADER -->
+    <div class="bg-[#153638] text-white p-5 shadow-md sticky top-0 z-50">
+        <h1 class="text-2xl font-bold font-inter">Preview Wasiat</h1>
+        <p class="text-gray-300 text-sm">Dokumen Wasiat Saya</p>
     </div>
 
-  </div>
-
-  <!-- FIREBASE -->
-  <script type="module">
-
-    import { initializeApp }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-    import {
-      getAuth,
-      onAuthStateChanged
-    }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      updateDoc,
-      collection,
-      getDocs
-    }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    const firebaseConfig = {
-
-      apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-
-      authDomain: "alqawthar-mywaris.firebaseapp.com",
-
-      projectId: "alqawthar-mywaris",
-
-      storageBucket: "alqawthar-mywaris.firebasestorage.app",
-
-      messagingSenderId: "3498810778",
-
-      appId: "1:3498810778:web:ee36e0fe42f76698046e23"
-
-    };
-
-    const app =
-      initializeApp(firebaseConfig);
-
-    const auth =
-      getAuth(app);
-
-    const db =
-      getFirestore(app);
-
-    let currentUser = null;
-
-    // CHECK LOGIN
-    onAuthStateChanged(auth, async(user)=>{
-
-      if(!user){
-
-        window.location.href =
-          "login.html";
-
-        return;
-
-      }
-
-      currentUser = user;
-
-      // GET DATA
-      const docRef =
-      doc(
-        db,
-        "users",
-        currentUser.uid,
-        "wasiat",
-        "maklumat"
-      );
-
-      const docSnap =
-      await getDoc(docRef);
-
-      if(docSnap.exists()){
-
-        const data =
-        docSnap.data();
-
-        document.getElementById("nama").innerHTML =
-        data.nama || "";
-
-        document.getElementById("ic").innerHTML =
-        data.ic || "";
-
-        document.getElementById("telefon").innerHTML =
-        data.telefon || "";
-
-        document.getElementById("alamat").innerHTML =
-        data.alamat || "";
-
-document.getElementById(
-"wasi1Preview"
-).innerHTML = `
-
-<div class="border p-3 rounded-lg">
-
-<p><strong>Nama:</strong>
-${data.namaWasi1 || "-"}</p>
-
-<p><strong>IC:</strong>
-${data.icWasi1 || "-"}</p>
-
-<p><strong>Hubungan:</strong>
-${data.hubunganWasi1 || "-"}</p>
-
-<p><strong>Telefon:</strong>
-${data.telefonWasi1 || "-"}</p>
-
-<p><strong>Alamat:</strong>
-${data.alamatWasi1 || "-"}</p>
-
-</div>
-
-`;
-
-document.getElementById(
-"wasi2Preview"
-).innerHTML = `
-
-<div class="border p-3 rounded-lg">
-
-<p><strong>Nama:</strong>
-${data.namaWasi2 || "-"}</p>
-
-<p><strong>IC:</strong>
-${data.icWasi2 || "-"}</p>
-
-<p><strong>Hubungan:</strong>
-${data.hubunganWasi2 || "-"}</p>
-
-<p><strong>Telefon:</strong>
-${data.telefonWasi2 || "-"}</p>
-
-<p><strong>Alamat:</strong>
-${data.alamatWasi2 || "-"}</p>
-
-</div>
-
-`;
+    <!-- MAIN CONTENT & PDF PREVIEW WRAPPER -->
+    <main class="flex-grow flex flex-col items-center pt-8 pb-4 overflow-auto">
         
+        <!-- WRAPPER UNTUK SKALA (Bagi paparan mobile cantik) -->
+        <div id="scale-wrapper" class="drop-shadow-2xl">
+            
+            <!-- PDF CONTENT SEBENAR -->
+            <div id="pdfContent">
 
-let warisHTML = "";
+                <!-- PAGE 1 (COVER) -->
+                <div class="a4-page">
+                    <!-- Gunakan fallback imej jika gambar tempatan tiada untuk preview -->
+                    <img src="images/wasiat-cover.png" 
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2100&auto=format&fit=crop';" 
+                         class="absolute inset-0 w-full h-full object-cover" alt="Cover Wasiat" />
+                    
+                    <!-- Overlay gelap sedikit (optional) supaya teks mudah dibaca -->
+                    <div class="absolute inset-0 bg-black/20"></div>
+
+                    <!-- DOC REF -->
+                    <p id="docRef" class="absolute top-[5%] left-[8%] text-[#d8c08f] text-xl font-cinzel tracking-widest font-semibold drop-shadow-md">
+                        AQMS-WST-2026-001
+                    </p>
+
+                    <!-- YEAR -->
+                    <p id="tahun" class="absolute top-[5%] right-[8%] text-white text-4xl font-bold font-cinzel tracking-widest drop-shadow-lg">
+                        2026
+                    </p>
+
+                    <!-- NAMA -->
+                    <p id="namaCover" class="absolute top-[56%] left-[11%] text-white text-2xl font-bold uppercase font-cinzel tracking-widest drop-shadow-lg">
+                        ALI BIN ABU
+                    </p>
+
+                    <!-- IC -->
+                    <p id="icCover" class="absolute top-[62%] left-[11%] text-white text-xl font-bold font-cinzel tracking-widest drop-shadow-md">
+                        000000-00-0000
+                    </p>
+
+                    <!-- APPROVED DATE -->
+                    <p id="approvedDate" class="absolute bottom-[3%] right-[3%] text-white text-sm font-cinzel tracking-widest drop-shadow-sm">
+                        24 MEI 2026
+                    </p>
+
+
+                    
+                </div>
+
+                <!-- PAGE 2 (MAKLUMAT) -->
+                <div class="a4-page p-[18mm]">
+                    
+                    <div class="border-b-2 border-[#153638] pb-4 mb-10 mt-5">
+                        <p id="docRef2" class="text-[#153638] text-xl font-bold font-cinzel tracking-widest">
+                            DOC REF: AQMS-WST-2026-001
+                        </p>
+                    </div>
+
+                   <table class="w-full border-collapse border border-gray-300 text-sm font-cinzel text-gray-800">
+                        <tr>
+                            <td class="border border-gray-300 p-5 font-semibold w-1/3 bg-gray-50">NAMA</td>
+                            <td id="namaTable" class="border border-gray-300 p-5 font-medium">-</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 p-5 font-semibold bg-gray-50">NO. KAD PENGENALAN</td>
+                            <td id="icTable" class="border border-gray-300 p-5 font-medium">-</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 p-5 font-semibold bg-gray-50">NO. TELEFON</td>
+                            <td id="telefonTable" class="border border-gray-300 p-5 font-medium">-</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 p-5 font-semibold bg-gray-50">ALAMAT</td>
+                            <td id="alamatTable" class="border border-gray-300 p-5 font-medium">-</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 p-5 font-semibold bg-gray-50">NO. KOD PERUNDING</td>
+                            <td id="kodTable" class="border border-gray-300 p-5 font-medium">-</td>
+                        </tr>
+                    </table>
+
+<div class="pdf-footer">
+
+
+
+<span class="page-number">
+2
+</span>
+
+</div>
+                    
+</div>
+
+<!-- PAGE 3 -->
+
+              
+<div>
+<div id="sectionWasiat"></div>
+</div>
+
+  
+</div>
+                
+ </main>
+        
+    <div class="max-w-[210mm] mx-auto mt-6 mb-20">
+    <!-- ACTION BUTTONS -->
+    <div class="w-full max-w-3xl mx-auto p-4 mb-8 space-y-4">
+        <button id="downloadBtn" class="w-full bg-black hover:bg-gray-800 transition-all text-white py-4 rounded-xl font-semibold shadow-lg text-lg flex justify-center items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            Download PDF
+        </button>
+
+        <div class="flex justify-center gap-4 mt-6">
+
+
+</div>
+    </div>
+
+</div>    
+
+        
+    <!-- SCRIPT FIREBASE & LOGIK APLIKASI -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, getDocs, setDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // Konfigurasi Responsif untuk Viewport Desktop & Mobile
+        function updateScale() {
+            const wrapper = document.getElementById('scale-wrapper');
+            const pdfContent = document.getElementById('pdfContent');
+            const containerWidth = window.innerWidth;
+            const targetWidth = 794; // Lebar A4 (~210mm dalam piksel pada resolusi piawai)
+            const padding = 32;
+
+            if (containerWidth < targetWidth + padding) {
+                // Kecilkan paparan untuk skrin mobile
+                const scale = (containerWidth - padding) / targetWidth;
+                wrapper.style.transform = `scale(${scale})`;
+                
+                // Baiki ketinggian bekas supaya tiada ruang kosong di bawah elemen
+                const actualHeight = pdfContent.offsetHeight;
+                const scaledHeight = actualHeight * scale;
+                wrapper.style.marginBottom = `-${actualHeight - scaledHeight}px`;
+            } else {
+                // Paparan desktop normal
+                wrapper.style.transform = 'scale(1)';
+                wrapper.style.marginBottom = '0px';
+            }
+        }
+
+        // Kemaskini skala ketika resize
+        window.addEventListener('resize', updateScale);
+        window.addEventListener('DOMContentLoaded', () => {
+            // Berikan masa rendering sejenak sebelum skala
+            setTimeout(updateScale, 100);
+        });
+
+        // Download Logik PDF
+        document.getElementById("downloadBtn").addEventListener("click", async () => {
+            const wrapper = document.getElementById('scale-wrapper');
+            const element = document.getElementById("pdfContent");
+
+if(window.wasiatData?.status !== "APPROVED"){
+   alert(
+      "Dokumen Wasiat anda masih belum diluluskan."
+   );
+   return;
+}
+          
+            // 1. Simpan tetapan skala dan margin asal
+            const originalTransform = wrapper.style.transform;
+            const originalMarginBottom = wrapper.style.marginBottom;
+            const originalMargin = element.style.margin;
+
+            // 2. Buang skala sementara & paksa kedudukan paksi kiri (PUNCA ruang kosong)
+            wrapper.style.transform = 'scale(1)';
+            wrapper.style.marginBottom = '0px';
+            wrapper.style.transformOrigin = 'top left'; 
+            element.style.margin = '0'; // Buang margin auto sementara
+
+            // 3. Beri masa kepada browser untuk kemaskini DOM
+            await new Promise(r => setTimeout(r, 150));
+
+            const options = {
+                margin: 0,
+                filename: "Wasiat.pdf",
+                image: { type: "jpeg", quality: 1 },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true, 
+                    scrollY: 0,
+                    scrollX: 0, // Set koordinat X ke 0
+                    windowWidth: document.documentElement.offsetWidth
+                },
+                pagebreak: { mode: ['css'] }, // Pastikan html2pdf__page-break berfungsi
+                jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+            };
+
+            // 4. Proses render PDF
+            html2pdf().set(options).from(element).save().then(() => {
+                // 5. Kembalikan semua tetapan asal
+                wrapper.style.transform = originalTransform;
+                wrapper.style.marginBottom = originalMarginBottom;
+                wrapper.style.transformOrigin = 'top center';
+                element.style.margin = originalMargin || '0 auto';
+            });
+        });
+
+        // --------------------------------------------------------
+        // FIREBASE LOGIC
+        // --------------------------------------------------------
+        const firebaseConfig = {
+            apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+            authDomain: "alqawthar-mywaris.firebaseapp.com",
+            projectId: "alqawthar-mywaris",
+            storageBucket: "alqawthar-mywaris.firebasestorage.app",
+            messagingSenderId: "3498810778",
+            appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, async(user)=>{
+
+   if(!user){
+      location.href="login.html";
+      return;
+   }
+
+   const userId = user.uid;
+
+            try {
+                
+                // LOAD CUSTOMER DATA
+                if (userId) {
+                    const docRef = doc(db, "users", userId, "wasiat", "maklumat");
+                    const docSnap = await getDoc(docRef);
+
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+
+window.wasiatData = data;
+
+
+                      
+if(!data.firstViewedAt){
+
+   const firstViewedAt = new Date();
+
+   const expiryDate = new Date();
+
+   expiryDate.setFullYear(
+      expiryDate.getFullYear() + 1
+   );
+
+   await updateDoc(docRef,{
+      firstViewedAt:
+         firstViewedAt.toISOString(),
+
+      expiryDate:
+         expiryDate.toISOString()
+   });
+
+}             
+                      
+                        const userDoc = await getDoc(
+    doc(db, "users", userId)
+);
+
+
+
+
+                      
+         
+                      
+const userData = userDoc.data();
+
+                        console.log("FULL DATA");
+                        console.log(data);
+                        console.log(Object.keys(data));
+
+                        console.log("WASIAT 1/3");
+console.log(data.wasiatSatuPerTiga);
+
+const huruf = "abcdefghijklmnopqrstuvwxyz";
+
+const wasiat13Html = (data.wasiatSatuPerTiga || [])
+.map((item,index)=>`
+<table style="
+width:100%;
+border-collapse:collapse;
+margin-bottom:8px;
+">
+<tr valign="top">
+
+<td style="
+width:35px;
+font-weight:bold;
+">
+${huruf[index]})
+</td>
+
+<td style="
+text-align:justify;
+line-height:1.7;
+">
+<strong>${item.bahagian}</strong> daripada <strong>${item.harta}</strong>
+hendaklah diberikan kepada
+<strong>${item.penerima}</strong>
+${item.nota ? `, ${item.nota}` : ""}.
+</td>
+
+</tr>
+</table>
+`)
+.join("");
+
+console.log(wasiat13Html);                        
+                        
+                        // UPDATE UI
+                        document.getElementById("docRef").innerHTML = data.docRef || "-";
+                        document.getElementById("docRef2").innerHTML = `DOC REF: ${data.docRef || "-"}`;
+                        
+                        const approvedDate = data.approvedAt ? new Date(data.approvedAt) : new Date();
+                        document.getElementById("tahun").innerHTML = approvedDate.getFullYear();
+                        
+                        document.getElementById("namaCover").innerHTML = (data.nama || "-").toUpperCase();
+                        document.getElementById("icCover").innerHTML = data.ic || "-";
+                        document.getElementById("approvedDate").innerHTML = approvedDate.toLocaleDateString("ms-MY", { day: "numeric", month: "long", year: "numeric" });
+                        
+                        document.getElementById("namaTable").innerHTML = data.nama || "-";
+                        document.getElementById("icTable").innerHTML = data.ic || "-";
+                        document.getElementById("telefonTable").innerHTML = data.telefon || "-";
+                        document.getElementById("alamatTable").innerHTML = data.alamat || "-";
+                        document.getElementById("kodTable").innerHTML = userData?.referral || "-";
+
+let lampiranWaris = `
+<table
+style="
+width:100%;
+border-collapse:collapse;
+font-size:14px;
+">
+
+<tr>
+
+<th style="border:1px solid #000;padding:8px;">
+Nama
+</th>
+
+<th style="border:1px solid #000;padding:8px;">
+No Kad Pengenalan
+</th>
+
+<th style="border:1px solid #000;padding:8px;">
+Hubungan
+</th>
+
+<th style="border:1px solid #000;padding:8px;">
+Status
+</th>
+
+</tr>
+`;
 
 data.waris?.forEach(w=>{
 
-warisHTML += `
-<div class="border p-3 rounded-lg mb-3">
+lampiranWaris += `
 
-<p><strong>Nama:</strong> ${w.nama}</p>
+<tr>
 
-<p><strong>IC:</strong> ${w.ic}</p>
+<td style="border:1px solid #000;padding:8px;">
+${w.nama || "-"}
+</td>
 
-<p><strong>Hubungan:</strong> ${w.hubungan}</p>
+<td style="border:1px solid #000;padding:8px;">
+${w.ic || "-"}
+</td>
 
-<p><strong>Status:</strong> ${
-w.status === "bawah18"
+<td style="border:1px solid #000;padding:8px;">
+${w.hubungan || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${
+w.status==="bawah18"
 ? "Bawah 18 Tahun"
 :
-w.status === "oku"
+w.status==="oku"
 ? "OKU"
 :
 "Dewasa"
 }
-</p>
+</td>
 
-</div>
+</tr>
 `;
 
 });
 
-document.getElementById(
-"warisPreview"
-).innerHTML = warisHTML;
+lampiranWaris += `
+</table>
+`;                        
 
-// PEMEGANG AMANAH
+let lampiranPemegangAmanah = `
+<table
+style="
+width:100%;
+border-collapse:collapse;
+font-size:14px;
+">
 
-let pemegangHTML = "";
+<tr>
+<th style="border:1px solid #000;padding:8px;">
+Perkara
+</th>
 
-if(data.pemegangAmanah){
+<th style="border:1px solid #000;padding:8px;">
+Maklumat
+</th>
+</tr>
 
-pemegangHTML = `
+<tr>
+<td style="border:1px solid #000;padding:8px;">
+Nama
+</td>
 
-<div class="border p-3 rounded-lg">
+<td style="border:1px solid #000;padding:8px;">
+${data.pemegangAmanah?.nama || "-"}
+</td>
+</tr>
 
-<p><strong>Pilihan:</strong>
-${
-data.pemegangAmanah.pilihan === "ya"
-? "Ya"
-:
-data.pemegangAmanah.pilihan === "tidak"
-? "Tidak"
-:
-"-"
-}
-</p>
+<tr>
+<td style="border:1px solid #000;padding:8px;">
+No. Kad Pengenalan
+</td>
 
-<p><strong>Jenis:</strong>
-${
-data.pemegangAmanah.jenis === "pasangan"
-? "Pasangan"
-:
-data.pemegangAmanah.jenis === "lain"
-? "Orang Lain"
-:
-"-"
-}
-</p>
+<td style="border:1px solid #000;padding:8px;">
+${data.pemegangAmanah?.ic || "-"}
+</td>
+</tr>
 
-<p><strong>Nama:</strong>
-${data.pemegangAmanah.nama || "-"}</p>
+<tr>
+<td style="border:1px solid #000;padding:8px;">
+Hubungan
+</td>
 
-<p><strong>IC:</strong>
-${data.pemegangAmanah.ic || "-"}</p>
+<td style="border:1px solid #000;padding:8px;">
+${data.pemegangAmanah?.hubungan || "-"}
+</td>
+</tr>
 
-<p><strong>Hubungan:</strong>
-${data.pemegangAmanah.hubungan || "-"}</p>
+<tr>
+<td style="border:1px solid #000;padding:8px;">
+Telefon
+</td>
 
-<p><strong>Telefon:</strong>
-${data.pemegangAmanah.telefon || "-"}</p>
+<td style="border:1px solid #000;padding:8px;">
+${data.pemegangAmanah?.telefon || "-"}
+</td>
+</tr>
 
-</div>
+</table>
 `;
 
+let lampiranHartaAlih = `
+<table
+style="
+width:100%;
+border-collapse:collapse;
+font-size:14px;
+">
+
+<tr>
+<th style="border:1px solid #000;padding:8px;">Nama Harta</th>
+<th style="border:1px solid #000;padding:8px;">Rujukan</th>
+<th style="border:1px solid #000;padding:8px;">Nilai</th>
+<th style="border:1px solid #000;padding:8px;">Pemilikan</th>
+<th style="border:1px solid #000;padding:8px;">Kategori</th>
+</tr>
+`;
+                        
+ data.hartaAlih?.forEach(item=>{
+
+let pemilikanText = "-";
+
+if(item.pemilikan==="milikPenuh"){
+pemilikanText = "Milik Penuh";
 }
 
-document.getElementById(
-"pemegangAmanahPreview"
-).innerHTML = pemegangHTML;    
+if(item.pemilikan==="perkongsian"){
+pemilikanText = "Perkongsian Nama";
+}
 
-let hartaAlihHTML = "";
+let kategoriText = item.kategori;
 
-data.hartaAlih?.forEach(item=>{
+if(item.kategori==="hibah"){
+kategoriText = "Hibah";
+}
 
-hartaAlihHTML += `
+if(item.kategori==="sepencarian"){
+kategoriText = "Harta Sepencarian";
+}
 
-<div class="border p-3 rounded-lg mb-3">
+if(item.kategori==="faraid"){
+kategoriText = "Faraid";
+}
 
-<p><strong>Nama:</strong>
-${item.nama}</p>
+lampiranHartaAlih += `
 
-<p><strong>Rujukan:</strong>
-${item.rujukan}</p>
+<tr>
 
-<p><strong>Nilai:</strong>
-${item.nilai}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.nama || "-"}
+</td>
 
-<p><strong>Kategori:</strong>
-${
-item.kategori === "hibah"
-? "Hibah"
-: item.kategori === "sepencarian"
+<td style="border:1px solid #000;padding:8px;">
+${item.rujukan || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${item.nilai || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${pemilikanText}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${kategoriText}
+</td>
+
+</tr>
+
+`;
+
+});
+
+lampiranHartaAlih += `
+</table>
+`;
+
+let lampiranHartaTakAlih = `
+<table
+style="
+width:100%;
+border-collapse:collapse;
+font-size:14px;
+">
+
+<tr>
+<th style="border:1px solid #000;padding:8px;">Nama Harta</th>
+<th style="border:1px solid #000;padding:8px;">No Geran</th>
+<th style="border:1px solid #000;padding:8px;">Nilai</th>
+<th style="border:1px solid #000;padding:8px;">Pemilikan</th>
+<th style="border:1px solid #000;padding:8px;">Kategori</th>
+</tr>
+`;
+
+ data.hartaTakAlih?.forEach(item=>{
+
+let pemilikanText =
+item.pemilikan==="perkongsian"
+? "Perkongsian Nama"
+: "Milik Penuh";
+
+let kategoriText =
+item.kategori==="sepencarian"
 ? "Harta Sepencarian"
-: "Faraid"
-}
-</p>
-
-<p><strong>Pemilikan:</strong>
-${
-item.pemilikan === "milikPenuh"
-? "Milik Penuh"
-: "Perkongsian Nama"
-}
-</p>
-
-`;
-
-if(
-item.kategori === "hibah"
-&&
-item.penerimaHibah?.length
-){
-
-hartaAlihHTML += `
-<p class="mt-2">
-<strong>Penerima Hibah:</strong>
-</p>
-
-<ul class="list-disc ml-6">
-`;
-
-item.penerimaHibah.forEach(p=>{
-
-hartaAlihHTML += `
-<li>
-${p.nama}
-(${p.peratus}%)
-</li>
-`;
-
-});
-
-hartaAlihHTML += `
-</ul>
-`;
-
-}
-
-if(
-item.kategori === "sepencarian"
-){
-
-hartaAlihHTML += `
-<p class="mt-2">
-
-<strong>Penerima Sepencarian:</strong>
-
-${item.penerimaSepencarian || "-"}
-
-</p>
-`;
-
-}
-
-hartaAlihHTML += `
-</div>
-`;
-
-});       
-
-document.getElementById(
-"hartaAlihPreview"
-).innerHTML = hartaAlihHTML;
-        
-let hartaTakAlihHTML = "";
-
-data.hartaTakAlih?.forEach(item=>{
-
-hartaTakAlihHTML += `
-
-<div class="border p-3 rounded-lg mb-3">
-
-<p><strong>Nama:</strong>
-${item.nama}</p>
-
-<p><strong>Geran:</strong>
-${item.rujukan}</p>
-
-<p><strong>Nilai:</strong>
-${item.nilai}</p>
-
-<p><strong>Kategori:</strong>
-${
-item.kategori === "hibah"
+:
+item.kategori==="hibah"
 ? "Hibah"
-: item.kategori === "sepencarian"
-? "Harta Sepencarian"
-: "Faraid"
-}
-</p>
+:
+"Faraid";
 
-<p><strong>Pemilikan:</strong>
-${
-item.pemilikan === "milikPenuh"
-? "Milik Penuh"
-: "Perkongsian Nama"
-}
-</p>
+lampiranHartaTakAlih += `
+<tr>
 
-`;
+<td style="border:1px solid #000;padding:8px;">
+${item.nama || "-"}
+</td>
 
-if(
-item.kategori === "hibah"
-&&
-item.penerimaHibahTakAlih?.length
-){
+<td style="border:1px solid #000;padding:8px;">
+${item.rujukan || "-"}
+</td>
 
-hartaTakAlihHTML += `
-<p class="mt-2">
-<strong>Penerima Hibah:</strong>
-</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.nilai || "-"}
+</td>
 
-<ul class="list-disc ml-6">
-`;
+<td style="border:1px solid #000;padding:8px;">
+${pemilikanText}
+</td>
 
-item.penerimaHibahTakAlih.forEach(p=>{
+<td style="border:1px solid #000;padding:8px;">
+${kategoriText}
+</td>
 
-hartaTakAlihHTML += `
-<li>
-${p.nama}
-(${p.peratus}%)
-</li>
+</tr>
 `;
 
 });
 
-hartaTakAlihHTML += `
-</ul>
+lampiranHartaTakAlih += `
+</table>
 `;
 
-}
+let lampiranBerpenama = `
+<table
+style="
+width:100%;
+border-collapse:collapse;
+font-size:14px;
+">
 
-if(
-item.kategori === "sepencarian"
-){
-
-hartaTakAlihHTML += `
-<p class="mt-2">
-
-<strong>Penerima Sepencarian:</strong>
-
-${item.penerimaSepencarianTakAlih || "-"}
-
-</p>
-`;
-
-}
-
-hartaTakAlihHTML += `
-</div>
-`;
-
-});
-
-document.getElementById(
-"hartaTakAlihPreview"
-).innerHTML = hartaTakAlihHTML;        
-
-let berpenamaHTML = "";
+<tr>
+<th style="border:1px solid #000;padding:8px;">Jenis</th>
+<th style="border:1px solid #000;padding:8px;">No Akaun</th>
+<th style="border:1px solid #000;padding:8px;">Penama</th>
+<th style="border:1px solid #000;padding:8px;">IC Penama</th>
+<th style="border:1px solid #000;padding:8px;">Hubungan</th>
+<th style="border:1px solid #000;padding:8px;">Bahagian (%)</th>
+</tr>
+`;                        
 
 data.hartaBerpenama?.forEach(item=>{
 
-berpenamaHTML += `
+lampiranBerpenama += `
 
-<div class="border p-3 rounded-lg mb-3">
+<tr>
 
-<p><strong>Jenis:</strong>
-${item.jenis}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.jenis || "-"}
+</td>
 
-<p><strong>No Akaun:</strong>
-${item.akaun}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.akaun || "-"}
+</td>
 
-<p><strong>Penama:</strong>
-${item.penama}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.penama || "-"}
+</td>
 
-<p><strong>IC:</strong>
-${item.ic}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.ic || "-"}
+</td>
 
-<p><strong>Hubungan:</strong>
-${item.hubungan}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.hubungan || "-"}
+</td>
 
-<p><strong>Bahagian:</strong>
-${item.bahagian}%</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.bahagian || "-"}
+</td>
 
-</div>
+</tr>
 
 `;
 
 });
 
-document.getElementById(
-"hartaBerpenamaPreview"
-).innerHTML = berpenamaHTML;
+lampiranBerpenama += `
+</table>
+`;
 
-let takafulHTML = "";
+let lampiranTakaful = `
+<table style="width:100%;border-collapse:collapse;font-size:14px;">
+
+<tr>
+<th style="border:1px solid #000;padding:8px;">Syarikat</th>
+<th style="border:1px solid #000;padding:8px;">No Polisi</th>
+<th style="border:1px solid #000;padding:8px;">Penerima</th>
+<th style="border:1px solid #000;padding:8px;">IC</th>
+<th style="border:1px solid #000;padding:8px;">Hubungan</th>
+<th style="border:1px solid #000;padding:8px;">Bahagian (%)</th>
+</tr>
+`;
 
 data.takaful?.forEach(item=>{
 
-takafulHTML += `
+lampiranTakaful += `
 
-<div class="border p-3 rounded-lg mb-3">
+<tr>
 
-<p><strong>Syarikat:</strong>
-${item.syarikat}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.syarikat || "-"}
+</td>
 
-<p><strong>Polisi:</strong>
-${item.polisi}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.polisi || "-"}
+</td>
 
-<p><strong>Penerima:</strong>
-${item.penerima}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.penerima || "-"}
+</td>
 
-<p><strong>IC:</strong>
-${item.ic}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.ic || "-"}
+</td>
 
-<p><strong>Hubungan:</strong>
-${item.hubungan}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.hubungan || "-"}
+</td>
 
-<p><strong>Bahagian:</strong>
-${item.bahagian}%</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.bahagian || "-"}
+</td>
 
-</div>
+</tr>
 
 `;
 
 });
 
-document.getElementById(
-"takafulPreview"
-).innerHTML = takafulHTML;
+lampiranTakaful += `
+</table>
+`;
 
-let pemiutangHTML = "";
+ let lampiranPemiutang = `
+<table style="width:100%;border-collapse:collapse;font-size:14px;">
+
+<tr>
+<th style="border:1px solid #000;padding:8px;">Pemiutang</th>
+<th style="border:1px solid #000;padding:8px;">Jenis Hutang</th>
+<th style="border:1px solid #000;padding:8px;">Baki</th>
+<th style="border:1px solid #000;padding:8px;">Kaedah Penyelesaian</th>
+</tr>
+`;
 
 data.pemiutang?.forEach(item=>{
 
-pemiutangHTML += `
+lampiranPemiutang += `
 
-<div class="border p-3 rounded-lg mb-3">
+<tr>
 
-<p><strong>Nama:</strong>
-${item.nama}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.nama || "-"}
+</td>
 
-<p><strong>Jenis:</strong>
-${item.jenis}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.jenis || "-"}
+</td>
 
-<p><strong>Baki:</strong>
-${item.baki}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.baki || "-"}
+</td>
 
-<p><strong>Kaedah Penyelesaian:</strong>
-${item.kaedah}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.kaedah || "-"}
+</td>
 
-</div>
+</tr>
 
 `;
 
 });
 
-document.getElementById(
-"pemiutangPreview"
-).innerHTML = pemiutangHTML;
+lampiranPemiutang += `
+</table>
+`;
+                        
+ let lampiranPenghutang = `
+<table style="width:100%;border-collapse:collapse;font-size:14px;">
 
-
-let penghutangHTML = "";
+<tr>
+<th style="border:1px solid #000;padding:8px;">Penghutang</th>
+<th style="border:1px solid #000;padding:8px;">Jenis Hutang</th>
+<th style="border:1px solid #000;padding:8px;">Baki</th>
+<th style="border:1px solid #000;padding:8px;">Kaedah Penyelesaian</th>
+</tr>
+`;                       
 
 data.penghutang?.forEach(item=>{
 
-penghutangHTML += `
+lampiranPenghutang += `
 
-<div class="border p-3 rounded-lg mb-3">
+<tr>
 
-<p><strong>Nama:</strong>
-${item.nama}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.nama || "-"}
+</td>
 
-<p><strong>Jenis:</strong>
-${item.jenis}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.jenis || "-"}
+</td>
 
-<p><strong>Baki:</strong>
-${item.baki}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.baki || "-"}
+</td>
 
-<p><strong>Kaedah Penyelesaian:</strong>
-${item.kaedah}</p>
+<td style="border:1px solid #000;padding:8px;">
+${item.kaedah || "-"}
+</td>
 
-</div>
+</tr>
 
 `;
 
 });
 
+lampiranPenghutang += `
+</table>
+`;
+
+const pesananText =
+data.pesananWasiat || "Tiada pesanan khusus.";
+
+const paragraphs = pesananText
+.split("\n\n")
+.filter(p => p.trim() !== "");
+
+const maxCharsPerPage = 3000;
+
+let currentPageLength = 0;
+let currentPageContent = [];
+let pagesPesanan = [];
+
+paragraphs.forEach(paragraph => {
+
+    if (
+        currentPageLength + paragraph.length >
+        maxCharsPerPage
+    ) {
+
+        pagesPesanan.push(
+            currentPageContent.join("")
+        );
+
+        currentPageContent = [];
+        currentPageLength = 0;
+    }
+
+    currentPageContent.push(`
+        <p style="
+            margin-bottom:12px;
+            line-height:1.6;
+            text-align:justify;
+        ">
+            ${paragraph}
+        </p>
+    `);
+
+    currentPageLength += paragraph.length;
+});
+
+if(currentPageContent.length){
+    pagesPesanan.push(
+        currentPageContent.join("")
+    );
+}
+
+let pesananHTML = pagesPesanan[0] || "";
+
+for(let i=1; i<pagesPesanan.length; i++){
+
+    pesananHTML += `
+
+<div class="pdf-footer">
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
+
+<h3 style="
+margin-top:40px;
+margin-bottom:15px;
+font-weight:bold;
+">
+<strong>
+6. PESANAN KEPADA WARIS (SAMBUNGAN)
+</strong>
+</h3>
+
+${pagesPesanan[i]}
+
+`;
+
+}
+                        
+                        
+                        let finalContent =
+wasiatContent
+
+.replaceAll(
+"{{LAMPIRAN_WARIS}}",
+lampiranWaris
+)  
+
+.replaceAll(
+"{{LAMPIRAN_PEMEGANG_AMANAH}}",
+lampiranPemegangAmanah
+)
+
+.replaceAll(
+"{{LAMPIRAN_HARTA_ALIH}}",
+lampiranHartaAlih
+)
+
+.replaceAll(
+"{{LAMPIRAN_HARTA_TAK_ALIH}}",
+lampiranHartaTakAlih
+)
+
+.replaceAll("{{LAMPIRAN_BERPENAMA}}", lampiranBerpenama)
+.replaceAll("{{LAMPIRAN_TAKAFUL}}", lampiranTakaful)
+.replaceAll("{{LAMPIRAN_PEMIUTANG}}", lampiranPemiutang)
+.replaceAll("{{LAMPIRAN_PENGHUTANG}}", lampiranPenghutang)                            
+
+.replaceAll(
+"{{PESANAN_WASIAT}}",
+pesananHTML
+)
+
+.replaceAll(
+"{{NAMA_PEWASIAT}}",
+data.nama || "-"
+)
+
+.replaceAll(
+"{{NO_IC_PEWASIAT}}",
+data.ic || "-"
+)
+
+.replaceAll(
+"{{ALAMAT_PEWASIAT}}",
+data.alamat || "-"
+)
+                            
+.replaceAll(
+"{{HUBUNGAN_WASI1}}",
+data.hubunganWasi1 || "-"
+)
+
+.replaceAll(
+"{{NAMA_WASI1}}",
+data.namaWasi1 || "-"
+)
+
+.replaceAll(
+"{{NO_IC_WASI1}}",
+data.icWasi1 || "-"
+)
+
+.replaceAll(
+"{{HUBUNGAN_WASI2}}",
+data.hubunganWasi2 || "-"
+)
+
+.replaceAll(
+"{{NAMA_WASI2}}",
+data.namaWasi2 || "-"
+)
+
+.replaceAll(
+"{{NO_IC_WASI2}}",
+data.icWasi2 || "-"
+)
+
+.replace(
+  "{{WASIAT_SATU_PER_TIGA}}",
+  wasiat13Html
+);
+                        
 document.getElementById(
-"penghutangPreview"
-).innerHTML = penghutangHTML;
-        
-// LOAD LAMPIRAN
-const snapshot =
-await getDocs(
+"sectionWasiat"
+).innerHTML =
+finalContent;
+          
 
-  collection(
-    db,
-    "users",
-    currentUser.uid,
-    "wasiatDocuments"
-  )
+const currentDocRef =
+data.docRef ||
+data.docRefNo ||
+"-";
 
+const pages =
+document.querySelectorAll(
+".a4-page"
 );
 
-let lampiranHTML = "";
+pages.forEach((page,index)=>{
 
-snapshot.forEach((doc)=>{
+if(index === 0) return;
 
-  const file =
-  doc.data();
+const footer =
+page.querySelector(".pdf-footer");
 
-  lampiranHTML += `
+if(!footer) return;
 
-<div class="bg-gray-100 p-4 rounded-xl space-y-3">
+footer.innerHTML = `
+<span class="footer-docref">
+${currentDocRef}
+</span>
 
-  <div class="flex justify-between items-center">
-
-    <p class="text-sm font-medium text-gray-700">
-      ${file.fileName}
-    </p>
-
-    <a
-      href="${file.fileURL}"
-      target="_blank"
-      class="text-[#153638] font-semibold">
-
-      Buka
-
-    </a>
-
-  </div>
-
-  ${
-    file.fileName.endsWith(".pdf")
-
-    ?
-
-    `
-
-    <iframe
-      src="${file.fileURL}"
-      class="w-full h-96 rounded-lg border">
-    </iframe>
-
-    `
-
-    :
-
-    `
-
-    <img
-      src="${file.fileURL}"
-      class="w-full rounded-lg border">
-
-    `
-  }
-
-</div>
-
+<span class="page-number">
+${index + 1}
+</span>
 `;
 
-});
+});    
+                        
+/*
+document.getElementById(
+"footerDocRef1"
+).innerText =
+currentDocRef;
 
 document.getElementById(
-  "lampiranList"
-).innerHTML = lampiranHTML;
-        
-      }
+"footerDocRef2"
+).innerText =
+currentDocRef;
 
-      // SUBMIT
-      document
-      .getElementById("submitBtn")
-      .addEventListener("click", async()=>{
-
-        try{
-
-          await updateDoc(
-
-            doc(
-              db,
-              "users",
-              currentUser.uid,
-              "wasiat",
-              "maklumat"
-            ),
-
-            {
-
-              status:
-              "SUBMITTED"
-
+document.getElementById(
+"footerDocRef3"
+).innerText =
+currentDocRef;
+*/
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
             }
+        });
 
-          );
+       
+    </script>
 
-          document.getElementById(
-            "status"
-          ).innerHTML =
-
-          "Permohonan berjaya dihantar.";
-
-        }
-
-        catch(error){
-
-          document.getElementById(
-            "status"
-          ).innerHTML =
-
-          error.message;
-
-        }
-
-      });
-
-    });
-
-  </script>
-
+<script src="wasiat-content.js"></script>
+    
 </body>
 </html>
