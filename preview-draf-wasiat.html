@@ -1,1 +1,522 @@
-vv
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Preview Draf Wasiat</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- HEADER -->
+  <div class="bg-[#153638] text-white p-5 shadow">
+
+    <h1 class="text-2xl font-bold">
+      Preview Draf Wasiat
+    </h1>
+
+    <p class="text-gray-200">
+      Sila semak maklumat sebelum menghantar permohonan
+    </p>
+
+  </div>
+
+  <!-- DOCUMENT -->
+<div
+id="pdfContent"
+class="max-w-4xl mx-auto p-5">
+
+    <div class="bg-white rounded-2xl shadow p-8 space-y-8">
+
+      <!-- TITLE -->
+      <div class="text-center border-b pb-6">
+
+        <h1 class="text-3xl font-bold text-[#153638]">
+          DOKUMEN WASIAT
+        </h1>
+
+        <p class="text-gray-500 mt-2">
+          Al-Qawthar Mawaris Synergy
+        </p>
+
+      </div>
+
+     <!-- SECTION 1 -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+1. Butiran Wasiat
+</h2>
+
+<p><strong>Nama:</strong> <span id="nama"></span></p>
+<p><strong>No IC:</strong> <span id="ic"></span></p>
+<p><strong>Telefon:</strong> <span id="telefon"></span></p>
+<p><strong>Alamat:</strong> <span id="alamat"></span></p>
+
+</div>
+
+      
+<!-- SECTION 2 -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+2. Pelantikan Wasi
+</h2>
+
+<div id="wasiInfo"></div>
+
+</div>
+
+<!-- SECTION 3 -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+3. Wasiat 1/3
+</h2>
+
+<div id="wasiat13Summary"></div>
+
+</div>
+
+<!-- SECTION 4 -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+4. Pesanan Wasiat
+</h2>
+
+<p id="pesananPreview"></p>
+
+</div>
+
+<!-- SECTION 5 -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+5. Senarai Waris
+</h2>
+
+<p id="warisCount"></p>
+
+</div>
+
+<!-- SECTION 6 -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+6. Pemegang Amanah
+</h2>
+
+<div id="amanahInfo"></div>
+
+</div>
+
+<!-- SECTION 7 -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+7. Senarai Harta
+</h2>
+
+<ul class="space-y-2">
+
+<li>
+Harta Alih:
+${data.hartaAlih?.length || 0}
+</li>
+
+<li>
+Harta Tak Alih:
+${data.hartaTakAlih?.length || 0}
+</li>
+
+<li>
+Harta Berpenama:
+${data.hartaBerpenama?.length || 0}
+</li>
+
+<li>
+Takaful:
+${data.takaful?.length || 0}
+</li>
+
+</ul>
+
+</div>
+
+<!-- SECTION 8 -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+8. Hutang & Tuntutan
+</h2>
+
+<ul>
+
+<li>
+Pemiutang:
+${data.pemiutang?.length || 0}
+</li>
+
+<li>
+Penghutang:
+${data.penghutang?.length || 0}
+</li>
+
+</ul>
+
+</div>
+      
+<!-- LAMPIRAN -->
+<div>
+
+  <h2 class="text-2xl font-bold text-[#153638] mb-4">
+    Lampiran Dokumen
+  </h2>
+
+  <div
+    id="lampiranList"
+    class="space-y-3">
+  </div>
+
+</div>
+      
+      <!-- ACTION -->
+      <div class="pt-6 border-t space-y-3">
+
+        <button
+id="downloadBtn"
+class="w-full bg-black hover:bg-gray-800 transition text-white py-3 rounded-lg font-semibold">
+
+Download PDF
+
+</button>
+        
+        <button
+          id="submitBtn"
+          class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-lg font-semibold">
+
+          Hantar Permohonan
+
+        </button>
+
+        <a
+          href="hibah.html"
+          class="block text-center bg-gray-200 hover:bg-gray-300 transition text-gray-700 py-3 rounded-lg font-semibold">
+
+          ← Kembali Edit Borang
+
+        </a>
+
+      </div>
+
+      <!-- STATUS -->
+      <p
+        id="status"
+        class="text-center text-green-600 font-medium">
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- FIREBASE -->
+  <script type="module">
+
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      updateDoc,
+      collection,
+      getDocs
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+      authDomain: "alqawthar-mywaris.firebaseapp.com",
+
+      projectId: "alqawthar-mywaris",
+
+      storageBucket: "alqawthar-mywaris.firebasestorage.app",
+
+      messagingSenderId: "3498810778",
+
+      appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+
+    };
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    const auth =
+      getAuth(app);
+
+    const db =
+      getFirestore(app);
+
+    let currentUser = null;
+
+    // CHECK LOGIN
+    onAuthStateChanged(auth, async(user)=>{
+
+      if(!user){
+
+        window.location.href =
+          "login.html";
+
+        return;
+
+      }
+
+      currentUser = user;
+
+      // GET DATA
+      const docRef =
+      doc(
+        db,
+        "users",
+        currentUser.uid,
+        "hibah",
+        "maklumat"
+      );
+
+      const docSnap =
+      await getDoc(docRef);
+
+      if(docSnap.exists()){
+
+        const data =
+        docSnap.data();
+
+document.getElementById("wasiInfo").innerHTML = `
+<p><strong>Wasi 1:</strong> ${data.namaWasi1 || "-"}</p>
+<p><strong>IC:</strong> ${data.icWasi1 || "-"}</p>
+
+<hr class="my-3">
+
+<p><strong>Wasi 2:</strong> ${data.namaWasi2 || "-"}</p>
+<p><strong>IC:</strong> ${data.icWasi2 || "-"}</p>
+`;
+
+document.getElementById(
+"wasiat13Summary"
+).innerHTML =
+
+`${data.wasiatSatuPerTiga?.length || 0}
+ rekod wasiat 1/3 direkodkan`;
+
+document.getElementById(
+"pesananPreview"
+).innerHTML =
+
+(data.pesananWasiat || "")
+.substring(0,300);
+
+document.getElementById(
+"warisCount"
+).innerHTML =
+
+`${data.waris?.length || 0}
+ waris direkodkan`;
+
+document.getElementById(
+"amanahInfo"
+).innerHTML =
+
+`
+<p>
+${data.pemegangAmanah?.nama || "-"}
+</p>
+`;
+
+        
+// LOAD LAMPIRAN
+const snapshot =
+await getDocs(
+
+  collection(
+    db,
+    "users",
+    currentUser.uid,
+    "hibahDocuments"
+  )
+
+);
+
+let lampiranHTML = "";
+
+snapshot.forEach((doc)=>{
+
+  const file =
+  doc.data();
+
+  lampiranHTML += `
+
+<div class="bg-gray-100 p-4 rounded-xl space-y-3">
+
+  <div class="flex justify-between items-center">
+
+    <p class="text-sm font-medium text-gray-700">
+      ${file.fileName}
+    </p>
+
+    <a
+      href="${file.fileURL}"
+      target="_blank"
+      class="text-[#153638] font-semibold">
+
+      Buka
+
+    </a>
+
+  </div>
+
+  ${
+    file.fileName.endsWith(".pdf")
+
+    ?
+
+    `
+
+    <iframe
+      src="${file.fileURL}"
+      class="w-full h-96 rounded-lg border">
+    </iframe>
+
+    `
+
+    :
+
+    `
+
+    <img
+      src="${file.fileURL}"
+      class="w-full rounded-lg border">
+
+    `
+  }
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+  "lampiranList"
+).innerHTML = lampiranHTML;
+        
+      }
+
+   // DOWNLOAD PDF
+document
+.getElementById("downloadBtn")
+.addEventListener("click", ()=>{
+
+  const element =
+  document.getElementById(
+    "pdfContent"
+  );
+
+  const options = {
+
+    margin: 0.5,
+
+    filename:
+    "Hibah.pdf",
+
+    image: {
+      type: "jpeg",
+      quality: 1
+    },
+
+    html2canvas: {
+      scale: 2
+    },
+
+    jsPDF: {
+      unit: "in",
+      format: "a4",
+      orientation: "portrait"
+    }
+
+  };
+
+  html2pdf()
+  .set(options)
+  .from(element)
+  .save();
+
+});
+      
+      // SUBMIT
+      document
+      .getElementById("submitBtn")
+      .addEventListener("click", async()=>{
+
+        try{
+
+          await updateDoc(
+
+            doc(
+              db,
+              "users",
+              currentUser.uid,
+              "hibah",
+              "maklumat"
+            ),
+
+            {
+
+              status:
+              "SUBMITTED"
+
+            }
+
+          );
+
+          document.getElementById(
+            "status"
+          ).innerHTML =
+
+          "Permohonan hibah berjaya dihantar.";
+
+        }
+
+        catch(error){
+
+          document.getElementById(
+            "status"
+          ).innerHTML =
+
+          error.message;
+
+        }
+
+      });
+
+    });
+
+  </script>
+
+</body>
+</html>
