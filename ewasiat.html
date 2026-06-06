@@ -3112,7 +3112,7 @@ document
 .querySelectorAll(".kategoriAlih")
 .forEach((select,index)=>{
 
-select.onchange = ()=>{
+const updateKategori = ()=>{
 
 const detail =
 document.querySelectorAll(
@@ -3130,15 +3130,12 @@ detail.querySelector(
 );
 
 detail.classList.add("hidden");
-
 hibah.classList.add("hidden");
-
 sepencarian.classList.add("hidden");
 
 if(select.value==="hibah"){
 
 detail.classList.remove("hidden");
-
 hibah.classList.remove("hidden");
 
 }
@@ -3146,7 +3143,6 @@ hibah.classList.remove("hidden");
 if(select.value==="sepencarian"){
 
 detail.classList.remove("hidden");
-
 sepencarian.classList.remove("hidden");
 
 populatePasanganDropdown();
@@ -3154,6 +3150,11 @@ populatePasanganDropdown();
 }
 
 };
+
+select.onchange = updateKategori;
+
+/* INI BARIS PENTING */
+updateKategori();
 
 });
 
