@@ -359,6 +359,43 @@ if(window.wasiatData?.status !== "APPROVED"){
 
 window.wasiatData = data;
 
+if(data.status !== "APPROVED"){
+
+   document.body.innerHTML = `
+      <div style="
+         max-width:700px;
+         margin:120px auto;
+         text-align:center;
+         font-family:Arial,sans-serif;
+         padding:30px;
+      ">
+         <h2>
+            Dokumen Wasiat Masih Dalam Semakan
+         </h2>
+
+         <p>
+            Dokumen Wasiat anda masih belum
+            diluluskan oleh pihak admin.
+         </p>
+
+         <a href="dashboard.html"
+            style="
+               display:inline-block;
+               margin-top:20px;
+               padding:12px 24px;
+               background:#153638;
+               color:white;
+               text-decoration:none;
+               border-radius:8px;
+            ">
+            Kembali ke Dashboard
+         </a>
+      </div>
+   `;
+
+   return;
+}
+
 
                       
 if(!data.firstViewedAt){
