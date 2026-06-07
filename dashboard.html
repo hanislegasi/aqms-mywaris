@@ -14,6 +14,10 @@
 
 <div class="bg-[#153638] text-white px-5 py-6 shadow">
 
+<div class="flex justify-between items-center">
+
+<div>
+
 <h1 class="text-2xl font-bold">
 Mawaris
 </h1>
@@ -24,6 +28,57 @@ Memuatkan...
 
 </div>
 
+<button
+id="notifBtn"
+class="relative">
+
+<svg
+xmlns="http://www.w3.org/2000/svg"
+class="w-7 h-7"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M15 17h5l-1.405-1.405A2.032
+2.032 0 0118 14.158V11a6.002
+6.002 0 00-4-5.659V5a2 2 0
+10-4 0v.341C7.67 6.165 6 8.388
+6 11v3.159c0 .538-.214 1.055-.595
+1.436L4 17h5m6 0v1a3 3 0
+11-6 0v-1m6 0H9"/>
+
+</svg>
+
+<span
+id="notifCount"
+class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 rounded-full hidden">
+
+0
+
+</span>
+
+</button>
+
+</div>
+
+</div>
+
+<div
+id="notifPanel"
+class="hidden bg-white shadow-xl rounded-2xl p-4 max-w-md mx-auto mt-3">
+
+<h3 class="font-bold mb-3">
+Notifikasi
+</h3>
+
+<div id="notifList"></div>
+
+</div>
+  
 <div class="p-5">
 
 <h2 class="font-bold text-xl mb-4">
@@ -479,7 +534,63 @@ Lihat Dokumen
 
 }
 
+const notifSnap =
+await getDocs(
+   collection(
+      db,
+      "users",
+      user.uid,
+      "notifications"
+   )
+);
 
+let notifHTML = "";
+let unread = 0;
+
+notifSnap.forEach((doc)=>{
+
+   const notif =
+   doc.data();
+
+   if(!notif.read){
+
+      unread++;
+
+   }
+
+   notifHTML += `
+
+   <div class="border-b py-3">
+
+      <p class="font-semibold">
+         ${notif.title}
+      </p>
+
+      <p class="text-sm text-gray-600">
+         ${notif.message}
+      </p>
+
+   </div>
+
+   `;
+
+});
+
+document.getElementById(
+"notifList"
+).innerHTML = notifHTML;
+
+if(unread > 0){
+
+   document.getElementById(
+      "notifCount"
+   ).innerHTML = unread;
+
+   document.getElementById(
+      "notifCount"
+   ).classList.remove("hidden");
+
+}
 
 
   
@@ -697,6 +808,16 @@ document
 
 });
 
+document
+.getElementById("notifBtn")
+.addEventListener("click", ()=>{
+
+document
+.getElementById("notifPanel")
+.classList.toggle("hidden");
+
+});
+  
 </script>
   
 </body>
