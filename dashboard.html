@@ -311,10 +311,10 @@ await getDoc(
    )
 );
 
-if(wasiatSnap.exists()){
-  
 const wasiatData =
-wasiatSnap.data();
+wasiatSnap.exists()
+? wasiatSnap.data()
+: {};
 
 if(wasiatData.docRef){
 
