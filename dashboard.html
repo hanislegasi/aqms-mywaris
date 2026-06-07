@@ -291,11 +291,14 @@ doc(db,"users",user.uid)
 
 if(docSnap.exists()){
 
+const userData =
+docSnap.data();
+  
 document.getElementById(
 "namaUser"
 ).innerHTML =
 "Selamat datang, "
-+ docSnap.data().nama;
++ userData.nama;
 
 const wasiatSnap =
 await getDoc(
@@ -359,7 +362,7 @@ ${wasiatData.telefon || "-"}
 </p>
 
 <p class="opacity-80 text-sm">
-No Ahli: ${user.uid.substring(0,8)}
+No Ahli: ${userData.memberNo || "-"}
 </p>
 
 <span class="
@@ -479,8 +482,7 @@ Lihat Dokumen
 
   
 // PAYMENT STATUS
-const userData =
-docSnap.data();
+
 
 if(userData.paymentStatus === "paid"){
 
