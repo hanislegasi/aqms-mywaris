@@ -332,7 +332,16 @@ getAuth(app);
 const db =
 getFirestore(app);
 
-onAuthStateChanged(auth, async(user)=>{
+let currentUser = null;  
+
+onAuthStateChanged(auth,(user)=>{
+
+if(!user){
+window.location.href="login.html";
+return;
+}
+
+currentUser = user;
 
 if(!user){
 
@@ -840,7 +849,7 @@ await updateDoc(
 doc(
 db,
 "users",
-user.uid,
+currentUser.uid,
 "notifications",
 window.firstUnreadId
 ),
