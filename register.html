@@ -148,26 +148,6 @@ password
 const uid =
 userCredential.user.uid;
 
-const counterRef =
-doc(db,"system","counters");
-
-const counterSnap =
-await getDoc(counterRef);
-
-let memberCounter = 1;
-
-if(counterSnap.exists()){
-
-memberCounter =
-(counterSnap.data().memberCounter || 0)
-+ 1;
-
-}
-
-const memberNo =
-"AQM" +
-String(memberCounter)
-.padStart(4,"0");
   
 await setDoc(
 doc(db,"users",uid),
@@ -178,20 +158,19 @@ email,
 telefon,
 referral,
 
-memberNo,
-
 role:"customer",
+
+leadStatus:"REGISTERED",
+
+paymentStatus:"unpaid",
+
+memberNo:null,
 
 createdAt:new Date()
 }
 );
 
-await updateDoc(
-counterRef,
-{
-memberCounter
-}
-);
+
   
 alert("Pendaftaran berjaya!");
 
