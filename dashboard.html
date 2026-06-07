@@ -352,7 +352,7 @@ return;
 
 const docSnap =
 await getDoc(
-doc(db,"users",user.uid)
+doc(db,"users",currentUser.uid)
 );
 
 if(docSnap.exists()){
