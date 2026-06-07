@@ -102,7 +102,7 @@ class="max-w-4xl mx-auto p-5">
 5. Senarai Waris
 </h2>
 
-<p id="warisCount"></p>
+<div id="warisList"></div>
 
 </div>
 
@@ -117,59 +117,69 @@ class="max-w-4xl mx-auto p-5">
 
 </div>
 
-<!-- SECTION 7 -->
+<!-- SECTION 7A -->
 <div class="bg-gray-50 rounded-xl p-5 border">
 
 <h2 class="text-xl font-bold text-[#153638] mb-3">
-7. Senarai Harta
+7A. Harta Alih
 </h2>
 
-<ul class="space-y-2">
-
-<li>
-Harta Alih:
-<span id="hartaAlihCount"></span>
-</li>
-
-<li>
-Harta Tak Alih:
-<span id="hartaTakAlihCount"></span>
-</li>
-
-<li>
-Harta Berpenama:
-<span id="hartaBerpenamaCount"></span>
-</li>
-
-<li>
-Takaful:
-<span id="takafulCount"></span>
-</li>
-
-</ul>
+<div id="hartaAlihList"></div>
 
 </div>
 
-<!-- SECTION 8 -->
+<!-- SECTION 7B -->
 <div class="bg-gray-50 rounded-xl p-5 border">
 
 <h2 class="text-xl font-bold text-[#153638] mb-3">
-8. Hutang & Tuntutan
+7B. Harta Tak Alih
 </h2>
 
-<ul>
+<div id="hartaTakAlihList"></div>
 
-<li>
-Pemiutang:
-<span id="pemiutangCount"></span>
-</li>
+</div>
 
-<li>
-Penghutang:
-<span id="penghutangCount"></span>
-</li>
+<!-- SECTION 7C -->
+<div class="bg-gray-50 rounded-xl p-5 border">
 
-</ul>
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+7C. Harta Berpenama
+</h2>
+
+<div id="hartaBerpenamaList"></div>
+
+</div>
+
+<!-- SECTION 7D -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+7D. Takaful
+</h2>
+
+<div id="takafulList"></div>
+
+</div>
+
+<!-- SECTION 8A -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+8A. Pemiutang
+</h2>
+
+<div id="pemiutangList"></div>
+
+</div>
+
+<!-- SECTION 8B -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+8B. Penghutang
+</h2>
+
+<div id="penghutangList"></div>
 
 </div>
       
@@ -323,66 +333,234 @@ document.getElementById("wasiInfo").innerHTML = `
 <p><strong>IC:</strong> ${data.icWasi2 || "-"}</p>
 `;
 
+let wasiat13HTML = "";
+
+(data.wasiatSatuPerTiga || []).forEach((item,index)=>{
+
+wasiat13HTML += `
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${index+1}. ${item.harta}</strong></p>
+
+<p>Bahagian: ${item.bahagian}</p>
+
+<p>Penerima: ${item.penerima}</p>
+
+<p>Nota: ${item.nota}</p>
+
+</div>
+`;
+
+});
+
 document.getElementById(
 "wasiat13Summary"
-).innerHTML =
-
-`${data.wasiatSatuPerTiga?.length || 0}
- rekod wasiat 1/3 direkodkan`;
+).innerHTML = wasiat13HTML;
 
 document.getElementById(
 "pesananPreview"
 ).innerHTML =
+data.pesananWasiat || "-";
 
-(data.pesananWasiat || "")
-.substring(0,300);
+let warisHTML = "";
 
-document.getElementById(
-"warisCount"
-).innerHTML =
+(data.waris || []).forEach((waris,index)=>{
 
-`${data.waris?.length || 0}
- waris direkodkan`;
+warisHTML += `
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${index+1}. ${waris.nama}</strong></p>
+
+<p>No IC: ${waris.ic || "-"}</p>
+
+<p>Hubungan: ${waris.hubungan || "-"}</p>
+
+<p>Telefon: ${waris.telefon || "-"}</p>
+
+<p>Status: ${waris.status || "-"}</p>
+
+</div>
+`;
+
+});
+
+document.getElementById("warisList").innerHTML =
+warisHTML;
 
 document.getElementById(
 "amanahInfo"
-).innerHTML =
+).innerHTML = `
 
-`
-<p>
-${data.pemegangAmanah?.nama || "-"}
-</p>
+<p><strong>Nama:</strong>
+${data.pemegangAmanah?.nama || "-"}</p>
+
+<p><strong>IC:</strong>
+${data.pemegangAmanah?.ic || "-"}</p>
+
+<p><strong>Hubungan:</strong>
+${data.pemegangAmanah?.hubungan || "-"}</p>
+
+<p><strong>Telefon:</strong>
+${data.pemegangAmanah?.telefon || "-"}</p>
+
 `;
 
-document.getElementById(
-"hartaAlihCount"
-).innerHTML =
-data.hartaAlih?.length || 0;
+let hartaAlihHTML = "";
+
+(data.hartaAlih || []).forEach((item,index)=>{
+
+hartaAlihHTML += `
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${index+1}. ${item.nama}</strong></p>
+
+<p>No Rujukan: ${item.rujukan || "-"}</p>
+
+<p>Pemilikan: ${item.pemilikan || "-"}</p>
+
+<p>Nilai: ${item.nilai || "-"}</p>
+
+<p>Kategori: ${item.kategori || "-"}</p>
+
+</div>
+`;
+
+});
 
 document.getElementById(
-"hartaTakAlihCount"
-).innerHTML =
-data.hartaTakAlih?.length || 0;
+"hartaAlihList"
+).innerHTML = hartaAlihHTML;
+
+        
+let hartaTakAlihHTML = "";
+
+(data.hartaTakAlih || []).forEach((item,index)=>{
+
+html += `
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${index+1}. ${item.nama}</strong></p>
+
+<p>No Geran: ${item.rujukan || "-"}</p>
+
+<p>Nilai: ${item.nilai || "-"}</p>
+
+<p>Alamat: ${item.alamat || "-"}</p>
+
+<p>Kategori: ${item.kategori || "-"}</p>
+
+</div>
+`;
+
+});
 
 document.getElementById(
-"hartaBerpenamaCount"
-).innerHTML =
-data.hartaBerpenama?.length || 0;
+"hartaTakAlihList"
+).innerHTML = html;
+
+let hartaBerpenamaHTML = "";
+
+(data.hartaBerpenama || []).forEach((item,index)=>{
+
+html += `
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${item.jenis}</strong></p>
+
+<p>No Akaun: ${item.akaun}</p>
+
+<p>Penama: ${item.penama}</p>
+
+<p>IC: ${item.ic}</p>
+
+<p>Hubungan: ${item.hubungan}</p>
+
+<p>Bahagian: ${item.bahagian}%</p>
+
+</div>
+`;
+
+});
 
 document.getElementById(
-"takafulCount"
-).innerHTML =
-data.takaful?.length || 0;
+"hartaBerpenamaList"
+).innerHTML = html;
+
+let takafulHTML = "";
+
+(data.takaful || []).forEach((item,index)=>{
+
+html += `
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${item.syarikat}</strong></p>
+
+<p>Polisi: ${item.polisi}</p>
+
+<p>Penerima: ${item.penerima}</p>
+
+<p>IC: ${item.ic}</p>
+
+<p>Hubungan: ${item.hubungan}</p>
+
+<p>Bahagian: ${item.bahagian}%</p>
+
+</div>
+`;
+
+});
 
 document.getElementById(
-"pemiutangCount"
-).innerHTML =
-data.pemiutang?.length || 0;
+"takafulList"
+).innerHTML = html;
+
+let pemiutangHTML = "";
+
+(data.pemiutang || []).forEach((item,index)=>{
+
+html += `
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${item.nama}</strong></p>
+
+<p>Jenis Hutang: ${item.jenis}</p>
+
+<p>Baki Hutang: ${item.baki}</p>
+
+<p>Kaedah Penyelesaian: ${item.kaedah}</p>
+
+</div>
+`;
+
+});
 
 document.getElementById(
-"penghutangCount"
-).innerHTML =
-data.penghutang?.length || 0;
+"pemiutangList"
+).innerHTML = html;
+
+let penghutangHTML = "";
+
+(data.penghutang || []).forEach((item,index)=>{
+
+html += `
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${item.nama}</strong></p>
+
+<p>Jenis Hutang: ${item.jenis}</p>
+
+<p>Baki Hutang: ${item.baki}</p>
+
+<p>Kaedah Penyelesaian: ${item.kaedah}</p>
+
+</div>
+`;
+
+});
+
+document.getElementById(
+"penghutangList"
+).innerHTML = html;
 
         
 // LOAD LAMPIRAN
@@ -496,7 +674,7 @@ document.getElementById(
             "status"
           ).innerHTML =
 
-          "Permohonan hibah berjaya dihantar.";
+          "Permohonan wasiat berjaya dihantar.";
 
         }
 
