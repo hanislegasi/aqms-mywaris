@@ -307,6 +307,8 @@ doc,
 getDoc,
 getDocs,
 collection
+updateDoc,
+query  
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";  
 
@@ -547,7 +549,7 @@ await getDocs(
 let notifHTML = "";
 let unread = 0;
 
-notifSnap.forEach((doc)=>{
+notifSnap.forEach((notifDoc)=>{
 
    const notif =
    doc.data();
@@ -558,21 +560,36 @@ notifSnap.forEach((doc)=>{
 
    }
 
+if(!notif.read){
+
+window.firstUnreadId =
+notifDoc.id;
+
+}
+  
    notifHTML += `
 
-   <div class="border-b py-3">
+<div class="border-b py-3">
 
-      <p class="font-semibold">
-         ${notif.title}
-      </p>
+<p class="font-semibold">
+${notif.title}
+</p>
 
-      <p class="text-sm text-gray-600">
-         ${notif.message}
-      </p>
+<p class="text-sm text-gray-600">
+${notif.message}
+</p>
 
-   </div>
+<a
+href="preview-wasiat.html"
+class="inline-block mt-2 text-green-600 font-semibold text-sm">
 
-   `;
+Lihat Dokumen →
+
+</a>
+
+</div>
+
+`;
 
 });
 
@@ -810,11 +827,35 @@ document
 
 document
 .getElementById("notifBtn")
-.addEventListener("click", ()=>{
+.addEventListener("click", async()=>{
 
 document
 .getElementById("notifPanel")
 .classList.toggle("hidden");
+
+if(window.firstUnreadId){
+
+await updateDoc(
+
+doc(
+db,
+"users",
+user.uid,
+"notifications",
+window.firstUnreadId
+),
+
+{
+read:true
+}
+
+);
+
+document
+.getElementById("notifCount")
+.classList.add("hidden");
+
+}
 
 });
   
