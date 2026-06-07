@@ -436,7 +436,7 @@ let hartaTakAlihHTML = "";
 
 (data.hartaTakAlih || []).forEach((item,index)=>{
 
-html += `
+hartaTakAlihHTML += `
 <div class="border rounded-lg p-3 mb-3">
 
 <p><strong>${index+1}. ${item.nama}</strong></p>
@@ -462,7 +462,7 @@ let hartaBerpenamaHTML = "";
 
 (data.hartaBerpenama || []).forEach((item,index)=>{
 
-html += `
+hartaBerpenamaHTML += `
 <div class="border rounded-lg p-3 mb-3">
 
 <p><strong>${item.jenis}</strong></p>
@@ -490,7 +490,7 @@ let takafulHTML = "";
 
 (data.takaful || []).forEach((item,index)=>{
 
-html += `
+takafulHTML +=`
 <div class="border rounded-lg p-3 mb-3">
 
 <p><strong>${item.syarikat}</strong></p>
@@ -518,7 +518,7 @@ let pemiutangHTML = "";
 
 (data.pemiutang || []).forEach((item,index)=>{
 
-html += `
+pemiutangHTML += `
 <div class="border rounded-lg p-3 mb-3">
 
 <p><strong>${item.nama}</strong></p>
@@ -542,7 +542,7 @@ let penghutangHTML = "";
 
 (data.penghutang || []).forEach((item,index)=>{
 
-html += `
+penghutangHTML +=`
 <div class="border rounded-lg p-3 mb-3">
 
 <p><strong>${item.nama}</strong></p>
