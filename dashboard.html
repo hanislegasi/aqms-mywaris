@@ -350,19 +350,19 @@ Profil Pewasiat
 </p>
 
 <h2 class="text-2xl font-bold mt-1">
-${wasiatData.nama || "-"}
+${userData.nama || "-"}
 </h2>
 
 <p class="opacity-90 mt-1">
-${wasiatData.ic || "-"}
+${userData.ic || "-"}
 </p>
 
 <p class="opacity-90">
-${wasiatData.telefon || "-"}
+${userData.telefon || "-"}
 </p>
 
 <p class="opacity-80 text-sm">
-No Ahli: ${userData.memberNo || "Prospek"}
+No Ahli: ${userData.memberNo || "Belum Aktif"}
 </p>
 
 <span class="
@@ -374,7 +374,9 @@ rounded-full
 bg-white/20
 text-sm">
 
-${wasiatData.docRef ? "AHLI AKTIF" : "PROSPEK"}
+${userData.paymentStatus === "paid"
+? "AHLI AKTIF"
+: "PROSPEK"}
 
 </span>
 
@@ -383,7 +385,7 @@ ${wasiatData.docRef ? "AHLI AKTIF" : "PROSPEK"}
 <div
 class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold">
 
-${(wasiatData.nama || "U")[0]}
+${(userData.nama || "U")[0]}
 
 </div>
 
