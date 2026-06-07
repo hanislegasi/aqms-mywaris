@@ -73,10 +73,11 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
 getFirestore,
 doc,
-updateDoc
+updateDoc,
+getDoc,
+increment
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
 const firebaseConfig = {
 
 apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
@@ -120,6 +121,38 @@ document
 
 try{
 
+// ambil counter
+const counterRef =
+doc(
+db,
+"system",
+"counter"
+);
+
+const counterSnap =
+await getDoc(counterRef);
+
+const currentNo =
+counterSnap.data().memberCounter || 0;
+
+const newNo =
+currentNo + 1;
+
+// update counter
+await updateDoc(
+counterRef,
+{
+memberCounter:
+increment(1)
+}
+);
+
+// generate AQM number
+const memberNo =
+"AQM" +
+String(newNo).padStart(4,"0");
+
+// update user
 await updateDoc(
 
 doc(
@@ -130,8 +163,12 @@ currentUser.uid
 
 {
 
-paymentStatus:
-"paid"
+paymentStatus:"paid",
+
+memberNo,
+
+memberSince:
+new Date().toISOString()
 
 }
 
