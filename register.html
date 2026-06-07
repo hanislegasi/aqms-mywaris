@@ -88,7 +88,9 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
 getFirestore,
 doc,
-setDoc
+setDoc,
+getDoc,
+updateDoc  
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -146,6 +148,27 @@ password
 const uid =
 userCredential.user.uid;
 
+const counterRef =
+doc(db,"settings","counters");
+
+const counterSnap =
+await getDoc(counterRef);
+
+let memberCounter = 1;
+
+if(counterSnap.exists()){
+
+memberCounter =
+(counterSnap.data().memberCounter || 0)
++ 1;
+
+}
+
+const memberNo =
+"AQM" +
+String(memberCounter)
+.padStart(4,"0");
+  
 await setDoc(
 doc(db,"users",uid),
 {
@@ -154,11 +177,22 @@ ic,
 email,
 telefon,
 referral,
+
+memberNo,
+
 role:"customer",
+
 createdAt:new Date()
 }
 );
 
+await updateDoc(
+counterRef,
+{
+memberCounter
+}
+);
+  
 alert("Pendaftaran berjaya!");
 
 window.location.href =
