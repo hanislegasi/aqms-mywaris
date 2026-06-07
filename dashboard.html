@@ -38,7 +38,7 @@ Loading...
 
 </div>
   
-<div id="wasiatNotification"></div>
+<div id="wasiatNotification" class="mb-6"></div>
   
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
 
@@ -313,10 +313,21 @@ if(wasiatSnap.exists()){
 const wasiatData =
 wasiatSnap.data();
 
+if(wasiatData.docRef){
+
 document.getElementById(
 "wasiatStatus"
 ).innerHTML =
-wasiatData.status || "DRAFT";  
+wasiatData.docRef;
+
+}else{
+
+document.getElementById(
+"wasiatStatus"
+).innerHTML =
+"DRAFT";
+
+}
 
   
 document.getElementById(
@@ -360,7 +371,7 @@ rounded-full
 bg-white/20
 text-sm">
 
-${wasiatData.status || "DRAFT"}
+${wasiatData.docRef ? "DOKUMEN SIAP" : "DRAF"}
 
 </span>
 
@@ -401,7 +412,7 @@ Permohonan anda sedang dalam proses semakan.
 
 }
 
-if(wasiatData.status === "APPROVED"){
+if(wasiatData.docRef){
 
 
 document.getElementById(
@@ -410,12 +421,43 @@ document.getElementById(
 
 <div class="bg-green-50 border border-green-300 rounded-xl p-4">
 
-<h3 class="font-bold">
-🔔 Dokumen Wasiat Diluluskan
+<div class="flex items-center gap-2 mb-2">
+
+<svg
+xmlns="http://www.w3.org/2000/svg"
+class="w-5 h-5 text-green-600"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M15 17h5l-1.405-1.405A2.032
+2.032 0 0118 14.158V11a6.002
+6.002 0 00-4-5.659V5a2 2 0
+10-4 0v.341C7.67 6.165 6 8.388
+6 11v3.159c0 .538-.214 1.055-.595
+1.436L4 17h5m6 0v1a3 3 0
+11-6 0v-1m6 0H9"/>
+
+</svg>
+
+<h3 class="font-bold text-green-800">
+Dokumen Wasiat Diluluskan
 </h3>
 
+</div>
+
 <p>
-Dokumen Wasiat anda telah diluluskan.
+No Dokumen:
+<strong>${wasiatData.docRef}</strong>
+</p>
+
+<p class="mt-1">
+Tarikh Kelulusan:
+${new Date(wasiatData.approvedAt).toLocaleDateString("ms-MY")}
 </p>
 
 <a
