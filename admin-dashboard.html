@@ -60,6 +60,67 @@ Senarai Pelanggan
 </h2>
 
 <div
+id="kpiCards"
+class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+
+<div class="bg-white p-5 rounded-xl shadow">
+<h3 class="text-gray-500">
+Prospek
+</h3>
+<p
+id="prospekCount"
+class="text-3xl font-bold">
+0
+</p>
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+<h3 class="text-gray-500">
+Ahli Aktif
+</h3>
+<p
+id="aktifCount"
+class="text-3xl font-bold">
+0
+</p>
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+<h3 class="text-gray-500">
+Keahlian Tamat
+</h3>
+<p
+id="expiredCount"
+class="text-3xl font-bold">
+0
+</p>
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+<h3 class="text-gray-500">
+Wasiat Diluluskan
+</h3>
+<p
+id="approvedCount"
+class="text-3xl font-bold">
+0
+</p>
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+<h3 class="text-gray-500">
+Renewal
+</h3>
+<p
+id="renewalCount"
+class="text-3xl font-bold">
+0
+</p>
+</div>
+
+</div>
+  
+<div
 id="customerList"
 class="space-y-4">
 
@@ -81,7 +142,7 @@ getFirestore,
 collection,
 getDocs,
 getDoc,
-doc
+doc,
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -123,6 +184,111 @@ getFirestore(app);
 const auth =
 getAuth(app);
 
+async function loadKPI(){
+
+const usersSnap =
+await getDocs(
+collection(db,"users")
+);
+
+let prospek = 0;
+let aktif = 0;
+let tamat = 0;
+let approved = 0;
+let renewal = 0;
+
+for(const userDoc of usersSnap.docs){
+
+const user =
+userDoc.data();
+
+if(
+user.paymentStatus !== "paid"
+){
+
+prospek++;
+
+}
+else{
+
+aktif++;
+
+}
+
+if(user.memberSince){
+
+renewal++;
+
+}
+
+const wasiatSnap =
+await getDoc(
+doc(
+db,
+"users",
+userDoc.id,
+"wasiat",
+"maklumat"
+)
+);
+
+if(wasiatSnap.exists()){
+
+const wasiat =
+wasiatSnap.data();
+
+if(wasiat.docRef){
+
+approved++;
+
+}
+
+if(wasiat.expiryDate){
+
+const expiry =
+new Date(
+wasiat.expiryDate
+);
+
+if(expiry < new Date()){
+
+tamat++;
+
+}
+
+}
+
+}
+
+}
+
+document.getElementById(
+"prospekCount"
+).innerHTML =
+prospek;
+
+document.getElementById(
+"aktifCount"
+).innerHTML =
+aktif;
+
+document.getElementById(
+"expiredCount"
+).innerHTML =
+tamat;
+
+document.getElementById(
+"approvedCount"
+).innerHTML =
+approved;
+
+document.getElementById(
+"renewalCount"
+).innerHTML =
+renewal;
+
+}
+  
 onAuthStateChanged(auth, async(user)=>{
 
   if(!user){
@@ -277,6 +443,8 @@ window.location.href =
 "index.html";
 
 });
+
+loadKPI();
   
 </script>
 
