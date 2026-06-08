@@ -190,7 +190,7 @@ let wasiatStatus =
 let docRef = "-";
 let approvedDate = "-";
 let expiryDate = "-";
-
+let bakiHari = 0;
 if(wasiatSnap.exists()){
 
 const wasiatData =
@@ -217,7 +217,7 @@ wasiatData.expiryDate
 ).toLocaleDateString("ms-MY")
 : "-";
 
-const bakiHari =
+bakiHari =
 expiryDate !== "-"
 ? Math.ceil(
 (
@@ -386,7 +386,11 @@ Baki Hari:
 <span
 class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
 
-${wasiatStatus}
+${
+bakiHari <= 0
+? "KEAHLIAN TAMAT"
+: wasiatStatus
+}
 
 </span>
 
