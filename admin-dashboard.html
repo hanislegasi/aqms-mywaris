@@ -258,6 +258,10 @@ for(const userDoc of usersSnap.docs){
 const user =
 userDoc.data();
 
+if(user.role === "admin"){
+continue;
+}
+  
 if(
 user.paymentStatus !== "paid"
 ){
