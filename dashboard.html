@@ -375,6 +375,26 @@ wasiatSnap.exists()
 ? wasiatSnap.data()
 : {};
 
+let bakiHari = "-";
+
+if(wasiatData.expiryDate){
+
+const today =
+new Date();
+
+const expiry =
+new Date(
+wasiatData.expiryDate
+);
+
+bakiHari =
+Math.ceil(
+(expiry - today)
+/ (1000 * 60 * 60 * 24)
+);
+
+}
+  
 if(wasiatData.docRef){
 
 document.getElementById(
@@ -432,6 +452,11 @@ wasiatData.expiryDate
 .toLocaleDateString("ms-MY")
 : "-"
 }
+</p>
+
+<p class="opacity-80 text-sm">
+Baki:
+${bakiHari} Hari
 </p>
 
 <span class="
