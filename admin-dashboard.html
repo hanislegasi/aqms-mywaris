@@ -47,21 +47,67 @@ Al-Qawthar Mawaris Synergy
 <!-- CONTENT -->
 <div class="p-5">
 
+<div class="flex flex-wrap gap-3 mb-6">
+
+<button
+id="aqmBtn"
+class="bg-[#153638] text-white px-5 py-3 rounded-xl font-semibold">
+
+Pelanggan (AQM)
+
+</button>
+
+<button
+id="aqcBtn"
+class="bg-white px-5 py-3 rounded-xl shadow font-semibold">
+
+Konsultan (AQC)
+
+</button>
+
+<button
+id="accountBtn"
+class="bg-white px-5 py-3 rounded-xl shadow font-semibold">
+
+Akaun
+
+</button>
+
+<button
+id="auditBtn"
+class="bg-white px-5 py-3 rounded-xl shadow font-semibold">
+
+Audit
+
+</button>
+
 <button
 id="logoutBtn"
-class="inline-block mb-5 bg-red-500 hover:bg-red-600 transition text-white px-5 py-3 rounded-xl font-semibold">
+class="bg-red-500 text-white px-5 py-3 rounded-xl font-semibold">
 
 Logout
 
 </button>
+
+</div>
   
-<h2 class="text-xl font-bold mb-5">
-Senarai Pelanggan
+<h2
+id="sectionTitle"
+class="text-xl font-bold mb-5">
+
+Pelanggan (AQM)
+
 </h2>
 
 <div
 id="kpiCards"
 class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+
+<div
+id="listContainer"
+class="space-y-4">
+
+</div>  
 
 <div class="bg-white p-5 rounded-xl shadow">
 <h3 class="text-gray-500">
@@ -122,7 +168,7 @@ class="text-3xl font-bold">
   
 <div
 id="customerList"
-class="space-y-4">
+class="hidden">
 
 <p class="text-gray-500">
 Memuatkan data...
