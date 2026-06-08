@@ -187,6 +187,10 @@ userId,
 let wasiatStatus =
 "BELUM DIISI";
 
+let docRef = "-";
+let approvedDate = "-";
+let expiryDate = "-";
+
 if(wasiatSnap.exists()){
 
 const wasiatData =
@@ -195,6 +199,23 @@ wasiatSnap.data();
 wasiatStatus =
 wasiatData.status ||
 "DRAFT";
+
+docRef =
+wasiatData.docRef || "-";
+
+approvedDate =
+wasiatData.approvedAt
+? new Date(
+wasiatData.approvedAt
+).toLocaleDateString("ms-MY")
+: "-";
+
+expiryDate =
+wasiatData.expiryDate
+? new Date(
+wasiatData.expiryDate
+).toLocaleDateString("ms-MY")
+: "-";
 
 }
 
@@ -322,15 +343,37 @@ ${user.telefon || "-"}
 
 </div>
 
-<div class="bg-gray-100 p-4 rounded-xl">
+<div class="bg-green-50 border border-green-200 p-4 rounded-xl">
 
-<p class="text-sm text-gray-500">
+<h3 class="font-bold text-green-800 mb-3">
 e-Wasiat
+</h3>
+
+<p class="text-sm">
+No Dokumen:
+<strong>${docRef}</strong>
 </p>
 
-<p class="font-semibold">
-${wasiatStatus}
+<p class="text-sm">
+Tarikh Lulus:
+${approvedDate}
 </p>
+
+<p class="text-sm">
+Tamat Keahlian:
+${expiryDate}
+</p>
+
+<div class="mt-3">
+
+<span
+class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+
+${wasiatStatus}
+
+</span>
+
+</div>
 
 </div>
 
