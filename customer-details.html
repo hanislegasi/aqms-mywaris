@@ -266,6 +266,46 @@ ${user.nama || "-"}
 ${user.email || "-"}
 </p>
 
+<div class="bg-gray-50 rounded-xl p-5 mt-5">
+
+<h3 class="font-bold mb-3">
+Maklumat Keahlian
+</h3>
+
+<div class="grid grid-cols-2 gap-4">
+
+<div>
+<p class="text-gray-500 text-sm">
+No Ahli
+</p>
+<p id="memberNo"></p>
+</div>
+
+<div>
+<p class="text-gray-500 text-sm">
+Tarikh Daftar
+</p>
+<p id="memberSince"></p>
+</div>
+
+<div>
+<p class="text-gray-500 text-sm">
+Referral
+</p>
+<p id="referral"></p>
+</div>
+
+<div>
+<p class="text-gray-500 text-sm">
+Status
+</p>
+<p id="memberStatus"></p>
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -354,6 +394,32 @@ View Harta Sepencarian
 </div>
 
 `;
+
+document.getElementById(
+"memberNo"
+).innerHTML =
+user.memberNo || "-";
+
+document.getElementById(
+"memberSince"
+).innerHTML =
+user.memberSince
+? new Date(
+user.memberSince
+).toLocaleDateString("ms-MY")
+: "-";
+
+document.getElementById(
+"referral"
+).innerHTML =
+user.referral || "-";
+
+document.getElementById(
+"memberStatus"
+).innerHTML =
+user.paymentStatus === "paid"
+? "AHLI AKTIF"
+: "PROSPEK";  
 
 }
 
