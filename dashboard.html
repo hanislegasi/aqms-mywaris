@@ -712,6 +712,27 @@ ${new Date(wasiatData.expiryDate)
 </strong>
 </p>
 
+${
+bakiHari <= 0
+
+?
+
+`
+
+<a
+href="renewal.html"
+class="inline-block mt-3 bg-red-600 text-white px-4 py-2 rounded-lg">
+
+Perbaharui Keahlian
+
+</a>
+
+`
+
+:
+
+`
+
 <a
 href="preview-wasiat.html"
 class="inline-block mt-3 bg-green-600 text-white px-4 py-2 rounded-lg">
@@ -720,6 +741,9 @@ Lihat Dokumen
 
 </a>
 
+`
+
+}
 </div>
 
 `;
