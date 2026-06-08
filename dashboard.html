@@ -507,9 +507,13 @@ rounded-full
 bg-white/20
 text-sm">
 
-${userData.paymentStatus === "paid"
+${
+bakiHari <= 0
+? "KEAHLIAN TAMAT"
+: userData.paymentStatus === "paid"
 ? "AHLI AKTIF"
-: "PROSPEK"}
+: "PROSPEK"
+}
 
 </span>
 
