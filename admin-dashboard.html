@@ -396,10 +396,22 @@ collection(db,"users")
 
 let html = "";
 
+window.customerHTML = "";
+
+let allCustomers = [];
+  
 snapshot.forEach((doc)=>{
 
 const user =
 doc.data();
+
+allCustomers.push({
+id: doc.id,
+nama: user.nama || "",
+email: user.email || "",
+memberNo: user.memberNo || "",
+status: user.paymentStatus || ""
+});  
 
 if(user.role === "admin"){
 return;
@@ -469,6 +481,9 @@ ${status}
 document.getElementById(
 "listContainer"
 ).innerHTML = html;
+
+window.allCustomers =
+allCustomers;  
   
 });
 
@@ -497,6 +512,40 @@ document
 document
 .getElementById("listContainer")
 .classList.remove("hidden");
+
+});
+
+document
+.getElementById("searchInput")
+.addEventListener("keyup",(e)=>{
+
+const keyword =
+e.target.value.toLowerCase();
+
+const cards =
+document.querySelectorAll(
+"#listContainer a"
+);
+
+cards.forEach((card)=>{
+
+const text =
+card.innerText.toLowerCase();
+
+if(text.includes(keyword)){
+
+card.style.display =
+"block";
+
+}
+else{
+
+card.style.display =
+"none";
+
+}
+
+});
 
 });
   
