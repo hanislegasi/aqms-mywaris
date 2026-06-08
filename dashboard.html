@@ -424,6 +424,16 @@ ${userData.telefon || "-"}
 No Ahli: ${userData.memberNo || "Belum Aktif"}
 </p>
 
+<p class="opacity-80 text-sm">
+Tamat Keahlian:
+${
+wasiatData.expiryDate
+? new Date(wasiatData.expiryDate)
+.toLocaleDateString("ms-MY")
+: "-"
+}
+</p>
+
 <span class="
 inline-block
 mt-2
