@@ -91,17 +91,11 @@ Logout
 
 </div>
   
-<h2
-id="sectionTitle"
-class="text-xl font-bold mb-5">
 
-Pelanggan (AQM)
-
-</h2>
 
 <div
 id="kpiCards"
-class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6"
 
 <div
 id="listContainer"
@@ -385,92 +379,55 @@ const user =
 doc.data();
 
 const memberNo =
-user.memberNo || "-";  
+user.memberNo || "-";
+
+const status =
+user.paymentStatus === "paid"
+? "AHLI AKTIF"
+: "PROSPEK";
 
 html += `
 
 <a
 href="customer-details.html?id=${doc.id}"
-class="block bg-white p-5 rounded-2xl shadow hover:shadow-lg transition">
+class="block bg-white rounded-2xl p-5 shadow hover:shadow-lg transition">
 
-<div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+<div class="flex justify-between items-center">
 
 <div>
 
+<p class="text-xs text-gray-500">
+
+${memberNo}
+
+</p>
+
 <h3 class="font-bold text-lg">
+
 ${user.nama || "-"}
+
 </h3>
 
-<p class="text-gray-500 text-sm">
+<p class="text-gray-500">
+
 ${user.email || "-"}
-</p>
-
-<p class="text-sm mt-1">
-
-No Ahli:
-<strong>
-${memberNo}
-</strong>
 
 </p>
 
-<div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+</div>
 
-<div class="bg-gray-100 p-3 rounded-xl">
+<div>
 
-<p class="text-xs text-gray-500">
-e-Wasiat
-</p>
-
-<p class="font-semibold">
+<span
+class="
+px-3 py-1 rounded-full text-sm
 ${user.paymentStatus === "paid"
-? "PAID"
-: "UNPAID"}
-</p>
+? "bg-green-100 text-green-700"
+: "bg-yellow-100 text-yellow-700"}">
 
-</div>
+${status}
 
-<div class="bg-gray-100 p-3 rounded-xl">
-
-<p class="text-xs text-gray-500">
-Hibah
-</p>
-
-<p class="font-semibold">
-${user.hibahPaymentStatus === "paid"
-? "PAID"
-: "UNPAID"}
-</p>
-
-</div>
-
-<div class="bg-gray-100 p-3 rounded-xl">
-
-<p class="text-xs text-gray-500">
-Harta Sepencarian
-</p>
-
-<p class="font-semibold">
-${user.pusakaPaymentStatus === "paid"
-? "PAID"
-: "UNPAID"}
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="md:text-right">
-
-<p class="text-sm text-gray-500">
-Telefon
-</p>
-
-<p class="font-semibold">
-${user.telefon || "-"}
-</p>
+</span>
 
 </div>
 
@@ -479,11 +436,11 @@ ${user.telefon || "-"}
 </a>
 
 `;
-
+  
 });
 
 document.getElementById(
-"customerList"
+"listContainer"
 ).innerHTML = html;
   
 });
