@@ -476,67 +476,7 @@ Permohonan anda sedang dalam proses semakan.
 
 }
 
-if(wasiatData.docRef){
 
-
-document.getElementById(
-"wasiatNotification"
-).innerHTML = `
-
-<div class="bg-green-50 border border-green-300 rounded-xl p-4">
-
-<div class="flex items-center gap-2 mb-2">
-
-<svg
-xmlns="http://www.w3.org/2000/svg"
-class="w-5 h-5 text-green-600"
-fill="none"
-viewBox="0 0 24 24"
-stroke="currentColor">
-
-<path
-stroke-linecap="round"
-stroke-linejoin="round"
-stroke-width="2"
-d="M15 17h5l-1.405-1.405A2.032
-2.032 0 0118 14.158V11a6.002
-6.002 0 00-4-5.659V5a2 2 0
-10-4 0v.341C7.67 6.165 6 8.388
-6 11v3.159c0 .538-.214 1.055-.595
-1.436L4 17h5m6 0v1a3 3 0
-11-6 0v-1m6 0H9"/>
-
-</svg>
-
-<h3 class="font-bold text-green-800">
-Dokumen Wasiat Diluluskan
-</h3>
-
-</div>
-
-<p>
-No Dokumen:
-<strong>${wasiatData.docRef}</strong>
-</p>
-
-<p class="mt-1">
-Tarikh Kelulusan:
-${new Date(wasiatData.approvedAt).toLocaleDateString("ms-MY")}
-</p>
-
-<a
-href="preview-wasiat.html"
-class="inline-block mt-3 bg-green-600 text-white px-4 py-2 rounded-lg">
-
-Lihat Dokumen
-
-</a>
-
-</div>
-
-`;  
-
-}
 
 const notifSnap =
 await getDocs(
@@ -611,7 +551,85 @@ if(unread > 0){
 
 }
 
+const readNotif =
+notifSnap.docs.find(
+d => d.data().read === true
+);
 
+if(readNotif){
+
+const notif =
+readNotif.data();
+
+document.getElementById(
+"wasiatNotification"
+).innerHTML = `
+
+<div class="bg-green-50 border border-green-300 rounded-xl p-4 mb-6">
+
+<div class="flex items-center gap-2 mb-2">
+
+<svg
+xmlns="http://www.w3.org/2000/svg"
+class="w-5 h-5 text-green-600"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M5 13l4 4L19 7"/>
+
+</svg>
+
+<h3 class="font-bold text-green-800">
+Dokumen Wasiat Diluluskan
+</h3>
+
+</div>
+
+<p>
+No Dokumen:
+<strong>${wasiatData.docRef}</strong>
+</p>
+
+<p class="mt-1">
+Tarikh Kelulusan:
+${new Date(wasiatData.approvedAt)
+.toLocaleDateString("ms-MY")}
+</p>
+
+<p class="mt-1">
+Keahlian Sah Sehingga:
+<strong>
+${new Date(wasiatData.expiryDate)
+.toLocaleDateString("ms-MY")}
+</strong>
+</p>
+
+<p class="mt-1">
+Dokumen Sah Sehingga:
+<strong>
+${new Date(wasiatData.expiryDate)
+.toLocaleDateString("ms-MY")}
+</strong>
+</p>
+
+<a
+href="preview-wasiat.html"
+class="inline-block mt-3 bg-green-600 text-white px-4 py-2 rounded-lg">
+
+Lihat Dokumen
+
+</a>
+
+</div>
+
+`;
+
+}
   
 // PAYMENT STATUS
 
