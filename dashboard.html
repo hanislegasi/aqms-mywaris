@@ -714,9 +714,27 @@ Lihat Dokumen
 
 if(userData.paymentStatus === "paid"){
 
-  document.getElementById(
-    "wasiatButton"
-  ).href = "ewasiat.html";
+  if(bakiHari <= 0){
+
+    document.getElementById(
+      "wasiatButton"
+    ).href = "renewal.html";
+
+    document.getElementById(
+      "wasiatStatus"
+    ).innerHTML =
+
+    "🔒 Keahlian Tamat";
+
+  }
+
+  else{
+
+    document.getElementById(
+      "wasiatButton"
+    ).href = "ewasiat.html";
+
+  }
 
 }
 
