@@ -394,6 +394,10 @@ snapshot.forEach((doc)=>{
 const user =
 doc.data();
 
+if(user.role === "admin"){
+return;
+}
+  
 const memberNo =
 user.memberNo || "-";
 
