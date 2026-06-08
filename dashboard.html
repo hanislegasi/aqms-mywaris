@@ -394,6 +394,42 @@ Math.ceil(
 );
 
 }
+
+let renewalAlert = "";
+
+if(
+bakiHari !== "-" &&
+bakiHari <= 30 &&
+bakiHari > 0
+){
+
+renewalAlert = `
+
+<div
+class="bg-orange-50 border border-orange-300 rounded-xl p-4 mb-6">
+
+<h3 class="font-bold text-orange-700">
+⚠ Keahlian Akan Tamat
+</h3>
+
+<p class="mt-1">
+Keahlian anda akan tamat dalam
+<strong>${bakiHari} hari</strong>.
+</p>
+
+<a
+href="renewal.html"
+class="inline-block mt-3 bg-orange-500 text-white px-4 py-2 rounded-lg">
+
+Perbaharui Sekarang
+
+</a>
+
+</div>
+
+`;
+
+}
   
 if(wasiatData.docRef){
 
@@ -415,6 +451,8 @@ document.getElementById(
 document.getElementById(
 "profileCard"
 ).innerHTML = `
+
+renewalAlert +
 
 <div
 class="bg-gradient-to-r from-[#153638] to-[#24575a]
