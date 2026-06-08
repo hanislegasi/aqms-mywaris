@@ -338,6 +338,9 @@ snapshot.forEach((doc)=>{
 const user =
 doc.data();
 
+const memberNo =
+user.memberNo || "-";  
+
 html += `
 
 <a
@@ -354,6 +357,15 @@ ${user.nama || "-"}
 
 <p class="text-gray-500 text-sm">
 ${user.email || "-"}
+</p>
+
+<p class="text-sm mt-1">
+
+No Ahli:
+<strong>
+${memberNo}
+</strong>
+
 </p>
 
 <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
