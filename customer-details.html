@@ -217,6 +217,18 @@ wasiatData.expiryDate
 ).toLocaleDateString("ms-MY")
 : "-";
 
+const bakiHari =
+expiryDate !== "-"
+? Math.ceil(
+(
+new Date(wasiatData.expiryDate)
+- new Date()
+)
+/
+(1000*60*60*24)
+)
+: 0;
+  
 }
 
 // HIBAH STATUS
@@ -362,6 +374,11 @@ ${approvedDate}
 <p class="text-sm">
 Tamat Keahlian:
 ${expiryDate}
+</p>
+
+<p class="text-sm">
+Baki Hari:
+<strong>${bakiHari} Hari</strong>
 </p>
 
 <div class="mt-3">
