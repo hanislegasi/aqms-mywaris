@@ -253,11 +253,10 @@ d.data();
 
 if(
 u.role === "customer" &&
-u.paymentStatus === "paid"
+u.paymentStatus === "paid" &&
+(u.referral || "").trim() === data.consultantNo
 ){
-
 activeClients++;
-
 }
 
 });  
