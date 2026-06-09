@@ -141,15 +141,25 @@ console.log(
 client.nama
 );
   
+const expiryDate =
+client.expiryDate
+? new Date(client.expiryDate)
+.toLocaleDateString("ms-MY")
+: "-";
+
 html += `
 
-<div class="bg-white p-4 rounded-xl shadow">
+<div class="bg-white p-5 rounded-xl shadow">
 
-<h3 class="font-bold">
+<div class="flex justify-between">
+
+<div>
+
+<h3 class="font-bold text-lg">
 ${client.nama || "-"}
 </h3>
 
-<p>
+<p class="text-gray-500">
 ${client.memberNo || "-"}
 </p>
 
@@ -157,11 +167,47 @@ ${client.memberNo || "-"}
 ${client.telefon || "-"}
 </p>
 
-<p>
+</div>
+
+<div>
+
+<span class="
+px-3 py-1 rounded-full text-sm
+${client.paymentStatus === "paid"
+? "bg-green-100 text-green-700"
+: "bg-yellow-100 text-yellow-700"}">
+
 ${client.paymentStatus === "paid"
 ? "AHLI AKTIF"
 : "PROSPEK"}
+
+</span>
+
+</div>
+
+</div>
+
+<div class="mt-4 text-sm">
+
+<p>
+Tarikh Tamat:
+<strong>${expiryDate}</strong>
 </p>
+
+<p>
+Referral:
+<strong>${client.referral || "-"}</strong>
+</p>
+
+</div>
+
+<a
+href="customer-details.html?id=${docSnap.id}"
+class="inline-block mt-4 bg-[#153638] text-white px-4 py-2 rounded-lg">
+
+View Customer
+
+</a>
 
 </div>
 
