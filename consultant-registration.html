@@ -126,6 +126,20 @@ getAuth(app);
 const db =
 getFirestore(app);
 
+// CHECK LOGIN
+onAuthStateChanged(auth,(user)=>{
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+});
+  
 document
 .getElementById("consultantForm")
 .addEventListener("submit", async(e)=>{
