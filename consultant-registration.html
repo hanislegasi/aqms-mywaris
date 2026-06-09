@@ -1,0 +1,188 @@
+<form id="consultantForm" class="space-y-4">
+
+<input
+id="nama"
+type="text"
+placeholder="Nama Penuh"
+class="w-full border p-3 rounded-xl"
+required>
+
+<input
+id="ic"
+type="text"
+placeholder="No IC"
+class="w-full border p-3 rounded-xl"
+required>
+
+<input
+id="telefon"
+type="text"
+placeholder="No Telefon"
+class="w-full border p-3 rounded-xl"
+required>
+
+<input
+id="email"
+type="email"
+placeholder="Email"
+required>
+
+<input
+id="bankName"
+type="text"
+placeholder="Nama Bank"
+required>
+
+<input
+id="bankAccount"
+type="text"
+placeholder="No Akaun Bank"
+required>
+  
+<input
+id="alamat"
+type="text"
+placeholder="Alamat"
+class="w-full border p-3 rounded-xl"
+required>
+
+<select
+id="state"
+class="w-full border p-3 rounded-xl">
+
+<option>Selangor</option>
+<option>Kuala Lumpur</option>
+<option>Johor</option>
+<option>Kedah</option>
+<option>Kelantan</option>
+<option>Melaka</option>
+<option>Negeri Sembilan</option>
+<option>Pahang</option>
+<option>Perak</option>
+<option>Perlis</option>
+<option>Pulau Pinang</option>
+<option>Sabah</option>
+<option>Sarawak</option>
+<option>Terengganu</option>
+
+</select>
+
+<input
+id="upline"
+type="text"
+placeholder="Kod Upline (AQC001)"
+class="w-full border p-3 rounded-xl">
+
+<button
+type="submit"
+class="w-full bg-[#153638] text-white p-4 rounded-xl font-bold">
+
+Daftar Konsultan (RM200)
+
+</button>
+
+</form>
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+updateDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:
+"...",
+
+authDomain:
+"...",
+
+projectId:
+"...",
+
+storageBucket:
+"...",
+
+messagingSenderId:
+"...",
+
+appId:
+"..."
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+document
+.getElementById("consultantForm")
+.addEventListener("submit", async(e)=>{
+
+e.preventDefault();
+
+await updateDoc(
+doc(
+db,
+"users",
+auth.currentUser.uid
+),
+{
+
+nama:
+document.getElementById("nama").value,
+
+ic:
+document.getElementById("ic").value,
+
+telefon:
+document.getElementById("telefon").value,
+
+email:
+document.getElementById("email").value,
+
+bankName:
+document.getElementById("bankName").value,
+
+bankAccount:
+document.getElementById("bankAccount").value,
+
+alamat:
+document.getElementById("alamat").value,
+
+state:
+document.getElementById("state").value,
+
+upline:
+document.getElementById("upline").value || "",
+
+role:
+"consultant",
+
+consultantLevel:
+"AQC",
+
+consultantPaymentStatus:
+"pending"
+
+}
+);
+
+window.location.href =
+"consultant-payment.html";
+
+});
