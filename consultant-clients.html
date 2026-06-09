@@ -120,11 +120,13 @@ snap.forEach((docSnap)=>{
 const client =
 docSnap.data();
 
-console.log(
-client.nama,
-client.referral,
-consultantNo
-);
+console.log({
+nama: client.nama,
+role: client.role,
+memberNo: client.memberNo,
+referral: client.referral,
+consultantNo: consultantNo
+});
   
 if(
 client.role !== "customer" ||
