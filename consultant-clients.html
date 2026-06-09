@@ -94,7 +94,10 @@ snap.forEach((docSnap)=>{
 const user =
 docSnap.data();
 
-if(user.role === "consultant"){
+if(
+user.role !== "customer" ||
+!user.memberNo
+){
 return;
 }
 
