@@ -133,7 +133,15 @@ RM0
 
 <!-- MENU -->
 
-<div class="grid md:grid-cols-3 gap-4">
+<div class="grid md:grid-cols-4 gap-4">
+
+<button
+id="clientsBtn"
+class="bg-blue-600 text-white p-5 rounded-xl">
+
+My Clients
+
+</button>
 
 <button
 id="careerBtn"
@@ -160,7 +168,6 @@ Marketing Kit
 </button>
 
 </div>
-
 </div>
 
 <script type="module">
@@ -288,6 +295,15 @@ document.getElementById(
 });
 
 document
+.getElementById("clientsBtn")
+.addEventListener("click", ()=>{
+
+window.location.href =
+"consultant-clients.html";
+
+});
+  
+document
 .getElementById("logoutBtn")
 .addEventListener("click", async()=>{
 
@@ -299,4 +315,10 @@ window.location.href =
 });
 
 </script>
+
+</div>
+
+</body>
+
+</html>
   
