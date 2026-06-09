@@ -1,1 +1,116 @@
-mm
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Clients</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+My Clients
+</h1>
+
+</div>
+
+<div class="p-5">
+
+<div
+id="clientList"
+class="space-y-3">
+
+Memuatkan...
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+projectId:"alqawthar-mywaris",
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+messagingSenderId:"3498810778",
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const snap =
+await getDocs(
+collection(db,"users")
+);
+
+let html = "";
+
+snap.forEach((docSnap)=>{
+
+const user =
+docSnap.data();
+
+if(user.role === "consultant"){
+return;
+}
+
+html += `
+
+<div class="bg-white p-4 rounded-xl shadow">
+
+<h3 class="font-bold">
+${user.nama || "-"}
+</h3>
+
+<p>
+${user.memberNo || "-"}
+</p>
+
+<p>
+${user.telefon || "-"}
+</p>
+
+<p>
+${user.paymentStatus === "paid"
+? "AHLI AKTIF"
+: "PROSPEK"}
+</p>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"clientList"
+).innerHTML = html;
+
+</script>
+
+</body>
+</html>
