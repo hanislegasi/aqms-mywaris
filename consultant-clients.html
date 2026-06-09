@@ -120,6 +120,12 @@ snap.forEach((docSnap)=>{
 const client =
 docSnap.data();
 
+console.log(
+client.nama,
+client.referral,
+consultantNo
+);
+  
 if(
 client.role !== "customer" ||
 !client.memberNo ||
@@ -162,9 +168,7 @@ document.getElementById(
 html || "Tiada client.";
 
 });
-document.getElementById(
-"clientList"
-).innerHTML = html;
+
 
 </script>
 
