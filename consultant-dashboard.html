@@ -1,1 +1,302 @@
-mm
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Consultant Dashboard
+</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+<!-- HEADER -->
+
+<div class="bg-[#153638] text-white p-5 shadow">
+
+<div class="flex justify-between items-center">
+
+<div>
+
+<h1 class="text-2xl font-bold">
+Dashboard Konsultan
+</h1>
+
+<p id="welcomeText">
+Memuatkan...
+</p>
+
+</div>
+
+<button
+id="logoutBtn"
+class="bg-red-500 px-4 py-2 rounded-xl">
+
+Logout
+
+</button>
+
+</div>
+
+</div>
+
+<div class="p-5">
+
+<!-- PROFIL -->
+
+<div
+id="profileCard"
+class="bg-white p-5 rounded-2xl shadow mb-5">
+
+Memuatkan profil...
+
+</div>
+
+<!-- KPI -->
+
+<div
+class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
+
+<div class="bg-white p-5 rounded-xl shadow">
+
+<p class="text-gray-500">
+Client Aktif
+</p>
+
+<p
+id="activeClients"
+class="text-3xl font-bold">
+
+0
+
+</p>
+
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+
+<p class="text-gray-500">
+Jumlah Jualan
+</p>
+
+<p
+id="totalSales"
+class="text-3xl font-bold">
+
+RM0
+
+</p>
+
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+
+<p class="text-gray-500">
+Komisen
+</p>
+
+<p
+id="totalCommission"
+class="text-3xl font-bold">
+
+RM0
+
+</p>
+
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+
+<p class="text-gray-500">
+Overriding
+</p>
+
+<p
+id="totalOverriding"
+class="text-3xl font-bold">
+
+RM0
+
+</p>
+
+</div>
+
+</div>
+
+<!-- MENU -->
+
+<div class="grid md:grid-cols-3 gap-4">
+
+<button
+id="careerBtn"
+class="bg-[#153638] text-white p-5 rounded-xl">
+
+Career Path
+
+</button>
+
+<button
+id="trainingBtn"
+class="bg-[#153638] text-white p-5 rounded-xl">
+
+Training Material
+
+</button>
+
+<button
+id="marketingBtn"
+class="bg-[#153638] text-white p-5 rounded-xl">
+
+Marketing Kit
+
+</button>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+
+projectId:"alqawthar-mywaris",
+
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+
+messagingSenderId:"3498810778",
+
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+const userSnap =
+await getDoc(
+doc(
+db,
+"users",
+user.uid
+)
+);
+
+const data =
+userSnap.data();
+
+document.getElementById(
+"welcomeText"
+).innerHTML =
+data.nama;
+
+document.getElementById(
+"profileCard"
+).innerHTML = `
+
+<h2 class="text-2xl font-bold mb-3">
+
+${data.nama}
+
+</h2>
+
+<p>No Konsultan: ${data.consultantNo}</p>
+
+<p>Level: ${data.consultantLevel}</p>
+
+<p>Upline: ${data.upline || "-"}</p>
+
+<p>Telefon: ${data.telefon}</p>
+
+<p>Negeri: ${data.state}</p>
+
+<p>Tarikh Sertai:
+${new Date(data.joinDate).toLocaleDateString("ms-MY")}
+</p>
+
+<p>Renewal:
+${new Date(data.renewalDate).toLocaleDateString("ms-MY")}
+</p>
+
+`;
+
+document.getElementById(
+"activeClients"
+).innerHTML =
+data.activeClients || 0;
+
+document.getElementById(
+"totalSales"
+).innerHTML =
+"RM" + (data.totalSales || 0);
+
+document.getElementById(
+"totalCommission"
+).innerHTML =
+"RM" + (data.totalCommission || 0);
+
+document.getElementById(
+"totalOverriding"
+).innerHTML =
+"RM" + (data.totalOverriding || 0);
+
+});
+
+document
+.getElementById("logoutBtn")
+.addEventListener("click", async()=>{
+
+await signOut(auth);
+
+window.location.href =
+"index.html";
+
+});
+
+</script>
+  
