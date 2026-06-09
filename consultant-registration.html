@@ -83,40 +83,37 @@ Daftar Konsultan (RM200)
 
 </form>
 
+<script type="module">
+
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-getAuth
+getAuth,
+onAuthStateChanged,
+signOut
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
 getFirestore,
 doc,
-updateDoc
+getDoc,
+getDocs,
+collection,
+updateDoc,
+query  
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";  
 
 const firebaseConfig = {
 
-apiKey:
-"...",
-
-authDomain:
-"...",
-
-projectId:
-"...",
-
-storageBucket:
-"...",
-
-messagingSenderId:
-"...",
-
-appId:
-"..."
+apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain: "alqawthar-mywaris.firebaseapp.com",
+projectId: "alqawthar-mywaris",
+storageBucket: "alqawthar-mywaris.firebasestorage.app",
+messagingSenderId: "3498810778",
+appId: "1:3498810778:web:ee36e0fe42f76698046e23"
 
 };
 
@@ -135,6 +132,16 @@ document
 
 e.preventDefault();
 
+if(!auth.currentUser){
+
+alert(
+"Sila login dahulu"
+);
+
+return;
+
+}
+  
 await updateDoc(
 doc(
 db,
@@ -169,9 +176,6 @@ document.getElementById("state").value,
 
 upline:
 document.getElementById("upline").value || "",
-
-role:
-"consultant",
 
 consultantLevel:
 "AQC",
