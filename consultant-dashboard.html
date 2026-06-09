@@ -185,7 +185,9 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
 getFirestore,
 doc,
-getDoc
+getDoc,
+getDocs,
+collection
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -237,6 +239,29 @@ user.uid
 const data =
 userSnap.data();
 
+let activeClients = 0;
+
+const usersSnap =
+await getDocs(
+collection(db,"users")
+);
+
+usersSnap.forEach((d)=>{
+
+const u =
+d.data();
+
+if(
+u.role === "customer" &&
+u.paymentStatus === "paid"
+){
+
+activeClients++;
+
+}
+
+});  
+
 document.getElementById(
 "welcomeText"
 ).innerHTML =
@@ -275,7 +300,7 @@ ${new Date(data.renewalDate).toLocaleDateString("ms-MY")}
 document.getElementById(
 "activeClients"
 ).innerHTML =
-data.activeClients || 0;
+activeClients;
 
 document.getElementById(
 "totalSales"
