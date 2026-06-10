@@ -422,6 +422,33 @@ correct++;
 
 });
 
+let answered = 0;
+
+questions.forEach((q,index)=>{
+
+const selected =
+document.querySelector(
+`input[name="q${index}"]:checked`
+);
+
+if(selected){
+
+answered++;
+
+}
+
+});
+
+if(answered < questions.length){
+
+alert(
+"Sila jawab semua soalan terlebih dahulu."
+);
+
+return;
+
+}
+ 
 const score =
 Math.round(
 (correct/questions.length)*100
