@@ -76,7 +76,8 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
 getFirestore,
 doc,
-updateDoc
+updateDoc,
+getDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -482,6 +483,30 @@ ${score}%
 
 `;
 
+const userSnap =
+await getDoc(
+doc(
+db,
+"users",
+currentUser.uid
+)
+);
+
+const oldData =
+userSnap.data();
+
+const oldScore =
+oldData?.training?.hibah?.bestScore || 0;
+
+const oldAttempts =
+oldData?.training?.hibah?.attempts || 0;
+
+const bestScore =
+Math.max(
+oldScore,
+score
+);
+ 
 await updateDoc(
 doc(
 db,
@@ -489,16 +514,19 @@ db,
 currentUser.uid
 ),
 {
+"training.wasiat.status":"passed",
 
-"training.hibah.status":
-"passed",
+"training.wasiat.bestScore":
+bestScore,
 
-"training.hibah.score":
+"training.wasiat.lastScore":
 score,
 
-"training.hibah.completedAt":
-new Date()
+"training.wasiat.attempts":
+oldAttempts + 1,
 
+"training.wasiat.completedAt":
+new Date()
 }
 );
  
