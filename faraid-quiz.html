@@ -6,12 +6,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Training Centre</title>
+<title>Ujian Faraid Islam</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -25,279 +22,51 @@ font-family: Inter, sans-serif;
 
 </head>
 
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-100">
 
 <div class="bg-[#153638] text-white p-5">
 
-<h1 class="text-2xl font-bold">
-Training Centre
+<h1 class="text-3xl font-bold">
+Ujian Faraid Islam
 </h1>
 
-<p class="text-gray-200">
-Latihan Tahunan Konsultan
+<p>
+20 Soalan • Lulus 80%
 </p>
 
 </div>
 
-<div class="p-5 max-w-6xl mx-auto">
-
-<a
-href="consultant-dashboard.html"
-class="inline-block bg-gray-200 hover:bg-gray-300 px-5 py-3 rounded-xl font-semibold mb-5">
-
-← Kembali ke Dashboard
-
-</a>
-
-<div class="bg-white rounded-2xl border border-gray-200 p-6 mb-6">
-
-<h2 class="text-xl font-bold text-[#153638] mb-3">
-Continuous Professional Development - Training Compliance
-</h2>
-
-<p class="text-gray-600">
-Semua modul wajib dilengkapkan dan lulus sebelum renewal tahunan.
-</p>
-
-<div class="mt-4">
-
-<div class="w-full bg-gray-200 rounded-full h-3">
-
-<div
-id="progressBar"
-class="bg-[#153638] h-3 rounded-full"
-style="width:0%">
-</div>
-
-</div>
-
-<p
-id="progressText"
-class="mt-2 text-sm text-gray-500">
-
-0 / 4 Modul Lengkap
-
-</p>
-
-</div>
-  
-</div>
-
-<div class="grid md:grid-cols-2 gap-5">
-
-<!-- WASIAT -->
-
-<div class="bg-white border border-gray-200 rounded-2xl p-6">
-
-<h2 class="text-xl font-bold text-[#153638]">
-Kepentingan Wasiat Menurut Hukum Islam
-</h2>
-
-<p class="text-gray-500 mt-2">
-20 minit bacaan • 20 soalan
-</p>
-
-<div class="mt-4">
-
-<span
-id="wasiatStatus"
-class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-
-LULUS
-
-</span>
-
-<p
-id="wasiatStats"
-class="text-xs text-gray-500 mt-2">
-
-</p>
-
-</div>
-
-<div class="flex gap-3 mt-5">
-
-<a
-href="wasiat-module.html"
-class="bg-[#153638] text-white px-4 py-2 rounded-xl">
-
-Baca Modul
-
-</a>
-
-<a
-href="wasiat-quiz.html"
-class="bg-gray-200 px-4 py-2 rounded-xl">
-
-Ambil Ujian
-
-</a>
-
-</div>
-
-</div>
-
-<!-- HIBAH -->
-
-<div class="bg-white border border-gray-200 rounded-2xl p-6">
-
-<h2 class="text-xl font-bold text-[#153638]">
-Hibah Dalam Perancangan Harta
-</h2>
-
-<p class="text-gray-500 mt-2">
-20 minit bacaan • 20 soalan
-</p>
-
-<div class="mt-4">
-
-<span
-id="hibahStatus"
-class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-
-LULUS
-
-</span>
-
-<p
-id="hibahStats"
-class="text-xs text-gray-500 mt-2">
-
-</p>
-
-</div>
-
-<div class="flex gap-3 mt-5">
-
-<a
-href="hibah-module.html"
-class="bg-[#153638] text-white px-4 py-2 rounded-xl">
-
-Baca Modul
-
-</a>
-
-<a
-href="hibah-quiz.html"
-class="bg-gray-200 px-4 py-2 rounded-xl">
-
-Ambil Ujian
-
-</a>
-
-</div>
-
-</div>
-
-<!-- FARAID -->
-
-<div class="bg-white border border-gray-200 rounded-2xl p-6">
-
-<h2 class="text-xl font-bold text-[#153638]">
-Faraid & Pembahagian Harta Pusaka
-</h2>
-
-<p class="text-gray-500 mt-2">
-20 minit bacaan • 20 soalan
-</p>
-
-<div class="mt-4">
-
-<span
-id="faraidStatus"
-class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-
-LULUS
-
-</span>
-
-<p
-id="faraidStats"
-class="text-xs text-gray-500 mt-2">
-
-</p>
-
-</div>
-
-<div class="flex gap-3 mt-5">
+<div class="max-w-4xl mx-auto p-5">
 
 <a
 href="faraid-module.html"
-class="bg-[#153638] text-white px-4 py-2 rounded-xl">
+class="inline-block bg-gray-200 hover:bg-gray-300 px-5 py-3 rounded-xl font-semibold mb-5">
 
-Baca Modul
-
-</a>
-
-<a
-href="faraid-quiz.html"
-class="bg-gray-200 px-4 py-2 rounded-xl">
-
-Ambil Ujian
+← Kembali ke Modul
 
 </a>
 
-</div>
+<form id="quizForm">
 
-</div>
+<div id="questionsContainer"></div>
 
-<!-- AMLA -->
+<button
+type="submit"
+class="bg-[#153638] text-white px-8 py-4 rounded-xl font-bold mt-5">
 
-<div class="bg-white border border-gray-200 rounded-2xl p-6">
+Hantar Jawapan
 
-<h2 class="text-xl font-bold text-[#153638]">
-AMLA & Compliance
-</h2>
+</button>
 
-<p class="text-gray-500 mt-2">
-20 minit bacaan • 20 soalan
-</p>
+</form>
 
-<div class="mt-4">
-
-<span
-id="amlaStatus"
-class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-
-LULUS
-
-</span>
-
-<p
-id="amlaStats"
-class="text-xs text-gray-500 mt-2">
-
-</p>
-
-</div>
-<div class="flex gap-3 mt-5">
-
-<a
-href="amla-module.html"
-class="bg-[#153638] text-white px-4 py-2 rounded-xl">
-
-Baca Modul
-
-</a>
-
-<a
-href="amla-quiz.html"
-class="bg-gray-200 px-4 py-2 rounded-xl">
-
-Ambil Ujian
-
-</a>
-
-</div>
-
-
-
-
-  
-</div>
-
+<div id="result" class="mt-5"></div>
+ 
 <script type="module">
-  
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
 import {
 getAuth,
 onAuthStateChanged
@@ -307,12 +76,10 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
 getFirestore,
 doc,
+updateDoc,
 getDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 const firebaseConfig = {
 
@@ -332,14 +99,16 @@ appId:"1:3498810778:web:ee36e0fe42f76698046e23"
 
 const app =
 initializeApp(firebaseConfig);
-  
+
 const auth =
 getAuth(app);
 
 const db =
 getFirestore(app);
 
-onAuthStateChanged(auth, async(user)=>{
+let currentUser = null;
+
+onAuthStateChanged(auth,(user)=>{
 
 if(!user){
 
@@ -350,85 +119,458 @@ return;
 
 }
 
+currentUser = user;
+
+});
+
+
+ 
+
+
+
+
+const questions = [
+
+{
+question:"Apakah maksud faraid?",
+options:[
+"Pembahagian harta pusaka menurut syarak",
+"Pemberian hibah",
+"Penamaan wasi",
+"Wakaf harta"
+],
+answer:"A"
+},
+
+{
+question:"Faraid berkuat kuasa selepas:",
+options:[
+"Kematian pemilik harta",
+"Hibah dibuat",
+"Wasiat ditulis",
+"Pembelian aset"
+],
+answer:"A"
+},
+
+{
+question:"Sumber utama hukum faraid ialah:",
+options:[
+"Al-Quran",
+"Akta Syarikat",
+"Kanun Tanah",
+"Perlembagaan"
+],
+answer:"A"
+},
+
+{
+question:"Antara tujuan faraid ialah:",
+options:[
+"Menjamin keadilan waris",
+"Menghapuskan waris",
+"Menambah hutang",
+"Mengurangkan aset"
+],
+answer:"A"
+},
+
+{
+question:"Siapakah waris utama lelaki?",
+options:[
+"Anak lelaki",
+"Jiran",
+"Kawan",
+"Peguam"
+],
+answer:"A"
+},
+
+{
+question:"Anak perempuan termasuk dalam kategori:",
+options:[
+"Waris faraid",
+"Bukan waris",
+"Wasi",
+"Pentadbir"
+],
+answer:"A"
+},
+
+{
+question:"Faraid ditetapkan oleh:",
+options:[
+"Mahkamah sahaja",
+"Individu",
+"Allah SWT",
+"Wasi"
+],
+answer:"C"
+},
+
+{
+question:"Apakah maksud asabah?",
+options:[
+"Waris yang menerima baki pusaka",
+"Wasi",
+"Penerima hibah",
+"Saksi"
+],
+answer:"A"
+},
+
+{
+question:"Hijab dalam faraid bermaksud:",
+options:[
+"Penghalang waris menerima pusaka",
+"Dokumen hibah",
+"Pembahagian hibah",
+"Wakaf"
+],
+answer:"A"
+},
+
+{
+question:"Antara waris perempuan ialah:",
+options:[
+"Isteri",
+"Jiran",
+"Kawan",
+"Majikan"
+],
+answer:"A"
+},
+
+{
+question:"Harta pusaka perlu diselesaikan selepas:",
+options:[
+"Kematian",
+"Perkahwinan",
+"Kelahiran",
+"Pencen"
+],
+answer:"A"
+},
+
+{
+question:"Siapakah yang perlu didahulukan sebelum pembahagian pusaka?",
+options:[
+"Penyelesaian hutang si mati",
+"Jiran",
+"Majikan",
+"Ejen"
+],
+answer:"A"
+},
+
+{
+question:"Faraid termasuk dalam bidang:",
+options:[
+"Muamalat Islam",
+"Cukai",
+"Perbankan",
+"Pelaburan"
+],
+answer:"A"
+},
+
+{
+question:"Tujuan latihan faraid untuk konsultan ialah:",
+options:[
+"Membantu pelanggan memahami pusaka",
+"Menjadi hakim",
+"Menjadi peguam",
+"Menggantikan mahkamah"
+],
+answer:"A"
+},
+
+{
+question:"Faraid tidak boleh diubah kerana:",
+options:[
+"Telah ditetapkan syarak",
+"Bergantung kepada waris",
+"Ikut adat",
+"Ikut peguam"
+],
+answer:"A"
+},
+
+{
+question:"Anak lelaki biasanya menerima:",
+options:[
+"Bahagian tertentu menurut syarak",
+"Tiada bahagian",
+"Semua harta",
+"Ikut suka"
+],
+answer:"A"
+},
+
+{
+question:"Isteri adalah:",
+options:[
+"Waris faraid",
+"Bukan waris",
+"Wasi",
+"Saksi"
+],
+answer:"A"
+},
+
+{
+question:"Pembekuan harta boleh berlaku jika:",
+options:[
+"Tiada pengurusan pusaka",
+"Hibah dibuat",
+"Wasiat lengkap",
+"Takaful dibayar"
+],
+answer:"A"
+},
+
+{
+question:"Perancangan harta membantu:",
+options:[
+"Memudahkan pentadbiran pusaka",
+"Menghapuskan waris",
+"Menambah hutang",
+"Mengurangkan hak waris"
+],
+answer:"A"
+},
+
+{
+question:"Apakah objektif utama modul Faraid?",
+options:[
+"Memahami asas pembahagian pusaka Islam",
+"Menjadi hakim syarie",
+"Menjadi peguam",
+"Menggantikan faraid"
+],
+answer:"A"
+}
+];
+ 
+const container =
+document.getElementById(
+"questionsContainer"
+);
+
+questions.forEach((q,index)=>{
+
+let html = `
+
+<div class="bg-white rounded-2xl border border-gray-200 p-6 mb-5">
+
+<h2 class="font-bold mb-4">
+
+${index+1}. ${q.question}
+
+</h2>
+
+`;
+
+q.options.forEach((option,optIndex)=>{
+
+const letter =
+["A","B","C","D"][optIndex];
+
+html += `
+
+<label class="block mb-2">
+
+<input
+type="radio"
+name="q${index}"
+value="${letter}">
+
+${option}
+
+</label>
+
+`;
+
+});
+
+html += `</div>`;
+
+container.innerHTML += html;
+
+});
+
+document
+.getElementById("quizForm")
+.addEventListener("submit", async(e)=>{
+
+e.preventDefault();
+
+let correct = 0;
+
+questions.forEach((q,index)=>{
+
+const selected =
+document.querySelector(
+`input[name="q${index}"]:checked`
+)?.value;
+
+if(selected === q.answer){
+
+correct++;
+
+}
+
+});
+
+let answered = 0;
+
+questions.forEach((q,index)=>{
+
+const selected =
+document.querySelector(
+`input[name="q${index}"]:checked`
+);
+
+if(selected){
+
+answered++;
+
+}
+
+});
+
+if(answered < questions.length){
+
+alert(
+"Sila jawab semua soalan terlebih dahulu."
+);
+
+return;
+
+}
+ 
+const score =
+Math.round(
+(correct/questions.length)*100
+);
+
+const result =
+document.getElementById(
+"result"
+);
+
+if(score >= 80){
+
+result.innerHTML = `
+
+<div class="bg-green-100 text-green-700 p-5 rounded-xl">
+
+<h2 class="font-bold text-xl">
+
+LULUS ✅
+
+</h2>
+
+<p>
+
+Markah:
+${score}%
+
+</p>
+
+</div>
+
+`;
+
 const userSnap =
 await getDoc(
 doc(
 db,
 "users",
-user.uid
+currentUser.uid
 )
 );
 
-const data =
+const oldData =
 userSnap.data();
 
-let completed = 0;
+const oldScore =
+oldData?.training?.faraid?.bestScore || 0;
 
-if(
-data?.training?.wasiat?.status === "passed"
-){
+const oldAttempts =
+oldData?.training?.faraid?.attempts || 0;
 
-completed++;
+const bestScore =
+Math.max(
+oldScore,
+score
+);
 
-document.getElementById(
-"wasiatStatus"
-).innerHTML =
-`✅ LULUS (${data.training.wasiat.bestScore}%)`;
+console.log("FARAID UPDATE RUNNING");
+console.log("Score:", score);
+console.log("Best:", bestScore);
+console.log("Attempts:", oldAttempts + 1);
+ 
+await updateDoc(
+doc(
+db,
+"users",
+currentUser.uid
+),
+{
+"training.faraid.status":"passed",
 
-document.getElementById(
-"wasiatStats"
-).innerHTML =
-`
-Best: ${data.training.wasiat.bestScore}%<br>
-Last: ${data.training.wasiat.lastScore}%<br>
-Attempts: ${data.training.wasiat.attempts}
+"training.faraid.bestScore":
+bestScore,
+
+"training.faraid.lastScore":
+score,
+
+"training.faraid.attempts":
+oldAttempts + 1,
+
+"training.faraid.completedAt":
+new Date()
+}
+);
+ 
+}
+else{
+
+result.innerHTML = `
+
+<div class="bg-red-100 text-red-700 p-5 rounded-xl">
+
+<h2 class="font-bold text-xl">
+
+GAGAL ❌
+
+</h2>
+
+<p>
+
+Markah:
+${score}%
+
+</p>
+
+<p>
+
+Minimum lulus adalah 80%
+
+</p>
+
+</div>
+
 `;
 
+
+ 
 }
-
-if(
-data?.training?.hibah?.status === "passed"
-){
-
-completed++;
-
-document.getElementById(
-"hibahStatus"
-).innerHTML =
-`✅ LULUS (${data.training.hibah.bestScore}%)`;
-
-document.getElementById(
-"hibahStats"
-).innerHTML =
-`
-Best: ${data.training.hibah.bestScore}%<br>
-Last: ${data.training.hibah.lastScore}%<br>
-Attempts: ${data.training.hibah.attempts}
-`;
-
-}
-  
-const percent =
-(completed / 4) * 100;
-
-document.getElementById(
-"progressBar"
-).style.width =
-percent + "%";
-
-document.getElementById(
-"progressText"
-).innerHTML =
-`${completed} / 4 Modul Lengkap`;
 
 });
-  
+
 </script>
 
-
-</div>
-
-</div>
-  
 </body>
 </html>
