@@ -62,13 +62,71 @@ Hantar Jawapan
 
 <div id="result" class="mt-5"></div>
  
+<script type="module">
 
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+updateDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+
+projectId:"alqawthar-mywaris",
+
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+
+messagingSenderId:"3498810778",
+
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+let currentUser = null;
+
+onAuthStateChanged(auth,(user)=>{
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+currentUser = user;
+
+});
 
 
  
 
 
-<script>
+<script type="module">
 
 const questions = [
 
@@ -178,7 +236,7 @@ container.innerHTML += html;
 
 document
 .getElementById("quizForm")
-.addEventListener("submit",(e)=>{
+.addEventListener("submit", async(e)=>{
 
 e.preventDefault();
 
@@ -262,6 +320,26 @@ Minimum lulus adalah 80%
 
 `;
 
+await updateDoc(
+doc(
+db,
+"users",
+currentUser.uid
+),
+{
+
+"training.wasiat.status":
+"passed",
+
+"training.wasiat.score":
+score,
+
+"training.wasiat.completedAt":
+new Date()
+
+}
+);
+ 
 }
 
 });
