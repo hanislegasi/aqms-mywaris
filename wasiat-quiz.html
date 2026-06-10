@@ -126,7 +126,7 @@ currentUser = user;
  
 
 
-<script type="module">
+
 
 const questions = [
 
@@ -290,6 +290,26 @@ ${score}%
 
 `;
 
+await updateDoc(
+doc(
+db,
+"users",
+currentUser.uid
+),
+{
+
+"training.wasiat.status":
+"passed",
+
+"training.wasiat.score":
+score,
+
+"training.wasiat.completedAt":
+new Date()
+
+}
+);
+ 
 }
 else{
 
@@ -320,25 +340,7 @@ Minimum lulus adalah 80%
 
 `;
 
-await updateDoc(
-doc(
-db,
-"users",
-currentUser.uid
-),
-{
 
-"training.wasiat.status":
-"passed",
-
-"training.wasiat.score":
-score,
-
-"training.wasiat.completedAt":
-new Date()
-
-}
-);
  
 }
 
