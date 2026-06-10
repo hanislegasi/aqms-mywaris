@@ -429,6 +429,28 @@ Attempts: ${data.training.faraid.attempts}
 `;
 
 }
+
+if(
+data?.training?.amla?.status === "passed"
+){
+
+completed++;
+
+document.getElementById(
+"amlaStatus"
+).innerHTML =
+`✅ LULUS (${data.training.amla.bestScore}%)`;
+
+document.getElementById(
+"amlaStats"
+).innerHTML =
+`
+Best: ${data.training.amla.bestScore}%<br>
+Last: ${data.training.amla.lastScore}%<br>
+Attempts: ${data.training.amla.attempts}
+`;
+
+}
   
 const percent =
 (completed / 4) * 100;
