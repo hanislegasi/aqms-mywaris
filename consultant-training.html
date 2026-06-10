@@ -407,6 +407,28 @@ Attempts: ${data.training.hibah.attempts}
 `;
 
 }
+
+if(
+data?.training?.faraid?.status === "passed"
+){
+
+completed++;
+
+document.getElementById(
+"faraidStatus"
+).innerHTML =
+`✅ LULUS (${data.training.faraid.bestScore}%)`;
+
+document.getElementById(
+"faraidStats"
+).innerHTML =
+`
+Best: ${data.training.faraid.bestScore}%<br>
+Last: ${data.training.faraid.lastScore}%<br>
+Attempts: ${data.training.faraid.attempts}
+`;
+
+}
   
 const percent =
 (completed / 4) * 100;
