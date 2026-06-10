@@ -101,11 +101,17 @@ Kepentingan Wasiat Menurut Hukum Islam
 
 <span
 id="wasiatStatus"
-class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
+class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
 
-Belum Lengkap
+LULUS
 
 </span>
+
+<p
+id="wasiatStats"
+class="text-xs text-gray-500 mt-2">
+
+</p>
 
 </div>
 
@@ -147,11 +153,17 @@ Hibah Dalam Perancangan Harta
 
 <span
 id="hibahStatus"
-class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
+class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
 
-Belum Lengkap
+LULUS
 
 </span>
+
+<p
+id="hibahStats"
+class="text-xs text-gray-500 mt-2">
+
+</p>
 
 </div>
 
@@ -191,11 +203,19 @@ Faraid & Pembahagian Harta Pusaka
 
 <div class="mt-4">
 
-<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
+<span
+id="faraidStatus"
+class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
 
-Belum Lengkap
+LULUS
 
 </span>
+
+<p
+id="faraidStats"
+class="text-xs text-gray-500 mt-2">
+
+</p>
 
 </div>
 
@@ -235,14 +255,21 @@ AMLA & Compliance
 
 <div class="mt-4">
 
-<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
+<span
+id="amlaStatus"
+class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
 
-Belum Lengkap
+LULUS
 
 </span>
 
-</div>
+<p
+id="amlaStats"
+class="text-xs text-gray-500 mt-2">
 
+</p>
+
+</div>
 <div class="flex gap-3 mt-5">
 
 <a
@@ -349,9 +376,13 @@ document.getElementById(
 `✅ LULUS (${data.training.wasiat.bestScore}%)`;
 
 document.getElementById(
-"wasiatStatus"
-).className =
-"bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm";
+"wasiatStats"
+).innerHTML =
+`
+Best: ${data.training.wasiat.bestScore}%<br>
+Last: ${data.training.wasiat.lastScore}%<br>
+Attempts: ${data.training.wasiat.attempts}
+`;
 
 }
 
@@ -364,12 +395,16 @@ completed++;
 document.getElementById(
 "hibahStatus"
 ).innerHTML =
-`✅ LULUS (${data.training.hibah.score}%)`;
+`✅ LULUS (${data.training.hibah.bestScore}%)`;
 
 document.getElementById(
-"hibahStatus"
-).className =
-"bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold";
+"hibahtStats"
+).innerHTML =
+`
+Best: ${data.training.hibah.bestScore}%<br>
+Last: ${data.training.hibah.lastScore}%<br>
+Attempts: ${data.training.hibah.attempts}
+`;
 
 }
   
