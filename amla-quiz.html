@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ujian AMLA & Compliance</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+font-family: Inter, sans-serif;
+}
+
+</style>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-3xl font-bold">
+Ujian AMLA & Compliance
+</h1>
+
+<p>
+20 Soalan • Lulus 80%
+</p>
+
+</div>
+
+<div class="max-w-4xl mx-auto p-5">
+
+<a
+href="amla-module.html"
+class="inline-block bg-gray-200 hover:bg-gray-300 px-5 py-3 rounded-xl font-semibold mb-5">
+
+← Kembali ke Modul
+
+</a>
+
+<form id="quizForm">
+
+<div id="questionsContainer"></div>
+
+<button
+type="submit"
+class="bg-[#153638] text-white px-8 py-4 rounded-xl font-bold mt-5">
+
+Hantar Jawapan
+
+</button>
+
+</form>
+
+<div id="result" class="mt-5"></div>
+ 
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+updateDoc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+
+projectId:"alqawthar-mywaris",
+
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+
+messagingSenderId:"3498810778",
+
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+let currentUser = null;
+
+onAuthStateChanged(auth,(user)=>{
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+currentUser = user;
+
+});
+
+
+ 
+
+
+
+
+const questions = [
+
+{
+question:"Apakah maksud AMLA?",
+options:[
+"Anti-Money Laundering Act",
+"Anti-Marketing Law Act",
+"Asset Management Legal Act",
+"Agency Management Law Act"
+],
+answer:"A"
+},
+
+{
+question:"Objektif utama AMLA ialah:",
+options:[
+"Mencegah pengubahan wang haram",
+"Meningkatkan jualan",
+"Meningkatkan komisen",
+"Meningkatkan cukai"
+],
+answer:"A"
+},
+
+{
+question:"Money laundering bermaksud:",
+options:[
+"Menyembunyikan sumber wang haram",
+"Membayar cukai",
+"Menyimpan wang di bank",
+"Melabur dalam saham"
+],
+answer:"A"
+},
+
+{
+question:"Terrorism financing merujuk kepada:",
+options:[
+"Pembiayaan aktiviti keganasan",
+"Pembiayaan perniagaan",
+"Pembiayaan pendidikan",
+"Pembiayaan hartanah"
+],
+answer:"A"
+},
+
+{
+question:"Apakah maksud KYC?",
+options:[
+"Know Your Customer",
+"Keep Your Cash",
+"Know Your Consultant",
+"Keep Your Compliance"
+],
+answer:"A"
+},
+
+{
+question:"Tujuan KYC adalah untuk:",
+options:[
+"Mengenal pasti identiti pelanggan",
+"Meningkatkan jualan",
+"Mengurangkan komisen",
+"Menghapuskan risiko pelaburan"
+],
+answer:"A"
+},
+
+{
+question:"CDD bermaksud:",
+options:[
+"Customer Due Diligence",
+"Customer Data Document",
+"Consultant Due Disclosure",
+"Compliance Data Department"
+],
+answer:"A"
+},
+
+{
+question:"CDD melibatkan:",
+options:[
+"Pengesahan maklumat pelanggan",
+"Pengiraan komisen",
+"Pembahagian pusaka",
+"Penjualan produk"
+],
+answer:"A"
+},
+
+{
+question:"Antara dokumen KYC yang biasa digunakan ialah:",
+options:[
+"MyKad atau Pasport",
+"Bil utiliti sahaja",
+"Kad ahli gym",
+"Kad pelajar sahaja"
+],
+answer:"A"
+},
+
+{
+question:"Red flag bermaksud:",
+options:[
+"Petunjuk risiko atau transaksi mencurigakan",
+"Dokumen pelanggan",
+"Kontrak jualan",
+"Sijil latihan"
+],
+answer:"A"
+},
+
+{
+question:"Pelanggan enggan memberikan dokumen pengenalan diri adalah:",
+options:[
+"Red Flag",
+"Normal",
+"Bukan isu",
+"Keperluan biasa"
+],
+answer:"A"
+},
+
+{
+question:"Transaksi yang luar biasa dan tidak selari dengan profil pelanggan perlu:",
+options:[
+"Diperhatikan dan disemak",
+"Diabaikan",
+"Diteruskan tanpa semakan",
+"Dipadamkan"
+],
+answer:"A"
+},
+
+{
+question:"Rekod pelanggan perlu disimpan:",
+options:[
+"Mengikut tempoh yang ditetapkan",
+"1 hari sahaja",
+"1 minggu sahaja",
+"Tidak perlu disimpan"
+],
+answer:"A"
+},
+
+{
+question:"Siapa yang bertanggungjawab mematuhi AMLA?",
+options:[
+"Semua konsultan",
+"Hanya pengurus",
+"Hanya pelanggan",
+"Hanya pentadbir sistem"
+],
+answer:"A"
+},
+
+{
+question:"Maklumat pelanggan yang tidak lengkap boleh menyebabkan:",
+options:[
+"Risiko pematuhan",
+"Peningkatan komisen",
+"Bonus tambahan",
+"Tiada kesan"
+],
+answer:"A"
+},
+
+{
+question:"Apabila mengesan transaksi mencurigakan, konsultan perlu:",
+options:[
+"Melaporkannya mengikut prosedur",
+"Mengabaikannya",
+"Menyembunyikannya",
+"Mengubah rekod"
+],
+answer:"A"
+},
+
+{
+question:"Apakah risiko utama jika AMLA tidak dipatuhi?",
+options:[
+"Tindakan undang-undang dan penalti",
+"Peningkatan komisen",
+"Bonus tahunan",
+"Naik pangkat automatik"
+],
+answer:"A"
+},
+
+{
+question:"AMLA membantu melindungi:",
+options:[
+"Sistem kewangan dan organisasi",
+"Komisen semata-mata",
+"Produk syarikat sahaja",
+"Pelaburan individu sahaja"
+],
+answer:"A"
+},
+
+{
+question:"Sebagai konsultan, anda perlu memastikan:",
+options:[
+"Maklumat pelanggan tepat dan lengkap",
+"Jualan sahaja penting",
+"Komisen sahaja penting",
+"Tiada dokumentasi diperlukan"
+],
+answer:"A"
+},
+
+{
+question:"Objektif utama modul AMLA ialah:",
+options:[
+"Memahami tanggungjawab pematuhan dan AMLA",
+"Menjadi pegawai penyiasat",
+"Menjadi hakim",
+"Menggantikan bank"
+],
+answer:"A"
+}
+];
+ 
+const container =
+document.getElementById(
+"questionsContainer"
+);
+
+questions.forEach((q,index)=>{
+
+let html = `
+
+<div class="bg-white rounded-2xl border border-gray-200 p-6 mb-5">
+
+<h2 class="font-bold mb-4">
+
+${index+1}. ${q.question}
+
+</h2>
+
+`;
+
+q.options.forEach((option,optIndex)=>{
+
+const letter =
+["A","B","C","D"][optIndex];
+
+html += `
+
+<label class="block mb-2">
+
+<input
+type="radio"
+name="q${index}"
+value="${letter}">
+
+${option}
+
+</label>
+
+`;
+
+});
+
+html += `</div>`;
+
+container.innerHTML += html;
+
+});
+
+document
+.getElementById("quizForm")
+.addEventListener("submit", async(e)=>{
+
+e.preventDefault();
+
+let correct = 0;
+
+questions.forEach((q,index)=>{
+
+const selected =
+document.querySelector(
+`input[name="q${index}"]:checked`
+)?.value;
+
+if(selected === q.answer){
+
+correct++;
+
+}
+
+});
+
+let answered = 0;
+
+questions.forEach((q,index)=>{
+
+const selected =
+document.querySelector(
+`input[name="q${index}"]:checked`
+);
+
+if(selected){
+
+answered++;
+
+}
+
+});
+
+if(answered < questions.length){
+
+alert(
+"Sila jawab semua soalan terlebih dahulu."
+);
+
+return;
+
+}
+ 
+const score =
+Math.round(
+(correct/questions.length)*100
+);
+
+const result =
+document.getElementById(
+"result"
+);
+
+if(score >= 80){
+
+result.innerHTML = `
+
+<div class="bg-green-100 text-green-700 p-5 rounded-xl">
+
+<h2 class="font-bold text-xl">
+
+LULUS ✅
+
+</h2>
+
+<p>
+
+Markah:
+${score}%
+
+</p>
+
+</div>
+
+`;
+
+const userSnap =
+await getDoc(
+doc(
+db,
+"users",
+currentUser.uid
+)
+);
+
+const oldData =
+userSnap.data();
+
+const oldScore =
+oldData?.training?.amla?.bestScore || 0;
+
+const oldAttempts =
+oldData?.training?.amla?.attempts || 0;
+
+const bestScore =
+Math.max(
+oldScore,
+score
+);
+
+console.log("AMLA UPDATE RUNNING");
+console.log("Score:", score);
+console.log("Best:", bestScore);
+console.log("Attempts:", oldAttempts + 1);
+ 
+await updateDoc(
+doc(
+db,
+"users",
+currentUser.uid
+),
+{
+"training.amla.status":"passed",
+
+"training.amla.bestScore":
+bestScore,
+
+"training.amla.lastScore":
+score,
+
+"training.amla.attempts":
+oldAttempts + 1,
+
+"training.amla.completedAt":
+new Date()
+}
+);
+ 
+}
+else{
+
+result.innerHTML = `
+
+<div class="bg-red-100 text-red-700 p-5 rounded-xl">
+
+<h2 class="font-bold text-xl">
+
+GAGAL ❌
+
+</h2>
+
+<p>
+
+Markah:
+${score}%
+
+</p>
+
+<p>
+
+Minimum lulus adalah 80%
+
+</p>
+
+</div>
+
+`;
+
+
+ 
+}
+
+});
+
+</script>
+
+</body>
+</html>
