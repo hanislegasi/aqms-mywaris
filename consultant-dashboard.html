@@ -380,6 +380,7 @@ Renew Now
 }
   
 let activeClients = 0;
+let totalSales = 0;
 
 const usersSnap =
 await getDocs(
@@ -396,7 +397,13 @@ u.role === "customer" &&
 u.paymentStatus === "paid" &&
 (u.referral || "").trim() === data.consultantNo
 ){
+
 activeClients++;
+
+totalSales += Number(
+u.packageAmount || 100
+);
+
 }
 
 });  
