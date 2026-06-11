@@ -334,6 +334,16 @@ document.getElementById(
 ).innerHTML =
 data.nama;
 
+const joinDate =
+data.joinDate?.toDate
+? data.joinDate.toDate()
+: new Date(data.joinDate);
+
+const renewalDate =
+data.renewalDate?.toDate
+? data.renewalDate.toDate()
+: new Date(data.renewalDate);
+ 
 document.getElementById(
 "profileCard"
 ).innerHTML = `
@@ -354,12 +364,14 @@ ${data.nama}
 
 <p>Negeri: ${data.state}</p>
 
-<p>Tarikh Sertai:
-${new Date(data.joinDate).toLocaleDateString("ms-MY")}
+<p>
+Tarikh Sertai:
+${joinDate.toLocaleDateString("ms-MY")}
 </p>
 
-<p>Renewal:
-${new Date(data.renewalDate).toLocaleDateString("ms-MY")}
+<p>
+Renewal:
+${renewalDate.toLocaleDateString("ms-MY")}
 </p>
 
 `;
