@@ -120,6 +120,19 @@ user.uid
 const data =
 userSnap.data();
 
+const renewalDate =
+new Date(data.renewalDate);
+
+const today =
+new Date();
+
+const diffDays =
+Math.ceil(
+(renewalDate - today)
+/
+(1000 * 60 * 60 * 24)
+);  
+
 let completed = 0;
 
 if(data?.training?.wasiat?.status === "passed") completed++;
@@ -132,7 +145,45 @@ document.getElementById(
 "renewalStatus"
 );
 
-if(completed === 4){
+if(completed === 4 && diffDays > 30){
+
+renewalStatus.innerHTML = `
+
+<div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl">
+
+<h2 class="text-2xl font-bold text-blue-700 mb-3">
+
+✅ ACTIVE MEMBERSHIP
+
+</h2>
+
+<p class="mb-2">
+
+CPD lengkap dan membership masih aktif.
+
+</p>
+
+<p>
+
+Tarikh Tamat:
+<b>${renewalDate.toLocaleDateString("ms-MY")}</b>
+
+</p>
+
+<p class="mt-2 text-gray-600">
+
+Renewal hanya dibuka 30 hari sebelum tamat.
+
+</p>
+
+</div>
+
+`;
+
+}
+else if(completed === 4 && diffDays <= 30){
+  
+if(completed === 4 && diffDays <= 30){
 
 renewalStatus.innerHTML = `
 
