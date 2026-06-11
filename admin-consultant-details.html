@@ -53,5 +53,228 @@ Loading...
 
 </div>
 
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+updateDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+
+projectId:"alqawthar-mywaris",
+
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+
+messagingSenderId:"3498810778",
+
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const consultantId =
+params.get("id");
+
+const snap =
+await getDoc(
+doc(
+db,
+"users",
+consultantId
+)
+);
+
+const data =
+snap.data();
+
+const sales =
+data.careerSales || 0;
+
+let nextLevel = "";
+let targetSales = 0;
+
+if(data.consultantLevel === "AQC"){
+
+nextLevel = "AQC-AS";
+targetSales = 30000;
+
+}
+else if(data.consultantLevel === "AQC-AS"){
+
+nextLevel = "AQC-UM";
+targetSales = 60000;
+
+}
+else if(data.consultantLevel === "AQC-UM"){
+
+nextLevel = "MGAM";
+targetSales = 120000;
+
+}
+else{
+
+nextLevel = "TOP LEVEL";
+targetSales = sales;
+
+}
+
+const progress =
+Math.min(
+100,
+(sales / targetSales) * 100
+);
+
+const remaining =
+Math.max(
+0,
+targetSales - sales
+);
+
+document.getElementById(
+"profileContainer"
+).innerHTML = `
+
+<div class="grid md:grid-cols-2 gap-5">
+
+<div class="bg-white p-6 rounded-2xl border">
+
+<h2 class="text-2xl font-bold mb-4">
+${data.nama}
+</h2>
+
+<p><b>No:</b> ${data.consultantNo}</p>
+
+<p><b>Level:</b> ${data.consultantLevel}</p>
+
+<p><b>Email:</b> ${data.email}</p>
+
+<p><b>Telefon:</b> ${data.telefon}</p>
+
+<p><b>Negeri:</b> ${data.state}</p>
+
+</div>
+
+<div class="bg-white p-6 rounded-2xl border">
+
+<h2 class="text-xl font-bold mb-4">
+
+Performance
+
+</h2>
+
+<p>
+Career Sales:
+RM${sales.toLocaleString()}
+</p>
+
+<p>
+Commission:
+RM${(data.totalCommission || 0).toLocaleString()}
+</p>
+
+<p>
+Overriding:
+RM${(data.totalOverriding || 0).toLocaleString()}
+</p>
+
+</div>
+
+</div>
+
+<div class="bg-white p-6 rounded-2xl border mt-5">
+
+<h2 class="text-xl font-bold mb-4">
+
+Career Progress
+
+</h2>
+
+<p>
+
+Current:
+<b>${data.consultantLevel}</b>
+
+→
+
+Next:
+<b>${nextLevel}</b>
+
+</p>
+
+<div class="w-full bg-gray-200 rounded-full h-4 mt-4">
+
+<div
+class="bg-green-600 h-4 rounded-full"
+style="width:${progress}%">
+
+</div>
+
+</div>
+
+<p class="mt-3">
+
+RM${remaining.toLocaleString()}
+lagi untuk naik ke ${nextLevel}
+
+</p>
+
+</div>
+
+<div class="bg-white p-6 rounded-2xl border mt-5">
+
+<h2 class="text-xl font-bold mb-4">
+
+Training Compliance
+
+</h2>
+
+<p>
+Wasiat:
+${data.training?.wasiat?.status === "passed" ? "✅" : "❌"}
+</p>
+
+<p>
+Hibah:
+${data.training?.hibah?.status === "passed" ? "✅" : "❌"}
+</p>
+
+<p>
+Faraid:
+${data.training?.faraid?.status === "passed" ? "✅" : "❌"}
+</p>
+
+<p>
+AMLA:
+${data.training?.amla?.status === "passed" ? "✅" : "❌"}
+</p>
+
+</div>
+
+`;
+
+</script>
+
+  
 </body>
 </html>
