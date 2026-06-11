@@ -271,8 +271,73 @@ ${data.training?.amla?.status === "passed" ? "✅" : "❌"}
 
 </div>
 
+${data.promotionRequest ? `
+
+<div class="bg-amber-50 border border-amber-300 p-6 rounded-2xl mt-5">
+
+<h2 class="text-xl font-bold text-amber-800 mb-3">
+
+📈 Promotion Application
+
+</h2>
+
+<p>
+
+Current Level:
+<b>${data.consultantLevel}</b>
+
+→
+
+Requested:
+<b>${data.requestedLevel}</b>
+
+</p>
+
+<button
+id="approvePromotionBtn"
+class="mt-4 bg-green-600 text-white px-5 py-3 rounded-xl">
+
+Approve Promotion
+
+</button>
+
+</div>
+
+` : ""}
+
 `;
 
+document
+.getElementById("approvePromotionBtn")
+?.addEventListener("click", async()=>{
+
+await updateDoc(
+doc(
+db,
+"users",
+consultantId
+),
+{
+consultantLevel:
+data.requestedLevel,
+
+promotionRequest:false,
+
+requestedLevel:"",
+
+promotionApprovedAt:
+new Date()
+}
+);
+
+alert(
+"Promotion Approved"
+);
+
+location.reload();
+
+});
+  
 </script>
 
   
