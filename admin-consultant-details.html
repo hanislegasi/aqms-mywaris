@@ -334,15 +334,39 @@ Promotion History
 
 </h2>
 
-<p class="mt-2">
+<div class="mt-2">
 
-Last Promotion Approved:
+<div class="flex justify-between">
 
-${data.promotionApprovedAt.toDate
+<span>
+Promotion Date
+</span>
+
+<span class="font-semibold">
+
+${data.promotionApprovedAt?.toDate
 ? data.promotionApprovedAt.toDate().toLocaleDateString("ms-MY")
 : "-"}
 
-</p>
+</span>
+
+</div>
+
+<div class="flex justify-between mt-2">
+
+<span>
+Promoted To
+</span>
+
+<span class="font-semibold text-green-700">
+
+${data.promotionApprovedLevel || data.consultantLevel}
+
+</span>
+
+</div>
+
+</div>
 
 </div>
 
