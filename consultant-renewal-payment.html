@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Consultant Renewal Payment</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+body{
+font-family: Inter, sans-serif;
+}
+</style>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+Consultant Renewal Payment
+</h1>
+
+<p>
+Renewal Tahunan Konsultan
+</p>
+
+</div>
+
+<div class="max-w-4xl mx-auto p-5">
+
+<div
+id="paymentCard"
+class="bg-white rounded-2xl border border-gray-200 p-6">
+
+Loading...
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+updateDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+const userSnap =
+await getDoc(
+doc(db,"users",user.uid)
+);
+
+  
+const data =
+userSnap.data();
+
+
+let renewalFee = 100;
+
+if(data.consultantLevel === "AQC-AS"){
+renewalFee = 150;
+}
+
+if(data.consultantLevel === "AQC-UM"){
+renewalFee = 250;
+}
+
+if(data.consultantLevel === "MGAM"){
+renewalFee = 500;
+}
+
+document.getElementById(
+"paymentCard"
+).innerHTML = `
+
+<h2 class="text-2xl font-bold text-[#153638] mb-5">
+
+Renewal Summary
+
+</h2>
+
+<div class="space-y-3">
+
+<p>
+<b>Consultant No:</b>
+${data.consultantNo || "-"}
+</p>
+
+<p>
+<b>Level:</b>
+${data.consultantLevel}
+</p>
+
+<p>
+<b>Status:</b>
+ACTIVE
+</p>
+
+<p>
+<b>Renewal Fee:</b>
+RM${renewalFee}
+</p>
+
+</div>
+
+<button
+id="payRenewalBtn"
+class="mt-6 bg-[#153638] text-white px-6 py-3 rounded-xl">
+
+Pay Renewal Fee
+
+</button>
+
+`;  
+
+
+  
+document
+.getElementById("payRenewalBtn")
+?.addEventListener("click", async()=>{
+
+const currentExpiry =
+new Date(data.renewalDate);
+
+const newExpiry =
+new Date(currentExpiry);
+
+newExpiry.setFullYear(
+newExpiry.getFullYear() + 1
+);
+
+await updateDoc(
+doc(db,"users",user.uid),
+{
+consultantPaymentStatus:"paid",
+renewalDate:newExpiry,
+lastRenewalDate:new Date(),
+renewalFeePaid:renewalFee
+}
+);
+
+alert(
+`Renewal Berjaya!
+
+Tarikh Tamat Baru:
+${newExpiry.toLocaleDateString("ms-MY")}`
+);
+
+window.location.href =
+"consultant-dashboard.html";
+
+});
+  
+</script>
+  
+</body>
+</html>
