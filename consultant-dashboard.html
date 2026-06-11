@@ -256,7 +256,9 @@ const data =
 userSnap.data();
 
 const renewalDate =
-new Date(data.renewalDate);
+data.renewalDate?.toDate
+? data.renewalDate.toDate()
+: new Date(data.renewalDate);
 
 const today =
 new Date();
