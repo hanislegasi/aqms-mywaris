@@ -68,6 +68,14 @@ Memuatkan profil...
 
 </div>
 
+<div
+id="promotionCard"
+class="bg-white p-5 rounded-2xl shadow mb-5">
+
+Loading Career Progress...
+
+</div>
+
  
 <!-- KPI -->
 
@@ -256,6 +264,52 @@ user.uid
 const data =
 userSnap.data();
 
+const sales =
+data.totalSales || 0;
+
+let nextLevel = "";
+let targetSales = 0;
+
+if(data.consultantLevel === "AQC"){
+
+nextLevel = "AQC-AS";
+targetSales = 10000;
+
+}
+
+else if(data.consultantLevel === "AQC-AS"){
+
+nextLevel = "AQC-UM";
+targetSales = 50000;
+
+}
+
+else if(data.consultantLevel === "AQC-UM"){
+
+nextLevel = "MGAM";
+targetSales = 150000;
+
+}
+
+else{
+
+nextLevel = "TOP LEVEL";
+targetSales = sales;
+
+}
+
+const progress =
+Math.min(
+100,
+(sales / targetSales) * 100
+);
+
+const remaining =
+Math.max(
+0,
+targetSales - sales
+); 
+
 const renewalDate =
 data.renewalDate?.toDate
 ? data.renewalDate.toDate()
@@ -335,6 +389,57 @@ document.getElementById(
 ).innerHTML =
 data.nama;
 
+document.getElementById(
+"promotionCard"
+).innerHTML = `
+
+<h2 class="text-xl font-bold mb-3">
+
+Career Progression
+
+</h2>
+
+<p>
+
+Current Level:
+<b>${data.consultantLevel}</b>
+
+</p>
+
+<p>
+
+Next Level:
+<b>${nextLevel}</b>
+
+</p>
+
+<div class="w-full bg-gray-200 rounded-full h-4 mt-4">
+
+<div
+class="bg-green-500 h-4 rounded-full"
+style="width:${progress}%">
+
+</div>
+
+</div>
+
+<p class="mt-2">
+
+RM${sales.toLocaleString()}
+/
+RM${targetSales.toLocaleString()}
+
+</p>
+
+<p class="mt-2 text-red-600 font-semibold">
+
+RM${remaining.toLocaleString()}
+ lagi untuk naik ke ${nextLevel}
+
+</p>
+
+`;
+ 
 const joinDate =
 data.joinDate?.toDate
 ? data.joinDate.toDate()
