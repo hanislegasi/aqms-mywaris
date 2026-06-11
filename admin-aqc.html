@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html lang="ms">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AQC Management</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+AQC Management
+</h1>
+
+<p>
+Consultant Management Centre
+</p>
+
+</div>
+
+<div class="max-w-7xl mx-auto p-5">
+
+<a
+href="admin-dashboard.html"
+class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+
+← Dashboard
+
+</a>
+
+<div
+id="consultantList"
+class="grid md:grid-cols-2 gap-4">
+
+Loading...
+
+</div>
+
+</div>
+
+<script type="module">  
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+getDoc,
+doc,
+updateDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+
+projectId:"alqawthar-mywaris",
+
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+
+messagingSenderId:"3498810778",
+
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+  
+const snapshot =
+await getDocs(
+collection(db,"users")
+);
+
+let html = "";
+
+snapshot.forEach((d)=>{
+
+const u = d.data();
+
+if(
+!u.consultantNo
+){
+return;
+}
+
+html += `
+
+<div class="bg-white rounded-2xl p-5 border">
+
+<h2 class="text-xl font-bold">
+${u.nama}
+</h2>
+
+<p>
+No:
+${u.consultantNo}
+</p>
+
+<p>
+Level:
+${u.consultantLevel}
+</p>
+
+<p>
+Telefon:
+${u.telefon || "-"}
+</p>
+
+<p>
+Email:
+${u.email || "-"}
+</p>
+
+<p>
+Career Sales:
+RM${(u.careerSales || 0).toLocaleString()}
+</p>
+
+`;
+  
+if(u.promotionRequest){
+
+html += `
+
+<div class="bg-yellow-100 border border-yellow-300 p-3 rounded-xl mt-3">
+
+🎉 Promotion Request
+
+<br>
+
+${u.consultantLevel}
+→
+${u.requestedLevel}
+
+</div>
+
+<button
+data-id="${d.id}"
+class="approveBtn mt-3 bg-green-600 text-white px-4 py-2 rounded-xl">
+
+Approve Promotion
+
+</button>
+
+`;
+
+}
+
+html += `
+</div>
+`;  
+
+ }); 
+
+document.getElementById(
+"consultantList"
+).innerHTML =
+html;  
+  
+document
+.querySelectorAll(".approveBtn")
+.forEach((btn)=>{
+
+btn.addEventListener("click", async()=>{
+
+const id =
+btn.dataset.id;
+
+const snap =
+await getDoc(
+doc(db,"users",id)
+);
+
+const data =
+snap.data();
+
+await updateDoc(
+doc(db,"users",id),
+{
+consultantLevel:
+data.requestedLevel,
+
+promotionRequest:false,
+
+requestedLevel:"",
+
+promotionApprovedAt:
+new Date()
+}
+);
+
+alert(
+"Promotion Approved"
+);
+
+location.reload();
+
+});
+
+});
+  
+
+  
+</script>
+
+  
+  
+</body>
+</html>
