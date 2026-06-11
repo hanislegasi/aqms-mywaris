@@ -134,13 +134,6 @@ Career Sales:
 RM${(u.careerSales || 0).toLocaleString()}
 </p>
 
-<a
-href="admin-consultant-details.html?id=${d.id}"
-class="inline-block mt-3 bg-[#153638] text-white px-4 py-2 rounded-xl">
-
-View Profile
-
-</a>
 
 <p>
 Join Date:
@@ -165,6 +158,15 @@ ${u.downlineCount || 0}
 Status:
 ${u.consultantPaymentStatus || "unpaid"}
 </p>
+
+<a
+href="admin-consultant-details.html?id=${d.id}"
+class="inline-block mt-3 bg-[#153638] text-white px-4 py-2 rounded-xl">
+
+View Profile
+
+</a>
+
 
 `;
   
