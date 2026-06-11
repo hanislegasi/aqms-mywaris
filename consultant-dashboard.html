@@ -265,8 +265,7 @@ user.uid
 const data =
 userSnap.data();
 
-const sales =
-data.totalSales || 0;
+let sales = 0;
 
 let nextLevel = "";
 let targetSales = 0;
@@ -295,27 +294,12 @@ targetSales = 120000;
 else{
 
 nextLevel = "TOP LEVEL";
-targetSales = sales;
+targetSales = 0;
 
 }
 
 
-if(
-totalSales >= targetSales &&
-nextLevel !== "TOP LEVEL" &&
-!data.promotionRequest
-)
 
-await updateDoc(
-doc(db,"users",user.uid),
-{
-promotionRequest:true,
-requestedLevel:nextLevel,
-promotionRequestDate:new Date()
-}
-);
-
-}
  
 const renewalDate =
 data.renewalDate?.toDate
@@ -466,6 +450,23 @@ Math.max(
 0,
 targetSales - totalSales
 );
+
+if(
+totalSales >= targetSales &&
+nextLevel !== "TOP LEVEL" &&
+!data.promotionRequest
+)
+
+await updateDoc(
+doc(db,"users",user.uid),
+{
+promotionRequest:true,
+requestedLevel:nextLevel,
+promotionRequestDate:new Date()
+}
+);
+
+}
 
  
 document.getElementById(
