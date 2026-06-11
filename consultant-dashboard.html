@@ -310,6 +310,23 @@ Math.max(
 targetSales - sales
 ); 
 
+if(
+sales >= targetSales &&
+nextLevel !== "TOP LEVEL" &&
+!data.promotionRequest
+){
+
+await updateDoc(
+doc(db,"users",user.uid),
+{
+promotionRequest:true,
+requestedLevel:nextLevel,
+promotionRequestDate:new Date()
+}
+);
+
+}
+ 
 const renewalDate =
 data.renewalDate?.toDate
 ? data.renewalDate.toDate()
@@ -433,8 +450,28 @@ RM${targetSales.toLocaleString()}
 
 <p class="mt-2 text-red-600 font-semibold">
 
+${
+data.promotionRequest
+?
+
+`<div class="mt-3 bg-yellow-100 text-yellow-700 p-3 rounded-xl">
+
+🎉 Promotion Request Submitted
+
+Menunggu kelulusan HQ.
+
+</div>`
+
+:
+
+`<p class="mt-2 text-red-600 font-semibold">
+
 RM${remaining.toLocaleString()}
- lagi untuk naik ke ${nextLevel}
+lagi untuk naik ke ${nextLevel}
+
+</p>`
+
+}
 
 </p>
 
