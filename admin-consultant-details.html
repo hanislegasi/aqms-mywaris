@@ -255,12 +255,40 @@ Keep inspiring and growing your team.
 
 ` : `
 
-<p class="mt-3">
+<div class="mt-4">
+
+<div class="flex justify-between text-sm mb-2">
+
+<span>
+Current Sales
+</span>
+
+<span>
+RM${sales.toLocaleString()}
+</span>
+
+</div>
+
+<div class="flex justify-between text-sm">
+
+<span>
+Target
+</span>
+
+<span>
+RM${targetSales.toLocaleString()}
+</span>
+
+</div>
+
+<p class="mt-3 font-semibold text-[#153638]">
 
 RM${remaining.toLocaleString()}
-lagi untuk naik ke ${nextLevel}
+ lagi untuk naik ke ${nextLevel}
 
 </p>
+
+</div>
 
 `}
 
@@ -296,11 +324,39 @@ ${data.training?.amla?.status === "passed" ? "✅" : "❌"}
 
 </div>
 
+${data.promotionApprovedAt ? `
+
+<div class="bg-green-50 border border-green-200 p-6 rounded-2xl mt-5">
+
+<h2 class="text-xl font-bold text-green-700">
+
+Promotion History
+
+</h2>
+
+<p class="mt-2">
+
+Last Promotion Approved:
+
+${data.promotionApprovedAt.toDate
+? data.promotionApprovedAt.toDate().toLocaleDateString("ms-MY")
+: "-"}
+
+</p>
+
+</div>
+
+` : ""}
+
 ${data.promotionRequest ? `
 
 <div class="bg-amber-50 border border-amber-300 p-6 rounded-2xl mt-5">
 
 <h2 class="text-xl font-bold text-amber-800 mb-3">
+
+</div>
+
+
 
 📈 Promotion Application
 
