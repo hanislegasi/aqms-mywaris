@@ -455,7 +455,7 @@ if(
 totalSales >= targetSales &&
 nextLevel !== "TOP LEVEL" &&
 !data.promotionRequest
-)
+){
 
 await updateDoc(
 doc(db,"users",user.uid),
