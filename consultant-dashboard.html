@@ -212,7 +212,8 @@ getFirestore,
 doc,
 getDoc,
 getDocs,
-collection
+collection,
+updateDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -298,23 +299,12 @@ targetSales = sales;
 
 }
 
-const progress =
-Math.min(
-100,
-(sales / targetSales) * 100
-);
-
-const remaining =
-Math.max(
-0,
-targetSales - sales
-); 
 
 if(
-sales >= targetSales &&
+totalSales >= targetSales &&
 nextLevel !== "TOP LEVEL" &&
 !data.promotionRequest
-){
+)
 
 await updateDoc(
 doc(db,"users",user.uid),
@@ -394,20 +384,90 @@ d.data();
 
 if(
 u.role === "customer" &&
-u.paymentStatus === "paid" &&
 (u.referral || "").trim() === data.consultantNo
 ){
 
 activeClients++;
 
-totalSales += Number(
-u.packageAmount || 100
-);
+if(u.paymentStatus === "paid"){
+totalSales += 350;
+}
+
+if(u.hibahPaymentStatus === "paid"){
+totalSales += 2500;
+}
+
+if(u.pusakaPaymentStatus === "paid"){
+totalSales += 800;
+}
 
 }
 
-});  
+});
 
+let commissionRate = 0;
+let overridingRate = 0;
+
+if(data.consultantLevel === "AQC"){
+
+commissionRate = 35;
+overridingRate = 0;
+
+}
+
+else if(data.consultantLevel === "AQC-AS"){
+
+commissionRate = 38;
+overridingRate = 3;
+
+}
+
+else if(data.consultantLevel === "AQC-UM"){
+
+commissionRate = 40;
+overridingRate = 10;
+
+}
+
+else if(data.consultantLevel === "MGAM"){
+
+commissionRate = 45;
+overridingRate = 13;
+
+}
+
+const totalCommission =
+(totalSales * commissionRate) / 100;
+
+const totalOverriding =
+(totalSales * overridingRate) / 100;
+
+
+await updateDoc(
+doc(db,"users",user.uid),
+{
+careerSales: totalSales,
+totalSales: totalSales,
+totalCommission: totalCommission,
+totalOverriding: totalOverriding
+}
+);
+
+const progress =
+targetSales > 0
+? Math.min(
+100,
+(totalSales / targetSales) * 100
+)
+: 100;
+
+const remaining =
+Math.max(
+0,
+targetSales - totalSales
+);
+
+ 
 document.getElementById(
 "welcomeText"
 ).innerHTML =
@@ -428,12 +488,36 @@ Career Progression
 Current Level:
 <b>${data.consultantLevel}</b>
 
+<p class="mt-2">
+Commission:
+<b>${commissionRate}%</b>
+</p>
+
+<p>
+Overriding:
+<b>${overridingRate}%</b>
+</p>
+
 </p>
 
 <p>
 
+${
+data.consultantLevel === "MGAM"
+?
+
+`<div class="mt-3 text-green-700 font-bold">
+🏆 You are our Elite MGAM Leader.
+Keep inspiring and growing your team.
+</div>`
+
+:
+
+`<p>
 Next Level:
 <b>${nextLevel}</b>
+</p>`
+}
 
 </p>
 
@@ -449,7 +533,7 @@ style="width:${progress}%">
 
 <p class="mt-2">
 
-RM${sales.toLocaleString()}
+RM${totalSales.toLocaleString()}
 /
 RM${targetSales.toLocaleString()}
 
@@ -559,17 +643,17 @@ activeClients;
 document.getElementById(
 "totalSales"
 ).innerHTML =
-"RM" + (data.totalSales || 0);
+"RM" + totalSales.toLocaleString();
 
 document.getElementById(
 "totalCommission"
 ).innerHTML =
-"RM" + (data.totalCommission || 0);
+"RM" + totalCommission.toLocaleString();
 
 document.getElementById(
 "totalOverriding"
 ).innerHTML =
-"RM" + (data.totalOverriding || 0);
+"RM" + totalOverriding.toLocaleString();
 
 });
 
