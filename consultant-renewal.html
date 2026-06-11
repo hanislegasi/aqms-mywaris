@@ -44,19 +44,218 @@ class="inline-block bg-gray-200 hover:bg-gray-300 px-5 py-3 rounded-xl font-semi
 
 </a>
 
-<div class="bg-white rounded-2xl border border-gray-200 p-6">
+<div
+id="renewalStatus"
+class="bg-white rounded-2xl border border-gray-200 p-6">
 
-<h2 class="text-xl font-bold text-[#153638] mb-3">
-Semakan Renewal
+Loading...
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+
+projectId:"alqawthar-mywaris",
+
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+
+messagingSenderId:"3498810778",
+
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+const userSnap =
+await getDoc(
+doc(
+db,
+"users",
+user.uid
+)
+);
+
+const data =
+userSnap.data();
+
+let completed = 0;
+
+if(data?.training?.wasiat?.status === "passed") completed++;
+if(data?.training?.hibah?.status === "passed") completed++;
+if(data?.training?.faraid?.status === "passed") completed++;
+if(data?.training?.amla?.status === "passed") completed++;
+
+const renewalStatus =
+document.getElementById(
+"renewalStatus"
+);
+
+renewalStatus.innerHTML = `
+
+<div class="bg-green-50 border border-green-200 p-6 rounded-2xl">
+
+<div class="flex justify-between items-center mb-5">
+
+<div>
+
+<h2 class="text-2xl font-bold text-green-700">
+
+✅ CPD COMPLIANT
+
 </h2>
 
-<p class="text-gray-600">
-Sistem sedang menyemak status CPD dan kelayakan renewal anda.
+<p class="text-gray-600 mt-1">
+
+Semua latihan tahunan telah dilengkapkan.
+
+</p>
+
+</div>
+
+<span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
+
+ACTIVE
+
+</span>
+
+</div>
+
+<div class="grid md:grid-cols-2 gap-4 mb-5">
+
+<div class="bg-white p-4 rounded-xl border">
+
+<p class="text-gray-500 text-sm">
+Status CPD
+</p>
+
+<p class="font-bold text-lg">
+Compliant
+</p>
+
+</div>
+
+<div class="bg-white p-4 rounded-xl border">
+
+<p class="text-gray-500 text-sm">
+Modul Lengkap
+</p>
+
+<p class="font-bold text-lg">
+4 / 4
 </p>
 
 </div>
 
 </div>
 
+<button
+id="proceedRenewalBtn"
+class="bg-[#153638] text-white px-6 py-3 rounded-xl font-semibold">
+
+Proceed Renewal
+
+</button>
+
+</div>
+
+`;
+}
+else{
+
+renewalStatus.innerHTML = `
+
+<div class="bg-red-100 text-red-700 p-5 rounded-xl">
+
+<h2 class="text-2xl font-bold mb-2">
+
+❌ CPD NON-COMPLIANT
+
+</h2>
+
+<p>
+
+Training belum lengkap.
+
+</p>
+
+<p class="mt-2">
+
+Lengkapkan semua 4 modul terlebih dahulu.
+
+</p>
+
+setTimeout(()=>{
+
+document
+.getElementById("proceedRenewalBtn")
+?.addEventListener("click",()=>{
+
+window.location.href =
+"consultant-renewal-payment.html";
+
+});
+
+},100);
+
+<a
+href="consultant-training.html"
+class="inline-block mt-4 bg-red-600 text-white px-5 py-3 rounded-xl">
+
+Pergi ke Training Centre
+
+</a>
+
+</div>
+
+`;
+
+}
+
+});
+
+</script>
+  
 </body>
 </html>
