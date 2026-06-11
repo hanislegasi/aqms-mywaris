@@ -68,6 +68,17 @@ Memuatkan profil...
 
 </div>
 
+<div class="mt-4">
+<button
+id="editProfileBtn"
+class="bg-blue-500 text-white px-5 py-2 rounded-xl">
+
+Edit Profile
+
+</button>
+</div>
+
+ 
 <!-- KPI -->
 
 <div
@@ -345,33 +356,62 @@ document.getElementById(
 ).innerHTML = `
 
 <h2 class="text-2xl font-bold mb-3">
-
 ${data.nama}
-
 </h2>
 
-<p>No Konsultan: ${data.consultantNo}</p>
+<p><b>No Konsultan:</b> ${data.consultantNo}</p>
 
-<p>Level: ${data.consultantLevel}</p>
+<p><b>Level:</b> ${data.consultantLevel}</p>
 
-<p>Upline: ${data.upline || "-"}</p>
+<p><b>Upline:</b> ${data.upline || "-"}</p>
 
-<p>Telefon: ${data.telefon}</p>
+<p><b>Telefon:</b> ${data.telefon}</p>
 
-<p>Negeri: ${data.state}</p>
+<p><b>Email:</b> ${data.email || "-"}</p>
+
+<p><b>IC:</b> ${data.ic || "-"}</p>
+
+<p><b>Negeri:</b> ${data.state}</p>
+
+<p><b>Bank:</b> ${data.bankName || "-"}</p>
+
+<p><b>No Akaun:</b> ${data.bankAccount || "-"}</p>
+
+<p><b>Status Bayaran:</b> ${data.consultantPaymentStatus || "-"}</p>
 
 <p>
-Tarikh Sertai:
+<b>Tarikh Sertai:</b>
 ${joinDate.toLocaleDateString("ms-MY")}
 </p>
 
 <p>
-Renewal:
+<b>Renewal:</b>
 ${renewalDate.toLocaleDateString("ms-MY")}
 </p>
 
+<div class="mt-4">
+
+<button
+id="editProfileBtn"
+class="bg-blue-500 text-white px-5 py-2 rounded-xl">
+
+Edit Profile
+
+</button>
+
+</div>
+
 `;
 
+document
+.getElementById("editProfileBtn")
+?.addEventListener("click",()=>{
+
+window.location.href =
+"consultant-profile-edit.html";
+
+});
+ 
 document.getElementById(
 "activeClients"
 ).innerHTML =
@@ -429,7 +469,8 @@ window.location.href =
 "consultant-renewal.html";
 
 });  
-  
+
+ 
 document
 .getElementById("logoutBtn")
 .addEventListener("click", async()=>{
