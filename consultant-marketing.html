@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+Marketing Kit
+</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<style>
+body{
+font-family:Inter,sans-serif;
+}
+</style>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+Marketing Kit
+</h1>
+
+<p>
+Consultant Resource Centre
+</p>
+
+</div>
+
+<div class="max-w-7xl mx-auto p-5">
+
+<a
+href="consultant-dashboard.html"
+class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+
+← Dashboard
+
+</a>
+
+<div class="grid md:grid-cols-3 gap-5">
+
+<div id="driveCard"></div>
+
+<div id="businessCardSection"></div>
+
+<div id="posterCard"></div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+projectId:"alqawthar-mywaris",
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+messagingSenderId:"3498810778",
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+const snap =
+await getDoc(
+doc(db,"users",user.uid)
+);
+
+const data =
+snap.data();
+
+
+
+
+
+onAuthStateChanged(auth, async(user)=>{
+  
+document.getElementById(
+"driveCard"
+).innerHTML = `
+
+<div class="bg-white rounded-2xl p-6 shadow">
+
+<div class="text-4xl mb-3">
+📂
+</div>
+
+<h2 class="text-xl font-bold">
+Marketing Materials
+</h2>
+
+<p class="text-gray-500 mt-2">
+Brochure, guide & sales materials.
+</p>
+
+<a
+href="YOUR_DRIVE_URL_1"
+target="_blank"
+class="block mt-4 bg-[#153638] text-white text-center py-3 rounded-xl">
+
+Marketing Folder
+
+</a>
+
+<a
+href="YOUR_DRIVE_URL_2"
+target="_blank"
+class="block mt-3 bg-gray-700 text-white text-center py-3 rounded-xl">
+
+Video Library
+
+</a>
+
+</div>
+
+`;
+
+document.getElementById(
+"businessCardSection"
+).innerHTML = `
+
+<div class="bg-white rounded-2xl p-6 shadow">
+
+<div class="text-4xl mb-3">
+💳
+</div>
+
+<h2 class="text-xl font-bold">
+Virtual Business Card
+</h2>
+
+<div
+class="bg-[#153638] text-white rounded-2xl p-5 mt-4">
+
+<h3 class="text-xl font-bold">
+${data.nama}
+</h3>
+
+<p class="mt-2">
+${data.consultantNo}
+</p>
+
+<p>
+${data.telefon || ""}
+</p>
+
+</div>
+
+<div class="grid grid-cols-2 gap-3 mt-4">
+
+<button
+id="shareCardBtn"
+class="bg-green-600 text-white py-3 rounded-xl">
+
+Share
+
+</button>
+
+<button
+id="downloadCardBtn"
+class="bg-blue-600 text-white py-3 rounded-xl">
+
+Download
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+document
+.getElementById("shareCardBtn")
+?.addEventListener("click",async()=>{
+
+if(navigator.share){
+
+await navigator.share({
+
+title:"AQMS Consultant",
+
+text:
+`${data.nama}
+${data.consultantNo}
+${data.telefon}`
+
+});
+
+}
+
+});
+
+document
+.getElementById("downloadCardBtn")
+?.addEventListener("click",()=>{
+
+window.open(
+`business-card.html?id=${user.uid}`,
+"_blank"
+);
+
+});
+
+document.getElementById(
+"posterCard"
+).innerHTML = `
+
+<div class="bg-white rounded-2xl p-6 shadow">
+
+<div class="text-4xl mb-3">
+🖼️
+</div>
+
+<h2 class="text-xl font-bold">
+Poster Library
+</h2>
+
+<p class="text-gray-500 mt-2">
+Ready-to-use social media posters.
+</p>
+
+<a
+href="YOUR_POSTER_URL"
+target="_blank"
+class="block mt-4 bg-[#153638] text-white text-center py-3 rounded-xl">
+
+Open Poster Library
+
+</a>
+
+</div>
+
+`;
+
+});
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+                   
