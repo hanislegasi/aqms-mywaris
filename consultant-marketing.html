@@ -169,9 +169,18 @@ Virtual Business Card
 </h2>
 
 <div
-class="bg-[#153638] text-white rounded-2xl p-5 mt-4">
+class="bg-gradient-to-r from-[#153638] to-[#21585b]
+text-white rounded-2xl p-6 mt-4 shadow-lg">
 
-<h3 class="text-xl font-bold">
+<div class="flex justify-between items-start">
+
+<div>
+
+<p class="text-xs opacity-80">
+AL QAWTHAR MAWARIS SYNERGY
+</p>
+
+<h3 class="text-2xl font-bold mt-2">
 ${data.nama}
 </h3>
 
@@ -180,7 +189,30 @@ ${data.consultantNo}
 </p>
 
 <p>
-${data.telefon || ""}
+${data.telefon || "-"}
+</p>
+
+</div>
+
+<div class="text-right">
+
+<div class="bg-white text-[#153638]
+px-3 py-1 rounded-full text-xs font-bold">
+
+CONSULTANT
+
+</div>
+
+</div>
+
+</div>
+
+<hr class="my-4 border-white/20">
+
+<p class="text-sm opacity-90">
+
+Professional Estate Planning Consultant
+
 </p>
 
 </div>
