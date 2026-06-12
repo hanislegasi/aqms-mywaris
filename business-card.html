@@ -31,18 +31,56 @@ font-family:Inter,sans-serif;
 
 <body class="bg-gray-100 p-5">
 
-<div class="max-w-md mx-auto">
+<div class="max-w-5xl mx-auto">
 
-<div id="businessCard" class="relative max-w-5xl mx-auto">
+<div
+id="businessCard"
+class="relative max-w-5xl mx-auto bg-white">
 
 <img
-src="images/business-card-template.png"
-id="cardTemplate"
+src="https://hanislegasi.github.io/aqms-mywaris/images/business-card-template.png"
 class="w-full">
 
 <div
 id="cardContent"
 class="absolute inset-0">
+
+<div
+class="absolute left-[60px] top-[240px]">
+
+<h2
+id="cardName"
+class="text-5xl font-bold text-[#153638]">
+Loading...
+</h2>
+
+</div>
+
+<div
+class="absolute left-[60px] top-[340px] text-[#153638]">
+
+<p
+id="cardAqc"
+class="text-2xl font-semibold mb-3">
+AQC0001
+</p>
+
+<p
+id="cardPhone"
+class="text-xl mb-2">
+0123456789
+</p>
+
+<p
+id="cardEmail"
+class="text-xl mb-2">
+email@gmail.com
+</p>
+
+<p
+class="text-xl font-semibold">
+www.alqawthar.my
+</p>
 
 </div>
 
@@ -132,33 +170,18 @@ doc(db,"users",user.uid)
 const data =
 snap.data();
 
-document.getElementById(
-"businessCard"
-).innerHTML = `
+document.getElementById("cardName").innerText =
+data.nama || "";
 
-<p class="text-xs opacity-80">
-AL QAWTHAR MAWARIS SYNERGY
-</p>
+document.getElementById("cardAqc").innerText =
+data.consultantNo || "";
 
-<h1 class="text-3xl font-bold mt-4">
-${data.nama}
-</h1>
+document.getElementById("cardPhone").innerText =
+data.telefon || "";
 
-<p class="mt-2">
-${data.consultantNo}
-</p>
-
-<p>
-${data.telefon || "-"}
-</p>
-
-<p class="mt-6 text-sm opacity-80">
-
-Professional Estate Planning Consultant
-
-</p>
-
-`;
+document.getElementById("cardEmail").innerText =
+data.email || "";
+  
 
 document
 .getElementById("shareBtn")
