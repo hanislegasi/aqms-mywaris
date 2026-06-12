@@ -389,6 +389,24 @@ totalSales += 800;
 
 });
 
+let overridingSales = 0;
+
+usersSnap.forEach((d)=>{
+
+const u = d.data();
+
+if(
+u.consultantNo &&
+u.upline === data.consultantNo
+){
+
+overridingSales +=
+Number(u.totalSales || 0);
+
+}
+
+});
+ 
 let commissionRate = 0;
 let overridingRate = 0;
 
@@ -424,7 +442,7 @@ const totalCommission =
 (totalSales * commissionRate) / 100;
 
 const totalOverriding =
-(totalSales * overridingRate) / 100;
+(overridingSales * overridingRate) / 100;
 
 
 await updateDoc(
@@ -497,6 +515,20 @@ Commission:
 <p>
 Overriding:
 <b>${overridingRate}%</b>
+</p>
+
+<p>
+Team Sales:
+<b>
+RM${overridingSales.toLocaleString()}
+</b>
+</p>
+
+<p>
+Overriding Earned:
+<b class="text-green-600">
+RM${totalOverriding.toLocaleString()}
+</b>
 </p>
 
 </p>
