@@ -187,29 +187,58 @@ document
 .getElementById("shareBtn")
 .addEventListener("click", async()=>{
 
-if(navigator.share){
+const canvas =
+await html2canvas(
+document.getElementById("businessCard")
+);
+
+canvas.toBlob(async(blob)=>{
+
+const file =
+new File(
+[blob],
+`${data.consultantNo}.png`,
+{
+type:"image/png"
+}
+);
+
+if(
+navigator.canShare &&
+navigator.canShare({
+files:[file]
+})
+){
 
 await navigator.share({
-
-title:"AQMS Consultant",
-
-text:`
-${data.nama}
-${data.consultantNo}
-${data.telefon}
-`
-
+files:[file]
 });
 
 }
 
 });
 
+});
+
 document
 .getElementById("downloadBtn")
-.addEventListener("click",()=>{
+.addEventListener("click", async()=>{
 
-window.print();
+const canvas =
+await html2canvas(
+document.getElementById("businessCard")
+);
+
+const link =
+document.createElement("a");
+
+link.download =
+`${data.consultantNo}.png`;
+
+link.href =
+canvas.toDataURL("image/png");
+
+link.click();
 
 });
 
@@ -217,6 +246,8 @@ window.print();
 
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  
 </body>
 
 </html>
