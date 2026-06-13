@@ -183,14 +183,38 @@ Pelanggan (AQM)
 <input
 id="searchInput"
 type="text"
-placeholder="Cari nama, email atau no ahli..."
+placeholder="Cari nama, email, no AQM, referral atau tarikh daftar..."
 class="w-full p-4 rounded-xl border border-gray-300 mb-4">
 
 </div>
 
 <div
 id="listContainer"
-class="space-y-4 hidden">
+class="hidden overflow-x-auto">
+
+<table class="w-full bg-white rounded-xl overflow-hidden">
+
+<thead class="bg-[#153638] text-white">
+
+<tr>
+  
+<th class="p-3 text-center">Bil</th>
+<th class="p-3 text-left">Tarikh Daftar</th>
+<th class="p-3 text-left">No AQM</th>
+<th class="p-3 text-left">Nama</th>
+<th class="p-3 text-left">Email</th>
+<th class="p-3 text-left">Referral</th>
+<th class="p-3 text-center">Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tableBody">
+
+</tbody>
+
+</table>
 
 </div>
 
@@ -406,71 +430,76 @@ collection(db,"users")
 
 let html = "";
 
-window.customerHTML = "";
+let bil = 1;
 
-let allCustomers = [];
-  
 snapshot.forEach((doc)=>{
 
-const user =
-doc.data();
-
-allCustomers.push({
-id: doc.id,
-nama: user.nama || "",
-email: user.email || "",
-memberNo: user.memberNo || "",
-status: user.paymentStatus || ""
-});  
+const user = doc.data();
 
 if(user.role === "admin"){
 return;
 }
-  
-const memberNo =
-user.memberNo || "-";
+
+const memberNo = user.memberNo || "-";
 
 const status =
 user.paymentStatus === "paid"
 ? "AHLI AKTIF"
 : "PROSPEK";
 
+let registerDate = "-";
+
+if(user.createdAt){
+
+registerDate =
+user.createdAt
+.toDate()
+.toLocaleDateString("ms-MY");
+
+}
+  
 html += `
 
-<a
-href="customer-details.html?id=${doc.id}"
-class="block bg-white rounded-2xl p-5 shadow hover:shadow-lg transition">
+<tr
+class="border-b hover:bg-gray-50 cursor-pointer"
+onclick="window.location='customer-details.html?id=${doc.id}'">
 
-<div class="flex justify-between items-center">
+<td class="p-3">
 
-<div>
+${registerDate}
 
-<p class="text-xs text-gray-500">
+</td>
+
+<td class="p-3">
 
 ${memberNo}
 
-</p>
+</td>
 
-<h3 class="font-bold text-lg">
+<td class="p-3 font-semibold">
 
 ${user.nama || "-"}
 
-</h3>
+</td>
 
-<p class="text-gray-500">
+<td class="p-3">
 
 ${user.email || "-"}
 
-</p>
+</td>
 
-</div>
+<td class="p-3">
 
-<div>
+${user.referral || "-"}
+
+</td>
+
+<td class="p-3 text-center">
 
 <span
 class="
-px-3 py-1 rounded-full text-sm
-${user.paymentStatus === "paid"
+px-3 py-1 rounded-full text-xs
+${user.paymentStatus==="paid"
 ? "bg-green-100 text-green-700"
 : "bg-yellow-100 text-yellow-700"}">
 
@@ -478,18 +507,16 @@ ${status}
 
 </span>
 
-</div>
+</td>
 
-</div>
-
-</a>
+</tr>
 
 `;
   
 });
 
 document.getElementById(
-"listContainer"
+"tableBody"
 ).innerHTML = html;
 
 window.allCustomers =
@@ -541,26 +568,24 @@ document
 const keyword =
 e.target.value.toLowerCase();
 
-const cards =
+const rows =
 document.querySelectorAll(
-"#listContainer a"
+"#tableBody tr"
 );
 
-cards.forEach((card)=>{
+rows.forEach((row)=>{
 
 const text =
-card.innerText.toLowerCase();
+row.innerText.toLowerCase();
 
 if(text.includes(keyword)){
 
-card.style.display =
-"block";
+row.style.display = "";
 
 }
 else{
 
-card.style.display =
-"none";
+row.style.display = "none";
 
 }
 
