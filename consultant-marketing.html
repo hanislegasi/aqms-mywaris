@@ -170,11 +170,15 @@ Virtual Business Card
 
 <div
 id="virtualCard"
-class="relative mt-4">
+class="relative mx-auto"
+style="
+width:600px;
+height:340px;
+">
 
 <img
 src="images/business-card-template.png"
-class="w-full rounded-2xl">
+class="absolute inset-0 w-full h-full">
 
 <div
 class="absolute inset-0">
@@ -183,10 +187,15 @@ class="absolute inset-0">
 class="absolute left-[8%] top-[45%]">
 
 <h3
-class="text-2xl font-bold text-[#153638]">
-
+class="
+absolute
+left-[55px]
+top-[145px]
+text-[42px]
+font-bold
+text-[#153638]
+">
 ${data.nama}
-
 </h3>
 
 </div>
@@ -195,28 +204,50 @@ ${data.nama}
 class="absolute left-[8%] top-[57%]
 text-[#153638]">
 
-<p class="font-semibold">
-
+<p
+class="
+absolute
+left-[55px]
+top-[205px]
+text-[26px]
+font-semibold
+text-[#153638]
+">
 ${data.consultantNo}
-
 </p>
 
-<p>
-
-${data.telefon || "-"}
-
+<p
+class="
+absolute
+left-[55px]
+top-[245px]
+text-[24px]
+text-[#153638]
+">
+${data.telefon}
 </p>
 
-<p class="text-sm">
-
-${data.email || "-"}
-
+<p
+class="
+absolute
+left-[55px]
+top-[285px]
+text-[20px]
+text-[#153638]
+">
+${data.email}
 </p>
 
-<p class="text-sm font-semibold">
-
+<p
+class="
+absolute
+left-[55px]
+top-[315px]
+text-[20px]
+font-semibold
+text-[#153638]
+">
 www.alqawthar.my
-
 </p>
 
 </div>
