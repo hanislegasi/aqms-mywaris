@@ -55,11 +55,36 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 </a>
 
-<div
-id="consultantList"
-class="grid md:grid-cols-2 gap-4">
+<div class="bg-white rounded-2xl shadow overflow-x-auto">
 
+<table class="w-full">
+
+<thead class="bg-[#153638] text-white">
+
+<tr>
+<th class="p-3 text-left">Bil</th>
+<th class="p-3 text-left">Tarikh Daftar</th>
+<th class="p-3 text-left">No AQC</th>
+<th class="p-3 text-left">Nama</th>
+<th class="p-3 text-left">Level</th>
+<th class="p-3 text-left">Telefon</th>
+<th class="p-3 text-left">Career Sales</th>
+<th class="p-3 text-left">Status</th>
+</tr>
+
+</thead>
+
+<tbody id="consultantList">
+
+<tr>
+<td colspan="8" class="p-4">
 Loading...
+</td>
+</tr>
+
+</tbody>
+
+</table>
 
 </div>
 
@@ -102,12 +127,22 @@ initializeApp(firebaseConfig);
 const db =
 getFirestore(app);
   
+import {
+query,
+orderBy
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 const snapshot =
 await getDocs(
-collection(db,"users")
+query(
+collection(db,"users"),
+orderBy("joinDate","desc")
+)
 );
 
 let html = "";
+let bil = 1;
 
 snapshot.forEach((d)=>{
 
@@ -121,115 +156,56 @@ return;
 
 html += `
 
-<div class="bg-white rounded-2xl p-5 border">
+<tr class="border-b hover:bg-gray-50">
 
-<h2 class="text-xl font-bold">
-${u.nama}
-</h2>
+<td class="p-3">
+${bil++}
+</td>
 
-<p>
-No:
-${u.consultantNo}
-</p>
-
-<p>
-Level:
-${u.consultantLevel}
-</p>
-
-<p>
-Telefon:
-${u.telefon || "-"}
-</p>
-
-<p>
-Email:
-${u.email || "-"}
-</p>
-
-<p>
-Career Sales:
-RM${(u.careerSales || 0).toLocaleString()}
-</p>
-
-
-<p>
-Join Date:
+<td class="p-3">
 ${u.joinDate
 ? new Date(u.joinDate).toLocaleDateString("ms-MY")
 : "-"}
-</p>
+</td>
 
-<p>
-Renewal:
-${u.renewalDate?.toDate
-? u.renewalDate.toDate().toLocaleDateString("ms-MY")
-: "-"}
-</p>
+<td class="p-3">
+${u.consultantNo}
+</td>
 
-<p>
-Active Clients:
-${u.downlineCount || 0}
-</p>
+<td class="p-3 font-semibold">
+${u.nama}
+</td>
 
-<p>
-Status:
+<td class="p-3">
+${u.consultantLevel || "-"}
+</td>
+
+<td class="p-3">
+${u.telefon || "-"}
+</td>
+
+<td class="p-3">
+RM${(u.careerSales || 0).toLocaleString()}
+</td>
+
+<td class="p-3">
+
+<span class="
+px-3 py-1 rounded-full text-xs
+${u.consultantPaymentStatus === "paid"
+? "bg-green-100 text-green-700"
+: "bg-red-100 text-red-700"}
+">
+
 ${u.consultantPaymentStatus || "unpaid"}
-</p>
 
-<a
-href="admin-consultant-details.html?id=${d.id}"
-class="inline-block mt-3 bg-[#153638] text-white px-4 py-2 rounded-xl">
+</span>
 
-View Profile
+</td>
 
-</a>
-
+</tr>
 
 `;
-  
-if(u.promotionRequest){
-
-html += `
-
-<div class="bg-amber-50 border border-amber-300 p-4 rounded-xl mt-4">
-
-<div class="font-semibold text-amber-800">
-
-📈 Promotion Application
-
-</div>
-
-<p class="mt-2">
-
-Current Level:
-<b>${u.consultantLevel}</b>
-
-→
-
-Requested:
-<b>${u.requestedLevel}</b>
-
-</p>
-
-</div>
-
-<button
-data-id="${d.id}"
-class="approveBtn mt-3 bg-green-600 text-white px-4 py-2 rounded-xl">
-
-Approve Promotion
-
-</button>
-
-`;
-
-}
-
-html += `
-</div>
-`;  
-
  }); 
 
 document.getElementById(
