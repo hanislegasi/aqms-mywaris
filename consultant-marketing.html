@@ -160,7 +160,7 @@ document.getElementById(
 "businessCardSection"
 ).innerHTML = `
 
-<div class="bg-white rounded-2xl p-6 shadow max-w-3xl mx-auto">
+<div class="bg-white rounded-2xl p-6 shadow max-w-5xl mx-auto">
 
 <div class="text-4xl mb-3">
 💳
@@ -172,9 +172,9 @@ Virtual Business Card
 
 <div
 id="virtualCard"
-class="relative mx-auto"
+class="relative mx-auto overflow-hidden"
 style="
-max-width:700px;
+max-width:900px;
 width:100%;
 aspect-ratio: 1059 / 606;
 ">
@@ -189,23 +189,22 @@ class="absolute inset-0 w-full h-full">
 <h3
 class="
 absolute
-left-[60px]
-top-[190px]
-text-[42px]
+left-[9%]
+top-[58%]
+text-[clamp(18px,4vw,54px)]
 font-bold
 text-[#153638]
+leading-tight
 ">
 ${data.nama}
 </h3>
 
-</div>
-
 <p
 class="
 absolute
-left-[55px]
-top-[205px]
-text-[26px]
+left-[9%]
+top-[73%]
+text-[clamp(12px,2vw,28px)]
 font-semibold
 text-[#153638]
 ">
@@ -215,9 +214,22 @@ ${data.consultantNo}
 <p
 class="
 absolute
-left-[55px]
-top-[245px]
-text-[24px]
+left-[9%]
+top-[67%]
+text-[clamp(10px,1.5vw,18px)]
+text-[#153638]
+font-medium
+">
+Perunding Perancangan Harta Pusaka
+</p>
+
+
+<p
+class="
+absolute
+left-[9%]
+top-[80%]
+text-[clamp(12px,2vw,24px)]
 text-[#153638]
 ">
 ${data.telefon}
@@ -226,9 +238,9 @@ ${data.telefon}
 <p
 class="
 absolute
-left-[55px]
-top-[285px]
-text-[20px]
+left-[9%]
+top-[86%]
+text-[clamp(10px,1.8vw,20px)]
 text-[#153638]
 ">
 ${data.email}
@@ -237,9 +249,9 @@ ${data.email}
 <p
 class="
 absolute
-left-[55px]
-top-[315px]
-text-[20px]
+left-[9%]
+top-[92%]
+text-[clamp(10px,1.8vw,20px)]
 font-semibold
 text-[#153638]
 ">
@@ -248,13 +260,7 @@ www.alqawthar.my
 
 </div>
 
-</div>
-
-</div>
-
-</div>
-
-<div class="grid grid-cols-2 gap-4 mt-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
 
 <button
 id="shareCardBtn"
@@ -273,6 +279,8 @@ Download
 </button>
 
 </div>
+
+
 
 </div>
 
