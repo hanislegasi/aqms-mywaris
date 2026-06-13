@@ -348,39 +348,71 @@ Status
 
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
 
 
-<div class="bg-green-50 border border-green-200 p-4 rounded-xl">
+<!-- WASIAT -->
+<div class="bg-green-50 border border-green-200 rounded-2xl p-5 shadow-sm">
 
-<h3 class="font-bold text-green-800 mb-3">
+<div class="flex items-center justify-between mb-4">
+
+<h3 class="font-bold text-green-800 text-lg">
 e-Wasiat
 </h3>
 
-<p class="text-sm">
-No Dokumen:
-<strong>${docRef}</strong>
+
+
+</div>
+
+
+<p class="text-sm text-gray-600">
+No Dokumen
 </p>
 
-<p class="text-sm">
-Tarikh Lulus:
+<p class="font-semibold mb-3">
+${docRef}
+</p>
+
+
+<p class="text-sm text-gray-600">
+Tarikh Lulus
+</p>
+
+<p class="mb-3">
 ${approvedDate}
 </p>
 
-<p class="text-sm">
-Tamat Keahlian:
+
+<p class="text-sm text-gray-600">
+Tamat Keahlian
+</p>
+
+<p class="mb-3">
 ${expiryDate}
 </p>
 
-<p class="text-sm">
-Baki Hari:
-<strong>${bakiHari} Hari</strong>
+
+<p class="text-sm text-gray-600">
+Baki Hari
 </p>
 
-<div class="mt-3">
+<p class="font-bold text-green-700 text-xl">
+${bakiHari} Hari
+</p>
+
+
+<div class="mt-4">
 
 <span
-class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+class="
+bg-green-100 
+text-green-700 
+px-4 
+py-2 
+rounded-full 
+text-xs 
+font-bold
+">
 
 ${
 bakiHari <= 0
@@ -394,29 +426,88 @@ bakiHari <= 0
 
 </div>
 
-<div class="bg-gray-100 border border-gray-200 p-4 rounded-xl">
+
+
+<!-- HIBAH -->
+<div class="bg-blue-50 border border-blue-200 rounded-2xl p-5 shadow-sm">
+
+<div class="flex items-center justify-between mb-4">
+
+<h3 class="font-bold text-blue-800 text-lg">
+Hibah
+</h3>
+
+
+
+</div>
+
 
 <p class="text-sm text-gray-500">
-Hibah
+Status Permohonan
 </p>
 
-<p class="font-semibold">
+
+<p class="font-bold text-blue-700 text-xl mt-2">
 ${hibahStatus}
 </p>
 
-</div>
 
-</div>
+<div class="mt-5 bg-white rounded-xl p-3">
 
-<div class="bg-gray-100 border border-gray-200 p-4 rounded-xl">
-
-<p class="text-sm text-gray-500">
-Harta Sepencarian
+<p class="text-xs text-gray-500">
+Perancangan Harta
 </p>
 
 <p class="font-semibold">
+Hibah Keluarga
+</p>
+
+</div>
+
+
+</div>
+
+
+
+
+<!-- HARTA SEPENCARIAN -->
+<div class="bg-purple-50 border border-purple-200 rounded-2xl p-5 shadow-sm">
+
+
+<div class="flex items-center justify-between mb-4">
+
+<h3 class="font-bold text-purple-800 text-lg">
+Harta Sepencarian
+</h3>
+
+
+
+</div>
+
+
+
+<p class="text-sm text-gray-500">
+Status Rekod
+</p>
+
+
+<p class="font-bold text-purple-700 text-xl mt-2">
 ${pusakaStatus}
 </p>
+
+
+<div class="mt-5 bg-white rounded-xl p-3">
+
+<p class="text-xs text-gray-500">
+Perlindungan Aset
+</p>
+
+<p class="font-semibold">
+Dokumen Keluarga
+</p>
+
+</div>
+
 
 </div>
 
