@@ -405,29 +405,24 @@ totalSales += 800;
 const allUsers =
 usersSnap.docs.map(doc=>doc.data());
 
-function calculateOverride(
-consultantNo,
-consultantLevel
-){
-
-let total = 0;
-let sales = 0;
+let totalOverriding = 0;
+let overridingSales = 0;
 
 for(const u of allUsers){
 
 if(
 u.consultantNo &&
-u.upline === consultantNo
+u.upline === data.consultantNo
 ){
 
 const teamSales =
 Number(u.totalSales || 0);
 
-sales += teamSales;
+overridingSales += teamSales;
 
 const uplineRate =
 getCumulativeOverride(
-consultantLevel
+data.consultantLevel
 );
 
 const downlineRate =
@@ -441,40 +436,12 @@ Math.max(
 uplineRate - downlineRate
 );
 
-total +=
+totalOverriding +=
 (teamSales * diffRate) / 100;
 
-const child =
-calculateOverride(
-u.consultantNo,
-consultantLevel
-);
-
-total += child.total;
-sales += child.sales;
-
 }
 
 }
-
-return {
-total,
-sales
-};
-
-}
-
-const overrideData =
-calculateOverride(
-data.consultantNo,
-data.consultantLevel
-);
-
-let totalOverriding =
-overrideData.total;
-
-let overridingSales =
-overrideData.sales;
  
 let commissionRate = 0;
 let overridingRate = 0;
