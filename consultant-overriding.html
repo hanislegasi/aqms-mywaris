@@ -47,8 +47,8 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 <div
 id="summaryCard"
-class="bg-white rounded-2xl p-6 shadow mb-5">
-Loading...
+class="grid md:grid-cols-2 gap-5 mb-5">
+
 </div>
 
 <div class="bg-white rounded-2xl shadow overflow-x-auto">
@@ -154,6 +154,7 @@ data.consultantNo
 
 let html = "";
 let lifetimeTotal = 0;
+let totalSales = 0;
 
 historySnap.forEach((d)=>{
 
@@ -161,6 +162,9 @@ const h = d.data();
 
 lifetimeTotal +=
 Number(h.override || 0);
+
+totalSales +=
+Number(h.sales || 0);
 
 html += `
 
@@ -216,15 +220,33 @@ document.getElementById(
 "summaryCard"
 ).innerHTML = `
 
-<h2 class="text-xl font-bold">
+<div class="bg-white rounded-2xl p-6 shadow">
+
+<h2 class="text-lg font-semibold text-gray-500">
+Total Team Sales
+</h2>
+
+<p class="text-4xl font-bold text-[#153638] mt-2">
+
+RM${totalSales.toLocaleString()}
+
+</p>
+
+</div>
+
+<div class="bg-white rounded-2xl p-6 shadow">
+
+<h2 class="text-lg font-semibold text-gray-500">
 Lifetime Override
 </h2>
 
-<p class="text-4xl font-bold text-green-600 mt-3">
+<p class="text-4xl font-bold text-green-600 mt-2">
 
 RM${lifetimeTotal.toFixed(2)}
 
 </p>
+
+</div>
 
 `;
 
