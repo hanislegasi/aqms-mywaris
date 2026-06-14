@@ -242,6 +242,18 @@ getAuth(app);
 const db =
 getFirestore(app);
 
+
+function getOverrideRate(level){
+
+if(level === "AQC-AS") return 3;
+if(level === "AQC-UM") return 4;
+if(level === "MGAM") return 5;
+
+return 0;
+
+}
+ 
+ 
 onAuthStateChanged(auth, async(user)=>{
 
 if(!user){
@@ -390,6 +402,7 @@ totalSales += 800;
 });
 
 let overridingSales = 0;
+let totalOverriding = 0;
 
 usersSnap.forEach((d)=>{
 
@@ -400,8 +413,14 @@ u.consultantNo &&
 u.upline === data.consultantNo
 ){
 
-overridingSales +=
+const teamSales =
 Number(u.totalSales || 0);
+
+overridingSales += teamSales;
+
+totalOverriding +=
+(teamSales * getOverrideRate(data.consultantLevel))
+/ 100;
 
 }
 
@@ -427,22 +446,20 @@ overridingRate = 3;
 else if(data.consultantLevel === "AQC-UM"){
 
 commissionRate = 40;
-overridingRate = 7;
+overridingRate = 4;
 
 }
 
 else if(data.consultantLevel === "MGAM"){
 
 commissionRate = 45;
-overridingRate = 12;
+overridingRate = 5;
 
 }
 
 const totalCommission =
 (totalSales * commissionRate) / 100;
 
-const totalOverriding =
-(overridingSales * overridingRate) / 100;
 
 
 await updateDoc(
