@@ -44,16 +44,23 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 </a>
 
-<div
-id="summaryCard"
-class="bg-white rounded-2xl p-6 shadow mb-5">
 
-Loading...
+<div class="bg-white rounded-2xl p-6 shadow mb-5">
+
+<h2 class="text-xl font-bold">
+Lifetime Override
+</h2>
+
+<div class="text-5xl font-bold text-green-600 mt-3">
+
+RM${totalOverride.toFixed(2)}
 
 </div>
 
-<div
-class="bg-white rounded-2xl shadow overflow-hidden">
+</div>
+
+  
+<div class="bg-white rounded-2xl shadow overflow-hidden">
 
 <table class="w-full">
 
@@ -61,23 +68,31 @@ class="bg-white rounded-2xl shadow overflow-hidden">
 
 <tr>
 
-<th class="p-4 text-left">
-No AQC
+<th class="p-3 text-left">
+Tarikh
 </th>
 
-<th class="p-4 text-left">
+<th class="p-3 text-left">
+Dari AQC
+</th>
+
+<th class="p-3 text-left">
 Nama
 </th>
 
-<th class="p-4 text-left">
-Level
+<th class="p-3 text-left">
+Level Saya
 </th>
 
-<th class="p-4 text-left">
-Team Sales
+<th class="p-3 text-left">
+Sales
 </th>
 
-<th class="p-4 text-left">
+<th class="p-3 text-left">
+Rate
+</th>
+
+<th class="p-3 text-left">
 Override
 </th>
 
@@ -85,14 +100,15 @@ Override
 
 </thead>
 
-<tbody id="overrideTable">
+<tbody>
+
+${rows}
 
 </tbody>
 
 </table>
 
 </div>
-
 </div>
 
 <script type="module">
@@ -111,7 +127,10 @@ getFirestore,
 doc,
 getDoc,
 getDocs,
-collection
+collection,
+getDocs,
+query,
+where  
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -182,6 +201,77 @@ u.consultantNo &&
 u.upline === data.consultantNo
 ){
 
+const historySnap =
+await getDocs(
+query(
+collection(db,"overrideHistory"),
+where(
+"receiver",
+"==",
+consultantNo
+)
+)
+);
+
+let totalOverride = 0;
+let rows = "";
+
+
+historySnap.forEach((doc)=>{
+
+const h = doc.data();
+
+totalOverride +=
+Number(
+h.override || 0
+);
+
+rows += `
+
+<tr class="border-b">
+
+<td class="p-3">
+${
+h.createdAt?.toDate
+?
+h.createdAt
+.toDate()
+.toLocaleDateString("ms-MY")
+:
+"-"
+}
+</td>
+
+<td class="p-3">
+${h.fromConsultant}
+</td>
+
+<td class="p-3">
+${h.fromName}
+</td>
+
+<td class="p-3">
+${h.receiverLevel}
+</td>
+
+<td class="p-3">
+RM${Number(h.sales || 0).toLocaleString()}
+</td>
+
+<td class="p-3">
+${h.diffRate}%
+</td>
+
+<td class="p-3 font-semibold text-green-600">
+RM${Number(h.override || 0).toFixed(2)}
+</td>
+
+</tr>
+
+`;
+
+}); 
+  
 const teamSales =
 Number(u.totalSales || 0);
 
