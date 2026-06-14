@@ -161,6 +161,14 @@ My Clients
 </button>
 
 <button
+id="overridingBtn"
+class="bg-[#153638] text-white p-5 rounded-xl">
+
+My Team
+
+</button>
+
+<button
 id="careerBtn"
 class="bg-[#153638] text-white p-5 rounded-xl">
 
@@ -742,6 +750,15 @@ window.location.href =
 
 });
 
+document
+.getElementById("overridingBtn")
+.addEventListener("click",()=>{
+
+window.location.href =
+"consultant-overriding.html";
+
+});
+ 
 document
 .getElementById("trainingBtn")
 .addEventListener("click", ()=>{
