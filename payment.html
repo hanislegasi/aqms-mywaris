@@ -75,7 +75,9 @@ getFirestore,
 doc,
 updateDoc,
 getDoc,
-increment
+increment,
+collection,
+getDocs
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const firebaseConfig = {
@@ -174,6 +176,101 @@ new Date().toISOString()
 
 );
 
+const customerSnap =
+await getDoc(
+doc(
+db,
+"users",
+currentUser.uid
+)
+);
+
+const customer =
+customerSnap.data();
+
+const usersSnap =
+await getDocs(
+collection(db,"users")
+);
+
+const allUsers = [];
+
+usersSnap.forEach((d)=>{
+
+allUsers.push({
+id:d.id,
+...d.data()
+});
+
+});
+
+function getOverrideRate(level){
+
+if(level === "AQC") return 0;
+if(level === "AQC-AS") return 3;
+if(level === "AQC-UM") return 7;
+if(level === "MGAM") return 12;
+
+return 0;
+
+}
+
+function findConsultant(no){
+
+return allUsers.find(
+u => u.consultantNo === no
+);
+
+}
+
+let currentConsultant =
+findConsultant(
+customer.referral
+);
+
+while(currentConsultant){
+
+const upline =
+findConsultant(
+currentConsultant.upline
+);
+
+if(!upline) break;
+
+const diffRate =
+Math.max(
+0,
+getOverrideRate(
+upline.consultantLevel
+)
+-
+getOverrideRate(
+currentConsultant.consultantLevel
+)
+);
+
+const overrideAmount =
+350 * diffRate / 100;
+
+await updateDoc(
+doc(
+db,
+"users",
+upline.id
+),
+{
+totalOverriding:
+increment(
+overrideAmount
+)
+}
+);
+
+currentConsultant =
+upline;
+
+}
+  
 alert(
 "Pembayaran berjaya"
 );
