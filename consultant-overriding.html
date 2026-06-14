@@ -45,71 +45,37 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 </a>
 
 
-<div class="bg-white rounded-2xl p-6 shadow mb-5">
-
-<h2 class="text-xl font-bold">
-Lifetime Override
-</h2>
-
-<div class="text-5xl font-bold text-green-600 mt-3">
-
-RM${totalOverride.toFixed(2)}
-
+<div
+id="summaryCard"
+class="bg-white rounded-2xl p-6 shadow mb-5">
+Loading...
 </div>
 
-</div>
-
-  
-<div class="bg-white rounded-2xl shadow overflow-hidden">
+<div class="bg-white rounded-2xl shadow overflow-x-auto">
 
 <table class="w-full">
 
 <thead class="bg-[#153638] text-white">
 
 <tr>
-
-<th class="p-3 text-left">
-Tarikh
-</th>
-
-<th class="p-3 text-left">
-Dari AQC
-</th>
-
-<th class="p-3 text-left">
-Nama
-</th>
-
-<th class="p-3 text-left">
-Level Saya
-</th>
-
-<th class="p-3 text-left">
-Sales
-</th>
-
-<th class="p-3 text-left">
-Rate
-</th>
-
-<th class="p-3 text-left">
-Override
-</th>
-
+<th class="p-3 text-left">Tarikh</th>
+<th class="p-3 text-left">Dari AQC</th>
+<th class="p-3 text-left">Nama</th>
+<th class="p-3 text-left">Level Saya</th>
+<th class="p-3 text-left">Sales</th>
+<th class="p-3 text-left">Rate</th>
+<th class="p-3 text-left">Override</th>
 </tr>
 
 </thead>
 
-<tbody>
-
-${rows}
+<tbody id="overrideTable">
 
 </tbody>
 
 </table>
 
-</div>
-</div>
+</div></div>
 
 <script type="module">
 
@@ -128,7 +94,6 @@ doc,
 getDoc,
 getDocs,
 collection,
-getDocs,
 query,
 where  
 }
@@ -154,16 +119,7 @@ getAuth(app);
 const db =
 getFirestore(app);
 
-function getCumulativeOverride(level){
 
-if(level === "AQC") return 0;
-if(level === "AQC-AS") return 3;
-if(level === "AQC-UM") return 7;
-if(level === "MGAM") return 12;
-
-return 0;
-
-}
 
 onAuthStateChanged(auth, async(user)=>{
 
@@ -184,23 +140,6 @@ doc(db,"users",user.uid)
 const data =
 userSnap.data();
 
-const usersSnap =
-await getDocs(
-collection(db,"users")
-);
-
-let html = "";
-let lifetimeTotal = 0;
-
-usersSnap.forEach((d)=>{
-
-const u = d.data();
-
-if(
-u.consultantNo &&
-u.upline === data.consultantNo
-){
-
 const historySnap =
 await getDocs(
 query(
@@ -208,61 +147,56 @@ collection(db,"overrideHistory"),
 where(
 "receiver",
 "==",
-consultantNo
+data.consultantNo
 )
 )
 );
 
-let totalOverride = 0;
-let rows = "";
+let html = "";
+let lifetimeTotal = 0;
 
+historySnap.forEach((d)=>{
 
-historySnap.forEach((doc)=>{
+const h = d.data();
 
-const h = doc.data();
+lifetimeTotal +=
+Number(h.override || 0);
 
-totalOverride +=
-Number(
-h.override || 0
-);
-
-rows += `
+html += `
 
 <tr class="border-b">
 
-<td class="p-3">
+<td class="p-4">
 ${
 h.createdAt?.toDate
 ?
-h.createdAt
-.toDate()
-.toLocaleDateString("ms-MY")
+h.createdAt.toDate().toLocaleDateString("ms-MY")
 :
 "-"
 }
 </td>
 
-<td class="p-3">
+<td class="p-4">
 ${h.fromConsultant}
 </td>
 
-<td class="p-3">
+<td class="p-4">
 ${h.fromName}
 </td>
 
-<td class="p-3">
+<td class="p-4">
 ${h.receiverLevel}
 </td>
 
-<td class="p-3">
+<td class="p-4">
 RM${Number(h.sales || 0).toLocaleString()}
 </td>
 
-<td class="p-3">
+<td class="p-4">
 ${h.diffRate}%
 </td>
 
-<td class="p-3 font-semibold text-green-600">
+<td class="p-4 font-bold text-green-600">
 RM${Number(h.override || 0).toFixed(2)}
 </td>
 
@@ -270,59 +204,8 @@ RM${Number(h.override || 0).toFixed(2)}
 
 `;
 
-}); 
-  
-const teamSales =
-Number(u.totalSales || 0);
-
-const diffRate =
-Math.max(
-0,
-getCumulativeOverride(
-data.consultantLevel
-)
--
-getCumulativeOverride(
-u.consultantLevel
-)
-);
-
-const override =
-(teamSales * diffRate) / 100;
-
-lifetimeTotal += override;
-
-html += `
-
-<tr class="border-b">
-
-<td class="p-4">
-${u.consultantNo}
-</td>
-
-<td class="p-4">
-${u.nama}
-</td>
-
-<td class="p-4">
-${u.consultantLevel}
-</td>
-
-<td class="p-4">
-RM${teamSales.toLocaleString()}
-</td>
-
-<td class="p-4 font-bold text-green-600">
-RM${override.toLocaleString()}
-</td>
-
-</tr>
-
-`;
-
-}
-
 });
+  
 
 document.getElementById(
 "overrideTable"
@@ -339,7 +222,7 @@ Lifetime Override
 
 <p class="text-4xl font-bold text-green-600 mt-3">
 
-RM${lifetimeTotal.toLocaleString()}
+RM${lifetimeTotal.toFixed(2)}
 
 </p>
 
