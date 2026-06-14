@@ -402,28 +402,38 @@ totalSales += 800;
 
 });
 
-let overridingSales = 0;
-let totalOverriding = 0;
+const allUsers =
+usersSnap.docs.map(doc=>doc.data());
 
-usersSnap.forEach((d)=>{
+function calculateOverride(
+consultantNo,
+consultantLevel
+){
 
-const u = d.data();
+let total = 0;
+let sales = 0;
+
+for(const u of allUsers){
 
 if(
 u.consultantNo &&
-u.upline === data.consultantNo
+u.upline === consultantNo
 ){
 
 const teamSales =
 Number(u.totalSales || 0);
 
-overridingSales += teamSales;
+sales += teamSales;
 
 const uplineRate =
-getCumulativeOverride(data.consultantLevel);
+getCumulativeOverride(
+consultantLevel
+);
 
 const downlineRate =
-getCumulativeOverride(u.consultantLevel);
+getCumulativeOverride(
+u.consultantLevel
+);
 
 const diffRate =
 Math.max(
@@ -431,12 +441,40 @@ Math.max(
 uplineRate - downlineRate
 );
 
-totalOverriding +=
+total +=
 (teamSales * diffRate) / 100;
+
+const child =
+calculateOverride(
+u.consultantNo,
+consultantLevel
+);
+
+total += child.total;
+sales += child.sales;
 
 }
 
-});
+}
+
+return {
+total,
+sales
+};
+
+}
+
+const overrideData =
+calculateOverride(
+data.consultantNo,
+data.consultantLevel
+);
+
+let totalOverriding =
+overrideData.total;
+
+let overridingSales =
+overrideData.sales;
  
 let commissionRate = 0;
 let overridingRate = 0;
