@@ -243,11 +243,12 @@ const db =
 getFirestore(app);
 
 
-function getOverrideRate(level){
+function getCumulativeOverride(level){
 
+if(level === "AQC") return 0;
 if(level === "AQC-AS") return 3;
-if(level === "AQC-UM") return 4;
-if(level === "MGAM") return 5;
+if(level === "AQC-UM") return 7;
+if(level === "MGAM") return 12;
 
 return 0;
 
@@ -341,7 +342,7 @@ document.getElementById(
 <div class="bg-red-50 border border-red-200 rounded-2xl p-5">
 
 <h2 class="font-bold text-red-700 text-lg">
-🚨 Renewal Reminder
+Renewal Reminder
 </h2>
 
 <p class="mt-2">
@@ -418,9 +419,20 @@ Number(u.totalSales || 0);
 
 overridingSales += teamSales;
 
+const uplineRate =
+getCumulativeOverride(data.consultantLevel);
+
+const downlineRate =
+getCumulativeOverride(u.consultantLevel);
+
+const diffRate =
+Math.max(
+0,
+uplineRate - downlineRate
+);
+
 totalOverriding +=
-(teamSales * getOverrideRate(data.consultantLevel))
-/ 100;
+(teamSales * diffRate) / 100;
 
 }
 
@@ -446,14 +458,14 @@ overridingRate = 3;
 else if(data.consultantLevel === "AQC-UM"){
 
 commissionRate = 40;
-overridingRate = 4;
+overridingRate = 7;
 
 }
 
 else if(data.consultantLevel === "MGAM"){
 
 commissionRate = 45;
-overridingRate = 5;
+overridingRate = 12;
 
 }
 
@@ -557,7 +569,7 @@ data.consultantLevel === "MGAM"
 ?
 
 `<div class="mt-3 text-green-700 font-bold">
-🏆 You are our Elite MGAM Leader.
+You are our Elite MGAM Leader.
 Keep inspiring and growing your team.
 </div>`
 
@@ -597,7 +609,7 @@ data.promotionRequest
 
 `<div class="mt-3 bg-yellow-100 text-yellow-700 p-3 rounded-xl">
 
-🎉 Promotion Request Submitted
+Promotion Request Submitted
 
 Menunggu kelulusan HQ.
 
