@@ -69,8 +69,14 @@ required>
 <input
 id="referral"
 type="text"
-placeholder="Kod Referral AQC (jika ada)"
-class="w-full border p-3 rounded-lg">
+placeholder="Kod Referral AQC"
+class="w-full border p-3 rounded-lg"
+required>
+
+<p
+id="referralName"
+class="text-sm text-green-600">
+</p>
 
 <button
 type="submit"
@@ -104,7 +110,9 @@ getFirestore,
 doc,
 setDoc,
 getDoc,
-updateDoc  
+updateDoc,
+collection,
+getDocs
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -126,6 +134,65 @@ getAuth(app);
 const db =
 getFirestore(app);
 
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const ref =
+params.get("ref");
+
+if(ref){
+
+document.getElementById(
+"referral"
+).value = ref;
+
+}
+
+document
+.getElementById("referral")
+.addEventListener("blur", async()=>{
+
+const referral =
+document
+.getElementById("referral")
+.value
+.trim();
+
+if(!referral) return;
+
+const usersSnap =
+await getDocs(
+collection(db,"users")
+);
+
+let sponsor = null;
+
+usersSnap.forEach((d)=>{
+
+const u = d.data();
+
+if(
+u.consultantNo === referral
+){
+
+sponsor = u.nama;
+
+}
+
+});
+
+document
+.getElementById("referralName")
+.innerHTML =
+
+sponsor
+? "✓ " + sponsor
+: "❌ No Konsultan tidak sah";
+
+});
+  
  document
 .getElementById("registerForm")
 .addEventListener("submit", async (e)=>{
@@ -149,6 +216,47 @@ document.getElementById("password").value;
 
 const referral =
 document.getElementById("referral").value;
+
+if(!referral){
+
+alert(
+"Sila masukkan Kod Referral"
+);
+
+return;
+
+}
+
+const usersSnap =
+await getDocs(
+collection(db,"users")
+);
+
+let validReferral = false;
+
+usersSnap.forEach((d)=>{
+
+const u = d.data();
+
+if(
+u.consultantNo === referral
+){
+
+validReferral = true;
+
+}
+
+});
+
+if(!validReferral){
+
+alert(
+"Referral tidak sah"
+);
+
+return;
+
+}  
 
 const accountType =
 document.getElementById("accountType").value;
