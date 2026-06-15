@@ -263,7 +263,7 @@ getAuth(app);
 const db =
 getFirestore(app);
 
-consultantData = data;
+let consultantData = null;
  
 function getCumulativeOverride(level){
 
@@ -276,6 +276,7 @@ return 0;
 
 }
  
+
  
 onAuthStateChanged(auth, async(user)=>{
 
@@ -794,27 +795,47 @@ window.location.href =
 });
 
 document
-.getElementById(
-"copyReferralBtn"
-)
+.getElementById("copyReferralBtn")
 .addEventListener(
 "click",
 async()=>{
+
+try{
 
 const referralLink =
 window.location.origin +
 "/register.html?ref=" +
 consultantData.consultantNo;
 
-await navigator
-.clipboard
-.writeText(
+await navigator.clipboard.writeText(
 referralLink
 );
 
-alert(
-"Referral link berjaya disalin"
+const btn =
+document.getElementById(
+"copyReferralBtn"
 );
+
+btn.innerHTML =
+"✓ Copied";
+
+setTimeout(()=>{
+
+btn.innerHTML =
+"Copy Link";
+
+},2000);
+
+}
+catch(err){
+
+alert(
+"Gagal copy link"
+);
+
+console.log(err);
+
+}
 
 });
 
