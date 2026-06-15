@@ -804,7 +804,11 @@ try{
 
 const referralLink =
 window.location.origin +
-"/register.html?ref=" +
+window.location.pathname.replace(
+"consultant-dashboard.html",
+"register.html"
+) +
+"?ref=" +
 consultantData.consultantNo;
 
 await navigator.clipboard.writeText(
