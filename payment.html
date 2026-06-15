@@ -77,7 +77,8 @@ updateDoc,
 getDoc,
 increment,
 collection,
-getDocs
+getDocs,
+addDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const firebaseConfig = {
@@ -176,6 +177,26 @@ new Date().toISOString()
 
 );
 
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:new Date(),
+
+account:"Sales - eWasiat",
+
+category:"income",
+
+description:
+memberNo,
+
+debit:0,
+
+credit:350
+
+}
+);
+  
 const customerSnap =
 await getDoc(
 doc(
