@@ -34,6 +34,43 @@ class="inline-block bg-gray-200 hover:bg-gray-300 px-5 py-3 rounded-xl font-semi
 </a>
 
 <div
+class="grid md:grid-cols-2 gap-4 mb-5">
+
+<div class="bg-white p-5 rounded-xl shadow">
+
+<p class="text-gray-500">
+Jumlah Client
+</p>
+
+<p
+id="totalClients"
+class="text-3xl font-bold">
+
+0
+
+</p>
+
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+
+<p class="text-gray-500">
+Jumlah Sales
+</p>
+
+<p
+id="totalClientSales"
+class="text-3xl font-bold text-green-600">
+
+RM0
+
+</p>
+
+</div>
+
+</div>
+  
+<div
 id="clientList"
 class="overflow-x-auto">
 
@@ -43,13 +80,13 @@ class="overflow-x-auto">
 
 <tr>
 <th class="p-3 text-left">Bil</th>
-<th class="p-3 text-left">Tarikh Daftar</th>
+<th class="p-3 text-center">Tarikh Daftar</th>
 <th class="p-3 text-left">No Ahli</th>
 <th class="p-3 text-left">Nama</th>
 <th class="p-3 text-left">Telefon</th>
 <th class="p-3 text-left">Referral</th>
 <th class="p-3 text-right">Sales</th>
-<th class="p-3 text-left">Tarikh Tamat</th>
+<th class="p-3 text-center">Tarikh Tamat</th>
 <th class="p-3 text-center">Status</th>
 <th class="p-3 text-center">Tindakan</th>
 </tr>
@@ -147,6 +184,9 @@ collection(db,"users")
 let html = "";
 let bil = 1;
 
+let totalClients = 0;
+let totalClientSales = 0;
+
 snap.forEach((docSnap)=>{
 
 const client =
@@ -186,6 +226,9 @@ clientSales += 2500;
 if(client.pusakaPaymentStatus === "paid"){
 clientSales += 800;
 }
+
+totalClients++;
+totalClientSales += clientSales;
   
 const expiryDate =
 client.expiryDate
@@ -270,6 +313,17 @@ View
   
 });
 
+document.getElementById(
+"totalClients"
+).innerHTML =
+totalClients;
+
+document.getElementById(
+"totalClientSales"
+).innerHTML =
+"RM" +
+totalClientSales.toLocaleString();
+  
 document.getElementById(
 "tableBody"
 ).innerHTML =
