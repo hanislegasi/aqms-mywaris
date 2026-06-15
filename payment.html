@@ -149,11 +149,20 @@ memberCounter:
 increment(1)
 }
 );
-
+  
 // generate AQM number
+const latestCounter =
+await getDoc(counterRef);
+
 const memberNo =
 "AQM" +
-String(newNo).padStart(4,"0");
+String(
+latestCounter.data().memberCounter
+).padStart(4,"0");
+
+  
+
+
 
 // update user
 await updateDoc(
