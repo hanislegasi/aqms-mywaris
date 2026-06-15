@@ -186,6 +186,18 @@ new Date().toISOString()
 
 );
 
+const customerSnap =
+await getDoc(
+doc(
+db,
+"users",
+currentUser.uid
+)
+);
+
+const customer =
+customerSnap.data();
+  
 await addDoc(
 collection(db,"ledger"),
 {
@@ -206,40 +218,10 @@ credit:350
 }
 );
 
-await addDoc(
-collection(db,"ledger"),
-{
-
-date:new Date(),
-
-account:"Consultant Override",
-
-category:"expense",
-
-description:
-upline.consultantNo +
-" " +
-upline.nama,
-
-debit:overrideAmount,
-
-credit:0
-
-}
-);
 
 
-const customerSnap =
-await getDoc(
-doc(
-db,
-"users",
-currentUser.uid
-)
-);
 
-const customer =
-customerSnap.data();
+
 
 const usersSnap =
 await getDocs(
@@ -364,6 +346,28 @@ currentConsultant.consultantLevel
 const overrideAmount =
 350 * diffRate / 100;
 
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:new Date(),
+
+account:"Consultant Override",
+
+category:"expense",
+
+description:
+upline.consultantNo +
+" " +
+upline.nama,
+
+debit:overrideAmount,
+
+credit:0
+
+}
+);
+  
 await updateDoc(
 doc(
 db,
