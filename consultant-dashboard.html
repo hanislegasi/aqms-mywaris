@@ -221,7 +221,9 @@ doc,
 getDoc,
 getDocs,
 collection,
-updateDoc
+updateDoc,
+query,
+where
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -410,47 +412,32 @@ totalSales += 800;
 
 });
 
-const allUsers =
-usersSnap.docs.map(doc=>doc.data());
+const historySnap =
+await getDocs(
+query(
+collection(db,"overrideHistory"),
+where(
+"receiver",
+"==",
+data.consultantNo
+)
+)
+);
 
 let totalOverriding = 0;
 let overridingSales = 0;
 
-for(const u of allUsers){
+historySnap.forEach((d)=>{
 
-if(
-u.consultantNo &&
-u.upline === data.consultantNo
-){
-
-const teamSales =
-Number(u.totalSales || 0);
-
-overridingSales += teamSales;
-
-const uplineRate =
-getCumulativeOverride(
-data.consultantLevel
-);
-
-const downlineRate =
-getCumulativeOverride(
-u.consultantLevel
-);
-
-const diffRate =
-Math.max(
-0,
-uplineRate - downlineRate
-);
+const h = d.data();
 
 totalOverriding +=
-(teamSales * diffRate) / 100;
+Number(h.override || 0);
 
-}
+overridingSales +=
+Number(h.sales || 0);
 
-}
- 
+}); 
 let commissionRate = 0;
 let overridingRate = 0;
 
