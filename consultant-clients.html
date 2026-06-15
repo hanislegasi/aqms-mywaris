@@ -43,6 +43,7 @@ class="overflow-x-auto">
 
 <tr>
 <th class="p-3 text-left">Bil</th>
+<th class="p-3 text-left">Tarikh Daftar</th>
 <th class="p-3 text-left">No Ahli</th>
 <th class="p-3 text-left">Nama</th>
 <th class="p-3 text-left">Telefon</th>
@@ -177,12 +178,23 @@ client.expiryDate
 .toLocaleDateString("ms-MY")
 : "-";
 
+const registerDate =
+client.createdAt
+? client.createdAt.toDate().toLocaleDateString("ms-MY")
+: "-";
+
+
+  
 html += `
 
 <tr class="border-b hover:bg-gray-50">
 
 <td class="p-3">
 ${bil++}
+</td>
+
+<td class="p-3">
+${registerDate}
 </td>
 
 <td class="p-3">
@@ -244,7 +256,7 @@ document.getElementById(
 ).innerHTML =
 html || `
 <tr>
-<td colspan="8" class="p-5 text-center">
+<td colspan="9" class="p-5 text-center">
 Tiada client.
 </td>
 </tr>
