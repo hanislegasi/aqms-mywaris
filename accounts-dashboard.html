@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Accounts Dashboard</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+Accounts Dashboard
+</h1>
+
+<p>
+Financial Management Centre
+</p>
+
+</div>
+
+<div class="max-w-7xl mx-auto p-5">
+
+<a
+href="admin-dashboard.html"
+class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+
+← Dashboard
+
+</a>
+
+<div
+class="grid md:grid-cols-4 gap-4 mb-6">
+
+<div class="bg-white p-5 rounded-xl shadow">
+
+<p class="text-gray-500">
+Income
+</p>
+
+<p
+id="incomeCard"
+class="text-3xl font-bold text-green-600">
+
+RM0
+
+</p>
+
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+
+<p class="text-gray-500">
+Expenses
+</p>
+
+<p
+id="expenseCard"
+class="text-3xl font-bold text-red-600">
+
+RM0
+
+</p>
+
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+
+<p class="text-gray-500">
+Profit
+</p>
+
+<p
+id="profitCard"
+class="text-3xl font-bold text-blue-600">
+
+RM0
+
+</p>
+
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+
+<p class="text-gray-500">
+Transactions
+</p>
+
+<p
+id="transactionCard"
+class="text-3xl font-bold">
+
+0
+
+</p>
+
+</div>
+
+</div>
+
+<div class="bg-white rounded-xl shadow overflow-x-auto">
+
+<table class="w-full">
+
+<thead class="bg-[#153638] text-white">
+
+<tr>
+
+<th class="p-3 text-left">
+Date
+</th>
+
+<th class="p-3 text-left">
+Account
+</th>
+
+<th class="p-3 text-left">
+Category
+</th>
+
+<th class="p-3 text-left">
+Description
+</th>
+
+<th class="p-3 text-right">
+Debit
+</th>
+
+<th class="p-3 text-right">
+Credit
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="ledgerTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+projectId:"alqawthar-mywaris",
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+messagingSenderId:"3498810778",
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const snap =
+await getDocs(
+collection(db,"ledger")
+);
+
+let html = "";
+
+let income = 0;
+let expense = 0;
+let count = 0;
+
+snap.forEach((d)=>{
+
+const row = d.data();
+
+income +=
+Number(row.credit || 0);
+
+expense +=
+Number(row.debit || 0);
+
+count++;
+
+html += `
+
+<tr class="border-b">
+
+<td class="p-3">
+
+${
+row.date?.toDate
+?
+row.date.toDate().toLocaleDateString("ms-MY")
+:
+"-"
+}
+
+</td>
+
+<td class="p-3">
+${row.account || "-"}
+</td>
+
+<td class="p-3">
+${row.category || "-"}
+</td>
+
+<td class="p-3">
+${row.description || "-"}
+</td>
+
+<td class="p-3 text-right">
+
+RM${Number(row.debit || 0).toFixed(2)}
+
+</td>
+
+<td class="p-3 text-right">
+
+RM${Number(row.credit || 0).toFixed(2)}
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById(
+"ledgerTable"
+).innerHTML =
+html;
+
+document.getElementById(
+"incomeCard"
+).innerHTML =
+"RM" + income.toFixed(2);
+
+document.getElementById(
+"expenseCard"
+).innerHTML =
+"RM" + expense.toFixed(2);
+
+document.getElementById(
+"profitCard"
+).innerHTML =
+"RM" + (income-expense).toFixed(2);
+
+document.getElementById(
+"transactionCard"
+).innerHTML =
+count;
+
+</script>
+
+</body>
+</html>
