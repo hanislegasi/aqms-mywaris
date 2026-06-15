@@ -205,7 +205,30 @@ credit:350
 
 }
 );
-  
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:new Date(),
+
+account:"Consultant Override",
+
+category:"expense",
+
+description:
+upline.consultantNo +
+" " +
+upline.nama,
+
+debit:overrideAmount,
+
+credit:0
+
+}
+);
+
+
 const customerSnap =
 await getDoc(
 doc(
@@ -245,6 +268,21 @@ return 0;
 
 }
 
+function getCommissionRate(level){
+
+if(level === "AQC") return 35;
+
+if(level === "AQC-AS") return 38;
+
+if(level === "AQC-UM") return 40;
+
+if(level === "MGAM") return 45;
+
+return 35;
+
+}
+  
+  
 function findConsultant(no){
 
 return allUsers.find(
@@ -253,11 +291,55 @@ u => u.consultantNo === no
 
 }
 
+const directConsultant =
+findConsultant(
+customer.referral
+);
+  
 let currentConsultant =
 findConsultant(
 customer.referral
 );
 
+if(directConsultant){
+
+const commissionRate =
+getCommissionRate(
+directConsultant.consultantLevel
+);
+
+const commissionAmount =
+350 *
+commissionRate /
+100;
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:new Date(),
+
+account:
+"Consultant Commission",
+
+category:
+"expense",
+
+description:
+directConsultant.consultantNo +
+" " +
+directConsultant.nama,
+
+debit:
+commissionAmount,
+
+credit:0
+
+}
+);
+
+}
+  
 while(currentConsultant){
 
 const upline =
