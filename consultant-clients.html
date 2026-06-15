@@ -48,6 +48,7 @@ class="overflow-x-auto">
 <th class="p-3 text-left">Nama</th>
 <th class="p-3 text-left">Telefon</th>
 <th class="p-3 text-left">Referral</th>
+<th class="p-3 text-right">Sales</th>
 <th class="p-3 text-left">Tarikh Tamat</th>
 <th class="p-3 text-center">Status</th>
 <th class="p-3 text-center">Tindakan</th>
@@ -171,6 +172,20 @@ console.log(
 "MASUK",
 client.nama
 );
+
+let clientSales = 0;
+
+if(client.paymentStatus === "paid"){
+clientSales += 350;
+}
+
+if(client.hibahPaymentStatus === "paid"){
+clientSales += 2500;
+}
+
+if(client.pusakaPaymentStatus === "paid"){
+clientSales += 800;
+}
   
 const expiryDate =
 client.expiryDate
@@ -211,6 +226,10 @@ ${client.telefon || "-"}
 
 <td class="p-3">
 ${client.referral || "-"}
+</td>
+
+<td class="p-3 text-right font-semibold text-green-600">
+RM${clientSales.toLocaleString()}
 </td>
 
 <td class="p-3">
