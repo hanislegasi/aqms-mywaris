@@ -287,6 +287,51 @@ overrideAmount
 }
 );
 
+await addDoc(
+collection(
+db,
+"overrideHistory"
+),
+{
+
+createdAt:
+new Date(),
+
+customerNo:
+memberNo,
+
+customerName:
+customer.nama,
+
+fromConsultant:
+currentConsultant.consultantNo,
+
+fromName:
+currentConsultant.nama,
+
+fromLevel:
+currentConsultant.consultantLevel,
+
+receiver:
+upline.consultantNo,
+
+receiverName:
+upline.nama,
+
+receiverLevel:
+upline.consultantLevel,
+
+sales:350,
+
+diffRate:
+diffRate,
+
+override:
+overrideAmount
+
+}
+);
+
 currentConsultant =
 upline;
 
