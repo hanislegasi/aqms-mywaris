@@ -263,7 +263,7 @@ getAuth(app);
 const db =
 getFirestore(app);
 
-let consultantData = null;
+consultantData = data;
  
 function getCumulativeOverride(level){
 
@@ -804,7 +804,7 @@ async()=>{
 const referralLink =
 window.location.origin +
 "/register.html?ref=" +
-data.consultantNo;
+consultantData.consultantNo;
 
 await navigator
 .clipboard
