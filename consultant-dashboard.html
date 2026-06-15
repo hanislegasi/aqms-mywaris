@@ -265,7 +265,8 @@ getAuth(app);
 const db =
 getFirestore(app);
 
-
+let consultantData = null;
+ 
 function getCumulativeOverride(level){
 
 if(level === "AQC") return 0;
@@ -301,11 +302,20 @@ user.uid
 const data =
 userSnap.data();
 
+consultantData = data;
+ 
 const referralLink =
 window.location.origin +
 "/register.html?ref=" +
-data.consultantNo;
+consultantData.consultantNo;
 
+document
+.getElementById(
+"referralLinkBox"
+)
+.innerHTML =
+referralLink;
+ 
 let sales = 0;
 
 let nextLevel = "";
@@ -816,14 +826,9 @@ alert(
 
 });
 
-document
-.getElementById(
-"referralLinkBox"
-)
-.innerHTML =
-referralLink;
 
-});
+
+
 
 document
 .getElementById("logoutBtn")
