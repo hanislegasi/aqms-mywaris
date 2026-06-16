@@ -408,6 +408,29 @@ credit:0
 }
 );
 
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:new Date(),
+
+accountCode:"2000",
+account:"Consultant Payable",
+
+category:"liability",
+
+description:
+directConsultant.consultantNo +
+" " +
+directConsultant.nama,
+
+debit:0,
+
+credit:commissionAmount
+
+}
+);
+  
 }
   
 while(currentConsultant){
@@ -453,6 +476,29 @@ upline.nama,
 debit:overrideAmount,
 
 credit:0
+
+}
+);
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:new Date(),
+
+accountCode:"2000",
+account:"Consultant Payable",
+
+category:"liability",
+
+description:
+upline.consultantNo +
+" " +
+upline.nama,
+
+debit:0,
+
+credit:overrideAmount
 
 }
 );
