@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Trial Balance</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+Trial Balance
+</h1>
+
+</div>
+
+<div class="max-w-7xl mx-auto p-5">
+
+<a
+href="accounts-dashboard.html"
+class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+
+← Akaun
+
+</a>
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+
+<table class="w-full">
+
+<thead class="bg-[#153638] text-white">
+
+<tr>
+
+<th class="p-3 text-left">
+Code
+</th>
+
+<th class="p-3 text-left">
+Account
+</th>
+
+<th class="p-3 text-right">
+Debit
+</th>
+
+<th class="p-3 text-right">
+Credit
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tbTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey:"...",
+authDomain:"...",
+projectId:"alqawthar-mywaris",
+storageBucket:"...",
+messagingSenderId:"...",
+appId:"..."
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const snap =
+await getDocs(
+collection(db,"ledger")
+);
+
+const accounts = {};
+
+snap.forEach((d)=>{
+
+const row = d.data();
+
+const code =
+row.accountCode || "0000";
+
+if(!accounts[code]){
+
+accounts[code] = {
+
+name:
+row.account,
+
+debit:0,
+credit:0
+
+};
+
+}
+
+accounts[code].debit +=
+Number(row.debit || 0);
+
+accounts[code].credit +=
+Number(row.credit || 0);
+
+});
+
+let html = "";
+
+let totalDebit = 0;
+let totalCredit = 0;
+
+Object.keys(accounts)
+.sort()
+.forEach((code)=>{
+
+const a =
+accounts[code];
+
+totalDebit +=
+a.debit;
+
+totalCredit +=
+a.credit;
+
+html += `
+
+<tr class="border-b">
+
+<td class="p-3">
+${code}
+</td>
+
+<td class="p-3">
+${a.name}
+</td>
+
+<td class="p-3 text-right">
+RM${a.debit.toFixed(2)}
+</td>
+
+<td class="p-3 text-right">
+RM${a.credit.toFixed(2)}
+</td>
+
+</tr>
+
+`;
+
+});
+
+html += `
+
+<tr class="bg-gray-100 font-bold">
+
+<td colspan="2" class="p-3">
+TOTAL
+</td>
+
+<td class="p-3 text-right">
+RM${totalDebit.toFixed(2)}
+</td>
+
+<td class="p-3 text-right">
+RM${totalCredit.toFixed(2)}
+</td>
+
+</tr>
+
+`;
+
+document.getElementById(
+"tbTable"
+).innerHTML =
+html;
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
