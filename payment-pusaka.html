@@ -7,6 +7,13 @@
 <title>Pembayaran</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body{
+font-family:Inter,sans-serif;
+}
+</style>
+  
 </head>
 
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-5">
@@ -186,12 +193,25 @@ new Date().toISOString()
 
 );
 
+const customerSnap =
+await getDoc(
+doc(
+db,
+"users",
+currentUser.uid
+)
+);
+
+const customer =
+customerSnap.data();
+  
 await addDoc(
 collection(db,"ledger"),
 {
 
 date:new Date(),
 
+accountCode:"4200",
 account:"Sales - Harta Sepencarian",
 
 category:"income",
@@ -205,18 +225,91 @@ credit:800
 
 }
 );
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:new Date(),
+
+accountCode:"1000",
+account:"Bank",
+
+category:"asset",
+
+description:
+memberNo + " " + customer.nama,
+
+debit:800,
+
+credit:0
+
+}
+);
   
-const customerSnap =
+const compensationSnap =
 await getDoc(
 doc(
 db,
-"users",
-currentUser.uid
+"settings",
+"compensation"
 )
 );
 
-const customer =
-customerSnap.data();
+const comp =
+compensationSnap.data();
+
+const saleAmount = 350;
+
+const shareholder =
+saleAmount *
+(comp.shareholderPool / 100);
+
+const company =
+saleAmount *
+(comp.companyPool / 100);
+
+const allowance =
+saleAmount *
+(comp.allowance / 100);
+
+const adminOperation =
+saleAmount *
+(comp.adminOperation / 100);
+
+const royalty =
+saleAmount *
+(comp.royalty / 100);
+
+await addDoc(
+collection(
+db,
+"companyAllocation"
+),
+{
+createdAt:new Date(),
+
+memberNo,
+customerName:
+customer.nama,
+
+product:
+"harta sepencarian",
+
+sale:
+saleAmount,
+
+shareholder,
+company,
+
+allowance,
+adminOperation,
+royalty
+}
+);
+
+
+
 
 const usersSnap =
 await getDocs(
@@ -245,6 +338,21 @@ return 0;
 
 }
 
+function getCommissionRate(level){
+
+if(level === "AQC") return 35;
+
+if(level === "AQC-AS") return 38;
+
+if(level === "AQC-UM") return 40;
+
+if(level === "MGAM") return 45;
+
+return 35;
+
+}
+  
+  
 function findConsultant(no){
 
 return allUsers.find(
@@ -253,11 +361,55 @@ u => u.consultantNo === no
 
 }
 
+const directConsultant =
+findConsultant(
+customer.referral
+);
+  
 let currentConsultant =
 findConsultant(
 customer.referral
 );
 
+if(directConsultant){
+
+const commissionRate =
+getCommissionRate(
+directConsultant.consultantLevel
+);
+
+const commissionAmount =
+800 *
+commissionRate /
+100;
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:new Date(),
+
+accountCode:"5000",
+account:"Consultant Commission",
+
+category:
+"expense",
+
+description:
+directConsultant.consultantNo +
+" " +
+directConsultant.nama,
+
+debit:
+commissionAmount,
+
+credit:0
+
+}
+);
+
+}
+  
 while(currentConsultant){
 
 const upline =
@@ -282,6 +434,29 @@ currentConsultant.consultantLevel
 const overrideAmount =
 800 * diffRate / 100;
 
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:new Date(),
+
+accountCode:"5100",
+account:"Consultant Override",
+
+category:"expense",
+
+description:
+upline.consultantNo +
+" " +
+upline.nama,
+
+debit:overrideAmount,
+
+credit:0
+
+}
+);
+  
 await updateDoc(
 doc(
 db,
