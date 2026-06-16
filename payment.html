@@ -225,7 +225,66 @@ credit:350
 }
 );
 
+const compensationSnap =
+await getDoc(
+doc(
+db,
+"settings",
+"compensation"
+)
+);
 
+const comp =
+compensationSnap.data();
+
+const saleAmount = 350;
+
+const shareholder =
+saleAmount *
+(comp.shareholderPool / 100);
+
+const company =
+saleAmount *
+(comp.companyPool / 100);
+
+const allowance =
+saleAmount *
+(comp.allowance / 100);
+
+const adminOperation =
+saleAmount *
+(comp.adminOperation / 100);
+
+const royalty =
+saleAmount *
+(comp.royalty / 100);
+
+await addDoc(
+collection(
+db,
+"companyAllocation"
+),
+{
+createdAt:new Date(),
+
+memberNo,
+customerName:
+customer.nama,
+
+product:
+"eWasiat",
+
+sale:
+saleAmount,
+
+shareholder,
+company,
+
+allowance,
+adminOperation,
+royalty
+}
+);
 
 
 
