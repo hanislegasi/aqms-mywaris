@@ -110,6 +110,47 @@ class="text-3xl font-bold">
 </div>
 
 </div>
+  
+<div class="grid grid-cols-5 gap-5 mb-6">
+
+<div class="bg-white p-5 rounded-xl shadow">
+<p>Company Reserve</p>
+<h2 id="companyFund" class="text-3xl font-bold text-green-600">
+RM0.00
+</h2>
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+<p>Shareholder Reserve</p>
+<h2 id="shareholderFund" class="text-3xl font-bold text-blue-600">
+RM0.00
+</h2>
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+<p>Allowance Reserve</p>
+<h2 id="allowanceFund" class="text-3xl font-bold text-purple-600">
+RM0.00
+</h2>
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+<p>Admin Reserve</p>
+<h2 id="adminFund" class="text-3xl font-bold text-orange-600">
+RM0.00
+</h2>
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+<p>Royalty Reserve</p>
+<h2 id="royaltyFund" class="text-3xl font-bold text-red-600">
+RM0.00
+</h2>
+</div>
+
+</div>
+  
+</div>
 
 <div class="bg-white rounded-xl shadow overflow-x-auto">
 
@@ -190,6 +231,42 @@ const snap =
 await getDocs(
 collection(db,"ledger")
 );
+
+const allocationSnap =
+await getDocs(
+collection(
+db,
+"companyAllocation"
+)
+);
+
+let companyFund = 0;
+let shareholderFund = 0;
+let allowanceFund = 0;
+let adminFund = 0;
+let royaltyFund = 0;
+
+allocationSnap.forEach((d)=>{
+
+const a = d.data();
+
+companyFund +=
+Number(a.company || 0);
+
+shareholderFund +=
+Number(a.shareholder || 0);
+
+allowanceFund +=
+Number(a.allowance || 0);
+
+adminFund +=
+Number(a.adminOperation || 0);
+
+royaltyFund +=
+Number(a.royalty || 0);
+
+});
+  
 
 let html = "";
 
@@ -280,6 +357,36 @@ document.getElementById(
 ).innerHTML =
 count;
 
+document.getElementById(
+"companyFund"
+).innerHTML =
+"RM" +
+companyFund.toFixed(2);
+
+document.getElementById(
+"shareholderFund"
+).innerHTML =
+"RM" +
+shareholderFund.toFixed(2);
+
+document.getElementById(
+"allowanceFund"
+).innerHTML =
+"RM" +
+allowanceFund.toFixed(2);
+
+document.getElementById(
+"adminFund"
+).innerHTML =
+"RM" +
+adminFund.toFixed(2);
+
+document.getElementById(
+"royaltyFund"
+).innerHTML =
+"RM" +
+royaltyFund.toFixed(2);
+  
 </script>
 
 </body>
