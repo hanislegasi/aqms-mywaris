@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="ms">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Payment Voucher</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body{
+font-family:Inter,sans-serif;
+}
+</style>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+Payment Voucher
+</h1>
+
+</div>
+
+<div class="max-w-7xl mx-auto p-5">
+
+<a
+href="accounts-dashboard.html"
+class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+
+← Akaun
+
+</a>
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+
+<table class="w-full">
+
+<thead class="bg-[#153638] text-white">
+
+<tr>
+
+<th class="p-3 text-left">
+PV No
+</th>
+
+<th class="p-3 text-left">
+Consultant
+</th>
+
+<th class="p-3 text-right">
+Amount
+</th>
+
+<th class="p-3 text-center">
+Status
+</th>
+
+<th class="p-3 text-center">
+Action
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="pvTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+doc,
+updateDoc,
+addDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+projectId:"alqawthar-mywaris",
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+messagingSenderId:"3498810778",
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const snap =
+await getDocs(
+collection(
+db,
+"paymentVouchers"
+)
+);
+
+let html = "";
+
+snap.forEach((d)=>{
+
+const pv = d.data();
+
+html += `
+
+<tr class="border-b">
+
+<td class="p-3">
+${pv.pvNo}
+</td>
+
+<td class="p-3">
+${pv.consultantName}
+</td>
+
+<td class="p-3 text-right">
+RM${Number(pv.amount).toFixed(2)}
+</td>
+
+<td class="p-3 text-center">
+
+<span class="${
+pv.status==="PAID"
+?
+'text-green-600'
+:
+'text-orange-600'
+}">
+
+${pv.status}
+
+</span>
+
+</td>
+
+<td class="p-3 text-center">
+
+${
+pv.status==="PENDING"
+?
+
+`<button
+onclick="markPaid(
+'${d.id}',
+'${pv.consultantName}',
+${pv.amount}
+)"
+class="bg-green-600 text-white px-4 py-2 rounded-lg">
+
+Mark Paid
+
+</button>`
+
+:
+
+`<span class="text-green-600 font-semibold">
+PAID
+</span>`
+
+}
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById(
+"pvTable"
+).innerHTML =
+html;
+
+window.markPaid =
+async(
+pvId,
+consultantName,
+amount
+)=>{
+
+if(
+!confirm(
+"Confirm payment?"
+)
+){
+return;
+}
+
+await addDoc(
+collection(
+db,
+"ledger"
+),
+{
+
+date:new Date(),
+
+accountCode:"2000",
+
+account:
+"Consultant Payable",
+
+category:
+"liability",
+
+description:
+consultantName,
+
+debit:
+amount,
+
+credit:0
+
+}
+);
+
+await addDoc(
+collection(
+db,
+"ledger"
+),
+{
+
+date:new Date(),
+
+accountCode:"1000",
+
+account:
+"Bank",
+
+category:
+"asset",
+
+description:
+consultantName,
+
+debit:0,
+
+credit:amount
+
+}
+);
+
+await updateDoc(
+doc(
+db,
+"paymentVouchers",
+pvId
+),
+{
+
+status:"PAID",
+
+paidAt:
+new Date()
+
+}
+);
+
+alert(
+"Payment completed"
+);
+
+location.reload();
+
+};
+
+</script>
+
+</body>
+</html>
