@@ -83,7 +83,8 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
 getFirestore,
 collection,
-getDocs
+getDocs,
+addDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -192,6 +193,48 @@ document.getElementById(
 "payableTable"
 ).innerHTML =
 html;
+
+window.generatePV =
+async(
+consultantNo,
+consultantName,
+amount
+)=>{
+
+const pvNo =
+"PV-" +
+Date.now();
+
+await addDoc(
+collection(
+db,
+"paymentVouchers"
+),
+{
+
+pvNo,
+
+consultantNo,
+
+consultantName,
+
+amount,
+
+status:
+"PENDING",
+
+createdAt:
+new Date()
+
+});
+
+alert(
+"PV berjaya dijana"
+);
+
+location.reload();
+
+};
   
 </script>
   
