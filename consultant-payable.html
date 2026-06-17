@@ -109,6 +109,8 @@ const row = d.data();
 
 if(
 row.accountCode !== "2000"
+||
+!row.description.startsWith("AQC")
 ) return;
 
 const consultant =
