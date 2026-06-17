@@ -160,7 +160,11 @@ RM${payable[consultant].toFixed(2)}
 <td class="p-3 text-center">
 
 <button
-onclick="generatePV('${consultant}',${payable[consultant]})"
+onclick="generatePV(
+'${consultant.split(" ")[0]}',
+'${consultant}',
+${payable[consultant]}
+)"
 class="bg-green-600 text-white px-4 py-2 rounded-lg">
 
 Generate PV
@@ -175,19 +179,7 @@ Generate PV
 
 });
 
-window.generatePV =
-async(
-consultant,
-amount
-)=>{
 
-alert(
-consultant +
-"\nRM" +
-amount
-);
-
-};
   
 document.getElementById(
 "payableTable"
