@@ -160,8 +160,16 @@ ${pv.status}
 
 <td class="p-3 text-center">
 
+<a
+href="payment-voucher-view.html?id=${d.id}"
+class="bg-blue-600 text-white px-3 py-2 rounded-lg mr-2">
+
+View
+
+</a>
+
 ${
-pv.status==="PENDING"
+pv.status === "PENDING"
 ?
 
 `<button
@@ -170,7 +178,7 @@ onclick="markPaid(
 '${pv.consultantName}',
 ${pv.amount}
 )"
-class="bg-green-600 text-white px-4 py-2 rounded-lg">
+class="bg-green-600 text-white px-3 py-2 rounded-lg">
 
 Mark Paid
 
@@ -179,7 +187,9 @@ Mark Paid
 :
 
 `<span class="text-green-600 font-semibold">
+
 PAID
+
 </span>`
 
 }
