@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html lang="ms">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Payment Voucher</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body{
+font-family:Inter,sans-serif;
+}
+</style>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+Payment Voucher Details
+</h1>
+
+</div>
+
+<div class="max-w-4xl mx-auto p-5">
+
+<a
+href="payment-voucher.html"
+class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+
+← Payment Voucher
+
+</a>
+
+<div class="bg-white rounded-xl shadow p-6">
+
+<div class="grid md:grid-cols-2 gap-4 mb-6">
+
+<div>
+
+<label class="font-semibold">
+PV No
+</label>
+
+<p id="pvNo">
+-
+</p>
+
+</div>
+
+<div>
+
+<label class="font-semibold">
+Status
+</label>
+
+<p id="status">
+-
+</p>
+
+</div>
+
+<div>
+
+<label class="font-semibold">
+Consultant
+</label>
+
+<p id="consultant">
+-
+</p>
+
+</div>
+
+<div>
+
+<label class="font-semibold">
+Amount
+</label>
+
+<p id="amount">
+RM0.00
+</p>
+
+</div>
+
+</div>
+
+<hr class="my-6">
+
+<h2 class="font-bold text-lg mb-4">
+Payment Information
+</h2>
+
+<div class="space-y-4">
+
+<div>
+
+<label>
+Payment Method
+</label>
+
+<select
+id="paymentMethod"
+class="w-full border rounded-lg p-3">
+
+<option value="">
+Pilih
+</option>
+
+<option>
+Maybank Transfer
+</option>
+
+<option>
+Cheque
+</option>
+
+<option>
+DuitNow
+</option>
+
+<option>
+IBG
+</option>
+
+</select>
+
+</div>
+
+<div>
+
+<label>
+Reference No
+</label>
+
+<input
+id="referenceNo"
+type="text"
+class="w-full border rounded-lg p-3">
+
+</div>
+
+<div>
+
+<label>
+Payment Date
+</label>
+
+<input
+id="paymentDate"
+type="date"
+class="w-full border rounded-lg p-3">
+
+</div>
+
+<div>
+
+<label>
+Remarks
+</label>
+
+<textarea
+id="remarks"
+class="w-full border rounded-lg p-3"></textarea>
+
+</div>
+
+</div>
+
+<div class="mt-6 flex gap-3">
+
+<button
+id="saveBtn"
+class="bg-blue-600 text-white px-5 py-3 rounded-xl">
+
+Save
+
+</button>
+
+<button
+id="paidBtn"
+class="bg-green-600 text-white px-5 py-3 rounded-xl">
+
+Mark Paid
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+updateDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+projectId:"alqawthar-mywaris",
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+messagingSenderId:"3498810778",
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const pvId =
+params.get("id");
+
+const pvRef =
+doc(
+db,
+"paymentVouchers",
+pvId
+);
+
+const pvSnap =
+await getDoc(
+pvRef
+);
+
+const pv =
+pvSnap.data();
+
+document.getElementById("pvNo").innerHTML =
+pv.pvNo;
+
+document.getElementById("status").innerHTML =
+pv.status;
+
+document.getElementById("consultant").innerHTML =
+pv.consultantName;
+
+document.getElementById("amount").innerHTML =
+"RM" + Number(pv.amount).toFixed(2);
+
+document.getElementById("paymentMethod").value =
+pv.paymentMethod || "";
+
+document.getElementById("referenceNo").value =
+pv.referenceNo || "";
+
+document.getElementById("remarks").value =
+pv.remarks || "";
+
+document.getElementById("saveBtn")
+.addEventListener(
+"click",
+async()=>{
+
+await updateDoc(
+pvRef,
+{
+
+paymentMethod:
+document.getElementById("paymentMethod").value,
+
+referenceNo:
+document.getElementById("referenceNo").value,
+
+paymentDate:
+document.getElementById("paymentDate").value,
+
+remarks:
+document.getElementById("remarks").value
+
+}
+);
+
+alert(
+"Saved"
+);
+
+}
+);
+
+</script>
+
+</body>
+</html>
