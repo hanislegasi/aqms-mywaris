@@ -457,9 +457,24 @@ ledgerSnap.forEach((d)=>{
 const row = d.data();
 
 if(
-row.accountCode === "5000" &&
-row.consultantNo === data.consultantNo
+row.accountCode === "5000"
 ){
+
+const consultantCode =
+(row.description || "")
+.split(" ")[0];
+
+if(
+consultantCode ===
+data.consultantNo
+){
+
+totalCommission +=
+Number(row.debit || 0);
+
+}
+
+}{
 
 totalCommission +=
 Number(row.debit || 0);
