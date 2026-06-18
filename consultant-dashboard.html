@@ -461,12 +461,7 @@ row.accountCode === "5000" &&
 row.consultantNo === data.consultantNo
 ){
 
-console.log(
-"MATCH",
-data.consultantNo,
-row.consultantNo,
-row.debit
-);
+
  
 totalCommission +=
 Number(row.debit || 0);
@@ -761,11 +756,7 @@ document.getElementById(
 ).innerHTML =
 "RM" + totalCommission.toLocaleString();
 
-console.log(
-"TOTAL COMMISSION",
-data.consultantNo,
-totalCommission
-); 
+
 
 document.getElementById(
 "totalOverriding"
