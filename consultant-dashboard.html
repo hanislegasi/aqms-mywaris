@@ -450,6 +450,29 @@ let overridingSales = 0;
 
 historySnap.forEach((d)=>{
 
+const ledgerSnap =
+await getDocs(
+collection(db,"ledger")
+);
+
+let totalCommission = 0;
+
+ledgerSnap.forEach((d)=>{
+
+const row = d.data();
+
+if(
+row.accountCode === "5000" &&
+row.consultantNo === data.consultantNo
+){
+
+totalCommission +=
+Number(row.debit || 0);
+
+}
+
+});
+ 
 const h = d.data();
 
 totalOverriding +=
@@ -490,8 +513,6 @@ overridingRate = 12;
 
 }
 
-const totalCommission =
-(totalSales * commissionRate) / 100;
 
 
 
