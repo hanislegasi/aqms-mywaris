@@ -114,6 +114,24 @@ await getDocs(
 collection(db,"ledger")
 );
 
+// DEBUG REKOD ROSAK
+snap.forEach((d)=>{
+
+const row = d.data();
+
+if(
+!row.accountCode ||
+!row.account
+){
+console.log(
+"BROKEN",
+d.id,
+row
+);
+}
+
+});
+
 const accounts = {};
 
 snap.forEach((d)=>{
