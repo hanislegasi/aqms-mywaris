@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>General Journal</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+General Journal
+</h1>
+
+</div>
+
+<div class="max-w-7xl mx-auto p-5">
+
+<a
+href="accounts-dashboard.html"
+class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+
+← Akaun
+
+</a>
+
+<div
+id="journalContainer"
+class="space-y-5">
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+projectId:"alqawthar-mywaris",
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+messagingSenderId:"3498810778",
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const snap =
+await getDocs(
+collection(db,"ledger")
+);
+
+let rows = [];
+
+snap.forEach((d)=>{
+
+rows.push(
+d.data()
+);
+
+});
+
+rows.sort(
+(a,b)=>
+new Date(b.date) -
+new Date(a.date)
+);
+
+let html = "";
+
+rows.forEach((row)=>{
+
+html += `
+
+<div class="bg-white rounded-xl shadow p-5">
+
+<div class="flex justify-between">
+
+<div>
+
+<p class="font-bold">
+
+${row.accountCode}
+
+-
+${row.account}
+
+</p>
+
+<p class="text-sm text-gray-500">
+
+${row.description || "-"}
+
+</p>
+
+</div>
+
+<div>
+
+${new Date(
+row.date.seconds
+? row.date.seconds * 1000
+: row.date
+).toLocaleDateString("ms-MY")}
+
+</div>
+
+</div>
+
+<div class="grid grid-cols-2 gap-4 mt-4">
+
+<div>
+
+Debit
+
+<br>
+
+<b>
+
+RM${Number(
+row.debit || 0
+).toFixed(2)}
+
+</b>
+
+</div>
+
+<div>
+
+Credit
+
+<br>
+
+<b>
+
+RM${Number(
+row.credit || 0
+).toFixed(2)}
+
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"journalContainer"
+).innerHTML =
+html;
+
+</script>
+
+</body>
+</html>
+  
+  
+
+  
