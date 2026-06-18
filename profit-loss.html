@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Profit & Loss</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+Profit & Loss
+</h1>
+
+</div>
+
+<div class="max-w-5xl mx-auto p-5">
+
+<a
+href="accounts-dashboard.html"
+class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+
+← Akaun
+
+</a>
+
+<div
+id="plCard"
+class="bg-white rounded-xl shadow p-6">
+
+Loading...
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+projectId:"alqawthar-mywaris",
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+messagingSenderId:"3498810778",
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const snap =
+await getDocs(
+collection(db,"ledger")
+);
+
+let salesEWasiat = 0;
+let salesHibah = 0;
+let salesPusaka = 0;
+
+let commission = 0;
+let override = 0;
+
+snap.forEach((d)=>{
+
+const row = d.data();
+
+if(row.accountCode === "4000")
+salesEWasiat += Number(row.credit || 0);
+
+if(row.accountCode === "4100")
+salesHibah += Number(row.credit || 0);
+
+if(row.accountCode === "4200")
+salesPusaka += Number(row.credit || 0);
+
+if(row.accountCode === "5000")
+commission += Number(row.debit || 0);
+
+if(row.accountCode === "5100")
+override += Number(row.debit || 0);
+
+});
+
+const totalRevenue =
+salesEWasiat +
+salesHibah +
+salesPusaka;
+
+const totalExpense =
+commission +
+override;
+
+const netProfit =
+totalRevenue -
+totalExpense;
+  
+document.getElementById(
+"plCard"
+).innerHTML = `
+
+<h2 class="text-xl font-bold mb-5">
+
+Revenue
+
+</h2>
+
+<div class="space-y-2">
+
+<p>
+Sales - eWasiat
+<span class="float-right">
+RM${salesEWasiat.toFixed(2)}
+</span>
+</p>
+
+<p>
+Sales - Hibah
+<span class="float-right">
+RM${salesHibah.toFixed(2)}
+</span>
+</p>
+
+<p>
+Sales - Harta Sepencarian
+<span class="float-right">
+RM${salesPusaka.toFixed(2)}
+</span>
+</p>
+
+<hr>
+
+<p class="font-bold">
+
+Total Revenue
+
+<span class="float-right">
+
+RM${totalRevenue.toFixed(2)}
+
+</span>
+
+</p>
+
+</div>
+
+<h2 class="text-xl font-bold mt-8 mb-5">
+
+Expenses
+
+</h2>
+
+<div class="space-y-2">
+
+<p>
+Consultant Commission
+<span class="float-right">
+RM${commission.toFixed(2)}
+</span>
+</p>
+
+<p>
+Consultant Override
+<span class="float-right">
+RM${override.toFixed(2)}
+</span>
+</p>
+
+<hr>
+
+<p class="font-bold">
+
+Total Expenses
+
+<span class="float-right">
+
+RM${totalExpense.toFixed(2)}
+
+</span>
+
+</p>
+
+</div>
+
+<hr class="my-6">
+
+<h2 class="text-2xl font-bold">
+
+Net Profit
+
+<span class="float-right text-green-600">
+
+RM${netProfit.toFixed(2)}
+
+</span>
+
+</h2>
+
+`;  
+
+</script>
+
+</body>
+</html>  
+  
