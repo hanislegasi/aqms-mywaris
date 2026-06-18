@@ -39,7 +39,7 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 <div
 id="plCard"
-class="bg-white rounded-xl shadow p-6">
+class="space-y-5">
 
 Loading...
 
@@ -101,12 +101,13 @@ rows:[],
 
 debit:0,
 
-credit:0
+credit:0,
+
+balance:0
 
 };
 
 }
-
 accounts[code].rows.push(row);
 
 accounts[code].debit +=
@@ -206,21 +207,15 @@ html += `
 <tr class="font-bold bg-gray-100">
 
 <td colspan="2">
-
 TOTAL
-
 </td>
 
 <td>
-
 RM${acc.debit.toFixed(2)}
-
 </td>
 
 <td>
-
 RM${acc.credit.toFixed(2)}
-
 </td>
 
 </tr>
@@ -233,6 +228,11 @@ RM${acc.credit.toFixed(2)}
 
 });
 
+document.getElementById(
+"plCard"
+).innerHTML =
+html;
+  
 </script>
 
 </body>
