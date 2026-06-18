@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>General Ledger</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+General Ledger
+</h1>
+
+</div>
+
+<div class="max-w-5xl mx-auto p-5">
+
+<a
+href="accounts-dashboard.html"
+class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+
+← Akaun
+
+</a>
+
+<div
+id="plCard"
+class="bg-white rounded-xl shadow p-6">
+
+Loading...
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+projectId:"alqawthar-mywaris",
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+messagingSenderId:"3498810778",
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const snap =
+await getDocs(
+collection(db,"ledger")
+);
+
+const accounts = {};
+
+snap.forEach((d)=>{
+
+const row = d.data();
+
+const code =
+String(row.accountCode);
+
+if(!accounts[code]){
+
+accounts[code] = {
+
+account:
+row.account,
+
+rows:[],
+
+debit:0,
+
+credit:0
+
+};
+
+}
+
+accounts[code].rows.push(row);
+
+accounts[code].debit +=
+Number(row.debit || 0);
+
+accounts[code].credit +=
+Number(row.credit || 0);
+
+});
+
+let html = "";
+
+Object.keys(accounts)
+.sort()
+.forEach((code)=>{
+
+const acc =
+accounts[code];
+
+html += `
+
+<div class="bg-white rounded-xl shadow p-5 mb-5">
+
+<h2 class="text-xl font-bold mb-3">
+
+${code}
+-
+${acc.account}
+
+</h2>
+
+<table class="w-full">
+
+<tr>
+
+<th>Date</th>
+
+<th>Description</th>
+
+<th>Debit</th>
+
+<th>Credit</th>
+
+</tr>
+
+`;
+
+acc.rows.forEach((row)=>{
+
+html += `
+
+<tr>
+
+<td>
+
+${
+row.date?.toDate
+?
+row.date.toDate()
+.toLocaleDateString("ms-MY")
+:
+"-"
+}
+
+</td>
+
+<td>
+
+${row.description || "-"}
+
+</td>
+
+<td>
+
+RM${Number(
+row.debit || 0
+).toFixed(2)}
+
+</td>
+
+<td>
+
+RM${Number(
+row.credit || 0
+).toFixed(2)}
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+html += `
+
+<tr class="font-bold bg-gray-100">
+
+<td colspan="2">
+
+TOTAL
+
+</td>
+
+<td>
+
+RM${acc.debit.toFixed(2)}
+
+</td>
+
+<td>
+
+RM${acc.credit.toFixed(2)}
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+`;
+
+});
+
+</script>
+
+</body>
+</html>
