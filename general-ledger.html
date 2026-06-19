@@ -27,8 +27,12 @@ font-family: Inter, sans-serif;
 General Ledger
 </h1>
 
+
+  
 </div>
 
+<div class="max-w-6xl mx-auto p-5">
+  
 <div class="flex items-center gap-3 mb-6">
 
 <a
@@ -186,25 +190,18 @@ html += `
 class="ledger-card bg-white rounded-xl shadow-sm border p-4 mb-4"
 data-date="${latestDate}">
 
-
 <h2 class="text-xl font-bold mb-3">
-
-${code}
--
-${acc.account}
-
+${code} - ${acc.account}
 </h2>
 
+<table class="w-full text-sm border-collapse">
+
 <tr class="border-b bg-gray-50">
-
-<tr>
-
 <th>Date</th>
 <th>Description</th>
-<th>Debit</th>
-<th>Credit</th>
-<th>Balance</th>
-
+<th class="text-right">Debit</th>
+<th class="text-right">Credit</th>
+<th class="text-right">Balance</th>
 </tr>
 
 `;
@@ -238,7 +235,7 @@ Number(row.credit || 0);
 
 html += `
 
-<tr>
+<tr class="border-b hover:bg-gray-50">
 
 <td>
 ${
@@ -255,19 +252,17 @@ row.date.toDate()
 ${row.description || "-"}
 </td>
 
-<td>
-RM${Number(
-row.debit || 0
-).toFixed(2)}
+<td class="text-right">
+RM${Number(row.debit || 0).toFixed(2)}
 </td>
 
-<td>
+<td class="text-right">
 RM${Number(
 row.credit || 0
 ).toFixed(2)}
 </td>
 
-<td>
+<td class="text-right">
 RM${balance.toFixed(2)}
 </td>
 
@@ -285,15 +280,15 @@ html += `
 TOTAL
 </td>
 
-<td>
+<td class="text-right">
 RM${acc.debit.toFixed(2)}
 </td>
 
-<td>
+<td class="text-right">
 RM${acc.credit.toFixed(2)}
 </td>
 
-<td>
+<td class="text-right">
 RM${balance.toFixed(2)}
 </td>
 
@@ -405,13 +400,32 @@ document
 "click",
 ()=>{
 
-html2pdf()
+html2pdf().set({
+
+margin:0.3,
+
+filename:"General-Ledger.pdf",
+
+image:{
+type:"jpeg",
+quality:1
+},
+
+html2canvas:{
+scale:2
+},
+
+jsPDF:{
+unit:"in",
+format:"a4",
+orientation:"portrait"
+}
+
+})
 .from(
 document.getElementById("plCard")
 )
-.save(
-"General-Ledger.pdf"
-);
+.save();
 
 });
   
