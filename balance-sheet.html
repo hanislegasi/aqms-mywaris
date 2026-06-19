@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Balance Sheet</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+body{
+font-family: Inter, sans-serif;
+}
+</style>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+Balance Sheet
+</h1>
+
+</div>
+
+<div class="max-w-5xl mx-auto p-5">
+
+<a
+href="accounts-dashboard.html"
+class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+
+← Akaun
+
+</a>
+
+<button
+id="exportPdfBtn"
+class="bg-red-600 text-white px-5 py-3 rounded-xl mb-5">
+
+Export PDF
+
+</button>
+
+<div
+id="bsCard"
+class="bg-white rounded-xl shadow p-8">
+
+Loading...
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+getDoc,
+doc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+
+projectId:"alqawthar-mywaris",
+
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+
+messagingSenderId:"3498810778",
+
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const settingsSnap =
+await getDoc(
+doc(db,"settings","company")
+);
+
+const settings =
+settingsSnap.data();
+
+const companyName =
+settings?.companyName ||
+"AL-QAWTHAR MAWARIS SDN. BHD.";
+
+const reportPeriod =
+settings?.reportPeriod ||
+"01 January 2026 - 31 December 2026";
+
+const snap =
+await getDocs(
+collection(db,"ledger")
+);
+
+let bank = 0;
+let consultantPayable = 0;
+
+let salesEWasiat = 0;
+let salesHibah = 0;
+let salesPusaka = 0;
+
+let commission = 0;
+let override = 0;
+  
+let bank = 0;
+let consultantPayable = 0;
+
+snap.forEach((d)=>{
+
+const row = d.data();
+
+if(row.accountCode === "1000"){
+
+bank +=
+Number(row.debit || 0);
+
+bank -=
+Number(row.credit || 0);
+
+}
+
+if(row.accountCode === "2000"){
+
+consultantPayable +=
+Number(row.credit || 0);
+
+consultantPayable -=
+Number(row.debit || 0);
+
+}
+
+if(row.accountCode === "4000")
+salesEWasiat += Number(row.credit || 0);
+
+if(row.accountCode === "4100")
+salesHibah += Number(row.credit || 0);
+
+if(row.accountCode === "4200")
+salesPusaka += Number(row.credit || 0);
+
+if(row.accountCode === "5000")
+commission += Number(row.debit || 0);
+
+if(row.accountCode === "5100")
+override += Number(row.debit || 0);
+
+});
+  
+
+const netProfit =
+
+(
+salesEWasiat +
+salesHibah +
+salesPusaka
+)
+
+-
+
+(
+commission +
+override
+);
+
+const totalAssets =
+bank;
+
+const totalLiabilities =
+consultantPayable;
+
+const totalEquity =
+netProfit;
+
+const totalLE =
+totalLiabilities +
+totalEquity;
+
+document.getElementById(
+"bsCard"
+).innerHTML = `
+
+<div class="text-center border-b pb-5 mb-6">
+
+<h1 class="text-3xl font-bold">
+${companyName}
+</h1>
+
+<p>
+STATEMENT OF FINANCIAL POSITION
+</p>
+
+<p>
+As At ${financialYearEnd}
+</p>
+
+</div>
+
+<table class="w-full">
+
+<tr class="font-bold bg-gray-100">
+
+<td colspan="2">
+ASSETS
+</td>
+
+</tr>
+
+<tr>
+
+<td class="pl-6 py-2">
+Bank
+</td>
+
+<td class="text-right">
+RM${bank.toFixed(2)}
+</td>
+
+</tr>
+
+<tr class="font-bold border-t">
+
+<td>
+TOTAL ASSETS
+</td>
+
+<td class="text-right">
+RM${totalAssets.toFixed(2)}
+</td>
+
+</tr>
+
+<tr>
+<td colspan="2" class="py-4"></td>
+</tr>
+
+<tr class="font-bold bg-gray-100">
+
+<td colspan="2">
+LIABILITIES
+</td>
+
+</tr>
+
+<tr>
+
+<td class="pl-6 py-2">
+Consultant Payable
+</td>
+
+<td class="text-right">
+RM${consultantPayable.toFixed(2)}
+</td>
+
+</tr>
+
+<tr class="font-bold border-t">
+
+<td>
+TOTAL LIABILITIES
+</td>
+
+<td class="text-right">
+RM${totalLiabilities.toFixed(2)}
+</td>
+
+</tr>
+
+<tr>
+<td colspan="2" class="py-4"></td>
+</tr>
+
+<tr class="font-bold bg-gray-100">
+
+<td colspan="2">
+EQUITY
+</td>
+
+</tr>
+
+<tr>
+
+<td class="pl-6 py-2">
+Retained Earnings
+</td>
+
+<td class="text-right">
+RM${netProfit.toFixed(2)}
+</td>
+
+</tr>
+
+<tr class="font-bold border-t">
+
+<td>
+TOTAL EQUITY
+</td>
+
+<td class="text-right">
+RM${totalEquity.toFixed(2)}
+</td>
+
+</tr>
+
+<tr class="bg-green-50 text-green-700 font-bold text-xl">
+
+<td class="py-4">
+TOTAL LIABILITIES & EQUITY
+</td>
+
+<td class="text-right">
+RM${totalLE.toFixed(2)}
+</td>
+
+</tr>
+
+</table>
+
+`;
+
+document
+.getElementById("exportPdfBtn")
+.addEventListener(
+"click",
+()=>{
+
+html2pdf()
+.set({
+
+margin:0.3,
+
+filename:"Balance-Sheet.pdf",
+
+html2canvas:{
+scale:2
+},
+
+jsPDF:{
+unit:"in",
+format:"a4",
+orientation:"portrait"
+}
+
+})
+.from(
+document.getElementById("bsCard")
+)
+.save();
+
+});
+
+</script>
+
+</body>
+</html>
+  
