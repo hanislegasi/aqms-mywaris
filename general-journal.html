@@ -9,6 +9,8 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  
 <style>
 body{
 font-family: Inter, sans-serif;
@@ -38,6 +40,14 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 </a>
 
+<button
+id="exportPdfBtn"
+class="bg-red-600 text-white px-5 py-3 rounded-xl ml-2">
+
+Export PDF
+
+</button>
+  
 <div class="grid md:grid-cols-4 gap-3 mb-6">
 
 <input
@@ -58,7 +68,9 @@ class="border rounded-xl p-3 h-12">
 
 </div>
 
-<div class="bg-white rounded-xl shadow overflow-hidden">
+<div
+id="journalContainer"
+class="bg-white rounded-xl shadow overflow-hidden">
 
 <table class="w-full text-sm">
 
@@ -201,6 +213,139 @@ document.getElementById(
 "journalTable"
 ).innerHTML = html;
 
+function filterJournal(){
+
+const keyword =
+document.getElementById("journalSearch")
+.value.toLowerCase();
+
+const from =
+document.getElementById("dateFrom")
+.value;
+
+const to =
+document.getElementById("dateTo")
+.value;
+
+const rows =
+document.querySelectorAll(
+"#journalTable tr"
+);
+
+rows.forEach((row)=>{
+
+const text =
+row.innerText.toLowerCase();
+
+const dateText =
+row.children[0]?.innerText || "";
+
+let show = true;
+
+if(
+keyword &&
+!text.includes(keyword)
+){
+show = false;
+}
+
+if(from){
+
+const rowDate =
+new Date(
+dateText.split("/")
+.reverse()
+.join("-")
+);
+
+if(rowDate < new Date(from)){
+show = false;
+}
+
+}
+
+if(to){
+
+const rowDate =
+new Date(
+dateText.split("/")
+.reverse()
+.join("-")
+);
+
+if(rowDate > new Date(to)){
+show = false;
+}
+
+}
+
+row.style.display =
+show
+? ""
+: "none";
+
+});
+
+}
+
+document
+.getElementById("journalSearch")
+.addEventListener(
+"input",
+filterJournal
+);
+
+document
+.getElementById("dateFrom")
+.addEventListener(
+"change",
+filterJournal
+);
+
+document
+.getElementById("dateTo")
+.addEventListener(
+"change",
+filterJournal
+);
+
+document
+.getElementById("exportPdfBtn")
+.addEventListener(
+"click",
+()=>{
+
+html2pdf().set({
+
+margin:0.3,
+
+filename:"General-Journal.pdf",
+
+image:{
+type:"jpeg",
+quality:1
+},
+
+html2canvas:{
+scale:2
+},
+
+jsPDF:{
+unit:"in",
+format:"a4",
+orientation:"portrait"
+}
+
+})
+.from(
+document.getElementById(
+"journalContainer"
+)
+)
+.save();
+
+});
+  
 </script>
 
 </body>
