@@ -37,13 +37,23 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 </a>
 
-<div class="mb-5">
+<div class="grid md:grid-cols-3 gap-3 mb-5">
+
+<input
+type="date"
+id="dateFrom"
+class="border rounded-xl p-3">
+
+<input
+type="date"
+id="dateTo"
+class="border rounded-xl p-3">
 
 <input
 type="text"
 id="ledgerSearch"
-placeholder="Cari kod, nama, description atau tarikh..."
-class="w-full border rounded-xl p-3">
+placeholder="🔍 Cari kod, nama atau description..."
+class="border rounded-xl p-3">
 
 </div>
 
@@ -140,9 +150,30 @@ Object.keys(accounts)
 const acc =
 accounts[code];
 
+const dates =
+acc.rows.map(r=>{
+
+if(r.date?.toDate){
+
+return r.date.toDate()
+.toISOString()
+.substring(0,10);
+
+}
+
+return "";
+
+});
+
+const latestDate =
+dates.sort().reverse()[0] || "";
+
 html += `
 
-<div class="bg-white rounded-xl shadow p-5 mb-5">
+<div
+class="ledger-card bg-white rounded-xl shadow p-5 mb-5"
+data-date="${latestDate}">
+`;
 
 <h2 class="text-xl font-bold mb-3">
 
@@ -157,25 +188,31 @@ ${acc.account}
 <tr>
 
 <th>Date</th>
-
 <th>Description</th>
-
 <th>Debit</th>
-
 <th>Credit</th>
+<th>Balance</th>
 
 </tr>
 
 `;
 
+let balance = 0;
+
 acc.rows.forEach((row)=>{
+
+
+balance +=
+Number(row.debit || 0);
+
+balance -=
+Number(row.credit || 0);
 
 html += `
 
 <tr>
 
 <td>
-
 ${
 row.date?.toDate
 ?
@@ -184,29 +221,26 @@ row.date.toDate()
 :
 "-"
 }
-
 </td>
 
 <td>
-
 ${row.description || "-"}
-
 </td>
 
 <td>
-
 RM${Number(
 row.debit || 0
 ).toFixed(2)}
-
 </td>
 
 <td>
-
 RM${Number(
 row.credit || 0
 ).toFixed(2)}
+</td>
 
+<td>
+RM${balance.toFixed(2)}
 </td>
 
 </tr>
@@ -248,20 +282,27 @@ document.getElementById(
 ).innerHTML =
 html;
 
-document
-.getElementById("ledgerSearch")
-.addEventListener(
-"input",
-function(){
+function filterLedger(){
 
 const keyword =
-this.value
-.toLowerCase()
-.trim();
+document
+.getElementById("ledgerSearch")
+.value
+.toLowerCase();
+
+const from =
+document
+.getElementById("dateFrom")
+.value;
+
+const to =
+document
+.getElementById("dateTo")
+.value;
 
 const cards =
 document.querySelectorAll(
-"#plCard > div"
+".ledger-card"
 );
 
 cards.forEach((card)=>{
@@ -270,25 +311,62 @@ const text =
 card.innerText
 .toLowerCase();
 
+const cardDate =
+card.dataset.date;
+
+let show = true;
+
 if(
-text.includes(keyword)
+keyword &&
+!text.includes(keyword)
 ){
-
-card.style.display =
-"block";
-
-}else{
-
-card.style.display =
-"none";
-
+show = false;
 }
+
+if(
+from &&
+cardDate < from
+){
+show = false;
+}
+
+if(
+to &&
+cardDate > to
+){
+show = false;
+}
+
+card.style.display =
+show
+? "block"
+: "none";
 
 });
 
 }
+
+document
+.getElementById("ledgerSearch")
+.addEventListener(
+"input",
+filterLedger
 );
-  
+
+document
+.getElementById("dateFrom")
+.addEventListener(
+"change",
+filterLedger
+);
+
+document
+.getElementById("dateTo")
+.addEventListener(
+"change",
+filterLedger
+);
+
 </script>
 
 </body>
