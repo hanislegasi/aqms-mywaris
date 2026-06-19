@@ -37,6 +37,16 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 </a>
 
+<div class="mb-5">
+
+<input
+type="text"
+id="ledgerSearch"
+placeholder="Cari kod, nama, description atau tarikh..."
+class="w-full border rounded-xl p-3">
+
+</div>
+
 <div
 id="plCard"
 class="space-y-5">
@@ -44,6 +54,7 @@ class="space-y-5">
 Loading...
 
 </div>
+  
 
 </div>
 
@@ -118,6 +129,8 @@ Number(row.credit || 0);
 
 });
 
+let originalHtml = "";
+  
 let html = "";
 
 Object.keys(accounts)
@@ -228,10 +241,53 @@ RM${acc.credit.toFixed(2)}
 
 });
 
+originalHtml = html;
+
 document.getElementById(
 "plCard"
 ).innerHTML =
 html;
+
+document
+.getElementById("ledgerSearch")
+.addEventListener(
+"input",
+function(){
+
+const keyword =
+this.value
+.toLowerCase()
+.trim();
+
+const cards =
+document.querySelectorAll(
+"#plCard > div"
+);
+
+cards.forEach((card)=>{
+
+const text =
+card.innerText
+.toLowerCase();
+
+if(
+text.includes(keyword)
+){
+
+card.style.display =
+"block";
+
+}else{
+
+card.style.display =
+"none";
+
+}
+
+});
+
+}
+);
   
 </script>
 
