@@ -105,10 +105,10 @@ const companyName =
 settings?.companyName ||
 "AL-QAWTHAR MAWARIS SDN. BHD.";
 
-<p>
-${reportPeriod}
-</p>
-
+const reportPeriod =
+settings?.reportPeriod ||
+"01 January 2026 - 31 December 2026";
+  
 const financialYearEnd =
 settings?.financialYearEnd ||
 "31 December 2026";
@@ -217,7 +217,7 @@ ${companyName}
 STATEMENT OF FINANCIAL POSITION
 </p>
 
-<p>
+<p class="text-gray-500">
 As At ${financialYearEnd}
 </p>
 
