@@ -9,6 +9,8 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  
 <style>
 body{
 font-family: Inter, sans-serif;
@@ -45,7 +47,7 @@ Export PDF
 
 </button>
   
-<div id="plCard" class="bg-white rounded-xl shadow p-8">
+<div id="plCard">
 
 <div class="text-center border-b pb-5 mb-6">
 
@@ -53,16 +55,16 @@ Export PDF
 AL-QAWTHAR MAWARIS SDN. BHD.
 </h1>
 
-<p class="text-gray-600">
-(Registration No: XXXXXXX-X)
+<p>
+Registration No: XXXXXXX-X
 </p>
 
-<h2 class="text-xl font-bold mt-4">
+<h2 class="text-xl font-bold mt-3">
 STATEMENT OF PROFIT OR LOSS
 </h2>
 
-<p class="text-gray-500">
-For The Period Ended 30 June 2026
+<p>
+For The Period Ended
 </p>
 
 </div>
@@ -71,13 +73,13 @@ For The Period Ended 30 June 2026
 
 <div class="mt-10 border-t pt-4 text-xs text-gray-500">
 
-Generated on:
-${new Date().toLocaleString("ms-MY")}
+Generated:
+<span id="generatedDate"></span>
 
 </div>
 
 </div>
-
+  
 <script type="module">
 
 import { initializeApp }
@@ -320,6 +322,17 @@ document.getElementById("plCard")
 .save();
 
 });
+
+document.getElementById(
+"generatedDate"
+).innerText =
+new Date().toLocaleString("ms-MY");
+
+document.getElementById(
+"reportContent"
+).innerHTML = `
+...
+`;  
   
 </script>
 
