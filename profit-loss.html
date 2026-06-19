@@ -49,36 +49,7 @@ Export PDF
   
 <div id="plCard">
 
-<div class="text-center border-b pb-5 mb-6">
-
-<h1 class="text-3xl font-bold">
-${settings.companyName}
-</h1>
-
-<p>
-Registration No :
-${settings.registrationNo}
-</p>
-
-<h2 class="text-2xl font-bold mt-4">
-STATEMENT OF PROFIT OR LOSS
-</h2>
-
-<p>
-For The Period Ended
-${settings.financialYearEnd}
-</p>
-
-</div>
-
-<div id="reportContent"></div>
-
-<div class="mt-10 border-t pt-4 text-xs text-gray-500">
-
-Generated:
-<span id="generatedDate"></span>
-
-</div>
+Loading...
 
 </div>
   
@@ -90,7 +61,9 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
 getFirestore,
 collection,
-getDocs
+getDocs,
+getDoc,
+doc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -118,6 +91,16 @@ doc(db,"settings","company")
 
 const settings =
 settingsSnap.data();
+
+const companyName =
+settings.companyName || "";
+
+const registrationNo =
+settings.registrationNo || "";
+
+const financialYearEnd =
+settings.financialYearEnd || "";
+
   
 const snap =
 await getDocs(
@@ -165,14 +148,33 @@ const netProfit =
 totalRevenue -
 totalExpense;
 
-document.getElementById(
-"generatedDate"
-).innerText =
-new Date().toLocaleString("ms-MY");
+
   
 document.getElementById(
-"reportContent"
+"plCard"
 ).innerHTML = `
+
+<div class="text-center border-b pb-5 mb-6">
+
+<h1 class="text-3xl font-bold">
+${companyName}
+</h1>
+
+<p>
+Registration No :
+${registrationNo}
+</p>
+
+<h2 class="text-2xl font-bold mt-4">
+STATEMENT OF PROFIT OR LOSS
+</h2>
+
+<p>
+For The Period Ended
+${financialYearEnd}
+</p>
+
+</div>
 
 <table class="w-full">
 
@@ -303,7 +305,15 @@ RM${netProfit.toFixed(2)}
 </tr>
 
 </table>
-`;  
+
+<div class="mt-10 border-t pt-4 text-xs text-gray-500">
+
+Generated :
+${new Date().toLocaleString("ms-MY")}
+
+</div>
+
+`; 
 
 document
 .getElementById("exportPdfBtn")
