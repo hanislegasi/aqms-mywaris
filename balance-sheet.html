@@ -105,10 +105,14 @@ const companyName =
 settings?.companyName ||
 "AL-QAWTHAR MAWARIS SDN. BHD.";
 
-const reportPeriod =
-settings?.reportPeriod ||
-"01 January 2026 - 31 December 2026";
+<p>
+${reportPeriod}
+</p>
 
+const financialYearEnd =
+settings?.financialYearEnd ||
+"31 December 2026";
+  
 const snap =
 await getDocs(
 collection(db,"ledger")
@@ -124,8 +128,6 @@ let salesPusaka = 0;
 let commission = 0;
 let override = 0;
   
-let bank = 0;
-let consultantPayable = 0;
 
 snap.forEach((d)=>{
 
@@ -197,6 +199,10 @@ const totalLE =
 totalLiabilities +
 totalEquity;
 
+const difference =
+totalAssets - totalLE;
+
+  
 document.getElementById(
 "bsCard"
 ).innerHTML = `
@@ -335,7 +341,33 @@ RM${totalLE.toFixed(2)}
 
 </tr>
 
+<tr class="${
+difference === 0
+? 'bg-green-100'
+: 'bg-red-100'
+} font-bold">
+
+<td>
+BALANCE CHECK
+</td>
+
+<td class="text-right">
+
+RM${difference.toFixed(2)}
+
+</td>
+
+</tr>
+
+
 </table>
+
+<div class="mt-10 border-t pt-4 text-xs text-gray-500">
+
+Generated :
+${new Date().toLocaleString("ms-MY")}
+
+</div>
 
 `;
 
