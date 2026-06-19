@@ -9,6 +9,8 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  
 <style>
 body{
 font-family: Inter, sans-serif;
@@ -37,6 +39,16 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 </a>
 
+<button
+id="exportPdfBtn"
+class="bg-red-600 text-white px-5 py-3 rounded-xl">
+
+Export PDF
+
+</button>
+
+</div>
+  
 <div class="grid md:grid-cols-3 gap-3 mb-5">
 
 <input
@@ -173,7 +185,7 @@ html += `
 <div
 class="ledger-card bg-white rounded-xl shadow p-5 mb-5"
 data-date="${latestDate}">
-`;
+
 
 <h2 class="text-xl font-bold mb-3">
 
@@ -196,6 +208,22 @@ ${acc.account}
 </tr>
 
 `;
+
+acc.rows.sort((a,b)=>{
+
+const dateA =
+a.date?.toDate
+? a.date.toDate()
+: new Date(a.date);
+
+const dateB =
+b.date?.toDate
+? b.date.toDate()
+: new Date(b.date);
+
+return dateA - dateB;
+
+});
 
 let balance = 0;
 
@@ -263,6 +291,10 @@ RM${acc.debit.toFixed(2)}
 
 <td>
 RM${acc.credit.toFixed(2)}
+</td>
+
+<td>
+RM${balance.toFixed(2)}
 </td>
 
 </tr>
@@ -367,6 +399,22 @@ document
 filterLedger
 );
 
+document
+.getElementById("exportPdfBtn")
+.addEventListener(
+"click",
+()=>{
+
+html2pdf()
+.from(
+document.getElementById("plCard")
+)
+.save(
+"General-Ledger.pdf"
+);
+
+});
+  
 </script>
 
 </body>
