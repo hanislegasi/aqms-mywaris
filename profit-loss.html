@@ -37,11 +37,42 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 </a>
 
-<div
-id="plCard"
-class="bg-white rounded-xl shadow p-6">
+<button
+id="exportPdfBtn"
+class="bg-red-600 text-white px-5 py-3 rounded-xl mb-5">
 
-Loading...
+Export PDF
+
+</button>
+  
+<div id="plCard" class="bg-white rounded-xl shadow p-8">
+
+<div class="text-center border-b pb-5 mb-6">
+
+<h1 class="text-2xl font-bold">
+AL-QAWTHAR MAWARIS SDN. BHD.
+</h1>
+
+<p class="text-gray-600">
+(Registration No: XXXXXXX-X)
+</p>
+
+<h2 class="text-xl font-bold mt-4">
+STATEMENT OF PROFIT OR LOSS
+</h2>
+
+<p class="text-gray-500">
+For The Period Ended 30 June 2026
+</p>
+
+</div>
+
+<div id="reportContent"></div>
+
+<div class="mt-10 border-t pt-4 text-xs text-gray-500">
+
+Generated on:
+${new Date().toLocaleString("ms-MY")}
 
 </div>
 
@@ -126,105 +157,170 @@ document.getElementById(
 "plCard"
 ).innerHTML = `
 
-<h2 class="text-xl font-bold mb-5">
+<table class="w-full">
 
-Revenue
+<tr class="font-bold border-b">
 
-</h2>
+<td class="py-2">
+REVENUE
+</td>
 
-<div class="space-y-2">
+<td class="text-right">
+RM
+</td>
 
-<p>
+</tr>
+
+<tr>
+
+<td class="pl-6 py-1">
 Sales - eWasiat
-<span class="float-right">
-RM${salesEWasiat.toFixed(2)}
-</span>
-</p>
+</td>
 
-<p>
+<td class="text-right">
+${salesEWasiat.toFixed(2)}
+</td>
+
+</tr>
+
+<tr>
+
+<td class="pl-6 py-1">
 Sales - Hibah
-<span class="float-right">
-RM${salesHibah.toFixed(2)}
-</span>
-</p>
+</td>
 
-<p>
+<td class="text-right">
+${salesHibah.toFixed(2)}
+</td>
+
+</tr>
+
+<tr>
+
+<td class="pl-6 py-1">
 Sales - Harta Sepencarian
-<span class="float-right">
-RM${salesPusaka.toFixed(2)}
-</span>
-</p>
+</td>
 
-<hr>
+<td class="text-right">
+${salesPusaka.toFixed(2)}
+</td>
 
-<p class="font-bold">
+</tr>
 
-Total Revenue
+<tr class="font-bold border-t border-b">
 
-<span class="float-right">
+<td class="py-2">
+TOTAL REVENUE
+</td>
 
+<td class="text-right">
 RM${totalRevenue.toFixed(2)}
+</td>
 
-</span>
+</tr>
 
-</p>
+<tr>
+<td colspan="2" class="py-4"></td>
+</tr>
 
-</div>
+<tr class="font-bold border-b">
 
-<h2 class="text-xl font-bold mt-8 mb-5">
+<td class="py-2">
+EXPENSES
+</td>
 
-Expenses
+<td></td>
 
-</h2>
+</tr>
 
-<div class="space-y-2">
+<tr>
 
-<p>
+<td class="pl-6 py-1">
 Consultant Commission
-<span class="float-right">
-RM${commission.toFixed(2)}
-</span>
-</p>
+</td>
 
-<p>
+<td class="text-right">
+${commission.toFixed(2)}
+</td>
+
+</tr>
+
+<tr>
+
+<td class="pl-6 py-1">
 Consultant Override
-<span class="float-right">
-RM${override.toFixed(2)}
-</span>
-</p>
+</td>
 
-<hr>
+<td class="text-right">
+${override.toFixed(2)}
+</td>
 
-<p class="font-bold">
+</tr>
 
-Total Expenses
+<tr class="font-bold border-t border-b">
 
-<span class="float-right">
+<td class="py-2">
+TOTAL EXPENSES
+</td>
 
+<td class="text-right">
 RM${totalExpense.toFixed(2)}
+</td>
 
-</span>
+</tr>
 
-</p>
+<tr>
+<td colspan="2" class="py-4"></td>
+</tr>
 
-</div>
+<tr class="bg-green-50 text-green-700 text-xl font-bold">
 
-<hr class="my-6">
+<td class="py-4 px-2">
+NET PROFIT
+</td>
 
-<h2 class="text-2xl font-bold">
-
-Net Profit
-
-<span class="float-right text-green-600">
-
+<td class="text-right px-2">
 RM${netProfit.toFixed(2)}
+</td>
 
-</span>
+</tr>
 
-</h2>
-
+</table>
 `;  
 
+document
+.getElementById("exportPdfBtn")
+.addEventListener("click",()=>{
+
+html2pdf().set({
+
+margin:0.3,
+
+filename:"Profit-Loss.pdf",
+
+image:{
+type:"jpeg",
+quality:1
+},
+
+html2canvas:{
+scale:2
+},
+
+jsPDF:{
+unit:"in",
+format:"a4",
+orientation:"portrait"
+}
+
+})
+.from(
+document.getElementById("plCard")
+)
+.save();
+
+});
+  
 </script>
 
 </body>
