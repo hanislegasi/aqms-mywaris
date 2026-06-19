@@ -51,20 +51,22 @@ Export PDF
 
 <div class="text-center border-b pb-5 mb-6">
 
-<h1 class="text-2xl font-bold">
-AL-QAWTHAR MAWARIS SDN. BHD.
+<h1 class="text-3xl font-bold">
+${settings.companyName}
 </h1>
 
 <p>
-Registration No: XXXXXXX-X
+Registration No :
+${settings.registrationNo}
 </p>
 
-<h2 class="text-xl font-bold mt-3">
+<h2 class="text-2xl font-bold mt-4">
 STATEMENT OF PROFIT OR LOSS
 </h2>
 
 <p>
 For The Period Ended
+${settings.financialYearEnd}
 </p>
 
 </div>
@@ -109,6 +111,14 @@ initializeApp(firebaseConfig);
 const db =
 getFirestore(app);
 
+const settingsSnap =
+await getDoc(
+doc(db,"settings","company")
+);
+
+const settings =
+settingsSnap.data();
+  
 const snap =
 await getDocs(
 collection(db,"ledger")
@@ -154,9 +164,14 @@ override;
 const netProfit =
 totalRevenue -
 totalExpense;
+
+document.getElementById(
+"generatedDate"
+).innerText =
+new Date().toLocaleString("ms-MY");
   
 document.getElementById(
-"plCard"
+"reportContent"
 ).innerHTML = `
 
 <table class="w-full">
@@ -323,16 +338,9 @@ document.getElementById("plCard")
 
 });
 
-document.getElementById(
-"generatedDate"
-).innerText =
-new Date().toLocaleString("ms-MY");
 
-document.getElementById(
-"reportContent"
-).innerHTML = `
-...
-`;  
+
+
   
 </script>
 
