@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cashflow</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+body{
+font-family: Inter, sans-serif;
+}
+</style>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+Cashflow
+</h1>
+
+</div>
+
+<div class="max-w-5xl mx-auto p-5">
+
+<a
+href="accounts-dashboard.html"
+class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+
+← Akaun
+
+</a>
+
+<button
+id="exportPdfBtn"
+class="bg-red-600 text-white px-5 py-3 rounded-xl mb-5">
+
+Export PDF
+
+</button>
+
+<div
+id="bsCard"
+class="bg-white rounded-xl shadow p-8">
+
+Loading...
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+getDoc,
+doc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+
+projectId:"alqawthar-mywaris",
+
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+
+messagingSenderId:"3498810778",
+
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+getDoc,
+doc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+
+projectId:"alqawthar-mywaris",
+
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+
+messagingSenderId:"3498810778",
+
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const settingsSnap =
+await getDoc(
+doc(db,"settings","company")
+);
+
+const settings =
+settingsSnap.data();
+
+const companyName =
+settings?.companyName || "";
+
+const registrationNo =
+settings?.registrationNo || "";
+
+const financialYearEnd =
+settings?.financialYearEnd || "";
+
+const openingBank =
+Number(
+settings?.openingBankBalance || 0
+);
+
+const snap =
+await getDocs(
+collection(db,"ledger")
+);
+
+let sales = 0;
+
+let commission = 0;
+
+let override = 0;
+
+let bank = 0;
+
+let sales = 0;
+let commission = 0;
+let override = 0;
+let bank = 0;
+
+snap.forEach((d)=>{
+
+const row = d.data();
+
+if(
+row.accountCode === "4000" ||
+row.accountCode === "4100" ||
+row.accountCode === "4200"
+){
+
+sales +=
+Number(row.credit || 0);
+
+}
+
+if(row.accountCode === "5000"){
+
+commission +=
+Number(row.debit || 0);
+
+}
+
+if(row.accountCode === "5100"){
+
+override +=
+Number(row.debit || 0);
+
+}
+
+if(row.accountCode === "1000"){
+
+bank +=
+Number(row.debit || 0);
+
+bank -=
+Number(row.credit || 0);
+
+}
+
+});
+
+if(
+row.accountCode === "4000" ||
+row.accountCode === "4100" ||
+row.accountCode === "4200"
+){
+
+sales += Number(row.credit || 0);
+
+}
+
+if(row.accountCode === "5000"){
+
+commission += Number(row.debit || 0);
+
+}
+
+if(row.accountCode === "5100"){
+
+override += Number(row.debit || 0);
+
+}
+
+if(row.accountCode === "1000"){
+
+bank += Number(row.debit || 0);
+bank -= Number(row.credit || 0);
+
+}
+
+const openingBank =
+Number(
+settings?.openingBankBalance || 0
+);
+
+const operatingCashFlow =
+sales -
+commission -
+override;
+
+const closingBank =
+openingBank +
+operatingCashFlow;
+
+<div class="text-center border-b pb-5 mb-6">
+
+<h1 class="text-3xl font-bold">
+${companyName}
+</h1>
+
+<p>
+STATEMENT OF CASH FLOWS
+</p>
+
+<p>
+For The Period Ended
+${financialYearEnd}
+</p>
+
+</div>
+
+<table class="w-full">
+
+<tr class="font-bold bg-gray-100">
+
+<td colspan="2">
+
+OPERATING ACTIVITIES
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Cash Received From Customers
+</td>
+
+<td class="text-right">
+RM${sales.toFixed(2)}
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Consultant Commission Paid
+</td>
+
+<td class="text-right">
+(RM${commission.toFixed(2)})
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Consultant Override Paid
+</td>
+
+<td class="text-right">
+(RM${override.toFixed(2)})
+</td>
+
+</tr>
+
+<tr class="font-bold border-t">
+
+<td>
+Net Cash From Operating Activities
+</td>
+
+<td class="text-right">
+RM${operatingCashFlow.toFixed(2)}
+</td>
+
+</tr>
+
+<tr>
+<td colspan="2" class="py-4"></td>
+</tr>
+
+<tr>
+
+<td>
+Opening Bank Balance
+</td>
+
+<td class="text-right">
+RM${openingBank.toFixed(2)}
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Closing Bank Balance
+</td>
+
+<td class="text-right">
+RM${closingBank.toFixed(2)}
+</td>
+
+</tr>
+
+</table>
+
+document.getElementById(
+"cfCard"
+).innerHTML = `
+
+document
+.getElementById("exportPdfBtn")
+.addEventListener(
+"click",
+()=>{
+
+html2pdf()
+.set({
+
+margin:0.3,
+
+filename:"Cash-Flow.pdf",
+
+html2canvas:{
+scale:2
+},
+
+jsPDF:{
+unit:"in",
+format:"a4",
+orientation:"portrait"
+}
+
+})
+.from(
+document.getElementById("cfCard")
+)
+.save();
+
+});
+
+</script>
+
+</body>
+
+</html>
