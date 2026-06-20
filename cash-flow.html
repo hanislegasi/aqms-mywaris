@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Cashflow</title>
+<title>Cash Flow Statement</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -24,9 +24,8 @@ font-family: Inter, sans-serif;
 <div class="bg-[#153638] text-white p-5">
 
 <h1 class="text-2xl font-bold">
-Cashflow
+Cash Flow Statement
 </h1>
-
 </div>
 
 <div class="max-w-5xl mx-auto p-5">
@@ -190,8 +189,9 @@ ${companyName}
 STATEMENT OF CASH FLOWS
 </p>
 
-<p>
-For The Period Ended
+<p class="text-gray-500">
+For The Financial Period Ended
+<br>
 ${financialYearEnd}
 </p>
 
@@ -287,7 +287,14 @@ RM${closingBank.toFixed(2)}
 
 </table>
 
+<div class="mt-10 border-t pt-4 text-xs text-gray-500">
 
+Generated :
+${new Date().toLocaleString("ms-MY")}
+
+</div>
+
+`;
 
 document
 .getElementById("exportPdfBtn")
