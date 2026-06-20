@@ -42,7 +42,7 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 </a>
 
-<div class="flex gap-3 mb-5">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 mb-5">
 
 <a
 href="trial-balance.html"
@@ -112,10 +112,11 @@ Cash Flow
 </div>
   
 <div
-class="grid md:grid-cols-4 gap-4 mb-6">
+class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  
+<div class="bg-white rounded-xl shadow p-5 h-32">
 
-<div class="bg-white p-5 rounded-xl shadow">
-
+  
 <p class="text-gray-500">
 Income
 </p>
@@ -128,9 +129,11 @@ RM0
 
 </p>
 
+  
 </div>
 
-<div class="bg-white p-5 rounded-xl shadow">
+<div class="bg-white rounded-xl shadow p-5 h-32">
+
 
 <p class="text-gray-500">
 Expenses
@@ -138,7 +141,7 @@ Expenses
 
 <p
 id="expenseCard"
-class="text-3xl font-bold text-red-600">
+class="text-3xl font-bold mt-3">
 
 RM0
 
@@ -146,7 +149,8 @@ RM0
 
 </div>
 
-<div class="bg-white p-5 rounded-xl shadow">
+<div class="bg-white rounded-xl shadow p-5 h-32">
+
 
 <p class="text-gray-500">
 Profit
@@ -154,7 +158,7 @@ Profit
 
 <p
 id="profitCard"
-class="text-3xl font-bold text-blue-600">
+class="text-3xl font-bold mt-3">
 
 RM0
 
@@ -162,7 +166,7 @@ RM0
 
 </div>
 
-<div class="bg-white p-5 rounded-xl shadow">
+<div class="bg-white rounded-xl shadow p-5 h-32">
 
 <p class="text-gray-500">
 Cash Bank
@@ -170,7 +174,7 @@ Cash Bank
 
 <p
 id="bankCard"
-class="text-3xl font-bold text-green-600">
+class="text-3xl font-bold mt-3">
 
 RM0
 
@@ -178,43 +182,53 @@ RM0
 
 </div>
 
+<div class="bg-white rounded-xl shadow p-5 h-32">
+<p class="text-gray-500">Transactions</p>
+<p id="transactionCard" class="text-3xl font-bold mt-3">0</p>
+</div>
+  
 </div>
 
 </div>
   
-<div class="grid grid-cols-5 gap-5 mb-6">
+<div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
 
-<div class="bg-white p-5 rounded-xl shadow">
+<div class="bg-white rounded-xl shadow p-5 h-32">
+
 <p>Company Reserve</p>
-<h2 id="companyFund" class="text-3xl font-bold text-green-600">
+<h2 id="companyFund" class="text-3xl font-bold mt-3">
 RM0.00
 </h2>
 </div>
 
-<div class="bg-white p-5 rounded-xl shadow">
+<div class="bg-white rounded-xl shadow p-5 h-32">
+
 <p>Shareholder Reserve</p>
-<h2 id="shareholderFund" class="text-3xl font-bold text-blue-600">
+<h2 id="shareholderFund" class="text-3xl font-bold mt-3">
 RM0.00
 </h2>
 </div>
 
-<div class="bg-white p-5 rounded-xl shadow">
+<div class="bg-white rounded-xl shadow p-5 h-32">
+
 <p>Allowance Reserve</p>
-<h2 id="allowanceFund" class="text-3xl font-bold text-purple-600">
+<h2 id="allowanceFund" class="text-3xl font-bold mt-3">
 RM0.00
 </h2>
 </div>
 
-<div class="bg-white p-5 rounded-xl shadow">
+<div class="bg-white rounded-xl shadow p-5 h-32">
+
 <p>Admin Reserve</p>
-<h2 id="adminFund" class="text-3xl font-bold text-orange-600">
+<h2 id="adminFund" class="text-3xl font-bold mt-3">
 RM0.00
 </h2>
 </div>
 
-<div class="bg-white p-5 rounded-xl shadow">
+<div class="bg-white rounded-xl shadow p-5 h-32">
+
 <p>Royalty Reserve</p>
-<h2 id="royaltyFund" class="text-3xl font-bold text-red-600">
+<h2 id="royaltyFund" class="text-3xl font-bold mt-3">
 RM0.00
 </h2>
 </div>
@@ -223,6 +237,22 @@ RM0.00
   
 </div>
 
+<div class="bg-white rounded-xl shadow p-5 mb-3">
+
+<h2 class="text-lg font-bold">
+
+Latest Transaction Movement
+
+</h2>
+
+<p class="text-gray-500 text-sm">
+
+Latest 10 accounting entries
+
+</p>
+
+</div>
+  
 <div class="bg-white rounded-xl shadow overflow-x-auto">
 
 <table class="w-full">
@@ -237,10 +267,6 @@ Date
 
 <th class="p-3 text-left">
 Account
-</th>
-
-<th class="p-3 text-left">
-Category
 </th>
 
 <th class="p-3 text-left">
@@ -350,30 +376,49 @@ let expense = 0;
 let count = 0;
 let bankBalance = 0;
 
-  
+const rows = [];
+
 snap.forEach((d)=>{
 
-const row = d.data();
+rows.push(d.data());
 
-income +=
-Number(row.credit || 0);
+});
 
-expense +=
-Number(row.debit || 0);
+rows.sort((a,b)=>{
+
+rows.forEach((row)=>{
+
+income += Number(row.credit || 0);
+
+expense += Number(row.debit || 0);
 
 count++;
-  
+
 if(row.accountCode === "1000"){
 
-bankBalance +=
-Number(row.debit || 0);
-
-bankBalance -=
-Number(row.credit || 0);
+bankBalance += Number(row.debit || 0);
+bankBalance -= Number(row.credit || 0);
 
 }
-  
 
+});
+
+rows.sort((a,b)=>{
+
+const dateA =
+a.date?.toDate()
+|| new Date(a.date);
+
+const dateB =
+b.date?.toDate()
+|| new Date(b.date);
+
+return dateB - dateA;
+
+});
+  
+rows.slice(0,10).forEach((row)=>{
+  
 
 html += `
 
@@ -395,9 +440,6 @@ row.date.toDate().toLocaleDateString("ms-MY")
 ${row.account || "-"}
 </td>
 
-<td class="p-3">
-${row.category || "-"}
-</td>
 
 <td class="p-3">
 ${row.description || "-"}
@@ -447,6 +489,11 @@ document.getElementById(
 "RM" +
 bankBalance.toFixed(2);
 
+document.getElementById(
+"transactionCard"
+).innerHTML =
+count;
+  
 document.getElementById(
 "companyFund"
 ).innerHTML =
