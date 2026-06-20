@@ -231,9 +231,7 @@ RM0.00
 <h2 id="royaltyFund" class="text-3xl font-bold mt-3">
 RM0.00
 </h2>
-</div>
 
-</div>
   
 </div>
 
@@ -397,6 +395,7 @@ count++;
 if(row.accountCode === "1000"){
 
 bankBalance += Number(row.debit || 0);
+
 bankBalance -= Number(row.credit || 0);
 
 }
@@ -406,17 +405,18 @@ bankBalance -= Number(row.credit || 0);
 rows.sort((a,b)=>{
 
 const dateA =
-a.date?.toDate()
-|| new Date(a.date);
+a.date?.toDate
+? a.date.toDate()
+: new Date(a.date);
 
 const dateB =
-b.date?.toDate()
-|| new Date(b.date);
+b.date?.toDate
+? b.date.toDate()
+: new Date(b.date);
 
 return dateB - dateA;
 
-});
-  
+});  
 rows.slice(0,10).forEach((row)=>{
   
 
