@@ -48,7 +48,7 @@ Export PDF
 </button>
 
 <div
-id="bsCard"
+id="cfCard"
 class="bg-white rounded-xl shadow p-8">
 
 Loading...
@@ -59,39 +59,6 @@ Loading...
 
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-getDocs,
-getDoc,
-doc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-
-apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-
-authDomain:"alqawthar-mywaris.firebaseapp.com",
-
-projectId:"alqawthar-mywaris",
-
-storageBucket:"alqawthar-mywaris.firebasestorage.app",
-
-messagingSenderId:"3498810778",
-
-appId:"1:3498810778:web:ee36e0fe42f76698046e23"
-
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const db =
-getFirestore(app);
 
 
 
@@ -156,13 +123,7 @@ await getDocs(
 collection(db,"ledger")
 );
 
-let sales = 0;
 
-let commission = 0;
-
-let override = 0;
-
-let bank = 0;
 
 let sales = 0;
 let commission = 0;
@@ -173,42 +134,6 @@ snap.forEach((d)=>{
 
 const row = d.data();
 
-if(
-row.accountCode === "4000" ||
-row.accountCode === "4100" ||
-row.accountCode === "4200"
-){
-
-sales +=
-Number(row.credit || 0);
-
-}
-
-if(row.accountCode === "5000"){
-
-commission +=
-Number(row.debit || 0);
-
-}
-
-if(row.accountCode === "5100"){
-
-override +=
-Number(row.debit || 0);
-
-}
-
-if(row.accountCode === "1000"){
-
-bank +=
-Number(row.debit || 0);
-
-bank -=
-Number(row.credit || 0);
-
-}
-
-});
 
 if(
 row.accountCode === "4000" ||
@@ -250,8 +175,7 @@ commission -
 override;
 
 const closingBank =
-openingBank +
-operatingCashFlow;
+bank;
 
 <div class="text-center border-b pb-5 mb-6">
 
