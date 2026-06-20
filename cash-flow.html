@@ -164,10 +164,9 @@ bank -= Number(row.credit || 0);
 
 }
 
-const openingBank =
-Number(
-settings?.openingBankBalance || 0
-);
+});
+  
+
 
 const operatingCashFlow =
 sales -
@@ -176,6 +175,10 @@ override;
 
 const closingBank =
 bank;
+
+document.getElementById(
+"cfCard"
+).innerHTML = `
 
 <div class="text-center border-b pb-5 mb-6">
 
@@ -284,9 +287,7 @@ RM${closingBank.toFixed(2)}
 
 </table>
 
-document.getElementById(
-"cfCard"
-).innerHTML = `
+
 
 document
 .getElementById("exportPdfBtn")
