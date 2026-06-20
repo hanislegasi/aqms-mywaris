@@ -100,6 +100,15 @@ Balance Sheet
 
 </a>
 
+<a
+href="cash-flow.html"
+class="bg-[#153638] text-white px-5 py-3 rounded-xl">
+
+Cash Flow
+
+</a>
+
+  
 </div>
   
 <div
@@ -156,16 +165,18 @@ RM0
 <div class="bg-white p-5 rounded-xl shadow">
 
 <p class="text-gray-500">
-Transactions
+Cash Bank
 </p>
 
 <p
-id="transactionCard"
-class="text-3xl font-bold">
+id="bankCard"
+class="text-3xl font-bold text-green-600">
 
-0
+RM0
 
 </p>
+
+</div>
 
 </div>
 
@@ -306,6 +317,8 @@ let allowanceFund = 0;
 let adminFund = 0;
 let royaltyFund = 0;
 
+
+  
 allocationSnap.forEach((d)=>{
 
 const a = d.data();
@@ -328,12 +341,16 @@ Number(a.royalty || 0);
 });
   
 
+
+  
 let html = "";
 
 let income = 0;
 let expense = 0;
 let count = 0;
+let bankBalance = 0;
 
+  
 snap.forEach((d)=>{
 
 const row = d.data();
@@ -345,6 +362,18 @@ expense +=
 Number(row.debit || 0);
 
 count++;
+  
+if(row.accountCode === "1000"){
+
+bankBalance +=
+Number(row.debit || 0);
+
+bankBalance -=
+Number(row.credit || 0);
+
+}
+  
+
 
 html += `
 
@@ -413,9 +442,10 @@ document.getElementById(
 "RM" + (income-expense).toFixed(2);
 
 document.getElementById(
-"transactionCard"
+"bankCard"
 ).innerHTML =
-count;
+"RM" +
+bankBalance.toFixed(2);
 
 document.getElementById(
 "companyFund"
@@ -446,6 +476,8 @@ document.getElementById(
 ).innerHTML =
 "RM" +
 royaltyFund.toFixed(2);
+
+
   
 </script>
 
