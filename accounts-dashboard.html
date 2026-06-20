@@ -232,22 +232,47 @@ RM0.00
 RM0.00
 </h2>
 
-  
+</div>
+ 
 </div>
 
-<div class="bg-white rounded-xl shadow p-5 mb-3">
+<div class="bg-white rounded-xl shadow overflow-hidden mt-6">
+
+<div class="p-5 border-b">
 
 <h2 class="text-lg font-bold">
-
 Latest Transaction Movement
-
 </h2>
 
 <p class="text-gray-500 text-sm">
-
 Latest 10 accounting entries
-
 </p>
+
+</div>
+
+<div class="overflow-x-auto">
+
+<table class="w-full">
+
+<thead class="bg-[#153638] text-white">
+
+<tr>
+<th class="p-3 text-left">Date</th>
+<th class="p-3 text-left">Account</th>
+<th class="p-3 text-left">Description</th>
+<th class="p-3 text-right">Debit</th>
+<th class="p-3 text-right">Credit</th>
+</tr>
+
+</thead>
+
+<tbody id="ledgerTable">
+
+</tbody>
+
+</table>
+
+</div>
 
 </div>
   
@@ -382,8 +407,6 @@ rows.push(d.data());
 
 });
 
-rows.sort((a,b)=>{
-
 rows.forEach((row)=>{
 
 income += Number(row.credit || 0);
@@ -416,7 +439,7 @@ b.date?.toDate
 
 return dateB - dateA;
 
-});  
+});
 rows.slice(0,10).forEach((row)=>{
   
 
