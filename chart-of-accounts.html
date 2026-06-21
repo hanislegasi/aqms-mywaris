@@ -257,23 +257,21 @@ const coa =
 d.data();
 
 html += `
-
 <tr class="border-b">
 
 <td class="p-3">
-${coa.accountCode}
+${row.code || "-"}
 </td>
 
 <td class="p-3">
-${coa.accountName}
+${row.name || "-"}
 </td>
 
 <td class="p-3">
-${coa.accountType}
+${row.type || "-"}
 </td>
 
 </tr>
-
 `;
 
 });
