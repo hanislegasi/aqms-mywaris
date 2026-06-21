@@ -1,556 +1,270 @@
 <!DOCTYPE html>
 <html lang="ms">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Accounts Dashboard</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-body{
-font-family: Inter, sans-serif;
-}
-</style>
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounts Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
 
-<div class="bg-[#153638] text-white p-5">
-
-<h1 class="text-2xl font-bold">
-Accounts Dashboard
-</h1>
-
-<p>
-Financial Management Centre
-</p>
-
-</div>
-
-<div class="max-w-7xl mx-auto p-5">
-
-<a
-href="admin-dashboard.html"
-class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
-
-← Dashboard
-
-</a>
-
-<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">
-
-<a
-href="trial-balance.html"
-class="bg-[#153638] text-white px-3 py-3 rounded-xl text-center flex items-center justify-center min-h-[60px]">
-
-Trial Balance
-
-</a>
-
-<a
-href="consultant-payable.html"
-class="bg-[#153638] text-white px-3 py-3 rounded-xl text-center flex items-center justify-center min-h-[60px]">
-
-Consultant Payable
-
-</a>
-
-<a
-href="payment-voucher.html"
-class="bg-[#153638] text-white px-3 py-3 rounded-xl text-center flex items-center justify-center min-h-[60px]">
-
-Payment Voucher
-
-</a>
-  
-<a
-href="general-ledger.html"
-class="bg-[#153638] text-white px-3 py-3 rounded-xl text-center flex items-center justify-center min-h-[60px]">
-
-General Ledger
-
-</a>  
-
-<a
-href="general-journal.html"
-class="bg-[#153638] text-white px-3 py-3 rounded-xl text-center flex items-center justify-center min-h-[60px]">
-
-General Journal
-
-</a>  
-  
-<a
-href="profit-loss.html"
-class="bg-[#153638] text-white px-3 py-3 rounded-xl text-center flex items-center justify-center min-h-[60px]">
-
-Profit & Loss
-
-</a>
-
-<a
-href="balance-sheet.html"
-class="bg-[#153638] text-white px-3 py-3 rounded-xl text-center flex items-center justify-center min-h-[60px]">
-
-Balance Sheet
-
-</a>
-
-<a
-href="cash-flow.html"
-class="bg-[#153638] text-white px-3 py-3 rounded-xl text-center flex items-center justify-center min-h-[60px]">
-
-Cash Flow
-
-</a>
-
-  
-</div>
-  
-<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
-  
-<div class="bg-white rounded-xl shadow p-5 h-32">
-
-  
-<p class="text-gray-500">
-Income
-</p>
-
-<p
-id="incomeCard"
-class="text-2xl md:text-3xl font-bold">
-
-RM0
-
-</p>
-
-  
-</div>
-
-<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
-
-
-<p class="text-gray-500">
-Expenses
-</p>
-
-<p
-id="expenseCard"
-class="text-2xl md:text-3xl font-bold">
-
-RM0
-
-</p>
-
-</div>
-
-<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
-
-
-<p class="text-gray-500">
-Profit
-</p>
-
-<p
-id="profitCard"
-class="text-2xl md:text-3xl font-bold">
-
-RM0
-
-</p>
-
-</div>
-
-<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
-
-<p class="text-gray-500">
-Cash Bank
-</p>
-
-<p
-id="bankCard"
-class="text-2xl md:text-3xl font-bold">
-
-RM0
-
-</p>
-
-</div>
-
-<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
-<p class="text-gray-500">Transactions</p>
-<p id="transactionCard" class="text-2xl md:text-3xl font-bold">0</p>
-</div>
-  
-</div>
-
-</div>
-  
-<div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-
-<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
-
-<p>Company Reserve</p>
-<h2 id="companyFund" class="text-2xl md:text-3xl font-bold">
-RM0.00
-</h2>
-</div>
-
-<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
-
-<p>Shareholder Reserve</p>
-<h2 id="shareholderFund" class="text-2xl md:text-3xl font-bold">
-RM0.00
-</h2>
-</div>
-
-<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
-
-<p>Allowance Reserve</p>
-<h2 id="allowanceFund" class="text-2xl md:text-3xl font-bold">
-RM0.00
-</h2>
-</div>
-
-<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
-
-<p>Admin Reserve</p>
-<h2 id="adminFund" class="text-2xl md:text-3xl font-bold">
-RM0.00
-</h2>
-</div>
-
-<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
-
-<p>Royalty Reserve</p>
-<h2 id="royaltyFund" class="text-2xl md:text-3xl font-bold">
-RM0.00
-</h2>
-
-</div>
-
-</div>
-  
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<div class="grid lg:grid-cols-3 gap-4 mb-6">
-
-  <!-- CHART -->
-  <div class="bg-white rounded-xl shadow p-5">
-
-    <h2 class="font-bold mb-3">
-      Revenue vs Expense
-    </h2>
-
-    <div class="h-[350px]">
-      <canvas id="financeChart"></canvas>
+    <!-- Header Section (Content aligned to match max-w-7xl) -->
+    <div class="bg-[#153638] text-white shadow-md">
+        <div class="max-w-7xl mx-auto p-5">
+            <h1 class="text-2xl font-bold">Accounts Dashboard</h1>
+            <p class="text-gray-300 mt-1">Financial Management Centre</p>
+        </div>
     </div>
 
-  </div>
-
-  <!-- TRANSACTION -->
-  <div class="bg-white rounded-xl shadow overflow-hidden lg:col-span-2">
-
-    <div class="p-5 border-b">
-
-      <h2 class="text-lg font-bold">
-        Latest Transaction Movement
-      </h2>
-
-      <p class="text-gray-500 text-sm">
-        Latest 10 accounting entries
-      </p>
-
-    </div>
-
-    <div class="overflow-x-auto">
-
-      <table class="w-full">
-
-        <thead class="bg-[#153638] text-white">
-
-          <tr>
-            <th class="p-3 text-left">Date</th>
-            <th class="p-3 text-left">Account</th>
-            <th class="p-3 text-left hidden md:table-cell">Description</th>
-            <th class="p-3 text-right">Debit</th>
-            <th class="p-3 text-right">Credit</th>
-          </tr>
-
-        </thead>
-
-        <tbody id="ledgerTable">
-
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </div>
-
-</div>
-  
-
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-getDocs
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-
-apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-authDomain:"alqawthar-mywaris.firebaseapp.com",
-projectId:"alqawthar-mywaris",
-storageBucket:"alqawthar-mywaris.firebasestorage.app",
-messagingSenderId:"3498810778",
-appId:"1:3498810778:web:ee36e0fe42f76698046e23"
-
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const db =
-getFirestore(app);
-
-const snap =
-await getDocs(
-collection(db,"ledger")
-);
-
-const allocationSnap =
-await getDocs(
-collection(
-db,
-"companyAllocation"
-)
-);
-
-let companyFund = 0;
-let shareholderFund = 0;
-let allowanceFund = 0;
-let adminFund = 0;
-let royaltyFund = 0;
-
-
-  
-allocationSnap.forEach((d)=>{
-
-const a = d.data();
-
-companyFund +=
-Number(a.company || 0);
-
-shareholderFund +=
-Number(a.shareholder || 0);
-
-allowanceFund +=
-Number(a.allowance || 0);
-
-adminFund +=
-Number(a.adminOperation || 0);
-
-royaltyFund +=
-Number(a.royalty || 0);
-
-});
-  
-
-
-  
-let html = "";
-
-let income = 0;
-let expense = 0;
-let count = 0;
-let bankBalance = 0;
-
-const rows = [];
-
-snap.forEach((d)=>{
-
-rows.push(d.data());
-
-});
-
-rows.forEach((row)=>{
-
-if(row.category === "income"){income += Number(row.credit || 0);}
-
-if(row.category === "expense"){expense += Number(row.debit || 0);}
-
-  count++;
-
-if(row.accountCode === "1000"){
-
-bankBalance += Number(row.debit || 0);
-
-bankBalance -= Number(row.credit || 0);
-
-}
-
-});
-
-rows.sort((a,b)=>{
-
-const dateA =
-a.date?.toDate
-? a.date.toDate()
-: new Date(a.date);
-
-const dateB =
-b.date?.toDate
-? b.date.toDate()
-: new Date(b.date);
-
-return dateB - dateA;
-
-});
-rows.slice(0,10).forEach((row)=>{
-  
-
-html += `
-
-<tr class="border-b">
-
-<td class="p-3">
-
-${
-row.date?.toDate
-?
-row.date.toDate().toLocaleDateString("ms-MY")
-:
-"-"
-}
-
-</td>
-
-<td class="p-3">
-${row.account || "-"}
-</td>
-
-
-<td class="p-3 hidden md:table-cell">
-${row.description || "-"}
-</td>
-
-<td class="p-3 text-right">
-
-RM${Number(row.debit || 0).toFixed(2)}
-
-</td>
-
-<td class="p-3 text-right">
-
-RM${Number(row.credit || 0).toFixed(2)}
-
-</td>
-
-</tr>
-
-`;
-
-});
-
-document.getElementById(
-"ledgerTable"
-).innerHTML =
-html;
-
-document.getElementById(
-"incomeCard"
-).innerHTML =
-"RM" + income.toFixed(2);
-
-document.getElementById(
-"expenseCard"
-).innerHTML =
-"RM" + expense.toFixed(2);
-
-document.getElementById(
-"profitCard"
-).innerHTML =
-"RM" + (income-expense).toFixed(2);
-
-document.getElementById(
-"bankCard"
-).innerHTML =
-"RM" +
-bankBalance.toFixed(2);
-
-document.getElementById(
-"transactionCard"
-).innerHTML =
-count;
-  
-document.getElementById(
-"companyFund"
-).innerHTML =
-"RM" +
-companyFund.toFixed(2);
-
-document.getElementById(
-"shareholderFund"
-).innerHTML =
-"RM" +
-shareholderFund.toFixed(2);
-
-document.getElementById(
-"allowanceFund"
-).innerHTML =
-"RM" +
-allowanceFund.toFixed(2);
-
-document.getElementById(
-"adminFund"
-).innerHTML =
-"RM" +
-adminFund.toFixed(2);
-
-document.getElementById(
-"royaltyFund"
-).innerHTML =
-"RM" +
-royaltyFund.toFixed(2);
-
-new Chart(
-document.getElementById("financeChart"),
-{
-type:"bar",
-data:{
-labels:[
-"Income",
-"Expense",
-"Profit"
-],
-datasets:[{
-label:"RM",
-data:[
-income,
-expense,
-income-expense
-]
-}]
-},
-options:{
-responsive:true,
-maintainAspectRatio:false
-}
-});
-  
-</script>
-
+    <!-- MAIN CONTAINER (Wraps everything to ensure equal left/right margins) -->
+    <div class="max-w-7xl mx-auto p-5">
+
+        <!-- Back Button -->
+        <a href="admin-dashboard.html" class="inline-flex items-center bg-white text-gray-700 hover:bg-gray-200 shadow-sm px-5 py-2.5 rounded-xl mb-6 font-medium transition-colors">
+            &larr; <span class="ml-2">Dashboard</span>
+        </a>
+
+        <!-- Navigation Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
+            <a href="trial-balance.html" class="bg-[#153638] hover:bg-[#0f2728] transition-colors text-white px-4 py-4 rounded-xl text-center flex items-center justify-center min-h-[70px] shadow-sm font-medium">
+                Trial Balance
+            </a>
+            <a href="consultant-payable.html" class="bg-[#153638] hover:bg-[#0f2728] transition-colors text-white px-4 py-4 rounded-xl text-center flex items-center justify-center min-h-[70px] shadow-sm font-medium">
+                Consultant Payable
+            </a>
+            <a href="payment-voucher.html" class="bg-[#153638] hover:bg-[#0f2728] transition-colors text-white px-4 py-4 rounded-xl text-center flex items-center justify-center min-h-[70px] shadow-sm font-medium">
+                Payment Voucher
+            </a>
+            <a href="general-ledger.html" class="bg-[#153638] hover:bg-[#0f2728] transition-colors text-white px-4 py-4 rounded-xl text-center flex items-center justify-center min-h-[70px] shadow-sm font-medium">
+                General Ledger
+            </a>
+            <a href="general-journal.html" class="bg-[#153638] hover:bg-[#0f2728] transition-colors text-white px-4 py-4 rounded-xl text-center flex items-center justify-center min-h-[70px] shadow-sm font-medium">
+                General Journal
+            </a>
+            <a href="profit-loss.html" class="bg-[#153638] hover:bg-[#0f2728] transition-colors text-white px-4 py-4 rounded-xl text-center flex items-center justify-center min-h-[70px] shadow-sm font-medium">
+                Profit & Loss
+            </a>
+            <a href="balance-sheet.html" class="bg-[#153638] hover:bg-[#0f2728] transition-colors text-white px-4 py-4 rounded-xl text-center flex items-center justify-center min-h-[70px] shadow-sm font-medium">
+                Balance Sheet
+            </a>
+            <a href="cash-flow.html" class="bg-[#153638] hover:bg-[#0f2728] transition-colors text-white px-4 py-4 rounded-xl text-center flex items-center justify-center min-h-[70px] shadow-sm font-medium">
+                Cash Flow
+            </a>
+        </div>
+
+        <!-- Financial Summary Cards -->
+        <h2 class="text-lg font-bold text-gray-800 mb-3">Financial Overview</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium mb-1">Income</p>
+                <p id="incomeCard" class="text-2xl md:text-3xl font-bold text-gray-800">RM0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium mb-1">Expenses</p>
+                <p id="expenseCard" class="text-2xl md:text-3xl font-bold text-gray-800">RM0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium mb-1">Profit</p>
+                <p id="profitCard" class="text-2xl md:text-3xl font-bold text-green-600">RM0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium mb-1">Cash Bank</p>
+                <p id="bankCard" class="text-2xl md:text-3xl font-bold text-blue-600">RM0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium mb-1">Transactions</p>
+                <p id="transactionCard" class="text-2xl md:text-3xl font-bold text-gray-800">0</p>
+            </div>
+        </div>
+
+        <!-- Reserve Funds Cards -->
+        <h2 class="text-lg font-bold text-gray-800 mb-3">Reserve Funds</h2>
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium mb-1">Company Reserve</p>
+                <h2 id="companyFund" class="text-xl md:text-2xl font-bold text-gray-800">RM0.00</h2>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium mb-1">Shareholder Reserve</p>
+                <h2 id="shareholderFund" class="text-xl md:text-2xl font-bold text-gray-800">RM0.00</h2>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium mb-1">Allowance Reserve</p>
+                <h2 id="allowanceFund" class="text-xl md:text-2xl font-bold text-gray-800">RM0.00</h2>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium mb-1">Admin Reserve</p>
+                <h2 id="adminFund" class="text-xl md:text-2xl font-bold text-gray-800">RM0.00</h2>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium mb-1">Royalty Reserve</p>
+                <h2 id="royaltyFund" class="text-xl md:text-2xl font-bold text-gray-800">RM0.00</h2>
+            </div>
+        </div>
+
+        <!-- Chart and Transaction Table Section (NOW INSIDE THE MAIN CONTAINER) -->
+        <div class="grid lg:grid-cols-3 gap-4 mb-6">
+            
+            <!-- CHART -->
+            <div class="bg-white rounded-xl shadow-sm p-5 border border-gray-100 flex flex-col">
+                <h2 class="font-bold text-gray-800 mb-3">Revenue vs Expense</h2>
+                <div class="h-[350px] w-full flex-grow">
+                    <canvas id="financeChart"></canvas>
+                </div>
+            </div>
+
+            <!-- TRANSACTION -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 lg:col-span-2">
+                <div class="p-5 border-b border-gray-100 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-lg font-bold text-gray-800">Latest Transaction Movement</h2>
+                        <p class="text-gray-500 text-sm">Latest 10 accounting entries</p>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full whitespace-nowrap">
+                        <thead class="bg-gray-50 text-gray-600 text-sm border-b border-gray-200">
+                            <tr>
+                                <th class="p-4 text-left font-semibold">Date</th>
+                                <th class="p-4 text-left font-semibold">Account</th>
+                                <th class="p-4 text-left font-semibold hidden md:table-cell">Description</th>
+                                <th class="p-4 text-right font-semibold">Debit</th>
+                                <th class="p-4 text-right font-semibold">Credit</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledgerTable" class="text-sm">
+                            <!-- Dynamic Rows Go Here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div> <!-- END MAIN CONTAINER -->
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+            authDomain: "alqawthar-mywaris.firebaseapp.com",
+            projectId: "alqawthar-mywaris",
+            storageBucket: "alqawthar-mywaris.firebasestorage.app",
+            messagingSenderId: "3498810778",
+            appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        try {
+            const snap = await getDocs(collection(db, "ledger"));
+            const allocationSnap = await getDocs(collection(db, "companyAllocation"));
+
+            let companyFund = 0;
+            let shareholderFund = 0;
+            let allowanceFund = 0;
+            let adminFund = 0;
+            let royaltyFund = 0;
+
+            allocationSnap.forEach((d) => {
+                const a = d.data();
+                companyFund += Number(a.company || 0);
+                shareholderFund += Number(a.shareholder || 0);
+                allowanceFund += Number(a.allowance || 0);
+                adminFund += Number(a.adminOperation || 0);
+                royaltyFund += Number(a.royalty || 0);
+            });
+
+            let html = "";
+            let income = 0;
+            let expense = 0;
+            let count = 0;
+            let bankBalance = 0;
+            const rows = [];
+
+            snap.forEach((d) => {
+                rows.push(d.data());
+            });
+
+            rows.forEach((row) => {
+                if (row.category === "income") { income += Number(row.credit || 0); }
+                if (row.category === "expense") { expense += Number(row.debit || 0); }
+                count++;
+                
+                if (row.accountCode === "1000") {
+                    bankBalance += Number(row.debit || 0);
+                    bankBalance -= Number(row.credit || 0);
+                }
+            });
+
+            rows.sort((a, b) => {
+                const dateA = a.date?.toDate ? a.date.toDate() : new Date(a.date);
+                const dateB = b.date?.toDate ? b.date.toDate() : new Date(b.date);
+                return dateB - dateA;
+            });
+
+            rows.slice(0, 10).forEach((row) => {
+                html += `
+                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                        <td class="p-4 text-gray-700">${row.date?.toDate ? row.date.toDate().toLocaleDateString("ms-MY") : "-"}</td>
+                        <td class="p-4 font-medium text-gray-800">${row.account || "-"}</td>
+                        <td class="p-4 text-gray-500 hidden md:table-cell truncate max-w-xs">${row.description || "-"}</td>
+                        <td class="p-4 text-right text-gray-700">RM${Number(row.debit || 0).toFixed(2)}</td>
+                        <td class="p-4 text-right text-gray-700">RM${Number(row.credit || 0).toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById("ledgerTable").innerHTML = html;
+            document.getElementById("incomeCard").innerHTML = "RM" + income.toFixed(2);
+            document.getElementById("expenseCard").innerHTML = "RM" + expense.toFixed(2);
+            document.getElementById("profitCard").innerHTML = "RM" + (income - expense).toFixed(2);
+            document.getElementById("bankCard").innerHTML = "RM" + bankBalance.toFixed(2);
+            document.getElementById("transactionCard").innerHTML = count;
+            document.getElementById("companyFund").innerHTML = "RM" + companyFund.toFixed(2);
+            document.getElementById("shareholderFund").innerHTML = "RM" + shareholderFund.toFixed(2);
+            document.getElementById("allowanceFund").innerHTML = "RM" + allowanceFund.toFixed(2);
+            document.getElementById("adminFund").innerHTML = "RM" + adminFund.toFixed(2);
+            document.getElementById("royaltyFund").innerHTML = "RM" + royaltyFund.toFixed(2);
+
+            new Chart(document.getElementById("financeChart"), {
+                type: "bar",
+                data: {
+                    labels: ["Income", "Expense", "Profit"],
+                    datasets: [{
+                        label: "Amount (RM)",
+                        data: [income, expense, income - expense],
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.8)', // Green for Income
+                            'rgba(239, 68, 68, 0.8)', // Red for Expense
+                            'rgba(59, 130, 246, 0.8)'  // Blue for Profit
+                        ],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+            
+        } catch(error) {
+            console.error("Error loading dashboard data:", error);
+        }
+    </script>
 </body>
 </html>
