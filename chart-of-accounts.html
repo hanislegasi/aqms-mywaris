@@ -33,6 +33,18 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
 
 <div class="bg-white p-5 rounded-xl shadow mb-5">
 
+<button
+id="seedBtn"
+class="bg-green-600 text-white px-5 py-3 rounded-xl">
+
+Create Default COA
+
+</button>
+
+</div>
+  
+<div class="bg-white p-5 rounded-xl shadow mb-5">
+
 <div class="grid md:grid-cols-4 gap-3">
 
 <input
@@ -139,6 +151,68 @@ const db =
 getFirestore(app);
 
 document
+.getElementById("seedBtn")
+.addEventListener(
+"click",
+async()=>{
+
+const coa = [
+
+{
+accountCode:"1000",
+accountName:"Bank",
+accountType:"Asset"
+},
+
+{
+accountCode:"2100",
+accountName:"Consultant Payable",
+accountType:"Liability"
+},
+
+{
+accountCode:"4000",
+accountName:"Sales e-Wasiat",
+accountType:"Income"
+},
+
+{
+accountCode:"4100",
+accountName:"Sales Hibah",
+accountType:"Income"
+},
+
+{
+accountCode:"5000",
+accountName:"Consultant Commission",
+accountType:"Expense"
+},
+
+{
+accountCode:"5100",
+accountName:"Consultant Override",
+accountType:"Expense"
+}
+
+];
+
+for(const item of coa){
+
+await addDoc(
+collection(
+db,
+"chartOfAccounts"
+),
+item
+);
+
+}
+
+alert("COA Created");
+
+});
+  
+document
 .getElementById("saveBtn")
 .addEventListener(
 "click",
@@ -213,7 +287,10 @@ html;
 
 
 
+</script>
 
+</body>
+</html>
 
 
 
