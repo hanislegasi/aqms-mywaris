@@ -42,7 +42,7 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 </a>
 
-<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 mb-5">
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">
 
 <a
 href="trial-balance.html"
@@ -54,7 +54,7 @@ Trial Balance
 
 <a
 href="consultant-payable.html"
-class="bg-[#153638] text-white px-5 py-3 rounded-xl">
+class="bg-[#153638] text-white px-3 py-2 rounded-xl text-sm text-center">
 
 Consultant Payable
 
@@ -132,7 +132,7 @@ RM0
   
 </div>
 
-<div class="bg-white rounded-xl shadow p-5 h-32">
+<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
 
 
 <p class="text-gray-500">
@@ -149,7 +149,7 @@ RM0
 
 </div>
 
-<div class="bg-white rounded-xl shadow p-5 h-32">
+<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
 
 
 <p class="text-gray-500">
@@ -166,7 +166,7 @@ RM0
 
 </div>
 
-<div class="bg-white rounded-xl shadow p-5 h-32">
+<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
 
 <p class="text-gray-500">
 Cash Bank
@@ -182,7 +182,7 @@ RM0
 
 </div>
 
-<div class="bg-white rounded-xl shadow p-5 h-32">
+<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
 <p class="text-gray-500">Transactions</p>
 <p id="transactionCard" class="text-3xl font-bold mt-3">0</p>
 </div>
@@ -193,7 +193,7 @@ RM0
   
 <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
 
-<div class="bg-white rounded-xl shadow p-5 h-32">
+<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
 
 <p>Company Reserve</p>
 <h2 id="companyFund" class="text-3xl font-bold mt-3">
@@ -201,7 +201,7 @@ RM0.00
 </h2>
 </div>
 
-<div class="bg-white rounded-xl shadow p-5 h-32">
+<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
 
 <p>Shareholder Reserve</p>
 <h2 id="shareholderFund" class="text-3xl font-bold mt-3">
@@ -209,7 +209,7 @@ RM0.00
 </h2>
 </div>
 
-<div class="bg-white rounded-xl shadow p-5 h-32">
+<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
 
 <p>Allowance Reserve</p>
 <h2 id="allowanceFund" class="text-3xl font-bold mt-3">
@@ -217,7 +217,7 @@ RM0.00
 </h2>
 </div>
 
-<div class="bg-white rounded-xl shadow p-5 h-32">
+<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
 
 <p>Admin Reserve</p>
 <h2 id="adminFund" class="text-3xl font-bold mt-3">
@@ -225,7 +225,7 @@ RM0.00
 </h2>
 </div>
 
-<div class="bg-white rounded-xl shadow p-5 h-32">
+<div class="bg-white rounded-xl shadow p-5 min-h-[110px]">
 
 <p>Royalty Reserve</p>
 <h2 id="royaltyFund" class="text-3xl font-bold mt-3">
@@ -233,9 +233,19 @@ RM0.00
 </h2>
 
 </div>
- 
-</div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="bg-white rounded-xl shadow p-5 mb-6">
+
+<h2 class="font-bold mb-3">
+Revenue vs Expense
+</h2>
+
+<canvas id="financeChart"></canvas>
+
+</div>
+  
 <div class="bg-white rounded-xl shadow overflow-hidden mt-6">
 
 <div class="p-5 border-b">
@@ -249,6 +259,12 @@ Latest 10 accounting entries
 </p>
 
 </div>
+  
+</div>
+
+
+  
+
 
 <div class="overflow-x-auto">
 
@@ -257,11 +273,11 @@ Latest 10 accounting entries
 <thead class="bg-[#153638] text-white">
 
 <tr>
-<th class="p-3 text-left">Date</th>
-<th class="p-3 text-left">Account</th>
-<th class="p-3 text-left">Description</th>
-<th class="p-3 text-right">Debit</th>
-<th class="p-3 text-right">Credit</th>
+<th class="p-2 w-20">Date</th>
+<th class="p-2">Account</th>
+<th class="p-2 hidden md:table-cell">Description</th>
+<th class="p-2 text-right">Debit</th>
+<th class="p-2 text-right">Credit</th>
 </tr>
 
 </thead>
@@ -276,47 +292,6 @@ Latest 10 accounting entries
 
 </div>
   
-<div class="bg-white rounded-xl shadow overflow-x-auto">
-
-<table class="w-full">
-
-<thead class="bg-[#153638] text-white">
-
-<tr>
-
-<th class="p-3 text-left">
-Date
-</th>
-
-<th class="p-3 text-left">
-Account
-</th>
-
-<th class="p-3 text-left">
-Description
-</th>
-
-<th class="p-3 text-right">
-Debit
-</th>
-
-<th class="p-3 text-right">
-Credit
-</th>
-
-</tr>
-
-</thead>
-
-<tbody id="ledgerTable">
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
 
 <script type="module">
 
@@ -409,11 +384,11 @@ rows.push(d.data());
 
 rows.forEach((row)=>{
 
-income += Number(row.credit || 0);
+if(row.category === "income"){income += Number(row.credit || 0);}
 
-expense += Number(row.debit || 0);
+if(row.category === "expense"){expense += Number(row.debit || 0);}
 
-count++;
+  count++;
 
 if(row.accountCode === "1000"){
 
@@ -464,7 +439,7 @@ ${row.account || "-"}
 </td>
 
 
-<td class="p-3">
+<td class="p-3 hidden md:table-cell">
 ${row.description || "-"}
 </td>
 
@@ -547,7 +522,29 @@ document.getElementById(
 "RM" +
 royaltyFund.toFixed(2);
 
-
+new Chart(
+document.getElementById("financeChart"),
+{
+type:"bar",
+data:{
+labels:[
+"Income",
+"Expense",
+"Profit"
+],
+datasets:[{
+label:"RM",
+data:[
+income,
+expense,
+income-expense
+]
+}]
+},
+options:{
+responsive:true
+}
+});
   
 </script>
 
