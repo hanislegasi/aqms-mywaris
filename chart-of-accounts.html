@@ -1,1 +1,220 @@
-mm
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Chart Of Accounts</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+Chart Of Accounts
+</h1>
+
+</div>
+
+<div class="max-w-7xl mx-auto p-5">
+
+<a
+href="accounts-dashboard.html"
+class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
+
+← Accounts Dashboard
+
+</a>
+
+<div class="bg-white p-5 rounded-xl shadow mb-5">
+
+<div class="grid md:grid-cols-4 gap-3">
+
+<input
+id="accountCode"
+placeholder="Account Code"
+class="border p-3 rounded-xl">
+
+<input
+id="accountName"
+placeholder="Account Name"
+class="border p-3 rounded-xl">
+
+<select
+id="accountType"
+class="border p-3 rounded-xl">
+
+<option>Asset</option>
+<option>Liability</option>
+<option>Equity</option>
+<option>Income</option>
+<option>Expense</option>
+
+</select>
+
+<button
+id="saveBtn"
+class="bg-green-600 text-white rounded-xl">
+
+Save Account
+
+</button>
+
+</div>
+
+</div>
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+
+<table class="w-full">
+
+<thead class="bg-[#153638] text-white">
+
+<tr>
+
+<th class="p-3 text-left">
+Code
+</th>
+
+<th class="p-3 text-left">
+Account Name
+</th>
+
+<th class="p-3 text-left">
+Type
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="coaTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+addDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"xxxxx",
+authDomain:"xxxxx",
+projectId:"xxxxx",
+storageBucket:"xxxxx",
+messagingSenderId:"xxxxx",
+appId:"xxxxx"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+document
+.getElementById("saveBtn")
+.addEventListener(
+"click",
+async ()=>{
+
+await addDoc(
+collection(db,"chartOfAccounts"),
+{
+
+accountCode:
+document.getElementById("accountCode").value,
+
+accountName:
+document.getElementById("accountName").value,
+
+accountType:
+document.getElementById("accountType").value,
+
+createdAt:
+new Date()
+
+}
+);
+
+location.reload();
+
+});
+
+const snap =
+await getDocs(
+collection(
+db,
+"chartOfAccounts"
+)
+);
+
+let html = "";
+
+snap.forEach((d)=>{
+
+const coa =
+d.data();
+
+html += `
+
+<tr class="border-b">
+
+<td class="p-3">
+${coa.accountCode}
+</td>
+
+<td class="p-3">
+${coa.accountName}
+</td>
+
+<td class="p-3">
+${coa.accountType}
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById(
+"coaTable"
+).innerHTML =
+html;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
