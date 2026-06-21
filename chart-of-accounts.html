@@ -159,39 +159,38 @@ async()=>{
 const coa = [
 
 {
-accountCode:"1000",
-accountName:"Bank",
-accountType:"Asset"
+code:"1000",
+name:"Bank",
+type:"Asset"
 },
 
 {
-accountCode:"2100",
-accountName:"Consultant Payable",
-accountType:"Liability"
+code:"2100",
+name:"Consultant Payable",
+type:"Liability"
 },
 
 {
-accountCode:"4000",
-accountName:"Sales e-Wasiat",
-accountType:"Income"
+code:"4000",
+name:"Sales e-Wasiat",
+type:"Income"
+},
+{
+code:"4100",
+name:"Sales Hibah",
+type:"Income"
 },
 
 {
-accountCode:"4100",
-accountName:"Sales Hibah",
-accountType:"Income"
+code:"5000",
+name:"Consultant Commission",
+type:"Expense"
 },
 
 {
-accountCode:"5000",
-accountName:"Consultant Commission",
-accountType:"Expense"
-},
-
-{
-accountCode:"5100",
-accountName:"Consultant Override",
-accountType:"Expense"
+code:"5100",
+name:"Consultant Override",
+type:"Expense"
 }
 
 ];
@@ -253,22 +252,21 @@ let html = "";
 
 snap.forEach((d)=>{
 
-const coa =
-d.data();
+const coa = d.data();
 
 html += `
 <tr class="border-b">
 
 <td class="p-3">
-${row.code || "-"}
+${coa.code || coa.accountCode || "-"}
 </td>
 
 <td class="p-3">
-${row.name || "-"}
+${coa.name || coa.accountName || "-"}
 </td>
 
 <td class="p-3">
-${row.type || "-"}
+${coa.type || coa.accountType || "-"}
 </td>
 
 </tr>
