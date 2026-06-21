@@ -233,65 +233,65 @@ RM0.00
 
 </div>
 
+</div>
+  
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <div class="grid lg:grid-cols-3 gap-4 mb-6">
 
-<div class="bg-white rounded-xl shadow p-5">
+  <!-- CHART -->
+  <div class="bg-white rounded-xl shadow p-5">
 
-<h2 class="font-bold mb-3">
-Revenue vs Expense
-</h2>
+    <h2 class="font-bold mb-3">
+      Revenue vs Expense
+    </h2>
 
-<div class="h-[350px]">
-<canvas id="financeChart"></canvas>
-</div>
+    <div class="h-[350px]">
+      <canvas id="financeChart"></canvas>
+    </div>
 
-</div>
-  
-<div class="bg-white rounded-xl shadow overflow-hidden mt-6">
+  </div>
 
-<div class="p-5 border-b">
+  <!-- TRANSACTION -->
+  <div class="bg-white rounded-xl shadow overflow-hidden lg:col-span-2">
 
-<h2 class="text-lg font-bold">
-Latest Transaction Movement
-</h2>
+    <div class="p-5 border-b">
 
-<p class="text-gray-500 text-sm">
-Latest 10 accounting entries
-</p>
+      <h2 class="text-lg font-bold">
+        Latest Transaction Movement
+      </h2>
 
-</div>
-  
-</div>
+      <p class="text-gray-500 text-sm">
+        Latest 10 accounting entries
+      </p>
 
+    </div>
 
-  
+    <div class="overflow-x-auto">
 
+      <table class="w-full">
 
-<div class="overflow-x-auto">
+        <thead class="bg-[#153638] text-white">
 
-<table class="w-full">
+          <tr>
+            <th class="p-3 text-left">Date</th>
+            <th class="p-3 text-left">Account</th>
+            <th class="p-3 text-left hidden md:table-cell">Description</th>
+            <th class="p-3 text-right">Debit</th>
+            <th class="p-3 text-right">Credit</th>
+          </tr>
 
-<thead class="bg-[#153638] text-white">
+        </thead>
 
-<tr>
-<th class="p-2 w-20">Date</th>
-<th class="p-2">Account</th>
-<th class="p-2 hidden md:table-cell">Description</th>
-<th class="p-2 text-right">Debit</th>
-<th class="p-2 text-right">Credit</th>
-</tr>
+        <tbody id="ledgerTable">
 
-</thead>
+        </tbody>
 
-<tbody id="ledgerTable">
+      </table>
 
-</tbody>
+    </div>
 
-</table>
-
-</div>
+  </div>
 
 </div>
   
@@ -528,9 +528,6 @@ royaltyFund.toFixed(2);
 new Chart(
 document.getElementById("financeChart"),
 {
-responsive:true,
-maintainAspectRatio:false,
-type:"bar",
 type:"bar",
 data:{
 labels:[
@@ -548,7 +545,8 @@ income-expense
 }]
 },
 options:{
-responsive:true
+responsive:true,
+maintainAspectRatio:false
 }
 });
   
