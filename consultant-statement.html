@@ -60,11 +60,8 @@ Loading...
 Period
 </p>
 
-<p id="periodText">
+<p id="periodText"></p>
 
-June 2026
-
-</p>
 
 <p class="mt-4">
 Month
@@ -350,7 +347,8 @@ let wasiat = 0;
 let hibah = 0;
 let sepencarian = 0;                
 
-                
+let firstDate = null;
+let lastDate = null;               
                
 let commission = 0;
 let override = 0;
@@ -362,6 +360,20 @@ const row = d.data();
    
 if(row.consultantNo === consultantNo){
 
+const trxDate = row.date?.toDate();
+
+if(trxDate){
+
+if(!firstDate || trxDate < firstDate){
+firstDate = trxDate;
+}
+
+if(!lastDate || trxDate > lastDate){
+lastDate = trxDate;
+}
+
+}
+    
 if(row.accountCode === "5000"){
 
 if(
@@ -564,6 +576,32 @@ document.getElementById(
 <br>
 Consultant No : ${consultantNo}
 `;       
+
+const today = new Date();
+
+const firstDay =
+new Date(
+today.getFullYear(),
+today.getMonth(),
+1
+);
+
+const lastDay =
+new Date(
+today.getFullYear(),
+today.getMonth()+1,
+0
+);
+
+document.getElementById(
+"periodText"
+).innerHTML =
+
+firstDay.toLocaleDateString("ms-MY")
++
+" - " +
+lastDay.toLocaleDateString("ms-MY");
+}
                 
             } catch (error) {
                 console.error("Error fetching data: ", error);
