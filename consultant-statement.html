@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Statement</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Masukkan library html2pdf di bahagian head -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen py-8">
+
+    <!-- KAWASAN PENYATA (Akan di-export ke PDF) -->
+    <div id="statementArea" class="bg-white p-8 md:p-12 rounded-xl shadow-lg max-w-5xl mx-auto">
+
+        <!-- HEADER -->
+        <div class="text-center border-b border-gray-200 pb-6 mb-8">
+            <h1 id="companyName" class="text-3xl font-bold text-gray-800">
+                AL-QAWTHAR MAWARIS SDN. BHD.
+            </h1>
+            <p id="registrationNo" class="text-gray-600 mt-1">
+                Registration No : XXXXXXX-X
+            </p>
+            <h2 class="text-2xl font-bold mt-6 text-[#153638]">
+                CONSULTANT STATEMENT
+            </h2>
+            <p id="consultantInfo" class="text-gray-500 mt-2">
+                Loading consultant info...
+            </p>
+        </div>
+
+        <!-- SUMMARY CARDS -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+            <div class="bg-gray-50 border rounded-xl p-4 text-center">
+                <p class="text-sm text-gray-500 mb-1">Commission</p>
+                <h2 id="commissionTotal" class="text-xl font-bold text-gray-800">RM0.00</h2>
+            </div>
+            <div class="bg-gray-50 border rounded-xl p-4 text-center">
+                <p class="text-sm text-gray-500 mb-1">Override</p>
+                <h2 id="overrideTotal" class="text-xl font-bold text-gray-800">RM0.00</h2>
+            </div>
+            <div class="bg-gray-50 border rounded-xl p-4 text-center">
+                <p class="text-sm text-gray-500 mb-1">Total Earned</p>
+                <h2 id="earnedTotal" class="text-xl font-bold text-green-600">RM0.00</h2>
+            </div>
+            <div class="bg-gray-50 border rounded-xl p-4 text-center">
+                <p class="text-sm text-gray-500 mb-1">Paid</p>
+                <h2 id="paidTotal" class="text-xl font-bold text-blue-600">RM0.00</h2>
+            </div>
+            <div class="bg-gray-50 border rounded-xl p-4 text-center">
+                <p class="text-sm text-gray-500 mb-1">Outstanding</p>
+                <h2 id="outstandingTotal" class="text-xl font-bold text-red-600">RM0.00</h2>
+            </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="overflow-x-auto mb-8 border rounded-xl">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-[#153638] text-white">
+                    <tr>
+                        <th class="p-4 font-semibold">Date</th>
+                        <th class="p-4 font-semibold">Description</th>
+                        <th class="p-4 font-semibold text-right">Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="statementTable" class="divide-y divide-gray-200">
+                    <!-- Data will be populated here by JavaScript -->
+                    <tr>
+                        <td colspan="3" class="p-4 text-center text-gray-500">Loading data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="border-t border-gray-200 pt-4 text-xs text-gray-500 flex justify-between">
+            <p>This is a computer-generated document. No signature is required.</p>
+            <p>Generated : <span id="generatedDate"></span></p>
+        </div>
+
+    </div> <!-- END STATEMENT AREA -->
+
+    <!-- BUTTON AREA (Diletakkan di luar kotak putih supaya tidak masuk dalam PDF) -->
+    <div class="max-w-5xl mx-auto mt-6 text-right px-4 md:px-0">
+        <button id="printBtn" class="bg-green-600 hover:bg-green-700 transition-colors text-white font-medium px-6 py-3 rounded-xl shadow-md inline-flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            Export PDF
+        </button>
+    </div>
+
+    <!-- LOGIK JAVASCRIPT -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+            authDomain: "alqawthar-mywaris.firebaseapp.com",
+            projectId: "alqawthar-mywaris",
+            storageBucket: "alqawthar-mywaris.firebasestorage.app",
+            messagingSenderId: "3498810778",
+            appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Set Current Date
+        document.getElementById("generatedDate").innerHTML = new Date().toLocaleString("ms-MY");
+
+        // Fetch Company Settings
+        async function loadData() {
+            try {
+                const settingsSnap = await getDoc(doc(db, "settings", "company"));
+                if (settingsSnap.exists()) {
+                    const settings = settingsSnap.data();
+                    document.getElementById("companyName").innerHTML = settings?.companyName || "AL-QAWTHAR MAWARIS SDN. BHD.";
+                    document.getElementById("registrationNo").innerHTML = "Registration No : " + (settings?.registrationNo || "");
+                }
+
+                // NOTA UNTUK ANDA: Letakkan kod untuk fetch data table/statement di sini.
+                // Sebagai contoh, saya setkan nilai lalai (default) buat masa ini agar tiada error.
+                let commission = 0;
+                let override = 0;
+                let html = `
+                    <tr>
+                        <td colspan="3" class="p-4 text-center text-gray-500">Tiada rekod dijumpai</td>
+                    </tr>
+                `;
+
+                // Kemaskini UI dengan data
+                document.getElementById("statementTable").innerHTML = html;
+                document.getElementById("commissionTotal").innerHTML = "RM" + commission.toFixed(2);
+                document.getElementById("overrideTotal").innerHTML = "RM" + override.toFixed(2);
+                document.getElementById("earnedTotal").innerHTML = "RM" + (commission + override).toFixed(2);
+
+            } catch (error) {
+                console.error("Error fetching data: ", error);
+            }
+        }
+
+        // Initialize Data Load
+        loadData();
+
+        // Export PDF Function
+        document.getElementById("printBtn").addEventListener("click", () => {
+            const element = document.getElementById("statementArea");
+            
+            const opt = {
+                margin: 0.5,
+                filename: 'Consultant-Statement.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        });
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+  
