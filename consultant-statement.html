@@ -103,7 +103,9 @@ getFirestore,
 doc,
 getDoc,
 collection,
-getDocs
+getDocs,
+query,
+where
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -138,11 +140,35 @@ await getDocs(
 collection(db,"ledger")
 );
 
-                const consultantNo = "AQC0001";
+const paymentSnap =
+await getDocs(
+query(
+collection(db,"paymentVouchers"),
+where(
+"consultantNo",
+"==",
+consultantNo
+)
+)
+);
+
+let paid = 0;
+
+paymentSnap.forEach((d)=>{
+
+const pv = d.data();
+
+paid += Number(
+pv.amount || 0
+);
+
+});                
                 
-                // NOTA UNTUK ANDA: Letakkan kod untuk fetch data table/statement di sini.
-                // Sebagai contoh, saya setkan nilai lalai (default) buat masa ini agar tiada error.
-                let commission = 0;
+                
+const consultantNo = "AQC0001";
+                
+               
+let commission = 0;
 let override = 0;
 let html = "";
 
@@ -206,8 +232,41 @@ Tiada rekod dijumpai
 
 }
 
-                // Kemaskini UI dengan data
-               document.getElementById(
+paymentSnap.forEach((d)=>{
+
+const pv = d.data();
+
+html += `
+
+<tr class="bg-green-50">
+
+<td class="p-3">
+${
+pv.paymentDate?.toDate()
+?.toLocaleDateString("ms-MY")
+|| "-"
+}
+</td>
+
+<td class="p-3">
+PAYMENT VOUCHER
+${pv.voucherNo || ""}
+</td>
+
+<td class="p-3 text-right text-red-600">
+-RM${Number(
+pv.amount || 0
+).toFixed(2)}
+</td>
+
+</tr>
+
+`;
+
+});                
+
+                
+document.getElementById(
 "commissionTotal"
 ).innerHTML =
 "RM" +
@@ -230,6 +289,24 @@ document.getElementById(
 ).innerHTML =
 html;
 
+document.getElementById(
+"paidTotal"
+).innerHTML =
+"RM" +
+paid.toFixed(2);
+
+const earned =
+commission + override;
+
+const outstanding =
+earned - paid;
+
+document.getElementById(
+"outstandingTotal"
+).innerHTML =
+"RM" +
+outstanding.toFixed(2);
+                
 document.getElementById(
 "consultantInfo"
 ).innerHTML =
