@@ -222,28 +222,28 @@ consultantNo
 )
 );
 
-const consultantSnap =
+const userSnap =
 await getDoc(
 doc(
 db,
-"consultants",
-consultantNo
+"users",
+userUid
 )
 );
 
 let consultantIC = "-";
 let consultantAddress = "-";
 
-if(consultantSnap.exists()){
+if(userSnap.exists()){
 
-const c =
-consultantSnap.data();
+const user =
+userSnap.data();
 
 consultantIC =
-c.ic || "-";
+user.ic || "-";
 
 consultantAddress =
-c.state || "-";
+user.state || "-";
 
 }
 
@@ -365,17 +365,21 @@ document.getElementById(
 </div>
 
 <div>
-Consultant No : ${consultantNo}
+Consultant No :
+${consultantNo}
 </div>
 
 <div>
-No IC : ${consultantIc}
+No IC :
+${consultantIC}
 </div>
 
 <div>
-${consultantState}
+State :
+${consultantAddress}
 </div>
 `;
+                
 if(firstDate && lastDate){
 
 const periodText =
