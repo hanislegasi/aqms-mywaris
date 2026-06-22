@@ -119,9 +119,14 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         };
 
         // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
+const consultantNo =
+new URLSearchParams(
+window.location.search
+).get("consultantNo");
+        
         // Set Current Date
         document.getElementById("generatedDate").innerHTML = new Date().toLocaleString("ms-MY");
 
@@ -165,7 +170,7 @@ pv.amount || 0
 });                
                 
                 
-const consultantNo = "AQC0001";
+
                 
                
 let commission = 0;
@@ -176,6 +181,8 @@ ledgerSnap.forEach((d)=>{
 
 const row = d.data();
 
+let consultantName = "";
+    
 if(row.consultantNo === consultantNo){
 
 if(row.accountCode === "5000"){
@@ -242,15 +249,15 @@ html += `
 
 <td class="p-3">
 ${
-pv.paymentDate?.toDate()
+pv.paidAt?.toDate()
 ?.toLocaleDateString("ms-MY")
 || "-"
 }
 </td>
 
 <td class="p-3">
-PAYMENT VOUCHER
-${pv.voucherNo || ""}
+Payment Voucher
+${pv.pvNo || ""}
 </td>
 
 <td class="p-3 text-right text-red-600">
@@ -262,7 +269,6 @@ pv.amount || 0
 </tr>
 
 `;
-
 });                
 
                 
@@ -310,7 +316,11 @@ outstanding.toFixed(2);
 document.getElementById(
 "consultantInfo"
 ).innerHTML =
-`Consultant No : ${consultantNo}`;                
+`
+${consultantName}
+<br>
+Consultant No : ${consultantNo}
+`;              
                 
             } catch (error) {
                 console.error("Error fetching data: ", error);
