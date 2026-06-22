@@ -89,8 +89,8 @@ RM0.00
 </td>
 </tr>
 
-<tr>
-<td class="py-1">
+<tr class="border-t">
+<td class="py-2 font-semibold">
 Total Earned
 </td>
 
@@ -111,8 +111,8 @@ RM0.00
 </td>
 </tr>
 
-<tr>
-<td class="py-1">
+<tr class="border-t-2">
+<td class="py-2 font-bold">
 Outstanding
 </td>
 
@@ -131,7 +131,8 @@ RM0.00
 
         <!-- FOOTER -->
         <div class="border-t border-gray-200 pt-4 text-xs text-gray-500 flex justify-between">
-            <p>This is a computer-generated document. No signature is required.</p>
+            <p>This statement is generated automatically from AQMS.
+No signature is required.</p>
             <p>Generated : <span id="generatedDate"></span></p>
         </div>
 
@@ -259,7 +260,12 @@ pv.amount || 0
 
 });                
                 
-          
+const statementNo =
+`CST-${
+new Date().getFullYear()
+}${
+String(new Date().getMonth()+1).padStart(2,"0")
+}-${consultantNo}`;          
 
 let firstDate = null;
 let lastDate = null;               
