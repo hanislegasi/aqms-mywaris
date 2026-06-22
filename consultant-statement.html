@@ -239,10 +239,10 @@ const c =
 consultantSnap.data();
 
 consultantIC =
-c.icNo || "-";
+c.ic || "-";
 
 consultantAddress =
-c.address || "-";
+c.state || "-";
 
 }
 
@@ -363,11 +363,11 @@ Consultant No : ${consultantNo}
 </div>
 
 <div>
-No IC : ${consultantIC}
+No IC : ${consultantIc}
 </div>
 
 <div>
-${consultantAddress}
+${consultantState}
 </div>
 `;
 if(firstDate && lastDate){
