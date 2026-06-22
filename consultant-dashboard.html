@@ -60,14 +60,55 @@ class="hidden mb-5">
   
 <!-- PROFIL -->
 
-<div
-id="profileCard"
-class="bg-white p-5 rounded-2xl shadow mb-5">
+<div class="mb-5 flex gap-3">
 
-Memuatkan profil...
+<button
+id="profileBtn"
+class="bg-blue-600 text-white px-5 py-3 rounded-xl">
+
+Profile
+
+</button>
+
+<button
+onclick="window.location.href='consultant-statement.html'"
+class="bg-green-600 text-white px-5 py-3 rounded-xl">
+
+My Statement
+
+</button>
 
 </div>
 
+<div
+id="profileModal"
+class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+<div class="bg-white rounded-2xl p-6 w-[600px]">
+
+<h2 class="text-xl font-bold mb-4">
+Consultant Profile
+</h2>
+
+<div id="profileContent">
+
+Loading...
+
+</div>
+
+<button
+id="closeProfile"
+class="mt-5 bg-red-500 text-white px-4 py-2 rounded-xl">
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+ 
 <div
 id="promotionCard"
 class="bg-white p-5 rounded-2xl shadow mb-5">
@@ -688,18 +729,14 @@ data.joinDate?.toDate
 
 
 document.getElementById(
-"profileCard"
+"profileContent"
 ).innerHTML = `
 
-<h2 class="text-2xl font-bold mb-3">
-${data.nama}
-</h2>
+<p><b>Nama:</b> ${data.nama}</p>
 
 <p><b>No Konsultan:</b> ${data.consultantNo}</p>
 
 <p><b>Level:</b> ${data.consultantLevel}</p>
-
-<p><b>Upline:</b> ${data.upline || "-"}</p>
 
 <p><b>Telefon:</b> ${data.telefon}</p>
 
@@ -707,35 +744,11 @@ ${data.nama}
 
 <p><b>IC:</b> ${data.ic || "-"}</p>
 
-<p><b>Negeri:</b> ${data.state}</p>
+<p><b>Negeri:</b> ${data.state || "-"}</p>
 
 <p><b>Bank:</b> ${data.bankName || "-"}</p>
 
 <p><b>No Akaun:</b> ${data.bankAccount || "-"}</p>
-
-<p><b>Status Bayaran:</b> ${data.consultantPaymentStatus || "-"}</p>
-
-<p>
-<b>Tarikh Sertai:</b>
-${joinDate.toLocaleDateString("ms-MY")}
-</p>
-
-<p>
-<b>Renewal:</b>
-${renewalDate.toLocaleDateString("ms-MY")}
-</p>
-
-<div class="mt-4">
-
-<button
-id="editProfileBtn"
-class="bg-blue-500 text-white px-5 py-2 rounded-xl">
-
-Edit Profile
-
-</button>
-
-</div>
 
 `;
 
@@ -875,7 +888,25 @@ console.log(err);
 
 });
 
+document
+.getElementById("profileBtn")
+?.addEventListener("click",()=>{
 
+document
+.getElementById("profileModal")
+.classList.remove("hidden");
+
+});
+
+document
+.getElementById("closeProfile")
+?.addEventListener("click",()=>{
+
+document
+.getElementById("profileModal")
+.classList.add("hidden");
+
+});
 
 
 
