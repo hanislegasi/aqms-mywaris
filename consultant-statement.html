@@ -359,32 +359,24 @@ document.getElementById(
 </div>
 
 <div>
-Consultant No :
-${consultantNo}
+Consultant No : ${consultantNo}
 </div>
 
 <div>
-No IC :
-${consultantIC || "-"}
+No IC : ${consultantIC}
 </div>
 
 <div>
-${consultantAddress || "-"}
+${consultantAddress}
 </div>
-
-<div class="mt-2">
-Period :
-${document.getElementById("periodText").innerHTML}
-</div>
-`;    
-
+`;
 if(firstDate && lastDate){
 
 const periodText =
-firstDay.toLocaleDateString("ms-MY")
+firstDate.toLocaleDateString("ms-MY")
 +
 " - " +
-lastDay.toLocaleDateString("ms-MY");
+lastDate.toLocaleDateString("ms-MY");
 
 document.getElementById(
 "periodInfo"
