@@ -63,24 +63,13 @@ Period
 <p id="periodText"></p>
 
 
-<p class="mt-4">
-Month
-</p>
 
-<p id="monthText">
-
-June 2026
-
-</p>
 
 </div>
 
 </div>           
         <!-- SUMMARY CARDS -->
-       <div class="grid grid-cols-2 gap-6 my-4">
-
-<!-- LEFT -->
-<div>
+      <div class="border-t border-b py-4 my-4">
 
 <table class="w-full">
 
@@ -143,101 +132,8 @@ RM0.00
 
 </div>
 
-<!-- RIGHT -->
-<div>
-
-<h3 class="font-bold text-xl mb-3">
-SUMMARY BY SERVICE
-</h3>
-
-<table class="w-full border">
-
-<tr>
-<td class="p-3">
-e-Wasiat
-</td>
-
-<td
-id="wasiatTotal"
-class="p-3 text-right">
-RM0.00
-</td>
-</tr>
-
-<tr>
-<td class="p-3">
-Hibah
-</td>
-
-<td
-id="hibahTotal"
-class="p-3 text-right">
-RM0.00
-</td>
-</tr>
-
-<tr>
-<td class="p-3">
-Harta Sepencarian
-</td>
-
-<td
-id="sepencarianTotal"
-class="p-3 text-right">
-RM0.00
-</td>
-</tr>
-
-<tr class="font-bold">
-
-<td class="p-3">
-Total
-</td>
-
-<td
-id="serviceTotal"
-class="p-3 text-right text-green-600">
-RM0.00
-</td>
-
-</tr>
-
-</table>
-
-</div>
-
-</div>    
         
-        <!-- TABLE -->
-        <div class="overflow-x-auto mb-8 border rounded-xl">
-            <table class="w-full text-sm text-left">
-                <thead class="bg-[#153638] text-white">
-                    <tr>
-                        <th class="p-3">
-Date
-</th>
-
-<th class="p-3">
-Transaction
-</th>
-
-<th class="p-3">
-Category
-</th>
-
-<th class="p-3 text-right">
-Amount
-</th>
-                    </tr>
-                </thead>
-                <tbody id="statementTable" class="divide-y divide-gray-200">
-                    <!-- Data will be populated here by JavaScript -->
-                    <tr>
-                        <td colspan="3" class="p-4 text-center text-gray-500">Loading data...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+      
 
         <!-- FOOTER -->
         <div class="border-t border-gray-200 pt-4 text-xs text-gray-500 flex justify-between">
@@ -343,9 +239,7 @@ pv.amount || 0
 
 });                
                 
-let wasiat = 0;
-let hibah = 0;
-let sepencarian = 0;                
+          
 
 let firstDate = null;
 let lastDate = null;               
@@ -376,39 +270,6 @@ lastDate = trxDate;
     
 if(row.accountCode === "5000"){
 
-if(
-row.description
-?.toLowerCase()
-.includes("wasiat")
-){
-
-wasiat += Number(
-row.debit || 0
-);
-
-}
-
-if(
-row.description
-?.toLowerCase()
-.includes("hibah")
-){
-
-hibah += Number(
-row.debit || 0
-);
-
-}
-
-if(
-row.description
-?.toLowerCase()
-.includes("sepencarian")
-){
-
-sepencarian += Number(
-row.debit || 0
-);
 
 }
 
@@ -425,33 +286,7 @@ Number(row.debit || 0);
 
 }
 
-html += `
-<tr>
 
-<td class="p-3">
-${row.date?.toDate().toLocaleDateString("ms-MY")}
-</td>
-
-<td class="p-3">
-${row.description}
-</td>
-
-<td class="p-3">
-${
-row.accountCode === "5000"
-?
-"Commission"
-:
-"Override"
-}
-</td>
-
-<td class="p-3 text-right">
-RM${Number(row.debit).toFixed(2)}
-</td>
-
-</tr>
-`;
 
 }
 
@@ -540,33 +375,7 @@ document.getElementById(
 "RM" +
 outstanding.toFixed(2);
 
-document.getElementById(
-"wasiatTotal"
-).innerHTML =
-"RM" +
-wasiat.toFixed(2);
-
-document.getElementById(
-"hibahTotal"
-).innerHTML =
-"RM" +
-hibah.toFixed(2);
-
-document.getElementById(
-"sepencarianTotal"
-).innerHTML =
-"RM" +
-sepencarian.toFixed(2);
-
-document.getElementById(
-"serviceTotal"
-).innerHTML =
-"RM" +
-(
-wasiat +
-hibah +
-sepencarian
-).toFixed(2);                
+ 
                 
 document.getElementById(
 "consultantInfo"
@@ -601,12 +410,12 @@ firstDay.toLocaleDateString("ms-MY")
 +
 " - " +
 lastDay.toLocaleDateString("ms-MY");
-}
+
                 
             } catch (error) {
                 console.error("Error fetching data: ", error);
             }
-        }
+        
 
         // Initialize Data Load
         loadData();
