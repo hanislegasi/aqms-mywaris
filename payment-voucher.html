@@ -1,308 +1,163 @@
 <!DOCTYPE html>
-
 <html lang="ms">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Payment Voucher</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-body{
-font-family:Inter,sans-serif;
-}
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Voucher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: Inter, sans-serif;
+        }
+        /* Custom scrollbar styling untuk paparan kemas di telefon pintas */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
 
-<div class="bg-[#153638] text-white p-5">
-
-<h1 class="text-2xl font-bold">
-Payment Voucher
-</h1>
-
-</div>
-
-<div class="max-w-7xl mx-auto p-5">
-
-<a
-href="accounts-dashboard.html"
-class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
-
-← Akaun
-
-</a>
-
-<div class="bg-white rounded-xl shadow overflow-hidden">
-
-<table class="w-full">
-
-<thead class="bg-[#153638] text-white">
-
-<tr>
-
-<th class="p-3 text-left">
-PV No
-</th>
-
-<th class="p-3 text-left">
-Consultant
-</th>
-
-<th class="p-3 text-right">
-Amount
-</th>
-
-<th class="p-3 text-center">
-Status
-</th>
-
-<th class="p-3 text-center">
-Action
-</th>
-
-</tr>
-
-</thead>
-
-<tbody id="pvTable">
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-getDocs,
-doc,
-updateDoc,
-addDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-
-apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-authDomain:"alqawthar-mywaris.firebaseapp.com",
-projectId:"alqawthar-mywaris",
-storageBucket:"alqawthar-mywaris.firebasestorage.app",
-messagingSenderId:"3498810778",
-appId:"1:3498810778:web:ee36e0fe42f76698046e23"
-
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const db =
-getFirestore(app);
-
-const snap =
-await getDocs(
-collection(
-db,
-"paymentVouchers"
-)
-);
-
-let html = "";
-
-snap.forEach((d)=>{
-
-const pv = d.data();
-
-html += `
-
-<tr class="border-b">
-
-<td class="p-3">
-${pv.pvNo}
-</td>
-
-<td class="p-3">
-${pv.consultantName}
-</td>
-
-<td class="p-3 text-right">
-RM${Number(pv.amount).toFixed(2)}
-</td>
-
-<td class="p-3 text-center">
-
-<span class="${
-pv.status==="PAID"
-?
-'text-green-600'
-:
-'text-orange-600'
-}">
-
-${pv.status}
-
-</span>
-
-</td>
-
-<td class="p-3 text-center">
-
-<a
-href="payment-voucher-view.html?id=${d.id}"
-class="inline-block w-28 text-center bg-blue-600 text-white py-2 rounded-lg">
-
-View
-
-</a>
-
-${
-pv.status === "PENDING"
-?
-
-`<button
-onclick="markPaid(
-'${d.id}',
-'${pv.consultantName}',
-${pv.amount}
-)"
-class="w-28 bg-green-600 text-white py-2 rounded-lg">
-
-Mark Paid
-
-</button>`
-
-:
-
-`<button
-class="bg-white border border-green-600 text-green-600 px-4 py-2 rounded-lg font-semibold cursor-default">
-
-PAID
-
-</button>`
-
-}
-
-</td>
-
-</tr>
-
-`;
-
-});
-
-document.getElementById(
-"pvTable"
-).innerHTML =
-html;
-
-window.markPaid =
-async(
-pvId,
-consultantName,
-amount
-)=>{
-
-if(
-!confirm(
-"Confirm payment?"
-)
-){
-return;
-}
-
-await addDoc(
-collection(
-db,
-"ledger"
-),
-{
-
-date:new Date(),
-
-accountCode:"2000",
-
-account:
-"Consultant Payable",
-
-category:
-"liability",
-
-description:
-consultantName,
-
-debit:
-amount,
-
-credit:0
-
-}
-);
-
-await addDoc(
-collection(
-db,
-"ledger"
-),
-{
-
-date:new Date(),
-
-accountCode:"1000",
-
-account:
-"Bank",
-
-category:
-"asset",
-
-description:
-consultantName,
-
-debit:0,
-
-credit:amount
-
-}
-);
-
-await updateDoc(
-doc(
-db,
-"paymentVouchers",
-pvId
-),
-{
-
-status:"PAID",
-
-paidAt:
-new Date()
-
-}
-);
-
-alert(
-"Payment completed"
-);
-
-location.reload();
-
-};
-
-</script>
-
+    <div class="bg-[#153638] text-white p-5">
+        <h1 class="text-2xl font-bold">
+            Payment Voucher
+        </h1>
+    </div>
+
+    <div class="max-w-7xl mx-auto p-5">
+
+        <a href="accounts-dashboard.html" class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5 text-gray-800">
+            &larr; Akaun
+        </a>
+
+        <!-- Mobile Scroll Instruction (Hanya kelihatan di skrin telefon) -->
+        <div class="flex items-center text-sm text-gray-500 mb-2 md:hidden">
+            <svg class="w-4 h-4 mr-2 text-blue-500 animate-pulse flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+            <span>Tatal (scroll) ke kanan untuk melihat jadual penuh.</span>
+        </div>
+
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+            <!-- Pembungkus scroll ditambah di sini -->
+            <div class="overflow-x-auto custom-scrollbar">
+                <!-- min-w-[700px] mengekalkan kelebaran jadual pada skrin kecil untuk mewujudkan fungsi tatalan -->
+                <table class="w-full min-w-[700px]">
+                    <thead class="bg-[#153638] text-white">
+                        <tr>
+                            <th class="p-3 text-left">PV No</th>
+                            <th class="p-3 text-left">Consultant</th>
+                            <th class="p-3 text-right">Amount</th>
+                            <th class="p-3 text-center">Status</th>
+                            <th class="p-3 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pvTable">
+                        <!-- Data akan dimuatkan di sini -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+            authDomain: "alqawthar-mywaris.firebaseapp.com",
+            projectId: "alqawthar-mywaris",
+            storageBucket: "alqawthar-mywaris.firebasestorage.app",
+            messagingSenderId: "3498810778",
+            appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const snap = await getDocs(collection(db, "paymentVouchers"));
+        let html = "";
+
+        snap.forEach((d) => {
+            const pv = d.data();
+            
+            html += `
+                <tr class="border-b">
+                    <td class="p-3">${pv.pvNo}</td>
+                    <td class="p-3">${pv.consultantName}</td>
+                    <td class="p-3 text-right">RM${Number(pv.amount).toFixed(2)}</td>
+                    <td class="p-3 text-center">
+                        <span class="${pv.status === "PAID" ? 'text-green-600' : 'text-orange-600'}">
+                            ${pv.status}
+                        </span>
+                    </td>
+                    <td class="p-3 text-center">
+                        <a href="payment-voucher-view.html?id=${d.id}" class="inline-block w-28 text-center bg-blue-600 text-white py-2 rounded-lg">
+                            View
+                        </a>
+                        ${pv.status === "PENDING" ? 
+                            `<button onclick="markPaid('${d.id}', '${pv.consultantName}', ${pv.amount})" class="w-28 bg-green-600 text-white py-2 rounded-lg">
+                                Mark Paid
+                            </button>` 
+                            : 
+                            `<button class="bg-white border border-green-600 text-green-600 px-4 py-2 rounded-lg font-semibold cursor-default">
+                                PAID
+                            </button>`
+                        }
+                    </td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("pvTable").innerHTML = html;
+
+        window.markPaid = async (pvId, consultantName, amount) => {
+            // Mengekalkan fungsi confirm() asal seperti permintaan anda
+            if (!confirm("Confirm payment?")) {
+                return;
+            }
+
+            await addDoc(collection(db, "ledger"), {
+                date: new Date(),
+                accountCode: "2000",
+                account: "Consultant Payable",
+                category: "liability",
+                description: consultantName,
+                debit: amount,
+                credit: 0
+            });
+
+            await addDoc(collection(db, "ledger"), {
+                date: new Date(),
+                accountCode: "1000",
+                account: "Bank",
+                category: "asset",
+                description: consultantName,
+                debit: 0,
+                credit: amount
+            });
+
+            await updateDoc(doc(db, "paymentVouchers", pvId), {
+                status: "PAID",
+                paidAt: new Date()
+            });
+
+            // Mengekalkan fungsi alert() asal seperti permintaan anda
+            alert("Payment completed");
+            location.reload();
+        };
+    </script>
 </body>
 </html>
