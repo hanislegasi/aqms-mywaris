@@ -39,7 +39,7 @@ Registration No :
 
 </p>
 
-<h2 class="text-2xl font-bold mt-6">
+<h2 class="text-2xl font-bold mt-3">
 
 CONSULTANT STATEMENT
 
@@ -80,38 +80,137 @@ June 2026
 
 </div>           
         <!-- SUMMARY CARDS -->
-       <div class="my-6">
+       <div class="grid grid-cols-2 gap-6 my-4">
+
+<!-- LEFT -->
+<div>
 
 <table class="w-full">
 
 <tr>
-<td class="py-2">Commission</td>
-<td class="text-right font-bold" id="commissionTotal">RM0.00</td>
+<td class="py-2">
+Commission
+</td>
+
+<td class="text-right font-bold"
+id="commissionTotal">
+RM0.00
+</td>
 </tr>
 
 <tr>
-<td class="py-2">Override</td>
-<td class="text-right font-bold" id="overrideTotal">RM0.00</td>
+<td class="py-2">
+Override
+</td>
+
+<td class="text-right font-bold"
+id="overrideTotal">
+RM0.00
+</td>
 </tr>
 
 <tr>
-<td class="py-2">Total Earned</td>
-<td class="text-right font-bold text-green-600" id="earnedTotal">RM0.00</td>
+<td class="py-2">
+Total Earned
+</td>
+
+<td class="text-right font-bold text-green-600"
+id="earnedTotal">
+RM0.00
+</td>
 </tr>
 
 <tr>
-<td class="py-2">Paid</td>
-<td class="text-right font-bold text-blue-600" id="paidTotal">RM0.00</td>
+<td class="py-2">
+Paid
+</td>
+
+<td class="text-right font-bold text-blue-600"
+id="paidTotal">
+RM0.00
+</td>
 </tr>
 
 <tr>
-<td class="py-2">Outstanding</td>
-<td class="text-right font-bold text-red-600" id="outstandingTotal">RM0.00</td>
+<td class="py-2">
+Outstanding
+</td>
+
+<td class="text-right font-bold text-red-600"
+id="outstandingTotal">
+RM0.00
+</td>
 </tr>
 
 </table>
 
 </div>
+
+<!-- RIGHT -->
+<div>
+
+<h3 class="font-bold text-xl mb-3">
+SUMMARY BY SERVICE
+</h3>
+
+<table class="w-full border">
+
+<tr>
+<td class="p-3">
+e-Wasiat
+</td>
+
+<td
+id="wasiatTotal"
+class="p-3 text-right">
+RM0.00
+</td>
+</tr>
+
+<tr>
+<td class="p-3">
+Hibah
+</td>
+
+<td
+id="hibahTotal"
+class="p-3 text-right">
+RM0.00
+</td>
+</tr>
+
+<tr>
+<td class="p-3">
+Harta Sepencarian
+</td>
+
+<td
+id="sepencarianTotal"
+class="p-3 text-right">
+RM0.00
+</td>
+</tr>
+
+<tr class="font-bold">
+
+<td class="p-3">
+Total
+</td>
+
+<td
+id="serviceTotal"
+class="p-3 text-right text-green-600">
+RM0.00
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>    
+        
         <!-- TABLE -->
         <div class="overflow-x-auto mb-8 border rounded-xl">
             <table class="w-full text-sm text-left">
@@ -247,7 +346,9 @@ pv.amount || 0
 
 });                
                 
-                
+let wasiat = 0;
+let hibah = 0;
+let sepencarian = 0;                
 
                 
                
@@ -263,6 +364,43 @@ if(row.consultantNo === consultantNo){
 
 if(row.accountCode === "5000"){
 
+if(
+row.description
+?.toLowerCase()
+.includes("wasiat")
+){
+
+wasiat += Number(
+row.debit || 0
+);
+
+}
+
+if(
+row.description
+?.toLowerCase()
+.includes("hibah")
+){
+
+hibah += Number(
+row.debit || 0
+);
+
+}
+
+if(
+row.description
+?.toLowerCase()
+.includes("sepencarian")
+){
+
+sepencarian += Number(
+row.debit || 0
+);
+
+}
+
+    
 commission +=
 Number(row.debit || 0);
 
@@ -389,6 +527,34 @@ document.getElementById(
 ).innerHTML =
 "RM" +
 outstanding.toFixed(2);
+
+document.getElementById(
+"wasiatTotal"
+).innerHTML =
+"RM" +
+wasiat.toFixed(2);
+
+document.getElementById(
+"hibahTotal"
+).innerHTML =
+"RM" +
+hibah.toFixed(2);
+
+document.getElementById(
+"sepencarianTotal"
+).innerHTML =
+"RM" +
+sepencarian.toFixed(2);
+
+document.getElementById(
+"serviceTotal"
+).innerHTML =
+"RM" +
+(
+wasiat +
+hibah +
+sepencarian
+).toFixed(2);                
                 
 document.getElementById(
 "consultantInfo"
