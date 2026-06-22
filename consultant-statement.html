@@ -123,9 +123,23 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const consultantNo =
-new URLSearchParams(
-window.location.search
-).get("consultantNo");
+sessionStorage.getItem(
+"consultantNo"
+);
+
+const consultantName =
+sessionStorage.getItem(
+"consultantName"
+);
+
+if(!consultantNo){
+
+alert("Session Expired");
+
+window.location.href =
+"consultant-login.html";
+
+}
         
         // Set Current Date
         document.getElementById("generatedDate").innerHTML = new Date().toLocaleString("ms-MY");
@@ -180,9 +194,7 @@ let html = "";
 ledgerSnap.forEach((d)=>{
 
 const row = d.data();
-
-let consultantName = "";
-    
+   
 if(row.consultantNo === consultantNo){
 
 if(row.accountCode === "5000"){
@@ -317,10 +329,10 @@ document.getElementById(
 "consultantInfo"
 ).innerHTML =
 `
-${consultantName}
+<strong>${consultantName}</strong>
 <br>
 Consultant No : ${consultantNo}
-`;              
+`;       
                 
             } catch (error) {
                 console.error("Error fetching data: ", error);
