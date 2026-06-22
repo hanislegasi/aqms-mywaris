@@ -45,6 +45,11 @@ CONSULTANT STATEMENT
 
 </h2>
 
+<div>
+Statement No :
+${statementNo}
+</div>
+                
 <div id="consultantInfo"
 class="mt-3 text-sm space-y-1">
 
@@ -248,7 +253,9 @@ consultantIC =
 user.ic || "-";
 
 consultantAddress =
-user.state || "-";
+user.address ||
+user.state ||
+"-";
 
 }
 
@@ -375,12 +382,10 @@ ${consultantNo}
 </div>
 
 <div>
-No IC :
 ${consultantIC}
 </div>
 
 <div>
-State :
 ${consultantAddress}
 </div>
 `;
@@ -417,7 +422,7 @@ document.getElementById(
                 margin: 0.5,
                 filename: 'Consultant-Statement.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
+                html2canvas: { scale: 3, useCORS: true },
                 jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
             };
 
