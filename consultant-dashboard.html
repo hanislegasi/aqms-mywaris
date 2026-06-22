@@ -189,10 +189,9 @@ RM0
 Jualan Bulanan
 </h3>
 
-<canvas
-id="salesChart"
-height="100">
-</canvas>
+<div class="relative h-56 md:h-80">
+    <canvas id="salesChart"></canvas>
+</div>
 
 </div>
  
@@ -852,6 +851,7 @@ data:salesData
 
 options:{
 responsive:true,
+maintainAspectRatio:false, 
 plugins:{
 legend:{
 display:false
