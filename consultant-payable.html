@@ -1,236 +1,179 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Consultant Payable</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-
-body{
-font-family: Inter, sans-serif;
-}
-
-</style>
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultant Payable</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: Inter, sans-serif;
+        }
+        /* Custom scrollbar styling for mobile */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
 
-<div class="bg-[#153638] text-white p-5">
-
-<h1 class="text-2xl font-bold">
-Consultant Payable
-</h1>
-
-</div>
-
-<div class="max-w-7xl mx-auto p-5">
-
-<a
-href="accounts-dashboard.html"
-class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
-
-← Akaun
-
-</a>
-
-<div class="bg-white rounded-xl shadow overflow-hidden">
-
-<table class="w-full">
-
-<thead class="bg-[#153638] text-white">
-
-<tr>
-
-<th class="p-3 text-left">
-Consultant
-</th>
-
-<th class="p-3 text-left">
-Nama
-</th>
-
-<th class="p-3 text-right">
-Amount
-</th>
-
-<th class="p-3 text-center">
-Action
-</th>
-
-</tr>
-
-</thead>
-
-<tbody id="payableTable">
-
-</tbody>
-
-</table>
-
-</div>
-
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-getDocs,
-addDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-
-apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-authDomain:"alqawthar-mywaris.firebaseapp.com",
-projectId:"alqawthar-mywaris",
-storageBucket:"alqawthar-mywaris.firebasestorage.app",
-messagingSenderId:"3498810778",
-appId:"1:3498810778:web:ee36e0fe42f76698046e23"
-
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const db =
-getFirestore(app);
-
-const snap =
-await getDocs(
-collection(db,"ledger")
-);
-
-const payable = {};
-
-snap.forEach((d)=>{
-
-const row = d.data();
-
-if(
-row.accountCode !== "2000"
-||
-!row.description.startsWith("AQC")
-) return;
-
-const consultant =
-row.description;
-
-if(!payable[consultant]){
-
-payable[consultant] = 0;
-
-}
-
-payable[consultant] +=
-Number(row.credit || 0);
-
-});
-
-let html = "";
-
-Object.keys(payable)
-.forEach((consultant)=>{
-
-html += `
-
-<tr class="border-b">
-
-<td class="p-3">
-${consultant.split(" ")[0]}
-</td>
-
-<td class="p-3">
-${consultant}
-</td>
-
-<td class="p-3 text-right font-semibold">
-RM${payable[consultant].toFixed(2)}
-</td>
-
-<td class="p-3 text-center">
-
-<button
-onclick="generatePV(
-'${consultant.split(" ")[0]}',
-'${consultant}',
-${payable[consultant]}
-)"
-class="bg-green-600 text-white px-4 py-2 rounded-lg">
-
-Generate PV
-
-</button>
-
-</td>
-
-</tr>
-
-`;
-
-});
-
-
-  
-document.getElementById(
-"payableTable"
-).innerHTML =
-html;
-
-window.generatePV =
-async(
-consultantNo,
-consultantName,
-amount
-)=>{
-
-const pvNo =
-"PV-" +
-Date.now();
-
-await addDoc(
-collection(
-db,
-"paymentVouchers"
-),
-{
-
-pvNo,
-
-consultantNo,
-
-consultantName,
-
-amount,
-
-status:
-"PENDING",
-
-createdAt:
-new Date()
-
-});
-
-alert(
-"PV berjaya dijana"
-);
-
-location.reload();
-
-};
-  
-</script>
-  
-</div>
-
+    <div class="bg-[#153638] text-white p-5">
+        <h1 class="text-2xl font-bold">
+            Consultant Payable
+        </h1>
+    </div>
+
+    <div class="max-w-7xl mx-auto p-5">
+
+        <a href="accounts-dashboard.html" class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5 text-gray-800">
+            &larr; Akaun
+        </a>
+
+        <!-- Mobile Scroll Instruction (Only visible on small screens) -->
+        <div class="flex items-center text-sm text-gray-500 mb-2 md:hidden">
+            <svg class="w-4 h-4 mr-2 text-blue-500 animate-pulse flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+            <span>Tatal (scroll) ke kanan untuk melihat jadual penuh.</span>
+        </div>
+
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+            <!-- PENTING: Pembungkus overflow-x-auto ditambah di sini -->
+            <div class="overflow-x-auto custom-scrollbar">
+                <!-- min-w-[600px] memaksa jadual mengekalkan kelebaran, mewujudkan scroll di phone -->
+                <table class="w-full min-w-[600px]">
+                    <thead class="bg-[#153638] text-white">
+                        <tr>
+                            <th class="p-3 text-left">Consultant</th>
+                            <th class="p-3 text-left">Nama</th>
+                            <th class="p-3 text-right">Amount</th>
+                            <th class="p-3 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="payableTable">
+                        <!-- Loading placeholder -->
+                        <tr>
+                            <td colspan="4" class="p-5 text-center text-gray-500">Memuatkan data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Message Box untuk menggantikan alert() -->
+    <div id="customAlert" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 px-4">
+        <div class="bg-white p-6 rounded-xl shadow-xl max-w-sm w-full text-center">
+            <div class="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Berjaya!</h3>
+            <p id="alertMessage" class="text-gray-600 mb-6">Mesej di sini</p>
+            <button onclick="closeCustomAlert()" class="bg-[#153638] text-white px-6 py-2 rounded-lg w-full font-medium hover:bg-[#0f2728] transition-colors">
+                Tutup & Muat Semula
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+            authDomain: "alqawthar-mywaris.firebaseapp.com",
+            projectId: "alqawthar-mywaris",
+            storageBucket: "alqawthar-mywaris.firebasestorage.app",
+            messagingSenderId: "3498810778",
+            appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Fetch data
+        const snap = await getDocs(collection(db, "ledger"));
+        const payable = {};
+
+        snap.forEach((d) => {
+            const row = d.data();
+            
+            // Logik kekal sama
+            if (row.accountCode !== "2000" || !row.description.startsWith("AQC")) return;
+
+            const consultant = row.description;
+
+            if (!payable[consultant]) {
+                payable[consultant] = 0;
+            }
+
+            payable[consultant] += Number(row.credit || 0);
+        });
+
+        let html = "";
+
+        Object.keys(payable).forEach((consultant) => {
+            html += `
+                <tr class="border-b">
+                    <td class="p-3">${consultant.split(" ")[0]}</td>
+                    <td class="p-3">${consultant}</td>
+                    <td class="p-3 text-right font-semibold">RM${payable[consultant].toFixed(2)}</td>
+                    <td class="p-3 text-center">
+                        <button 
+                            onclick="generatePV('${consultant.split(" ")[0]}', '${consultant}', ${payable[consultant]})"
+                            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                            Generate PV
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("payableTable").innerHTML = html || '<tr><td colspan="4" class="p-5 text-center text-gray-500">Tiada rekod setakat ini.</td></tr>';
+
+        // Fungsi PV (globalised supaya boleh dipanggil oleh butang dalam table)
+        window.generatePV = async (consultantNo, consultantName, amount) => {
+            try {
+                const pvNo = "PV-" + Date.now();
+
+                await addDoc(collection(db, "paymentVouchers"), {
+                    pvNo,
+                    consultantNo,
+                    consultantName,
+                    amount,
+                    status: "PENDING",
+                    createdAt: new Date()
+                });
+
+                // Tunjuk Custom Alert (menggantikan alert asal)
+                document.getElementById('alertMessage').innerText = "PV berjaya dijana (" + pvNo + ")";
+                document.getElementById('customAlert').classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Error generating PV: ", error);
+                document.getElementById('alertMessage').innerText = "Ralat: Gagal menjana PV.";
+                document.getElementById('customAlert').classList.remove('hidden');
+            }
+        };
+
+        // Fungsi tutup custom alert dan muat semula halaman
+        window.closeCustomAlert = () => {
+            document.getElementById('customAlert').classList.add('hidden');
+            location.reload();
+        };
+
+    </script>
 </body>
 </html>
