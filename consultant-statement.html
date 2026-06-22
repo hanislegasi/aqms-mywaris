@@ -77,76 +77,41 @@ June 2026
 </p>
 
 </div>
+
+</div>           
         <!-- SUMMARY CARDS -->
-        <div class="flex justify-between mt-6 border-t border-b py-4">
+       <div class="my-6">
 
-<div>
+<table class="w-full">
 
-<p class="text-sm text-gray-500">
-Commission
-</p>
+<tr>
+<td class="py-2">Commission</td>
+<td class="text-right font-bold" id="commissionTotal">RM0.00</td>
+</tr>
 
-<p id="commissionTotal"
-class="text-xl font-bold">
-RM0.00
-</p>
+<tr>
+<td class="py-2">Override</td>
+<td class="text-right font-bold" id="overrideTotal">RM0.00</td>
+</tr>
 
-</div>
+<tr>
+<td class="py-2">Total Earned</td>
+<td class="text-right font-bold text-green-600" id="earnedTotal">RM0.00</td>
+</tr>
 
-<div>
+<tr>
+<td class="py-2">Paid</td>
+<td class="text-right font-bold text-blue-600" id="paidTotal">RM0.00</td>
+</tr>
 
-<p class="text-sm text-gray-500">
-Override
-</p>
+<tr>
+<td class="py-2">Outstanding</td>
+<td class="text-right font-bold text-red-600" id="outstandingTotal">RM0.00</td>
+</tr>
 
-<p id="overrideTotal"
-class="text-xl font-bold">
-RM0.00
-</p>
-
-</div>
-
-<div>
-
-<p class="text-sm text-gray-500">
-Total Earned
-</p>
-
-<p id="earnedTotal"
-class="text-xl font-bold text-green-600">
-RM0.00
-</p>
+</table>
 
 </div>
-
-<div>
-
-<p class="text-sm text-gray-500">
-Paid
-</p>
-
-<p id="paidTotal"
-class="text-xl font-bold text-blue-600">
-RM0.00
-</p>
-
-</div>
-
-<div>
-
-<p class="text-sm text-gray-500">
-Outstanding
-</p>
-
-<p id="outstandingTotal"
-class="text-xl font-bold text-red-600">
-RM0.00
-</p>
-
-</div>
-
-</div>
-
         <!-- TABLE -->
         <div class="overflow-x-auto mb-8 border rounded-xl">
             <table class="w-full text-sm text-left">
@@ -363,22 +328,19 @@ html += `
 <tr class="bg-green-50">
 
 <td class="p-3">
-${
-pv.paidAt?.toDate()
-?.toLocaleDateString("ms-MY")
-|| "-"
-}
+${pv.paidAt?.toDate()?.toLocaleDateString("ms-MY") || "-"}
 </td>
 
 <td class="p-3">
-Payment Voucher
-${pv.pvNo || ""}
+Payment Voucher ${pv.pvNo || ""}
+</td>
+
+<td class="p-3">
+Payment
 </td>
 
 <td class="p-3 text-right text-red-600">
--RM${Number(
-pv.amount || 0
-).toFixed(2)}
+-RM${Number(pv.amount || 0).toFixed(2)}
 </td>
 
 </tr>
