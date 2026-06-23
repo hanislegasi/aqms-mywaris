@@ -50,9 +50,7 @@
         </div>
 
         <div class="bg-white rounded-xl shadow overflow-hidden">
-            <!-- PENTING: Pembungkus overflow-x-auto ditambah di sini -->
             <div class="overflow-x-auto custom-scrollbar">
-                <!-- min-w-[600px] memaksa jadual mengekalkan kelebaran, mewujudkan scroll di phone -->
                 <table class="w-full min-w-[600px]">
                     <thead class="bg-[#153638] text-white">
                         <tr>
@@ -73,13 +71,16 @@
         </div>
     </div>
 
-    <!-- Custom Message Box untuk menggantikan alert() -->
+    <!-- Custom Message Box -->
     <div id="customAlert" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 px-4">
         <div class="bg-white p-6 rounded-xl shadow-xl max-w-sm w-full text-center">
-            <div class="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            <!-- Icon Background & SVG dynamic update -->
+            <div id="alertIconBg" class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
+                <span id="alertIcon">
+                    <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </span>
             </div>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Berjaya!</h3>
+            <h3 id="alertTitle" class="text-xl font-bold text-gray-800 mb-2">Berjaya!</h3>
             <p id="alertMessage" class="text-gray-600 mb-6">Mesej di sini</p>
             <button onclick="closeCustomAlert()" class="bg-[#153638] text-white px-6 py-2 rounded-lg w-full font-medium hover:bg-[#0f2728] transition-colors">
                 Tutup & Muat Semula
@@ -89,7 +90,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
@@ -110,7 +111,6 @@
         snap.forEach((d) => {
             const row = d.data();
             
-            // Logik kekal sama
             if (row.accountCode !== "2000" || !row.description.startsWith("AQC")) return;
 
             const consultant = row.description;
@@ -132,8 +132,8 @@
                     <td class="p-3 text-right font-semibold">RM${payable[consultant].toFixed(2)}</td>
                     <td class="p-3 text-center">
                         <button 
-                            onclick="generatePV('${consultant.split(" ")[0]}', '${consultant}', ${payable[consultant]})"
-                            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                            onclick="generatePV('${consultant.split(" ")[0]}', '${consultant}', ${payable[consultant]}, this)"
+                            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors whitespace-nowrap">
                             Generate PV
                         </button>
                     </td>
@@ -143,9 +143,46 @@
 
         document.getElementById("payableTable").innerHTML = html || '<tr><td colspan="4" class="p-5 text-center text-gray-500">Tiada rekod setakat ini.</td></tr>';
 
-        // Fungsi PV (globalised supaya boleh dipanggil oleh butang dalam table)
-        window.generatePV = async (consultantNo, consultantName, amount) => {
+        // Fungsi PV yang dikemaskini
+        window.generatePV = async (consultantNo, consultantName, amount, btnElement) => {
+            // 1. Kunci butang sementara untuk elak klik bertubi-tubi
+            if (btnElement) {
+                btnElement.disabled = true;
+                btnElement.classList.add("opacity-50", "cursor-not-allowed");
+                btnElement.innerText = "Memproses...";
+            }
+
             try {
+                // 2. Semak pangkalan data jika PV (Status: PENDING) sudah wujud untuk konsultan ini
+                const q = query(
+                    collection(db, "paymentVouchers"),
+                    where("consultantNo", "==", consultantNo),
+                    where("status", "==", "PENDING")
+                );
+                
+                const querySnapshot = await getDocs(q);
+
+                // Jika sudah ada PV PENDING
+                if (!querySnapshot.empty) {
+                    // Set paparan Alert Amaran
+                    document.getElementById('alertTitle').innerText = "Perhatian";
+                    document.getElementById('alertTitle').className = "text-xl font-bold text-yellow-600 mb-2";
+                    document.getElementById('alertIconBg').className = "w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4";
+                    document.getElementById('alertIcon').innerHTML = `<svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
+                    
+                    document.getElementById('alertMessage').innerText = "PV untuk konsultan ini telah pun dijana dan sedang diproses (PENDING).";
+                    document.getElementById('customAlert').classList.remove('hidden');
+                    
+                    // Pulihkan butang semula jika pengguna mahu cuba lagi selepas ini
+                    if(btnElement) {
+                        btnElement.disabled = false;
+                        btnElement.classList.remove("opacity-50", "cursor-not-allowed");
+                        btnElement.innerText = "Generate PV";
+                    }
+                    return; // Hentikan fungsi di sini
+                }
+
+                // 3. Jika tiada, teruskan menjana PV baharu
                 const pvNo = "PV-" + Date.now();
 
                 await addDoc(collection(db, "paymentVouchers"), {
@@ -157,14 +194,33 @@
                     createdAt: new Date()
                 });
 
-                // Tunjuk Custom Alert (menggantikan alert asal)
+                // Set paparan Alert Berjaya
+                document.getElementById('alertTitle').innerText = "Berjaya!";
+                document.getElementById('alertTitle').className = "text-xl font-bold text-green-600 mb-2";
+                document.getElementById('alertIconBg').className = "w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4";
+                document.getElementById('alertIcon').innerHTML = `<svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+                
                 document.getElementById('alertMessage').innerText = "PV berjaya dijana (" + pvNo + ")";
                 document.getElementById('customAlert').classList.remove('hidden');
 
             } catch (error) {
                 console.error("Error generating PV: ", error);
+                
+                // Set paparan Alert Ralat
+                document.getElementById('alertTitle').innerText = "Ralat!";
+                document.getElementById('alertTitle').className = "text-xl font-bold text-red-600 mb-2";
+                document.getElementById('alertIconBg').className = "w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4";
+                document.getElementById('alertIcon').innerHTML = `<svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>`;
+                
                 document.getElementById('alertMessage').innerText = "Ralat: Gagal menjana PV.";
                 document.getElementById('customAlert').classList.remove('hidden');
+
+                // Pulihkan butang semula
+                if(btnElement) {
+                    btnElement.disabled = false;
+                    btnElement.classList.remove("opacity-50", "cursor-not-allowed");
+                    btnElement.innerText = "Generate PV";
+                }
             }
         };
 
