@@ -92,7 +92,18 @@ mb-4
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+       import {
+getFirestore,
+collection,
+getDocs,
+doc,
+updateDoc,
+addDoc,
+query,
+orderBy,
+limit
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
@@ -106,7 +117,20 @@ mb-4
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const snap = await getDocs(collection(db, "paymentVouchers"));
+        const snap = await getDocs(
+query(
+collection(
+db,
+"paymentVouchers"
+),
+orderBy(
+"createdAt",
+"desc"
+),
+limit(50)
+)
+);
+        
         let html = "";
 
         snap.forEach((d) => {
