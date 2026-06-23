@@ -558,6 +558,34 @@ ledgerSnap.forEach((d)=>{
 
 const row = d.data();
 
+const trxDate =
+row.date?.toDate();
+
+if(
+trxDate &&
+row.consultantNo === data.consultantNo
+){
+
+const month =
+trxDate.getMonth();
+
+if(row.accountCode === "5000"){
+
+monthlyCommission[month] +=
+Number(row.debit || 0);
+
+}
+
+if(row.accountCode === "5100"){
+
+monthlyOverride[month] +=
+Number(row.debit || 0);
+
+}
+
+}
+
+ 
 if(
 row.consultantNo === data.consultantNo
 ){
@@ -858,69 +886,99 @@ document.getElementById(
 
 
 
-const monthNames = [
-"Jan","Feb","Mac","Apr","Mei","Jun",
-"Jul","Ogos","Sep","Okt","Nov","Dis"
+const monthlyCommission = [
+0,0,0,0,0,0,0,0,0,0,0,0
 ];
 
- 
-const currentMonth =
-monthNames[new Date().getMonth()] +
-" " +
-new Date().getFullYear();
+const monthlyOverride = [
+0,0,0,0,0,0,0,0,0,0,0,0
+];
 
-labels: [currentMonth],
- 
+}); 
+
+const ctx =
+document
+.getElementById("salesChart")
+.getContext("2d");
+
 new Chart(ctx, {
+
 type: "bar",
+
 data: {
-labels: ["Jun 2026"],
+
+labels: [
+"Jan",
+"Feb",
+"Mac",
+"Apr",
+"Mei",
+"Jun",
+"Jul",
+"Ogos",
+"Sep",
+"Okt",
+"Nov",
+"Dis"
+],
 
 datasets: [
 
 {
 label: "Sales",
-data: [totalSales],
-backgroundColor: "#3B82F6"
+data: [
+monthlySales[1],
+monthlySales[2],
+monthlySales[3],
+monthlySales[4],
+monthlySales[5],
+monthlySales[6],
+monthlySales[7],
+monthlySales[8],
+monthlySales[9],
+monthlySales[10],
+monthlySales[11],
+monthlySales[12]
+],
+backgroundColor:"#3B82F6"
 },
 
 {
 label: "Commission",
-data: [totalCommission],
-backgroundColor: "#10B981"
+data: monthlyCommission,
+backgroundColor:"#10B981"
 },
 
 {
 label: "Override",
-data: [totalOverriding],
-backgroundColor: "#F59E0B"
+data: monthlyOverride,
+backgroundColor:"#F59E0B"
 }
 
 ]
+
 },
 
 options: {
-responsive: true,
-maintainAspectRatio: false,
 
-plugins: {
-legend: {
-position: "top"
+responsive:true,
+maintainAspectRatio:false,
+
+plugins:{
+legend:{
+position:"top"
 }
 },
 
-scales: {
-y: {
-beginAtZero: true
+scales:{
+y:{
+beginAtZero:true
 }
 }
-}
-});
 
+}
 
 }); 
-
- 
 
 
 
