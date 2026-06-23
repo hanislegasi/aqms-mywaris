@@ -226,12 +226,15 @@ pv.amount || 0
 Royalty
 </td>
 
+<td class="p-3">
+Founder
+</td>
+
 <td class="p-3 text-right">
 RM${royaltyPayable.toFixed(2)}
 </td>
 
 <td class="p-3 text-center">
-
 <button
 onclick="
 generatePV(
@@ -249,21 +252,17 @@ rounded-lg
 ">
 Generate PV
 </button>
-
 </td>
 </tr>
 
-<tr>
-<td class="p-3">
-Allowance
-</td>
 
+<tr>
+<td class="p-3">Allowance</td>
+<td class="p-3">Board</td>
 <td class="p-3 text-right">
 RM${allowancePayable.toFixed(2)}
 </td>
-
 <td class="p-3 text-center">
-
 <button
 onclick="
 generatePV(
@@ -274,21 +273,17 @@ ${allowancePayable}
 ">
 Generate PV
 </button>
-
 </td>
 </tr>
 
-<tr>
-<td class="p-3">
-Admin
-</td>
 
+<tr>
+<td class="p-3">Admin</td>
+<td class="p-3">System</td>
 <td class="p-3 text-right">
 RM${adminPayable.toFixed(2)}
 </td>
-
 <td class="p-3 text-center">
-
 <button
 onclick="
 generatePV(
@@ -299,21 +294,18 @@ ${adminPayable}
 ">
 Generate PV
 </button>
-
 </td>
 </tr>
 
-<tr>
-<td class="p-3">
-Shareholder
-</td>
 
+
+<tr>
+<td class="p-3">Shareholder</td>
+<td class="p-3">Shareholder</td>
 <td class="p-3 text-right">
 RM${shareholderPayable.toFixed(2)}
 </td>
-
 <td class="p-3 text-center">
-
 <button
 onclick="
 generatePV(
@@ -324,7 +316,6 @@ ${shareholderPayable}
 ">
 Generate PV
 </button>
-
 </td>
 </tr>
 `;
