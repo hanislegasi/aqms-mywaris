@@ -122,13 +122,18 @@
             ${pv.status}
         </span>
     </td>
-;
+
                     <td class="p-3 text-center">
                         <a href="payment-voucher-view.html?id=${d.id}" class="inline-block w-28 text-center bg-blue-600 text-white py-2 rounded-lg">
                             View
                         </a>
                         ${pv.status === "PENDING" ? 
-                            `<button onclick="markPaid('${d.id}', '${pv.consultantName}', ${pv.amount})" class="w-28 bg-green-600 text-white py-2 rounded-lg">
+                            `<button onclick="markPaid(
+'${d.id}',
+'${pv.type || "CONSULTANT"}',
+'${pv.payee || pv.consultantName}',
+${pv.amount}
+)" class="w-28 bg-green-600 text-white py-2 rounded-lg">
                                 Mark Paid
                             </button>` 
                             : 
@@ -143,32 +148,60 @@
 
         document.getElementById("pvTable").innerHTML = html;
 
-        window.markPaid = async (pvId, consultantName, amount) => {
+       window.markPaid = async (
+pvId,
+type,
+payee,
+amount
+) => {
             // Mengekalkan fungsi confirm() asal seperti permintaan anda
             if (!confirm("Confirm payment?")) {
                 return;
             }
 
-            await addDoc(collection(db, "ledger"), {
-                date: new Date(),
-                accountCode: "2000",
-                account: "Consultant Payable",
-                category: "liability",
-                description: consultantName,
-                debit: amount,
-                credit: 0
-            });
+            let accountCode = "2000";
+let accountName = "Consultant Payable";
 
-            await addDoc(collection(db, "ledger"), {
-                date: new Date(),
-                accountCode: "1000",
-                account: "Bank",
-                category: "asset",
-                description: consultantName,
-                debit: 0,
-                credit: amount
-            });
+if(type === "ROYALTY"){
+    accountCode = "3400";
+    accountName = "Royalty Reserve";
+}
 
+if(type === "ALLOWANCE"){
+    accountCode = "3300";
+    accountName = "Allowance Reserve";
+}
+
+if(type === "ADMIN"){
+    accountCode = "3200";
+    accountName = "Admin Reserve";
+}
+
+if(type === "SHAREHOLDER"){
+    accountCode = "3100";
+    accountName = "Shareholder Reserve";
+}
+
+await addDoc(collection(db, "ledger"), {
+    date: new Date(),
+    accountCode,
+    account: accountName,
+    category: "equity",
+    description: payee,
+    debit: amount,
+    credit: 0
+});
+
+await addDoc(collection(db, "ledger"), {
+    date: new Date(),
+    accountCode: "1000",
+    account: "Bank",
+    category: "asset",
+    description: payee,
+    debit: 0,
+    credit: amount
+});           
+           
             await updateDoc(doc(db, "paymentVouchers", pvId), {
                 status: "PAID",
                 paidAt: new Date()
