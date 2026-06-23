@@ -355,6 +355,21 @@ user.uid
 const data =
 userSnap.data();
 
+sessionStorage.setItem(
+"consultantNo",
+data.consultantNo
+);
+
+sessionStorage.setItem(
+"consultantName",
+data.nama
+);
+
+sessionStorage.setItem(
+"userUid",
+user.uid
+);
+ 
 consultantData = data;
  
 const referralLink =
