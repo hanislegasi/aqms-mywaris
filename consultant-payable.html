@@ -90,8 +90,19 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+        import {
+getFirestore,
+collection,
+getDocs,
+doc,
+updateDoc,
+addDoc,
+query,
+orderBy,
+limit
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        
         const firebaseConfig = {
             apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
             authDomain: "alqawthar-mywaris.firebaseapp.com",
@@ -105,7 +116,20 @@
         const db = getFirestore(app);
 
         // Fetch data
-        const snap = await getDocs(collection(db, "ledger"));
+       const snap =
+await getDocs(
+query(
+collection(
+db,
+"ledger"
+),
+orderBy(
+"date",
+"desc"
+),
+limit(500)
+)
+);
         const payable = {};
 
         snap.forEach((d) => {
