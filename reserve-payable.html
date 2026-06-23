@@ -376,6 +376,12 @@ pvNo,
 
 type,
 
+consultantNo:
+"-",
+
+consultantName:
+payee,
+
 payee,
 
 amount,
@@ -392,7 +398,8 @@ alert(
 "Payment Voucher Created"
 );
 
-location.reload();
+window.location.href =
+"payment-voucher.html";
 
 }
 catch(err){
