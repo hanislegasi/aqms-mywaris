@@ -863,12 +863,13 @@ const monthNames = [
 "Jul","Ogos","Sep","Okt","Nov","Dis"
 ];
 
-labels: [currentMonth],
  
 const currentMonth =
 monthNames[new Date().getMonth()] +
 " " +
 new Date().getFullYear();
+
+labels: [currentMonth],
  
 new Chart(ctx, {
 type: "bar",
