@@ -370,9 +370,9 @@ db,
 "paymentVouchers"
 ),
 where(
-"consultantNo",
+"type",
 "==",
-consultantNo
+type
 ),
 where(
 "status",
@@ -385,10 +385,9 @@ where(
 if(!existingPV.empty){
 
 alert(
-"Consultant masih mempunyai PV PENDING"
+type +
+" masih mempunyai PV PENDING"
 );
-
-button.disabled = false;
 
 return;
 
