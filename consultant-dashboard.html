@@ -452,6 +452,22 @@ Renew Now
 }
 
 let monthlySales = {};
+
+const monthlySales = {
+1:0,
+2:0,
+3:0,
+4:0,
+5:0,
+6:0,
+7:0,
+8:0,
+9:0,
+10:0,
+11:0,
+12:0
+};
+
  
 let activeClients = 0;
 let totalSales = 0;
@@ -474,15 +490,45 @@ u.role === "customer" &&
 activeClients++;
 
 if(u.paymentStatus === "paid"){
+
 totalSales += 350;
+
+const m =
+u.joinDate?.toDate()
+?.getMonth() + 1;
+
+if(m){
+monthlySales[m] += 350;
+}
+
 }
 
 if(u.hibahPaymentStatus === "paid"){
+
 totalSales += 2500;
+
+const m =
+u.joinDate?.toDate()
+?.getMonth() + 1;
+
+if(m){
+monthlySales[m] += 2500;
+}
+
 }
 
 if(u.pusakaPaymentStatus === "paid"){
+
 totalSales += 800;
+
+const m =
+u.joinDate?.toDate()
+?.getMonth() + 1;
+
+if(m){
+monthlySales[m] += 800;
+}
+
 }
 
 }
@@ -809,6 +855,47 @@ document.getElementById(
 ).innerHTML =
 "RM" + totalOverriding.toLocaleString();
 
+new Chart(
+document.getElementById("salesChart"),
+{
+type:"line",
+
+data:{
+labels:[
+"Jan","Feb","Mac",
+"Apr","Mei","Jun",
+"Jul","Ogos","Sep",
+"Okt","Nov","Dis"
+],
+
+datasets:[{
+
+label:"Sales",
+
+data:[
+monthlySales[1],
+monthlySales[2],
+monthlySales[3],
+monthlySales[4],
+monthlySales[5],
+monthlySales[6],
+monthlySales[7],
+monthlySales[8],
+monthlySales[9],
+monthlySales[10],
+monthlySales[11],
+monthlySales[12]
+]
+
+}]
+},
+
+options:{
+responsive:true
+}
+
+});
+ 
 const labels = [
 "Jan",
 "Feb",
