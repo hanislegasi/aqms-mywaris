@@ -57,6 +57,7 @@
                     <thead class="bg-[#153638] text-white">
                         <tr>
                             <th class="p-3 text-left">PV No</th>
+                            <th class="p-3 text-left">Type</th>
                             <th class="p-3 text-left">Consultant</th>
                             <th class="p-3 text-right">Amount</th>
                             <th class="p-3 text-center">Status</th>
@@ -93,16 +94,35 @@
         snap.forEach((d) => {
             const pv = d.data();
             
-            html += `
-                <tr class="border-b">
-                    <td class="p-3">${pv.pvNo}</td>
-                    <td class="p-3">${pv.consultantName}</td>
-                    <td class="p-3 text-right">RM${Number(pv.amount).toFixed(2)}</td>
-                    <td class="p-3 text-center">
-                        <span class="${pv.status === "PAID" ? 'text-green-600' : 'text-orange-600'}">
-                            ${pv.status}
-                        </span>
-                    </td>
+           html += `
+<tr class="border-b">
+
+    <td class="p-3">
+        ${pv.pvNo}
+    </td>
+
+    <td class="p-3">
+        ${pv.type || "CONSULTANT"}
+    </td>
+
+    <td class="p-3">
+        ${pv.payee || pv.consultantName}
+    </td>
+
+    <td class="p-3 text-right">
+        RM${Number(pv.amount || 0).toFixed(2)}
+    </td>
+
+    <td class="p-3 text-center">
+        <span class="${
+            pv.status === "PAID"
+            ? "text-green-600"
+            : "text-orange-600"
+        }">
+            ${pv.status}
+        </span>
+    </td>
+;
                     <td class="p-3 text-center">
                         <a href="payment-voucher-view.html?id=${d.id}" class="inline-block w-28 text-center bg-blue-600 text-white py-2 rounded-lg">
                             View
