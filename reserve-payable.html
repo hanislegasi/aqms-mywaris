@@ -233,6 +233,13 @@ RM${royaltyPayable.toFixed(2)}
 <td class="p-3 text-center">
 
 <button
+onclick="
+generatePV(
+'ROYALTY',
+'Founder',
+${royaltyPayable}
+)
+"
 class="
 bg-green-600
 text-white
@@ -240,9 +247,7 @@ px-4
 py-2
 rounded-lg
 ">
-
 Generate PV
-
 </button>
 
 </td>
@@ -260,16 +265,14 @@ RM${allowancePayable.toFixed(2)}
 <td class="p-3 text-center">
 
 <button
-class="
-bg-green-600
-text-white
-px-4
-py-2
-rounded-lg
+onclick="
+generatePV(
+'ALLOWANCE',
+'Board',
+${allowancePayable}
+)
 ">
-
 Generate PV
-
 </button>
 
 </td>
@@ -287,16 +290,14 @@ RM${adminPayable.toFixed(2)}
 <td class="p-3 text-center">
 
 <button
-class="
-bg-green-600
-text-white
-px-4
-py-2
-rounded-lg
+onclick="
+generatePV(
+'ADMIN',
+'System',
+${adminPayable}
+)
 ">
-
 Generate PV
-
 </button>
 
 </td>
@@ -314,16 +315,14 @@ RM${shareholderPayable.toFixed(2)}
 <td class="p-3 text-center">
 
 <button
-class="
-bg-green-600
-text-white
-px-4
-py-2
-rounded-lg
+onclick="
+generatePV(
+'SHAREHOLDER',
+'Shareholder',
+${shareholderPayable}
+)
 ">
-
 Generate PV
-
 </button>
 
 </td>
@@ -338,9 +337,63 @@ html;
      window.generatePV = async (
 type,
 payee,
-amount,
-btnElement
+amount
 ) => {
+
+try {
+
+if(amount <= 0){
+
+alert("No payable balance");
+
+return;
+
+}
+
+const pvNo =
+"PV-" +
+Date.now();
+
+await addDoc(
+collection(
+db,
+"paymentVouchers"
+),
+{
+pvNo,
+
+type,
+
+payee,
+
+amount,
+
+status:
+"PENDING",
+
+createdAt:
+new Date()
+}
+);
+
+alert(
+"Payment Voucher Created"
+);
+
+location.reload();
+
+}
+catch(err){
+
+console.error(err);
+
+alert(
+err.message
+);
+
+}
+
+};
             // 1. Kunci butang sementara untuk elak klik bertubi-tubi
             if (btnElement) {
                 btnElement.disabled = true;
