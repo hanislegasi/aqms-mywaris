@@ -186,7 +186,7 @@ RM0
 <div class="bg-white p-5 rounded-2xl shadow mb-5">
 
 <h3 class="text-xl font-bold mb-4">
-Jualan Bulanan
+Performance Summary
 </h3>
 
 <div class="relative w-full h-52 md:h-72 lg:h-80">
@@ -861,34 +861,54 @@ document.getElementById("salesChart"),
 type:"bar",
 
 data:{
+
 labels:[
-"Jan","Feb","Mac",
-"Apr","Mei","Jun",
-"Jul","Ogos","Sep",
-"Okt","Nov","Dis"
+"Sales",
+"Commission",
+"Overriding"
 ],
 
 datasets:[{
 
-label:"Sales",
-
 data:[
-monthlySales[1],
-monthlySales[2],
-monthlySales[3],
-monthlySales[4],
-monthlySales[5],
-monthlySales[6],
-monthlySales[7],
-monthlySales[8],
-monthlySales[9],
-monthlySales[10],
-monthlySales[11],
-monthlySales[12]
-]
+totalSales,
+totalCommission,
+totalOverriding
+],
+
+backgroundColor:[
+"#3B82F6",
+"#22C55E",
+"#F59E0B"
+],
+
+borderRadius:10
 
 }]
+
 },
+
+options:{
+
+responsive:true,
+
+maintainAspectRatio:false,
+
+plugins:{
+legend:{
+display:false
+}
+},
+
+scales:{
+y:{
+beginAtZero:true
+}
+}
+
+}
+
+});
 
 options:{
 responsive:true,
