@@ -167,11 +167,50 @@ limit(500)
 
         document.getElementById("payableTable").innerHTML = html || '<tr><td colspan="4" class="p-5 text-center text-gray-500">Tiada rekod setakat ini.</td></tr>';
 
+window.generatePV = async (
+consultantNo,
+consultantName,
+amount,
+button
+) => {
 
-              
-                
-               window.location.href =
+try{
+
+button.disabled = true;
+
+const pvNo =
+"PV-" +
+Date.now();
+
+await addDoc(
+collection(
+db,
+"paymentVouchers"
+),
+{
+pvNo,
+consultantNo,
+consultantName,
+amount,
+type:"CONSULTANT",
+status:"PENDING",
+createdAt:new Date()
+}
+);
+
+location.href =
 "payment-voucher.html";
+
+}
+catch(err){
+
+console.error(err);
+
+alert(err.message);
+
+}
+
+};
 
            
 
