@@ -856,68 +856,64 @@ document.getElementById(
 "RM" + totalOverriding.toLocaleString();
 
 
-console.log(
-"Sales:",
-totalSales,
-"Commission:",
-totalCommission,
-"Override:",
-totalOverriding
-);
+
+
+const monthNames = [
+"Jan","Feb","Mac","Apr","Mei","Jun",
+"Jul","Ogos","Sep","Okt","Nov","Dis"
+];
+
+labels: [currentMonth],
  
-new Chart(
-document.getElementById("salesChart"),
+const currentMonth =
+monthNames[new Date().getMonth()] +
+" " +
+new Date().getFullYear();
+ 
+new Chart(ctx, {
+type: "bar",
+data: {
+labels: ["Jun 2026"],
+
+datasets: [
+
 {
-type:"bar",
-
-data:{
-
-labels:[
-"Sales",
-"Commission",
-"Overriding"
-],
-
-datasets:[{
-
-data:[
-totalSales,
-totalCommission,
-totalOverriding
-],
-
-backgroundColor:[
-"#3B82F6",
-"#22C55E",
-"#F59E0B"
-],
-
-borderRadius:10
-
-}]
-
+label: "Sales",
+data: [totalSales],
+backgroundColor: "#3B82F6"
 },
 
-options:{
+{
+label: "Commission",
+data: [totalCommission],
+backgroundColor: "#10B981"
+},
 
-responsive:true,
+{
+label: "Override",
+data: [totalOverriding],
+backgroundColor: "#F59E0B"
+}
 
-maintainAspectRatio:false,
+]
+},
 
-plugins:{
-legend:{
-display:false
+options: {
+responsive: true,
+maintainAspectRatio: false,
+
+plugins: {
+legend: {
+position: "top"
 }
 },
 
-scales:{
-y:{
-beginAtZero:true
+scales: {
+y: {
+beginAtZero: true
 }
 }
-
 }
-
 });
 
 
