@@ -394,20 +394,32 @@ ${consultantAddress}
 </div>
 `;
                 
-if(firstDate && lastDate){
+const today = new Date();
 
-const periodText =
-firstDate.toLocaleDateString("ms-MY")
-+
-" - " +
-lastDate.toLocaleDateString("ms-MY");
+const firstDay =
+new Date(
+today.getFullYear(),
+today.getMonth(),
+1
+);
+
+const lastDay =
+new Date(
+today.getFullYear(),
+today.getMonth()+1,
+0
+);
 
 document.getElementById(
 "periodInfo"
 ).innerHTML =
-"Period : " + periodText;
-
-}
+"Period : "
++
+firstDay.toLocaleDateString("ms-MY")
++
+" - "
++
+lastDay.toLocaleDateString("ms-MY");
 
                 
             } catch (error) {
