@@ -575,7 +575,7 @@ row.consultantNo === data.consultantNo
 ){
 
 const month =
-trxDate.getMonth() + 1;
+trxDate.getMonth();
  
 if(row.accountCode === "5000"){
 
@@ -879,7 +879,9 @@ document.getElementById(
 "RM" + totalOverriding.toLocaleString();
 
 
-
+console.log("monthlySales", monthlySales);
+console.log("monthlyCommission", monthlyCommission);
+console.log("monthlyOverride", monthlyOverride);
 
 
 
