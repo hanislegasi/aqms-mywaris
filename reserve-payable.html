@@ -90,7 +90,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
@@ -362,6 +362,38 @@ return;
 
 }
 
+const existingPV =
+await getDocs(
+query(
+collection(
+db,
+"paymentVouchers"
+),
+where(
+"consultantNo",
+"==",
+consultantNo
+),
+where(
+"status",
+"==",
+"PENDING"
+)
+)
+);
+
+if(!existingPV.empty){
+
+alert(
+"Consultant masih mempunyai PV PENDING"
+);
+
+button.disabled = false;
+
+return;
+
+}
+    
 const pvNo =
 "PV-" +
 Date.now();
