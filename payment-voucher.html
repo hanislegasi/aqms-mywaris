@@ -65,45 +65,7 @@ mb-4
 
 </a>
 
-<select id="pvType">
 
-<option value="CONSULTANT">
-Consultant
-</option>
-
-<option value="ROYALTY">
-Royalty
-</option>
-
-<option value="ALLOWANCE">
-Allowance
-</option>
-
-<option value="ADMIN">
-Admin
-</option>
-
-<option value="SHAREHOLDER">
-Shareholder
-</option>
-
-<option value="TRAVEL">
-Travel Claim
-</option>
-
-<option value="MARKETING">
-Marketing
-</option>
-
-<option value="OFFICE">
-Office Expense
-</option>
-
-<option value="OTHERS">
-Others
-</option>
-
-</select>
         
         <div class="bg-white rounded-xl shadow overflow-hidden">
             <!-- Pembungkus scroll ditambah di sini -->
@@ -114,7 +76,7 @@ Others
                         <tr>
                             <th class="p-3 text-left">PV No</th>
                             <th class="p-3 text-left">Type</th>
-                            <th class="p-3 text-left">Consultant</th>
+                            <th class="p-3 text-left">Payee</th>
                             <th class="p-3 text-right">Amount</th>
                             <th class="p-3 text-center">Status</th>
                             <th class="p-3 text-center">Action</th>
@@ -224,12 +186,12 @@ if(type === "ROYALTY"){
 }
 
 if(type === "ALLOWANCE"){
-    accountCode = "3300";
+    accountCode = "3200";
     accountName = "Allowance Reserve";
 }
 
 if(type === "ADMIN"){
-    accountCode = "3200";
+    accountCode = "3300";
     accountName = "Admin Reserve";
 }
 
@@ -238,11 +200,40 @@ if(type === "SHAREHOLDER"){
     accountName = "Shareholder Reserve";
 }
 
+if(type === "TRAVEL"){
+    accountCode = "5800";
+    accountName = "Travelling Expense";
+}
+
+if(type === "MARKETING"){
+    accountCode = "5500";
+    accountName = "Marketing Expense";
+}
+
+if(type === "OFFICE"){
+    accountCode = "5300";
+    accountName = "Office Expense";
+}
+
+if(type === "OTHERS"){
+    accountCode = "5900";
+    accountName = "Other Expense";
+}
+
+           
 await addDoc(collection(db, "ledger"), {
     date: new Date(),
     accountCode,
     account: accountName,
-    category: "equity",
+    category:
+type === "CONSULTANT"
+? "liability"
+: (
+["ROYALTY","ALLOWANCE","ADMIN","SHAREHOLDER"]
+.includes(type)
+? "equity"
+: "expense"
+),
     description: payee,
     debit: amount,
     credit: 0
