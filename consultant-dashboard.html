@@ -468,6 +468,14 @@ const monthlySales = {
 12:0
 };
 
+const monthlyCommission = [
+0,0,0,0,0,0,0,0,0,0,0,0
+];
+
+const monthlyOverride = [
+0,0,0,0,0,0,0,0,0,0,0,0
+];
+
  
 let activeClients = 0;
 let totalSales = 0;
@@ -567,8 +575,8 @@ row.consultantNo === data.consultantNo
 ){
 
 const month =
-trxDate.getMonth();
-
+trxDate.getMonth() + 1;
+ 
 if(row.accountCode === "5000"){
 
 monthlyCommission[month] +=
@@ -593,20 +601,7 @@ row.consultantNo === data.consultantNo
 const trxDate =
 row.date?.toDate();
 
-if(trxDate){
 
-const monthKey =
-trxDate.getMonth()+1;
-
-monthlySales[monthKey] =
-(
-monthlySales[monthKey]
-|| 0
-)
-+
-Number(row.credit || 0);
-
-}
 
 if(row.accountCode === "5000"){
 
@@ -886,15 +881,8 @@ document.getElementById(
 
 
 
-const monthlyCommission = [
-0,0,0,0,0,0,0,0,0,0,0,0
-];
 
-const monthlyOverride = [
-0,0,0,0,0,0,0,0,0,0,0,0
-];
 
-}); 
 
 const ctx =
 document
