@@ -252,7 +252,7 @@ document.getElementById("status").innerHTML =
 pv.status;
 
 document.getElementById("consultant").innerHTML =
-pv.consultantName;
+pv.payee || pv.consultantName;
 
 document.getElementById("amount").innerHTML =
 "RM" + Number(pv.amount).toFixed(2);
