@@ -278,24 +278,44 @@ credit:0
 );
 
 }
+
+const pvDoc =
+await getDoc(
+doc(db,"paymentVouchers",pvId)
+);
+
+const pv =
+pvDoc.data();
            
-await addDoc(collection(db, "ledger"), {
-    date: new Date(),
-    accountCode,
-    account: accountName,
-    category:
-type === "CONSULTANT"
-? "liability"
-: (
-["ROYALTY","ALLOWANCE","ADMIN","SHAREHOLDER"]
-.includes(type)
-? "equity"
-: "expense"
-),
-    description: payee,
+if(pv.manual){
+
+await addDoc(
+collection(db,"ledger"),
+{
+    date:new Date(),
+    accountCode: pv.accountCode,
+    account: pv.accountName,
+    category:"expense",
+    description: pv.description,
     debit: amount,
-    credit: 0
+    credit:0
 });
+
+}else{
+
+await addDoc(
+collection(db,"ledger"),
+{
+    date:new Date(),
+    accountCode,
+    account:accountName,
+    category,
+    description:payee,
+    debit:amount,
+    credit:0
+});
+
+}
 
 await addDoc(collection(db, "ledger"), {
     date: new Date(),
