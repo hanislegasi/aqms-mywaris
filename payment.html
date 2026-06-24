@@ -308,22 +308,7 @@ royalty
 }
 );
 
-await addDoc(
-collection(
-db,
-"companyAllocation"
-),
-{
-memberNo,
-customerName: customer.nama,
-sale: saleAmount,
-shareholder,
-allowance,
-adminOperation,
-royalty,
-company,
-createdAt:new Date()
-});
+
 
 
 const usersSnap =
