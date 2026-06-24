@@ -201,47 +201,74 @@ amount
                 return;
             }
 
-            let accountCode = "2000";
-let accountName = "Consultant Payable";
+           let accountCode = "";
+let accountName = "";
+let category = "";
+
+if(type === "CONSULTANT"){
+    accountCode = "2000";
+    accountName = "Consultant Payable";
+    category = "liability";
+}
 
 if(type === "ROYALTY"){
     accountCode = "3400";
     accountName = "Royalty Reserve";
+    category = "equity";
 }
 
 if(type === "ALLOWANCE"){
     accountCode = "3200";
     accountName = "Allowance Reserve";
+    category = "equity";
 }
 
 if(type === "ADMIN"){
     accountCode = "3300";
     accountName = "Admin Reserve";
+    category = "equity";
 }
 
 if(type === "SHAREHOLDER"){
     accountCode = "3100";
     accountName = "Shareholder Reserve";
+    category = "equity";
 }
 
 if(type === "TRAVEL"){
     accountCode = "5800";
-    accountName = "Travelling Expense";
+    accountName = "Travel Expense";
+    category = "expense";
 }
 
 if(type === "MARKETING"){
     accountCode = "5500";
     accountName = "Marketing Expense";
+    category = "expense";
 }
 
 if(type === "OFFICE"){
     accountCode = "5300";
     accountName = "Office Expense";
+    category = "expense";
+}
+
+if(type === "UTILITY"){
+    accountCode = "5400";
+    accountName = "Utility Expense";
+    category = "expense";
+}
+
+if(type === "SYSTEM & SOFTWARE"){
+    accountCode = "5600";
+    accountName = "System & Software";
+    category = "expense";
 }
 
 if(type === "OTHERS"){
     accountCode = "5900";
     accountName = "Other Expense";
+    category = "expense";
 }
 
            
