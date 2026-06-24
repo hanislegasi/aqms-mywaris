@@ -51,31 +51,15 @@ Create Payment Voucher
 id="type"
 class="w-full border rounded-lg p-3">
 
-<option value="TRAVEL">
-Travel Claim
+<select
+id="accountCode"
+class="w-full border rounded-lg p-3">
+<option>
+Loading...
 </option>
-
-<option value="MARKETING">
-Marketing
-</option>
-
-<option value="OFFICE">
-Office Expense
-</option>
-
-<option value="UTILITY">
-Utility
-</option>
-
-<option value="RENTAL">
-Rental
-</option>
-
-<option value="OTHERS">
-Others
-</option>
-
+ 
 </select>
+
 </div>
 
 <div>
@@ -153,6 +137,40 @@ initializeApp(firebaseConfig);
 const db =
 getFirestore(app);
 
+const coaSnap =
+await getDocs(
+collection(
+db,
+"chartOfAccounts"
+)
+);
+
+let coaHtml = "";
+
+coaSnap.forEach((d)=>{
+
+const coa = d.data();
+
+if(
+coa.category === "expense"
+){
+
+coaHtml += `
+<option
+value="${coa.code}">
+${coa.code} - ${coa.account}
+</option>
+`;
+
+}
+
+});
+
+document.getElementById(
+"accountCode"
+).innerHTML =
+coaHtml;
+
  
 window.createPV = async()=>{
 
@@ -202,6 +220,21 @@ const pvNo =
 "PV-" +
 Date.now();
 
+const selectedOption =
+document.getElementById(
+"accountCode"
+);
+
+const accountCode =
+selectedOption.value;
+
+const accountName =
+selectedOption.options[
+selectedOption.selectedIndex
+]
+.text.split(" - ")[1];
+
+ 
 await addDoc(
 collection(
 db,
@@ -212,10 +245,15 @@ pvNo,
 
 period:
 currentPeriod,
+
+accountCode,
+
+accountName,
+
  
-type:
+accountCode:
 document.getElementById(
-"type"
+"accountCode"
 ).value,
 
 payee:
