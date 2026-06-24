@@ -235,42 +235,32 @@ if(type === "SHAREHOLDER"){
     category = "equity";
 }
 
-if(type === "TRAVEL"){
-    accountCode = "5800";
-    accountName = "Travel Expense";
-    category = "expense";
-}
+await addDoc(
+collection(
+db,
+"ledger"
+),
+{
+date:new Date(),
 
-if(type === "MARKETING"){
-    accountCode = "5500";
-    accountName = "Marketing Expense";
-    category = "expense";
-}
+accountCode:
+pv.accountCode,
 
-if(type === "OFFICE"){
-    accountCode = "5300";
-    accountName = "Office Expense";
-    category = "expense";
-}
+account:
+pv.accountName,
 
-if(type === "UTILITY"){
-    accountCode = "5400";
-    accountName = "Utility Expense";
-    category = "expense";
-}
+category:
+"expense",
 
-if(type === "SYSTEM & SOFTWARE"){
-    accountCode = "5600";
-    accountName = "System & Software";
-    category = "expense";
-}
+description:
+payee,
 
-if(type === "OTHERS"){
-    accountCode = "5900";
-    accountName = "Other Expense";
-    category = "expense";
-}
+debit:
+amount,
 
+credit:0
+}
+);
            
 await addDoc(collection(db, "ledger"), {
     date: new Date(),
