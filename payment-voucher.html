@@ -248,44 +248,8 @@ if(type === "SHAREHOLDER"){
     category = "equity";
 }
 
-if(pv.manual){
 
-await addDoc(
-collection(
-db,
-"ledger"
-),
-{
-date:new Date(),
 
-accountCode:
-pv.accountCode,
-
-account:
-pv.accountName,
-
-category:
-"expense",
-
-description:
-pv.description || payee,
-
-debit:
-amount,
-
-credit:0
-}
-);
-
-}
-
-const pvDoc =
-await getDoc(
-doc(db,"paymentVouchers",pvId)
-);
-
-const pv =
-pvDoc.data();
            
 if(pv.manual){
 
