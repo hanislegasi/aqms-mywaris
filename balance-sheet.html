@@ -120,7 +120,13 @@ collection(db,"ledger")
 
 let bank = 0;
 let consultantPayable = 0;
+let shareholderReserve = 0;
+let allowanceReserve = 0;
+let adminReserve = 0;
+let royaltyReserve = 0;
 
+
+  
 let salesEWasiat = 0;
 let salesHibah = 0;
 let salesPusaka = 0;
@@ -153,6 +159,26 @@ Number(row.debit || 0);
 
 }
 
+if(row.accountCode === "3100"){
+shareholderReserve += Number(row.credit || 0);
+shareholderReserve -= Number(row.debit || 0);
+}
+
+if(row.accountCode === "3200"){
+allowanceReserve += Number(row.credit || 0);
+allowanceReserve -= Number(row.debit || 0);
+}
+
+if(row.accountCode === "3300"){
+adminReserve += Number(row.credit || 0);
+adminReserve -= Number(row.debit || 0);
+}
+
+if(row.accountCode === "3400"){
+royaltyReserve += Number(row.credit || 0);
+royaltyReserve -= Number(row.debit || 0);
+}
+  
 if(row.accountCode === "4000")
 salesEWasiat += Number(row.credit || 0);
 
@@ -190,7 +216,11 @@ const totalAssets =
 bank;
 
 const totalLiabilities =
-consultantPayable;
+consultantPayable +
+shareholderReserve +
+allowanceReserve +
+adminReserve +
+royaltyReserve;
 
 const totalEquity =
 netProfit;
