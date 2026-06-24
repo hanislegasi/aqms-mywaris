@@ -187,14 +187,7 @@ salesHibah += Number(row.credit || 0);
 if(row.accountCode === "4200")
 salesPusaka += Number(row.credit || 0);
 
-if(row.accountCode === "5000")
-commission += Number(row.debit || 0);
 
-if(row.accountCode === "5100")
-override += Number(row.debit || 0);
-
-});
-  
 if(
 row.accountCode &&
 row.accountCode.startsWith("5")
@@ -208,22 +201,13 @@ expenses[row.account] || 0
 Number(row.debit || 0);
 
 }
+  
+});
+  
+
 
   
-const netProfit =
 
-(
-salesEWasiat +
-salesHibah +
-salesPusaka
-)
-
--
-
-(
-commission +
-override
-);
 
 const totalAssets =
 bank;
@@ -245,6 +229,12 @@ totalEquity;
 const difference =
 totalAssets - totalLE;
 
+const totalRevenue =
+salesEWasiat +
+salesHibah +
+salesPusaka;
+
+  
 const totalExpense =
 Object.values(expenses)
 .reduce((a,b)=>a+b,0);
