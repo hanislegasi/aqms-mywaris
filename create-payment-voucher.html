@@ -47,9 +47,7 @@ Create Payment Voucher
 <div>
 <label>PV Type</label>
 
-<select
-id="type"
-class="w-full border rounded-lg p-3">
+
 
 <select
 id="accountCode"
@@ -116,7 +114,8 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
 getFirestore,
 collection,
-addDoc
+addDoc,
+getDocs
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -250,16 +249,7 @@ accountCode,
 
 accountName,
 
- 
-accountCode:
-document.getElementById(
-"accountCode"
-).value,
-
-payee:
-document.getElementById(
-"payee"
-).value,
+payee, 
 
 description:
 document.getElementById(
@@ -279,20 +269,7 @@ new Date()
 }
 );
 
-const payee =
-document.getElementById(
-"payee"
-).value.trim();
 
-if(!payee){
-
-alert(
-"Payee Required"
-);
-
-return;
-
-}
  
 alert(
 "Payment Voucher Created"
