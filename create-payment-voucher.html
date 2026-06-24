@@ -151,13 +151,13 @@ coaSnap.forEach((d)=>{
 const coa = d.data();
 
 if(
-coa.category === "expense"
+coa.type?.toLowerCase() === "expense"
 ){
 
 coaHtml += `
 <option
 value="${coa.code}">
-${coa.code} - ${coa.account}
+${coa.code} - ${coa.name}
 </option>
 `;
 
