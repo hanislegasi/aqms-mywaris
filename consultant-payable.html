@@ -210,11 +210,52 @@ button.disabled = false;
 return;
 
 }
+
+const currentPeriod =
+new Date().getFullYear()
++
+"-" +
+String(
+new Date().getMonth()+1
+).padStart(2,"0");
     
 const pvNo =
 "PV-" +
 Date.now();
 
+const existingPV =
+await getDocs(
+query(
+collection(
+db,
+"paymentVouchers"
+),
+where(
+"consultantNo",
+"==",
+consultantNo
+),
+where(
+"period",
+"==",
+currentPeriod
+)
+)
+);
+
+if(!existingPV.empty){
+
+alert(
+consultantNo +
+" telah mempunyai PV bagi bulan ini"
+);
+
+button.disabled = false;
+
+return;
+
+}
+    
 await addDoc(
 collection(
 db,
@@ -222,12 +263,28 @@ db,
 ),
 {
 pvNo,
+
 consultantNo,
+
 consultantName,
+
+type:
+"CONSULTANT",
+
+period:
+currentPeriod,
+
+description:
+"Commission " +
+currentPeriod,
+
 amount,
-type:"CONSULTANT",
-status:"PENDING",
-createdAt:new Date()
+
+status:
+"PENDING",
+
+createdAt:
+new Date()
 }
 );
 
