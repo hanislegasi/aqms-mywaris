@@ -353,7 +353,7 @@ amount
 ) => {
 
 try {
-
+   
 if(amount <= 0){
 
 alert("No payable balance");
@@ -362,6 +362,14 @@ return;
 
 }
 
+const currentPeriod =
+new Date().getFullYear()
++
+"-" +
+String(
+new Date().getMonth()+1
+).padStart(2,"0");
+    
 const existingPV =
 await getDocs(
 query(
@@ -393,24 +401,7 @@ return;
 
 }
 
-if(!existingPV.empty){
 
-alert(
-type +
-" masih mempunyai PV PENDING"
-);
-
-return;
-
-}
-
-const currentPeriod =
-new Date().getFullYear()
-+
-"-" +
-String(
-new Date().getMonth()+1
-).padStart(2,"0");
     
 const pvNo =
 "PV-" +
