@@ -375,12 +375,23 @@ where(
 type
 ),
 where(
-"status",
+"period",
 "==",
-"PENDING"
+currentPeriod
 )
 )
 );
+
+if(!existingPV.empty){
+
+alert(
+type +
+" untuk bulan ini telah dijana"
+);
+
+return;
+
+}
 
 if(!existingPV.empty){
 
@@ -392,6 +403,14 @@ type +
 return;
 
 }
+
+const currentPeriod =
+new Date().getFullYear()
++
+"-" +
+String(
+new Date().getMonth()+1
+).padStart(2,"0");
     
 const pvNo =
 "PV-" +
@@ -407,6 +426,14 @@ pvNo,
 
 type,
 
+period:
+currentPeriod,
+
+description:
+type +
+" " +
+currentPeriod,
+    
 consultantNo:
 "-",
 
@@ -425,6 +452,8 @@ new Date()
 }
 );
 
+
+    
 alert(
 "Payment Voucher Created"
 );
