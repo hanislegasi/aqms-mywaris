@@ -97,6 +97,7 @@ getFirestore,
 collection,
 getDocs,
 doc,
+getDoc,
 updateDoc,
 addDoc,
 query,
@@ -201,6 +202,18 @@ amount
                 return;
             }
 
+const pvDoc =
+await getDoc(
+doc(
+db,
+"paymentVouchers",
+pvId
+)
+);
+
+const pv =
+pvDoc.data();
+           
            let accountCode = "";
 let accountName = "";
 let category = "";
@@ -235,6 +248,8 @@ if(type === "SHAREHOLDER"){
     category = "equity";
 }
 
+if(pv.manual){
+
 await addDoc(
 collection(
 db,
@@ -253,7 +268,7 @@ category:
 "expense",
 
 description:
-payee,
+pv.description || payee,
 
 debit:
 amount,
@@ -261,6 +276,8 @@ amount,
 credit:0
 }
 );
+
+}
            
 await addDoc(collection(db, "ledger"), {
     date: new Date(),
