@@ -136,10 +136,36 @@ addDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+const firebaseConfig = {
+
+apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain: "alqawthar-mywaris.firebaseapp.com",
+projectId: "alqawthar-mywaris",
+storageBucket: "alqawthar-mywaris.firebasestorage.app",
+messagingSenderId: "3498810778",
+appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+ 
 window.createPV = async()=>{
 
 try{
 
+const currentPeriod =
+new Date().getFullYear()
++
+"-" +
+String(
+new Date().getMonth()+1
+).padStart(2,"0");
+ 
 const amount =
 Number(
 document.getElementById(
@@ -147,6 +173,21 @@ document.getElementById(
 ).value
 );
 
+const payee =
+document.getElementById(
+"payee"
+).value.trim();
+
+if(!payee){
+
+alert(
+"Payee Required"
+);
+
+return;
+
+}
+ 
 if(amount <= 0){
 
 alert(
@@ -169,6 +210,9 @@ db,
 {
 pvNo,
 
+period:
+currentPeriod,
+ 
 type:
 document.getElementById(
 "type"
@@ -197,6 +241,21 @@ new Date()
 }
 );
 
+const payee =
+document.getElementById(
+"payee"
+).value.trim();
+
+if(!payee){
+
+alert(
+"Payee Required"
+);
+
+return;
+
+}
+ 
 alert(
 "Payment Voucher Created"
 );
