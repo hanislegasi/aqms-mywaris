@@ -179,37 +179,8 @@ try{
 
 button.disabled = true;
 
-const existingPV =
-await getDocs(
-query(
-collection(
-db,
-"paymentVouchers"
-),
-where(
-"consultantNo",
-"==",
-consultantNo
-),
-where(
-"status",
-"==",
-"PENDING"
-)
-)
-);
 
-if(!existingPV.empty){
 
-alert(
-"Consultant masih mempunyai PV PENDING"
-);
-
-button.disabled = false;
-
-return;
-
-}
 
 const currentPeriod =
 new Date().getFullYear()
