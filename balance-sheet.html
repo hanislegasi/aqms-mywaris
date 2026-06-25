@@ -121,9 +121,9 @@ collection(db,"ledger")
 let bank = 0;
 let consultantPayable = 0;
 let shareholderReserve = 0;
-let allowanceReserve = 0;
-let adminReserve = 0;
-let royaltyReserve = 0;
+let allowancePayable = 0;
+let adminPayable = 0;
+let royaltyPayable = 0;
 
 
   
@@ -163,19 +163,19 @@ shareholderReserve += Number(row.credit || 0);
 shareholderReserve -= Number(row.debit || 0);
 }
 
-if(row.accountCode === "3200"){
-allowanceReserve += Number(row.credit || 0);
-allowanceReserve -= Number(row.debit || 0);
+if(row.accountCode === "2200"){
+    allowancePayable += Number(row.credit || 0);
+    allowancePayable -= Number(row.debit || 0);
 }
 
-if(row.accountCode === "3300"){
-adminReserve += Number(row.credit || 0);
-adminReserve -= Number(row.debit || 0);
+if(row.accountCode === "2300"){
+    adminPayable += Number(row.credit || 0);
+    adminPayable -= Number(row.debit || 0);
 }
 
-if(row.accountCode === "3400"){
-royaltyReserve += Number(row.credit || 0);
-royaltyReserve -= Number(row.debit || 0);
+if(row.accountCode === "2400"){
+    royaltyPayable += Number(row.credit || 0);
+    royaltyPayable -= Number(row.debit || 0);
 }
   
 if(row.accountCode === "4000")
@@ -227,14 +227,14 @@ bank;
 
 const totalLiabilities =
 consultantPayable +
-shareholderReserve +
-allowanceReserve +
-adminReserve +
-royaltyReserve;
+allowancePayable +
+adminPayable +
+royaltyPayable;
 
 const totalEquity =
+shareholderReserve +
 netProfit;
-
+  
 const totalLE =
 totalLiabilities +
 totalEquity;
@@ -324,44 +324,33 @@ RM${consultantPayable.toFixed(2)}
 
 <tr>
 <td class="pl-6 py-2">
-Shareholder Reserve
+Allowance Payable
 </td>
 
 <td class="text-right">
-RM${shareholderReserve.toFixed(2)}
+RM${allowancePayable.toFixed(2)}
 </td>
 </tr>
 
 <tr>
 <td class="pl-6 py-2">
-Allowance Reserve
+Admin Payable
 </td>
 
 <td class="text-right">
-RM${allowanceReserve.toFixed(2)}
+RM${adminPayable.toFixed(2)}
 </td>
 </tr>
 
 <tr>
 <td class="pl-6 py-2">
-Admin Reserve
+Royalty Payable
 </td>
 
 <td class="text-right">
-RM${adminReserve.toFixed(2)}
+RM${royaltyPayable.toFixed(2)}
 </td>
 </tr>
-
-<tr>
-<td class="pl-6 py-2">
-Royalty Reserve
-</td>
-
-<td class="text-right">
-RM${royaltyReserve.toFixed(2)}
-</td>
-</tr>
-
 
 <tr class="font-bold border-t">
 
@@ -388,7 +377,16 @@ EQUITY
 </tr>
 
 <tr>
+<td class="pl-6 py-2">
+Shareholder Reserve
+</td>
 
+<td class="text-right">
+RM${shareholderReserve.toFixed(2)}
+</td>
+</tr>
+
+<tr>
 <td class="pl-6 py-2">
 Retained Earnings
 </td>
@@ -396,7 +394,6 @@ Retained Earnings
 <td class="text-right">
 RM${netProfit.toFixed(2)}
 </td>
-
 </tr>
 
 <tr class="font-bold border-t">
