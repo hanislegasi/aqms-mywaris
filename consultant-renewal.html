@@ -108,20 +108,22 @@ return;
 
 }
 
-const userSnap =
+const consultantSnap =
 await getDoc(
 doc(
 db,
-"users",
+"consultants",
 user.uid
 )
 );
 
 const data =
-userSnap.data();
+consultantSnap.data();
 
 const renewalDate =
-new Date(data.renewalDate);
+data?.renewalDate?.toDate
+? data.renewalDate.toDate()
+: new Date(data.renewalDate);
 
 const today =
 new Date();
