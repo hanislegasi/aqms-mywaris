@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+
+<meta charset="UTF-8">
+
+<title>Consultant Migration</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100 p-10">
+
+<div class="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow">
+
+<h1 class="text-3xl font-bold mb-5">
+Consultant Migration
+</h1>
+
+<p class="mb-6">
+Klik sekali sahaja.
+</p>
+
+<button
+id="runBtn"
+class="bg-green-600 text-white px-6 py-3 rounded-xl">
+
+Run Migration
+
+</button>
+
+<div
+id="result"
+class="mt-6 text-lg font-semibold">
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+
+getFirestore,
+collection,
+getDocs,
+doc,
+setDoc
+
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig={
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+
+projectId:"alqawthar-mywaris",
+
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+
+messagingSenderId:"3498810778",
+
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app=initializeApp(firebaseConfig);
+
+const db=getFirestore(app);
+
+document
+.getElementById("runBtn")
+.addEventListener("click",async()=>{
+
+const snap=
+await getDocs(
+collection(db,"users")
+);
+
+let total=0;
+
+for(const d of snap.docs){
+
+const u=d.data();
+
+if(
+
+u.role==="consultant"
+
+||
+
+u.consultantNo
+
+){
+
+await setDoc(
+
+doc(
+db,
+"consultants",
+d.id
+),
+
+u
+
+);
+
+total++;
+
+}
+
+}
+
+document
+.getElementById("result")
+.innerHTML=
+
+"Migration Completed : "
+
++
+
+total
+
++
+
+" consultant(s).";
+
+});
+
+</script>
+
+</body>
+</html>
