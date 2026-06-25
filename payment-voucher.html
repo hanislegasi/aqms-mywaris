@@ -254,15 +254,26 @@ credit:0
 });
            
 
-await addDoc(collection(db, "ledger"), {
-    date: new Date(),
-    accountCode: "1000",
-    account: "Bank",
-    category: "asset",
-    description: payee,
-    debit: 0,
-    credit: amount
-});          
+await addDoc(collection(db,"ledger"),{
+
+date:new Date(),
+
+accountCode:"1000",
+account:"Bank",
+
+category:"asset",
+
+description:payee,
+
+debit:0,
+
+credit:amount,
+
+paymentType:type,
+sourceAccount:accountCode,
+transactionGroup:pv.pvNo
+
+});     
 
            
            
