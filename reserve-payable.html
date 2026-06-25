@@ -31,7 +31,7 @@
 
     <div class="bg-[#153638] text-white p-5">
         <h1 class="text-2xl font-bold">
-            Internal Allocation
+            Internal Allocation & Reserve
         </h1>
     </div>
 
@@ -227,7 +227,10 @@ Royalty
 </td>
 
 <td class="p-3">
-Founder
+<input
+id="payee-ROYALTY"
+class="border rounded-lg p-2 w-full"
+placeholder="Enter payee">
 </td>
 
 <td class="p-3 text-right">
@@ -239,8 +242,8 @@ RM${royaltyPayable.toFixed(2)}
 onclick="
 generatePV(
 'ROYALTY',
-'Founder',
-${royaltyPayable}
+document.getElementById("payee-ROYALTY").value,
+royaltyPayable
 )
 "
 class="
@@ -258,7 +261,14 @@ Generate PV
 
 <tr>
 <td class="p-3">Allowance</td>
-<td class="p-3">Board</td>
+
+<td class="p-3">
+<input
+id="payee-ALLOWANCE"
+class="border rounded-lg p-2 w-full"
+placeholder="Enter payee">
+</td>
+
 <td class="p-3 text-right">
 RM${allowancePayable.toFixed(2)}
 </td>
@@ -267,8 +277,8 @@ RM${allowancePayable.toFixed(2)}
 onclick="
 generatePV(
 'ALLOWANCE',
-'Board',
-${allowancePayable}
+document.getElementById("payee-ALLOWANCE").value,
+allowancePayable
 )
 "
 class="
@@ -286,7 +296,14 @@ Generate PV
 
 <tr>
 <td class="p-3">Admin</td>
-<td class="p-3">System</td>
+
+<td class="p-3">
+<input
+id="payee-ADMIN"
+class="border rounded-lg p-2 w-full"
+placeholder="Enter payee">
+</td>
+
 <td class="p-3 text-right">
 RM${adminPayable.toFixed(2)}
 </td>
@@ -295,8 +312,8 @@ RM${adminPayable.toFixed(2)}
 onclick="
 generatePV(
 'ADMIN',
-'System',
-${adminPayable}
+document.getElementById("payee-ADMIN").value,
+adminPayable
 )
 "
 class="
@@ -315,7 +332,14 @@ Generate PV
 
 <tr>
 <td class="p-3">Shareholder</td>
-<td class="p-3">Shareholder</td>
+
+<td class="p-3">
+<input
+id="payee-SHAREHOLDER"
+class="border rounded-lg p-2 w-full"
+placeholder="Enter payee">
+</td>
+
 <td class="p-3 text-right">
 RM${shareholderReserve.toFixed(2)}
 </td>
@@ -324,8 +348,8 @@ RM${shareholderReserve.toFixed(2)}
 onclick="
 generatePV(
 'SHAREHOLDER',
-'Shareholder',
-${shareholderReserve}
+document.getElementById("payee-SHAREHOLDER").value,
+shareholderReserve
 )
 "
 class="
@@ -353,7 +377,17 @@ amount
 ) => {
 
 try {
-   
+
+payee = payee.trim();
+
+if(!payee){
+
+alert("Please enter Payee");
+
+return;
+
+}
+    
 if(amount <= 0){
 
 alert("No payable balance");
@@ -439,6 +473,10 @@ db,
 pvNo,
 
 type,
+
+accountCode,
+
+accountName,    
 
 period:
 currentPeriod,
