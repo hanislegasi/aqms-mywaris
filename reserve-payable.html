@@ -31,7 +31,7 @@
 
     <div class="bg-[#153638] text-white p-5">
         <h1 class="text-2xl font-bold">
-            Reserve Payable
+            Internal Allocation
         </h1>
     </div>
 
@@ -317,7 +317,7 @@ Generate PV
 <td class="p-3">Shareholder</td>
 <td class="p-3">Shareholder</td>
 <td class="p-3 text-right">
-RM${shareholderPayable.toFixed(2)}
+RM${shareholderReserve.toFixed(2)}
 </td>
 <td class="p-3 text-center">
 <button
@@ -407,6 +407,29 @@ const pvNo =
 "PV-" +
 Date.now();
 
+let accountCode = "";
+let accountName = "";
+
+if(type==="ALLOWANCE"){
+    accountCode="2200";
+    accountName="Allowance Payable";
+}
+
+if(type==="ADMIN"){
+    accountCode="2300";
+    accountName="Admin Payable";
+}
+
+if(type==="ROYALTY"){
+    accountCode="2400";
+    accountName="Royalty Payable";
+}
+
+if(type==="SHAREHOLDER"){
+    accountCode="3100";
+    accountName="Shareholder Reserve";
+}
+    
 await addDoc(
 collection(
 db,
