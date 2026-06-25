@@ -75,63 +75,47 @@ const db=getFirestore(app);
 
 document
 .getElementById("runBtn")
-.addEventListener("click",async()=>{
+.addEventListener("click", async () => {
 
-const snap=
-await getDocs(
-collection(db,"users")
-);
+    try{
 
-let total=0;
+        const snap = await getDocs(collection(db,"users"));
 
-for(const d of snap.docs){
+        console.log("Total users:", snap.size);
 
-const u=d.data();
+        let total = 0;
 
-if(
+        for(const d of snap.docs){
 
-u.role==="consultant"
+            const u = d.data();
 
-||
+            if(u.role === "consultant" || u.consultantNo){
 
-u.consultantNo
+                console.log("Migrating:", d.id, u.consultantNo);
 
-){
+                await setDoc(
+                    doc(db,"consultants",d.id),
+                    u
+                );
 
-await setDoc(
+                total++;
+            }
+        }
 
-doc(
-db,
-"consultants",
-d.id
-),
+        document.getElementById("result").innerHTML =
+            "Migration Completed : " + total;
 
-u
+        alert("Done");
 
-);
+    }catch(err){
 
-total++;
+        console.error(err);
 
-}
+        alert(err.message);
 
-}
-
-document
-.getElementById("result")
-.innerHTML=
-
-"Migration Completed : "
-
-+
-
-total
-
-+
-
-" consultant(s).";
+    }
 
 });
-
 </script>
 
 </body>
