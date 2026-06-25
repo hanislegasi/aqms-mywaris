@@ -127,6 +127,10 @@ collection(db,"ledger")
 let sales = 0;
 let commission = 0;
 let override = 0;
+let allowance = 0;
+let admin = 0;
+let royalty = 0;
+let otherExpense = 0;
 let bank = 0;
 
 snap.forEach((d)=>{
@@ -156,6 +160,33 @@ override += Number(row.debit || 0);
 
 }
 
+if(row.accountCode === "5200"){
+
+allowance += Number(row.debit || 0);
+
+}
+
+if(row.accountCode === "5300"){
+
+admin += Number(row.debit || 0);
+
+}
+
+if(row.accountCode === "5400"){
+
+royalty += Number(row.debit || 0);
+
+}
+
+if(
+row.accountCode >= "5500" &&
+row.accountCode <= "5999"
+){
+
+otherExpense += Number(row.debit || 0);
+
+}
+  
 if(row.accountCode === "1000"){
 
 bank += Number(row.debit || 0);
@@ -168,9 +199,19 @@ bank -= Number(row.credit || 0);
 
 
 const operatingCashFlow =
-sales -
-commission -
-override;
+sales
+-
+commission
+-
+override
+-
+allowance
+-
+admin
+-
+royalty
+-
+otherExpense;
 
 const closingBank =
 bank;
@@ -241,6 +282,54 @@ Consultant Override Paid
 
 <td class="text-right">
 (RM${override.toFixed(2)})
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Allowance Paid
+</td>
+
+<td class="text-right">
+(RM${allowance.toFixed(2)})
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Admin Paid
+</td>
+
+<td class="text-right">
+(RM${admin.toFixed(2)})
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Royalty Paid
+</td>
+
+<td class="text-right">
+(RM${royalty.toFixed(2)})
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Other Operating Expenses
+</td>
+
+<td class="text-right">
+(RM${otherExpense.toFixed(2)})
 </td>
 
 </tr>
