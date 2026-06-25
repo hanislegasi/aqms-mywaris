@@ -202,84 +202,38 @@ amount
                 return;
             }
 
-const pvDoc =
-await getDoc(
-doc(
-db,
-"paymentVouchers",
-pvId
-)
-);
-
-const pv =
-pvDoc.data();
-           
-           let accountCode = "";
-let accountName = "";
-let category = "";
-
-if(type === "CONSULTANT"){
-    accountCode = "2000";
-    accountName = "Consultant Payable";
-    category = "liability";
-}
-
-if(type === "ROYALTY"){
-    accountCode = "3400";
-    accountName = "Royalty Reserve";
-    category = "equity";
-}
-
-if(type === "ALLOWANCE"){
-    accountCode = "3200";
-    accountName = "Allowance Reserve";
-    category = "equity";
-}
-
-if(type === "ADMIN"){
-    accountCode = "3300";
-    accountName = "Admin Reserve";
-    category = "equity";
-}
-
-if(type === "SHAREHOLDER"){
-    accountCode = "3100";
-    accountName = "Shareholder Reserve";
-    category = "equity";
-}
 
 
 
            
-if(pv.manual){
+const accountCode = pv.accountCode;
+const accountName = pv.accountName;
 
-await addDoc(
-collection(db,"ledger"),
-{
-    date:new Date(),
-    accountCode: pv.accountCode,
-    account: pv.accountName,
-    category:"expense",
-    description: pv.description,
-    debit: amount,
-    credit:0
-});
+let category = "liability";
 
-}else{
-
-await addDoc(
-collection(db,"ledger"),
-{
-    date:new Date(),
-    accountCode,
-    account:accountName,
-    category,
-    description:payee,
-    debit:amount,
-    credit:0
-});
-
+if(accountCode === "3100"){
+    category = "equity";
 }
+
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:new Date(),
+
+accountCode,
+
+account:accountName,
+
+category,
+
+description:payee,
+
+debit:amount,
+
+credit:0
+});
+           
 
 await addDoc(collection(db, "ledger"), {
     date: new Date(),
@@ -289,7 +243,9 @@ await addDoc(collection(db, "ledger"), {
     description: payee,
     debit: 0,
     credit: amount
-});           
+});          
+
+           
            
             await updateDoc(doc(db, "paymentVouchers", pvId), {
                 status: "PAID",
