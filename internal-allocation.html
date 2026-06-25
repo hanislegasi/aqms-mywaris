@@ -375,6 +375,35 @@ try {
 
 payee = payee.trim();
 
+let accountCode = "";
+let accountName = "";
+let amount = 0;
+
+    
+if(type==="ALLOWANCE"){
+    amount = allowancePayable;
+    accountCode="2200";
+    accountName="Allowance Payable";
+}
+
+if(type==="ADMIN"){
+    amount = adminPayable;
+    accountCode="2300";
+    accountName="Admin Payable";
+}
+
+if(type==="ROYALTY"){
+    amount = royaltyPayable;
+    accountCode="2400";
+    accountName="Royalty Payable";
+}
+
+if(type==="SHAREHOLDER"){
+    amount = shareholderReserve;
+    accountCode="3100";
+    accountName="Shareholder Reserve";
+}
+    
 if(!payee){
 
 alert("Please enter Payee");
@@ -436,34 +465,7 @@ const pvNo =
 "PV-" +
 Date.now();
 
-let accountCode = "";
-let accountName = "";
-let amount = 0;
 
-    
-if(type==="ALLOWANCE"){
-    amount = allowancePayable;
-    accountCode="2200";
-    accountName="Allowance Payable";
-}
-
-if(type==="ADMIN"){
-    amount = adminPayable;
-    accountCode="2300";
-    accountName="Admin Payable";
-}
-
-if(type==="ROYALTY"){
-    amount = royaltyPayable;
-    accountCode="2400";
-    accountName="Royalty Payable";
-}
-
-if(type==="SHAREHOLDER"){
-    amount = shareholderReserve;
-    accountCode="3100";
-    accountName="Shareholder Reserve";
-}
     
 await addDoc(
 collection(
