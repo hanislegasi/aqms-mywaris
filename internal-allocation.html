@@ -157,61 +157,34 @@ db,
 
 pvSnap.forEach((d)=>{
 
-const pv =
-d.data();
+pvSnap.forEach((d)=>{
+
+const pv = d.data();
 
 if(
+pv.status === "PENDING" ||
 pv.status === "PAID"
 ){
 
-if(
-pv.type === "ROYALTY"
-){
-
-royaltyPayable -=
-Number(
-pv.amount || 0
-);
-
+if(pv.type==="ROYALTY"){
+    royaltyPayable -= Number(pv.amount||0);
 }
 
-if(
-pv.type === "ALLOWANCE"
-){
-
-allowancePayable -=
-Number(
-pv.amount || 0
-);
-
+if(pv.type==="ALLOWANCE"){
+    allowancePayable -= Number(pv.amount||0);
 }
 
-if(
-pv.type === "ADMIN"
-){
-
-adminPayable -=
-Number(
-pv.amount || 0
-);
-
+if(pv.type==="ADMIN"){
+    adminPayable -= Number(pv.amount||0);
 }
 
-if(
-pv.type === "SHAREHOLDER"
-){
-
-shareholderReserve -=
-Number(
-pv.amount || 0
-);
-
+if(pv.type==="SHAREHOLDER"){
+    shareholderReserve -= Number(pv.amount||0);
 }
 
 }
 
 });
-
       
         
 
@@ -220,7 +193,7 @@ pv.amount || 0
       
         
 
-        let html = `
+let html = `
 <tr>
 <td class="p-3">
 Royalty
@@ -431,28 +404,16 @@ new Date().getMonth()+1
 const existingPV =
 await getDocs(
 query(
-collection(
-db,
-"paymentVouchers"
-),
-where(
-"type",
-"==",
-type
-),
-where(
-"period",
-"==",
-currentPeriod
-)
+collection(db,"paymentVouchers"),
+where("type","==",type),
+where("status","==","PENDING")
 )
 );
 
 if(!existingPV.empty){
 
 alert(
-type +
-" untuk bulan ini telah dijana"
+type + " masih mempunyai Payment Voucher yang belum dibayar."
 );
 
 return;
