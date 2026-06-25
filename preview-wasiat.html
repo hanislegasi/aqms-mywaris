@@ -313,6 +313,7 @@ if(window.wasiatData?.status !== "APPROVED"){
             };
 
 await document.fonts.ready;
+await new Promise(r=>setTimeout(r,1000));
             
             // 4. Proses render PDF
             html2pdf().set(options).from(element).save().then(() => {
