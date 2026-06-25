@@ -146,10 +146,11 @@ getDoc,
 getDocs,
 collection,
 updateDoc,
-query  
+setDoc,
+query
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";  
-
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  
 const firebaseConfig = {
 
 apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
@@ -200,13 +201,15 @@ return;
 
 }
   
-await updateDoc(
+await setDoc(
 doc(
 db,
-"users",
+"consultants",
 auth.currentUser.uid
 ),
 {
+
+uid: auth.currentUser.uid,
 
 nama:
 document.getElementById("nama").value,
@@ -235,15 +238,28 @@ document.getElementById("state").value,
 upline:
 document.getElementById("upline").value || "",
 
-consultantLevel:
-"AQC",
+consultantLevel:"AQC",
 
-consultantPaymentStatus:
-"pending"
+consultantPaymentStatus:"pending",
 
-}
-);
+createdAt:new Date()
 
+});
+
+
+  
+await updateDoc(
+doc(
+db,
+"users",
+auth.currentUser.uid
+),
+{
+role:"consultant"
+});
+  
+
+  
 window.location.href =
 "consultant-payment.html";
 
