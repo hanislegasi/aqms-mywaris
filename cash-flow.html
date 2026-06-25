@@ -149,26 +149,6 @@ if(row.accountCode === "1000"){
 
     }
 
-    if(Number(row.credit || 0) > 0){
-
-        switch(row.description){
-
-            case "Consultant":
-                consultantPaid += Number(row.credit);
-                break;
-
-            default:
-
-                if(row.account === "Bank"){
-
-                    // ignore
-
-                }
-
-        }
-
-    }
-
 }
 
 if(row.accountCode === "2000" && row.debit>0){
