@@ -189,6 +189,62 @@ renewalFeePaid:renewalFee
 }
 );
 
+// ===============================
+// ACCOUNTING ENTRY
+// Dr Bank
+// Cr Consultant Renewal Fee
+// ===============================
+
+await addDoc(collection(db,"ledger"),{
+
+date:new Date(),
+
+accountCode:"4300",
+account:"Consultant Renewal Fee",
+
+category:"income",
+
+description:
+data.consultantNo + " Renewal",
+
+debit:0,
+
+credit:renewalFee,
+
+paymentType:"CUSTOMER",
+
+sourceAccount:"4300",
+
+transactionGroup:data.consultantNo
+
+});
+
+
+await addDoc(collection(db,"ledger"),{
+
+date:new Date(),
+
+accountCode:"1000",
+account:"Bank",
+
+category:"asset",
+
+description:
+data.consultantNo + " Renewal",
+
+debit:renewalFee,
+
+credit:0,
+
+paymentType:"CUSTOMER",
+
+sourceAccount:"4300",
+
+transactionGroup:data.consultantNo
+
+});
+
+  
 alert(
 `Renewal Berjaya!
 
