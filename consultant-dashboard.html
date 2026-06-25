@@ -343,17 +343,17 @@ return;
 
 }
 
-const userSnap =
+const consultantSnap =
 await getDoc(
 doc(
 db,
-"users",
+"consultants",
 user.uid
 )
 );
 
 const data =
-userSnap.data();
+consultantSnap.data();
 
 sessionStorage.setItem(
 "consultantNo",
@@ -677,12 +677,12 @@ overridingRate = 12;
 
 
 await updateDoc(
-doc(db,"users",user.uid),
+doc(db,"consultants",user.uid),
 {
 careerSales: totalSales,
-totalSales: totalSales,
-totalCommission: totalCommission,
-totalOverriding: totalOverriding
+totalSales,
+totalCommission,
+totalOverriding
 }
 );
 
@@ -707,7 +707,7 @@ nextLevel !== "TOP LEVEL" &&
 ){
 
 await updateDoc(
-doc(db,"users",user.uid),
+doc(db,"consultants",user.uid),
 {
 promotionRequest:true,
 requestedLevel:nextLevel,
