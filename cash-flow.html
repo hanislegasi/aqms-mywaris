@@ -195,6 +195,16 @@ if(row.accountCode === "2400" && row.debit>0){
 
 }
 
+if(
+Number(row.accountCode) >= 5500 &&
+Number(row.accountCode) <= 5999 &&
+row.debit > 0
+){
+
+    otherPaid += Number(row.debit);
+
+}
+    
 });
   
 
