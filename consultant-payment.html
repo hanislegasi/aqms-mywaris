@@ -77,7 +77,9 @@ getFirestore,
 doc,
 updateDoc,
 getDoc,
-increment
+increment,
+addDoc,
+collection
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const firebaseConfig = {
@@ -208,6 +210,62 @@ totalOverriding:0
 
 );
 
+// ===============================
+// ACCOUNTING ENTRY
+// Dr Bank
+// Cr Consultant Registration Fee
+// ===============================
+
+await addDoc(collection(db,"ledger"),{
+
+date:new Date(),
+
+accountCode:"4400",
+account:"Consultant Registration Fee",
+
+category:"income",
+
+description:
+consultantNo + " Registration",
+
+debit:0,
+credit:200,
+
+paymentType:"CUSTOMER",
+
+sourceAccount:"4400",
+
+transactionGroup:consultantNo
+
+});
+
+
+await addDoc(collection(db,"ledger"),{
+
+date:new Date(),
+
+accountCode:"1000",
+account:"Bank",
+
+category:"asset",
+
+description:
+consultantNo + " Registration",
+
+debit:200,
+credit:0,
+
+paymentType:"CUSTOMER",
+
+sourceAccount:"4400",
+
+transactionGroup:consultantNo
+
+});
+
+
+
+    
 alert(
 "Pendaftaran Konsultan Berjaya. No Konsultan: " +
 consultantNo
