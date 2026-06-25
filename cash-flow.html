@@ -124,73 +124,74 @@ collection(db,"ledger")
 
 
 
-let sales = 0;
-let commission = 0;
-let override = 0;
-let allowance = 0;
-let admin = 0;
-let royalty = 0;
-let otherExpense = 0;
+let cashReceived = 0;
+
+let consultantPaid = 0;
+let allowancePaid = 0;
+let adminPaid = 0;
+let royaltyPaid = 0;
+let otherPaid = 0;
+
 let bank = 0;
 
 snap.forEach((d)=>{
 
 const row = d.data();
 
-
-if(
-row.accountCode === "4000" ||
-row.accountCode === "4100" ||
-row.accountCode === "4200"
-){
-
-sales += Number(row.credit || 0);
-
-}
-
-if(row.accountCode === "5000"){
-
-commission += Number(row.debit || 0);
-
-}
-
-if(row.accountCode === "5100"){
-
-override += Number(row.debit || 0);
-
-}
-
-if(row.accountCode === "5200"){
-
-allowance += Number(row.debit || 0);
-
-}
-
-if(row.accountCode === "5300"){
-
-admin += Number(row.debit || 0);
-
-}
-
-if(row.accountCode === "5400"){
-
-royalty += Number(row.debit || 0);
-
-}
-
-if(
-row.accountCode >= "5500" &&
-row.accountCode <= "5999"
-){
-
-otherExpense += Number(row.debit || 0);
-
-}
-  
 if(row.accountCode === "1000"){
 
-bank += Number(row.debit || 0);
-bank -= Number(row.credit || 0);
+    bank += Number(row.debit || 0);
+    bank -= Number(row.credit || 0);
+
+    if(Number(row.debit || 0) > 0){
+
+        cashReceived += Number(row.debit);
+
+    }
+
+    if(Number(row.credit || 0) > 0){
+
+        switch(row.description){
+
+            case "Consultant":
+                consultantPaid += Number(row.credit);
+                break;
+
+            default:
+
+                if(row.account === "Bank"){
+
+                    // ignore
+
+                }
+
+        }
+
+    }
+
+}
+
+if(row.accountCode === "2000" && row.debit>0){
+
+    consultantPaid += Number(row.debit);
+
+}
+
+if(row.accountCode === "2200" && row.debit>0){
+
+    allowancePaid += Number(row.debit);
+
+}
+
+if(row.accountCode === "2300" && row.debit>0){
+
+    adminPaid += Number(row.debit);
+
+}
+
+if(row.accountCode === "2400" && row.debit>0){
+
+    royaltyPaid += Number(row.debit);
 
 }
 
@@ -199,19 +200,21 @@ bank -= Number(row.credit || 0);
 
 
 const operatingCashFlow =
-sales
+
+cashReceived
 -
-commission
+consultantPaid
 -
-override
+allowancePaid
 -
-allowance
+adminPaid
 -
-admin
+royaltyPaid
 -
-royalty
--
-otherExpense;
+otherPaid;
+
+
+  
 
 const closingBank =
 bank;
@@ -257,7 +260,7 @@ Cash Received From Customers
 </td>
 
 <td class="text-right">
-RM${sales.toFixed(2)}
+RM${cashReceived.toFixed(2)}
 </td>
 
 </tr>
@@ -265,11 +268,11 @@ RM${sales.toFixed(2)}
 <tr>
 
 <td>
-Consultant Commission Paid
+Consultant Payment
 </td>
 
 <td class="text-right">
-(RM${commission.toFixed(2)})
+(RM${consultantPaid.toFixed(2)})
 </td>
 
 </tr>
@@ -277,11 +280,11 @@ Consultant Commission Paid
 <tr>
 
 <td>
-Consultant Override Paid
+Allowance Payment
 </td>
 
 <td class="text-right">
-(RM${override.toFixed(2)})
+(RM${allowancePaid.toFixed(2)})
 </td>
 
 </tr>
@@ -289,11 +292,11 @@ Consultant Override Paid
 <tr>
 
 <td>
-Allowance Paid
+Admin Payment
 </td>
 
 <td class="text-right">
-(RM${allowance.toFixed(2)})
+(RM${adminPaid.toFixed(2)})
 </td>
 
 </tr>
@@ -301,11 +304,11 @@ Allowance Paid
 <tr>
 
 <td>
-Admin Paid
+Royalty Payment
 </td>
 
 <td class="text-right">
-(RM${admin.toFixed(2)})
+(RM${royaltyPaid.toFixed(2)})
 </td>
 
 </tr>
@@ -313,24 +316,14 @@ Admin Paid
 <tr>
 
 <td>
-Royalty Paid
+Other Operating Payment
 </td>
 
 <td class="text-right">
-(RM${royalty.toFixed(2)})
+(RM${otherPaid.toFixed(2)})
 </td>
 
 </tr>
-
-<tr>
-
-<td>
-Other Operating Expenses
-</td>
-
-<td class="text-right">
-(RM${otherExpense.toFixed(2)})
-</td>
 
 </tr>
 
