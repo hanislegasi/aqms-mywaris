@@ -229,7 +229,6 @@ credit:350
 await addDoc(
 collection(db,"ledger"),
 {
-
 date:new Date(),
 
 accountCode:"1000",
@@ -241,11 +240,12 @@ description:
 memberNo + " " + customer.nama,
 
 debit:350,
+credit:0,
 
-credit:0
-
-}
-);
+paymentType:"CUSTOMER",
+sourceAccount:"4000",
+transactionGroup:memberNo
+});
   
 const compensationSnap =
 await getDoc(
