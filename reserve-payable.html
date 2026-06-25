@@ -475,7 +475,6 @@ pvNo,
 type,
 
 accountCode,
-
 accountName,    
 
 period:
@@ -505,6 +504,71 @@ new Date()
 );
 
 
+// DR Expense (Allowance/Admin/Royalty)
+
+if(type !== "SHAREHOLDER"){
+
+let expenseCode="";
+let expenseName="";
+
+if(type==="ALLOWANCE"){
+expenseCode="5200";
+expenseName="Allowance Expense";
+}
+
+if(type==="ADMIN"){
+expenseCode="5300";
+expenseName="Admin Expense";
+}
+
+if(type==="ROYALTY"){
+expenseCode="5400";
+expenseName="Royalty Expense";
+}
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:new Date(),
+
+accountCode:expenseCode,
+account:expenseName,
+
+category:"expense",
+
+description:payee,
+
+debit:amount,
+
+credit:0
+});
+
+}
+
+
+// CR Liability / Equity
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:new Date(),
+
+accountCode,
+account:accountName,
+
+category:
+type==="SHAREHOLDER"
+? "equity"
+: "liability",
+
+description:payee,
+
+debit:0,
+
+credit:amount
+});
+    
+    
     
 alert(
 "Payment Voucher Created"
