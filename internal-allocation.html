@@ -155,7 +155,6 @@ db,
 )
 );
 
-pvSnap.forEach((d)=>{
 
 pvSnap.forEach((d)=>{
 
@@ -215,7 +214,7 @@ RM${royaltyPayable.toFixed(2)}
 onclick="
 generatePV(
 'ROYALTY',
-document.getElementById('payee-ROYALTY').value,
+document.getElementById('payee-ROYALTY').value
 )
 "
 class="
@@ -249,7 +248,7 @@ RM${allowancePayable.toFixed(2)}
 onclick="
 generatePV(
 'ALLOWANCE',
-document.getElementById('payee-ALLOWANCE').value,
+document.getElementById('payee-ALLOWANCE').value
 )
 "
 class="
@@ -283,7 +282,7 @@ RM${adminPayable.toFixed(2)}
 onclick="
 generatePV(
 'ADMIN',
-document.getElementById('payee-ADMIN').value,
+document.getElementById('payee-ADMIN').value
 )
 "
 class="
@@ -318,7 +317,7 @@ RM${shareholderReserve.toFixed(2)}
 onclick="
 generatePV(
 'SHAREHOLDER',
-document.getElementById('payee-SHAREHOLDER').value,
+document.getElementById('payee-SHAREHOLDER').value
 )
 "
 class="
