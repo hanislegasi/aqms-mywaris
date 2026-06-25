@@ -111,6 +111,9 @@ let salesEWasiat = 0;
 let salesHibah = 0;
 let salesPusaka = 0;
 
+let registrationFee = 0;
+let renewalFee = 0;
+
 let expenses = {};
 
 snap.forEach((d)=>{
@@ -125,6 +128,13 @@ salesHibah += Number(row.credit || 0);
 
 if(row.accountCode === "4200")
 salesPusaka += Number(row.credit || 0);
+
+if(row.accountCode==="4400")
+registrationFee += Number(row.credit||0);
+
+if(row.accountCode==="4300")
+renewalFee += Number(row.credit||0);
+  
 
 if(
 row.accountCode &&
@@ -146,9 +156,16 @@ Number(row.debit || 0);
 });
 
 const totalRevenue =
+
 salesEWasiat +
+
 salesHibah +
-salesPusaka;
+
+salesPusaka +
+
+registrationFee +
+
+renewalFee;
 
 const totalExpense =
 Object.values(expenses)
@@ -238,6 +255,29 @@ ${salesPusaka.toFixed(2)}
 </td>
 
 </tr>
+
+<tr>
+<td class="pl-6 py-1">
+Consultant Registration Fee
+</td>
+
+<td class="text-right">
+${registrationFee.toFixed(2)}
+</td>
+</tr>
+
+<tr>
+<td class="pl-6 py-1">
+Consultant Renewal Fee
+</td>
+
+<td class="text-right">
+${renewalFee.toFixed(2)}
+</td>
+</tr>
+
+
+
 
 <tr class="font-bold border-t border-b">
 
