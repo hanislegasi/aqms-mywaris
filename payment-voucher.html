@@ -74,6 +74,7 @@ mb-4
                 <table class="w-full min-w-[700px]">
                     <thead class="bg-[#153638] text-white">
                         <tr>
+                            <th class="p-3 text-left">Date</th>
                             <th class="p-3 text-left">PV No</th>
                             <th class="p-3 text-left">Type</th>
                             <th class="p-3 text-left">Payee</th>
@@ -140,6 +141,19 @@ limit(50)
            html += `
 <tr class="border-b">
 
+<td class="p-3">
+${
+pv.createdAt
+?
+new Date(
+pv.createdAt.seconds*1000
+).toLocaleDateString("ms-MY")
+:
+"-"
+}
+</td>
+
+
     <td class="p-3">
         ${pv.pvNo}
     </td>
@@ -203,8 +217,8 @@ amount
             }
 
 
-const pvDoc = await getDoc(
-    doc(db, "paymentVouchers", pvId)
+const pvDoc = 
+await getDoc(doc(db, "paymentVouchers", pvId)
 );
 
 const pv = pvDoc.data();
@@ -213,11 +227,12 @@ const pv = pvDoc.data();
 const accountCode = pv.accountCode;
 const accountName = pv.accountName;
 
-let category = "liability";
-
-if(accountCode === "3100"){
-    category = "equity";
-}
+const category =
+accountCode==="3100"
+?
+"equity"
+:
+"liability";
 
 
 await addDoc(
