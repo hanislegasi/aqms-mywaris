@@ -312,6 +312,8 @@ if(window.wasiatData?.status !== "APPROVED"){
                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
             };
 
+await document.fonts.ready;
+            
             // 4. Proses render PDF
             html2pdf().set(options).from(element).save().then(() => {
                 // 5. Kembalikan semua tetapan asal
