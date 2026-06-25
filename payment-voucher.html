@@ -203,7 +203,11 @@ amount
             }
 
 
+const pvDoc = await getDoc(
+    doc(db, "paymentVouchers", pvId)
+);
 
+const pv = pvDoc.data();
 
            
 const accountCode = pv.accountCode;
