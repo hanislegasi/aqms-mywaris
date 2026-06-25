@@ -173,43 +173,59 @@ await updateDoc(
 
 doc(
 db,
+"consultants",
+currentUser.uid
+),
+
+{
+
+consultantNo,
+
+consultantLevel:"AQC",
+
+consultantPaymentStatus:"paid",
+
+joinDate:new Date(),
+
+renewalDate,
+
+downlineCount:0,
+
+activeClients:0,
+
+careerSales:0,
+
+totalSales:0,
+
+totalCommission:0,
+
+totalOverriding:0,
+
+lifetimeCommission:0,
+
+lifetimeOverride:0
+
+}
+
+);
+
+await updateDoc(
+
+doc(
+db,
 "users",
 currentUser.uid
 ),
 
 {
 
-role:
-"consultant",
-
-consultantNo,
-
-consultantLevel:
-"AQC",
-
-consultantPaymentStatus:
-"paid",
-
-joinDate:
-new Date().toISOString(),
-
-renewalDate:
-renewalDate.toISOString(),
-
-downlineCount:0,
-
-activeClients:0,
-
-totalSales:0,
-
-totalCommission:0,
-
-totalOverriding:0
+role:"consultant"
 
 }
 
 );
 
+    
 // ===============================
 // ACCOUNTING ENTRY
 // Dr Bank
