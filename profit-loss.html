@@ -131,6 +131,7 @@ const expenses = {};
 
 snap.forEach((d)=>{
 
+
     const row = d.data();
 
     const coa =
@@ -174,8 +175,7 @@ type=="revenue"
 // EXPENSE
 //==================
 
-const type =
-coa.type?.toLowerCase();
+
 
 if(
 type=="expense" ||
@@ -201,6 +201,13 @@ type=="expenses"
 
 }
 
+console.log(
+row.accountCode,
+coa?.name,
+coa?.type,
+row.debit
+);  
+  
 });
 
   
