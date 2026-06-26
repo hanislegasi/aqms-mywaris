@@ -296,12 +296,6 @@ type=="expenses"
 
   
   
-expenses[row.account] =
-(
-expenses[row.account] || 0
-)
-+
-Number(row.debit || 0);
 
 }
   
@@ -377,17 +371,25 @@ ASSETS
 
 </tr>
 
+${Object.values(assets)
+
+.sort((a,b)=>a.code.localeCompare(b.code))
+
+.map(item=>`
+
 <tr>
 
 <td class="pl-6 py-2">
-Bank
+${item.name}
 </td>
 
 <td class="text-right">
-RM${bank.toFixed(2)}
+RM${item.amount.toFixed(2)}
 </td>
 
 </tr>
+
+`).join("")}
 
 <tr class="font-bold border-t">
 
@@ -413,47 +415,25 @@ LIABILITIES
 
 </tr>
 
+${Object.values(liabilities)
+
+.sort((a,b)=>a.code.localeCompare(b.code))
+
+.map(item=>`
+
 <tr>
 
 <td class="pl-6 py-2">
-Consultant Payable
+${item.name}
 </td>
 
 <td class="text-right">
-RM${consultantPayable.toFixed(2)}
+RM${item.amount.toFixed(2)}
 </td>
 
 </tr>
 
-<tr>
-<td class="pl-6 py-2">
-Allowance Payable
-</td>
-
-<td class="text-right">
-RM${allowancePayable.toFixed(2)}
-</td>
-</tr>
-
-<tr>
-<td class="pl-6 py-2">
-Admin Payable
-</td>
-
-<td class="text-right">
-RM${adminPayable.toFixed(2)}
-</td>
-</tr>
-
-<tr>
-<td class="pl-6 py-2">
-Royalty Payable
-</td>
-
-<td class="text-right">
-RM${royaltyPayable.toFixed(2)}
-</td>
-</tr>
+`).join("")}
 
 <tr class="font-bold border-t">
 
@@ -479,25 +459,39 @@ EQUITY
 
 </tr>
 
+${Object.values(equity)
+
+.sort((a,b)=>a.code.localeCompare(b.code))
+
+.map(item=>`
+
 <tr>
+
 <td class="pl-6 py-2">
-Shareholder Reserve
+${item.name}
 </td>
 
 <td class="text-right">
-RM${shareholderReserve.toFixed(2)}
+RM${item.amount.toFixed(2)}
 </td>
+
 </tr>
 
+`).join("")}
+
 <tr>
+
 <td class="pl-6 py-2">
-Retained Earnings
+Current Year Profit
 </td>
 
 <td class="text-right">
 RM${netProfit.toFixed(2)}
 </td>
+
 </tr>
+
+
 
 <tr class="font-bold border-t">
 
