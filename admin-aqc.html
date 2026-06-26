@@ -263,14 +263,14 @@ btn.dataset.id;
 
 const snap =
 await getDoc(
-doc(db,"users",id)
+doc(db,"consultants",id)
 );
 
 const data =
 snap.data();
 
 await updateDoc(
-doc(db,"users",id),
+doc(db,"consultants",id),
 {
 consultantLevel:
 data.requestedLevel,
