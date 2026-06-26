@@ -142,7 +142,7 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const snapshot =
 await getDocs(
 query(
-collection(db,"users"),
+collection(db,"consultants"),
 orderBy("joinDate","desc")
 )
 );
@@ -154,11 +154,7 @@ snapshot.forEach((d)=>{
 
 const u = d.data();
 
-if(
-!u.consultantNo
-){
-return;
-}
+
 
 html += `
 
