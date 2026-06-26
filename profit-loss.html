@@ -142,8 +142,13 @@ coaMap[String(row.accountCode)];
 // REVENUE
 //==================
 
-if(coa.type?.toLowerCase()=="income"){
+const type =
+coa.type?.toLowerCase();
 
+if(
+type=="income" ||
+type=="revenue"
+){
     if(!revenue[coa.code]){
 
         revenue[coa.code]={
@@ -169,7 +174,13 @@ if(coa.type?.toLowerCase()=="income"){
 // EXPENSE
 //==================
 
-if(coa.type?.toLowerCase()=="expense"){
+const type =
+coa.type?.toLowerCase();
+
+if(
+type=="expense" ||
+type=="expenses"
+){
 
     if(!expenses[coa.code]){
 
