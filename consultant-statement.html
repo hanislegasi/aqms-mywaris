@@ -245,27 +245,26 @@ const userSnap =
 await getDoc(
 doc(
 db,
-"users",
+"consultants",
 userUid
 )
 );
 
 let consultantIC = "-";
-let consultantAddress = "-";
+let consultantAlamat = "-";
+let consultantPostcode = "-";
+let consultantCity = "-";
+let consultantState = "-";
 
 if(userSnap.exists()){
 
-const user =
-userSnap.data();
+    const user = userSnap.data();
 
-consultantIC =
-user.ic || "-";
-
-consultantAddress =
-user.address ||
-user.state ||
-"-";
-
+    consultantIC = user.ic || "-";
+    consultantAddress = user.alamat || "-";
+    consultantPostcode = user.postcode || "-";
+    consultantCity = user.city || "-";
+    consultantState = user.state || "-";
 }
 
                 
