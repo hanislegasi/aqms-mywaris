@@ -133,7 +133,8 @@ snap.forEach((d)=>{
 
     const row = d.data();
 
-    const coa = coaMap[row.accountCode];
+    const coa =
+coaMap[String(row.accountCode)];
 
     if(!coa) return;
 
@@ -350,19 +351,7 @@ ${item.amount.toFixed(2)}
 
 .join("")}
 
-<tr>
 
-<td class="pl-6 py-1">
-${name}
-</td>
-
-<td class="text-right">
-${amount.toFixed(2)}
-</td>
-
-</tr>
-
-`).join("")}
 
 <tr class="font-bold border-t border-b">
 
