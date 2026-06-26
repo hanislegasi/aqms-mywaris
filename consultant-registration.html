@@ -79,18 +79,44 @@ placeholder="No Akaun Bank"
 class="w-full border p-3 rounded-xl"
 required>
   
-<input
+<!-- Alamat -->
+
+<textarea
 id="alamat"
-type="text"
 placeholder="Alamat"
+rows="3"
 class="w-full border p-3 rounded-xl"
+required></textarea>
+
+<!-- Poskod & Bandar -->
+
+<div class="grid grid-cols-3 gap-3">
+
+<input
+id="postcode"
+type="text"
+placeholder="Poskod"
+class="border p-3 rounded-xl"
+maxlength="5"
 required>
+
+<input
+id="city"
+type="text"
+placeholder="Bandar"
+class="col-span-2 border p-3 rounded-xl"
+required>
+
+</div>
+
+<!-- Negeri -->
 
 <select
 id="state"
-class="w-full border p-3 rounded-xl">
+class="w-full border p-3 rounded-xl"
+required>
 
-
+<option value="">Pilih Negeri</option>
 
 <option>Johor</option>
 <option>Kedah</option>
@@ -103,13 +129,14 @@ class="w-full border p-3 rounded-xl">
 <option>Perak</option>
 <option>Perlis</option>
 <option>Pulau Pinang</option>
-<option>Putrjaya</option>
+<option>Putrajaya</option>
 <option>Sabah</option>
 <option>Sarawak</option>
 <option>Selangor</option>
 <option>Terengganu</option>
 
 </select>
+
 
 <input
 id="upline"
@@ -232,6 +259,12 @@ document.getElementById("bankAccount").value,
 alamat:
 document.getElementById("alamat").value,
 
+postcode:
+document.getElementById("postcode").value,
+
+city:
+document.getElementById("city").value,
+  
 state:
 document.getElementById("state").value,
 
