@@ -164,11 +164,15 @@ html += `
 ${bil++}
 </td>
 
-<td class="p-3">
-${u.joinDate
-? new Date(u.joinDate).toLocaleDateString("ms-MY")
-: "-"}
-</td>
+const joinDate =
+
+u.joinDate?.toDate
+? u.joinDate.toDate()
+
+: u.joinDate instanceof Date
+? u.joinDate
+
+: new Date(u.joinDate);
 
 <td class="p-3">
 ${u.consultantNo}
@@ -196,6 +200,10 @@ ${u.telefon || "-"}
 
 <td class="p-3">
 RM${(u.careerSales || 0).toLocaleString()}
+</td>
+
+<td class="p-3">
+${joinDate.toLocaleDateString("ms-MY")}
 </td>
 
 <td class="p-3">
