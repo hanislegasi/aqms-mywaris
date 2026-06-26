@@ -372,6 +372,8 @@ ASSETS
 
 ${Object.values(assets)
 
+.filter(item=>item.amount!=0)
+
 .sort((a,b)=>a.code.localeCompare(b.code))
 
 .map(item=>`
@@ -388,7 +390,9 @@ RM${item.amount.toFixed(2)}
 
 </tr>
 
-`).join("")}
+`)
+
+.join("")}
 
 <tr class="font-bold border-t">
 
@@ -416,8 +420,10 @@ LIABILITIES
 
 ${Object.values(liabilities)
 
-.sort((a,b)=>a.code.localeCompare(b.code))
+.filter(item=>item.amount!=0)
 
+.sort((a,b)=>a.code.localeCompare(b.code))
+  
 .map(item=>`
 
 <tr>
@@ -459,6 +465,8 @@ EQUITY
 </tr>
 
 ${Object.values(equity)
+
+.filter(item=>item.amount!=0)
 
 .sort((a,b)=>a.code.localeCompare(b.code))
 
