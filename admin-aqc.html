@@ -154,16 +154,6 @@ snapshot.forEach((d)=>{
 
 const u = d.data();
 
-
-
-html += `
-
-<tr class="border-b hover:bg-gray-50">
-
-<td class="p-3">
-${bil++}
-</td>
-
 const joinDate =
 
 u.joinDate?.toDate
@@ -173,6 +163,18 @@ u.joinDate?.toDate
 ? u.joinDate
 
 : new Date(u.joinDate);
+
+html += `
+
+<tr class="border-b hover:bg-gray-50">
+
+<td class="p-3">
+${bil++}
+</td>
+
+<td class="p-3">
+${isNaN(joinDate) ? "-" : joinDate.toLocaleDateString("ms-MY")}
+</td>
 
 <td class="p-3">
 ${u.consultantNo}
@@ -203,10 +205,6 @@ RM${(u.careerSales || 0).toLocaleString()}
 </td>
 
 <td class="p-3">
-${joinDate.toLocaleDateString("ms-MY")}
-</td>
-
-<td class="p-3">
 
 <span class="
 px-3 py-1 rounded-full text-xs
@@ -224,7 +222,8 @@ ${u.consultantPaymentStatus || "unpaid"}
 </tr>
 
 `;
- }); 
+
+});
 
 document.getElementById(
 "consultantList"
