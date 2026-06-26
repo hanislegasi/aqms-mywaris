@@ -107,76 +107,68 @@ await getDocs(
 collection(db,"ledger")
 );
 
-let salesEWasiat = 0;
-let salesHibah = 0;
-let salesPusaka = 0;
+const coaSnap = await getDocs(
+    collection(db,"chartOfAccounts")
+);
 
-let registrationFee = 0;
-let renewalFee = 0;
+const coaMap = {};
 
-let expenses = {};
+coaSnap.forEach(doc=>{
+
+    const a = doc.data();
+
+    coaMap[a.code] = a;
+
+});
+  
+
+
+
+
+  
+const revenue = {};
+const expenses = {};
 
 snap.forEach((d)=>{
 
-const row = d.data();
+    const row = d.data();
 
-if(row.accountCode === "4000")
-salesEWasiat += Number(row.credit || 0);
+    const coa = coaMap[row.accountCode];
 
-if(row.accountCode === "4100")
-salesHibah += Number(row.credit || 0);
+    if(!coa) return;
 
-if(row.accountCode === "4200")
-salesPusaka += Number(row.credit || 0);
+    if(coa.type?.toLowerCase()=="income"){
 
-if(row.accountCode==="4400")
-registrationFee += Number(row.credit||0);
+        revenue[coa.name] =
+        (revenue[coa.name] || 0)
+        + Number(row.credit || 0);
 
-if(row.accountCode==="4300")
-renewalFee += Number(row.credit||0);
-  
+    }
 
-if(
-row.accountCode &&
-row.accountCode.startsWith("5")
-){
+    if(coa.type?.toLowerCase()=="expense"){
 
-const acc =
-row.account || "Expense";
+        expenses[coa.name] =
+        (expenses[coa.name] || 0)
+        + Number(row.debit || 0);
 
-if(!expenses[acc]){
-expenses[acc] = 0;
-}
-
-expenses[acc] +=
-Number(row.debit || 0);
-
-}
+    }
 
 });
 
+  
 const totalRevenue =
-
-salesEWasiat +
-
-salesHibah +
-
-salesPusaka +
-
-registrationFee +
-
-renewalFee;
+Object.values(revenue)
+.reduce((a,b)=>a+b,0);
 
 const totalExpense =
 Object.values(expenses)
-.reduce(
-(a,b)=>a+b,
-0
-);
+.reduce((a,b)=>a+b,0);
 
 const netProfit =
 totalRevenue -
 totalExpense;
+  
+
 
 
   
@@ -220,63 +212,22 @@ RM
 
 </tr>
 
-<tr>
-
-<td class="pl-6 py-1">
-Sales - eWasiat
-</td>
-
-<td class="text-right">
-${salesEWasiat.toFixed(2)}
-</td>
-
-</tr>
+${Object.entries(revenue)
+.map(([name,amount])=>`
 
 <tr>
 
 <td class="pl-6 py-1">
-Sales - Hibah
+${name}
 </td>
 
 <td class="text-right">
-${salesHibah.toFixed(2)}
+${amount.toFixed(2)}
 </td>
 
 </tr>
 
-<tr>
-
-<td class="pl-6 py-1">
-Sales - Harta Sepencarian
-</td>
-
-<td class="text-right">
-${salesPusaka.toFixed(2)}
-</td>
-
-</tr>
-
-<tr>
-<td class="pl-6 py-1">
-Consultant Registration Fee
-</td>
-
-<td class="text-right">
-${registrationFee.toFixed(2)}
-</td>
-</tr>
-
-<tr>
-<td class="pl-6 py-1">
-Consultant Renewal Fee
-</td>
-
-<td class="text-right">
-${renewalFee.toFixed(2)}
-</td>
-</tr>
-
-
+`).join("")}
 
 
 <tr class="font-bold border-t border-b">
