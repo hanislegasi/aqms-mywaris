@@ -126,6 +126,18 @@ coaSnap.forEach(doc=>{
     coaMap[a.code]=a;
 
 });
+
+function money(value){
+
+    return Number(value||0).toLocaleString(
+        "en-US",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+
+}
   
 const snap =
 await getDocs(
@@ -385,7 +397,7 @@ ${item.name}
 </td>
 
 <td class="text-right">
-RM${item.amount.toFixed(2)}
+RM${money(item.amount)}
 </td>
 
 </tr>
@@ -401,7 +413,7 @@ TOTAL ASSETS
 </td>
 
 <td class="text-right">
-RM${totalAssets.toFixed(2)}
+RM${money(totalAssets)}
 </td>
 
 </tr>
@@ -433,7 +445,7 @@ ${item.name}
 </td>
 
 <td class="text-right">
-RM${item.amount.toFixed(2)}
+RM${money(item.amount)}
 </td>
 
 </tr>
@@ -447,7 +459,7 @@ TOTAL LIABILITIES
 </td>
 
 <td class="text-right">
-RM${totalLiabilities.toFixed(2)}
+RM${money(totalLiabilities)}
 </td>
 
 </tr>
@@ -479,7 +491,7 @@ ${item.name}
 </td>
 
 <td class="text-right">
-RM${item.amount.toFixed(2)}
+RM${money(item.amount)}
 </td>
 
 </tr>
@@ -493,7 +505,7 @@ Current Year Profit
 </td>
 
 <td class="text-right">
-RM${netProfit.toFixed(2)}
+RM${money(netProfit)}
 </td>
 
 </tr>
@@ -507,7 +519,7 @@ TOTAL EQUITY
 </td>
 
 <td class="text-right">
-RM${totalEquity.toFixed(2)}
+RM${money(totalEquity)}
 </td>
 
 </tr>
@@ -519,7 +531,7 @@ TOTAL LIABILITIES & EQUITY
 </td>
 
 <td class="text-right">
-RM${totalLE.toFixed(2)}
+RM${money(totalLE.toFixed)}
 </td>
 
 </tr>
@@ -536,7 +548,7 @@ BALANCE CHECK
 
 <td class="text-right">
 
-RM${difference.toFixed(2)}
+RM${money(difference)}
 
 </td>
 
