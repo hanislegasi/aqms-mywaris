@@ -224,7 +224,16 @@ await getDoc(doc(db, "paymentVouchers", pvId)
 );
 
 const pv = pvDoc.data();
+           
+if(!pv.accountCode){
 
+    alert("Payment Voucher ini menggunakan format lama.");
+
+    console.log(pv);
+
+    return;
+
+}
            
 const accountCode = pv.accountCode;
 const accountName = pv.accountName;
