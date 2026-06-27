@@ -141,6 +141,18 @@ initializeApp(firebaseConfig);
 const db =
 getFirestore(app);
 
+function money(value){
+
+    return Number(value || 0).toLocaleString(
+        "en-US",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+
+}
+  
 const snap =
 await getDocs(
 collection(db,"ledger")
@@ -196,11 +208,11 @@ ${row.description || "-"}
 </td>
 
 <td class="p-3 text-right">
-RM${Number(row.debit || 0).toFixed(2)}
+RM${money(row.debit)}
 </td>
 
 <td class="p-3 text-right">
-RM${Number(row.credit || 0).toFixed(2)}
+RM${money(row.credit)}
 </td>
 
 </tr>
