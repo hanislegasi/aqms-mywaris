@@ -175,6 +175,18 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+function money(value){
+
+    return Number(value || 0).toLocaleString(
+        "en-US",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+
+}
+        
         try {
             const snap = await getDocs(collection(db, "ledger"));
             const allocationSnap = await getDocs(collection(db, "companyAllocation"));
@@ -228,23 +240,27 @@
                         <td class="p-4 text-gray-700">${row.date?.toDate ? row.date.toDate().toLocaleDateString("ms-MY") : "-"}</td>
                         <td class="p-4 font-medium text-gray-800">${row.account || "-"}</td>
                         <td class="p-4 text-gray-500 hidden md:table-cell truncate max-w-xs">${row.description || "-"}</td>
-                        <td class="p-4 text-right text-gray-700">RM${Number(row.debit || 0).toFixed(2)}</td>
-                        <td class="p-4 text-right text-gray-700">RM${Number(row.credit || 0).toFixed(2)}</td>
+                        <td class="p-4 text-right text-gray-700">RM${money(row.debit)}</td>
+                        <td class="p-4 text-right text-gray-700">RM${money(row.credit)}</td>
                     </tr>
                 `;
             });
 
             document.getElementById("ledgerTable").innerHTML = html;
-            document.getElementById("incomeCard").innerHTML = "RM" + income.toFixed(2);
-            document.getElementById("expenseCard").innerHTML = "RM" + expense.toFixed(2);
-            document.getElementById("profitCard").innerHTML = "RM" + (income - expense).toFixed(2);
-            document.getElementById("bankCard").innerHTML = "RM" + bankBalance.toFixed(2);
+           document.getElementById("incomeCard").innerHTML =
+"RM" + money(income);
+           document.getElementById("expenseCard").innerHTML =
+"RM" + money(expense);
+            document.getElementById("profitCard").innerHTML =
+"RM" + money(income-expense);
+            document.getElementById("bankCard").innerHTML =
+"RM" + money(bankBalance);
             document.getElementById("transactionCard").innerHTML = count;
-            document.getElementById("companyFund").innerHTML = "RM" + companyFund.toFixed(2);
-            document.getElementById("shareholderFund").innerHTML = "RM" + shareholderFund.toFixed(2);
-            document.getElementById("allowanceFund").innerHTML = "RM" + allowanceFund.toFixed(2);
-            document.getElementById("adminFund").innerHTML = "RM" + adminFund.toFixed(2);
-            document.getElementById("royaltyFund").innerHTML = "RM" + royaltyFund.toFixed(2);
+            document.getElementById("companyFund").innerHTML = "RM" + money(companyFund);
+            document.getElementById("shareholderFund").innerHTML = "RM" + money(shareholderFund);
+            document.getElementById("allowanceFund").innerHTML = "RM" + money(allowanceFund);
+            document.getElementById("adminFund").innerHTML = "RM" + money(adminFund);
+            document.getElementById("royaltyFund").innerHTML = "RM" + money(royaltyFund);
 
             new Chart(document.getElementById("financeChart"), {
                 type: "bar",
