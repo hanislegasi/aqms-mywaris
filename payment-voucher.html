@@ -205,6 +205,8 @@ ${pv.amount}
 
         document.getElementById("pvTable").innerHTML = html;
 
+console.log(pv);
+        
        window.markPaid = async (
 pvId,
 type,
@@ -241,6 +243,11 @@ const expenseNormalBalance = pv.expenseNormalBalance;
 const expenseReportGroup = pv.expenseReportGroup;
 
 
+console.log(accountCode);
+console.log(accountName);
+console.log(category);
+           
+           
 await addDoc(collection(db,"ledger"),{
 
 date:new Date(),
