@@ -112,7 +112,10 @@ settings?.registrationNo || "";
 const financialYearEnd =
 settings?.financialYearEnd || "";
 
+const openingBank =
+Number(settings?.openingBankBalance || 0);
 
+let closingBank = openingBank;    
 
 const snap =
 await getDocs(
@@ -293,8 +296,7 @@ financingCashFlow;
 
   
 
-const closingBank =
-bank;
+
 
 document.getElementById(
 "cfCard"
@@ -403,6 +405,21 @@ RM${openingBank.toFixed(2)}
 <tr>
 
 <td>
+Net Increase/(Decrease)
+</td>
+
+<td class="text-right">
+
+RM${netIncrease.toFixed(2)}
+
+</td>
+
+</tr>
+
+
+<tr>
+
+<td>
 Closing Bank Balance
 </td>
 
@@ -411,6 +428,119 @@ RM${closingBank.toFixed(2)}
 </td>
 
 </tr>
+
+${Object.values(investingIn)
+
+.sort((a,b)=>a.code.localeCompare(b.code))
+
+.map(item=>`
+
+<tr>
+
+<td>${item.name}</td>
+
+<td class="text-right">
+
+RM${item.amount.toFixed(2)}
+
+</td>
+
+</tr>
+
+`).join("")}
+
+${Object.values(investingOut)
+
+.sort((a,b)=>a.code.localeCompare(b.code))
+
+.map(item=>`
+
+<tr>
+
+<td>${item.name}</td>
+
+<td class="text-right">
+
+(RM${item.amount.toFixed(2)})
+
+</td>
+
+</tr>
+
+`).join("")}
+
+<tr class="font-bold border-t">
+
+<td>
+
+Net Cash From Investing Activities
+
+</td>
+
+<td class="text-right">
+
+RM${investingCashFlow.toFixed(2)}
+
+</td>
+
+</tr>
+
+${Object.values(financingIn)
+
+.sort((a,b)=>a.code.localeCompare(b.code))
+
+.map(item=>`
+
+<tr>
+
+<td>${item.name}</td>
+
+<td class="text-right">
+
+RM${item.amount.toFixed(2)}
+
+</td>
+
+</tr>
+
+`).join("")}
+
+${Object.values(financingOut)
+
+.sort((a,b)=>a.code.localeCompare(b.code))
+
+.map(item=>`
+
+<tr>
+
+<td>${item.name}</td>
+
+<td class="text-right">
+
+(RM${item.amount.toFixed(2)})
+
+</td>
+
+</tr>
+
+`).join("")}
+
+<tr class="font-bold border-t">
+
+<td>
+
+Net Cash From Financing Activities
+
+</td>
+
+<td class="text-right">
+
+RM${financingCashFlow.toFixed(2)}
+
+</td>
+
+</tr>
+
 
 </table>
 
