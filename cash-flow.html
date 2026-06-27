@@ -112,96 +112,183 @@ settings?.registrationNo || "";
 const financialYearEnd =
 settings?.financialYearEnd || "";
 
-const openingBank =
-Number(
-settings?.openingBankBalance || 0
-);
+
 
 const snap =
 await getDocs(
 collection(db,"ledger")
 );
 
+const coaSnap =
+await getDocs(
+collection(db,"chartOfAccounts")
+);
+
+const coaMap={};
+
+coaSnap.forEach(doc=>{
+
+const a=doc.data();
+
+coaMap[a.code]=a;
+
+});
+    
 
 
-let cashReceived = 0;
+const operatingIn = {};
+const operatingOut = {};
 
-let consultantPaid = 0;
-let allowancePaid = 0;
-let adminPaid = 0;
-let royaltyPaid = 0;
-let otherPaid = 0;
+const investingIn = {};
+const investingOut = {};
 
-let bank = 0;
+const financingIn = {};
+const financingOut = {};
+
+let closingBank =
+Number(settings?.openingBankBalance || 0);
+
+
+
+
 
 snap.forEach((d)=>{
 
-const row = d.data();
+    const row=d.data();
 
-if(row.accountCode === "1000"){
+    const coa=
+    coaMap[String(row.accountCode)];
 
-    bank += Number(row.debit || 0);
-    bank -= Number(row.credit || 0);
+    if(!coa) return;
 
-    if(Number(row.debit || 0) > 0){
+    const debit=
+    Number(row.debit||0);
 
-        cashReceived += Number(row.debit);
+    const credit=
+    Number(row.credit||0);
+
+    if(row.accountCode=="1000"){
+
+        closingBank += debit-credit;
+
+        return;
 
     }
 
-}
+    const section=
+    coa.cashFlowType?.toLowerCase();
 
-if(row.accountCode === "2000" && row.debit>0){
+    let cashIn;
+    let cashOut;
 
-    consultantPaid += Number(row.debit);
+    if(section=="operating"){
 
-}
+        cashIn=operatingIn;
+        cashOut=operatingOut;
 
-if(row.accountCode === "2200" && row.debit>0){
+    }
 
-    allowancePaid += Number(row.debit);
+    if(section=="investing"){
 
-}
+        cashIn=investingIn;
+        cashOut=investingOut;
 
-if(row.accountCode === "2300" && row.debit>0){
+    }
 
-    adminPaid += Number(row.debit);
+    if(section=="financing"){
 
-}
+        cashIn=financingIn;
+        cashOut=financingOut;
 
-if(row.accountCode === "2400" && row.debit>0){
+    }
 
-    royaltyPaid += Number(row.debit);
+    if(!cashIn) return;
 
-}
+    if(credit>0){
 
-if(
-Number(row.accountCode) >= 5500 &&
-Number(row.accountCode) <= 5999 &&
-row.debit > 0
-){
+        if(!cashIn[coa.code]){
 
-    otherPaid += Number(row.debit);
+            cashIn[coa.code]={
 
-}
-    
+                code:coa.code,
+                name:coa.name,
+                amount:0
+
+            };
+
+        }
+
+        cashIn[coa.code].amount += credit;
+
+    }
+
+    if(debit>0){
+
+        if(!cashOut[coa.code]){
+
+            cashOut[coa.code]={
+
+                code:coa.code,
+                name:coa.name,
+                amount:0
+
+            };
+
+        }
+
+        cashOut[coa.code].amount += debit;
+
+    }
+
 });
   
 
 
-const operatingCashFlow =
 
-cashReceived
--
-consultantPaid
--
-allowancePaid
--
-adminPaid
--
-royaltyPaid
--
-otherPaid;
+
+const operatingInTotal =
+Object.values(operatingIn)
+.reduce((a,b)=>a+b.amount,0);
+
+const operatingOutTotal =
+Object.values(operatingOut)
+.reduce((a,b)=>a+b.amount,0);
+
+const operatingCashFlow =
+operatingInTotal-operatingOutTotal;
+
+
+const investingInTotal =
+Object.values(investingIn)
+.reduce((a,b)=>a+b.amount,0);
+
+const investingOutTotal =
+Object.values(investingOut)
+.reduce((a,b)=>a+b.amount,0);
+
+const investingCashFlow =
+investingInTotal-investingOutTotal;
+
+
+const financingInTotal =
+Object.values(financingIn)
+.reduce((a,b)=>a+b.amount,0);
+
+const financingOutTotal =
+Object.values(financingOut)
+.reduce((a,b)=>a+b.amount,0);
+
+const financingCashFlow =
+financingInTotal-financingOutTotal;
+
+
+const netIncrease=
+
+operatingCashFlow+
+
+investingCashFlow+
+
+financingCashFlow;
 
 
   
@@ -243,79 +330,47 @@ OPERATING ACTIVITIES
 
 </tr>
 
-<tr>
 
-<td>
-Cash Received From Customers
-</td>
 
-<td class="text-right">
-RM${cashReceived.toFixed(2)}
-</td>
+${Object.values(operatingIn)
 
-</tr>
+.sort((a,b)=>a.code.localeCompare(b.code))
+
+.map(item=>`
 
 <tr>
 
-<td>
-Consultant Payment
-</td>
+<td>${item.name}</td>
 
 <td class="text-right">
-(RM${consultantPaid.toFixed(2)})
+
+RM${item.amount.toFixed(2)}
+
 </td>
 
 </tr>
+
+`).join("")}
+
+${Object.values(operatingOut)
+
+.sort((a,b)=>a.code.localeCompare(b.code))
+
+.map(item=>`
 
 <tr>
 
-<td>
-Allowance Payment
-</td>
+<td>${item.name}</td>
 
 <td class="text-right">
-(RM${allowancePaid.toFixed(2)})
+
+(RM${item.amount.toFixed(2)})
+
 </td>
 
 </tr>
 
-<tr>
-
-<td>
-Admin Payment
-</td>
-
-<td class="text-right">
-(RM${adminPaid.toFixed(2)})
-</td>
-
-</tr>
-
-<tr>
-
-<td>
-Royalty Payment
-</td>
-
-<td class="text-right">
-(RM${royaltyPaid.toFixed(2)})
-</td>
-
-</tr>
-
-<tr>
-
-<td>
-Other Operating Payment
-</td>
-
-<td class="text-right">
-(RM${otherPaid.toFixed(2)})
-</td>
-
-</tr>
-
-</tr>
+`).join("")}
 
 <tr class="font-bold border-t">
 
