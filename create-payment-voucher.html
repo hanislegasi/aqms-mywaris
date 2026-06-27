@@ -144,26 +144,29 @@ db,
 )
 );
 
+const coaMap = {};
+
 let coaHtml = "";
 
 coaSnap.forEach((d)=>{
 
-const coa = d.data();
+    const coa = d.data();
 
-if(
-coa.type?.toLowerCase() === "expense"
-){
+    coaMap[coa.code] = coa;
 
-coaHtml += `
-<option
-value="${coa.code}">
-${coa.code} - ${coa.name}
-</option>
-`;
+    if(coa.type?.toLowerCase()=="expense"){
 
-}
+        coaHtml += `
+        <option value="${coa.code}">
+        ${coa.code} - ${coa.name}
+        </option>
+        `;
+
+    }
 
 });
+
+
 
 document.getElementById(
 "accountCode"
@@ -224,56 +227,51 @@ document.getElementById(
 "accountCode"
 );
 
-const accountCode =
-selectedOption.value;
+const expenseCode =
+document.getElementById("accountCode").value;
 
-const accountName =
-selectedOption.options[
-selectedOption.selectedIndex
-]
-.text.split(" - ")[1];
+const expense =
+coaMap[expenseCode];
+
+const payable =
+coaMap[expense.payableCode];
 
  
 await addDoc(
-collection(
-db,
-"paymentVouchers"
-),
+collection(db,"paymentVouchers"),
 {
-pvNo,
+    pvNo,
 
-type:
-"MANUAL",
+    type:"MANUAL",
 
-period:
-currentPeriod,
+    period:currentPeriod,
 
-accountCode,
+    expenseCode:expense.code,
+expenseName:expense.name,
 
-accountName,
+accountCode:payable.code,
+accountName:payable.name,
 
-payee:
-document.getElementById(
-"payee"
-).value,
+category:payable.category,
+cashFlowType:payable.cashFlowType,
+normalBalance:payable.normalBalance,
+reportGroup:payable.reportGroup,
 
-description:
-document.getElementById(
-"description"
-).value,
+    
 
-amount,
+    payee:
+   
+    description:
+    document.getElementById("description").value,
 
-status:
-"PENDING",
+    amount,
 
-manual:
-true,
+    status:"PENDING",
 
-createdAt:
-new Date()
-}
-);
+    manual:true,
+
+    createdAt:new Date()
+});
 
 
  
