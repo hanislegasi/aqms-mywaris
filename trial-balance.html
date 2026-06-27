@@ -96,6 +96,19 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+function money(value){
+
+    return Number(value||0).toLocaleString(
+        "en-US",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+
+}
+
+        
         async function fetchTrialBalance() {
             try {
                 const snap = await getDocs(collection(db, "ledger"));
@@ -143,8 +156,8 @@
                             <tr class="border-b">
                                 <td class="p-3">${code}</td>
                                 <td class="p-3">${a.name}</td>
-                                <td class="p-3 text-right">RM${a.debit.toFixed(2)}</td>
-                                <td class="p-3 text-right">RM${a.credit.toFixed(2)}</td>
+                                <td class="p-3 text-right">RM${money(debit)}</td>
+                                <td class="p-3 text-right">RM${money(credit)}</td>
                             </tr>
                         `;
                     });
@@ -153,8 +166,8 @@
                 html += `
                     <tr class="bg-gray-100 font-bold">
                         <td colspan="2" class="p-3">TOTAL</td>
-                        <td class="p-3 text-right">RM${totalDebit.toFixed(2)}</td>
-                        <td class="p-3 text-right">RM${totalCredit.toFixed(2)}</td>
+                        <td class="p-3 text-right">RM${money(totalDebit)}</td>
+                        <td class="p-3 text-right">RM${money(totalCredit)}</td>
                     </tr>
                 `;
 
