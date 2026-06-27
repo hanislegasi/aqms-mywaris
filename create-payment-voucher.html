@@ -246,12 +246,17 @@ collection(db,"paymentVouchers"),
 
     period:currentPeriod,
 
-    expenseCode:expense.code,
+expenseCode:expense.code,
 expenseName:expense.name,
 
+expenseCategory:expense.category,
+expenseType:expense.type,
+expenseCashFlowType:expense.cashFlowType,
+expenseReportGroup:expense.reportGroup,
+expenseNormalBalance:expense.normalBalance,
+ 
 accountCode:payable.code,
 accountName:payable.name,
-
 category:payable.category,
 cashFlowType:payable.cashFlowType,
 normalBalance:payable.normalBalance,
@@ -259,7 +264,7 @@ reportGroup:payable.reportGroup,
 
     
 
-    payee:
+    payee,
    
     description:
     document.getElementById("description").value,
