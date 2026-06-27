@@ -101,6 +101,18 @@ settings.registrationNo || "";
 const financialYearEnd =
 settings.financialYearEnd || "";
 
+function money(value){
+
+    return Number(value||0).toLocaleString(
+        "en-US",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+
+}
+
   
 const snap =
 await getDocs(
@@ -303,7 +315,7 @@ ${item.name}
 
 <td class="text-right">
 
-${item.amount.toFixed(2)}
+${item.money(amount)}
 
 </td>
 
@@ -320,7 +332,7 @@ TOTAL REVENUE
 </td>
 
 <td class="text-right">
-RM${totalRevenue.toFixed(2)}
+RM${money(totalRevenue)}
 </td>
 
 </tr>
@@ -359,7 +371,7 @@ ${item.name}
 
 <td class="text-right">
 
-${item.amount.toFixed(2)}
+${item.money(amount)}
 
 </td>
 
@@ -378,7 +390,7 @@ TOTAL EXPENSES
 </td>
 
 <td class="text-right">
-RM${totalExpense.toFixed(2)}
+RM${money(totalExpense)}
 </td>
 
 </tr>
@@ -394,7 +406,7 @@ NET PROFIT
 </td>
 
 <td class="text-right px-2">
-RM${netProfit.toFixed(2)}
+RM${money(netProfit)}
 </td>
 
 </tr>
