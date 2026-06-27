@@ -345,7 +345,7 @@ ${Object.values(operatingIn)
 
 <td class="text-right">
 
-RM${item.amount.toFixed(2)}
+RM${money(item.amount)}
 
 </td>
 
@@ -366,7 +366,7 @@ ${Object.values(operatingOut)
 
 <td class="text-right">
 
-(RM${item.amount.toFixed(2)})
+(RM${money(item.amount)})
 
 </td>
 
@@ -381,7 +381,7 @@ Net Cash From Operating Activities
 </td>
 
 <td class="text-right">
-RM${operatingCashFlow.toFixed(2)}
+RM${money(operatingCashFlow)}
 </td>
 
 </tr>
@@ -397,7 +397,7 @@ Opening Bank Balance
 </td>
 
 <td class="text-right">
-RM${openingBank.toFixed(2)}
+RM${money(openingBank)}
 </td>
 
 </tr>
@@ -410,7 +410,7 @@ Net Increase/(Decrease)
 
 <td class="text-right">
 
-RM${netIncrease.toFixed(2)}
+RM${money(netIncrease)}
 
 </td>
 
@@ -424,7 +424,7 @@ Closing Bank Balance
 </td>
 
 <td class="text-right">
-RM${closingBank.toFixed(2)}
+RM${money(closingBank)}
 </td>
 
 </tr>
@@ -454,7 +454,7 @@ ${Object.values(investingIn)
 
 <td class="text-right">
 
-RM${item.amount.toFixed(2)}
+RM${money(item.amount)}
 
 </td>
 
@@ -475,7 +475,7 @@ ${Object.values(investingOut)
 
 <td class="text-right">
 
-(RM${item.amount.toFixed(2)})
+(RM${money(item.amount)})
 
 </td>
 
@@ -523,7 +523,7 @@ ${Object.values(financingIn)
 
 <td class="text-right">
 
-RM${item.amount.toFixed(2)}
+RM${money(item.amount)}
 
 </td>
 
@@ -544,7 +544,7 @@ ${Object.values(financingOut)
 
 <td class="text-right">
 
-(RM${item.amount.toFixed(2)})
+(RM${money(item.amount)})
 
 </td>
 
