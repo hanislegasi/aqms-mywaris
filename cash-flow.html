@@ -148,8 +148,6 @@ const investingOut = {};
 const financingIn = {};
 const financingOut = {};
 
-let closingBank =
-Number(settings?.openingBankBalance || 0);
 
 
 
@@ -335,7 +333,8 @@ OPERATING ACTIVITIES
 
 
 ${Object.values(operatingIn)
-
+.filter(item=>item.amount!=0)
+  
 .sort((a,b)=>a.code.localeCompare(b.code))
 
 .map(item=>`
@@ -355,7 +354,8 @@ RM${item.amount.toFixed(2)}
 `).join("")}
 
 ${Object.values(operatingOut)
-
+.filter(item=>item.amount!=0)
+  
 .sort((a,b)=>a.code.localeCompare(b.code))
 
 .map(item=>`
@@ -429,8 +429,21 @@ RM${closingBank.toFixed(2)}
 
 </tr>
 
-${Object.values(investingIn)
+<tr>
+<td colspan="2" class="py-4"></td>
+</tr>
 
+<tr class="font-bold bg-gray-100">
+<td colspan="2">
+INVESTING ACTIVITIES
+</td>
+</tr>
+
+
+
+${Object.values(investingIn)
+.filter(item=>item.amount!=0)
+  
 .sort((a,b)=>a.code.localeCompare(b.code))
 
 .map(item=>`
@@ -450,7 +463,8 @@ RM${item.amount.toFixed(2)}
 `).join("")}
 
 ${Object.values(investingOut)
-
+.filter(item=>item.amount!=0)
+  
 .sort((a,b)=>a.code.localeCompare(b.code))
 
 .map(item=>`
@@ -485,8 +499,20 @@ RM${investingCashFlow.toFixed(2)}
 
 </tr>
 
-${Object.values(financingIn)
+<tr>
+<td colspan="2" class="py-4"></td>
+</tr>
 
+<tr class="font-bold bg-gray-100">
+<td colspan="2">
+FINANCING ACTIVITIES
+</td>
+</tr>
+
+
+${Object.values(financingIn)
+.filter(item=>item.amount!=0)
+  
 .sort((a,b)=>a.code.localeCompare(b.code))
 
 .map(item=>`
@@ -506,7 +532,8 @@ RM${item.amount.toFixed(2)}
 `).join("")}
 
 ${Object.values(financingOut)
-
+.filter(item=>item.amount!=0)
+  
 .sort((a,b)=>a.code.localeCompare(b.code))
 
 .map(item=>`
