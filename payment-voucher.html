@@ -224,6 +224,9 @@ await getDoc(doc(db, "paymentVouchers", pvId)
 );
 
 const pv = pvDoc.data();
+
+console.log("PV ID =", pvId);
+console.log(pv);
            
 if(!pv.accountCode){
 
