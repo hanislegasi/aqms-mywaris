@@ -144,9 +144,15 @@ function money(value){
                 let totalCredit = 0;
 
                 // Sort accounts by code and append to UI
-                Object.keys(accounts)
-                    .sort()
+               Object.keys(accounts)
+.sort((a,b)=>Number(a)-Number(b))
                     .forEach((code) => {
+
+const a = accounts[code];
+
+if(a.debit===0 && a.credit===0)
+return;
+                        
                         const a = accounts[code];
                         totalDebit += a.debit;
                         totalCredit += a.credit;
@@ -156,8 +162,8 @@ function money(value){
                             <tr class="border-b">
                                 <td class="p-3">${code}</td>
                                 <td class="p-3">${a.name}</td>
-                                <td class="p-3 text-right">RM${money(debit)}</td>
-                                <td class="p-3 text-right">RM${money(credit)}</td>
+                                <td class="p-3 text-right">RM${money(a.debit)}</td>
+                                <td class="p-3 text-right">RM${money(a.credit)}</td>
                             </tr>
                         `;
                     });
