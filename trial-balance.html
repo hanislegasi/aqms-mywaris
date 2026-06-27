@@ -144,29 +144,42 @@ function money(value){
                 let totalCredit = 0;
 
                 // Sort accounts by code and append to UI
-               Object.keys(accounts)
+              Object.keys(accounts)
 .sort((a,b)=>Number(a)-Number(b))
-                    .forEach((code) =>{
+.forEach((code)=>{
 
-const a = accounts[code];
+    const a = accounts[code];
 
-if(a.debit===0 && a.credit===0)
-return;
-                    }                        
-                       
-                        totalDebit += a.debit;
-                        totalCredit += a.credit;
+    if(a.debit===0 && a.credit===0){
+        return;
+    }
 
-                        // Di sini kita kekalkan font standard dan padding (p-3) mengikut kod asal
-                        html += `
-                            <tr class="border-b">
-                                <td class="p-3">${code}</td>
-                                <td class="p-3">${a.name}</td>
-                                <td class="p-3 text-right">RM${money(a.debit)}</td>
-                                <td class="p-3 text-right">RM${money(a.credit)}</td>
-                            </tr>
-                        `;
-                    });
+    totalDebit += a.debit;
+    totalCredit += a.credit;
+
+    html += `
+    <tr class="border-b">
+
+        <td class="p-3">
+            ${code}
+        </td>
+
+        <td class="p-3">
+            ${a.name}
+        </td>
+
+        <td class="p-3 text-right">
+            RM${money(a.debit)}
+        </td>
+
+        <td class="p-3 text-right">
+            RM${money(a.credit)}
+        </td>
+
+    </tr>
+    `;
+
+});
 
                 // Add totals row at the bottom
                 html += `
