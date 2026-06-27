@@ -227,33 +227,65 @@ const pv = pvDoc.data();
 const accountCode = pv.accountCode;
 const accountName = pv.accountName;
 
-const category =
-accountCode==="3100"
-?
-"equity"
-:
-"liability";
+const category = pv.category;
+const cashFlowType = pv.cashFlowType;
+const normalBalance = pv.normalBalance;
+const reportGroup = pv.reportGroup;
+
+const expenseCode = pv.expenseCode;
+const expenseName = pv.expenseName;
+
+const expenseCategory = pv.expenseCategory;
+const expenseCashFlowType = pv.expenseCashFlowType;
+const expenseNormalBalance = pv.expenseNormalBalance;
+const expenseReportGroup = pv.expenseReportGroup;
 
 
-await addDoc(
-collection(db,"ledger"),
-{
+await addDoc(collection(db,"ledger"),{
+
 date:new Date(),
 
 accountCode,
-
 account:accountName,
 
 category,
+cashFlowType,
+normalBalance,
+reportGroup,
 
 description:payee,
 
 debit:amount,
+credit:0,
 
-credit:0
+paymentType:type,
+transactionGroup:pv.pvNo
+
 });
            
+await addDoc(collection(db,"ledger"),{
 
+date:new Date(),
+
+accountCode:expenseCode,
+account:expenseName,
+
+category:expenseCategory,
+cashFlowType:expenseCashFlowType,
+normalBalance:expenseNormalBalance,
+reportGroup:expenseReportGroup,
+
+description:payee,
+
+debit:amount,
+credit:0,
+
+paymentType:type,
+transactionGroup:pv.pvNo
+
+});
+
+           
 await addDoc(collection(db,"ledger"),{
 
 date:new Date(),
@@ -261,19 +293,20 @@ date:new Date(),
 accountCode:"1000",
 account:"Bank",
 
-category:"asset",
+category:"Asset",
+cashFlowType:"Operating",
+normalBalance:"Debit",
+reportGroup:"Balance Sheet",
 
 description:payee,
 
 debit:0,
-
 credit:amount,
 
 paymentType:type,
-sourceAccount:accountCode,
 transactionGroup:pv.pvNo
 
-});     
+});  
 
            
            
