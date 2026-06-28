@@ -306,27 +306,7 @@ transactionGroup:pv.pvNo
 
 });
            
-await addDoc(collection(db,"ledger"),{
 
-date:new Date(),
-
-accountCode:expenseCode,
-account:expenseName,
-
-category:expenseCategory,
-cashFlowType:expenseCashFlowType,
-normalBalance:expenseNormalBalance,
-reportGroup:expenseReportGroup,
-
-description:payee,
-
-debit:amount,
-credit:0,
-
-paymentType:type,
-transactionGroup:pv.pvNo
-
-});
 
            
 await addDoc(collection(db,"ledger"),{
