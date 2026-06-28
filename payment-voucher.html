@@ -225,6 +225,22 @@ await getDoc(doc(db, "paymentVouchers", pvId)
 
 const pv = pvDoc.data();
 
+const coaSnap = await getDocs(
+    collection(db,"chartOfAccounts")
+);
+
+const coaMap = {};
+
+coaSnap.forEach((d)=>{
+
+    const coa = d.data();
+
+    coaMap[coa.code] = coa;
+
+});
+
+const bank = coaMap["1000"];
+           
 console.log("PV ID =", pvId);
 console.log(pv);
            
