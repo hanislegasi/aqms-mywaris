@@ -371,44 +371,63 @@ if(type==="ADMIN") amount=adminPayable;
 if(type==="ROYALTY") amount=royaltyPayable;
 if(type==="SHAREHOLDER") amount=shareholderReserve;
 
-const expense =
-Object.values(coaMap).find(a=>
+let expense = null;
+let payable = null;
 
-a.type?.toLowerCase()=="expense" &&
-a.allocationType==type
+if(type=="ALLOWANCE"){
 
-);
+    payable = coaMap["2200"];
 
-if(!expense && type!="SHAREHOLDER"){
+    expense = Object.values(coaMap).find(a =>
+        a.type=="Expense" &&
+        a.payableCode=="2200"
+    );
+
+}
+
+if(type=="ADMIN"){
+
+    payable = coaMap["2300"];
+
+    expense = Object.values(coaMap).find(a =>
+        a.type=="Expense" &&
+        a.payableCode=="2300"
+    );
+
+}
+
+if(type=="ROYALTY"){
+
+    payable = coaMap["2400"];
+
+    expense = Object.values(coaMap).find(a =>
+        a.type=="Expense" &&
+        a.payableCode=="2400"
+    );
+
+}
+
+if(type=="SHAREHOLDER"){
+
+    payable = coaMap["3100"];
+
+}
+    
+if(type!="SHAREHOLDER" && !expense){
 
     alert("Expense Account not found");
-
     return;
 
 }
 
-const payable =
-Object.values(coaMap).find(a=>
-
-a.allocationType==type &&
-(
-a.type?.toLowerCase()=="liability" ||
-a.type?.toLowerCase()=="equity"
-)
-
-);
-
-    
 if(!payable){
 
     alert("Payable Account not found");
-
     return;
 
 }
 
     
-
 
 
 const currentPeriod =
