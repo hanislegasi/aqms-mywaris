@@ -104,6 +104,23 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+const coaSnap = await getDocs(
+collection(
+db,
+"chartOfAccounts"
+)
+);
+
+const coaMap = {};
+
+coaSnap.forEach((d)=>{
+
+    const coa = d.data();
+
+    coaMap[coa.code] = coa;
+
+});
+        
         // Fetch data
 
 let royaltyPayable = 0;
@@ -347,50 +364,52 @@ try {
 
 payee = payee.trim();
 
-let accountCode = "";
-let accountName = "";
 let amount = 0;
 
+if(type==="ALLOWANCE") amount=allowancePayable;
+if(type==="ADMIN") amount=adminPayable;
+if(type==="ROYALTY") amount=royaltyPayable;
+if(type==="SHAREHOLDER") amount=shareholderReserve;
+
+const expense =
+Object.values(coaMap).find(a=>
+
+a.type?.toLowerCase()=="expense" &&
+a.allocationType==type
+
+);
+
+if(!expense && type!="SHAREHOLDER"){
+
+    alert("Expense Account not found");
+
+    return;
+
+}
+
+const payable =
+Object.values(coaMap).find(a=>
+
+a.allocationType==type &&
+(
+a.type?.toLowerCase()=="liability" ||
+a.type?.toLowerCase()=="equity"
+)
+
+);
+
     
-if(type==="ALLOWANCE"){
-    amount = allowancePayable;
-    accountCode="2200";
-    accountName="Allowance Payable";
+if(!payable){
+
+    alert("Payable Account not found");
+
+    return;
+
 }
 
-if(type==="ADMIN"){
-    amount = adminPayable;
-    accountCode="2300";
-    accountName="Admin Payable";
-}
-
-if(type==="ROYALTY"){
-    amount = royaltyPayable;
-    accountCode="2400";
-    accountName="Royalty Payable";
-}
-
-if(type==="SHAREHOLDER"){
-    amount = shareholderReserve;
-    accountCode="3100";
-    accountName="Shareholder Reserve";
-}
     
-if(!payee){
 
-alert("Please enter Payee");
 
-return;
-
-}
-    
-if(amount <= 0){
-
-alert("No payable balance");
-
-return;
-
-}
 
 const currentPeriod =
 new Date().getFullYear()
@@ -425,44 +444,50 @@ const pvNo =
 "PV-" +
 Date.now();
 
+    
 
+
+    
     
 await addDoc(
-collection(
-db,
-"paymentVouchers"
-),
+collection(db,"paymentVouchers"),
 {
-pvNo,
+    pvNo,
 
-type,
+    type,
 
-accountCode,
-accountName,    
+    period: currentPeriod,
 
-period:
-currentPeriod,
+   ...(type!="SHAREHOLDER" && {
 
-description:
-type +
-" " +
-currentPeriod,
-    
-consultantNo:
-"-",
+expenseCode:expense.code,
+expenseName:expense.name,
+expenseCategory:expense.category,
+expenseCashFlowType:expense.cashFlowType,
+expenseNormalBalance:expense.normalBalance,
+expenseReportGroup:expense.reportGroup
 
-consultantName:
-payee,
+}),
 
-payee,
+    // Payable Account
+    accountCode: payable.code,
+    accountName: payable.name,
+    category: payable.category,
+    cashFlowType: payable.cashFlowType,
+    normalBalance: payable.normalBalance,
+    reportGroup: payable.reportGroup,
 
-amount,
+    description: type + " " + currentPeriod,
 
-status:
-"PENDING",
+    consultantNo: "-",
+    consultantName: payee,
+    payee,
 
-createdAt:
-new Date()
+    amount,
+
+    status: "PENDING",
+
+    createdAt: new Date()
 }
 );
 
@@ -471,33 +496,22 @@ new Date()
 
 if(type !== "SHAREHOLDER"){
 
-let expenseCode="";
-let expenseName="";
 
-if(type==="ALLOWANCE"){
-expenseCode="5200";
-expenseName="Allowance Expense";
-}
 
-if(type==="ADMIN"){
-expenseCode="5300";
-expenseName="Admin Expense";
-}
-
-if(type==="ROYALTY"){
-expenseCode="5400";
-expenseName="Royalty Expense";
-}
-
+    
 await addDoc(
 collection(db,"ledger"),
 {
 date:new Date(),
 
-accountCode:expenseCode,
-account:expenseName,
+accountCode:expense.code,
+account:expense.name,
 
-category:"expense",
+category:expense.category,
+cashFlowType:expense.cashFlowType,
+normalBalance:expense.normalBalance,
+reportGroup:expense.reportGroup,
+
 
 description:payee,
 
@@ -516,13 +530,16 @@ collection(db,"ledger"),
 {
 date:new Date(),
 
-accountCode,
-account:accountName,
+accountCode:payable.code,
+account:payable.name,
 
-category:
-type==="SHAREHOLDER"
-? "equity"
-: "liability",
+category:payable.category,
+cashFlowType:payable.cashFlowType,
+normalBalance:payable.normalBalance,
+reportGroup:payable.reportGroup,
+
+    
+
 
 description:payee,
 
