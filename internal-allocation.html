@@ -372,41 +372,29 @@ if(type==="ROYALTY") amount=royaltyPayable;
 if(type==="SHAREHOLDER") amount=shareholderReserve;
 
 let expense = null;
+
+if(type=="ALLOWANCE")
+expense = coaMap["5200"];
+
+if(type=="ADMIN")
+expense = coaMap["5300"];
+
+if(type=="ROYALTY")
+expense = coaMap["5400"];
+
 let payable = null;
 
-if(type=="ALLOWANCE"){
+if(type=="SHAREHOLDER"){
 
-    payable = coaMap["2200"];
+    payable = coaMap["3100"];
 
-    expense = Object.values(coaMap).find(a =>
-        a.type=="Expense" &&
-        a.payableCode=="2200"
-    );
+}else{
 
-}
-
-if(type=="ADMIN"){
-
-    payable = coaMap["2300"];
-
-    expense = Object.values(coaMap).find(a =>
-        a.type=="Expense" &&
-        a.payableCode=="2300"
-    );
+    payable = coaMap[expense.payableCode];
 
 }
 
-if(type=="ROYALTY"){
-
-    payable = coaMap["2400"];
-
-    expense = Object.values(coaMap).find(a =>
-        a.type=="Expense" &&
-        a.payableCode=="2400"
-    );
-
-}
-
+    
 if(type=="SHAREHOLDER"){
 
     payable = coaMap["3100"];
