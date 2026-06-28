@@ -317,13 +317,13 @@ await addDoc(collection(db,"ledger"),{
 
 date:new Date(),
 
-accountCode:"1000",
-account:"Bank",
+accountCode:bank.code,
+account:bank.name,
 
-category:"Asset",
-cashFlowType:"Operating",
-normalBalance:"Debit",
-reportGroup:"Balance Sheet",
+category:bank.category,
+cashFlowType:bank.cashFlowType,
+normalBalance:bank.normalBalance,
+reportGroup:bank.reportGroup,
 
 description:payee,
 
