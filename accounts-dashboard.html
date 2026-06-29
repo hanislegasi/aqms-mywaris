@@ -119,6 +119,83 @@
             </div>
         </div>
 
+<div class="grid md:grid-cols-3 gap-4 mb-5">
+
+<div class="bg-green-50 rounded-xl p-4">
+
+<div class="text-gray-500 text-sm">
+Current Month Income
+</div>
+
+<div
+id="incomeGrowth"
+class="text-2xl font-bold text-green-600">
+
+RM0
+
+</div>
+
+<div
+id="incomeGrowthPct"
+class="text-sm">
+
+-
+
+</div>
+
+</div>
+
+<div class="bg-red-50 rounded-xl p-4">
+
+<div class="text-gray-500 text-sm">
+Current Month Expense
+</div>
+
+<div
+id="expenseGrowth"
+class="text-2xl font-bold text-red-600">
+
+RM0
+
+</div>
+
+<div
+id="expenseGrowthPct"
+class="text-sm">
+
+-
+
+</div>
+
+</div>
+
+<div class="bg-blue-50 rounded-xl p-4">
+
+<div class="text-gray-500 text-sm">
+Current Month Profit
+</div>
+
+<div
+id="profitGrowth"
+class="text-2xl font-bold text-blue-600">
+
+RM0
+
+</div>
+
+<div
+id="profitGrowthPct"
+class="text-sm">
+
+-
+
+</div>
+
+</div>
+
+</div>
+
+        
        <!-- Monthly Trend -->
 
 <div class="bg-white rounded-xl shadow p-5 mb-6">
@@ -230,6 +307,21 @@ function money(value){
                 rows.push(d.data());
             });
 
+const coaSnap = await getDocs(
+    collection(db,"chartOfAccounts")
+);
+
+const coaMap = {};
+
+coaSnap.forEach(doc=>{
+
+    const a = doc.data();
+
+    coaMap[a.code] = a;
+
+});
+
+            
             rows.forEach((row) => {
                 if (row.category === "income") { income += Number(row.credit || 0); }
                 if (row.category === "expense") { expense += Number(row.debit || 0); }
@@ -276,40 +368,50 @@ function money(value){
             document.getElementById("royaltyFund").innerHTML = "RM" + money(royaltyFund);
 
 
+//==============================
+// MONTHLY TREND
+//==============================
+
 const monthlyIncome = Array(12).fill(0);
 const monthlyExpense = Array(12).fill(0);
 
 snap.forEach((d)=>{
 
-const row = d.data();
+    const row = d.data();
 
-const dt =
-row.date?.toDate
-? row.date.toDate()
-: new Date(row.date);
+    const coa =
+    coaMap[String(row.accountCode)];
 
-const month =
-dt.getMonth();
+    if(!coa) return;
 
-const coa =
-coaMap[String(row.accountCode)];
+    const dt =
+    row.date?.toDate
+    ? row.date.toDate()
+    : new Date(row.date);
 
-if(!coa) return;
+    const month =
+    dt.getMonth();
 
-const type =
-coa.type?.toLowerCase();
+    const type =
+    coa.type?.toLowerCase();
 
-if(type=="income"){
+    if(
+        type=="income" ||
+        type=="revenue"
+    ){
 
-    monthlyIncome[month]+=Number(row.credit||0);
+        monthlyIncome[month]+=Number(row.credit||0);
 
-}
+    }
 
-if(type=="expense"){
+    if(
+        type=="expense" ||
+        type=="expenses"
+    ){
 
-    monthlyExpense[month]+=Number(row.debit||0);
+        monthlyExpense[month]+=Number(row.debit||0);
 
-}
+    }
 
 });
 
@@ -319,9 +421,10 @@ monthlyIncome.map((v,i)=>
 v-monthlyExpense[i]
 
 );
-
             
-            new Chart(document.getElementById("financeChart"),{
+            new Chart(
+document.getElementById("financeChart"),
+{
 
 type:"line",
 
@@ -342,17 +445,17 @@ data:monthlyIncome,
 
 borderColor:"#22c55e",
 
-backgroundColor:"rgba(34,197,94,.2)",
+backgroundColor:"rgba(34,197,94,.15)",
 
 borderWidth:4,
 
 pointRadius:5,
 
-pointHoverRadius:7,
+pointHoverRadius:8,
 
 fill:false,
 
-tension:.4
+tension:.35
 
 },
 
@@ -360,21 +463,21 @@ tension:.4
 
 label:"Expense",
 
-data:monthlyIncome,
+data:monthlyExpense,
 
-borderColor:"#22c55e",
+borderColor:"#ef4444",
 
-backgroundColor:"rgba(34,197,94,.2)",
+backgroundColor:"rgba(239,68,68,.15)",
 
 borderWidth:4,
 
 pointRadius:5,
 
-pointHoverRadius:7,
+pointHoverRadius:8,
 
 fill:false,
 
-tension:.4
+tension:.35
 
 },
 
@@ -382,92 +485,114 @@ tension:.4
 
 label:"Profit",
 
-data:monthlyIncome,
+data:monthlyProfit,
 
-borderColor:"#22c55e",
+borderColor:"#2563eb",
 
-backgroundColor:"rgba(34,197,94,.2)",
+backgroundColor:"rgba(37,99,235,.15)",
 
 borderWidth:4,
 
 pointRadius:5,
 
-pointHoverRadius:7,
+pointHoverRadius:8,
 
 fill:false,
 
-tension:.4
+tension:.35
 
 }
+
 ]
 
 },
+
 options:{
 
-    responsive:true,
+responsive:true,
 
-    maintainAspectRatio:false,
+maintainAspectRatio:false,
 
-    devicePixelRatio:2
+devicePixelRatio:2,
+
+interaction:{
+
+mode:"index",
+
+intersect:false
 
 },
-                
-options:{
-    responsive:true,
-    maintainAspectRatio:false,
-
-    interaction:{
-        mode:"index",
-        intersect:false
-    },
 
 layout:{
-    padding:20
+
+padding:20
+
 },
-    
-    plugins:{
-    legend:{
-        position:"top",
-        labels:{
-            font:{
-                size:14,
-                weight:"bold"
-            }
-        }
-    }
+
+plugins:{
+
+legend:{
+
+position:"top",
+
+labels:{
+
+font:{
+
+size:14,
+
+weight:"bold"
+
+}
+
+}
+
+}
+
 },
 
 scales:{
 
-    x:{
-        ticks:{
-            font:{
-                size:13
-            }
-        }
-    },
+x:{
 
-    y:{
-        ticks:{
-            font:{
-                size:13
-            }
-        }
-    }
+ticks:{
+
+font:{
+
+size:13
+
+}
+
+}
 
 },
 
-    scales:{
+y:{
 
-        y:{
-            beginAtZero:true
-        }
+beginAtZero:true,
 
-    }
+ticks:{
+
+font:{
+
+size:13
+
+},
+
+callback:(value)=>
+
+"RM"+
+Number(value).toLocaleString()
 
 }
-});
 
+}
+
+}
+
+}
+
+});
             
                
             
