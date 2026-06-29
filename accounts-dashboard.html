@@ -119,8 +119,46 @@
             </div>
         </div>
 
-        <!-- Chart and Transaction Table Section (NOW INSIDE THE MAIN CONTAINER) -->
-        <div class="grid lg:grid-cols-3 gap-4 mb-6">
+       <!-- Monthly Trend -->
+
+<div class="bg-white rounded-xl shadow p-5 mb-6">
+
+    <h3 class="font-bold text-lg mb-4">
+        Monthly Financial Trend
+    </h3>
+
+    <div style="height:380px">
+
+        <canvas id="financeChart"></canvas>
+
+    </div>
+
+</div>
+
+
+<!-- Latest Transaction -->
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+
+    <div class="p-5 border-b">
+
+        <h3 class="font-bold text-lg">
+            Latest Transaction Movement
+        </h3>
+
+        <p class="text-sm text-gray-500">
+            Latest 10 accounting entries
+        </p>
+
+    </div>
+
+    <table class="w-full text-sm">
+
+        ...
+
+    </table>
+
+
             
             <!-- CHART -->
             <div class="bg-white rounded-xl shadow-sm p-5 border border-gray-100 flex flex-col">
