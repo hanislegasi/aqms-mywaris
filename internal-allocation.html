@@ -452,7 +452,8 @@ const pvNo =
 Date.now();
 
     
-
+const reserve = coaMap["3100"];
+const distribution = coaMap["3110"];
 
     
     
@@ -499,6 +500,55 @@ expenseReportGroup:expense.reportGroup
 );
 
 
+    
+if(type=="SHAREHOLDER"){
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:new Date(),
+
+accountCode:reserve.code,
+account:reserve.name,
+
+category:reserve.category,
+cashFlowType:reserve.cashFlowType,
+normalBalance:reserve.normalBalance,
+reportGroup:reserve.reportGroup,
+
+description:payee,
+
+debit:amount,
+credit:0
+
+});
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:new Date(),
+
+accountCode:distribution.code,
+account:distribution.name,
+
+category:distribution.category,
+cashFlowType:distribution.cashFlowType,
+normalBalance:distribution.normalBalance,
+reportGroup:distribution.reportGroup,
+
+description:payee,
+
+debit:0,
+credit:amount
+
+});
+
+}
+
+    
+    
 // DR Expense (Allowance/Admin/Royalty)
 
 if(type !== "SHAREHOLDER"){
