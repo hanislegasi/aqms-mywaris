@@ -577,9 +577,12 @@ credit:0
 
 // CR Liability / Equity
 
+if(type!="SHAREHOLDER"){
+
 await addDoc(
 collection(db,"ledger"),
 {
+
 date:new Date(),
 
 accountCode:payable.code,
@@ -590,15 +593,14 @@ cashFlowType:payable.cashFlowType,
 normalBalance:payable.normalBalance,
 reportGroup:payable.reportGroup,
 
-    
-
-
 description:payee,
 
 debit:0,
-
 credit:amount
+
 });
+
+}
     
     
     
