@@ -422,14 +422,28 @@ v-monthlyExpense[i]
 
 const currentMonth = new Date().getMonth();
 
-const currentIncome =
+const previousMonth =
+currentMonth===0
+?11
+:currentMonth-1;
+
+const incomeNow =
 monthlyIncome[currentMonth];
 
-const currentExpense =
+const incomePrev =
+monthlyIncome[previousMonth];
+
+const expenseNow =
 monthlyExpense[currentMonth];
 
-const currentProfit =
+const expensePrev =
+monthlyExpense[previousMonth];
+
+const profitNow =
 monthlyProfit[currentMonth];
+
+const profitPrev =
+monthlyProfit[previousMonth];
             
 
 function growth(now, prev){
@@ -493,7 +507,7 @@ formatGrowth(expenseGrowth);
 document.getElementById("profitGrowthPct").innerHTML =
 formatGrowth(profitGrowth);
 
- const incomePct =
+const incomePct =
 document.getElementById("incomeGrowthPct");
 
 incomePct.innerHTML =
@@ -528,7 +542,7 @@ profitGrowth >= 0
 ? "text-green-600 text-sm font-semibold"
 : "text-red-600 text-sm font-semibold";          
             
-            new Chart(
+new Chart(
 document.getElementById("financeChart"),
 {
 
