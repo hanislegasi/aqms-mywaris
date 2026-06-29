@@ -431,35 +431,6 @@ monthlyExpense[currentMonth];
 const currentProfit =
 monthlyProfit[currentMonth];
             
-//==============================
-// CURRENT MONTH KPI
-//==============================
-
-const currentMonth =
-new Date().getMonth();
-
-const previousMonth =
-currentMonth===0
-?11
-:currentMonth-1;
-
-const incomeNow =
-monthlyIncome[currentMonth];
-
-const incomePrev =
-monthlyIncome[previousMonth];
-
-const expenseNow =
-monthlyExpense[currentMonth];
-
-const expensePrev =
-monthlyExpense[previousMonth];
-
-const profitNow =
-monthlyProfit[currentMonth];
-
-const profitPrev =
-monthlyProfit[previousMonth];
 
 function growth(now, prev){
 
