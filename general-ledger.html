@@ -337,56 +337,65 @@ html;
 function filterLedger(){
 
 const keyword =
-document
-.getElementById("ledgerSearch")
-.value
-.toLowerCase();
+document.getElementById("ledgerSearch").value.toLowerCase();
 
 const from =
-document
-.getElementById("dateFrom")
-.value;
+document.getElementById("dateFrom").value;
 
 const to =
-document
-.getElementById("dateTo")
-.value;
+document.getElementById("dateTo").value;
 
-document
-.querySelectorAll(".ledger-card")
-.forEach(card=>{
+document.querySelectorAll(".ledger-card").forEach(card=>{
 
-let visibleRows=0;
-let debit = 0;
-let credit = 0;
-let balance = 0;
-  
-card
-.querySelectorAll(".ledger-row")
-.forEach(row=>{
+let visibleRows = 0;
 
-const text =
+const rows = card.querySelectorAll("tbody tr");
+
+rows.forEach(row=>{
+
+if(row.innerText.includes("TOTAL")) return;
+
+const cells = row.querySelectorAll("td");
+
+const dateText = cells[0].innerText.trim();
+
+const desc =
 row.innerText.toLowerCase();
 
+let show = true;
+
+if(keyword && !desc.includes(keyword))
+show = false;
+
+if(dateText){
+
+const p =
+dateText.split("/");
+
 const rowDate =
-row.dataset.date;
+`${p[2]}-${p[1].padStart(2,"0")}-${p[0].padStart(2,"0")}`;
 
-let show=true;
+if(from && rowDate < from)
+show = false;
 
-if(keyword && !text.includes(keyword))
-show=false;
+if(to && rowDate > to)
+show = false;
 
-if(from && rowDate<from)
-show=false;
-
-if(to && rowDate>to)
-show=false;
+}
 
 row.style.display =
-show
-? ""
-: "none";
+show ? "" : "none";
 
+if(show) visibleRows++;
+
+});
+
+card.style.display =
+visibleRows ? "" : "none";
+
+});
+
+}
 if(show){
 
 visibleRows++;
