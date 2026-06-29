@@ -249,9 +249,9 @@ let balance = 0;
 acc.rows.forEach((row)=>{
 
 const rowDate =
-row.date?.toDate()
-.toISOString()
-.substring(0,10);
+row.date?.toDate
+? row.date.toDate().toISOString().substring(0,10)
+: "";
 
   
 balance +=
@@ -396,42 +396,19 @@ visibleRows ? "" : "none";
 });
 
 }
-if(show){
 
-visibleRows++;
+  
+document
+.getElementById("ledgerSearch")
+.addEventListener("input", filterLedger);
 
-debit += Number(
-row.children[2]
-.innerText
-.replace("RM","")
-.replace(/,/g,"")
-);
+document
+.getElementById("dateFrom")
+.addEventListener("change", filterLedger);
 
-credit += Number(
-row.children[3]
-.innerText
-.replace("RM","")
-.replace(/,/g,"")
-);
-
-balance +=
-Number(
-row.children[2]
-.innerText
-.replace("RM","")
-.replace(/,/g,"")
-);
-
-balance -=
-Number(
-row.children[3]
-.innerText
-.replace("RM","")
-.replace(/,/g,"")
-);
-
-}
-
+document
+.getElementById("dateTo")
+.addEventListener("change", filterLedger);
   
 
 document
