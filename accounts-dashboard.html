@@ -265,21 +265,134 @@ function money(value){
             document.getElementById("adminFund").innerHTML = "RM" + money(adminFund);
             document.getElementById("royaltyFund").innerHTML = "RM" + money(royaltyFund);
 
-            new Chart(document.getElementById("financeChart"), {
-                type: "bar",
-                data: {
-                    labels: ["Income", "Expense", "Profit"],
-                    datasets: [{
-                        label: "Amount (RM)",
-                        data: [income, expense, income - expense],
-                        backgroundColor: [
-                            'rgba(34, 197, 94, 0.8)', // Green for Income
-                            'rgba(239, 68, 68, 0.8)', // Red for Expense
-                            'rgba(59, 130, 246, 0.8)'  // Blue for Profit
-                        ],
-                        borderRadius: 6
-                    }]
-                },
+
+const monthlyIncome = Array(12).fill(0);
+const monthlyExpense = Array(12).fill(0);
+
+snap.forEach((d)=>{
+
+const row = d.data();
+
+const dt =
+row.date?.toDate
+? row.date.toDate()
+: new Date(row.date);
+
+const month =
+dt.getMonth();
+
+if(row.credit > 0){
+
+monthlyIncome[month] += Number(row.credit);
+
+}
+
+if(row.debit > 0){
+
+monthlyExpense[month] += Number(row.debit);
+
+}
+
+});
+
+const monthlyProfit =
+monthlyIncome.map((v,i)=>
+
+v-monthlyExpense[i]
+
+);
+
+            
+            new Chart(document.getElementById("financeChart"),{
+
+type:"line",
+
+data:{
+
+labels:[
+"Jan","Feb","Mar","Apr","May","Jun",
+"Jul","Aug","Sep","Oct","Nov","Dec"
+],
+
+datasets:[
+
+{
+
+label:"Income",
+
+data:monthlyIncome,
+
+borderColor:"#22c55e",
+
+backgroundColor:"rgba(34,197,94,0.15)",
+
+fill:false,
+
+tension:0.3
+
+},
+
+{
+
+label:"Expense",
+
+data:monthlyExpense,
+
+borderColor:"#ef4444",
+
+backgroundColor:"rgba(239,68,68,0.15)",
+
+fill:false,
+
+tension:0.3
+
+},
+
+{
+
+label:"Profit",
+
+data:monthlyProfit,
+
+borderColor:"#3b82f6",
+
+backgroundColor:"rgba(59,130,246,0.15)",
+
+fill:false,
+
+tension:0.3
+
+}
+
+]
+
+},
+
+options:{
+
+responsive:true,
+
+plugins:{
+
+legend:{
+position:"bottom"
+}
+
+},
+
+scales:{
+
+y:{
+beginAtZero:true
+}
+
+}
+
+}
+
+});
+
+            
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
