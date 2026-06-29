@@ -478,7 +478,17 @@ EQUITY
 
 ${Object.values(equity)
 
-.filter(item=>item.amount!=0)
+.filter(item=>{
+
+    if(item.code=="3100" && item.amount<=0){
+
+        return false;
+
+    }
+
+    return true;
+
+})
 
 .sort((a,b)=>a.code.localeCompare(b.code))
 
@@ -487,16 +497,23 @@ ${Object.values(equity)
 <tr>
 
 <td class="pl-6 py-2">
+
 ${item.name}
+
 </td>
 
 <td class="text-right">
+
 RM${money(item.amount)}
+
 </td>
 
 </tr>
 
-`).join("")}
+`)
+
+.join("")}
+
 
 <tr>
 
