@@ -127,7 +127,9 @@
         Monthly Financial Trend
     </h3>
 
-    <div style="height:380px">
+    <div class="h-[420px] w-full">
+    <canvas id="financeChart"></canvas>
+</div>
 
         <canvas id="financeChart"></canvas>
 
@@ -356,11 +358,17 @@ data:monthlyIncome,
 
 borderColor:"#22c55e",
 
-backgroundColor:"rgba(34,197,94,0.15)",
+backgroundColor:"rgba(34,197,94,.2)",
+
+borderWidth:4,
+
+pointRadius:5,
+
+pointHoverRadius:7,
 
 fill:false,
 
-tension:0.3
+tension:.4
 
 },
 
@@ -368,15 +376,21 @@ tension:0.3
 
 label:"Expense",
 
-data:monthlyExpense,
+data:monthlyIncome,
 
-borderColor:"#ef4444",
+borderColor:"#22c55e",
 
-backgroundColor:"rgba(239,68,68,0.15)",
+backgroundColor:"rgba(34,197,94,.2)",
+
+borderWidth:4,
+
+pointRadius:5,
+
+pointHoverRadius:7,
 
 fill:false,
 
-tension:0.3
+tension:.4
 
 },
 
@@ -384,44 +398,59 @@ tension:0.3
 
 label:"Profit",
 
-data:monthlyProfit,
+data:monthlyIncome,
 
-borderColor:"#3b82f6",
+borderColor:"#22c55e",
 
-backgroundColor:"rgba(59,130,246,0.15)",
+backgroundColor:"rgba(34,197,94,.2)",
+
+borderWidth:4,
+
+pointRadius:5,
+
+pointHoverRadius:7,
 
 fill:false,
 
-tension:0.3
+tension:.4
 
 }
-
 ]
 
 },
 
 options:{
+    responsive:true,
+    maintainAspectRatio:false,
 
-responsive:true,
+    interaction:{
+        mode:"index",
+        intersect:false
+    },
 
-plugins:{
-
-legend:{
-position:"bottom"
-}
-
+layout:{
+    padding:20
+},
+    
+    plugins:{
+    legend:{
+        labels:{
+            font:{
+                size:14
+            }
+        }
+    }
 },
 
-scales:{
+    scales:{
 
-y:{
-beginAtZero:true
+        y:{
+            beginAtZero:true
+        }
+
+    }
+
 }
-
-}
-
-}
-
 });
 
             
