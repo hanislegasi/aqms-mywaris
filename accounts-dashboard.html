@@ -421,6 +421,140 @@ monthlyIncome.map((v,i)=>
 v-monthlyExpense[i]
 
 );
+
+//==============================
+// CURRENT MONTH KPI
+//==============================
+
+const currentMonth =
+new Date().getMonth();
+
+const previousMonth =
+currentMonth===0
+?11
+:currentMonth-1;
+
+const incomeNow =
+monthlyIncome[currentMonth];
+
+const incomePrev =
+monthlyIncome[previousMonth];
+
+const expenseNow =
+monthlyExpense[currentMonth];
+
+const expensePrev =
+monthlyExpense[previousMonth];
+
+const profitNow =
+monthlyProfit[currentMonth];
+
+const profitPrev =
+monthlyProfit[previousMonth];
+
+function growth(now,prev){
+
+if(prev===0){
+
+if(now===0) return 0;
+
+return 100;
+
+}
+
+return ((now-prev)/prev)*100;
+
+}
+
+const incomeGrowth =
+growth(incomeNow,incomePrev);
+
+const expenseGrowth =
+growth(expenseNow,expensePrev);
+
+const profitGrowth =
+growth(profitNow,profitPrev);
+
+
+
+document.getElementById("incomeGrowth").innerHTML =
+"RM"+money(incomeNow);
+
+document.getElementById("expenseGrowth").innerHTML =
+"RM"+money(expenseNow);
+
+document.getElementById("profitGrowth").innerHTML =
+"RM"+money(profitNow);
+
+document.getElementById("incomeGrowthPct").innerHTML =
+(incomeGrowth>=0?"▲ ":"▼ ")
++
+Math.abs(incomeGrowth).toFixed(1)
++
+"% vs last month";
+
+document.getElementById("expenseGrowthPct").innerHTML =
+(expenseGrowth>=0?"▲ ":"▼ ")
++
+Math.abs(expenseGrowth).toFixed(1)
++
+"% vs last month";
+
+document.getElementById("profitGrowthPct").innerHTML =
+(profitGrowth>=0?"▲ ":"▼ ")
++
+Math.abs(profitGrowth).toFixed(1)
++
+"% vs last month";
+
+ const incomePct =
+document.getElementById("incomeGrowthPct");
+
+incomePct.innerHTML =
+(incomeGrowth>=0?"▲ ":"▼ ")
++
+Math.abs(incomeGrowth).toFixed(1)
++
+"% vs last month";
+
+incomePct.className =
+incomeGrowth>=0
+?"text-green-600 text-sm font-semibold"
+:"text-red-600 text-sm font-semibold";
+
+
+
+const expensePct =
+document.getElementById("expenseGrowthPct");
+
+expensePct.innerHTML =
+(expenseGrowth>=0?"▲ ":"▼ ")
++
+Math.abs(expenseGrowth).toFixed(1)
++
+"% vs last month";
+
+expensePct.className =
+expenseGrowth<=0
+?"text-green-600 text-sm font-semibold"
+:"text-red-600 text-sm font-semibold";
+
+
+
+const profitPct =
+document.getElementById("profitGrowthPct");
+
+profitPct.innerHTML =
+(profitGrowth>=0?"▲ ":"▼ ")
++
+Math.abs(profitGrowth).toFixed(1)
++
+"% vs last month";
+
+profitPct.className =
+profitGrowth>=0
+?"text-green-600 text-sm font-semibold"
+:"text-red-600 text-sm font-semibold";           
             
             new Chart(
 document.getElementById("financeChart"),
