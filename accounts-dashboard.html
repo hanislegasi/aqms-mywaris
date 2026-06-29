@@ -461,20 +461,22 @@ monthlyProfit[currentMonth];
 const profitPrev =
 monthlyProfit[previousMonth];
 
-function growth(now,prev){
+function growth(now, prev){
 
-if(prev===0){
+    if(prev === 0){
 
-if(now===0) return 0;
+        return null;
 
-return 100;
+    }
 
-}
-
-return ((now-prev)/prev)*100;
+    return ((now-prev)/prev)*100;
 
 }
 
+
+
+            
+            
 const incomeGrowth =
 growth(incomeNow,incomePrev);
 
@@ -495,26 +497,30 @@ document.getElementById("expenseGrowth").innerHTML =
 document.getElementById("profitGrowth").innerHTML =
 "RM"+money(profitNow);
 
+function formatGrowth(value){
+
+    if(value === null){
+
+        return "NEW";
+
+    }
+
+    return (value>=0?"▲ ":"▼ ")
+    +
+    Math.abs(value).toFixed(1)
+    +
+    "% vs last month";
+
+}
+
 document.getElementById("incomeGrowthPct").innerHTML =
-(incomeGrowth>=0?"▲ ":"▼ ")
-+
-Math.abs(incomeGrowth).toFixed(1)
-+
-"% vs last month";
+formatGrowth(incomeGrowth);
 
 document.getElementById("expenseGrowthPct").innerHTML =
-(expenseGrowth>=0?"▲ ":"▼ ")
-+
-Math.abs(expenseGrowth).toFixed(1)
-+
-"% vs last month";
+formatGrowth(expenseGrowth);
 
 document.getElementById("profitGrowthPct").innerHTML =
-(profitGrowth>=0?"▲ ":"▼ ")
-+
-Math.abs(profitGrowth).toFixed(1)
-+
-"% vs last month";
+formatGrowth(profitGrowth);
 
  const incomePct =
 document.getElementById("incomeGrowthPct");
@@ -536,34 +542,20 @@ incomeGrowth>=0
 const expensePct =
 document.getElementById("expenseGrowthPct");
 
-expensePct.innerHTML =
-(expenseGrowth>=0?"▲ ":"▼ ")
-+
-Math.abs(expenseGrowth).toFixed(1)
-+
-"% vs last month";
-
 expensePct.className =
-expenseGrowth<=0
-?"text-green-600 text-sm font-semibold"
-:"text-red-600 text-sm font-semibold";
+expenseGrowth <= 0
+? "text-green-600 text-sm font-semibold"
+: "text-red-600 text-sm font-semibold";
 
 
 
 const profitPct =
 document.getElementById("profitGrowthPct");
 
-profitPct.innerHTML =
-(profitGrowth>=0?"▲ ":"▼ ")
-+
-Math.abs(profitGrowth).toFixed(1)
-+
-"% vs last month";
-
 profitPct.className =
-profitGrowth>=0
-?"text-green-600 text-sm font-semibold"
-:"text-red-600 text-sm font-semibold";           
+profitGrowth >= 0
+? "text-green-600 text-sm font-semibold"
+: "text-red-600 text-sm font-semibold";          
             
             new Chart(
 document.getElementById("financeChart"),
