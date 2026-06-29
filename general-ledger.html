@@ -299,21 +299,21 @@ RM${money(balance)}
 
 html += `
 
-<tr class="font-bold bg-gray-100">
+<tr class="ledger-total font-bold bg-gray-100">
 
 <td colspan="2" class="p-3">
 TOTAL
 </td>
 
-<td class="p-3 text-right">
+<td class="totalDebit p-3 text-right">
 RM${money(acc.debit)}
 </td>
 
-<td class="p-3 text-right">
+<td class="totalCredit p-3 text-right">
 RM${money(acc.credit)}
 </td>
 
-<td class="p-3 text-right">
+<td class="totalBalance p-3 text-right">
 RM${money(balance)}
 </td>
 
@@ -357,7 +357,10 @@ document
 .forEach(card=>{
 
 let visibleRows=0;
-
+let debit = 0;
+let credit = 0;
+let balance = 0;
+  
 card
 .querySelectorAll(".ledger-row")
 .forEach(row=>{
@@ -384,39 +387,43 @@ show
 ? ""
 : "none";
 
-if(show)
+if(show){
+
 visibleRows++;
 
-});
+debit += Number(
+row.children[2]
+.innerText
+.replace("RM","")
+.replace(/,/g,"")
+);
 
-card.style.display =
-visibleRows>0
-? ""
-: "none";
+credit += Number(
+row.children[3]
+.innerText
+.replace("RM","")
+.replace(/,/g,"")
+);
 
-});
+balance +=
+Number(
+row.children[2]
+.innerText
+.replace("RM","")
+.replace(/,/g,"")
+);
+
+balance -=
+Number(
+row.children[3]
+.innerText
+.replace("RM","")
+.replace(/,/g,"")
+);
+
 }
 
-document
-.getElementById("ledgerSearch")
-.addEventListener(
-"input",
-filterLedger
-);
-
-document
-.getElementById("dateFrom")
-.addEventListener(
-"change",
-filterLedger
-);
-
-document
-.getElementById("dateTo")
-.addEventListener(
-"change",
-filterLedger
-);
+  
 
 document
 .getElementById("exportPdfBtn")
