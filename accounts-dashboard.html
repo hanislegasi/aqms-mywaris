@@ -510,12 +510,10 @@ formatGrowth(profitGrowth);
 const incomePct =
 document.getElementById("incomeGrowthPct");
 
-incomePct.innerHTML =
-(incomeGrowth>=0?"▲ ":"▼ ")
-+
-Math.abs(incomeGrowth).toFixed(1)
-+
-"% vs last month";
+incomePct.className =
+incomeGrowth >= 0
+? "text-green-600 text-sm font-semibold"
+: "text-red-600 text-sm font-semibold";
 
 incomePct.className =
 incomeGrowth>=0
