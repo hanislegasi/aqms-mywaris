@@ -291,15 +291,23 @@ row.date?.toDate
 const month =
 dt.getMonth();
 
-if(row.credit > 0){
+const coa =
+coaMap[String(row.accountCode)];
 
-monthlyIncome[month] += Number(row.credit);
+if(!coa) return;
+
+const type =
+coa.type?.toLowerCase();
+
+if(type=="income"){
+
+    monthlyIncome[month]+=Number(row.credit||0);
 
 }
 
-if(row.debit > 0){
+if(type=="expense"){
 
-monthlyExpense[month] += Number(row.debit);
+    monthlyExpense[month]+=Number(row.debit||0);
 
 }
 
@@ -394,7 +402,15 @@ tension:.4
 ]
 
 },
+options:{
 
+    responsive:true,
+
+    maintainAspectRatio:false,
+
+    devicePixelRatio:2
+
+}
 options:{
     responsive:true,
     maintainAspectRatio:false,
@@ -410,12 +426,34 @@ layout:{
     
     plugins:{
     legend:{
+        position:"top",
         labels:{
             font:{
-                size:14
+                size:14,
+                weight:"bold"
             }
         }
     }
+},
+
+scales:{
+
+    x:{
+        ticks:{
+            font:{
+                size:13
+            }
+        }
+    },
+
+    y:{
+        ticks:{
+            font:{
+                size:13
+            }
+        }
+    }
+
 },
 
     scales:{
