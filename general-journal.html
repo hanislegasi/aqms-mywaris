@@ -186,7 +186,13 @@ rows.forEach((row)=>{
 
 html += `
 
-<tr class="border-b hover:bg-gray-50">
+<tr
+class="border-b hover:bg-gray-50"
+data-date="${
+row.date?.toDate
+? row.date.toDate().toISOString().substring(0,10)
+: ""
+}">
 
 <td class="p-3">
 ${
@@ -261,36 +267,15 @@ keyword &&
 show = false;
 }
 
-if(from){
+const rowDate = row.dataset.date;
 
-const rowDate =
-new Date(
-dateText.split("/")
-.reverse()
-.join("-")
-);
-
-if(rowDate < new Date(from)){
-show = false;
+if(from && rowDate < from){
+    show = false;
 }
 
+if(to && rowDate > to){
+    show = false;
 }
-
-if(to){
-
-const rowDate =
-new Date(
-dateText.split("/")
-.reverse()
-.join("-")
-);
-
-if(rowDate > new Date(to)){
-show = false;
-}
-
-}
-
 row.style.display =
 show
 ? ""
