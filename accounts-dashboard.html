@@ -372,6 +372,8 @@ coaSnap.forEach(doc=>{
 // MONTHLY TREND
 //==============================
 
+const currentYear = new Date().getFullYear();
+
 const monthlyIncome = Array(12).fill(0);
 const monthlyExpense = Array(12).fill(0);
 
@@ -379,37 +381,33 @@ snap.forEach((d)=>{
 
     const row = d.data();
 
-    const coa =
-    coaMap[String(row.accountCode)];
-
-    if(!coa) return;
-
     const dt =
     row.date?.toDate
     ? row.date.toDate()
     : new Date(row.date);
 
-    const month =
-    dt.getMonth();
+    // Skip tahun lain
+    if(dt.getFullYear() !== currentYear) return;
 
-    const type =
-    coa.type?.toLowerCase();
+    const month = dt.getMonth();
 
+    // Income sahaja
     if(
-        type=="income" ||
-        type=="revenue"
+        row.reportGroup === "Profit Loss" &&
+        row.normalBalance === "Credit"
     ){
 
-        monthlyIncome[month]+=Number(row.credit||0);
+        monthlyIncome[month] += Number(row.credit || 0);
 
     }
 
+    // Expense sahaja
     if(
-        type=="expense" ||
-        type=="expenses"
+        row.reportGroup === "Profit Loss" &&
+        row.normalBalance === "Debit"
     ){
 
-        monthlyExpense[month]+=Number(row.debit||0);
+        monthlyExpense[month] += Number(row.debit || 0);
 
     }
 
@@ -422,6 +420,17 @@ v-monthlyExpense[i]
 
 );
 
+const currentMonth = new Date().getMonth();
+
+const currentIncome =
+monthlyIncome[currentMonth];
+
+const currentExpense =
+monthlyExpense[currentMonth];
+
+const currentProfit =
+monthlyProfit[currentMonth];
+            
 //==============================
 // CURRENT MONTH KPI
 //==============================
