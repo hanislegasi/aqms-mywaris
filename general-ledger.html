@@ -68,7 +68,7 @@ class="border rounded-xl p-3 h-12">
 <input
 type="text"
 id="ledgerSearch"
-placeholder="🔍 Cari kod, nama atau description..."
+placeholder="Cari kod, nama atau description..."
 class="border rounded-xl p-3 h-12">
   
 </div>
@@ -248,7 +248,12 @@ let balance = 0;
 
 acc.rows.forEach((row)=>{
 
+const rowDate =
+row.date?.toDate()
+.toISOString()
+.substring(0,10);
 
+  
 balance +=
 Number(row.debit || 0);
 
@@ -257,7 +262,9 @@ Number(row.credit || 0);
 
 html += `
 
-<tr class="border-b hover:bg-gray-50">
+<tr
+class="ledger-row border-b hover:bg-gray-50"
+data-date="${rowDate}">
 
 <td class="p-3">
 ${
@@ -345,50 +352,49 @@ document
 .getElementById("dateTo")
 .value;
 
-const cards =
-document.querySelectorAll(
-".ledger-card"
-);
+document
+.querySelectorAll(".ledger-card")
+.forEach(card=>{
 
-cards.forEach((card)=>{
+let visibleRows=0;
+
+card
+.querySelectorAll(".ledger-row")
+.forEach(row=>{
 
 const text =
-card.innerText
-.toLowerCase();
+row.innerText.toLowerCase();
 
-const cardDate =
-card.dataset.date;
+const rowDate =
+row.dataset.date;
 
-let show = true;
+let show=true;
 
-if(
-keyword &&
-!text.includes(keyword)
-){
-show = false;
-}
+if(keyword && !text.includes(keyword))
+show=false;
 
-if(
-from &&
-cardDate < from
-){
-show = false;
-}
+if(from && rowDate<from)
+show=false;
 
-if(
-to &&
-cardDate > to
-){
-show = false;
-}
+if(to && rowDate>to)
+show=false;
 
-card.style.display =
+row.style.display =
 show
-? "block"
+? ""
 : "none";
+
+if(show)
+visibleRows++;
 
 });
 
+card.style.display =
+visibleRows>0
+? ""
+: "none";
+
+});
 }
 
 document
