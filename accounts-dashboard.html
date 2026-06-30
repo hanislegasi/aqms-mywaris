@@ -502,30 +502,29 @@ document.getElementById("expenseGrowth").innerHTML =
 document.getElementById("profitGrowth").innerHTML =
 "RM"+money(profitNow);
 
-function formatGrowth(value){
+function formatGrowth(value, type){
 
     if(value === null){
 
-        return "NEW";
+        return type === "expense"
+        ? "New Expense"
+        : "New";
 
     }
 
-    return (value>=0?"▲ ":"▼ ")
-    +
-    Math.abs(value).toFixed(1)
-    +
-    "% vs last month";
-
+    return (value >= 0 ? "▲ " : "▼ ")
+        + Math.abs(value).toFixed(1)
+        + "% vs last month";
 }
 
-document.getElementById("incomeGrowthPct").innerHTML =
-formatGrowth(incomeGrowth);
+document.getElementById(incomeGrowthPct.innerHTML =
+formatGrowth(incomeGrowth,"income");
 
-document.getElementById("expenseGrowthPct").innerHTML =
-formatGrowth(expenseGrowth);
+document.getElementById(expenseGrowthPct.innerHTML =
+formatGrowth(expenseGrowth,"expense");
 
-document.getElementById("profitGrowthPct").innerHTML =
-formatGrowth(profitGrowth);
+document.getElementById(profitGrowthPct.innerHTML =
+formatGrowth(profitGrowth,"profit");
 
 const incomePct =
 document.getElementById("incomeGrowthPct");
@@ -546,9 +545,9 @@ const expensePct =
 document.getElementById("expenseGrowthPct");
 
 expensePct.className =
-expenseGrowth <= 0
-? "text-green-600 text-sm font-semibold"
-: "text-red-600 text-sm font-semibold";
+expenseGrowth > 0
+? "text-red-600 text-sm font-semibold"
+: "text-green-600 text-sm font-semibold";
 
 
 
