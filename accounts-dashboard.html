@@ -404,24 +404,29 @@ console.log(
     const month = dt.getMonth();
 
     // Income sahaja
-    if(
-        row.reportGroup === "Profit Loss" &&
-        row.normalBalance === "Credit"
-    ){
+    const coa = coaMap[row.accountCode];
 
-        monthlyIncome[month] += Number(row.credit || 0);
+if(!coa) return;
 
-    }
+// Income
+if(
+    coa.reportGroup === "Profit Loss" &&
+    coa.normalBalance === "Credit"
+){
 
-    // Expense sahaja
-    if(
-        row.reportGroup === "Profit Loss" &&
-        row.normalBalance === "Debit"
-    ){
+    monthlyIncome[month] += Number(row.credit || 0);
 
-        monthlyExpense[month] += Number(row.debit || 0);
+}
 
-    }
+// Expense
+if(
+    coa.reportGroup === "Profit Loss" &&
+    coa.normalBalance === "Debit"
+){
+
+    monthlyExpense[month] += Number(row.debit || 0);
+
+}
 
 });
 
