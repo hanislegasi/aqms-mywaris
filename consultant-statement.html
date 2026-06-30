@@ -365,57 +365,38 @@ let paymentHtml = "";
 
 paymentSnap.forEach((d)=>{
 
-const pv = d.data();
+    const pv = d.data();
 
-const payDate =
-new Date(pv.paymentDate);
+    const payDate = new Date(pv.paymentDate);
 
-if(payDate.getMonth() !== selectedMonth)
-return;
+    if(payDate.getMonth() !== selectedMonth)
+        return;
 
-paid += Number(pv.amount || 0);
+    paid += Number(pv.amount || 0);
 
-});
+    paymentHtml += `
+    <tr class="border-b">
 
-paymentHtml += `
+        <td class="py-2">
+            ${pv.paymentDate || "-"}
+        </td>
 
-const payDate =
-new Date(pv.paymentDate);
+        <td>
+            ${pv.pvNo || "-"}
+        </td>
 
-if(payDate.getMonth() !== selectedMonth)
-return;
+        <td>
+            ${pv.paymentMethod || "-"}
+        </td>
 
-<tr class="border-b">
+        <td class="text-right">
+            RM${Number(pv.amount || 0).toFixed(2)}
+        </td>
 
-<td class="py-2">
+    </tr>
+    `;
 
-${pv.paymentDate || "-"}
-
-</td>
-
-<td>
-
-${pv.pvNo || "-"}
-
-</td>
-
-<td>
-
-${pv.paymentMethod || "-"}
-
-</td>
-
-<td class="text-right">
-
-RM${Number(pv.amount || 0).toFixed(2)}
-
-</td>
-
-</tr>
-
-`;
-
-});              
+});             
                 
         
 
