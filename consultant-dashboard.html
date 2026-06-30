@@ -619,11 +619,45 @@ data.consultantNo
 
 let totalCommission = 0;
 
+ 
+const earned =
+totalCommission +
+totalOverriding;
+
+const outstanding =
+earned - paid;
+
+ 
 const ledgerSnap =
 await getDocs(
 collection(db,"ledger")
 );
 
+
+ 
+const paymentSnap =
+await getDocs(
+query(
+collection(db,"paymentVouchers"),
+where("consultantNo","==",data.consultantNo),
+where("status","==","PAID")
+)
+);
+
+let paid = 0;
+
+paymentSnap.forEach((d)=>{
+
+const pv = d.data();
+
+paid += Number(
+pv.amount || 0
+);
+
+});
+
+ 
+ 
 ledgerSnap.forEach((d)=>{
 
 const row = d.data();
@@ -941,6 +975,16 @@ document.getElementById(
 ).innerHTML =
 "RM" + totalOverriding.toLocaleString();
 
+
+document.getElementById("paidCard").innerHTML =
+"RM" +
+paid.toFixed(2);
+
+document.getElementById("outstandingCard").innerHTML =
+"RM" +
+outstanding.toFixed(2);
+
+ 
 
 console.log("monthlySales", monthlySales);
 console.log("monthlyCommission", monthlyCommission);
