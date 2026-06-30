@@ -320,11 +320,8 @@ const paymentSnap =
 await getDocs(
 query(
 collection(db,"paymentVouchers"),
-where(
-"consultantNo",
-"==",
-consultantNo
-)
+where("consultantNo","==",consultantNo),
+where("status","==","PAID")
 )
 );
 
