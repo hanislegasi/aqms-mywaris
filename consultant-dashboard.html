@@ -620,12 +620,7 @@ data.consultantNo
 let totalCommission = 0;
 
  
-const earned =
-totalCommission +
-totalOverriding;
 
-const outstanding =
-earned - paid;
 
  
 const ledgerSnap =
@@ -733,6 +728,19 @@ overridingRate = 0;
 
 }
 
+
+
+ 
+const earned =
+totalCommission +
+totalOverriding;
+
+const outstanding =
+earned - paid;
+
+
+
+ 
 else if(data.consultantLevel === "AQC-AS"){
 
 commissionRate = 38;
