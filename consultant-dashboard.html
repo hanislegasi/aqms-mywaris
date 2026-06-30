@@ -103,14 +103,61 @@ Close
 </div>
 
  
-<div
-id="promotionCard"
-class="bg-white p-5 rounded-2xl shadow mb-5">
+<div class="grid lg:grid-cols-3 gap-5 mb-5">
 
-Loading Career Progress...
+    <!-- Career -->
+    <div class="lg:col-span-2 bg-white rounded-2xl shadow p-6">
+
+        ... Career Progression ...
+
+    </div>
+
+    <!-- Payment -->
+    <div class="bg-white rounded-2xl shadow p-6">
+
+        <h3 class="font-bold text-lg mb-5">
+            Payment Summary
+        </h3>
+
+        <div class="space-y-5">
+
+            <div class="border rounded-xl p-4">
+
+                <div class="text-sm text-gray-500">
+                    Paid
+                </div>
+
+                <div
+                id="paidCard"
+                class="text-3xl font-bold text-blue-600">
+
+                    RM0.00
+
+                </div>
+
+            </div>
+
+            <div class="border rounded-xl p-4">
+
+                <div class="text-sm text-gray-500">
+                    Outstanding
+                </div>
+
+                <div
+                id="outstandingCard"
+                class="text-3xl font-bold text-red-600">
+
+                    RM0.00
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
-
  
 <!-- KPI -->
 
@@ -673,9 +720,11 @@ overridingRate = 12;
 
 }
 
+let paid = 0;
+let outstanding = 0;
 
 
-
+ 
 await updateDoc(
 doc(db,"consultants",user.uid),
 {
