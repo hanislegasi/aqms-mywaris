@@ -709,7 +709,7 @@ Number(row.debit || 0);
 let totalOverriding = 0;
 let overridingSales = 0;
 
-console.log(row);
+
  
 ledgerSnap.forEach((d)=>{
 
@@ -719,6 +719,8 @@ ledgerSnap.forEach((d)=>{
 
     if(row.accountCode === "5100"){
 
+console.log(row);
+     
         totalOverriding += Number(row.debit || 0);
 
     }
