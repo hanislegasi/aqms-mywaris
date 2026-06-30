@@ -317,16 +317,6 @@ coaSnap.forEach(doc=>{
 
     const a = doc.data();
 
-if(Number(row.accountCode) >= 4000 && Number(row.accountCode) < 5000){
-    console.log(row);
-}
-
-console.log(
-    row.accountCode,
-    row.account,
-    row.credit,
-    row.debit
-);
 
     
     coaMap[a.code] = a;
@@ -393,6 +383,16 @@ snap.forEach((d)=>{
 
     const row = d.data();
 
+console.log(
+    row.accountCode,
+    row.account,
+    row.credit,
+    row.debit,
+    row.reportGroup,
+    row.normalBalance
+);
+
+    
     const dt =
     row.date?.toDate
     ? row.date.toDate()
