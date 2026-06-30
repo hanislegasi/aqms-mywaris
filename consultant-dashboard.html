@@ -732,12 +732,17 @@ historySnap.forEach((d)=>{
 
 });
 
+const earned =
+totalCommission + totalOverriding;
+
+const outstanding =
+earned - paid;
+
 console.log("Commission :", totalCommission);
 console.log("Override   :", totalOverriding);
 console.log("Paid       :", paid);
-console.log("Earned     :", totalCommission + totalOverriding);
+console.log("Earned     :", earned);
 console.log("Outstanding:", outstanding);
-
 
 
  
