@@ -761,7 +761,17 @@ totalOverriding;
 const outstanding =
 earned - paid;
 
+document.getElementById("paidCard").innerHTML =
+"RM" +
+paid.toFixed(2);
 
+document.getElementById("outstandingCard").innerHTML =
+"RM" +
+outstanding.toFixed(2);
+
+
+
+ 
  
 await updateDoc(
 doc(db,"consultants",user.uid),
@@ -981,13 +991,6 @@ document.getElementById(
 "RM" + totalOverriding.toLocaleString();
 
 
-document.getElementById("paidCard").innerHTML =
-"RM" +
-paid.toFixed(2);
-
-document.getElementById("outstandingCard").innerHTML =
-"RM" +
-outstanding.toFixed(2);
 
  
 
