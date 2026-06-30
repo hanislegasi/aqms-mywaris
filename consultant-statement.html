@@ -29,6 +29,38 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 </div>
 
+<div class="max-w-5xl mx-auto mb-5 flex gap-3 items-center">
+
+<select
+id="monthFilter"
+class="border rounded-lg px-4 py-2">
+
+<option value="0">Januari</option>
+<option value="1">Februari</option>
+<option value="2">Mac</option>
+<option value="3">April</option>
+<option value="4">Mei</option>
+<option value="5" selected>Jun</option>
+<option value="6">Julai</option>
+<option value="7">Ogos</option>
+<option value="8">September</option>
+<option value="9">Oktober</option>
+<option value="10">November</option>
+<option value="11">Disember</option>
+
+</select>
+
+<button
+id="searchBtn"
+class="bg-[#153638] text-white px-5 py-2 rounded-lg">
+
+Cari
+
+</button>
+
+</div>
+
+    
     <!-- KAWASAN PENYATA (Akan di-export ke PDF) -->
     <div id="statementArea" class="bg-white p-8 md:p-12 rounded-xl shadow-lg max-w-5xl mx-auto">
 
@@ -270,7 +302,7 @@ window.location.href =
         document.getElementById("generatedDate").innerHTML = new Date().toLocaleString("ms-MY");
 
         // Fetch Company Settings
-        async function loadData() {
+        async function loadData(selectedMonth = new Date().getMonth()){
             try {
                 const settingsSnap = await getDoc(doc(db, "settings", "company"));
                 if (settingsSnap.exists()) {
@@ -335,11 +367,23 @@ paymentSnap.forEach((d)=>{
 
 const pv = d.data();
 
-if(pv.status !== "PAID") return;
+const payDate =
+new Date(pv.paymentDate);
+
+if(payDate.getMonth() !== selectedMonth)
+return;
 
 paid += Number(pv.amount || 0);
 
+});
+
 paymentHtml += `
+
+const payDate =
+new Date(pv.paymentDate);
+
+if(payDate.getMonth() !== selectedMonth)
+return;
 
 <tr class="border-b">
 
@@ -389,6 +433,12 @@ if(row.consultantNo === consultantNo){
 
 const trxDate = row.date?.toDate();
 
+if(!trxDate) return;
+
+if(trxDate.getMonth() !== selectedMonth)
+return;
+
+    
 if(trxDate){
 
 if(!firstDate || trxDate < firstDate){
@@ -494,16 +544,16 @@ const today = new Date();
 const firstDay =
 new Date(
 today.getFullYear(),
-today.getMonth(),
+selectedMonth,
 1
 );
 
 const lastDay =
 new Date(
 today.getFullYear(),
-today.getMonth()+1,
+selectedMonth+1,
 0
-);
+);;
 
 document.getElementById(
 "periodInfo"
@@ -522,6 +572,24 @@ lastDay.toLocaleDateString("ms-MY");
             }
         }
 
+
+document
+.getElementById("searchBtn")
+.addEventListener("click",()=>{
+
+const month =
+Number(
+document.getElementById("monthFilter").value
+);
+
+loadData(month);
+
+});
+
+document.getElementById("monthFilter").value =
+new Date().getMonth();
+
+        
         // Initialize Data Load
         loadData();
 
