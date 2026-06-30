@@ -364,6 +364,8 @@ paymentSnap.forEach((d)=>{
 
     const pv = d.data();
 
+ if(pv.status !== "PAID") return;
+    
     const payDate = new Date(pv.paymentDate);
 
     if(payDate.getMonth() !== selectedMonth)
