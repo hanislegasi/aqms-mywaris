@@ -124,23 +124,83 @@ id="paidTotal">
 RM0.00
 </td>
 </tr>
-
-<tr class="border-t-2">
-<td class="py-2 font-bold">
-Outstanding
-</td>
-
-<td class="text-right font-bold text-red-600"
-id="outstandingTotal">
-RM0.00
-</td>
-</tr>
-
 </table>
 
 </div>
 
-        
+<div class="mt-8">
+
+<h3 class="text-lg font-bold border-b pb-2 mb-4">
+Payment History
+</h3>
+
+<table class="w-full text-sm">
+
+<thead class="border-b">
+
+<tr>
+
+<th class="text-left py-2">
+Date
+</th>
+
+<th class="text-left">
+PV No
+</th>
+
+<th class="text-left">
+Method
+</th>
+
+<th class="text-right">
+Amount
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="paymentHistory">
+
+<tr>
+
+<td colspan="4"
+class="py-4 text-center text-gray-400">
+
+No payment released.
+
+</td>
+
+</tr>
+
+</tbody>
+
+<tfoot class="border-t">
+
+<tr>
+
+<td colspan="3"
+class="py-3 font-bold">
+
+Total Paid
+
+</td>
+
+<td
+id="paymentTotal"
+class="text-right font-bold text-blue-600">
+
+RM0.00
+
+</td>
+
+</tr>
+
+</tfoot>
+
+</table>
+
+</div>        
       
 
         <!-- FOOTER -->
@@ -269,16 +329,49 @@ if(userSnap.exists()){
 
                 
 let paid = 0;
+let paymentHtml = "";
 
 paymentSnap.forEach((d)=>{
 
 const pv = d.data();
 
-paid += Number(
-pv.amount || 0
-);
+if(pv.status !== "PAID") return;
 
-});                
+paid += Number(pv.amount || 0);
+
+paymentHtml += `
+
+<tr class="border-b">
+
+<td class="py-2">
+
+${pv.paymentDate || "-"}
+
+</td>
+
+<td>
+
+${pv.pvNo || "-"}
+
+</td>
+
+<td>
+
+${pv.paymentMethod || "-"}
+
+</td>
+
+<td class="text-right">
+
+RM${Number(pv.amount || 0).toFixed(2)}
+
+</td>
+
+</tr>
+
+`;
+
+});              
                 
         
 
@@ -357,6 +450,17 @@ document.getElementById(
 "RM" +
 paid.toFixed(2);
 
+
+document.getElementById("paymentTotal").innerHTML =
+"RM" + paid.toFixed(2);
+
+if(paymentHtml !== ""){
+
+document.getElementById("paymentHistory").innerHTML =
+paymentHtml;
+
+}
+                
 const earned =
 commission + override;
 
