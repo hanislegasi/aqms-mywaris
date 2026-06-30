@@ -317,6 +317,11 @@ coaSnap.forEach(doc=>{
 
     const a = doc.data();
 
+if(Number(row.accountCode) >= 4000 && Number(row.accountCode) < 5000){
+    console.log(row);
+}
+
+    
     coaMap[a.code] = a;
 
 });
