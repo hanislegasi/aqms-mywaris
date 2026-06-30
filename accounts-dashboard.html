@@ -517,34 +517,25 @@ function formatGrowth(value, type){
         + "% vs last month";
 }
 
-document.getElementById(incomeGrowthPct.innerHTML =
+document.getElementById("incomeGrowthPct").innerHTML =
 formatGrowth(incomeGrowth,"income");
 
-document.getElementById(expenseGrowthPct.innerHTML =
+document.getElementById("expenseGrowthPct").innerHTML =
 formatGrowth(expenseGrowth,"expense");
 
-document.getElementById(profitGrowthPct.innerHTML =
+document.getElementById("profitGrowthPct").innerHTML =
 formatGrowth(profitGrowth,"profit");
 
 const incomePct =
-document.getElementById("incomeGrowthPct");
-
-incomePct.className =
+document.getElementById("incomeGrowthPct").className =
 incomeGrowth >= 0
 ? "text-green-600 text-sm font-semibold"
 : "text-red-600 text-sm font-semibold";
 
-incomePct.className =
-incomeGrowth>=0
-?"text-green-600 text-sm font-semibold"
-:"text-red-600 text-sm font-semibold";
-
 
 
 const expensePct =
-document.getElementById("expenseGrowthPct");
-
-expensePct.className =
+document.getElementById("expenseGrowthPct").className =
 expenseGrowth > 0
 ? "text-red-600 text-sm font-semibold"
 : "text-green-600 text-sm font-semibold";
@@ -552,9 +543,7 @@ expenseGrowth > 0
 
 
 const profitPct =
-document.getElementById("profitGrowthPct");
-
-profitPct.className =
+document.getElementById("profitGrowthPct").className =
 profitGrowth >= 0
 ? "text-green-600 text-sm font-semibold"
 : "text-red-600 text-sm font-semibold";          
