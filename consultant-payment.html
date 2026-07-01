@@ -280,7 +280,44 @@ transactionGroup:consultantNo
 });
 
 
+// ===============================
+// CREATE PAYMENT RECEIPT
+// ===============================
 
+await addDoc(
+
+collection(db,"receipts"),
+
+{
+
+receiptNo:
+"REG-" + Date.now(),
+
+uid:currentUser.uid,
+
+consultantNo,
+
+serviceCode:"REGISTRATION",
+
+serviceName:"Consultant Registration Fee",
+
+payerName:
+consultant.nama,
+
+amount:200,
+
+paymentMethod:"FPX",
+
+status:"PAID",
+
+paymentDate:new Date()
+
+}
+
+);
+
+
+    
     
 alert(
 "Pendaftaran Konsultan Berjaya. No Konsultan: " +
