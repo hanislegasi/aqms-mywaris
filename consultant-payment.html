@@ -146,14 +146,7 @@ counterSnap.data().consultantCounter || 0;
 const newNo =
 currentNo + 1;
 
-// update counter
-await updateDoc(
-counterRef,
-{
-consultantCounter:
-increment(1)
-}
-);
+
 
 // generate consultant no
 const consultantNo =
@@ -316,7 +309,14 @@ paymentDate:new Date()
 
 );
 
-
+// update counter
+await updateDoc(
+counterRef,
+{
+consultantCounter:
+increment(1)
+}
+);
     
     
 alert(
