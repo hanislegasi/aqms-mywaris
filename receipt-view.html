@@ -162,7 +162,7 @@ class="font-semibold mt-1">
 
 </div>    
 
-
+</div> 
 
 <table class="w-full mt-10 border-t">
 
@@ -228,14 +228,15 @@ RM0.00
 
 </table>             
 
+</div>
+</div>
+                
 <div
 class="border-t mt-12 pt-5 flex justify-between text-sm text-gray-500">
 
 <div>
 
-This receipt is computer generated.<br>
-
-No signature required.
+This receipt is computer generated. No signature required.
 
 </div>
 
@@ -304,6 +305,8 @@ new URLSearchParams(window.location.search);
 const receiptId =
 params.get("id");
 
+console.log("Receipt ID =", receiptId);
+    
 async function loadReceipt(){
 
 if(!receiptId){
@@ -319,6 +322,14 @@ await getDoc(
 doc(db,"receipts",receiptId)
 );
 
+console.log("Exists =", snap.exists());
+
+if(snap.exists()){
+
+console.log(snap.data());
+
+}
+    
 if(!snap.exists()){
 
 alert("Receipt not found");
