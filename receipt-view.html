@@ -196,5 +196,132 @@ Print PDF
 </button>
 
 </div>
-              
+
+<script type="module">
+                
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);              
+
+const params =
+new URLSearchParams(window.location.search);
+
+const receiptId =
+params.get("id");
+
+async function loadReceipt(){
+
+if(!receiptId){
+
+alert("Receipt not found");
+
+return;
+
+}
+
+const snap =
+await getDoc(
+doc(db,"receipts",receiptId)
+);
+
+if(!snap.exists()){
+
+alert("Receipt not found");
+
+return;
+
+}
+
+const r =
+snap.data();
+
+document.getElementById("receiptNo").innerHTML =
+r.receiptNo || "-";
+
+document.getElementById("receiptDate").innerHTML =
+r.paymentDate.toDate().toLocaleDateString("ms-MY");
+
+document.getElementById("payerName").innerHTML =
+r.payerName || "-";
+
+document.getElementById("referenceNo").innerHTML =
+r.consultantNo || r.customerNo || "-";
+
+document.getElementById("serviceName").innerHTML =
+r.serviceName || "-";
+
+document.getElementById("paymentMethod").innerHTML =
+r.paymentMethod || "-";
+
+document.getElementById("description").innerHTML =
+r.serviceName || "-";
+
+document.getElementById("amount").innerHTML =
+"RM" +
+Number(r.amount).toFixed(2);
+
+document.getElementById("totalPaid").innerHTML =
+"RM" +
+Number(r.amount).toFixed(2);
+
+document.getElementById("generatedDate").innerHTML =
+new Date().toLocaleString("ms-MY");
+
+}
+
+loadReceipt();
+
+document
+.getElementById("printBtn")
+.addEventListener("click",()=>{
+
+const opt={
+
+margin:0.5,
+
+filename:
+"Receipt-"+receiptId+".pdf",
+
+image:{
+type:"jpeg",
+quality:0.98
+},
+
+html2canvas:{
+scale:3
+},
+
+jsPDF:{
+unit:"in",
+format:"a4",
+orientation:"portrait"
+}
+
+};
+
+html2pdf()
+.set(opt)
+.from(
+document.getElementById("statementArea")
+)
+.save();
+
+});
+
+
+
+
+    
               
