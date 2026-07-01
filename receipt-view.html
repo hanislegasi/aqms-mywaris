@@ -21,7 +21,7 @@
 
 <a
 href="my-statement.html"
-class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+class="inline-flex items-center bg-gray-200 hover:bg-gray-300 px-5 py-3 rounded-xl mb-6">
 
 ← My Statement
 
@@ -29,18 +29,20 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 </div>
 
+<!-- RECEIPT -->
 
-</div>
+<div
+id="statementArea"
+class="bg-white rounded-2xl shadow-lg max-w-5xl mx-auto p-10">
 
-    
-    <!-- KAWASAN PENYATA (Akan di-export ke PDF) -->
-    <div id="statementArea" class="bg-white p-8 md:p-12 rounded-xl shadow-lg max-w-5xl mx-auto">
+<!-- HEADER -->
 
-        <!-- HEADER -->
-       <div class="flex justify-between border-b pb-6">
-            <div>
+<div class="flex justify-between items-start border-b pb-6">
 
-<h1 id="companyName"
+<div>
+
+<h1
+id="companyName"
 class="text-3xl font-bold text-[#153638]">
 
 AL-QAWTHAR MAWARIS
@@ -48,24 +50,44 @@ SYNERGY SDN. BHD.
 
 </h1>
 
-<p id="registrationNo">
+<p
+id="registrationNo"
+class="text-sm text-gray-500 mt-1">
 
 Registration No :
-123456xxx
+-
 
 </p>
 
-<h2 class="text-2xl font-bold mt-3">
+</div>
 
-OFFICIAL PAYMENT RECEIPT
+<div class="text-right">
+
+<h2 class="text-2xl font-bold">
+
+OFFICIAL
+PAYMENT RECEIPT
 
 </h2>
 
-<div class="grid grid-cols-2 gap-x-20 gap-y-5 mt-8">
+<div
+class="inline-block mt-3 bg-green-100 text-green-700 px-4 py-1 rounded-full font-semibold">
+
+PAID
+
+</div>
+
+</div>
+
+</div>
+
+<!-- RECEIPT INFO -->
+
+<div class="grid grid-cols-2 gap-x-16 gap-y-6 mt-8">
 
 <div>
 
-<div class="text-gray-500 text-sm">
+<div class="text-sm text-gray-500">
 Receipt No
 </div>
 
@@ -81,7 +103,7 @@ class="font-semibold mt-1">
 
 <div>
 
-<div class="text-gray-500 text-sm">
+<div class="text-sm text-gray-500">
 Date
 </div>
 
@@ -94,11 +116,11 @@ class="font-semibold mt-1">
 </div>
 
 </div>
-    
+
 <div>
 
-<div class="text-gray-500 text-sm">
-Receives From
+<div class="text-sm text-gray-500">
+Received From
 </div>
 
 <div
@@ -111,11 +133,9 @@ class="font-semibold mt-1">
 
 </div>
 
-    
-
 <div>
 
-<div class="text-gray-500 text-sm">
+<div class="text-sm text-gray-500">
 Reference
 </div>
 
@@ -128,11 +148,10 @@ class="font-semibold mt-1">
 </div>
 
 </div>
-    
 
 <div>
 
-<div class="text-gray-500 text-sm">
+<div class="text-sm text-gray-500">
 Category
 </div>
 
@@ -148,7 +167,7 @@ class="font-semibold mt-1">
 
 <div>
 
-<div class="text-gray-500 text-sm">
+<div class="text-sm text-gray-500">
 Payment Method
 </div>
 
@@ -160,15 +179,17 @@ class="font-semibold mt-1">
 
 </div>
 
-</div>    
+</div>
 
-</div> 
+</div>
 
-<table class="w-full mt-10 border-t">
+<!-- TABLE -->
+
+<table class="w-full mt-10">
 
 <thead>
 
-<tr>
+<tr class="border-y">
 
 <th class="text-left py-4">
 
@@ -188,15 +209,19 @@ Amount
 
 <tbody>
 
-<tr>
+<tr class="border-b">
 
-<td id="description">
+<td
+id="description"
+class="py-5">
+
 -
+
 </td>
 
 <td
 id="amount"
-class="text-right font-semibold text-lg">
+class="text-right text-lg font-semibold">
 
 RM0.00
 
@@ -208,15 +233,18 @@ RM0.00
 
 <tfoot>
 
-<tr class="border-t">
+<tr>
 
-<td class="font-bold py-4">
+<td
+class="py-5 font-bold text-lg">
+
 TOTAL PAID
+
 </td>
 
 <td
 id="totalPaid"
-class="text-right font-bold text-green-600">
+class="text-right text-xl font-bold text-green-600">
 
 RM0.00
 
@@ -226,17 +254,37 @@ RM0.00
 
 </tfoot>
 
-</table>             
+</table>
+
+<!-- NOTE -->
+
+<div
+class="bg-gray-50 rounded-xl p-4 mt-8">
+
+<p class="font-semibold">
+
+Payment received in full.
+
+</p>
+
+<p class="text-sm text-gray-500 mt-1">
+
+Thank you for your payment.
+
+</p>
 
 </div>
-</div>
-                
+
+<!-- FOOTER -->
+
 <div
-class="border-t mt-12 pt-5 flex justify-between text-sm text-gray-500">
+class="border-t mt-10 pt-5 flex justify-between text-sm text-gray-500">
 
 <div>
 
-This receipt is computer generated. No signature required.
+This receipt is computer generated.<br>
+
+No signature required.
 
 </div>
 
@@ -250,11 +298,9 @@ Generated<br>
 
 </div>
 
-
-
-    
 </div>
-<!-- END statementArea -->
+
+<!-- BUTTON -->
 
 <div class="max-w-5xl mx-auto mt-6 text-right">
 
@@ -267,9 +313,9 @@ Print PDF
 </button>
 
 </div>
-
+    
 <script type="module">
-                
+
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
@@ -282,22 +328,21 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
 
-apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-authDomain: "alqawthar-mywaris.firebaseapp.com",
-projectId: "alqawthar-mywaris",
-storageBucket: "alqawthar-mywaris.firebasestorage.app",
-messagingSenderId: "3498810778",
-appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+projectId:"alqawthar-mywaris",
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+messagingSenderId:"3498810778",
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
 
 };
 
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-    
-const app =
-initializeApp(firebaseConfig);
-
-const db =
-getFirestore(app);              
+// ---------------------
+// Receipt ID
+// ---------------------
 
 const params =
 new URLSearchParams(window.location.search);
@@ -305,34 +350,32 @@ new URLSearchParams(window.location.search);
 const receiptId =
 params.get("id");
 
-console.log("Receipt ID =", receiptId);
-    
+console.log("Receipt ID :", receiptId);
+
+// ---------------------
+// Load Receipt
+// ---------------------
+
 async function loadReceipt(){
 
 if(!receiptId){
 
-alert("Receipt not found");
+alert("Receipt ID not found.");
 
 return;
 
 }
+
+try{
 
 const snap =
 await getDoc(
 doc(db,"receipts",receiptId)
 );
 
-console.log("Exists =", snap.exists());
-
-if(snap.exists()){
-
-console.log(snap.data());
-
-}
-    
 if(!snap.exists()){
 
-alert("Receipt not found");
+alert("Receipt not found.");
 
 return;
 
@@ -341,41 +384,57 @@ return;
 const r =
 snap.data();
 
-document.getElementById("receiptNo").innerHTML =
+document.getElementById("receiptNo").textContent =
 r.receiptNo || "-";
 
-document.getElementById("receiptDate").innerHTML =
-r.paymentDate.toDate().toLocaleDateString("ms-MY");
+document.getElementById("receiptDate").textContent =
+r.paymentDate?.toDate().toLocaleDateString("ms-MY") || "-";
 
-document.getElementById("payerName").innerHTML =
+document.getElementById("payerName").textContent =
 r.payerName || "-";
 
-document.getElementById("referenceNo").innerHTML =
-r.consultantNo || r.customerNo || "-";
+document.getElementById("referenceNo").textContent =
+r.consultantNo ||
+r.customerNo ||
+"-";
 
-document.getElementById("serviceName").innerHTML =
+document.getElementById("serviceName").textContent =
 r.serviceName || "-";
 
-document.getElementById("paymentMethod").innerHTML =
+document.getElementById("paymentMethod").textContent =
 r.paymentMethod || "-";
 
-document.getElementById("description").innerHTML =
+document.getElementById("description").textContent =
 r.serviceName || "-";
 
-document.getElementById("amount").innerHTML =
+document.getElementById("amount").textContent =
 "RM" +
-Number(r.amount).toFixed(2);
+Number(r.amount || 0).toFixed(2);
 
-document.getElementById("totalPaid").innerHTML =
+document.getElementById("totalPaid").textContent =
 "RM" +
-Number(r.amount).toFixed(2);
+Number(r.amount || 0).toFixed(2);
 
-document.getElementById("generatedDate").innerHTML =
+document.getElementById("generatedDate").textContent =
 new Date().toLocaleString("ms-MY");
+
+console.log("Receipt Loaded",r);
+
+}catch(err){
+
+console.error(err);
+
+alert(err.message);
+
+}
 
 }
 
 loadReceipt();
+
+// ---------------------
+// Print PDF
+// ---------------------
 
 document
 .getElementById("printBtn")
@@ -394,7 +453,8 @@ quality:0.98
 },
 
 html2canvas:{
-scale:3
+scale:3,
+useCORS:true
 },
 
 jsPDF:{
@@ -414,6 +474,7 @@ document.getElementById("statementArea")
 
 });
 
+</script>
 
 
 
