@@ -263,6 +263,17 @@ getAuth(app);
 
 async function loadReceipts(user){
 
+const year =
+Number(
+document.getElementById("yearFilter").value
+);
+
+const month =
+document.getElementById("monthFilter").value;
+
+const type =
+document.getElementById("typeFilter").value;
+
 const receiptSnap =
 await getDocs(
 
@@ -286,6 +297,25 @@ receiptSnap.forEach((d)=>{
 
 const r = d.data();
 
+const payDate =
+r.paymentDate.toDate();
+
+if(payDate.getFullYear() !== year)
+return;
+
+if(
+month !== "" &&
+payDate.getMonth() !== Number(month)
+)
+return;
+
+if(
+type !== "" &&
+r.serviceCode !== type
+)
+return;
+
+        
 html += `
 
 <tr class="border-b">
@@ -329,12 +359,14 @@ ${r.status}
 <td class="p-4 text-center">
 
 <button
+
+onclick="window.location.href='receipt-view.html?id=${d.id}'"
+
 class="bg-[#153638] text-white px-4 py-2 rounded-lg">
 
 View
 
 </button>
-
 </td>
 
 </tr>
@@ -384,7 +416,24 @@ loadReceipts(user);
 
 });
 
+document
+.getElementById("searchBtn")
+.addEventListener("click",()=>{
 
+onAuthStateChanged(auth,(user)=>{
+
+if(user){
+
+loadReceipts(user);
+
+}
+
+});
+
+});
+
+
+        
         
 </script>
 
