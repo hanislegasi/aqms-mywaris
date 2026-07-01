@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Statement</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Masukkan library html2pdf di bahagian head -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen py-8">
+
+<div class="max-w-5xl mx-auto">
+
+<a
+href="my-statement.html"
+class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+
+← My Statement
+
+</a>
+
+</div>
+
+
+</div>
+
+    
+    <!-- KAWASAN PENYATA (Akan di-export ke PDF) -->
+    <div id="statementArea" class="bg-white p-8 md:p-12 rounded-xl shadow-lg max-w-5xl mx-auto">
+
+        <!-- HEADER -->
+       <div class="flex justify-between border-b pb-6">
+            <div>
+
+<h1 id="companyName"
+class="text-3xl font-bold text-[#153638]">
+
+AL-QAWTHAR MAWARIS
+SYNERGY SDN. BHD.
+
+</h1>
+
+<p id="registrationNo">
+
+Registration No :
+123456xxx
+
+</p>
+
+<h2 class="text-2xl font-bold mt-3">
+
+OFFICIAL PAYMENT RECEIPT
+
+</h2>
+
+<div class="grid md:grid-cols-2 gap-6 mt-6">
+
+<div>
+
+<p><b>Receipt No</b></p>
+<p id="receiptNo">-</p>
+
+</div>
+
+<div>
+
+<p><b>Date</b></p>
+<p id="receiptDate">-</p>
+
+</div>
+
+<div>
+
+<p><b>Received From</b></p>
+<p id="payerName">-</p>
+
+</div>
+
+<div>
+
+<p><b>Reference</b></p>
+<p id="referenceNo">-</p>
+
+</div>
+
+<div>
+
+<p><b>Category</b></p>
+<p id="serviceName">-</p>
+
+</div>
+
+<div>
+
+<p><b>Payment Method</b></p>
+<p id="paymentMethod">-</p>
+
+</div>
+
+</div>
+
+ <table class="w-full mt-8">
+
+<thead>
+
+<tr class="border-b">
+
+<th class="text-left py-3">
+Description
+</th>
+
+<th class="text-right">
+Amount
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td id="description">
+-
+</td>
+
+<td
+id="amount"
+class="text-right font-bold">
+
+RM0.00
+
+</td>
+
+</tr>
+
+</tbody>
+
+<tfoot>
+
+<tr class="border-t">
+
+<td class="font-bold py-4">
+TOTAL PAID
+</td>
+
+<td
+id="totalPaid"
+class="text-right font-bold text-green-600">
+
+RM0.00
+
+</td>
+
+</tr>
+
+</tfoot>
+
+</table>             
+
+<div class="border-t mt-10 pt-4 text-xs text-gray-500 flex justify-between">
+
+<p>
+
+This receipt is computer generated.
+
+</p>
+
+<p>
+
+Generated :
+<span id="generatedDate"></span>
+
+</p>
+
+</div>
+
+
+<div class="text-right mt-6">
+
+<button
+id="printBtn"
+class="bg-green-600 text-white px-6 py-3 rounded-xl">
+
+Print PDF
+
+</button>
+
+</div>
+              
+              
