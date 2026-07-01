@@ -263,7 +263,109 @@ getAuth(app);
 
 async function loadReceipts(user){
 
-console.log("Loading receipts...");
+const receiptSnap =
+await getDocs(
+
+query(
+
+collection(db,"receipts"),
+
+where(
+"uid",
+"==",
+user.uid
+)
+
+)
+
+);
+
+let html = "";
+
+receiptSnap.forEach((d)=>{
+
+const r = d.data();
+
+html += `
+
+<tr class="border-b">
+
+<td class="p-4">
+
+${r.receiptNo}
+
+</td>
+
+<td class="p-4">
+
+${new Date(
+r.paymentDate.seconds*1000
+).toLocaleDateString("ms-MY")}
+
+</td>
+
+<td class="p-4">
+
+${r.serviceName}
+
+</td>
+
+<td class="p-4 text-right">
+
+RM${Number(r.amount).toFixed(2)}
+
+</td>
+
+<td class="p-4 text-center">
+
+<span class="text-green-600 font-semibold">
+
+${r.status}
+
+</span>
+
+</td>
+
+<td class="p-4 text-center">
+
+<button
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
+View
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+if(html===""){
+
+html=`
+
+<tr>
+
+<td
+colspan="6"
+class="text-center py-10 text-gray-400">
+
+No receipt found.
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+document.getElementById(
+"receiptTable"
+).innerHTML = html;
 
 }
 
