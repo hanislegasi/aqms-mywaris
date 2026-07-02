@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>Payment Receipts</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+  
+</head>
+
+<body class="bg-gray-100">
+
+<div class="max-w-7xl mx-auto p-6">
+
+<a
+href="dashboard.html"
+class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-6">
+
+← Dashboard
+
+</a>
+
+<h1
+class="text-3xl font-bold text-[#153638]">
+
+Payment Receipts
+
+</h1>
+
+<p class="text-gray-500 mt-2 mb-6">
+
+Registration, Renewal & Product Payment Receipt
+
+</p>
+
+<div
+class="bg-white rounded-2xl shadow p-5 mb-6">
+
+<div
+class="grid md:grid-cols-4 gap-4">
+
+<select
+id="yearFilter"
+class="border rounded-xl p-3">
+
+<option>2026</option>
+
+<option>2027</option>
+
+<option>2028</option>
+
+</select>
+
+<select
+id="monthFilter"
+class="border rounded-xl p-3">
+
+<option value="">All Month</option>
+
+<option value="0">January</option>
+
+<option value="1">February</option>
+
+<option value="2">March</option>
+
+<option value="3">April</option>
+
+<option value="4">May</option>
+
+<option value="5">June</option>
+
+<option value="6">July</option>
+
+<option value="7">August</option>
+
+<option value="8">September</option>
+
+<option value="9">October</option>
+
+<option value="10">November</option>
+
+<option value="11">December</option>
+
+</select>
+
+<select
+id="typeFilter"
+class="border rounded-xl p-3">
+
+<option value="">
+All Category
+</option>
+
+<option value="REGISTRATION">
+Registration Fee
+</option>
+
+<option value="RENEWAL">
+Annual Renewal
+</option>
+
+<option value="WASIAT_RENEWAL">
+e-Wasiat
+</option>
+
+<option value="HIBAH_RENEWAL">
+Hibah
+</option>
+
+<option value="HARTA_RENEWAL">
+Harta Sepencarian
+</option>
+
+<option value="MAWARIS_RENEWAL">
+Mawaris
+</option>
+
+</select>
+
+<button
+id="searchBtn"
+class="bg-[#153638] text-white rounded-xl">
+
+Search
+
+</button>
+
+</div>
+
+</div>
+
+<div
+class="bg-white rounded-2xl shadow overflow-hidden">
+
+<table class="w-full">
+
+<thead
+class="bg-gray-50 border-b">
+
+<tr>
+
+<th class="p-4 text-left">
+
+Receipt No
+
+</th>
+
+<th class="p-4 text-left">
+
+Date
+
+</th>
+
+<th class="p-4 text-left">
+
+Description
+
+</th>
+
+<th class="p-4 text-right">
+
+Amount
+
+</th>
+
+<th class="p-4 text-center">
+
+Status
+
+</th>
+
+<th class="p-4 text-center">
+
+Action
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody
+id="receiptTable">
+
+<tr>
+
+<td
+colspan="6"
+class="text-center py-10 text-gray-400">
+
+No receipt found.
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+query,
+where
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+
+projectId:"alqawthar-mywaris",
+
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+
+messagingSenderId:"3498810778",
+
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
+const auth =
+getAuth(app);
+
+async function loadReceipts(user){
+
+const year =
+Number(
+document.getElementById("yearFilter").value
+);
+
+const month =
+document.getElementById("monthFilter").value;
+
+const type =
+document.getElementById("typeFilter").value;
+
+const receiptSnap =
+await getDocs(
+
+query(
+
+collection(db,"receipts"),
+
+where(
+"uid",
+"==",
+user.uid
+)
+
+)
+
+);
+
+let html = "";
+
+receiptSnap.forEach((d)=>{
+
+const r = d.data();
+
+const payDate =
+r.paymentDate.toDate();
+
+if(payDate.getFullYear() !== year)
+return;
+
+if(
+month !== "" &&
+payDate.getMonth() !== Number(month)
+)
+return;
+
+if(
+type !== "" &&
+r.serviceCode !== type
+)
+return;
+
+        
+html += `
+
+<tr class="border-b">
+
+<td class="p-4">
+${r.receiptNo}
+</td>
+
+<td class="p-4">
+${payDate.toLocaleDateString("ms-MY")}
+</td>
+
+<td class="p-4">
+${r.serviceName}
+</td>
+
+<td class="p-4 text-right">
+RM${Number(r.amount).toFixed(2)}
+</td>
+
+<td class="p-4 text-center">
+
+<span class="text-green-600 font-semibold">
+${r.status}
+</span>
+
+</td>
+
+<td class="p-4 text-center">
+
+<button
+onclick="window.location.href='receipt-view.html?id=${d.id}'"
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
+View
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+});
+
+if(html===""){
+
+html=`
+
+<tr>
+
+<td
+colspan="6"
+class="text-center py-10 text-gray-400">
+
+No receipt found.
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+document.getElementById(
+"receiptTable"
+).innerHTML = html;
+
+}
+
+onAuthStateChanged(auth,(user)=>{
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+loadReceipts(user);
+
+});
+
+document
+.getElementById("searchBtn")
+.addEventListener("click",()=>{
+
+onAuthStateChanged(auth,(user)=>{
+
+if(user){
+
+loadReceipts(user);
+
+}
+
+});
+
+});
+
+
+        
+        
+</script>
+
+
+        
+</body>
+
+</html>
+
+
+
+
+  
