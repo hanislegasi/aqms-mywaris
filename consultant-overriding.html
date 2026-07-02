@@ -95,7 +95,8 @@ getDoc,
 getDocs,
 collection,
 query,
-where  
+where,
+orderBy
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -144,11 +145,8 @@ const historySnap =
 await getDocs(
 query(
 collection(db,"overrideHistory"),
-where(
-"receiver",
-"==",
-data.consultantNo
-)
+where("receiver","==",data.consultantNo),
+orderBy("createdAt","desc")
 )
 );
 
