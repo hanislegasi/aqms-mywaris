@@ -74,7 +74,9 @@ import {
 getFirestore,
 doc,
 updateDoc,
-getDoc
+getDoc,
+addDoc,
+collection  
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const firebaseConfig = {
@@ -97,6 +99,8 @@ getAuth(app);
 const db =
 getFirestore(app);
 
+const renewalFee = 50;
+  
 let currentUser = null;
 
 onAuthStateChanged(auth,(user)=>{
@@ -147,12 +151,22 @@ return;
 const wasiatData =
 wasiatSnap.data();
 
+const userSnap =
+await getDoc(
+doc(db,"users",currentUser.uid)
+);
+
+const data =
+userSnap.data();  
+
 let expiryDate =
 new Date();
 
 expiryDate.setFullYear(
 expiryDate.getFullYear() + 1
 );
+
+  
 
 // update user
 await updateDoc(
@@ -167,6 +181,88 @@ new Date().toISOString()
 }
 );
 
+
+await addDoc(collection(db,"ledger"),{
+
+date:new Date(),
+
+accountCode:"4300",
+
+account:"AQM - Wasiat Renewal Fee",
+
+category:"income",
+
+description:
+"Wasiat Membership Renewal",
+
+debit:0,
+
+credit:renewalFee,
+
+paymentType:"CUSTOMER",
+
+sourceAccount:"4300",
+
+transactionGroup:currentUser.uid
+
+});
+
+
+await addDoc(collection(db,"ledger"),{
+
+date:new Date(),
+
+accountCode:"1000",
+
+account:"Bank",
+
+category:"asset",
+
+description:
+"Wasiat Membership Renewal",
+
+debit:renewalFee,
+
+credit:0,
+
+paymentType:"CUSTOMER",
+
+sourceAccount:"4300",
+
+transactionGroup:currentUser.uid
+
+});
+
+
+await addDoc(
+collection(db,"receipts"),
+{
+
+receiptNo:
+"WAS-REN-"+Date.now(),
+
+uid:currentUser.uid,
+
+payerName:data.nama || "-",
+
+customerPhone:data.telefon || "",
+
+serviceCode:"WASIAT_RENEWAL",
+
+serviceName:"Wasiat Membership Renewal",
+
+amount:renewalFee,
+
+paymentMethod:"ToyyibPay",
+
+status:"PAID",
+
+paymentDate:new Date()
+
+}
+);  
+  
+  
 alert(
 "Keahlian berjaya diperbaharui sehingga "
 +
@@ -186,78 +282,7 @@ console.log(error);
 
 });
 
-await addDoc(collection(db,"ledger"),{
 
-date:new Date(),
-
-accountCode:"4300",
-
-account:"AQM Renewal Fee",
-
-category:"income",
-
-description:data.consultantNo+" AQM Renewal",
-
-debit:0,
-
-credit:renewalFee,
-
-paymentType:"CUSTOMER",
-
-sourceAccount:"4300",
-
-transactionGroup:data.consultantNo
-
-});
-
-await addDoc(collection(db,"ledger"),{
-
-date:new Date(),
-
-accountCode:"1000",
-
-account:"Bank",
-
-category:"asset",
-
-description:data.consultantNo+" AQM Renewal",
-
-debit:renewalFee,
-
-credit:0,
-
-paymentType:"CUSTOMER",
-
-sourceAccount:"4300",
-
-transactionGroup:data.consultantNo
-
-});
-
-await addDoc(collection(db,"receipts"),{
-
-receiptNo:
-"AQM-REN-"+Date.now(),
-
-uid:user.uid,
-
-consultantNo:data.consultantNo,
-
-payerName:data.nama,
-
-serviceCode:"AQM_RENEWAL",
-
-serviceName:"AQM Annual Membership Renewal",
-
-amount:renewalFee,
-
-paymentMethod:"ToyyibPay",
-
-status:"PAID",
-
-paymentDate:new Date()
-
-});  
 
   
 </script>
