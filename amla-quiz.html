@@ -482,17 +482,13 @@ ${score}%
 
 `;
 
-const userSnap =
+const consultantSnap =
 await getDoc(
-doc(
-db,
-"users",
-currentUser.uid
-)
+doc(db,"consultants",currentUser.uid)
 );
 
 const oldData =
-userSnap.data();
+consultantSnap.data() || {};
 
 const oldScore =
 oldData?.training?.amla?.bestScore || 0;
@@ -512,12 +508,9 @@ console.log("Best:", bestScore);
 console.log("Attempts:", oldAttempts + 1);
  
 await updateDoc(
-doc(
-db,
-"users",
-currentUser.uid
-),
+doc(db,"consultants",currentUser.uid),
 {
+ 
 "training.amla.status":"passed",
 
 "training.amla.bestScore":
