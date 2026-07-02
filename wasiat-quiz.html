@@ -483,17 +483,16 @@ ${score}%
 
 `;
 
-const userSnap =
+const consultantSnap =
 await getDoc(
-doc(
-db,
-"users",
-currentUser.uid
-)
+doc(db,"consultants",currentUser.uid)
 );
 
 const oldData =
-userSnap.data();
+consultantSnap.data() || {};
+
+
+ 
 
 const oldScore =
 oldData?.training?.wasiat?.bestScore || 0;
@@ -508,12 +507,9 @@ score
 ); 
  
 await updateDoc(
-doc(
-db,
-"users",
-currentUser.uid
-),
+doc(db,"consultants",currentUser.uid),
 {
+ 
 "training.wasiat.status":"passed",
 
 "training.wasiat.bestScore":
