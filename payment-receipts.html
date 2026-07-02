@@ -274,21 +274,12 @@ document.getElementById("monthFilter").value;
 const type =
 document.getElementById("typeFilter").value;
 
-const receiptSnap =
-await getDocs(
-
+const receiptSnap = await getDocs(
 query(
-
 collection(db,"receipts"),
-
-where(
-"uid",
-"==",
-user.uid
+where("uid","==",currentUser.uid),
+where("portal","==","consultant")
 )
-
-)
-
 );
 
 let html = "";
