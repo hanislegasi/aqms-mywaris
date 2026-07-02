@@ -185,6 +185,26 @@
 
         loadReceipt();
 
+if(!r.payerName && r.uid){
+
+const userSnap =
+await getDoc(
+doc(db,"consultants",r.uid)
+);
+
+if(userSnap.exists()){
+
+r.payerName =
+userSnap.data().nama;
+
+}
+
+}
+
+document.getElementById("payerName").textContent =
+r.payerName || "-";
+
+        
         // ---------------------
         // Print PDF
         // ---------------------
