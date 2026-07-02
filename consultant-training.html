@@ -350,17 +350,17 @@ return;
 
 }
 
-const userSnap =
+const consultantSnap =
 await getDoc(
 doc(
 db,
-"users",
+"consultants",
 user.uid
 )
 );
 
 const data =
-userSnap.data();
+consultantSnap.data() || {};
 
 let completed = 0;
 
