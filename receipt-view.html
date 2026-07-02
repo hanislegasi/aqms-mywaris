@@ -165,6 +165,23 @@
 
                 const r = snap.data();
 
+if(!r.payerName && r.uid){
+
+const userSnap =
+await getDoc(
+doc(db,"consultants",r.uid)
+);
+
+if(userSnap.exists()){
+
+r.payerName =
+userSnap.data().nama;
+
+}
+
+}
+
+                
                 document.getElementById("receiptNo").textContent = r.receiptNo || "-";
                 document.getElementById("receiptDate").textContent = r.paymentDate?.toDate().toLocaleDateString("ms-MY") || "-";
                 document.getElementById("payerName").textContent = r.payerName || "-";
@@ -185,24 +202,9 @@
 
         loadReceipt();
 
-if(!r.payerName && r.uid){
 
-const userSnap =
-await getDoc(
-doc(db,"consultants",r.uid)
-);
 
-if(userSnap.exists()){
 
-r.payerName =
-userSnap.data().nama;
-
-}
-
-}
-
-document.getElementById("payerName").textContent =
-r.payerName || "-";
 
         
         // ---------------------
