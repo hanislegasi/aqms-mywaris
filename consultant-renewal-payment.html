@@ -246,6 +246,35 @@ transactionGroup:data.consultantNo
 });
 
   
+await addDoc(
+collection(db,"receipts"),
+{
+
+receiptNo:
+"REN-" + Date.now(),
+
+uid:user.uid,
+
+consultantNo:data.consultantNo,
+
+payerName:data.nama,
+
+serviceCode:"RENEWAL",
+
+serviceName:"Consultant Renewal Fee",
+
+amount:renewalFee,
+
+paymentMethod:"FPX",
+
+status:"PAID",
+
+paymentDate:new Date()
+
+}
+);
+
+  
 alert(
 `Renewal Berjaya!
 
