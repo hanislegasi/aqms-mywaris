@@ -202,6 +202,15 @@ lifetimeOverride:0
 
 );
 
+const consultantSnap =
+await getDoc(
+doc(db,"consultants",currentUser.uid)
+);
+
+const consultant =
+consultantSnap.data();
+
+    
 await updateDoc(
 
 doc(
