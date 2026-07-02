@@ -97,7 +97,6 @@ Loading...
 
 <div id="wasiatNotification"></div>
 
-<div id="receiptCard"></div>
 
 </div>
   
@@ -281,11 +280,21 @@ class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-
   
 </div>
 
-<div class="mt-10 border-t pt-6 flex justify-end">
-  
+<hr class="my-8">
+
+<div class="flex justify-end gap-3">
+
+<a
+href="payment-receipts.html"
+class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold">
+
+🧾 Resit Saya
+
+</a>
+
 <button
 id="logoutBtn"
-class="bg-red-600 hover:bg-red-700 transition text-white px-6 py-3 rounded-xl shadow-md">
+class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold">
 
 Logout
 
@@ -537,49 +546,7 @@ ${(userData.nama || "U")[0]}
 `;
 
   
-document.getElementById(
-"receiptCard"
-).innerHTML = `
 
-<div class="bg-white border border-blue-200 rounded-xl p-4 h-full">
-
-<div class="flex items-center gap-3 mb-3">
-
-<div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-
-🧾
-
-</div>
-
-<div>
-
-<h3 class="font-bold text-blue-800">
-
-Resit Saya
-
-</h3>
-
-<p class="text-sm text-gray-500">
-
-Semua resit pembayaran anda
-
-</p>
-
-</div>
-
-</div>
-
-<a
-href="payment-receipts.html"
-class="inline-block mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-
-Lihat Semua Resit
-
-</a>
-
-</div>
-
-`;
 
   
 if(wasiatData.status === "UNDER_REVIEW"){
