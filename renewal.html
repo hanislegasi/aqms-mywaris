@@ -186,6 +186,80 @@ console.log(error);
 
 });
 
+await addDoc(collection(db,"ledger"),{
+
+date:new Date(),
+
+accountCode:"4300",
+
+account:"AQM Renewal Fee",
+
+category:"income",
+
+description:data.consultantNo+" AQM Renewal",
+
+debit:0,
+
+credit:renewalFee,
+
+paymentType:"CUSTOMER",
+
+sourceAccount:"4300",
+
+transactionGroup:data.consultantNo
+
+});
+
+await addDoc(collection(db,"ledger"),{
+
+date:new Date(),
+
+accountCode:"1000",
+
+account:"Bank",
+
+category:"asset",
+
+description:data.consultantNo+" AQM Renewal",
+
+debit:renewalFee,
+
+credit:0,
+
+paymentType:"CUSTOMER",
+
+sourceAccount:"4300",
+
+transactionGroup:data.consultantNo
+
+});
+
+await addDoc(collection(db,"receipts"),{
+
+receiptNo:
+"AQM-REN-"+Date.now(),
+
+uid:user.uid,
+
+consultantNo:data.consultantNo,
+
+payerName:data.nama,
+
+serviceCode:"AQM_RENEWAL",
+
+serviceName:"AQM Annual Membership Renewal",
+
+amount:renewalFee,
+
+paymentMethod:"ToyyibPay",
+
+status:"PAID",
+
+paymentDate:new Date()
+
+});  
+
+  
 </script>
 
 </body>
