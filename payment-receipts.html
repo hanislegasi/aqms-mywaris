@@ -278,7 +278,7 @@ const receiptSnap = await getDocs(
 query(
 collection(db,"receipts"),
 where("uid","==",user.uid),
-where("portal","==","consultant")
+
 )
 );
 
