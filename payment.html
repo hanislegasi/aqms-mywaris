@@ -311,22 +311,22 @@ royalty
 
 
 
-const usersSnap =
+const consultantSnap =
 await getDocs(
-collection(db,"users")
+collection(db,"consultants")
 );
 
-const allUsers = [];
+const allConsultants = [];
 
-usersSnap.forEach((d)=>{
+consultantSnap.forEach((d)=>{
 
-allUsers.push({
+allConsultants.push({
 id:d.id,
 ...d.data()
 });
 
 });
-
+  
 function getOverrideRate(level){
 
 if(level === "AQC") return 0;
@@ -355,8 +355,8 @@ return 35;
   
 function findConsultant(no){
 
-return allUsers.find(
-u => u.consultantNo === no
+return allConsultants.find(
+u=>u.consultantNo===no
 );
 
 }
@@ -528,9 +528,10 @@ credit:overrideAmount
 );
   
 await updateDoc(
+
 doc(
 db,
-"users",
+"consultants",
 upline.id
 ),
 {
