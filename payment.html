@@ -189,6 +189,18 @@ memberNo,
 memberSince:
 new Date().toISOString()
 
+expiryDate:(()=>{
+
+const d=new Date();
+
+d.setFullYear(
+d.getFullYear()+1
+);
+
+return d.toISOString();
+
+})()
+
 }
 
 );
@@ -442,6 +454,16 @@ credit:commissionAmount
 
 }
 );
+
+await updateDoc(
+doc(db,"consultants",directConsultant.id),
+{
+activeClients: increment(1),
+totalSales: increment(350),
+careerSales: increment(350),
+totalCommission: increment(commissionAmount)
+}
+);
   
 }
   
@@ -528,17 +550,14 @@ credit:overrideAmount
 );
   
 await updateDoc(
-
 doc(
 db,
 "consultants",
 upline.id
 ),
 {
-totalOverriding:
-increment(
-overrideAmount
-)
+careerSales: increment(350),
+totalOverriding: increment(overrideAmount)
 }
 );
 
