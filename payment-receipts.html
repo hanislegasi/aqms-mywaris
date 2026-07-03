@@ -277,7 +277,7 @@ document.getElementById("typeFilter").value;
 const receiptSnap = await getDocs(
 query(
 collection(db,"receipts"),
-where("uid","==",currentUser.uid),
+where("uid","==",user.uid),
 where("portal","==","consultant")
 )
 );
