@@ -590,6 +590,38 @@ currentConsultant =
 upline;
 
 }
+
+// =====================
+// CREATE PAYMENT RECEIPT
+// =====================
+
+await addDoc(
+collection(db,"receipts"),
+{
+
+receiptNo:
+"WST-" + Date.now(),
+
+uid:currentUser.uid,
+
+memberNo:memberNo,
+
+payerName:customer.nama,
+
+serviceCode:"WASIAT",
+
+serviceName:"Wasiat Registration",
+
+amount:350,
+
+paymentMethod:"ToyyibPay",
+
+status:"PAID",
+
+paymentDate:new Date()
+
+}
+);
   
 alert(
 "Pembayaran berjaya"
