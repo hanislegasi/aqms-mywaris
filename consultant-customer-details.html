@@ -131,7 +131,7 @@ onAuthStateChanged(auth, async(user)=>{
   await getDoc(
     doc(
       db,
-      "users",
+      "consultants",
       user.uid
     )
   );
