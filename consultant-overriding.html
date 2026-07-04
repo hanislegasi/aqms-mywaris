@@ -141,15 +141,25 @@ doc(db,"consultants",user.uid)
 const data =
 userSnap.data();
 
+console.log(data.consultantNo);
+  
 const historySnap =
 await getDocs(
 query(
 collection(db,"overrideHistory"),
 where("receiver","==",data.consultantNo),
-orderBy("createdAt","desc")
+
 )
 );
 
+console.log(historySnap.size);
+
+}catch(err){
+
+console.error(err);
+
+  }  
+  
 let html = "";
 let lifetimeTotal = 0;
 let totalSales = 0;
