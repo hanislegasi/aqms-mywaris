@@ -164,7 +164,7 @@ params.get("id");
 // LOAD USER
 const docSnap =
 await getDoc(
-doc(db,"consultants",userId)
+doc(db,"users",userId)
 );
 
 if(docSnap.exists()){
