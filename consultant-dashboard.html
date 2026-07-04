@@ -670,17 +670,17 @@ row.consultantNo === data.consultantNo
 const month =
 trxDate.getMonth();
  
-if(row.accountCode === "5000"){
+if(row.accountCode === "2000"){
 
 monthlyCommission[month] +=
-Number(row.debit || 0);
+Number(row.credit || 0);
 
 }
 
-if(row.accountCode === "5100"){
+if(row.accountCode === "2100"){
 
 monthlyOverride[month] +=
-Number(row.debit || 0);
+Number(row.credit || 0);
 
 }
 
@@ -696,10 +696,10 @@ row.date?.toDate();
 
 
 
-if(row.accountCode === "5000"){
+if(row.accountCode === "2000"){
 
 totalCommission +=
-Number(row.debit || 0);
+Number(row.credit || 0);
 
 }
 
@@ -717,11 +717,11 @@ ledgerSnap.forEach((d)=>{
 
     if(row.consultantNo !== data.consultantNo) return;
 
-    if(row.accountCode === "5100"){
+    if(row.accountCode === "2100"){
 
 console.log(row);
      
-        totalOverriding += Number(row.debit || 0);
+        totalOverriding += Number(row.credit || 0);
 
     }
 
