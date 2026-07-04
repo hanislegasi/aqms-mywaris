@@ -148,7 +148,7 @@ await getDocs(
 query(
 collection(db,"overrideHistory"),
 where("receiver","==",data.consultantNo),
-
+orderBy("createdAt","desc")
 )
 );
 
