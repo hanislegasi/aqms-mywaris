@@ -125,6 +125,20 @@ Loading...
 
             <div class="border rounded-xl p-4">
 
+<div class="text-sm text-gray-500">
+Total Earned
+</div>
+
+<div
+id="earnedCard"
+class="text-3xl font-bold text-green-600">
+
+RM0.00
+
+</div>
+
+</div>
+
                 <div class="text-sm text-gray-500">
                     Paid
                 </div>
@@ -670,17 +684,15 @@ row.consultantNo === data.consultantNo
 const month =
 trxDate.getMonth();
  
-if(row.accountCode === "2000"){
+if(row.accountCode==="2000"){
 
-monthlyCommission[month] +=
-Number(row.credit || 0);
+monthlyCommission[month]+=Number(row.credit||0);
 
 }
 
-if(row.accountCode === "2100"){
+if(row.accountCode==="2100"){
 
-monthlyOverride[month] +=
-Number(row.credit || 0);
+monthlyOverride[month]+=Number(row.credit||0);
 
 }
 
@@ -696,10 +708,13 @@ row.date?.toDate();
 
 
 
-if(row.accountCode === "2000"){
+if(
+row.accountCode === "2000" &&
+row.credit > 0
+){
 
 totalCommission +=
-Number(row.credit || 0);
+Number(row.credit);
 
 }
 
@@ -717,13 +732,15 @@ ledgerSnap.forEach((d)=>{
 
     if(row.consultantNo !== data.consultantNo) return;
 
-    if(row.accountCode === "2100"){
+   if(
+row.accountCode === "2100" &&
+row.credit > 0
+){
 
-console.log(row);
-     
-        totalOverriding += Number(row.credit || 0);
+totalOverriding +=
+Number(row.credit);
 
-    }
+}
 
 });
 
@@ -739,6 +756,9 @@ historySnap.forEach((d)=>{
 const earned =
 totalCommission + totalOverriding;
 
+document.getElementById("earnedCard").innerHTML =
+"RM" + earned.toFixed(2);
+ 
 const outstanding =
 earned - paid;
 
