@@ -396,7 +396,28 @@ commissionRate /
 100;
 
 
+await addDoc(
+collection(db,"ledger"),
+{
+date:new Date(),
 
+accountCode:"5000",
+account:"Consultant Commission",
+
+category:"expense",
+
+consultantNo:directConsultant.consultantNo,
+consultantName:directConsultant.nama,
+
+description:
+directConsultant.consultantNo +
+" " +
+directConsultant.nama,
+
+debit:commissionAmount,
+credit:0
+}
+);
   
 
 await addDoc(
@@ -465,7 +486,28 @@ const overrideAmount =
 350 * diffRate / 100;
 
 
+await addDoc(
+collection(db,"ledger"),
+{
+date:new Date(),
 
+accountCode:"5100",
+account:"Consultant Override",
+
+category:"expense",
+
+consultantNo:upline.consultantNo,
+consultantName:upline.nama,
+
+description:
+upline.consultantNo +
+" " +
+upline.nama,
+
+debit:overrideAmount,
+credit:0
+}
+);
   
 
 await addDoc(
