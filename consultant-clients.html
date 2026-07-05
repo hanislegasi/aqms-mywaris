@@ -34,7 +34,7 @@ class="inline-block bg-gray-200 hover:bg-gray-300 px-5 py-3 rounded-xl font-semi
 </a>
 
 <div
-class="grid md:grid-cols-2 gap-4 mb-5">
+class="grid md:grid-cols-3 gap-4 mb-5">
 
 <div class="bg-white p-5 rounded-xl shadow">
 
@@ -68,6 +68,23 @@ RM0
 
 </div>
 
+<div class="bg-white p-5 rounded-xl shadow">
+
+<p class="text-gray-500">
+Jumlah Komisen
+</p>
+
+<p
+id="totalCommission"
+class="text-3xl font-bold text-blue-600">
+
+RM0
+
+</p>
+
+</div>
+
+  
 </div>
   
 <div
@@ -86,6 +103,7 @@ class="overflow-x-auto">
 <th class="p-3 text-left">Telefon</th>
 <th class="p-3 text-left">Referral</th>
 <th class="p-3 text-left">Sales</th>
+<th class="p-3 text-left">Komisen</th>
 <th class="p-3 text-left">Tarikh Tamat</th>
 <th class="p-3 text-left">Status</th>
 <th class="p-3 text-left">Tindakan</th>
@@ -186,6 +204,7 @@ let bil = 1;
 
 let totalClients = 0;
 let totalClientSales = 0;
+let totalCommission = 0;
 
 snap.forEach((docSnap)=>{
 
@@ -214,21 +233,27 @@ client.nama
 );
 
 let clientSales = 0;
+let commission = 0;
 
+  
 if(client.paymentStatus === "paid"){
-clientSales += 350;
+    clientSales += 350;
+    commission += 70;      // contoh 20%
 }
 
 if(client.hibahPaymentStatus === "paid"){
-clientSales += 2500;
+    clientSales += 2500;
+    commission += 250;     // contoh 10%
 }
 
 if(client.pusakaPaymentStatus === "paid"){
-clientSales += 800;
+    clientSales += 800;
+    commission += 40;      // contoh 5%
 }
 
 totalClients++;
 totalClientSales += clientSales;
+totalCommission += commission;  
   
 const expiryDate =
 client.expiryDate
@@ -273,6 +298,10 @@ ${client.referral || "-"}
 
 <td class="p-3 text-right font-semibold text-green-600">
 RM${clientSales.toLocaleString()}
+</td>
+
+<td class="p-3 text-right font-semibold text-blue-600">
+RM${commission.toLocaleString()}
 </td>
 
 <td class="p-3">
@@ -323,6 +352,13 @@ document.getElementById(
 ).innerHTML =
 "RM" +
 totalClientSales.toLocaleString();
+
+document.getElementById(
+"totalCommission"
+).innerHTML =
+"RM" +
+totalCommission.toLocaleString();
+
   
 document.getElementById(
 "tableBody"
