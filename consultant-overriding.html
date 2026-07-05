@@ -124,6 +124,8 @@ getFirestore(app);
 
 onAuthStateChanged(auth, async(user)=>{
 
+try{
+  
 if(!user){
 
 window.location.href =
