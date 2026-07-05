@@ -201,7 +201,8 @@ collection(db,"users")
 
 let commissionRate = 0;
 
-switch(data.consultantLevel){
+switch(consultantData.consultantLevel){
+
 
     case "AQC":
         commissionRate = 35;
@@ -331,13 +332,16 @@ ${client.telefon || "-"}
 ${client.referral || "-"}
 </td>
 
-<td class="p-3 text-right font-semibold text-green-600">
-RM${clientSales.toLocaleString()}
-</td>
+document.getElementById("totalClientSales").innerHTML =
+"RM" + totalClientSales.toLocaleString("en-US",{
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+});
 
-<td class="p-3 text-right font-semibold text-blue-600">
-RM${commission.toLocaleString()}
-</td>
+RM${commission.toLocaleString("en-US",{
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+})}
 
 <td class="p-3">
 ${expiryDate}
