@@ -199,6 +199,30 @@ await getDocs(
 collection(db,"users")
 );
 
+let commissionRate = 0;
+
+switch(data.consultantLevel){
+
+    case "AQC":
+        commissionRate = 35;
+        break;
+
+    case "AQC-AS":
+        commissionRate = 38;
+        break;
+
+    case "AQC-UM":
+        commissionRate = 40;
+        break;
+
+    case "MGAM":
+        commissionRate = 45;
+        break;
+
+    default:
+        commissionRate = 0;
+}
+  
 let html = "";
 let bil = 1;
 
@@ -235,20 +259,31 @@ client.nama
 let clientSales = 0;
 let commission = 0;
 
-  
 if(client.paymentStatus === "paid"){
-    clientSales += 350;
-    commission += 70;      // contoh 20%
+
+    const sales = 350;
+
+    clientSales += sales;
+    commission += sales * (commissionRate / 100);
+
 }
 
 if(client.hibahPaymentStatus === "paid"){
-    clientSales += 2500;
-    commission += 250;     // contoh 10%
+
+    const sales = 2500;
+
+    clientSales += sales;
+    commission += sales * (commissionRate / 100);
+
 }
 
 if(client.pusakaPaymentStatus === "paid"){
-    clientSales += 800;
-    commission += 40;      // contoh 5%
+
+    const sales = 800;
+
+    clientSales += sales;
+    commission += sales * (commissionRate / 100);
+
 }
 
 totalClients++;
