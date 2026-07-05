@@ -154,16 +154,6 @@ orderBy("createdAt","desc")
 )
 );
 
-console.log(historySnap.size);
-
-}catch(err){
-
-console.error(err);
-
-}  
-
-
-  
 let html = "";
 let lifetimeTotal = 0;
 let totalSales = 0;
@@ -177,6 +167,20 @@ Number(h.override || 0);
 
 totalSales +=
 Number(h.sales || 0);
+
+ });  
+  
+console.log(historySnap.size);
+
+}catch(err){
+
+console.error(err);
+
+}  
+
+
+  
+
 
 html += `
 
