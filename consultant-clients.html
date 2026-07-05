@@ -336,16 +336,19 @@ ${client.telefon || "-"}
 ${client.referral || "-"}
 </td>
 
-document.getElementById("totalClientSales").innerHTML =
-"RM" + totalClientSales.toLocaleString("en-US",{
+<td class="p-3 text-right font-semibold text-green-600">
+RM${clientSales.toLocaleString("en-US",{
     minimumFractionDigits:2,
     maximumFractionDigits:2
-});
+})}
+</td>
 
+<td class="p-3 text-right font-semibold text-blue-600">
 RM${commission.toLocaleString("en-US",{
     minimumFractionDigits:2,
     maximumFractionDigits:2
 })}
+</td>
 
 <td class="p-3">
 ${expiryDate}
