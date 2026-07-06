@@ -605,6 +605,10 @@ queueSepencarian+
 queueMawaris;
 
   
+// ======================
+// WASIAT
+// ======================
+
 const wasiatSnap =
 await getDoc(
 doc(
@@ -621,46 +625,108 @@ if(wasiatSnap.exists()){
 const wasiat =
 wasiatSnap.data();
 
-if(
-wasiat.status==="UNDER_REVIEW"
-){
-
+if(wasiat.status==="UNDER_REVIEW"){
 queueWasiat++;
-
 }
-  
+
 if(wasiat.docRef){
-
 approved++;
-
 }
 
 if(wasiat.renewedAt){
-
 renewal++;
-
 }
 
-  
 if(wasiat.expiryDate){
 
 const expiry =
-new Date(
-wasiat.expiryDate
-);
+new Date(wasiat.expiryDate);
 
 if(expiry < new Date()){
-
 tamat++;
-
 }
 
 }
 
 }
 
+// ======================
+// HIBAH
+// ======================
+
+const hibahSnap =
+await getDoc(
+doc(
+db,
+"users",
+userDoc.id,
+"hibah",
+"maklumat"
+)
+);
+
+if(hibahSnap.exists()){
+
+const hibah =
+hibahSnap.data();
+
+if(hibah.status==="UNDER_REVIEW"){
+queueHibah++;
 }
 
+}
+
+// ======================
+// HARTA SEPENCARIAN
+// ======================
+
+const sepencarianSnap =
+await getDoc(
+doc(
+db,
+"users",
+userDoc.id,
+"hartaSepencarian",
+"maklumat"
+)
+);
+
+if(sepencarianSnap.exists()){
+
+const sep =
+sepencarianSnap.data();
+
+if(sep.status==="UNDER_REVIEW"){
+queueSepencarian++;
+}
+
+}
+
+// ======================
+// MAWARIS
+// ======================
+
+const mawarisSnap =
+await getDoc(
+doc(
+db,
+"users",
+userDoc.id,
+"mawaris",
+"maklumat"
+)
+);
+
+if(mawarisSnap.exists()){
+
+const mawaris =
+mawarisSnap.data();
+
+if(mawaris.status==="UNDER_REVIEW"){
+queueMawaris++;
+}
+
+}
 document.getElementById(
 "prospekCount"
 ).innerHTML =
