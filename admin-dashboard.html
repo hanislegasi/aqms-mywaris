@@ -601,32 +601,7 @@ document.getElementById(
   
 }
 
-document
-.getElementById("newConsultantBtn")
-.onclick=()=>{
 
-window.location=
-"register-consultant.html";
-
-};
-
-document
-.getElementById("newCustomerBtn")
-.onclick=()=>{
-
-window.location=
-"register.html";
-
-};
-
-document
-.getElementById("newPaymentBtn")
-.onclick=()=>{
-
-window.location=
-"payment.html";
-
-};
 
 
 
@@ -667,129 +642,7 @@ onAuthStateChanged(auth, async(user)=>{
     
   }
 
-// LOAD CUSTOMERS
-const snapshot =
-await getDocs(
-collection(db,"users")
-);
-
-let html = "";
-
-window.customerHTML = "";
-
-let allCustomers = [];
-
-const users =
-snapshot.docs;
-
-users.sort((a,b)=>{
-
-const dateA =
-a.data().createdAt?.toDate() || new Date(0);
-
-const dateB =
-b.data().createdAt?.toDate() || new Date(0);
-
-return dateB - dateA;
-
-});
-
-let bil = 1;
-
-users.forEach((doc)=>{
-
-const user = doc.data();
-
-if(user.role === "admin"){
-return;
-}
-
-const memberNo = user.memberNo || "-";
-
-const status =
-user.paymentStatus === "paid"
-? "AHLI AKTIF"
-: "PROSPEK";
-
-let registerDate = "-";
-
-if(user.createdAt){
-
-registerDate =
-user.createdAt
-.toDate()
-.toLocaleDateString("ms-MY");
-
-}
-  
-html += `
-
-<tr
-class="border-b hover:bg-gray-50 cursor-pointer"
-onclick="window.location='customer-details.html?id=${doc.id}'">
-
-<td class="p-3">
-${bil++}
-</td>
-
-
-<td class="p-3">
-
-${registerDate}
-
-</td>
-
-<td class="p-3">
-
-${memberNo}
-
-</td>
-
-<td class="p-3 font-semibold">
-
-${user.nama || "-"}
-
-</td>
-
-<td class="p-3">
-
-${user.email || "-"}
-
-</td>
-
-<td class="p-3">
-
-${user.referral || "-"}
-
-</td>
-
-<td class="p-3 text-center">
-
-<span
-class="
-px-3 py-1 rounded-full text-xs
-${user.paymentStatus==="paid"
-? "bg-green-100 text-green-700"
-: "bg-yellow-100 text-yellow-700"}">
-
-${status}
-
-</span>
-
-</td>
-
-</tr>
-
-`;
-  
-});
-
-document.getElementById(
-"tableBody"
-).innerHTML = html;
-
-window.allCustomers =
-allCustomers;  
+loadKPI();
   
 });
 
@@ -843,17 +696,7 @@ window.location.href=
 
 });
   
-document
-.getElementById("searchInput")
-.addEventListener("keyup",(e)=>{
 
-const keyword =
-e.target.value.toLowerCase();
-
-const rows =
-document.querySelectorAll(
-"#tableBody tr"
-);
 
 rows.forEach((row)=>{
 
