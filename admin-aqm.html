@@ -175,7 +175,49 @@ class="bg-white rounded-xl shadow overflow-x-auto">
 
 </div>
 
-<script type="module">
+<script type="module">  
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+getDoc,
+doc,
+updateDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+
+projectId:"alqawthar-mywaris",
+
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+
+messagingSenderId:"3498810778",
+
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+  
+import {
+query,
+orderBy
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
   
 const snapshot =
 await getDocs(
