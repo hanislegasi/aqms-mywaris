@@ -412,6 +412,12 @@ let aktif = 0;
 let tamat = 0;
 let approved = 0;
 let renewal = 0;
+
+let queueWasiat = 0;
+let queueHibah = 0;
+let queueSepencarian = 0;
+let queueMawaris = 0;
+  
 let monthlySales = 0;
 let totalSales = 0;
 let cashBalance = 0; 
@@ -498,6 +504,97 @@ Number(data.credit||0);
 }
 
 });
+
+const receiptSnap =
+await getDocs(
+collection(db,"receipts")
+);
+
+let activityHTML="";
+
+const today =
+new Date().toLocaleDateString("ms-MY");
+
+receiptSnap.forEach((doc)=>{
+
+const data=
+doc.data();
+
+const tarikh=
+data.paymentDate
+.toDate()
+.toLocaleDateString("ms-MY");
+
+if(tarikh===today){
+
+activityHTML+=`
+
+<div class="flex justify-between">
+
+<span>${data.payerName}</span>
+
+<span class="font-semibold">
+
+RM${data.amount}
+
+</span>
+
+</div>
+
+`;
+
+}
+
+});
+
+if(activityHTML===""){
+
+activityHTML=
+"Tiada aktiviti hari ini";
+
+}
+
+document.getElementById(
+"todayActivity"
+).innerHTML=
+activityHTML;
+
+let missingReceipt=0;
+
+const ledgerCount =
+ledgerSnap.size;
+
+const receiptCount =
+receiptSnap.size;
+
+if(
+ledgerCount >
+receiptCount*2
+){
+
+missingReceipt =
+ledgerCount -
+(receiptCount*2);
+
+}
+
+document.getElementById(
+"missingReceipt"
+).innerHTML =
+missingReceipt;
+
+document.getElementById(
+"ledgerError"
+).innerHTML =
+0;
+
+document.getElementById(
+"pendingApproval"
+).innerHTML =
+queueWasiat+
+queueHibah+
+queueSepencarian;
+
   
 const wasiatSnap =
 await getDoc(
@@ -515,6 +612,14 @@ if(wasiatSnap.exists()){
 const wasiat =
 wasiatSnap.data();
 
+if(
+wasiat.status==="UNDER_REVIEW"
+){
+
+queueWasiat++;
+
+}
+  
 if(wasiat.docRef){
 
 approved++;
@@ -572,22 +677,27 @@ document.getElementById(
 ).innerHTML =
 renewal;
 
-// ===== KPI Accounting (sementara) =====
+document.getElementById(
+"queueWasiat"
+).innerHTML =
+queueWasiat;
 
 document.getElementById(
-"monthlySales"
+"queueHibah"
 ).innerHTML =
-"RM " + monthlySales.toFixed(2);
+queueHibah;
 
 document.getElementById(
-"totalSales"
+"queueSepencarian"
 ).innerHTML =
-"RM " + totalSales.toFixed(2);
+queueSepencarian;
 
 document.getElementById(
-"cashBalance"
+"queueMawaris"
 ).innerHTML =
-"RM " + cashBalance.toFixed(2);
+queueMawaris;
+  
+
   
 }
 
