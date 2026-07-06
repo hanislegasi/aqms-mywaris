@@ -441,42 +441,9 @@ aktif++;
 
   
 // ======================
-// TOTAL SALES
+// KPI ACCOUNTING
 // ======================
 
-ledgerSnap.forEach((doc)=>{
-
-const data = doc.data();
-
-if(
-data.category === "income"
-){
-
-totalSales +=
-Number(data.credit || 0);
-
-}
-
-});
-
-
-ledgerSnap.forEach((doc)=>{
-
-const data =
-doc.data();
-
-if(data.accountCode==="1000"){
-
-cashBalance +=
-Number(data.debit || 0);
-
-cashBalance -=
-Number(data.credit || 0);
-
-}
-
-});
-  
 const now =
 new Date();
 
@@ -485,8 +452,30 @@ ledgerSnap.forEach((doc)=>{
 const data =
 doc.data();
 
-if(data.category!=="income")
-return;
+// TOTAL SALES
+
+if(data.category==="income"){
+
+totalSales +=
+Number(data.credit||0);
+
+}
+
+// CASH
+
+if(data.accountCode==="1000"){
+
+cashBalance +=
+Number(data.debit||0);
+
+cashBalance -=
+Number(data.credit||0);
+
+}
+
+// SALES BULAN INI
+
+if(data.category==="income" && data.date){
 
 const txn =
 data.date.toDate();
@@ -506,8 +495,9 @@ Number(data.credit||0);
 
 }
 
-});
+}
 
+});
   
 const wasiatSnap =
 await getDoc(
