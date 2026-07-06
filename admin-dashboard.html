@@ -378,56 +378,7 @@ Audit Warning
 </div>
   
   
-<div
-id="sectionTitle"
-class="hidden">
 
-<h2
-class="text-2xl font-bold mb-4">
-
-Pelanggan (AQM)
-
-</h2>
-
-<input
-id="searchInput"
-type="text"
-placeholder="Cari nama, email, no AQM, referral atau tarikh daftar..."
-class="w-full p-4 rounded-xl border border-gray-300 mb-4">
-
-</div>
-
-<div
-id="listContainer"
-class="hidden overflow-x-auto">
-
-<table class="w-full bg-white rounded-xl overflow-hidden">
-
-<thead class="bg-[#153638] text-white">
-
-<tr>
-  
-<th class="p-3 text-center">Bil</th>
-<th class="p-3 text-left">Tarikh Daftar</th>
-<th class="p-3 text-left">No AQM</th>
-<th class="p-3 text-left">Nama</th>
-<th class="p-3 text-left">Email</th>
-<th class="p-3 text-left">Referral</th>
-<th class="p-3 text-center">Status</th>
-
-</tr>
-
-</thead>
-
-<tbody id="tableBody">
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
   
 <script type="module">
 
@@ -850,15 +801,10 @@ window.location.href =
 
 document
 .getElementById("aqmBtn")
-.addEventListener("click", ()=>{
+.addEventListener("click",()=>{
 
-document
-.getElementById("sectionTitle")
-.classList.remove("hidden");
-
-document
-.getElementById("listContainer")
-.classList.remove("hidden");
+window.location.href=
+"admin-aqm.html";
 
 });
 
