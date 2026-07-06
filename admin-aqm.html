@@ -225,10 +225,18 @@ getAuth(app);
 
 onAuthStateChanged(auth, async(user)=>{
 
-if(!user){
+const adminSnap =
+await getDoc(
+doc(db,"users",user.uid)
+);
+
+const admin =
+adminSnap.data();
+
+if(admin.role !== "admin"){
 
 window.location.href =
-"login.html";
+"dashboard.html";
 
 return;
 
@@ -261,17 +269,26 @@ return dateB - dateA;
 
 });
 
-let bil = 1;
-
-users.forEach((doc)=>{
-
+  
 let totalCustomer = 0;
 let prospek = 0;
 let aktif = 0;
 let expired = 0;
   
+let bil = 1;
+
+
+   
+users.forEach((doc)=>{
+
+
+  
 const user = doc.data();
 
+if(user.role==="admin"){
+return;
+}
+  
 totalCustomer++;
 
 if(user.paymentStatus==="paid"){
@@ -431,9 +448,6 @@ text.includes(keyword)
 });
 
 });
-  
-window.allCustomers =
-allCustomers;  
   
 });
 
