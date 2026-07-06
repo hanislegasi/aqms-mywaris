@@ -64,11 +64,11 @@ Logout
 <!-- CONTENT -->
 <div class="p-5">
 
-<div class="flex flex-wrap gap-3 mb-6">
+<div class="grid grid-cols-2 md:flex gap-3 mb-6">
 
 <button
 id="aqmBtn"
-class="w-32 bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-xl font-semibold">
+class="h-12 w-full md:w-32 bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-xl font-semibold">
   
 AQM
 
@@ -76,7 +76,7 @@ AQM
 
 <button
 id="aqcBtn"
-class="w-32 bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-xl font-semibold">
+class="h-12 w-full md:w-32 bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-xl font-semibold">
 
 AQC
 
@@ -84,7 +84,7 @@ AQC
 
 <button
 id="accountBtn"
-class="w-32 bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-xl font-semibold">
+class="h-12 w-full md:w-32 bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-xl font-semibold">
   
 Akaun
 
@@ -92,7 +92,7 @@ Akaun
 
 <button
 id="auditBtn"
-class="w-32 bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-xl font-semibold">
+class="h-12 w-full md:w-32 bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-xl font-semibold">
   
 Audit
 
@@ -107,7 +107,9 @@ Audit
 id="kpiCards"
 class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
 
- 
+
+
+
 
 <div class="bg-white p-5 rounded-xl shadow">
 <h3 class="text-gray-500">
@@ -165,10 +167,217 @@ class="text-3xl font-bold">
 </div>
 
 </div>
+
+
+
   
 
+<div
+class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+
+<div class="bg-white p-5 rounded-xl shadow">
+
+<p class="text-gray-500 text-sm">
+Sales Bulan Ini
+</p>
+
+<p
+id="monthlySales"
+class="text-3xl font-bold text-green-600">
+
+RM0.00
+
+</p>
+
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+
+<p class="text-gray-500 text-sm">
+Cash Balance
+</p>
+
+<p
+id="cashBalance"
+class="text-3xl font-bold text-blue-600">
+
+RM0.00
+
+</p>
+
+</div>
+
+<div class="bg-white p-5 rounded-xl shadow">
+
+<p class="text-gray-500 text-sm">
+Total Sales
+</p>
+
+<p
+id="totalSales"
+class="text-3xl font-bold text-[#153638]">
+
+RM0.00
+
+</p>
+
+</div>
+
+</div>
 
 
+  
+
+  
+<div
+class="bg-white p-5 rounded-xl shadow mb-6">
+
+<h3
+class="font-bold mb-4">
+
+Quick Action
+
+</h3>
+
+<div
+class="grid grid-cols-2 md:grid-cols-3 gap-3">
+
+<button
+id="newConsultantBtn"
+class="bg-blue-600 text-white rounded-xl py-3">
+
++ New Consultant
+
+</button>
+
+<button
+id="newCustomerBtn"
+class="bg-green-600 text-white rounded-xl py-3">
+
++ New Customer
+
+</button>
+
+<button
+id="newPaymentBtn"
+class="bg-[#153638] text-white rounded-xl py-3">
+
++ New Payment
+
+</button>
+
+</div>
+
+</div>
+
+
+
+<div
+class="bg-white rounded-xl shadow p-5 mb-6">
+
+<h3
+class="font-bold mb-4">
+
+Approval Queue
+
+</h3>
+
+<div class="space-y-3">
+
+<div class="flex justify-between">
+
+<span>e-Wasiat</span>
+
+<span id="queueWasiat">0</span>
+
+</div>
+
+<div class="flex justify-between">
+
+<span>Hibah</span>
+
+<span id="queueHibah">0</span>
+
+</div>
+
+<div class="flex justify-between">
+
+<span>Harta Sepencarian</span>
+
+<span id="queueSepencarian">0</span>
+
+</div>
+
+</div>
+
+</div>  
+
+
+
+<div
+class="bg-white rounded-xl shadow p-5 mb-6">
+
+<h3
+class="font-bold mb-4">
+
+Today's Activity
+
+</h3>
+
+<div
+id="todayActivity"
+class="space-y-2 text-sm text-gray-700">
+
+Tiada aktiviti hari ini
+
+</div>
+
+</div>  
+
+
+<div
+class="bg-white rounded-xl shadow p-5 mb-6">
+
+<h3
+class="font-bold mb-4 text-red-600">
+
+Audit Warning
+
+</h3>
+
+<div class="space-y-3">
+
+<div class="flex justify-between">
+
+<span>Missing Receipt</span>
+
+<span id="missingReceipt">0</span>
+
+</div>
+
+<div class="flex justify-between">
+
+<span>Ledger Out Balance</span>
+
+<span id="ledgerError">0</span>
+
+</div>
+
+<div class="flex justify-between">
+
+<span>Pending Approval</span>
+
+<span id="pendingApproval">0</span>
+
+</div>
+
+</div>
+
+</div>
+  
+
+  
+  
 <div
 id="sectionTitle"
 class="hidden">
@@ -281,11 +490,20 @@ await getDocs(
 collection(db,"users")
 );
 
+const ledgerSnap =
+await getDocs(
+collection(db,"ledger")
+);
+
+  
 let prospek = 0;
 let aktif = 0;
 let tamat = 0;
 let approved = 0;
 let renewal = 0;
+let monthlySales = 0;
+let totalSales = 0;
+let cashBalance = 0; 
 
 for(const userDoc of usersSnap.docs){
 
@@ -310,6 +528,27 @@ aktif++;
 }
 
 
+  
+// ======================
+// TOTAL SALES
+// ======================
+
+ledgerSnap.forEach((doc)=>{
+
+const data = doc.data();
+
+if(
+data.category === "income"
+){
+
+totalSales +=
+Number(data.credit || 0);
+
+}
+
+});
+
+  
 
 const wasiatSnap =
 await getDoc(
@@ -384,7 +623,54 @@ document.getElementById(
 ).innerHTML =
 renewal;
 
+// ===== KPI Accounting (sementara) =====
+
+document.getElementById(
+"monthlySales"
+).innerHTML =
+"RM " + monthlySales.toFixed(2);
+
+document.getElementById(
+"totalSales"
+).innerHTML =
+"RM " + totalSales.toFixed(2);
+
+document.getElementById(
+"cashBalance"
+).innerHTML =
+"RM " + cashBalance.toFixed(2);
+  
 }
+
+document
+.getElementById("newConsultantBtn")
+.onclick=()=>{
+
+window.location=
+"register-consultant.html";
+
+};
+
+document
+.getElementById("newCustomerBtn")
+.onclick=()=>{
+
+window.location=
+"register.html";
+
+};
+
+document
+.getElementById("newPaymentBtn")
+.onclick=()=>{
+
+window.location=
+"payment.html";
+
+};
+
+
+
   
 onAuthStateChanged(auth, async(user)=>{
 
@@ -591,6 +877,15 @@ document
 
 window.location.href =
 "accounts-dashboard.html";
+
+});
+
+document
+.getElementById("auditBtn")
+.addEventListener("click",()=>{
+
+window.location.href=
+"audit-dashboard.html";
 
 });
   
