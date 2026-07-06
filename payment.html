@@ -143,6 +143,8 @@ const counterSnap =
 await getDoc(counterRef);
 
 const txnDate = new Date();
+
+const saleAmount = 350;
   
 const currentNo =
 counterSnap.data().memberCounter || 0;
@@ -173,8 +175,8 @@ latestCounter.data().memberCounter
 
 
 
-// update user
-await updateDoc(
+// up user
+await upDoc(
 
 doc(
 db,
@@ -189,11 +191,11 @@ paymentStatus:"paid",
 memberNo,
 
 memberSince:
-new Date().toISOString(),
+txnDate.toISOString(),
 
-expiryDate:(()=>{
+expiry:(()=>{
 
-const d=new Date();
+const d=new ();
 
 d.setFullYear(
 d.getFullYear()+1
@@ -223,7 +225,7 @@ await addDoc(
 collection(db,"ledger"),
 {
 
-date:new Date(),
+date:txnDate,
 
 accountCode:"4010",
 account:"Sales - Wasiat",
@@ -243,7 +245,7 @@ credit:saleAmount
 await addDoc(
 collection(db,"ledger"),
 {
-date:new Date(),
+date:txnDate,
 
 accountCode:"1000",
 account:"Bank",
@@ -273,7 +275,7 @@ db,
 const comp =
 compensationSnap.data();
 
-const saleAmount = 350;
+
 
 const commissionPool =
 saleAmount *
@@ -307,7 +309,7 @@ db,
 "companyAllocation"
 ),
 {
-createdAt:new Date(),
+createdAt:txnDate,
 
 memberNo,
 customerName:
@@ -407,7 +409,7 @@ commissionRate /
 await addDoc(
 collection(db,"ledger"),
 {
-date:new Date(),
+date:txnDate,
 
 accountCode:"5000",
 account:"Consultant Commission",
@@ -432,7 +434,7 @@ await addDoc(
 collection(db,"ledger"),
 {
 
-date:new Date(),
+date:txnDate,
 
 accountCode:"2000",
 account:"Commission Payable",
@@ -472,7 +474,7 @@ totalCommission: increment(commissionAmount)
 await addDoc(
 collection(db,"ledger"),
 {
-date:new Date(),
+date:txnDate,
 
 accountCode:"5200",
 account:"Allowance Expense",
@@ -488,7 +490,7 @@ credit:0
 await addDoc(
 collection(db,"ledger"),
 {
-date:new Date(),
+date:txnDate,
 
 accountCode:"2200",
 account:"Allowance Payable",
@@ -504,7 +506,7 @@ credit:allowance
 await addDoc(
 collection(db,"ledger"),
 {
-date:new Date(),
+date:txnDate,
 
 accountCode:"5300",
 account:"Royalty Expense",
@@ -520,7 +522,7 @@ credit:0
 await addDoc(
 collection(db,"ledger"),
 {
-date:new Date(),
+date:txnDate,
 
 accountCode:"2300",
 account:"Royalty Payable",
@@ -563,7 +565,7 @@ diffRate / 100;
 await addDoc(
 collection(db,"ledger"),
 {
-date:new Date(),
+date:txnDate,
 
 accountCode:"5100",
 account:"Consultant Override",
@@ -588,7 +590,7 @@ await addDoc(
 collection(db,"ledger"),
 {
 
-date:new Date(),
+date:txnDate,
 
 accountCode:"2100",
 account:"Override Payable",
@@ -632,8 +634,7 @@ db,
 ),
 {
 
-createdAt:
-new Date(),
+createdAt:txnDate,
 
 customerNo:
 memberNo,
@@ -702,7 +703,7 @@ paymentMethod:"ToyyibPay",
 
 status:"PAID",
 
-paymentDate:new Date()
+paymentDate:txnDate
 
 }
 );
