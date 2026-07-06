@@ -250,6 +250,16 @@ class="bg-blue-600 text-white rounded-xl py-3">
 
 </button>
 
+document
+.getElementById("newConsultantBtn")
+.onclick=()=>{
+
+window.location=
+"consultant-register.html";
+
+};
+
+  
 <button
 id="newCustomerBtn"
 class="bg-green-600 text-white rounded-xl py-3">
@@ -258,6 +268,16 @@ class="bg-green-600 text-white rounded-xl py-3">
 
 </button>
 
+document
+.getElementById("newCustomerBtn")
+.onclick=()=>{
+
+window.location=
+"register.html";
+
+};
+  
+  
 <button
 id="newPaymentBtn"
 class="bg-[#153638] text-white rounded-xl py-3">
@@ -270,6 +290,15 @@ class="bg-[#153638] text-white rounded-xl py-3">
 
 </div>
 
+document
+.getElementById("newPaymentBtn")
+.onclick=()=>{
+
+window.location=
+"payment.html";
+
+};
+  
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
   
@@ -499,8 +528,56 @@ Number(data.credit || 0);
 
 });
 
-  
 
+ledgerSnap.forEach((doc)=>{
+
+const data =
+doc.data();
+
+if(data.accountCode==="1000"){
+
+cashBalance +=
+Number(data.debit || 0);
+
+cashBalance -=
+Number(data.credit || 0);
+
+}
+
+});
+  
+const now =
+new Date();
+
+ledgerSnap.forEach((doc)=>{
+
+const data =
+doc.data();
+
+if(data.category!=="income")
+return;
+
+const txn =
+data.date.toDate();
+
+if(
+
+txn.getMonth()===now.getMonth()
+
+&&
+
+txn.getFullYear()===now.getFullYear()
+
+){
+
+monthlySales +=
+Number(data.credit||0);
+
+}
+
+});
+
+  
 const wasiatSnap =
 await getDoc(
 doc(
