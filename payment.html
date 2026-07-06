@@ -176,7 +176,7 @@ latestCounter.data().memberCounter
 
 
 // up user
-await upDoc(
+await updateDoc(
 
 doc(
 db,
@@ -193,9 +193,9 @@ memberNo,
 memberSince:
 txnDate.toISOString(),
 
-expiry:(()=>{
+expiryDate:(()=>{
 
-const d=txnDate;
+const d = new Date(txnDate);
 
 d.setFullYear(
 d.getFullYear()+1
