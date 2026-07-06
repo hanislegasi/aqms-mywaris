@@ -223,8 +223,8 @@ collection(db,"ledger"),
 
 date:new Date(),
 
-accountCode:"4000",
-account:"Sales - eWasiat",
+accountCode:"4010",
+account:"Sales - Wasiat",
 
 category:"income",
 
@@ -273,9 +273,15 @@ compensationSnap.data();
 
 const saleAmount = 350;
 
-const shareholder =
+const commissionPool =
 saleAmount *
-(comp.shareholderPool / 100);
+(comp.commissionPool/100);
+
+const overridePool =
+saleAmount *
+(comp.overridePool/100);
+
+
 
 const company =
 saleAmount *
@@ -306,12 +312,12 @@ customerName:
 customer.nama,
 
 product:
-"eWasiat",
+"Wasiat",
 
 sale:
 saleAmount,
 
-shareholder,
+
 company,
 
 allowance,
@@ -460,6 +466,71 @@ totalCommission: increment(commissionAmount)
 );
   
 }
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:new Date(),
+
+accountCode:"5200",
+account:"Allowance Expense",
+
+category:"expense",
+
+description:"Allowance Allocation",
+
+debit:allowance,
+credit:0
+});
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:new Date(),
+
+accountCode:"2200",
+account:"Allowance Payable",
+
+category:"liability",
+
+description:"Allowance Allocation",
+
+debit:0,
+credit:allowance
+});
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:new Date(),
+
+accountCode:"5300",
+account:"Royalty Expense",
+
+category:"expense",
+
+description:"Royalty Allocation",
+
+debit:royalty,
+credit:0
+});
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:new Date(),
+
+accountCode:"2300",
+account:"Royalty Payable",
+
+category:"liability",
+
+description:"Royalty Allocation",
+
+debit:0,
+credit:royalty
+});
+
   
 while(currentConsultant){
 
