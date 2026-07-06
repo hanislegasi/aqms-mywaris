@@ -209,14 +209,30 @@ appId:"1:3498810778:web:ee36e0fe42f76698046e23"
 const app =
 initializeApp(firebaseConfig);
 
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  
 const db =
 getFirestore(app);
+
+const auth =
+getAuth(app);  
   
-import {
-query,
-orderBy
+
+
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+return;
+
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   
 const snapshot =
@@ -249,8 +265,38 @@ let bil = 1;
 
 users.forEach((doc)=>{
 
+let totalCustomer = 0;
+let prospek = 0;
+let aktif = 0;
+let expired = 0;
+  
 const user = doc.data();
 
+totalCustomer++;
+
+if(user.paymentStatus==="paid"){
+
+aktif++;
+
+}else{
+
+prospek++;
+
+}
+
+if(user.expiryDate){
+
+const expiry =
+new Date(user.expiryDate);
+
+if(expiry < new Date()){
+
+expired++;
+
+}
+
+}
+  
 if(user.role === "admin"){
 return;
 }
@@ -339,6 +385,53 @@ document.getElementById(
 "tableBody"
 ).innerHTML = html;
 
+document.getElementById(
+"totalCustomer"
+).innerHTML =
+totalCustomer;
+
+document.getElementById(
+"prospekCustomer"
+).innerHTML =
+prospek;
+
+document.getElementById(
+"aktifCustomer"
+).innerHTML =
+aktif;
+
+document.getElementById(
+"expiredCustomer"
+).innerHTML =
+expired;
+
+  
+document
+.getElementById("searchInput")
+.addEventListener("keyup",(e)=>{
+
+const keyword =
+e.target.value.toLowerCase();
+
+const rows =
+document.querySelectorAll(
+"#tableBody tr"
+);
+
+rows.forEach((row)=>{
+
+const text =
+row.innerText.toLowerCase();
+
+row.style.display =
+text.includes(keyword)
+? ""
+: "none";
+
+});
+
+});
+  
 window.allCustomers =
 allCustomers;  
   
