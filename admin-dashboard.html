@@ -2,881 +2,377 @@
 <html lang="ms">
 
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-Admin Dashboard
-</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap"
-rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body
-class="bg-gray-100 min-h-screen"
-style="font-family: Inter, sans-serif;">
-
-<!-- HEADER -->
-<div class="bg-[#153638] text-white p-5 shadow">
-
-<div class="flex justify-between items-center">
-
-<div>
-
-<h1 class="text-2xl font-bold">
-Admin Dashboard
-</h1>
-
-<p class="text-gray-200">
-Al-Qawthar Mawaris Synergy
-</p>
-
-</div>
-
-<button
-id="logoutBtn"
-class="bg-red-500 px-4 py-2 rounded-xl">
-
-Logout
-
-</button>
-  
-</div>
-
-</div>
-  
-  
-<!-- CONTENT -->
-<div class="p-5">
-
-<div class="grid grid-cols-2 md:flex gap-3 mb-6">
-
-<button
-id="aqmBtn"
-class="h-12 w-full md:w-32 bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-xl font-semibold">
-  
-AQM
-
-</button>
-
-<button
-id="aqcBtn"
-class="h-12 w-full md:w-32 bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-xl font-semibold">
-
-AQC
-
-</button>
-
-<button
-id="accountBtn"
-class="h-12 w-full md:w-32 bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-xl font-semibold">
-  
-Akaun
-
-</button>
-
-<button
-id="auditBtn"
-class="h-12 w-full md:w-32 bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-xl font-semibold">
-  
-Audit
-
-</button>
-
-
-</div>
-  
-
-
-<div
-id="kpiCards"
-class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-
-
-
-
-
-<div class="bg-white p-5 rounded-xl shadow">
-<h3 class="text-gray-500">
-Prospek
-</h3>
-<p
-id="prospekCount"
-class="text-3xl font-bold">
-0
-</p>
-</div>
-
-<div class="bg-white p-5 rounded-xl shadow">
-<h3 class="text-gray-500">
-Ahli Aktif
-</h3>
-<p
-id="aktifCount"
-class="text-3xl font-bold">
-0
-</p>
-</div>
-
-<div class="bg-white p-5 rounded-xl shadow">
-<h3 class="text-gray-500">
-Keahlian Tamat
-</h3>
-<p
-id="expiredCount"
-class="text-3xl font-bold">
-0
-</p>
-</div>
-
-<div class="bg-white p-5 rounded-xl shadow">
-<h3 class="text-gray-500">
-Wasiat Diluluskan
-</h3>
-<p
-id="approvedCount"
-class="text-3xl font-bold">
-0
-</p>
-</div>
-
-<div class="bg-white p-5 rounded-xl shadow">
-<h3 class="text-gray-500">
-Renewal
-</h3>
-<p
-id="renewalCount"
-class="text-3xl font-bold">
-0
-</p>
-</div>
-
-</div>
-
-
-
-  
-
-<div
-class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-
-<div class="bg-white p-5 rounded-xl shadow">
-
-<p class="text-gray-500 text-sm">
-Sales Bulan Ini
-</p>
-
-<p
-id="monthlySales"
-class="text-3xl font-bold text-green-600">
-
-RM0.00
-
-</p>
-
-</div>
-
-<div class="bg-white p-5 rounded-xl shadow">
-
-<p class="text-gray-500 text-sm">
-Cash Balance
-</p>
-
-<p
-id="cashBalance"
-class="text-3xl font-bold text-blue-600">
-
-RM0.00
-
-</p>
-
-</div>
-
-<div class="bg-white p-5 rounded-xl shadow">
-
-<p class="text-gray-500 text-sm">
-Total Sales
-</p>
-
-<p
-id="totalSales"
-class="text-3xl font-bold text-[#153638]">
-
-RM0.00
-
-</p>
-
-</div>
-
-</div>
-
-
-  
-
-  
-  
-
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-  
-<div
-class="bg-white rounded-xl shadow p-5">
-<h3
-class="font-bold mb-4">
-
-Approval Queue
-
-</h3>
-
-<div class="space-y-3">
-
-<div class="flex justify-between">
-
-<span>e-Wasiat</span>
-
-<span id="queueWasiat">0</span>
-
-</div>
-
-<div class="flex justify-between">
-
-<span>Hibah</span>
-
-<span id="queueHibah">0</span>
-
-</div>
-
-<div class="flex justify-between">
-
-<span>Harta Sepencarian</span>
-
-<span id="queueSepencarian">0</span>
-
-</div>
-
-<div class="flex justify-between">
-
-<span>Mawaris</span>
-
-<span id="queueMawaris">0</span>
-
-</div>
-  
-</div>
-
-</div>  
-
-
-
-<div
-class="bg-white rounded-xl shadow p-5">
-
-<h3
-class="font-bold mb-4">
-
-Today's Activity
-
-</h3>
-
-<div
-id="todayActivity"
-class="space-y-2 text-sm text-gray-700">
-
-Tiada aktiviti hari ini
-
-</div>
-
-</div>  
-
-
-<div
-class="bg-white rounded-xl shadow p-5">
-
-<h3
-class="font-bold mb-4 text-red-600">
-
-Audit Warning
-
-</h3>
-
-<div class="space-y-3">
-
-<div class="flex justify-between">
-
-<span>Missing Receipt</span>
-
-<span id="missingReceipt">0</span>
-
-</div>
-
-<div class="flex justify-between">
-
-<span>Ledger Out Balance</span>
-
-<span id="ledgerError">0</span>
-
-</div>
-
-<div class="flex justify-between">
-
-<span>Pending Approval</span>
-
-<span id="pendingApproval">0</span>
-
-</div>
-
-</div>
-
-</div>
-  
-</div>
-  
-  
-
-  
-<script type="module">
-
-
-  
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-getDocs,
-getDoc,
-doc,
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import {
-getAuth,
-onAuthStateChanged,
-signOut
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  
-const firebaseConfig = {
-
-apiKey:
-"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-
-authDomain:
-"alqawthar-mywaris.firebaseapp.com",
-
-projectId:
-"alqawthar-mywaris",
-
-storageBucket:
-"alqawthar-mywaris.firebasestorage.app",
-
-messagingSenderId:
-"3498810778",
-
-appId:
-"1:3498810778:web:ee36e0fe42f76698046e23"
-
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const db =
-getFirestore(app);
-
-const auth =
-getAuth(app);
-
-async function loadKPI(){
-
-const usersSnap =
-await getDocs(
-collection(db,"users")
-);
-
-const ledgerSnap =
-await getDocs(
-collection(db,"ledger")
-);
-
-  
-let prospek = 0;
-let aktif = 0;
-let tamat = 0;
-let approved = 0;
-let renewal = 0;
-
-let queueWasiat = 0;
-let queueHibah = 0;
-let queueSepencarian = 0;
-let queueMawaris = 0;
-  
-let monthlySales = 0;
-let totalSales = 0;
-let cashBalance = 0; 
-
-for(const userDoc of usersSnap.docs){
-
-const user =
-userDoc.data();
-
-if(user.role === "admin"){
-continue;
-}
-  
-if(
-user.paymentStatus !== "paid"
-){
-
-prospek++;
-
-}
-else{
-
-aktif++;
-
-}
-
-
-  
-// ======================
-// KPI ACCOUNTING
-// ======================
-
-const now =
-new Date();
-
-ledgerSnap.forEach((doc)=>{
-
-const data =
-doc.data();
-
-// TOTAL SALES
-
-if(data.category==="income"){
-
-totalSales +=
-Number(data.credit||0);
-
-}
-
-// CASH
-
-if(data.accountCode==="1000"){
-
-cashBalance +=
-Number(data.debit||0);
-
-cashBalance -=
-Number(data.credit||0);
-
-}
-
-// SALES BULAN INI
-
-if(data.category==="income" && data.date){
-
-const txn =
-data.date.toDate();
-
-if(
-
-txn.getMonth()===now.getMonth()
-
-&&
-
-txn.getFullYear()===now.getFullYear()
-
-){
-
-monthlySales +=
-Number(data.credit||0);
-
-}
-
-}
-
-});
-
-const receiptSnap =
-await getDocs(
-collection(db,"receipts")
-);
-
-let activityHTML="";
-
-const today =
-new Date().toLocaleDateString("ms-MY");
-
-receiptSnap.forEach((doc)=>{
-
-const data=
-doc.data();
-
-const tarikh=
-data.paymentDate
-.toDate()
-.toLocaleDateString("ms-MY");
-
-if(tarikh===today){
-
-activityHTML+=`
-
-<div class="flex justify-between">
-
-<span>${data.payerName}</span>
-
-<span class="font-semibold">
-
-RM${data.amount}
-
-</span>
-
-</div>
-
-`;
-
-}
-
-});
-
-if(activityHTML===""){
-
-activityHTML=
-"Tiada aktiviti hari ini";
-
-}
-
-document.getElementById(
-"todayActivity"
-).innerHTML=
-activityHTML;
-
-let missingReceipt=0;
-
-const ledgerCount =
-ledgerSnap.size;
-
-const receiptCount =
-receiptSnap.size;
-
-if(
-ledgerCount >
-receiptCount*2
-){
-
-missingReceipt =
-ledgerCount -
-(receiptCount*2);
-
-}
-
-document.getElementById(
-"missingReceipt"
-).innerHTML =
-missingReceipt;
-
-document.getElementById(
-"ledgerError"
-).innerHTML =
-0;
-
-document.getElementById(
-"pendingApproval"
-).innerHTML =
-queueWasiat+
-queueHibah+
-queueSepencarian+
-queueMawaris;
-
-  
-// ======================
-// WASIAT
-// ======================
-
-const wasiatSnap =
-await getDoc(
-doc(
-db,
-"users",
-userDoc.id,
-"wasiat",
-"maklumat"
-)
-);
-
-if(wasiatSnap.exists()){
-
-const wasiat =
-wasiatSnap.data();
-
-if(wasiat.status==="UNDER_REVIEW"){
-queueWasiat++;
-}
-
-if(wasiat.docRef){
-approved++;
-}
-
-if(wasiat.renewedAt){
-renewal++;
-}
-
-if(wasiat.expiryDate){
-
-const expiry =
-new Date(wasiat.expiryDate);
-
-if(expiry < new Date()){
-tamat++;
-}
-
-}
-
-}
-
-// ======================
-// HIBAH
-// ======================
-
-const hibahSnap =
-await getDoc(
-doc(
-db,
-"users",
-userDoc.id,
-"hibah",
-"maklumat"
-)
-);
-
-if(hibahSnap.exists()){
-
-const hibah =
-hibahSnap.data();
-
-if(hibah.status==="UNDER_REVIEW"){
-queueHibah++;
-}
-
-}
-
-// ======================
-// HARTA SEPENCARIAN
-// ======================
-
-const sepencarianSnap =
-await getDoc(
-doc(
-db,
-"users",
-userDoc.id,
-"hartaSepencarian",
-"maklumat"
-)
-);
-
-if(sepencarianSnap.exists()){
-
-const sep =
-sepencarianSnap.data();
-
-if(sep.status==="UNDER_REVIEW"){
-queueSepencarian++;
-}
-
-}
-
-// ======================
-// MAWARIS
-// ======================
-
-const mawarisSnap =
-await getDoc(
-doc(
-db,
-"users",
-userDoc.id,
-"mawaris",
-"maklumat"
-)
-);
-
-if(mawarisSnap.exists()){
-
-const mawaris =
-mawarisSnap.data();
-
-if(mawaris.status==="UNDER_REVIEW"){
-queueMawaris++;
-}
-
-}
-document.getElementById(
-"prospekCount"
-).innerHTML =
-prospek;
-
-document.getElementById(
-"aktifCount"
-).innerHTML =
-aktif;
-
-document.getElementById(
-"expiredCount"
-).innerHTML =
-tamat;
-
-document.getElementById(
-"approvedCount"
-).innerHTML =
-approved;
-
-document.getElementById(
-"renewalCount"
-).innerHTML =
-renewal;
-
-document.getElementById(
-"queueWasiat"
-).innerHTML =
-queueWasiat;
-
-document.getElementById(
-"queueHibah"
-).innerHTML =
-queueHibah;
-
-document.getElementById(
-"queueSepencarian"
-).innerHTML =
-queueSepencarian;
-
-document.getElementById(
-"queueMawaris"
-).innerHTML =
-queueMawaris;
-  
-
-  
-}
-
-
-
-
-
-  
-onAuthStateChanged(auth, async(user)=>{
-
-  if(!user){
-
-    window.location.href =
-    "login.html";
-
-    return;
-
-  }
-
-  const userDoc =
-  await getDoc(
-    doc(
-      db,
-      "users",
-      user.uid
-    )
-  );
-
-  const userData =
-  userDoc.data();
-
-  if(userData.role !== "admin"){
-
-    alert(
-      "Akses ditolak"
-    );
-
-    window.location.href =
-    "dashboard.html";
-
- return;
+<body class="bg-gray-100 min-h-screen" style="font-family: Inter, sans-serif;">
+
+    <!-- HEADER -->
+    <div class="bg-[#153638] text-white p-5 shadow">
+        <div class="flex justify-between items-center max-w-7xl mx-auto">
+            <div>
+                <h1 class="text-2xl font-bold">Admin Dashboard</h1>
+                <p class="text-gray-200">Al-Qawthar Mawaris Synergy</p>
+            </div>
+            <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 transition px-4 py-2 rounded-xl font-semibold">
+                Logout
+            </button>
+        </div>
+    </div>
     
-  }
+    <!-- CONTENT -->
+    <div class="p-5 max-w-7xl mx-auto">
 
-loadKPI();
+        <!-- ACTION BUTTONS -->
+        <div class="grid grid-cols-2 md:flex gap-3 mb-6">
+            <button id="aqmBtn" class="h-12 w-full md:w-32 bg-[#153638] hover:bg-[#1d4a4d] shadow transition text-white py-3 rounded-xl font-semibold">
+                AQM
+            </button>
+            <button id="aqcBtn" class="h-12 w-full md:w-32 bg-[#153638] hover:bg-[#1d4a4d] shadow transition text-white py-3 rounded-xl font-semibold">
+                AQC
+            </button>
+            <button id="accountBtn" class="h-12 w-full md:w-32 bg-[#153638] hover:bg-[#1d4a4d] shadow transition text-white py-3 rounded-xl font-semibold">
+                Akaun
+            </button>
+            <button id="auditBtn" class="h-12 w-full md:w-32 bg-[#153638] hover:bg-[#1d4a4d] shadow transition text-white py-3 rounded-xl font-semibold">
+                Audit
+            </button>
+        </div>
+
+        <!-- KPI CARDS - USERS -->
+        <div id="kpiCards" class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+            <div class="bg-white p-5 rounded-xl shadow">
+                <h3 class="text-gray-500 text-sm md:text-base font-medium">Prospek</h3>
+                <p id="prospekCount" class="text-3xl font-bold text-gray-800">0</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow">
+                <h3 class="text-gray-500 text-sm md:text-base font-medium">Ahli Aktif</h3>
+                <p id="aktifCount" class="text-3xl font-bold text-gray-800">0</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow">
+                <h3 class="text-gray-500 text-sm md:text-base font-medium">Keahlian Tamat</h3>
+                <p id="expiredCount" class="text-3xl font-bold text-gray-800">0</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow">
+                <h3 class="text-gray-500 text-sm md:text-base font-medium">Wasiat Diluluskan</h3>
+                <p id="approvedCount" class="text-3xl font-bold text-gray-800">0</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow">
+                <h3 class="text-gray-500 text-sm md:text-base font-medium">Renewal</h3>
+                <p id="renewalCount" class="text-3xl font-bold text-gray-800">0</p>
+            </div>
+        </div>
+
+        <!-- KPI CARDS - ACCOUNTS -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-white p-5 rounded-xl shadow border-l-4 border-green-500">
+                <p class="text-gray-500 text-sm font-medium">Sales Bulan Ini</p>
+                <p id="monthlySales" class="text-3xl font-bold text-green-600">RM0.00</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow border-l-4 border-blue-500">
+                <p class="text-gray-500 text-sm font-medium">Cash Balance</p>
+                <p id="cashBalance" class="text-3xl font-bold text-blue-600">RM0.00</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow border-l-4 border-[#153638]">
+                <p class="text-gray-500 text-sm font-medium">Total Sales</p>
+                <p id="totalSales" class="text-3xl font-bold text-[#153638]">RM0.00</p>
+            </div>
+        </div>
+
+        <!-- QUEUE & ACTIVITIES -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+            <!-- Approval Queue -->
+            <div class="bg-white rounded-xl shadow p-5">
+                <h3 class="font-bold mb-4 text-gray-800">Approval Queue</h3>
+                <div class="space-y-3 text-gray-700">
+                    <div class="flex justify-between border-b pb-2">
+                        <span>e-Wasiat</span>
+                        <span id="queueWasiat" class="font-semibold bg-gray-100 px-2 rounded">0</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span>Hibah</span>
+                        <span id="queueHibah" class="font-semibold bg-gray-100 px-2 rounded">0</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span>Harta Sepencarian</span>
+                        <span id="queueSepencarian" class="font-semibold bg-gray-100 px-2 rounded">0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Mawaris</span>
+                        <span id="queueMawaris" class="font-semibold bg-gray-100 px-2 rounded">0</span>
+                    </div>
+                </div>
+            </div>  
+
+            <!-- Today's Activity -->
+            <div class="bg-white rounded-xl shadow p-5">
+                <h3 class="font-bold mb-4 text-gray-800">Today's Activity</h3>
+                <div id="todayActivity" class="space-y-3 text-sm text-gray-700 h-32 overflow-y-auto">
+                    <!-- Activities will be populated here -->
+                    <div class="text-gray-400 italic">Tiada aktiviti hari ini</div>
+                </div>
+            </div>  
+
+            <!-- Audit Warning -->
+            <div class="bg-white rounded-xl shadow p-5">
+                <h3 class="font-bold mb-4 text-red-600 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    Audit Warning
+                </h3>
+                <div class="space-y-3 text-gray-700">
+                    <div class="flex justify-between border-b pb-2">
+                        <span>Missing Receipt</span>
+                        <span id="missingReceipt" class="font-semibold text-red-500">0</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span>Ledger Out Balance</span>
+                        <span id="ledgerError" class="font-semibold text-red-500">0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Pending Approval</span>
+                        <span id="pendingApproval" class="font-semibold text-orange-500">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
   
-});
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, getDocs, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+            authDomain: "alqawthar-mywaris.firebaseapp.com",
+            projectId: "alqawthar-mywaris",
+            storageBucket: "alqawthar-mywaris.firebasestorage.app",
+            messagingSenderId: "3498810778",
+            appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+        };
 
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
 
+        async function loadKPI() {
+            try {
+                // Fetch basic collections simultaneously to save loading time
+                const [usersSnap, ledgerSnap, receiptSnap] = await Promise.all([
+                    getDocs(collection(db, "users")),
+                    getDocs(collection(db, "ledger")),
+                    getDocs(collection(db, "receipts"))
+                ]);
 
-// LOGOUT
-document
-.getElementById("logoutBtn")
-.addEventListener("click", async()=>{
+                // VARIABLES - USERS
+                let prospek = 0;
+                let aktif = 0;
+                let tamat = 0;
+                let approved = 0;
+                let renewal = 0;
+                let queueWasiat = 0;
+                let queueHibah = 0;
+                let queueSepencarian = 0;
+                let queueMawaris = 0;
 
-await signOut(auth);
+                // VARIABLES - ACCOUNTS
+                let monthlySales = 0;
+                let totalSales = 0;
+                let cashBalance = 0; 
+                const now = new Date();
 
-window.location.href =
-"index.html";
+                // 1. CALCULATE USERS & DOCUMENTS KPI
+                for (const userDoc of usersSnap.docs) {
+                    const user = userDoc.data();
+                    
+                    if (user.role === "admin") continue;
+                    
+                    if (user.paymentStatus !== "paid") {
+                        prospek++;
+                    } else {
+                        aktif++;
+                    }
 
-});
+                    // Wasiat
+                    const wasiatSnap = await getDoc(doc(db, "users", userDoc.id, "wasiat", "maklumat"));
+                    if (wasiatSnap.exists()) {
+                        const wasiat = wasiatSnap.data();
+                        if (wasiat.status === "UNDER_REVIEW") queueWasiat++;
+                        if (wasiat.docRef) approved++;
+                        if (wasiat.renewedAt) renewal++;
+                        if (wasiat.expiryDate) {
+                            const expiry = new Date(wasiat.expiryDate);
+                            if (expiry < new Date()) tamat++;
+                        }
+                    }
 
-document
-.getElementById("aqmBtn")
-.addEventListener("click",()=>{
+                    // Hibah
+                    const hibahSnap = await getDoc(doc(db, "users", userDoc.id, "hibah", "maklumat"));
+                    if (hibahSnap.exists()) {
+                        if (hibahSnap.data().status === "UNDER_REVIEW") queueHibah++;
+                    }
 
-window.location.href=
-"admin-aqm.html";
+                    // Harta Sepencarian
+                    const sepencarianSnap = await getDoc(doc(db, "users", userDoc.id, "hartaSepencarian", "maklumat"));
+                    if (sepencarianSnap.exists()) {
+                        if (sepencarianSnap.data().status === "UNDER_REVIEW") queueSepencarian++;
+                    }
 
-});
+                    // Mawaris
+                    const mawarisSnap = await getDoc(doc(db, "users", userDoc.id, "mawaris", "maklumat"));
+                    if (mawarisSnap.exists()) {
+                        if (mawarisSnap.data().status === "UNDER_REVIEW") queueMawaris++;
+                    }
+                }
 
-document
-.getElementById("aqcBtn")
-.addEventListener("click",()=>{
+                // 2. CALCULATE ACCOUNTS KPI
+                // (Ini dikeluarkan dari dalam loop 'user' untuk elak pengiraan berganda)
+                ledgerSnap.forEach((doc) => {
+                    const data = doc.data();
 
-window.location.href =
-"admin-aqc.html";
+                    // TOTAL SALES
+                    if (data.category === "income") {
+                        totalSales += Number(data.credit || 0);
+                        
+                        // SALES BULAN INI
+                        if (data.date) {
+                            const txn = data.date.toDate();
+                            if (txn.getMonth() === now.getMonth() && txn.getFullYear() === now.getFullYear()) {
+                                monthlySales += Number(data.credit || 0);
+                            }
+                        }
+                    }
 
-});
+                    // CASH BALANCE
+                    if (data.accountCode === "1000") {
+                        cashBalance += Number(data.debit || 0);
+                        cashBalance -= Number(data.credit || 0);
+                    }
+                });
 
-document
-.getElementById("accountBtn")
-.addEventListener("click",()=>{
+                // 3. CALCULATE TODAY'S ACTIVITY & AUDIT
+                let activityHTML = "";
+                const today = new Date().toLocaleDateString("ms-MY");
 
-window.location.href =
-"accounts-dashboard.html";
+                receiptSnap.forEach((doc) => {
+                    const data = doc.data();
+                    if(data.paymentDate) {
+                        const tarikh = data.paymentDate.toDate().toLocaleDateString("ms-MY");
+                        if (tarikh === today) {
+                            activityHTML += `
+                                <div class="flex justify-between border-b border-gray-100 pb-2">
+                                    <span class="font-medium">${data.payerName || 'Pelanggan'}</span>
+                                    <span class="font-semibold text-green-600">RM${Number(data.amount||0).toFixed(2)}</span>
+                                </div>
+                            `;
+                        }
+                    }
+                });
 
-});
+                if (activityHTML === "") {
+                    activityHTML = "<div class='text-gray-400 italic'>Tiada aktiviti hari ini</div>";
+                }
+                
+                // Audit Logic
+                let missingReceipt = 0;
+                const ledgerCount = ledgerSnap.size;
+                const receiptCount = receiptSnap.size;
+                
+                if (ledgerCount > receiptCount * 2) {
+                    missingReceipt = ledgerCount - (receiptCount * 2);
+                }
 
-document
-.getElementById("auditBtn")
-.addEventListener("click",()=>{
+                // 4. UPDATE DOM ELEMENTS
+                document.getElementById("prospekCount").innerHTML = prospek;
+                document.getElementById("aktifCount").innerHTML = aktif;
+                document.getElementById("expiredCount").innerHTML = tamat;
+                document.getElementById("approvedCount").innerHTML = approved;
+                document.getElementById("renewalCount").innerHTML = renewal;
 
-window.location.href=
-"audit-dashboard.html";
+                document.getElementById("queueWasiat").innerHTML = queueWasiat;
+                document.getElementById("queueHibah").innerHTML = queueHibah;
+                document.getElementById("queueSepencarian").innerHTML = queueSepencarian;
+                document.getElementById("queueMawaris").innerHTML = queueMawaris;
 
-});
-  
-});
+                // Account DOM Updates (Ini tiada pada kod asal anda)
+                document.getElementById("monthlySales").innerHTML = `RM${monthlySales.toFixed(2)}`;
+                document.getElementById("totalSales").innerHTML = `RM${totalSales.toFixed(2)}`;
+                document.getElementById("cashBalance").innerHTML = `RM${cashBalance.toFixed(2)}`;
 
+                // Audit & Activity DOM Updates
+                document.getElementById("todayActivity").innerHTML = activityHTML;
+                document.getElementById("missingReceipt").innerHTML = missingReceipt;
+                document.getElementById("ledgerError").innerHTML = "0"; // Placeholder value
+                document.getElementById("pendingApproval").innerHTML = (queueWasiat + queueHibah + queueSepencarian + queueMawaris);
+                
+            } catch (error) {
+                console.error("Error loading KPI data:", error);
+                // Option: Alert user if needed
+            }
+        }
 
+        // AUTH STATE
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
 
-  
-</script>
+            try {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if(userDoc.exists()) {
+                    const userData = userDoc.data();
+                    if (userData.role !== "admin") {
+                        alert("Akses ditolak");
+                        window.location.href = "dashboard.html";
+                        return;
+                    }
+                    // Load data if authorized
+                    loadKPI();
+                } else {
+                    // Document doesn't exist
+                    alert("Ralat profil pengguna tidak dijumpai.");
+                    await signOut(auth);
+                }
+            } catch (error) {
+                console.error("Auth check error:", error);
+            }
+        });
 
+        // EVENT LISTENERS
+        document.getElementById("logoutBtn").addEventListener("click", async () => {
+            try {
+                await signOut(auth);
+                window.location.href = "index.html";
+            } catch (error) {
+                console.error("Logout error", error);
+            }
+        });
+
+        document.getElementById("aqmBtn").addEventListener("click", () => {
+            window.location.href = "admin-aqm.html";
+        });
+
+        document.getElementById("aqcBtn").addEventListener("click", () => {
+            window.location.href = "admin-aqc.html";
+        });
+
+        document.getElementById("accountBtn").addEventListener("click", () => {
+            window.location.href = "accounts-dashboard.html";
+        });
+
+        document.getElementById("auditBtn").addEventListener("click", () => {
+            window.location.href = "audit-dashboard.html";
+        });
+
+    </script>
 </body>
 </html>
