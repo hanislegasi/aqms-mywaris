@@ -142,6 +142,8 @@ db,
 const counterSnap =
 await getDoc(counterRef);
 
+const txnDate = new Date();
+  
 const currentNo =
 counterSnap.data().memberCounter || 0;
 
@@ -233,7 +235,7 @@ memberNo + " " + customer.nama,
 
 debit:0,
 
-credit:350
+credit:saleAmount
 
 }
 );
@@ -251,11 +253,11 @@ category:"asset",
 description:
 memberNo + " " + customer.nama,
 
-debit:350,
+debit:saleAmount,
 credit:0,
 
 paymentType:"CUSTOMER",
-sourceAccount:"4000",
+sourceAccount:"4010",
 transactionGroup:memberNo
 });
   
@@ -397,7 +399,7 @@ directConsultant.consultantLevel
 );
 
 const commissionAmount =
-350 *
+saleAmount *
 commissionRate /
 100;
 
@@ -459,8 +461,8 @@ await updateDoc(
 doc(db,"consultants",directConsultant.id),
 {
 activeClients: increment(1),
-totalSales: increment(350),
-careerSales: increment(350),
+totalSales: increment(saleAmount),
+careerSales: increment(saleAmount),
 totalCommission: increment(commissionAmount)
 }
 );
@@ -554,7 +556,8 @@ currentConsultant.consultantLevel
 );
 
 const overrideAmount =
-350 * diffRate / 100;
+saleAmount *
+diffRate / 100;
 
 
 await addDoc(
@@ -617,7 +620,7 @@ db,
 upline.id
 ),
 {
-careerSales: increment(350),
+careerSales: increment(saleAmount),
 totalOverriding: increment(overrideAmount)
 }
 );
@@ -656,7 +659,7 @@ upline.nama,
 receiverLevel:
 upline.consultantLevel,
 
-sales:350,
+sales:saleAmount,
 
 diffRate:
 diffRate,
@@ -693,7 +696,7 @@ serviceCode:"WASIAT",
 
 serviceName:"Wasiat Registration",
 
-amount:350,
+amount:saleAmount,
 
 paymentMethod:"ToyyibPay",
 
