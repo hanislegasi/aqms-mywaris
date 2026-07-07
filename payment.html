@@ -427,9 +427,7 @@ customer.referral
 
 if(directConsultant){
 
-const usbAmount =
-saleAmount *
-(comp.usb / 100);
+
 
 await addDoc(
 collection(db,"ledger"),
@@ -577,7 +575,7 @@ activeClients: increment(1),
 totalSales: increment(saleAmount),
 careerSales: increment(saleAmount),
 totalCommission: increment(commissionAmount),
-totalUSB: increment(usbAmount)
+
 }
 );
   
