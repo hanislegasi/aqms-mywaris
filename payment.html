@@ -129,8 +129,37 @@ document
 .getElementById("payBtn")
 .addEventListener("click", async()=>{
 
+const btn =
+document.getElementById("payBtn");
+
+btn.disabled=true;
+
+btn.innerHTML="Memproses...";
+
 try{
 
+const userSnap =
+await getDoc(
+doc(db,"users",currentUser.uid)
+);
+
+const userData =
+userSnap.data();
+
+if(userData.paymentStatus==="paid"){
+
+btn.disabled=false;
+btn.innerHTML="Bayar Sekarang";
+
+alert("Pembayaran telah direkodkan.");
+
+window.location.href="dashboard.html";
+
+return;
+
+}
+
+  
 // ambil counter
 const counterRef =
 doc(
@@ -152,24 +181,13 @@ counterSnap.data().memberCounter || 0;
 const newNo =
 currentNo + 1;
 
-// update counter
-await updateDoc(
-counterRef,
-{
-memberCounter:
-increment(1)
-}
-);
-  
-// generate AQM number
-const latestCounter =
-await getDoc(counterRef);
-
 const memberNo =
-"AQM" +
-String(
-latestCounter.data().memberCounter
-).padStart(4,"0");
+"AQM"+
+String(newNo).padStart(4,"0");
+
+await updateDoc(counterRef,{
+memberCounter:increment(1)
+});
 
   
 
@@ -237,8 +255,12 @@ memberNo + " " + customer.nama,
 
 debit:0,
 
-credit:saleAmount
+credit:saleAmount,
 
+transactionGroup:memberNo,
+paymentType:"CUSTOMER",
+sourceAccount:"4010",
+  
 }
 );
 
@@ -277,13 +299,14 @@ compensationSnap.data();
 
 
 
+// Allocation Pool (future validation)
 const commissionPool =
 saleAmount *
-(comp.commissionPool/100);
+(comp.commissionPool / 100);
 
 const overridePool =
 saleAmount *
-(comp.overridePool/100);
+(comp.overridePool / 100);
 
 
 
@@ -719,7 +742,15 @@ window.location.href =
 
 catch(error){
 
+btn.disabled=false;
+
+btn.innerHTML="Bayar Sekarang";
+  
 console.log(error);
+
+alert(
+"Ralat: "+error.message
+);
 
 }
 
