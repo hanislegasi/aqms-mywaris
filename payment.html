@@ -416,6 +416,89 @@ findConsultant(
 customer.referral
 );
 
+// =====================
+// UPLINE SPONSOR BENEFIT
+// =====================
+
+if(directConsultant){
+
+const usbAmount =
+saleAmount *
+(comp.usb / 100);
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:txnDate,
+
+accountCode:"5150",
+account:"Upline Sponsor Benefit",
+
+category:"expense",
+
+consultantNo:
+directConsultant.consultantNo,
+
+consultantName:
+directConsultant.nama,
+
+description:
+directConsultant.consultantNo +
+" USB",
+
+debit:usbAmount,
+credit:0
+
+});
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:txnDate,
+
+accountCode:"2150",
+account:"USB Payable",
+
+category:"liability",
+
+consultantNo:
+directConsultant.consultantNo,
+
+consultantName:
+directConsultant.nama,
+
+description:
+directConsultant.consultantNo +
+" USB",
+
+debit:0,
+credit:usbAmount
+
+});
+
+await updateDoc(
+
+doc(
+db,
+"consultants",
+directConsultant.id
+),
+
+{
+
+totalUSB:
+increment(usbAmount)
+
+}
+
+);
+
+}
+
+
+  
 if(directConsultant){
 
 const commissionRate =
