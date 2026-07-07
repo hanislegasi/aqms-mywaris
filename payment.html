@@ -425,9 +425,16 @@ customer.referral
 // UPLINE SPONSOR BENEFIT
 // =====================
 
-if(directConsultant){
+const sponsor =
+directConsultant
+? findConsultant(directConsultant.upline)
+: null;
 
+if(sponsor){
 
+const usbAmount =
+saleAmount *
+(comp.usb / 100);
 
 await addDoc(
 collection(db,"ledger"),
@@ -441,17 +448,20 @@ account:"Upline Sponsor Benefit",
 category:"expense",
 
 consultantNo:
-directConsultant.consultantNo,
+sponsor.consultantNo,
 
 consultantName:
-directConsultant.nama,
+sponsor.nama,
 
 description:
-directConsultant.consultantNo +
+sponsor.consultantNo +
 " USB",
 
 debit:usbAmount,
-credit:0
+credit:0,
+
+transactionGroup:memberNo,
+paymentType:"USB"
 
 });
 
@@ -467,17 +477,20 @@ account:"USB Payable",
 category:"liability",
 
 consultantNo:
-directConsultant.consultantNo,
+sponsor.consultantNo,
 
 consultantName:
-directConsultant.nama,
+sponsor.nama,
 
 description:
-directConsultant.consultantNo +
+sponsor.consultantNo +
 " USB",
 
 debit:0,
-credit:usbAmount
+credit:usbAmount,
+
+transactionGroup:memberNo,
+paymentType:"USB"
 
 });
 
@@ -486,7 +499,7 @@ await updateDoc(
 doc(
 db,
 "consultants",
-directConsultant.id
+sponsor.id
 ),
 
 {
