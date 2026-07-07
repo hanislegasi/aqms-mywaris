@@ -681,7 +681,15 @@ const overrideAmount =
 saleAmount *
 diffRate / 100;
 
+if(overrideAmount <= 0){
 
+currentConsultant = upline;
+
+continue;
+
+}
+
+  
 await addDoc(
 collection(db,"ledger"),
 {
