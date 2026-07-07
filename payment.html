@@ -228,8 +228,11 @@ doc(db,"users",currentUser.uid),
 updateData
 );
 
+const customerSnap =
+await getDoc(
+doc(db,"users",currentUser.uid)
+);
 
-  
 const customer =
 customerSnap.data();
   
