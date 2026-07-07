@@ -1053,7 +1053,13 @@ document.getElementById(
 ).innerHTML =
 "RM" + totalOverriding.toLocaleString();
 
-
+document.getElementById(
+"usbAmount"
+).innerHTML =
+"RM" +
+Number(
+consultant.totalUSB || 0
+).toLocaleString();
 
  
 
