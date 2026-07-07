@@ -210,6 +210,17 @@ doc(db,"consultants",currentUser.uid)
 const consultant =
 consultantSnap.data();
 
+if(consultant.consultantPaymentStatus === "paid"){
+
+alert("Yuran pendaftaran telah dijelaskan.");
+
+window.location.href =
+"consultant-dashboard.html";
+
+return;
+
+}
+    
     
 await updateDoc(
 
