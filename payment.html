@@ -175,67 +175,61 @@ const txnDate = new Date();
 
 const saleAmount = 350;
   
+let memberNo =
+userData.memberNo;
+
+if(!memberNo){
+
 const currentNo =
 counterSnap.data().memberCounter || 0;
 
 const newNo =
 currentNo + 1;
 
-const memberNo =
-"AQM"+
+memberNo =
+"AQM" +
 String(newNo).padStart(4,"0");
 
 await updateDoc(counterRef,{
 memberCounter:increment(1)
 });
 
+}
+
   
 
 
 
 // up user
-await updateDoc(
-
-doc(
-db,
-"users",
-currentUser.uid
-),
-
-{
+const updateData={
 
 paymentStatus:"paid",
 
-memberNo,
-
-memberSince:
-txnDate.toISOString(),
+memberSince:txnDate.toISOString(),
 
 expiryDate:(()=>{
 
-const d = new Date(txnDate);
-
-d.setFullYear(
-d.getFullYear()+1
-);
-
+const d=new Date(txnDate);
+d.setFullYear(d.getFullYear()+1);
 return d.toISOString();
 
 })()
 
+};
+
+if(!userData.memberNo){
+
+updateData.memberNo=memberNo;
+
 }
 
+await updateDoc(
+doc(db,"users",currentUser.uid),
+updateData
 );
 
-const customerSnap =
-await getDoc(
-doc(
-db,
-"users",
-currentUser.uid
-)
-);
 
+  
 const customer =
 customerSnap.data();
   
