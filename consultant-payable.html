@@ -167,19 +167,31 @@ total:0
 
 if(row.accountCode==="2000"){
 
-payable[consultant].commission += Number(row.credit||0);
+payable[consultant].commission +=
+Number(row.credit||0);
+
+payable[consultant].commission -=
+Number(row.debit||0);
 
 }
 
 if(row.accountCode==="2100"){
 
-payable[consultant].override += Number(row.credit||0);
+payable[consultant].override +=
+Number(row.credit||0);
+
+payable[consultant].override -=
+Number(row.debit||0);
 
 }
 
 if(row.accountCode==="2150"){
 
-payable[consultant].usb += Number(row.credit||0);
+payable[consultant].usb +=
+Number(row.credit||0);
+
+payable[consultant].usb -=
+Number(row.debit||0);
 
 }
 
@@ -192,7 +204,11 @@ payable[consultant].usb;
             
         let html = "";
 
-        Object.keys(payable).forEach((consultant) => {
+        Object.keys(payable).forEach((consultant)=>{
+
+    if(payable[consultant].total<=0){
+        return;
+    }
             html += `
                 <tr class="border-b">
                     <td class="p-3">${consultant.split(" ")[0]}</td>
