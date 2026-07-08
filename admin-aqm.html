@@ -11,6 +11,8 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  
 <link rel="preconnect"
 href="https://fonts.googleapis.com">
 
@@ -47,13 +49,25 @@ Customers Management Centre
 
 <div class="max-w-7xl mx-auto p-5">
 
+<div class="flex justify-between items-center mb-5">
+
 <a
 href="admin-dashboard.html"
-class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+class="bg-gray-200 px-5 py-3 rounded-xl">
 
 ← Dashboard
 
 </a>
+
+<button
+id="pdfBtn"
+class="bg-red-600 hover:bg-red-700 text-white px-5 py-3 rounded-xl">
+
+Export PDF
+
+</button>
+
+</div>
 
 
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -144,13 +158,16 @@ class="w-full p-4 rounded-xl border border-gray-300 shadow-sm mb-6">
 </div>
 
 <div
+id="printArea">
+
+<div
 id="listContainer"
-class="bg-white rounded-xl shadow overflow-x-auto">
+class="bg-white rounded-xl shadow overflow-x-auto overflow-y-auto max-h-[700px]">
 
 <table class="min-w-full bg-white rounded-xl overflow-hidden">
 
-<thead class="bg-[#153638] text-white sticky top-0">
-
+<thead class="sticky top-0 z-10 bg-[#153638] text-white">
+  
 <tr>
   
 <th class="p-3 text-center">Bil</th>
@@ -175,6 +192,8 @@ class="bg-white rounded-xl shadow overflow-x-auto">
 
 </div>
 
+</div>
+  
 <script type="module">  
 
 import { initializeApp }
@@ -268,7 +287,6 @@ b.data().createdAt?.toDate() || new Date(0);
 return dateB - dateA;
 
 });
-
   
 let totalCustomer = 0;
 let prospek = 0;
@@ -281,19 +299,19 @@ let bil = 1;
    
 users.forEach((doc)=>{
 
-
-  
 const user = doc.data();
 
+// Skip admin & consultant
 if(
-data.role==="admin" ||
-data.role==="consultant"
+user.role==="admin" ||
+user.role==="consultant"
 ){
-continue;
+return;
 }
 
-// Baru kira KPI
-if(data.paymentStatus==="paid"){
+totalCustomer++;
+
+if(user.paymentStatus==="paid"){
 aktif++;
 }else{
 prospek++;
@@ -324,9 +342,7 @@ expired++;
 
 }
   
-if(user.role === "admin"){
-return;
-}
+
 
 const memberNo = user.memberNo || "-";
 
@@ -408,6 +424,42 @@ ${status}
   
 });
 
+document
+.getElementById("pdfBtn")
+.addEventListener("click",()=>{
+
+const element =
+document.getElementById("printArea");
+
+html2pdf()
+.set({
+
+margin:0.3,
+
+filename:"AQM-Customer-List.pdf",
+
+image:{
+type:"jpeg",
+quality:1
+},
+
+html2canvas:{
+scale:2
+},
+
+jsPDF:{
+unit:"in",
+format:"a4",
+orientation:"landscape"
+}
+
+})
+.from(element)
+.save();
+
+});
+
+  
 document.getElementById(
 "tableBody"
 ).innerHTML = html;
