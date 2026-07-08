@@ -136,9 +136,21 @@ limit(500)
         snap.forEach((d) => {
             const row = d.data();
             
-            if (row.accountCode !== "2000" || !row.description.startsWith("AQC")) return;
+           if(
+!["2000","2100","2150"].includes(row.accountCode)
+||
+!row.description.startsWith("AQC")
+){
+return;
+}
+            const consultantNo =
+row.consultantNo;
 
-            const consultant = row.description;
+const consultantName =
+row.consultantName;
+
+const consultant =
+consultantNo + " " + consultantName;
 
             if (!payable[consultant]) {
                 payable[consultant] = 0;
@@ -246,7 +258,7 @@ period:
 currentPeriod,
 
 description:
-"Commission " +
+"Consultant Payable " +
 currentPeriod,
 
 amount,
