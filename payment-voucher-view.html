@@ -212,7 +212,9 @@ class="w-full border rounded-lg p-3"></textarea>
 
 </div>
 
-<div class="mt-6 flex gap-3">
+<div
+id="actionButtons"
+class="mt-6 flex gap-3">
 
 <button
 id="saveBtn"
@@ -231,7 +233,7 @@ Export PDF
 </button>
 
 </div>
-
+  
 </div>
 
 </div>
@@ -377,10 +379,15 @@ document
 .getElementById("pdfBtn")
 .addEventListener("click",()=>{
 
+const buttons =
+document.getElementById("actionButtons");
+
+buttons.style.display="none";
+
 const element =
 document.getElementById("voucherArea");
 
-const opt = {
+const opt={
 
 margin:0.3,
 
@@ -407,9 +414,15 @@ orientation:"portrait"
 html2pdf()
 .set(opt)
 .from(element)
-.save();
+.save()
+.then(()=>{
 
-});  
+buttons.style.display="flex";
+
+});
+
+});
+  
 </script>
 
 </body>
