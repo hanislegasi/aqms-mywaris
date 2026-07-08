@@ -184,7 +184,13 @@ Save
 
 </button>
 
+<button
+id="printBtn"
+class="bg-red-600 text-white px-5 py-3 rounded-xl">
 
+Print PDF
+
+</button>
 
 </div>
 
@@ -266,6 +272,9 @@ pv.referenceNo || "";
 document.getElementById("remarks").value =
 pv.remarks || "";
 
+document.getElementById("paymentDate").value =
+pv.paymentDate || "";
+  
 document.getElementById("saveBtn")
 .addEventListener(
 "click",
@@ -275,7 +284,7 @@ await updateDoc(
 pvRef,
 {
 
-paymentMethod:
+  paymentMethod:
 document.getElementById("paymentMethod").value,
 
 referenceNo:
@@ -297,6 +306,14 @@ alert(
 }
 );
 
+document
+.getElementById("printBtn")
+.addEventListener("click",()=>{
+
+window.print();
+
+});
+  
 </script>
 
 </body>
