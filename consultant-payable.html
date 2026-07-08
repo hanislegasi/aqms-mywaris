@@ -136,11 +136,13 @@ limit(500)
         snap.forEach((d) => {
             const row = d.data();
             
-           if(
+          if(
 !["2000","2100","2150"].includes(row.accountCode)
-||
-!row.description.startsWith("AQC")
 ){
+return;
+}
+
+if(!row.consultantNo){
 return;
 }
             const consultantNo =
