@@ -210,11 +210,10 @@ View
 
 <button
 onclick="generatePV(
-'${consultant.split(" ")[0]}',
 '${consultant}',
-${payable[consultant].total},
 this
 )"
+
 class="bg-green-600 text-white px-4 py-2 rounded-lg">
 
 Generate PV
@@ -259,15 +258,27 @@ RM${payable[consultant].usb.toFixed(2)}
         document.getElementById("payableTable").innerHTML = html || '<tr><td colspan="4" class="p-5 text-center text-gray-500">Tiada rekod setakat ini.</td></tr>';
 
 window.generatePV = async (
-consultantNo,
-consultantName,
-amount,
+consultant,
 button
 ) => {
 
 try{
 
 button.disabled = true;
+
+const consultantNo =
+consultant.split(" ")[0];
+
+const consultantName =
+consultant.substring(
+consultantNo.length + 1
+);
+
+const item =
+payable[consultant];
+
+const amount =
+item.total;
 
 
 
