@@ -250,9 +250,7 @@ console.log(pv);
 for(const item of accounts){
 
 await addDoc(
-
 collection(db,"ledger"),
-
 {
 
 date:new Date(),
@@ -269,10 +267,12 @@ normalBalance:item.normalBalance,
 
 reportGroup:item.reportGroup,
 
-description:payee,
+consultantNo: pv.consultantNo,
+consultantName: pv.consultantName,
+
+description: payee,
 
 debit:item.amount,
-
 credit:0,
 
 paymentType:type,
