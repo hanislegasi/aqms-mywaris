@@ -285,8 +285,18 @@ users.forEach((doc)=>{
   
 const user = doc.data();
 
-if(user.role==="admin"){
-return;
+if(
+data.role==="admin" ||
+data.role==="consultant"
+){
+continue;
+}
+
+// Baru kira KPI
+if(data.paymentStatus==="paid"){
+aktif++;
+}else{
+prospek++;
 }
   
 totalCustomer++;
