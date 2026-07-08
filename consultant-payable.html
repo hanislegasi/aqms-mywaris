@@ -316,6 +316,75 @@ button.disabled = false;
 return;
 
 }
+
+const coaSnap =
+await getDocs(
+collection(db,"chartOfAccounts")
+);
+
+const coaMap = {};
+
+coaSnap.forEach((d)=>{
+
+const coa =
+d.data();
+
+coaMap[coa.code] =
+coa;
+
+});
+
+const payableAccounts = [];
+
+function addPayable(code, amount){
+
+if(amount<=0) return;
+
+const coa =
+coaMap[code];
+
+if(!coa){
+
+alert("COA "+code+" tidak dijumpai.");
+
+return;
+
+}
+    
+payableAccounts.push({
+
+accountCode: coa.code,
+accountName: coa.name,
+
+category: coa.category,
+cashFlowType: coa.cashFlowType,
+normalBalance: coa.normalBalance,
+reportGroup: coa.reportGroup,
+
+amount:Number(amount)
+
+});
+
+}
+
+const item =
+payable[consultantName];
+
+addPayable(
+"2000",
+item.commission
+);
+
+addPayable(
+"2100",
+item.override
+);
+
+addPayable(
+"2150",
+item.usb
+);
+
     
 await addDoc(
 collection(
@@ -341,6 +410,9 @@ currentPeriod,
 
 amount,
 
+accounts:
+payableAccounts,
+
 status:
 "PENDING",
 
@@ -358,6 +430,8 @@ location.href =
 
 }
 catch(err){
+
+button.disabled=false;
 
 console.error(err);
 
