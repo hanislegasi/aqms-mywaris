@@ -10,6 +10,8 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  
 <style>
 body{
 font-family:Inter,sans-serif;
@@ -38,8 +40,10 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 </a>
 
-<div class="bg-white rounded-xl shadow p-6">
-
+<div
+id="voucherArea"
+class="bg-white rounded-xl shadow p-6">
+  
 <div class="grid md:grid-cols-2 gap-4 mb-6">
 
 <div>
@@ -92,6 +96,40 @@ RM0.00
 
 </div>
 
+<hr class="my-6">
+
+<h2 class="font-bold text-lg mb-4">
+Payment Breakdown
+</h2>
+
+<table class="w-full border mb-6">
+
+<thead class="bg-gray-100">
+
+<tr>
+
+<th class="border p-3 text-left">
+
+Account
+
+</th>
+
+<th class="border p-3 text-right">
+
+Amount
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="accountTable">
+
+</tbody>
+
+</table>
+  
 <hr class="my-6">
 
 <h2 class="font-bold text-lg mb-4">
@@ -185,10 +223,10 @@ Save
 </button>
 
 <button
-id="printBtn"
+id="pdfBtn"
 class="bg-red-600 text-white px-5 py-3 rounded-xl">
 
-Print PDF
+Export PDF
 
 </button>
 
@@ -263,6 +301,35 @@ pv.payee || pv.consultantName;
 document.getElementById("amount").innerHTML =
 "RM" + Number(pv.amount).toFixed(2);
 
+let accountHTML="";
+
+(pv.accounts||[]).forEach(item=>{
+
+accountHTML+=`
+
+<tr>
+
+<td class="border p-2">
+
+${item.accountName}
+
+</td>
+
+<td class="border p-2 text-right">
+
+RM${Number(item.amount).toFixed(2)}
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById("accountTable").innerHTML=
+accountHTML;
+  
 document.getElementById("paymentMethod").value =
 pv.paymentMethod || "";
 
@@ -284,7 +351,7 @@ await updateDoc(
 pvRef,
 {
 
-  paymentMethod:
+paymentMethod:
 document.getElementById("paymentMethod").value,
 
 referenceNo:
@@ -307,13 +374,42 @@ alert(
 );
 
 document
-.getElementById("printBtn")
+.getElementById("pdfBtn")
 .addEventListener("click",()=>{
 
-window.print();
+const element =
+document.getElementById("voucherArea");
 
-});
-  
+const opt = {
+
+margin:0.3,
+
+filename:
+pv.pvNo+".pdf",
+
+image:{
+type:"jpeg",
+quality:1
+},
+
+html2canvas:{
+scale:2
+},
+
+jsPDF:{
+unit:"in",
+format:"a4",
+orientation:"portrait"
+}
+
+};
+
+html2pdf()
+.set(opt)
+.from(element)
+.save();
+
+});  
 </script>
 
 </body>
