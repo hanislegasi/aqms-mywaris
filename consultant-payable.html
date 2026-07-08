@@ -188,6 +188,8 @@ payable[consultant].commission +
 payable[consultant].override +
 payable[consultant].usb;
 
+});
+            
         let html = "";
 
         Object.keys(payable).forEach((consultant) => {
@@ -195,7 +197,7 @@ payable[consultant].usb;
                 <tr class="border-b">
                     <td class="p-3">${consultant.split(" ")[0]}</td>
                     <td class="p-3">${consultant}</td>
-                    <td class="p-3 text-right font-semibold">RM${payable[consultant].toFixed(2)}</td>
+                    <td class="p-3 text-right font-semibold">RM${payable[consultant].total.toFixed(2)}</td>
                     <td class="p-3 text-center space-x-2">
 
 <button
@@ -207,7 +209,12 @@ View
 </button>
 
 <button
-onclick="generatePV('${consultant.split(" ")[0]}','${consultant}',${payable[consultant]},this)"
+onclick="generatePV('${consultant.split(" ")[0]}','${consultant}',onclick="generatePV(
+'${consultant.split(" ")[0]}',
+'${consultant}',
+${payable[consultant].total},
+this
+)"
 class="bg-green-600 text-white px-4 py-2 rounded-lg">
 
 Generate PV
@@ -216,7 +223,37 @@ Generate PV
 
 </td>
                 </tr>
-            `;
+
+<tr
+id="${consultant.split(" ")[0]}"
+class="hidden bg-gray-50">
+
+<td colspan="4" class="p-5">
+
+<div class="grid grid-cols-3 gap-4">
+
+<div>
+<b>Commission</b><br>
+RM${payable[consultant].commission.toFixed(2)}
+</div>
+
+<div>
+<b>Override</b><br>
+RM${payable[consultant].override.toFixed(2)}
+</div>
+
+<div>
+<b>USB</b><br>
+RM${payable[consultant].usb.toFixed(2)}
+</div>
+
+</div>
+
+</td>
+
+</tr>
+
+`;
         });
 
         document.getElementById("payableTable").innerHTML = html || '<tr><td colspan="4" class="p-5 text-center text-gray-500">Tiada rekod setakat ini.</td></tr>';
