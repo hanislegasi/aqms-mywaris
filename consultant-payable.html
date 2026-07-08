@@ -152,12 +152,41 @@ row.consultantName;
 const consultant =
 consultantNo + " " + consultantName;
 
-            if (!payable[consultant]) {
-                payable[consultant] = 0;
-            }
+            if(!payable[consultant]){
 
-            payable[consultant] += Number(row.credit || 0);
-        });
+payable[consultant]={
+
+commission:0,
+override:0,
+usb:0,
+total:0
+
+};
+
+}
+
+if(row.accountCode==="2000"){
+
+payable[consultant].commission += Number(row.credit||0);
+
+}
+
+if(row.accountCode==="2100"){
+
+payable[consultant].override += Number(row.credit||0);
+
+}
+
+if(row.accountCode==="2150"){
+
+payable[consultant].usb += Number(row.credit||0);
+
+}
+
+payable[consultant].total =
+payable[consultant].commission +
+payable[consultant].override +
+payable[consultant].usb;
 
         let html = "";
 
@@ -167,13 +196,25 @@ consultantNo + " " + consultantName;
                     <td class="p-3">${consultant.split(" ")[0]}</td>
                     <td class="p-3">${consultant}</td>
                     <td class="p-3 text-right font-semibold">RM${payable[consultant].toFixed(2)}</td>
-                    <td class="p-3 text-center">
-                        <button 
-                            onclick="generatePV('${consultant.split(" ")[0]}', '${consultant}', ${payable[consultant]}, this)"
-                            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors whitespace-nowrap">
-                            Generate PV
-                        </button>
-                    </td>
+                    <td class="p-3 text-center space-x-2">
+
+<button
+onclick="toggleDetail('${consultant.split(" ")[0]}')"
+class="bg-blue-600 text-white px-4 py-2 rounded-lg">
+
+View
+
+</button>
+
+<button
+onclick="generatePV('${consultant.split(" ")[0]}','${consultant}',${payable[consultant]},this)"
+class="bg-green-600 text-white px-4 py-2 rounded-lg">
+
+Generate PV
+
+</button>
+
+</td>
                 </tr>
             `;
         });
@@ -289,7 +330,14 @@ alert(err.message);
 
 };
 
-           
+window.toggleDetail=function(id){
+
+document
+.getElementById(id)
+.classList
+.toggle("hidden");
+
+}           
 
        
 
