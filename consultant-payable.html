@@ -378,20 +378,7 @@ amount:Number(amount)
 
 }
 
-const item =
-payable[
-consultantNo + " " + consultantName
-];
 
-if(!item){
-
-alert("Payable tidak dijumpai.");
-
-button.disabled=false;
-
-return;
-
-}
 
 addPayable(
 "2000",
@@ -433,6 +420,14 @@ currentPeriod,
 
 amount,
 
+accountCode:"MULTI",
+accountName:"Consultant Payable",
+
+category:"Liability",
+cashFlowType:"Operating",
+normalBalance:"Credit",
+reportGroup:"Balance Sheet",
+    
 accounts:
 payableAccounts,
 
