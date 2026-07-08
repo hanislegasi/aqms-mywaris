@@ -368,7 +368,19 @@ amount:Number(amount)
 }
 
 const item =
-payable[consultantName];
+payable[
+consultantNo + " " + consultantName
+];
+
+if(!item){
+
+alert("Payable tidak dijumpai.");
+
+button.disabled=false;
+
+return;
+
+}
 
 addPayable(
 "2000",
