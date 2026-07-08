@@ -240,36 +240,15 @@ coaSnap.forEach((d)=>{
 });
 
 const bank = coaMap["1000"];
+
+const accounts =
+pv.accounts || [];
            
 console.log("PV ID =", pvId);
 console.log(pv);
            
-if(!pv.accountCode){
 
-    alert("Payment Voucher ini menggunakan format lama.");
-
-    console.log(pv);
-
-    return;
-
-}
            
-const accountCode = pv.accountCode;
-const accountName = pv.accountName;
-
-const category = pv.category;
-const cashFlowType = pv.cashFlowType;
-const normalBalance = pv.normalBalance;
-const reportGroup = pv.reportGroup;
-
-const expenseCode = pv.expenseCode;
-const expenseName = pv.expenseName;
-
-const expenseCategory = pv.expenseCategory;
-const expenseCashFlowType = pv.expenseCashFlowType;
-const expenseNormalBalance = pv.expenseNormalBalance;
-const expenseReportGroup = pv.expenseReportGroup;
-
 
 console.log(accountCode);
 console.log(accountName);
@@ -284,27 +263,41 @@ console.log("expenseCode =", expenseCode);
 console.log("expenseName =", expenseName);
 
            
-await addDoc(collection(db,"ledger"),{
+for(const item of accounts){
+
+await addDoc(
+
+collection(db,"ledger"),
+
+{
 
 date:new Date(),
 
-accountCode,
-account:accountName,
+accountCode:item.accountCode,
 
-category,
-cashFlowType,
-normalBalance,
-reportGroup,
+account:item.accountName,
+
+category:item.category,
+
+cashFlowType:item.cashFlowType,
+
+normalBalance:item.normalBalance,
+
+reportGroup:item.reportGroup,
 
 description:payee,
 
-debit:amount,
+debit:item.amount,
+
 credit:0,
 
 paymentType:type,
+
 transactionGroup:pv.pvNo
 
 });
+
+}
            
 
 
