@@ -132,7 +132,51 @@ Run Audit
 
 </div>
 
-firebase sini
+<script type="module">  
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import{
+getFirestore,
+collection,
+getDocs
+}
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  
+const firebaseConfig = {
+
+apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+authDomain:"alqawthar-mywaris.firebaseapp.com",
+
+projectId:"alqawthar-mywaris",
+
+storageBucket:"alqawthar-mywaris.firebasestorage.app",
+
+messagingSenderId:"3498810778",
+
+appId:"1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  
+const db =
+getFirestore(app);
+
+const auth =
+getAuth(app);  
+
+async function runAudit(){
 
 const snap =
 await getDocs(
@@ -151,17 +195,17 @@ credit+=Number(row.credit||0);
 
 });
 
-if(
+document.getElementById("tbStatus").innerHTML=
+
 Math.abs(debit-credit)<0.01
-){
 
-tbStatus.innerHTML="✅ Balanced";
+?
 
-}else{
+"✅ Balanced"
 
-tbStatus.innerHTML="❌ Not Balanced";
+:
 
-}
+"❌ Not Balanced";
 
 
 const pv =
@@ -181,7 +225,7 @@ pending++;
 
 });
 
-pvStatus.innerHTML=
+document.getElementById("pvStatus").innerHTML=
 
 pending==0
 
@@ -194,10 +238,11 @@ pending==0
 pending+" Pending";
 
 
+document.getElementById("plStatus").innerHTML=
+"✅ Verified";
 
-plStatus.innerHTML="✅ Verified";
-
-bsStatus.innerHTML="✅ Verified";
+document.getElementById("bsStatus").innerHTML=
+"✅ Verified";
 
 
 let score=100;
@@ -214,11 +259,35 @@ score-=10;
 
 }
 
-auditScore.innerHTML=
-score+"%";  
+document.getElementById("auditScore").innerHTML=
+score+"%";
 
+}
 
+document
+.getElementById("runAudit")
+.addEventListener("click", async()=>{
 
+const btn =
+document.getElementById("runAudit");
+
+btn.disabled = true;
+btn.innerHTML = "Running...";
+
+await runAudit();
+
+btn.innerHTML = "Run Audit";
+btn.disabled = false;
+
+});
+
+runAudit();
+  
+
+</script>
+
+</body>
+</html>
 
 
 
