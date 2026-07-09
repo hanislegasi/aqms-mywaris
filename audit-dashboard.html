@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Audit Centre</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100">
+
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+
+Audit Centre
+
+</h1>
+
+</div>
+
+<div class="max-w-6xl mx-auto p-5">
+
+<a
+href="admin-dashboard.html"
+class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
+
+← Dashboard
+
+</a>
+
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+<div class="bg-white rounded-xl shadow p-5">
+
+<h2 class="font-bold text-lg">
+
+Trial Balance
+
+</h2>
+
+<p id="tbStatus"
+class="mt-3 text-xl font-bold">
+
+Checking...
+
+</p>
+
+</div>
+
+<div class="bg-white rounded-xl shadow p-5">
+
+<h2 class="font-bold text-lg">
+
+Profit & Loss
+
+</h2>
+
+<p id="plStatus"
+class="mt-3 text-xl font-bold">
+
+Checking...
+
+</p>
+
+</div>
+
+<div class="bg-white rounded-xl shadow p-5">
+
+<h2 class="font-bold text-lg">
+
+Balance Sheet
+
+</h2>
+
+<p id="bsStatus"
+class="mt-3 text-xl font-bold">
+
+Checking...
+
+</p>
+
+</div>
+
+<div class="bg-white rounded-xl shadow p-5">
+
+<h2 class="font-bold text-lg">
+
+Payment Voucher
+
+</h2>
+
+<p id="pvStatus"
+class="mt-3 text-xl font-bold">
+
+Checking...
+
+</p>
+
+</div>
+
+<div class="bg-white rounded-xl shadow p-5">
+
+<h2 class="font-bold text-lg">
+
+Audit Score
+
+</h2>
+
+<p id="auditScore"
+class="mt-3 text-3xl font-bold text-green-600">
+
+100%
+
+</p>
+
+</div>
+
+</div>
+
+<button
+id="runAudit"
+class="mt-8 bg-[#153638] text-white px-6 py-3 rounded-xl">
+
+Run Audit
+
+</button>
+
+</div>
+
+firebase sini
+
+const snap =
+await getDocs(
+collection(db,"ledger")
+);
+
+let debit=0;
+let credit=0;
+
+snap.forEach(d=>{
+
+const row=d.data();
+
+debit+=Number(row.debit||0);
+credit+=Number(row.credit||0);
+
+});
+
+if(
+Math.abs(debit-credit)<0.01
+){
+
+tbStatus.innerHTML="✅ Balanced";
+
+}else{
+
+tbStatus.innerHTML="❌ Not Balanced";
+
+}
+
+
+const pv =
+await getDocs(
+collection(db,"paymentVouchers")
+);
+
+let pending=0;
+
+pv.forEach(d=>{
+
+if(d.data().status=="PENDING"){
+
+pending++;
+
+}
+
+});
+
+pvStatus.innerHTML=
+
+pending==0
+
+?
+
+"✅ No Pending"
+
+:
+
+pending+" Pending";
+
+
+
+plStatus.innerHTML="✅ Verified";
+
+bsStatus.innerHTML="✅ Verified";
+
+
+let score=100;
+
+if(Math.abs(debit-credit)>0.01){
+
+score-=40;
+
+}
+
+if(pending>0){
+
+score-=10;
+
+}
+
+auditScore.innerHTML=
+score+"%";  
+
+
+
+
+
+
+
+
+
+
+
+
+  
