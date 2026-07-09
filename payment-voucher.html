@@ -207,8 +207,8 @@ ${pv.type==="MANUAL"
 ?
 `
 <button
-onclick="deletePV('${d.id}')"
-class="w-24 bg-red-600 text-white py-2 rounded-lg mt-2">
+data-id="${d.id}"
+class="deleteBtn w-24 bg-red-600 text-white py-2 rounded-lg mt-2">
 Delete
 </button>
 `
@@ -232,23 +232,31 @@ PAID
 
         document.getElementById("pvTable").innerHTML = html;
 
-window.deletePV = async(id)=>{
+document.querySelectorAll(".deleteBtn").forEach(btn=>{
 
-    if(!confirm("Delete this Manual Payment Voucher?")){
-        return;
-    }
+    btn.addEventListener("click", async()=>{
 
-    await deleteDoc(
-        doc(db,"paymentVouchers",id)
-    );
+        const id = btn.dataset.id;
 
-    alert("Manual Payment Voucher Deleted");
+        if(!confirm("Delete this Manual Payment Voucher?")){
+            return;
+        }
 
-    location.reload();
+        await deleteDoc(
+            doc(db,"paymentVouchers",id)
+        );
 
-};
+        alert("Manual Payment Voucher Deleted");
 
-console.log("deletePV loaded");
+        location.reload();
+
+    });
+
+});
+        
+
+
+
         
        window.markPaid = async (
 pvId,
