@@ -109,6 +109,9 @@ await getDoc(
 doc(db,"company","distribution")
 );
 
+console.log(distSnap.exists());
+console.log(distSnap.data());
+        
 const distribution =
 distSnap.data();
 
