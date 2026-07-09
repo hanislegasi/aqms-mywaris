@@ -42,11 +42,11 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 <div
 id="voucherArea"
-class="bg-white rounded-xl shadow p-6">
+class="bg-white rounded-xl shadow p-4">
 
-<div class="text-center mb-8">
+<div class="text-center mb-4">
 
-<h1 class="text-3xl font-bold">
+<h1 class="text-2xl font-bold">
 AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.
 </h1>
 
@@ -114,7 +114,7 @@ RM0.00
 
 <div id="beneficiarySection" class="hidden">
 
-<hr class="my-6">
+<hr class="my-3">
 
 <h2 class="font-bold text-lg mb-4">
 Beneficiaries
@@ -146,7 +146,7 @@ Amount
 
 </div>
   
-<hr class="my-6">
+<hr class="my-3">
 
 <h2 class="font-bold text-lg mb-4">
 Payment Breakdown
@@ -180,13 +180,13 @@ Amount
 
 </table>
   
-<hr class="my-6">
+<hr class="my-3">
 
 <h2 class="font-bold text-lg mb-4">
 Payment Information
 </h2>
 
-<div class="space-y-4">
+<div class="space-y-2">
 
 <div>
 
@@ -196,7 +196,7 @@ Payment Method
 
 <select
 id="paymentMethod"
-class="w-full border rounded-lg p-3">
+class="w-full border rounded-lg p-2">
 
 <option value="">
 Pilih
@@ -469,26 +469,30 @@ buttons.style.display="none";
 const element =
 document.getElementById("voucherArea");
 
-const opt={
+const opt = {
 
-margin:0.3,
+margin: 0.2,
 
-filename:
-pv.pvNo+".pdf",
+filename: pv.pvNo + ".pdf",
 
-image:{
-type:"jpeg",
-quality:1
+image: {
+    type: "jpeg",
+    quality: 1
 },
 
-html2canvas:{
-scale:2
+html2canvas: {
+    scale: 1.5,
+    useCORS: true
 },
 
-jsPDF:{
-unit:"in",
-format:"a4",
-orientation:"portrait"
+jsPDF: {
+    unit: "mm",
+    format: "a4",
+    orientation: "portrait"
+},
+
+pagebreak: {
+    mode: ["avoid-all"]
 }
 
 };
