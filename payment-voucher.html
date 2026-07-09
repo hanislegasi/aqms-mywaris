@@ -195,7 +195,7 @@ ${pv.status==="PENDING"
 <button
 onclick="markPaid(
 '${d.id}',
-'${pv.type || "CONSULTANT"}',
+'${pv.type}',
 '${pv.payee || pv.consultantName}',
 ${pv.amount}
 )"
@@ -203,6 +203,9 @@ class="w-24 bg-green-600 text-white py-2 rounded-lg mt-2">
 Mark Paid
 </button>
 
+${pv.type==="MANUAL"
+?
+`
 <button
 onclick="deletePV('${d.id}')"
 class="w-24 bg-red-600 text-white py-2 rounded-lg mt-2">
@@ -210,9 +213,13 @@ Delete
 </button>
 `
 :
+``
+}
+`
+:
 `
 <button
-class="w-24 bg-white border border-green-600 text-green-600 py-2 rounded-lg font-semibold cursor-default mt-2">
+class="w-24 bg-white border border-green-600 text-green-600 py-2 rounded-lg font-semibold">
 PAID
 </button>
 `
@@ -241,17 +248,17 @@ amount
 
 window.deletePV = async(id)=>{
 
-if(!confirm("Delete this Payment Voucher?")){
-    return;
-}
+    if(!confirm("Delete this Manual Payment Voucher?")){
+        return;
+    }
 
-await deleteDoc(
-doc(db,"paymentVouchers",id)
-);
+    await deleteDoc(
+        doc(db,"paymentVouchers",id)
+    );
 
-alert("Payment Voucher Deleted");
+    alert("Manual Payment Voucher Deleted");
 
-location.reload();
+    location.reload();
 
 };
            
