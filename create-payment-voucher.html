@@ -240,6 +240,10 @@ console.log({
     expenseCode: expense.code,
     expenseName: expense.name
 });
+
+console.log(expense);
+console.log(amount);
+console.log(payee);
  
 await addDoc(
 collection(db,"paymentVouchers"),
@@ -294,6 +298,8 @@ collection(db,"paymentVouchers"),
     createdAt:new Date()
 });
 
+
+console.log("PV Saved");
  
 alert(
 "Payment Voucher Created"
