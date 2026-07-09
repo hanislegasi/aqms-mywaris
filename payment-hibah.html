@@ -21,7 +21,7 @@ font-family:Inter,sans-serif;
 <div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl">
 
 <h1 class="text-3xl font-bold text-[#153638] mb-2">
-Hibah
+Wasiat + Hibah
 </h1>
 
 <p class="text-gray-500 mb-8">
@@ -37,7 +37,7 @@ Produk
 </span>
 
 <span class="font-semibold">
-Hibah
+Wasiat + Hibah
 </span>
 
 </div>
@@ -49,7 +49,7 @@ Jumlah
 </span>
 
 <span class="text-2xl font-bold text-[#153638]">
-RM2500
+RM2,500
 </span>
 
 </div>
@@ -129,8 +129,37 @@ document
 .getElementById("payBtn")
 .addEventListener("click", async()=>{
 
+const btn =
+document.getElementById("payBtn");
+
+btn.disabled=true;
+
+btn.innerHTML="Memproses...";
+
 try{
 
+const userSnap =
+await getDoc(
+doc(db,"users",currentUser.uid)
+);
+
+const userData =
+userSnap.data();
+
+if(userData.paymentStatus==="paid"){
+
+btn.disabled=false;
+btn.innerHTML="Bayar Sekarang";
+
+alert("Pembayaran telah direkodkan.");
+
+window.location.href="dashboard.html";
+
+return;
+
+}
+
+  
 // ambil counter
 const counterRef =
 doc(
@@ -142,64 +171,66 @@ db,
 const counterSnap =
 await getDoc(counterRef);
 
+const txnDate = new Date();
+
+const saleAmount = 2,500;
+  
+let memberNo =
+userData.memberNo;
+
+if(!memberNo){
+
 const currentNo =
 counterSnap.data().memberCounter || 0;
 
 const newNo =
 currentNo + 1;
 
-// update counter
-await updateDoc(
-counterRef,
-{
-memberCounter:
-increment(1)
-}
-);
-  
-// generate AQM number
-const latestCounter =
-await getDoc(counterRef);
-
-const memberNo =
+memberNo =
 "AQM" +
-String(
-latestCounter.data().memberCounter
-).padStart(4,"0");
+String(newNo).padStart(4,"0");
+
+await updateDoc(counterRef,{
+memberCounter:increment(1)
+});
+
+}
 
   
 
 
 
-// update user
-await updateDoc(
+// up user
+const updateData={
 
-doc(
-db,
-"users",
-currentUser.uid
-),
+paymentStatus:"paid",
 
-{
+memberSince:txnDate.toISOString(),
 
-hibahPaymentStatus:"paid",
+expiryDate:(()=>{
 
-memberNo,
+const d=new Date(txnDate);
+d.setFullYear(d.getFullYear()+1);
+return d.toISOString();
 
-memberSince:
-new Date().toISOString()
+})()
+
+};
+
+if(!userData.memberNo){
+
+updateData.memberNo=memberNo;
 
 }
 
+await updateDoc(
+doc(db,"users",currentUser.uid),
+updateData
 );
 
 const customerSnap =
 await getDoc(
-doc(
-db,
-"users",
-currentUser.uid
-)
+doc(db,"users",currentUser.uid)
 );
 
 const customer =
@@ -209,9 +240,9 @@ await addDoc(
 collection(db,"ledger"),
 {
 
-date:new Date(),
+date:txnDate,
 
-accountCode:"4100",
+accountCode:"4020",
 account:"Sales - Hibah",
 
 category:"income",
@@ -221,16 +252,19 @@ memberNo + " " + customer.nama,
 
 debit:0,
 
-credit:2500
+credit:saleAmount,
 
+transactionGroup:memberNo,
+paymentType:"CUSTOMER",
+sourceAccount:"4020",
+  
 }
 );
 
 await addDoc(
 collection(db,"ledger"),
 {
-
-date:new Date(),
+date:txnDate,
 
 accountCode:"1000",
 account:"Bank",
@@ -240,12 +274,13 @@ category:"asset",
 description:
 memberNo + " " + customer.nama,
 
-debit:2500,
+debit:saleAmount,
+credit:0,
 
-credit:0
-
-}
-);
+paymentType:"CUSTOMER",
+sourceAccount:"4020",
+transactionGroup:memberNo
+});
   
 const compensationSnap =
 await getDoc(
@@ -259,11 +294,18 @@ db,
 const comp =
 compensationSnap.data();
 
-const saleAmount = 350;
 
-const shareholder =
+
+// Allocation Pool (future validation)
+const commissionPool =
 saleAmount *
-(comp.shareholderPool / 100);
+(comp.commissionPool / 100);
+
+const overridePool =
+saleAmount *
+(comp.overridePool / 100);
+
+
 
 const company =
 saleAmount *
@@ -281,25 +323,30 @@ const royalty =
 saleAmount *
 (comp.royalty / 100);
 
+const usbAmount =
+saleAmount *
+(comp.usb / 100);
+
+  
 await addDoc(
 collection(
 db,
 "companyAllocation"
 ),
 {
-createdAt:new Date(),
+createdAt:txnDate,
 
 memberNo,
 customerName:
 customer.nama,
 
 product:
-"hibah",
+"Wasiat + Hibah",
 
 sale:
 saleAmount,
 
-shareholder,
+
 company,
 
 allowance,
@@ -311,22 +358,22 @@ royalty
 
 
 
-const usersSnap =
+const consultantSnap =
 await getDocs(
-collection(db,"users")
+collection(db,"consultants")
 );
 
-const allUsers = [];
+const allConsultants = [];
 
-usersSnap.forEach((d)=>{
+consultantSnap.forEach((d)=>{
 
-allUsers.push({
+allConsultants.push({
 id:d.id,
 ...d.data()
 });
 
 });
-
+  
 function getOverrideRate(level){
 
 if(level === "AQC") return 0;
@@ -355,8 +402,8 @@ return 35;
   
 function findConsultant(no){
 
-return allUsers.find(
-u => u.consultantNo === no
+return allConsultants.find(
+u=>u.consultantNo===no
 );
 
 }
@@ -371,6 +418,100 @@ findConsultant(
 customer.referral
 );
 
+// =====================
+// UPLINE SPONSOR BENEFIT
+// =====================
+
+const sponsor =
+directConsultant
+? findConsultant(directConsultant.upline)
+: null;
+
+if(sponsor){
+
+const usbAmount =
+saleAmount *
+(comp.usb / 100);
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:txnDate,
+
+accountCode:"5150",
+account:"Upline Sponsor Benefit",
+
+category:"expense",
+
+consultantNo:
+sponsor.consultantNo,
+
+consultantName:
+sponsor.nama,
+
+description:
+sponsor.consultantNo +
+" USB",
+
+debit:usbAmount,
+credit:0,
+
+transactionGroup:memberNo,
+paymentType:"USB"
+
+});
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:txnDate,
+
+accountCode:"2150",
+account:"USB Payable",
+
+category:"liability",
+
+consultantNo:
+sponsor.consultantNo,
+
+consultantName:
+sponsor.nama,
+
+description:
+sponsor.consultantNo +
+" USB",
+
+debit:0,
+credit:usbAmount,
+
+transactionGroup:memberNo,
+paymentType:"USB"
+
+});
+
+await updateDoc(
+
+doc(
+db,
+"consultants",
+sponsor.id
+),
+
+{
+
+totalUSB:
+increment(usbAmount)
+
+}
+
+);
+
+}
+
+
+  
 if(directConsultant){
 
 const commissionRate =
@@ -379,36 +520,141 @@ directConsultant.consultantLevel
 );
 
 const commissionAmount =
-2500 *
+saleAmount *
 commissionRate /
 100;
+
 
 await addDoc(
 collection(db,"ledger"),
 {
-
-date:new Date(),
+date:txnDate,
 
 accountCode:"5000",
 account:"Consultant Commission",
 
-category:
-"expense",
+category:"expense",
+
+consultantNo:directConsultant.consultantNo,
+consultantName:directConsultant.nama,
 
 description:
 directConsultant.consultantNo +
 " " +
 directConsultant.nama,
 
-debit:
-commissionAmount,
-
+debit:commissionAmount,
 credit:0
+}
+);
+  
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:txnDate,
+
+accountCode:"2000",
+account:"Commission Payable",
+
+consultantNo:
+directConsultant.consultantNo,
+
+consultantName:
+directConsultant.nama,
+  
+category:"liability",
+
+description:
+directConsultant.consultantNo +
+" " +
+directConsultant.nama,
+
+debit:0,
+
+credit:commissionAmount
 
 }
 );
 
+await updateDoc(
+doc(db,"consultants",directConsultant.id),
+{
+activeClients: increment(1),
+totalSales: increment(saleAmount),
+careerSales: increment(saleAmount),
+totalCommission: increment(commissionAmount),
+
 }
+);
+  
+}
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:txnDate,
+
+accountCode:"5200",
+account:"Allowance Expense",
+
+category:"expense",
+
+description:"Allowance Allocation",
+
+debit:allowance,
+credit:0
+});
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:txnDate,
+
+accountCode:"2200",
+account:"Allowance Payable",
+
+category:"liability",
+
+description:"Allowance Allocation",
+
+debit:0,
+credit:allowance
+});
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:txnDate,
+
+accountCode:"5300",
+account:"Royalty Expense",
+
+category:"expense",
+
+description:"Royalty Allocation",
+
+debit:royalty,
+credit:0
+});
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:txnDate,
+
+accountCode:"2300",
+account:"Royalty Payable",
+
+category:"liability",
+
+description:"Royalty Allocation",
+
+debit:0,
+credit:royalty
+});
+
   
 while(currentConsultant){
 
@@ -432,18 +678,30 @@ currentConsultant.consultantLevel
 );
 
 const overrideAmount =
-2500 * diffRate / 100;
+saleAmount *
+diffRate / 100;
 
+if(overrideAmount <= 0){
+
+currentConsultant = upline;
+
+continue;
+
+}
+
+  
 await addDoc(
 collection(db,"ledger"),
 {
-
-date:new Date(),
+date:txnDate,
 
 accountCode:"5100",
 account:"Consultant Override",
 
 category:"expense",
+
+consultantNo:upline.consultantNo,
+consultantName:upline.nama,
 
 description:
 upline.consultantNo +
@@ -451,8 +709,36 @@ upline.consultantNo +
 upline.nama,
 
 debit:overrideAmount,
-
 credit:0
+}
+);
+  
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:txnDate,
+
+accountCode:"2100",
+account:"Override Payable",
+
+consultantNo:
+upline.consultantNo,
+
+consultantName:
+upline.nama,
+  
+category:"liability",
+
+description:
+upline.consultantNo +
+" " +
+upline.nama,
+
+debit:0,
+
+credit:overrideAmount
 
 }
 );
@@ -460,14 +746,12 @@ credit:0
 await updateDoc(
 doc(
 db,
-"users",
+"consultants",
 upline.id
 ),
 {
-totalOverriding:
-increment(
-overrideAmount
-)
+careerSales: increment(saleAmount),
+totalOverriding: increment(overrideAmount)
 }
 );
 
@@ -478,8 +762,7 @@ db,
 ),
 {
 
-createdAt:
-new Date(),
+createdAt:txnDate,
 
 customerNo:
 memberNo,
@@ -505,7 +788,7 @@ upline.nama,
 receiverLevel:
 upline.consultantLevel,
 
-sales:2500,
+sales:saleAmount,
 
 diffRate:
 diffRate,
@@ -520,6 +803,38 @@ currentConsultant =
 upline;
 
 }
+
+// =====================
+// CREATE PAYMENT RECEIPT
+// =====================
+
+await addDoc(
+collection(db,"receipts"),
+{
+
+receiptNo:
+"WST-" + Date.now(),
+
+uid:currentUser.uid,
+
+memberNo:memberNo,
+
+payerName:customer.nama,
+
+serviceCode:"WASIAT + HIBAH",
+
+serviceName:"Wasiat + Hibah Registration",
+
+amount:saleAmount,
+
+paymentMethod:"ToyyibPay",
+
+status:"PAID",
+
+paymentDate:txnDate
+
+}
+);
   
 alert(
 "Pembayaran berjaya"
@@ -532,7 +847,15 @@ window.location.href =
 
 catch(error){
 
+btn.disabled=false;
+
+btn.innerHTML="Bayar Sekarang";
+  
 console.log(error);
+
+alert(
+"Ralat: "+error.message
+);
 
 }
 
