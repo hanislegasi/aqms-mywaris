@@ -90,7 +90,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc, query, orderBy, limit, where, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
@@ -104,6 +104,20 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+const distSnap =
+await getDoc(
+doc(db,"company","distribution")
+);
+
+const distribution =
+distSnap.data();
+
+const allowancePeople =
+distribution.allowance || [];
+
+const royaltyPeople =
+distribution.royalty || [];
+        
 const coaSnap = await getDocs(
 collection(
 db,
@@ -125,8 +139,7 @@ coaSnap.forEach((d)=>{
 
 let royaltyPayable = 0;
 let allowancePayable = 0;
-let adminPayable = 0;
-let shareholderReserve = 0;
+
       
        const snap =
 await getDocs(
@@ -152,15 +165,7 @@ Number(
 row.allowance || 0
 );
 
-adminPayable +=
-Number(
-row.adminOperation || 0
-);
 
-shareholderReserve +=
-Number(
-row.shareholder || 0
-);
 
 });
 
@@ -190,36 +195,23 @@ if(pv.type==="ALLOWANCE"){
     allowancePayable -= Number(pv.amount||0);
 }
 
-if(pv.type==="ADMIN"){
-    adminPayable -= Number(pv.amount||0);
-}
-
-if(pv.type==="SHAREHOLDER"){
-    shareholderReserve -= Number(pv.amount||0);
-}
 
 }
 
 });
-      
-        
-
-      
       
       
         
 
 let html = `
 <tr>
+
 <td class="p-3">
 Royalty
 </td>
 
 <td class="p-3">
-<input
-id="payee-ROYALTY"
-class="border rounded-lg p-2 w-full"
-placeholder="Enter payee">
+${royaltyPeople.join("<br>")}
 </td>
 
 <td class="p-3 text-right">
@@ -227,23 +219,17 @@ RM${royaltyPayable.toFixed(2)}
 </td>
 
 <td class="p-3 text-center">
+
 <button
-onclick="
-generatePV(
-'ROYALTY',
-document.getElementById('payee-ROYALTY').value
-)
-"
-class="
-bg-green-600
-text-white
-px-4
-py-2
-rounded-lg
-">
+onclick="generatePV('ROYALTY')"
+class="bg-green-600 text-white px-4 py-2 rounded-lg">
+
 Generate PV
+
 </button>
+
 </td>
+
 </tr>
 
 
@@ -251,10 +237,7 @@ Generate PV
 <td class="p-3">Allowance</td>
 
 <td class="p-3">
-<input
-id="payee-ALLOWANCE"
-class="border rounded-lg p-2 w-full"
-placeholder="Enter payee">
+${allowancePeople.join("<br>")}
 </td>
 
 <td class="p-3 text-right">
@@ -263,10 +246,7 @@ RM${allowancePayable.toFixed(2)}
 <td class="p-3 text-center">
 <button
 onclick="
-generatePV(
-'ALLOWANCE',
-document.getElementById('payee-ALLOWANCE').value
-)
+generatePV('ALLOWANCE')
 "
 class="
 bg-green-600
@@ -280,74 +260,6 @@ Generate PV
 </td>
 </tr>
 
-
-<tr>
-<td class="p-3">Admin</td>
-
-<td class="p-3">
-<input
-id="payee-ADMIN"
-class="border rounded-lg p-2 w-full"
-placeholder="Enter payee">
-</td>
-
-<td class="p-3 text-right">
-RM${adminPayable.toFixed(2)}
-</td>
-<td class="p-3 text-center">
-<button
-onclick="
-generatePV(
-'ADMIN',
-document.getElementById('payee-ADMIN').value
-)
-"
-class="
-bg-green-600
-text-white
-px-4
-py-2
-rounded-lg
-">
-Generate PV
-</button>
-</td>
-</tr>
-
-
-
-<tr>
-<td class="p-3">Shareholder</td>
-
-<td class="p-3">
-<input
-id="payee-SHAREHOLDER"
-class="border rounded-lg p-2 w-full"
-placeholder="Enter payee">
-</td>
-
-<td class="p-3 text-right">
-RM${shareholderReserve.toFixed(2)}
-</td>
-<td class="p-3 text-center">
-<button
-onclick="
-generatePV(
-'SHAREHOLDER',
-document.getElementById('payee-SHAREHOLDER').value
-)
-"
-class="
-bg-green-600
-text-white
-px-4
-py-2
-rounded-lg
-">
-Generate PV
-</button>
-</td>
-</tr>
 `;
 
 document.getElementById(
@@ -356,52 +268,38 @@ document.getElementById(
 html;
         // Fungsi PV yang dikemaskini
      window.generatePV = async (
-type,
-payee
+type
 ) => {
 
 try {
 
-payee = payee.trim();
 
 let amount = 0;
 
-if(type==="ALLOWANCE") amount=allowancePayable;
-if(type==="ADMIN") amount=adminPayable;
-if(type==="ROYALTY") amount=royaltyPayable;
-if(type==="SHAREHOLDER") amount=shareholderReserve;
+if(type==="ALLOWANCE"){
+    amount = allowancePayable;
+}
+
+if(type==="ROYALTY"){
+    amount = royaltyPayable;
+}
 
 let expense = null;
 
-if(type=="ALLOWANCE")
-expense = coaMap["5200"];
-
-if(type=="ADMIN")
-expense = coaMap["5300"];
-
-if(type=="ROYALTY")
-expense = coaMap["5400"];
-
-let payable = null;
-
-if(type=="SHAREHOLDER"){
-
-    payable = coaMap["3110"];
-
-}else{
-
-    payable = coaMap[expense.payableCode];
-
+if(type=="ALLOWANCE"){
+    expense = coaMap["5200"];
 }
 
-    
-    
-if(type!="SHAREHOLDER" && !expense){
-
-    alert("Expense Account not found");
-    return;
-
+if(type=="ROYALTY"){
+    expense = coaMap["5300"];
 }
+    
+const payable =
+coaMap[
+expense.payableCode
+];
+    
+    
 
 if(!payable){
 
@@ -447,10 +345,51 @@ const pvNo =
 Date.now();
 
     
-const reserve = coaMap["3100"];
-const distribution = coaMap["3110"];
+let beneficiaries = [];
 
-    
+if(type==="ALLOWANCE"){
+
+const count =
+allowancePeople.length;
+
+const share =
+Math.floor((amount/count)*100)/100;
+
+let balance =
+amount;
+
+allowancePeople.forEach((name,index)=>{
+
+const value =
+index===count-1
+?
+balance
+:
+share;
+
+beneficiaries.push({
+    name,
+    consultantNo:"",
+    amount
+});
+
+balance -= value;
+
+});
+
+}
+
+if(type==="ROYALTY"){
+
+beneficiaries.push({
+
+name:royaltyPeople[0],
+amount
+
+});
+
+}    
+
     
 await addDoc(
 collection(db,"paymentVouchers"),
@@ -461,123 +400,77 @@ collection(db,"paymentVouchers"),
 
     period: currentPeriod,
 
-   ...(type!="SHAREHOLDER" && {
+ 
 
 expenseCode:expense.code,
 expenseName:expense.name,
 expenseCategory:expense.category,
 expenseCashFlowType:expense.cashFlowType,
 expenseNormalBalance:expense.normalBalance,
-expenseReportGroup:expense.reportGroup
+expenseReportGroup:expense.reportGroup,
 
-}),
+}
+description: type + " " + currentPeriod,
 
-    // Payable Account
-    accountCode: payable.code,
-    accountName: payable.name,
-    category: payable.category,
-    cashFlowType: payable.cashFlowType,
-    normalBalance: payable.normalBalance,
-    reportGroup: payable.reportGroup,
+    
+consultantNo:"-",
 
-    description: type + " " + currentPeriod,
+consultantName:
+type,
 
-    consultantNo: "-",
-    consultantName: payee,
-    payee,
+payee:
+type,
 
-    amount,
+amount,
 
-    status: "PENDING",
+beneficiaries,
 
-    createdAt: new Date()
+accountCode:"MULTI",
+accountName:type + " Payable",
+
+accounts:[
+{
+accountCode:payable.code,
+accountName:payable.name,
+
+category:payable.category,
+cashFlowType:payable.cashFlowType,
+normalBalance:payable.normalBalance,
+reportGroup:payable.reportGroup,
+
+amount
+
+}
+],
+
+status:"PENDING",
+
+createdAt:new Date()
+
 }
 );
 
+// DR Expense (Allowance/Admin/Royalty) 
 
     
-if(type=="SHAREHOLDER"){
+await addDoc( collection(db,"ledger"), 
+{ date:new Date(), 
+ 
+accountCode:expense.code, 
+account:expense.name, 
+category:expense.category, 
+cashFlowType:expense.cashFlowType, 
+normalBalance:expense.normalBalance, 
+reportGroup:expense.reportGroup, 
 
-await addDoc(
-collection(db,"ledger"),
-{
-
-date:new Date(),
-
-accountCode:reserve.code,
-account:reserve.name,
-
-category:reserve.category,
-cashFlowType:reserve.cashFlowType,
-normalBalance:reserve.normalBalance,
-reportGroup:reserve.reportGroup,
-
-description:payee,
-
-debit:amount,
-credit:0
-
-});
-
-await addDoc(
-collection(db,"ledger"),
-{
-
-date:new Date(),
-
-accountCode:distribution.code,
-account:distribution.name,
-
-category:distribution.category,
-cashFlowType:distribution.cashFlowType,
-normalBalance:distribution.normalBalance,
-reportGroup:distribution.reportGroup,
-
-description:payee,
-
-debit:0,
-credit:amount
-
-});
-
-}
-
+description:type,
+ 
+debit:amount, 
+ 
+credit:0 }); 
     
-    
-// DR Expense (Allowance/Admin/Royalty)
-
-if(type !== "SHAREHOLDER"){
-
-
-
-    
-await addDoc(
-collection(db,"ledger"),
-{
-date:new Date(),
-
-accountCode:expense.code,
-account:expense.name,
-
-category:expense.category,
-cashFlowType:expense.cashFlowType,
-normalBalance:expense.normalBalance,
-reportGroup:expense.reportGroup,
-
-
-description:payee,
-
-debit:amount,
-
-credit:0
-});
-
-}
-
 
 // CR Liability / Equity
-
-if(type!="SHAREHOLDER"){
 
 await addDoc(
 collection(db,"ledger"),
@@ -593,7 +486,7 @@ cashFlowType:payable.cashFlowType,
 normalBalance:payable.normalBalance,
 reportGroup:payable.reportGroup,
 
-description:payee,
+description:type,
 
 debit:0,
 credit:amount
