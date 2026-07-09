@@ -89,7 +89,7 @@ Status
 <div>
 
 <label class="font-semibold">
-Consultant/ Payee
+Payee
 </label>
 
 <p id="consultant">
@@ -112,6 +112,40 @@ RM0.00
 
 </div>
 
+<div id="beneficiarySection" class="hidden">
+
+<hr class="my-6">
+
+<h2 class="font-bold text-lg mb-4">
+Beneficiaries
+</h2>
+
+<table class="w-full border mb-6">
+
+<thead class="bg-gray-100">
+
+<tr>
+
+<th class="border p-3 text-left">
+Name
+</th>
+
+<th class="border p-3 text-right">
+Amount
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="beneficiaryTable">
+
+</tbody>
+
+</table>
+
+</div>
+  
 <hr class="my-6">
 
 <h2 class="font-bold text-lg mb-4">
@@ -319,6 +353,38 @@ pv.payee || pv.consultantName;
 document.getElementById("amount").innerHTML =
 "RM" + Number(pv.amount).toFixed(2);
 
+if((pv.beneficiaries || []).length){
+
+document.getElementById("beneficiarySection")
+.classList.remove("hidden");
+
+let benHTML="";
+
+pv.beneficiaries.forEach(item=>{
+
+benHTML += `
+
+<tr>
+
+<td class="border p-2">
+${item.name}
+</td>
+
+<td class="border p-2 text-right">
+RM${Number(item.amount).toFixed(2)}
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById("beneficiaryTable").innerHTML =
+benHTML;
+
+}
+  
 let accountHTML="";
 
 (pv.accounts||[]).forEach(item=>{
