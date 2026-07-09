@@ -106,15 +106,15 @@
 
 const distSnap =
 await getDoc(
-doc(db,"setting","company")
+doc(db,"settings","company")
 );
 
 console.log(distSnap.exists());
-console.log(distSnap.data());
-console.log(distribution);
-        
+
 const distribution =
 distSnap.data();
+
+console.log(distribution);
 
 const allowancePeople =
 distribution.allowance || [];
