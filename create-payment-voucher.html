@@ -233,10 +233,6 @@ document.getElementById("accountCode").value;
 const expense =
 coaMap[expenseCode];
 
-const payable =
-coaMap[expense.payableCode];
-
- 
 await addDoc(
 collection(db,"paymentVouchers"),
 {
@@ -255,12 +251,12 @@ expenseCashFlowType:expense.cashFlowType,
 expenseReportGroup:expense.reportGroup,
 expenseNormalBalance:expense.normalBalance,
  
-accountCode:payable.code,
-accountName:payable.name,
-category:payable.category,
-cashFlowType:payable.cashFlowType,
-normalBalance:payable.normalBalance,
-reportGroup:payable.reportGroup,
+accountCode: expense.code,
+accountName: expense.name,
+category: expense.category,
+cashFlowType: expense.cashFlowType,
+normalBalance: expense.normalBalance,
+reportGroup: expense.reportGroup,
 
     
 
