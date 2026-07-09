@@ -232,21 +232,6 @@ PAID
 
         document.getElementById("pvTable").innerHTML = html;
 
-
-        
-       window.markPaid = async (
-pvId,
-type,
-payee,
-amount
-) => {
-            // Mengekalkan fungsi confirm() asal seperti permintaan anda
-            if (!confirm("Confirm payment?")) {
-                return;
-            
-
-};
-        
 window.deletePV = async(id)=>{
 
     if(!confirm("Delete this Manual Payment Voucher?")){
@@ -262,7 +247,18 @@ window.deletePV = async(id)=>{
     location.reload();
 
 };
+        
+       window.markPaid = async (
+pvId,
+type,
+payee,
+amount
+) => {
+            // Mengekalkan fungsi confirm() asal seperti permintaan anda
+            if (!confirm("Confirm payment?")) {
+                return;
            
+}       
            
 const pvDoc = 
 await getDoc(doc(db, "paymentVouchers", pvId)
