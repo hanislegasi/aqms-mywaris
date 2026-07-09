@@ -453,48 +453,6 @@ createdAt:new Date()
 }
 );
 
-// DR Expense (Allowance/Admin/Royalty) 
-
-    
-await addDoc( collection(db,"ledger"), 
-{ date:new Date(), 
- 
-accountCode:expense.code, 
-account:expense.name, 
-category:expense.category, 
-cashFlowType:expense.cashFlowType, 
-normalBalance:expense.normalBalance, 
-reportGroup:expense.reportGroup, 
-
-description:type,
- 
-debit:amount, 
- 
-credit:0 }); 
-    
-
-// CR Liability / Equity
-
-await addDoc(
-collection(db,"ledger"),
-{
-
-date:new Date(),
-
-accountCode:payable.code,
-account:payable.name,
-
-category:payable.category,
-cashFlowType:payable.cashFlowType,
-normalBalance:payable.normalBalance,
-reportGroup:payable.reportGroup,
-
-description:type,
-
-debit:0,
-credit:amount
-
-});
 
 
     
