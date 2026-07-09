@@ -250,26 +250,38 @@ collection(db,"paymentVouchers"),
 
     period:currentPeriod,
 
-expenseCode:expense.code,
-expenseName:expense.name,
+    expenseCode:expense.code,
+    expenseName:expense.name,
+    expenseCategory:expense.category,
+    expenseType:expense.type,
+    expenseCashFlowType:expense.cashFlowType,
+    expenseReportGroup:expense.reportGroup,
+    expenseNormalBalance:expense.normalBalance,
 
-expenseCategory:expense.category,
-expenseType:expense.type,
-expenseCashFlowType:expense.cashFlowType,
-expenseReportGroup:expense.reportGroup,
-expenseNormalBalance:expense.normalBalance,
- 
-accountCode: expense.code,
-accountName: expense.name,
-category: expense.category,
-cashFlowType: expense.cashFlowType,
-normalBalance: expense.normalBalance,
-reportGroup: expense.reportGroup,
+    accountCode:"MANUAL",
+    accountName:expense.name,
 
-    
+    accounts:[
+    {
+        accountCode:expense.code,
+        accountName:expense.name,
+
+        category:expense.category,
+        cashFlowType:expense.cashFlowType,
+        normalBalance:expense.normalBalance,
+        reportGroup:expense.reportGroup,
+
+        amount:amount
+    }
+    ],
+
+    beneficiaries:[],
+
+    consultantNo:"-",
+    consultantName:payee,
 
     payee,
-   
+
     description:
     document.getElementById("description").value,
 
@@ -281,7 +293,6 @@ reportGroup: expense.reportGroup,
 
     createdAt:new Date()
 });
-
 
  
 alert(
