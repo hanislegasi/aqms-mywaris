@@ -233,6 +233,14 @@ document.getElementById("accountCode").value;
 const expense =
 coaMap[expenseCode];
 
+console.log("Expense Code:", expenseCode);
+console.log("Expense:", expense);
+
+console.log({
+    expenseCode: expense.code,
+    expenseName: expense.name
+});
+ 
 await addDoc(
 collection(db,"paymentVouchers"),
 {
