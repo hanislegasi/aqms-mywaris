@@ -103,7 +103,8 @@ updateDoc,
 addDoc,
 query,
 orderBy,
-limit
+limit,
+deleteDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -181,25 +182,44 @@ pv.createdAt.seconds*1000
     </td>
 
                     <td class="p-3 text-center">
-                        <a href="payment-voucher-view.html?id=${d.id}" class="inline-block w-28 text-center bg-blue-600 text-white py-2 rounded-lg">
-                            View
-                        </a>
-                        ${pv.status === "PENDING" ? 
-                            `<button onclick="markPaid(
+
+<a
+href="payment-voucher-view.html?id=${d.id}"
+class="inline-block w-24 text-center bg-blue-600 text-white py-2 rounded-lg">
+View
+</a>
+
+${pv.status==="PENDING"
+?
+`
+<button
+onclick="markPaid(
 '${d.id}',
 '${pv.type || "CONSULTANT"}',
 '${pv.payee || pv.consultantName}',
 ${pv.amount}
-)" class="w-28 bg-green-600 text-white py-2 rounded-lg">
-                                Mark Paid
-                            </button>` 
-                            : 
-                            `<button class="bg-white border border-green-600 text-green-600 px-4 py-2 rounded-lg font-semibold cursor-default">
-                                PAID
-                            </button>`
-                        }
-                    </td>
-                </tr>
+)"
+class="w-24 bg-green-600 text-white py-2 rounded-lg mt-2">
+Mark Paid
+</button>
+
+<button
+onclick="deletePV('${d.id}')"
+class="w-24 bg-red-600 text-white py-2 rounded-lg mt-2">
+Delete
+</button>
+`
+:
+`
+<button
+class="w-24 bg-white border border-green-600 text-green-600 py-2 rounded-lg font-semibold cursor-default mt-2">
+PAID
+</button>
+`
+}
+
+</td>
+</tr>
             `;
         });
 
@@ -219,6 +239,23 @@ amount
             }
 
 
+window.deletePV = async(id)=>{
+
+if(!confirm("Delete this Payment Voucher?")){
+    return;
+}
+
+await deleteDoc(
+doc(db,"paymentVouchers",id)
+);
+
+alert("Payment Voucher Deleted");
+
+location.reload();
+
+};
+           
+           
 const pvDoc = 
 await getDoc(doc(db, "paymentVouchers", pvId)
 );
