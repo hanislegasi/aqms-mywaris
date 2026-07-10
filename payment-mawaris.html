@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pembayaran</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body{
+font-family:Inter,sans-serif;
+}
+</style>
+  
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-5">
+
+<div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl">
+
+<h1 class="text-3xl font-bold text-[#153638] mb-2">
+Mawaris
+</h1>
+
+<p class="text-gray-500 mb-8">
+Bayaran Pendaftaran
+</p>
+
+<div class="bg-gray-100 rounded-2xl p-5 mb-8">
+
+<div class="flex justify-between mb-3">
+
+<span>
+Produk
+</span>
+
+<span class="font-semibold">
+Mawaris
+</span>
+
+</div>
+
+<div class="flex justify-between">
+
+<span>
+Jumlah
+</span>
+
+<span class="text-2xl font-bold text-[#153638]">
+RM350
+</span>
+
+</div>
+
+</div>
+
+<button
+id="payBtn"
+class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-4 rounded-2xl font-semibold">
+
+Bayar Sekarang
+
+</button>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+updateDoc,
+getDoc,
+increment,
+collection,
+getDocs,
+addDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = {
+
+apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain: "alqawthar-mywaris.firebaseapp.com",
+projectId: "alqawthar-mywaris",
+storageBucket: "alqawthar-mywaris.firebasestorage.app",
+messagingSenderId: "3498810778",
+appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+let currentUser = null;
+
+onAuthStateChanged(auth,(user)=>{
+
+if(!user){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+currentUser = user;
+
+});
+
+document
+.getElementById("payBtn")
+.addEventListener("click", async()=>{
+
+const btn =
+document.getElementById("payBtn");
+
+btn.disabled=true;
+
+btn.innerHTML="Memproses...";
+
+try{
+
+const userSnap =
+await getDoc(
+doc(db,"users",currentUser.uid)
+);
+
+const userData =
+userSnap.data();
+
+if(userData.mawarisPaymentStatus==="paid"){
+
+btn.disabled=false;
+btn.innerHTML="Bayar Sekarang";
+
+alert("Pembayaran telah direkodkan.");
+
+window.location.href="dashboard.html";
+
+return;
+
+}
+
+  
+// ambil counter
+const counterRef =
+doc(
+db,
+"system",
+"counter"
+);
+
+const counterSnap =
+await getDoc(counterRef);
+
+const txnDate = new Date();
+
+const saleAmount = 350;
+  
+let memberNo =
+userData.memberNo;
+
+if(!memberNo){
+
+const currentNo =
+counterSnap.data().memberCounter || 0;
+
+const newNo =
+currentNo + 1;
+
+memberNo =
+"AQM" +
+String(newNo).padStart(4,"0");
+
+await updateDoc(counterRef,{
+memberCounter:increment(1)
+});
+
+}
+
+  
+
+
+
+// up user
+const updateData={
+
+mawarisPaymentStatus:"paid",
+
+memberSince:txnDate.toISOString(),
+
+expiryDate:(()=>{
+
+const d=new Date(txnDate);
+d.setFullYear(d.getFullYear()+1);
+return d.toISOString();
+
+})()
+
+};
+
+
+if(!userData.memberNo){
+
+updateData.memberNo=memberNo;
+
+}
+
+await updateDoc(
+doc(db,"users",currentUser.uid),
+updateData
+);
+
+const customerSnap =
+await getDoc(
+doc(db,"users",currentUser.uid)
+);
+
+const customer =
+customerSnap.data();
+  
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:txnDate,
+
+accountCode:"4010",
+account:"Sales - Mawaris",
+
+category:"income",
+
+description:
+memberNo + " " + customer.nama,
+
+debit:0,
+
+credit:saleAmount,
+
+transactionGroup:memberNo,
+paymentType:"CUSTOMER",
+sourceAccount:"4010",
+  
+}
+);
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:txnDate,
+
+accountCode:"1000",
+account:"Bank",
+
+category:"asset",
+
+description:
+memberNo + " " + customer.nama,
+
+debit:saleAmount,
+credit:0,
+
+paymentType:"CUSTOMER",
+sourceAccount:"4010",
+transactionGroup:memberNo
+});
+  
+const compensationSnap =
+await getDoc(
+doc(
+db,
+"settings",
+"compensation"
+)
+);
+
+const comp =
+compensationSnap.data();
+
+
+
+// Allocation Pool (future validation)
+const commissionPool =
+saleAmount *
+(comp.commissionPool / 100);
+
+const overridePool =
+saleAmount *
+(comp.overridePool / 100);
+
+
+
+const company =
+saleAmount *
+(comp.companyPool / 100);
+
+const allowance =
+saleAmount *
+(comp.allowance / 100);
+
+const adminOperation =
+saleAmount *
+(comp.adminOperation / 100);
+
+const royalty =
+saleAmount *
+(comp.royalty / 100);
+
+const usbAmount =
+saleAmount *
+(comp.usb / 100);
+
+  
+await addDoc(
+collection(
+db,
+"companyAllocation"
+),
+{
+createdAt:txnDate,
+
+memberNo,
+customerName:
+customer.nama,
+
+product:
+"Mawaris",
+
+sale:
+saleAmount,
+
+
+company,
+
+allowance,
+adminOperation,
+royalty
+}
+);
+
+
+
+
+const consultantSnap =
+await getDocs(
+collection(db,"consultants")
+);
+
+const allConsultants = [];
+
+consultantSnap.forEach((d)=>{
+
+allConsultants.push({
+id:d.id,
+...d.data()
+});
+
+});
+  
+function getOverrideRate(level){
+
+if(level === "AQC") return 0;
+if(level === "AQC-AS") return 3;
+if(level === "AQC-UM") return 7;
+if(level === "MGAM") return 12;
+
+return 0;
+
+}
+
+function getCommissionRate(level){
+
+if(level === "AQC") return 35;
+
+if(level === "AQC-AS") return 38;
+
+if(level === "AQC-UM") return 40;
+
+if(level === "MGAM") return 45;
+
+return 35;
+
+}
+  
+  
+function findConsultant(no){
+
+return allConsultants.find(
+u=>u.consultantNo===no
+);
+
+}
+
+const directConsultant =
+findConsultant(
+customer.referral
+);
+  
+let currentConsultant =
+findConsultant(
+customer.referral
+);
+
+// =====================
+// UPLINE SPONSOR BENEFIT
+// =====================
+
+const sponsor =
+directConsultant
+? findConsultant(directConsultant.upline)
+: null;
+
+if(sponsor){
+
+const usbAmount =
+saleAmount *
+(comp.usb / 100);
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:txnDate,
+
+accountCode:"5150",
+account:"Upline Sponsor Benefit",
+
+category:"expense",
+
+consultantNo:
+sponsor.consultantNo,
+
+consultantName:
+sponsor.nama,
+
+description:
+sponsor.consultantNo +
+" USB",
+
+debit:usbAmount,
+credit:0,
+
+transactionGroup:memberNo,
+paymentType:"USB"
+
+});
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:txnDate,
+
+accountCode:"2150",
+account:"USB Payable",
+
+category:"liability",
+
+consultantNo:
+sponsor.consultantNo,
+
+consultantName:
+sponsor.nama,
+
+description:
+sponsor.consultantNo +
+" USB",
+
+debit:0,
+credit:usbAmount,
+
+transactionGroup:memberNo,
+paymentType:"USB"
+
+});
+
+await updateDoc(
+
+doc(
+db,
+"consultants",
+sponsor.id
+),
+
+{
+
+totalUSB:
+increment(usbAmount)
+
+}
+
+);
+
+}
+
+
+  
+if(directConsultant){
+
+const commissionRate =
+getCommissionRate(
+directConsultant.consultantLevel
+);
+
+const commissionAmount =
+saleAmount *
+commissionRate /
+100;
+
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:txnDate,
+
+accountCode:"5000",
+account:"Consultant Commission",
+
+category:"expense",
+
+consultantNo:directConsultant.consultantNo,
+consultantName:directConsultant.nama,
+
+description:
+directConsultant.consultantNo +
+" " +
+directConsultant.nama,
+
+debit:commissionAmount,
+credit:0
+}
+);
+  
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:txnDate,
+
+accountCode:"2000",
+account:"Commission Payable",
+
+consultantNo:
+directConsultant.consultantNo,
+
+consultantName:
+directConsultant.nama,
+  
+category:"liability",
+
+description:
+directConsultant.consultantNo +
+" " +
+directConsultant.nama,
+
+debit:0,
+
+credit:commissionAmount
+
+}
+);
+
+await updateDoc(
+doc(db,"consultants",directConsultant.id),
+{
+activeClients: increment(1),
+totalSales: increment(saleAmount),
+careerSales: increment(saleAmount),
+totalCommission: increment(commissionAmount),
+
+}
+);
+  
+}
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:txnDate,
+
+accountCode:"5200",
+account:"Allowance Expense",
+
+category:"expense",
+
+description:"Allowance Allocation",
+
+debit:allowance,
+credit:0
+});
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:txnDate,
+
+accountCode:"2200",
+account:"Allowance Payable",
+
+category:"liability",
+
+description:"Allowance Allocation",
+
+debit:0,
+credit:allowance
+});
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:txnDate,
+
+accountCode:"5300",
+account:"Royalty Expense",
+
+category:"expense",
+
+description:"Royalty Allocation",
+
+debit:royalty,
+credit:0
+});
+
+await addDoc(
+collection(db,"ledger"),
+{
+date:txnDate,
+
+accountCode:"2300",
+account:"Royalty Payable",
+
+category:"liability",
+
+description:"Royalty Allocation",
+
+debit:0,
+credit:royalty
+});
+
+  
+while(currentConsultant){
+
+const upline =
+findConsultant(
+currentConsultant.upline
+);
+
+if(!upline) break;
+
+const diffRate =
+Math.max(
+0,
+getOverrideRate(
+upline.consultantLevel
+)
+-
+getOverrideRate(
+currentConsultant.consultantLevel
+)
+);
+
+const overrideAmount =
+saleAmount *
+diffRate / 100;
+
+if(overrideAmount <= 0){
+
+currentConsultant = upline;
+
+continue;
+
+}
+
+  
+await addDoc(
+collection(db,"ledger"),
+{
+date:txnDate,
+
+accountCode:"5100",
+account:"Consultant Override",
+
+category:"expense",
+
+consultantNo:upline.consultantNo,
+consultantName:upline.nama,
+
+description:
+upline.consultantNo +
+" " +
+upline.nama,
+
+debit:overrideAmount,
+credit:0
+}
+);
+  
+
+await addDoc(
+collection(db,"ledger"),
+{
+
+date:txnDate,
+
+accountCode:"2100",
+account:"Override Payable",
+
+consultantNo:
+upline.consultantNo,
+
+consultantName:
+upline.nama,
+  
+category:"liability",
+
+description:
+upline.consultantNo +
+" " +
+upline.nama,
+
+debit:0,
+
+credit:overrideAmount
+
+}
+);
+  
+await updateDoc(
+doc(
+db,
+"consultants",
+upline.id
+),
+{
+careerSales: increment(saleAmount),
+totalOverriding: increment(overrideAmount)
+}
+);
+
+await addDoc(
+collection(
+db,
+"overrideHistory"
+),
+{
+
+createdAt:txnDate,
+
+customerNo:
+memberNo,
+
+customerName:
+customer.nama,
+
+fromConsultant:
+currentConsultant.consultantNo,
+
+fromName:
+currentConsultant.nama,
+
+fromLevel:
+currentConsultant.consultantLevel,
+
+receiver:
+upline.consultantNo,
+
+receiverName:
+upline.nama,
+
+receiverLevel:
+upline.consultantLevel,
+
+sales:saleAmount,
+
+diffRate:
+diffRate,
+
+override:
+overrideAmount
+
+}
+);
+
+currentConsultant =
+upline;
+
+}
+
+// =====================
+// CREATE PAYMENT RECEIPT
+// =====================
+
+await addDoc(
+collection(db,"receipts"),
+{
+
+receiptNo:
+"HIB-" + Date.now(),
+
+uid:currentUser.uid,
+
+memberNo:memberNo,
+
+payerName:customer.nama,
+
+serviceCode:"MAWARIS",
+
+serviceName:"Mawaris Registration",
+
+amount:saleAmount,
+
+paymentMethod:"ToyyibPay",
+
+status:"PAID",
+
+paymentDate:txnDate
+
+}
+);
+  
+alert(
+"Pembayaran berjaya"
+);
+
+window.location.href =
+"mawaris-page.html";
+
+}
+
+catch(error){
+
+btn.disabled=false;
+
+btn.innerHTML="Bayar Sekarang";
+  
+console.log(error);
+
+alert(
+"Ralat: "+error.message
+);
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
