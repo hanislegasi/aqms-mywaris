@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mawaris</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 min-h-screen" style="font-family: 'Inter', sans-serif;">
+
+<div class="bg-[#153638] text-white px-5 py-6 shadow">
+
+<div class="flex justify-between items-center">
+
+<div>
+
+<h1 class="text-2xl font-bold">
+my-Mawaris
+</h1>
+
+<p id="namaUser">
+Memuatkan...
+</p>
+
+</div>
+
+<button
+id="notifBtn"
+class="relative">
+
+<svg
+xmlns="http://www.w3.org/2000/svg"
+class="w-7 h-7"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M15 17h5l-1.405-1.405A2.032
+2.032 0 0118 14.158V11a6.002
+6.002 0 00-4-5.659V5a2 2 0
+10-4 0v.341C7.67 6.165 6 8.388
+6 11v3.159c0 .538-.214 1.055-.595
+1.436L4 17h5m6 0v1a3 3 0
+11-6 0v-1m6 0H9"/>
+
+</svg>
+
+<span
+id="notifCount"
+class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 rounded-full hidden">
+
+0
+
+</span>
+
+</button>
+
+</div>
+
+</div>
+
+<div class="p-5">
+
+<a
+href="dashboard.html"
+class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+
+← Kembali ke Dashboard
+
+</a>
+  
+<div
+id="notifPanel"
+class="hidden absolute top-20 right-5 w-96 bg-white shadow-2xl rounded-2xl p-4 z-50">
+
+<h3 class="font-bold mb-3">
+Notifikasi
+</h3>
+
+<div id="notifList"></div>
+
+</div>
+  
+
+<h2 class="font-bold text-xl mb-4">
+Mawaris
+</h2>
+
+<div
+id="profileCard"
+class="bg-white rounded-2xl shadow p-5 mb-6">
+
+Loading...
+
+</div>
+  
+
+
+<div id="mawarisNotification"></div>
+
+
+
+  
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+
+<a
+id="mawarisButton"
+href="payment-mawaris.html"
+class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-gray-100 min-h-[120px]">
+<div class="flex items-center gap-4">
+
+  <!-- ICON -->
+  <div class="bg-[#153638]/10 p-3 rounded-xl">
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+class="w-8 h-8"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-1.042-.133-2.052-.382-3.016z"/>
+
+</svg>
+
+  </div>
+
+  <div>
+
+    <p class="text-base md:text-lg font-semibold">
+      Mawaris
+    </p>
+
+    <p
+      id="mawarisStatus"
+      class="text-xs md:text-sm text-gray-500 mt-1">
+
+      Memuatkan status...
+
+    </p>
+
+  </div>
+
+</div>
+
+</a>
+
+ 
+</div>
+
+<hr class="my-8">
+
+<div class="flex justify-end gap-3">
+
+<a
+href="payment-aqm-receipts.html"
+class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold">
+
+🧾 Resit Saya
+
+</a>
+
+<button
+id="logoutBtn"
+class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold">
+
+Logout
+
+</button>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+getDocs,
+collection,
+updateDoc,
+query  
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";  
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain: "alqawthar-mywaris.firebaseapp.com",
+projectId: "alqawthar-mywaris",
+storageBucket: "alqawthar-mywaris.firebasestorage.app",
+messagingSenderId: "3498810778",
+appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+let currentUser = null;  
+
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user){
+window.location.href="login.html";
+return;
+}
+
+currentUser = user;
+
+const docSnap =
+await getDoc(
+doc(db,"users",user.uid)
+);
+
+if(docSnap.exists()){
+
+const userData =
+docSnap.data();
+  
+document.getElementById(
+"namaUser"
+).innerHTML =
+"Selamat datang, "
++ userData.nama;
+
+const mawarisSnap =
+await getDoc(
+   doc(
+      db,
+      "users",
+      user.uid,
+      "mawaris",
+      "maklumat"
+   )
+);
+
+const mawarisData =
+mawarisSnap.exists()
+? mawarisSnap.data()
+: {};
+
+let bakiHari = "-";
+
+if(mawarisData.expiryDate){
+
+const today =
+new Date();
+
+const expiry =
+new Date(
+mawarisData.expiryDate
+);
+
+bakiHari =
+Math.ceil(
+(expiry - today)
+/ (1000 * 60 * 60 * 24)
+);
+
+}
+
+let renewalAlert = "";
+
+if(
+bakiHari !== "-" &&
+bakiHari <= 30 &&
+bakiHari > 0
+){
+
+renewalAlert = `
+
+<div
+class="bg-orange-50 border border-orange-300 rounded-xl p-4 mb-6">
+
+<h3 class="font-bold text-orange-700">
+⚠ Keahlian Akan Tamat
+</h3>
+
+<p class="mt-1">
+Keahlian anda akan tamat dalam
+<strong>${bakiHari} hari</strong>.
+</p>
+
+<a
+href="renewal.html"
+class="inline-block mt-3 bg-orange-500 text-white px-4 py-2 rounded-lg">
+
+Perbaharui Sekarang
+
+</a>
+
+</div>
+
+`;
+
+}
+  
+if(mawarisData.docRef){
+
+document.getElementById(
+"mawarisStatus"
+).innerHTML =
+mawarisData.docRef;
+
+}else{
+
+document.getElementById(
+"mawarisStatus"
+).innerHTML =
+"DRAFT";
+
+}
+
+  
+document.getElementById(
+"profileCard"
+).innerHTML =
+
+renewalAlert +
+
+`
+
+<div
+class="bg-gradient-to-r from-[#153638] to-[#24575a]
+text-white rounded-2xl p-6 mb-6 shadow">
+<div class="flex justify-between items-center">
+
+<div>
+
+<p class="text-sm opacity-80">
+Profil Pemawaris
+</p>
+
+<h2 class="text-2xl font-bold mt-1">
+${userData.nama || "-"}
+</h2>
+
+<p class="opacity-90 mt-1">
+${userData.ic || "-"}
+</p>
+
+<p class="opacity-90">
+${userData.telefon || "-"}
+</p>
+
+<p class="opacity-80 text-sm">
+No Ahli: ${userData.memberNo || "Belum Aktif"}
+</p>
+
+<p class="opacity-80 text-sm">
+Tamat Keahlian:
+${
+mawarisData.expiryDate
+? new Date(mawarisData.expiryDate)
+.toLocaleDateString("ms-MY")
+: "-"
+}
+</p>
+
+<p class="opacity-80 text-sm">
+Baki:
+${bakiHari} Hari
+</p>
+
+<span class="
+inline-block
+mt-2
+px-3
+py-1
+rounded-full
+bg-white/20
+text-sm">
+
+${
+bakiHari <= 0
+? "KEAHLIAN TAMAT"
+: userData.paymentStatus === "paid"
+? "AHLI AKTIF"
+: "PROSPEK"
+}
+
+</span>
+
+</div>
+
+<div
+class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold">
+
+${(userData.nama || "U")[0]}
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+  
+
+
+  
+if(mawarisData.status === "UNDER_REVIEW"){
+  
+document.getElementById(
+"mawarisNotification"
+).innerHTML = `
+
+
+
+<div class="bg-yellow-50 border border-yellow-300 rounded-xl p-4">
+
+<h3 class="font-bold">
+Permohonan Mawaris Sedang Disemak
+</h3>
+
+<p>
+Permohonan anda sedang dalam proses semakan.
+</p>
+
+</div>
+
+`;  
+
+}
+
+
+
+const notifSnap =
+await getDocs(
+   collection(
+      db,
+      "users",
+      user.uid,
+      "notifications"
+   )
+);
+
+let notifHTML = "";
+let unread = 0;
+
+notifSnap.forEach((notifDoc)=>{
+
+   const notif =
+notifDoc.data();
+
+   if(!notif.read){
+
+      unread++;
+
+   }
+
+ if(!window.firstUnreadId){
+
+window.firstUnreadId =
+notifDoc.id;
+
+}
+  
+   notifHTML += `
+
+<div class="border-b py-3">
+
+<p class="font-semibold">
+${notif.title}
+</p>
+
+<p class="text-sm text-gray-600">
+${notif.message}
+</p>
+
+${
+bakiHari <= 0
+
+?
+
+`<a
+href="renewal.html"
+class="inline-block mt-3 bg-red-600 text-white px-4 py-2 rounded-lg">
+
+Perbaharui Keahlian
+
+</a>`
+
+:
+
+`<a
+href="preview-mawaris.html"
+class="inline-block mt-3 bg-green-600 text-white px-4 py-2 rounded-lg">
+
+Lihat Dokumen
+
+</a>`
+
+}
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"notifList"
+).innerHTML = notifHTML;
+
+if(unread > 0){
+
+   document.getElementById(
+      "notifCount"
+   ).innerHTML = unread;
+
+   document.getElementById(
+      "notifCount"
+   ).classList.remove("hidden");
+
+}
+
+const readNotif =
+notifSnap.docs.find(
+d => d.data().read === true
+);
+
+if(readNotif){
+
+const notif =
+readNotif.data();
+
+document.getElementById(
+"mawarisNotification"
+).innerHTML = `
+
+<div class="bg-green-50 border border-green-300 rounded-xl p-4 mb-6">
+
+<div class="flex items-center gap-2 mb-2">
+
+<svg
+xmlns="http://www.w3.org/2000/svg"
+class="w-5 h-5 text-green-600"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M5 13l4 4L19 7"/>
+
+</svg>
+
+<h3 class="font-bold text-green-800">
+Dokumen Mawaris Diluluskan
+</h3>
+
+</div>
+
+<p>
+No Dokumen:
+<strong>${mawarisData.docRef}</strong>
+</p>
+
+<p class="mt-1">
+Tarikh Kelulusan:
+${new Date(mawarisData.approvedAt)
+.toLocaleDateString("ms-MY")}
+</p>
+
+<p class="mt-1">
+Dokumen Sah Sehingga:
+<strong>
+${new Date(mawarisData.expiryDate)
+.toLocaleDateString("ms-MY")}
+</strong>
+</p>
+
+${
+bakiHari <= 0
+
+?
+
+`
+
+<a
+href="renewal.html"
+class="inline-block mt-3 bg-red-600 text-white px-4 py-2 rounded-lg">
+
+Perbaharui Keahlian
+
+</a>
+
+`
+
+:
+
+`
+
+<a
+href="preview-mawaris.html"
+class="inline-block mt-3 bg-green-600 text-white px-4 py-2 rounded-lg">
+
+Lihat Dokumen
+
+</a>
+
+`
+
+}
+</div>
+
+`;
+
+}
+  
+// PAYMENT STATUS
+
+
+if(userData.paymentStatus === "paid"){
+
+  if(bakiHari <= 0){
+
+    document.getElementById(
+      "mawarisButton"
+    ).href = "renewal.html";
+
+    document.getElementById(
+"mawarisStatus"
+).innerHTML = `
+
+<svg
+xmlns="http://www.w3.org/2000/svg"
+class="w-5 h-5 inline text-amber-600"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M12 11c1.657 0 3-1.343 3-3V7a3 3 0 10-6 0v1c0 1.657 1.343 3 3 3zm-6 0h12a1 1 0 011 1v7a2 2 0 01-2 2H7a2 2 0 01-2-2v-7a1 1 0 011-1z"/>
+
+</svg>
+
+Keahlian Tamat
+
+`;
+
+  }
+
+  else{
+
+    document.getElementById(
+    "mawarisButton"
+).href = "mawaris.html";
+
+  }
+
+}
+
+else{
+
+  document.getElementById(
+    "mawarisButton"
+  ).href = "payment-mawaris.html";
+
+  document.getElementById(
+    "mawarisStatus"
+  ).innerHTML =
+
+  "Bayar RM350";
+
+}
+
+
+document
+.getElementById("logoutBtn")
+.addEventListener("click", async()=>{
+
+  try{
+
+    await signOut(auth);
+
+    localStorage.clear();
+
+    sessionStorage.clear();
+
+    window.location.replace(
+      "index.html"
+    );
+
+  }
+
+  catch(error){
+
+    console.log(error);
+
+  }
+
+});
+
+document
+.getElementById("notifBtn")
+.addEventListener("click", async()=>{
+
+document
+.getElementById("notifPanel")
+.classList.toggle("hidden");
+
+if(window.firstUnreadId){
+
+await updateDoc(
+
+doc(
+db,
+"users",
+currentUser.uid,
+"notifications",
+window.firstUnreadId
+),
+
+{
+read:true
+}
+
+);
+
+document
+.getElementById("notifCount")
+.classList.add("hidden");
+
+}
+
+});
+
+} // PENUTUP if(docSnap.exists()){ YANG TERCICIR
+}); // PENUTUP onAuthStateChanged YANG TERCICIR
+  
+</script>
+  
+</body>
+</html>
