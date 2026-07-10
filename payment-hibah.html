@@ -21,7 +21,7 @@ font-family:Inter,sans-serif;
 <div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl">
 
 <h1 class="text-3xl font-bold text-[#153638] mb-2">
-Wasiat + Hibah
+Hibah
 </h1>
 
 <p class="text-gray-500 mb-8">
@@ -49,7 +49,7 @@ Jumlah
 </span>
 
 <span class="text-2xl font-bold text-[#153638]">
-RM2,500
+RM350
 </span>
 
 </div>
@@ -146,7 +146,7 @@ doc(db,"users",currentUser.uid)
 const userData =
 userSnap.data();
 
-if(userData.paymentStatus==="paid"){
+if(userData.hibahPaymentStatus==="paid"){
 
 btn.disabled=false;
 btn.innerHTML="Bayar Sekarang";
@@ -173,7 +173,7 @@ await getDoc(counterRef);
 
 const txnDate = new Date();
 
-const saleAmount = 2500;
+const saleAmount = 350;
   
 let memberNo =
 userData.memberNo;
@@ -203,7 +203,7 @@ memberCounter:increment(1)
 // up user
 const updateData={
 
-paymentStatus:"paid",
+hibahPaymentStatus:"paid",
 
 memberSince:txnDate.toISOString(),
 
@@ -216,6 +216,7 @@ return d.toISOString();
 })()
 
 };
+
 
 if(!userData.memberNo){
 
@@ -242,7 +243,7 @@ collection(db,"ledger"),
 
 date:txnDate,
 
-accountCode:"4020",
+accountCode:"4010",
 account:"Sales - Hibah",
 
 category:"income",
@@ -256,7 +257,7 @@ credit:saleAmount,
 
 transactionGroup:memberNo,
 paymentType:"CUSTOMER",
-sourceAccount:"4020",
+sourceAccount:"4010",
   
 }
 );
@@ -278,7 +279,7 @@ debit:saleAmount,
 credit:0,
 
 paymentType:"CUSTOMER",
-sourceAccount:"4020",
+sourceAccount:"4010",
 transactionGroup:memberNo
 });
   
@@ -341,7 +342,7 @@ customerName:
 customer.nama,
 
 product:
-"Wasiat + Hibah",
+"Hibah",
 
 sale:
 saleAmount,
@@ -841,7 +842,7 @@ alert(
 );
 
 window.location.href =
-"dashboard.html";
+"hibah-page.html";
 
 }
 
