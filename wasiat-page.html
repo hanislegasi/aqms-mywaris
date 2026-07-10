@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Mawaris</title>
+<title>Wasiat</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,7 @@
 <div>
 
 <h1 class="text-2xl font-bold">
-Mawaris
+Wasiat
 </h1>
 
 <p id="namaUser">
@@ -67,6 +67,14 @@ class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 rounded-full 
 
 </div>
 
+<a
+href="dashboard.html"
+class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+
+← Dashboard
+
+</a>
+  
 <div
 id="notifPanel"
 class="hidden absolute top-20 right-5 w-96 bg-white shadow-2xl rounded-2xl p-4 z-50">
@@ -82,7 +90,7 @@ Notifikasi
 <div class="p-5">
 
 <h2 class="font-bold text-xl mb-4">
-Perkhidmatan
+Wasiat
 </h2>
 
 <div
@@ -147,185 +155,7 @@ d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618
 
 </a>
 
-<a
-id="hibahButton"
-href="payment-hibah.html"
-class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-gray-100 min-h-[120px]">
-
-<div class="flex items-center gap-4">
-
-  <!-- ICON -->
-   <div class="bg-[#153638]/10 p-3 rounded-xl">
-
-  <svg xmlns="http://www.w3.org/2000/svg"
-fill="none"
-viewBox="0 0 24 24"
-stroke-width="1.5"
-stroke="currentColor"
-class="w-6 h-6">
-    
-  <path stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M12 4.5v15m-7.5-9h15M21 7.5H3v3h18v-3Zm-1.5 3v9a1.5 1.5 0 0 1-1.5 1.5h-12A1.5 1.5 0 0 1 4.5 19.5v-9" />
-</svg>
-
-  </div>  
-  
-<div>
-
-  <p class="text-base md:text-lg font-semibold">
-    Hibah
-  </p>
-
-  <p
-    id="hibahStatus"
-    class="text-xs md:text-sm text-gray-500 mt-1">
-
-    Memuatkan status...
-
-  </p>
-
-</div>
-
-</div>
-
-</a>
-
-<a
-id="pusakaButton"
-href="payment-pusaka.html"
-class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-gray-100 min-h-[120px]">
-
-<div class="flex items-center gap-4">
-
-  <!-- ICON -->
-  <div class="bg-[#153638]/10 p-3 rounded-xl">
-
-    <svg xmlns="http://www.w3.org/2000/svg"
-      class="w-7 h-7 text-[#153638]"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor">
-
-      <path
-        stroke-linecap="round"
-  stroke-linejoin="round"
-  stroke-width="1.8"
-  d="M3 10l9-7 9 7v9a2 2 0 01-2 2h-4v-6H9v6H5a2 2 0 01-2-2v-9z"/>
-
-    </svg>
-
-  </div>  
-  
-<div>
-
-  <p class="text-base md:text-lg font-semibold">
-    Harta Sepencarian
-  </p>
-
-  <p
-    id="pusakaStatus"
-    class="text-xs md:text-sm text-gray-500 mt-1">
-
-    Memuatkan status...
-
-  </p>
-
-</div>
-
-</div>
-
-</a>
-
-<a
-id="mawarisButton"
-href="payment-mawaris.html"
-class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-gray-100 min-h-[120px]">
-
-<div class="flex items-center gap-4">
-
-  <!-- ICON -->
-  <div class="bg-[#153638]/10 p-3 rounded-xl">
-
-    <svg xmlns="http://www.w3.org/2000/svg"
-      class="w-7 h-7 text-[#153638]"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor">
-
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="1.8"
-        d="M9 12h6m-6 4h6M7 4h10a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z"/>
-
-    </svg>
-
-  </div>  
-  
-<div>
-
-  <p class="text-base md:text-lg font-semibold">
-    Mawaris
-  </p>
-
-  <p
-    id="mawarisStatus"
-    class="text-xs md:text-sm text-gray-500 mt-1">
-
-    Memuatkan status...
-
-  </p>
-
-</div>
-
-</div>
-
-</a>
-
-
-  
-<a
-href="dokumen.html"
-class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-gray-100 min-h-[120px]">
-
-<div class="flex items-center gap-4">
-
-  <!-- ICON -->
-  <div class="bg-[#153638]/10 p-3 rounded-xl">
-
-    <svg xmlns="http://www.w3.org/2000/svg"
-      class="w-7 h-7 text-[#153638]"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor">
-
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="1.8"
-        d="M9 12h6m-6 4h6M7 4h10a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z"/>
-
-    </svg>
-
-  </div>
-  
-<div>
-
-  <p class="text-base md:text-lg font-semibold">
-    Dokumen Saya
-  </p>
-
-  <p class="text-xs md:text-sm text-gray-500 mt-1">
-    Muat naik dokumen penting
-  </p>
-
-</div>
-
-</div>
-
-</a>
-  
+ 
 </div>
 
 <hr class="my-8">
