@@ -146,7 +146,7 @@ doc(db,"users",currentUser.uid)
 const userData =
 userSnap.data();
 
-if(userData.paymentStatus==="paid"){
+if(userData.wasiatPaymentStatus==="paid"){
 
 btn.disabled=false;
 btn.innerHTML="Bayar Sekarang";
@@ -203,7 +203,7 @@ memberCounter:increment(1)
 // up user
 const updateData={
 
-paymentStatus:"paid",
+wasiatPaymentStatus:"paid",
 
 memberSince:txnDate.toISOString(),
 
@@ -216,6 +216,7 @@ return d.toISOString();
 })()
 
 };
+
 
 if(!userData.memberNo){
 
