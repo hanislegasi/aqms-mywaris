@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Preview Draf Wasiat + Harta Sepencarian</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- HEADER -->
+  <div class="bg-[#153638] text-white p-5 shadow">
+
+    <h1 class="text-2xl font-bold">
+      Preview Draf Wasiat + Harta Sepencarian
+    </h1>
+
+    <p class="text-gray-200">
+      Sila semak maklumat sebelum menghantar permohonan
+    </p>
+
+  </div>
+
+  <!-- DOCUMENT -->
+<div
+id="pdfContent"
+class="max-w-4xl mx-auto p-5">
+
+    <div class="bg-white rounded-2xl shadow p-8 space-y-8">
+
+      <!-- TITLE -->
+      <div class="text-center border-b pb-6">
+
+        <h1 class="text-3xl font-bold text-[#153638]">
+          DRAF MAKLUMAT DOKUMEN WASIAT
+        </h1>
+
+        <p class="text-gray-500 mt-2">
+          Al-Qawthar Mawaris Synergy
+        </p>
+
+      </div>
+
+     <!-- SECTION 1 -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+1. Butiran Wasiat
+</h2>
+
+<p><strong>Nama:</strong> <span id="nama"></span></p>
+<p><strong>No IC:</strong> <span id="ic"></span></p>
+<p><strong>Telefon:</strong> <span id="telefon"></span></p>
+<p><strong>Alamat:</strong> <span id="alamat"></span></p>
+
+</div>
+
+      
+<!-- SECTION 2 -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+2. Pelantikan Wasi
+</h2>
+
+<div id="wasiInfo"></div>
+
+</div>
+
+<!-- SECTION 3 -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+3. Wasiat 1/3
+</h2>
+
+<div id="wasiat13Summary"></div>
+
+</div>
+
+<!-- SECTION 4 -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+4. Pesanan Wasiat
+</h2>
+
+<p id="pesananPreview"></p>
+
+</div>
+
+<!-- SECTION 5 -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+5. Senarai Waris
+</h2>
+
+<div id="warisList"></div>
+
+</div>
+
+<!-- SECTION 6 -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+6. Pemegang Amanah
+</h2>
+
+<div id="amanahInfo"></div>
+
+</div>
+
+<!-- SECTION 7A -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+7A. Harta Alih
+</h2>
+
+<div id="hartaAlihList"></div>
+
+</div>
+
+<!-- SECTION 7B -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+7B. Harta Tak Alih
+</h2>
+
+<div id="hartaTakAlihList"></div>
+
+</div>
+
+<!-- SECTION 7C -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+7C. Harta Berpenama
+</h2>
+
+<div id="hartaBerpenamaList"></div>
+
+</div>
+
+<!-- SECTION 7D -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+7D. Takaful
+</h2>
+
+<div id="takafulList"></div>
+
+</div>
+
+<!-- SECTION 8A -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+8A. Pemiutang
+</h2>
+
+<div id="pemiutangList"></div>
+
+</div>
+
+<!-- SECTION 8B -->
+<div class="bg-gray-50 rounded-xl p-5 border">
+
+<h2 class="text-xl font-bold text-[#153638] mb-3">
+8B. Penghutang
+</h2>
+
+<div id="penghutangList"></div>
+
+</div>
+      
+<!-- LAMPIRAN -->
+<div>
+
+  <h2 class="text-2xl font-bold text-[#153638] mb-4">
+    Lampiran Dokumen
+  </h2>
+
+  <div
+    id="lampiranList"
+    class="space-y-3">
+  </div>
+
+</div>
+      
+      <!-- ACTION -->
+      <div class="pt-6 border-t space-y-3">
+
+        
+        
+        <button
+          id="submitBtn"
+          class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-lg font-semibold">
+
+          Hantar Permohonan
+
+        </button>
+
+        <a
+          href="mawaris.html"
+          class="block text-center bg-gray-200 hover:bg-gray-300 transition text-gray-700 py-3 rounded-lg font-semibold">
+
+          ← Kembali Edit Borang
+
+        </a>
+
+      </div>
+
+      <!-- STATUS -->
+      <p
+        id="status"
+        class="text-center text-green-600 font-medium">
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- FIREBASE -->
+  <script type="module">
+
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      updateDoc,
+      collection,
+      getDocs
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+
+      authDomain: "alqawthar-mywaris.firebaseapp.com",
+
+      projectId: "alqawthar-mywaris",
+
+      storageBucket: "alqawthar-mywaris.firebasestorage.app",
+
+      messagingSenderId: "3498810778",
+
+      appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+
+    };
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    const auth =
+      getAuth(app);
+
+    const db =
+      getFirestore(app);
+
+    let currentUser = null;
+
+    // CHECK LOGIN
+    onAuthStateChanged(auth, async(user)=>{
+
+      if(!user){
+
+        window.location.href =
+          "login.html";
+
+        return;
+
+      }
+
+      currentUser = user;
+
+      // GET DATA
+      const docRef =
+      doc(
+        db,
+        "users",
+        currentUser.uid,
+        "mawaris",
+        "maklumat"
+      );
+
+      const docSnap =
+      await getDoc(docRef);
+
+      if(docSnap.exists()){
+
+        const data =
+        docSnap.data();
+
+document.getElementById("nama").innerHTML =
+data.nama || "-";
+
+document.getElementById("ic").innerHTML =
+data.ic || "-";
+
+document.getElementById("telefon").innerHTML =
+data.telefon || "-";
+
+document.getElementById("alamat").innerHTML =
+data.alamat || "-";
+        
+document.getElementById("wasiInfo").innerHTML = `
+<p><strong>Wasi 1:</strong> ${data.namaWasi1 || "-"}</p>
+<p><strong>IC:</strong> ${data.icWasi1 || "-"}</p>
+
+<hr class="my-3">
+
+<p><strong>Wasi 2:</strong> ${data.namaWasi2 || "-"}</p>
+<p><strong>IC:</strong> ${data.icWasi2 || "-"}</p>
+`;
+
+let wasiat13HTML = "";
+
+(data.wasiatSatuPerTiga || []).forEach((item,index)=>{
+
+wasiat13HTML += `
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${index+1}. ${item.harta}</strong></p>
+
+<p>Bahagian: ${item.bahagian}</p>
+
+<p>Penerima: ${item.penerima}</p>
+
+<p>Nota: ${item.nota}</p>
+
+</div>
+`;
+
+});
+
+document.getElementById(
+"wasiat13Summary"
+).innerHTML = wasiat13HTML;
+
+document.getElementById(
+"pesananPreview"
+).innerHTML =
+data.pesananWasiat || "-";
+
+let warisHTML = "";
+
+(data.waris || []).forEach((waris,index)=>{
+
+warisHTML += `
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${index+1}. ${waris.nama}</strong></p>
+
+<p>No IC: ${waris.ic || "-"}</p>
+
+<p>Hubungan: ${waris.hubungan || "-"}</p>
+
+<p>Telefon: ${waris.telefon || "-"}</p>
+
+<p>Status: ${waris.status || "-"}</p>
+
+</div>
+`;
+
+});
+
+document.getElementById("warisList").innerHTML =
+warisHTML;
+
+document.getElementById(
+"amanahInfo"
+).innerHTML = `
+
+<p><strong>Nama:</strong>
+${data.pemegangAmanah?.nama || "-"}</p>
+
+<p><strong>IC:</strong>
+${data.pemegangAmanah?.ic || "-"}</p>
+
+<p><strong>Hubungan:</strong>
+${data.pemegangAmanah?.hubungan || "-"}</p>
+
+<p><strong>Telefon:</strong>
+${data.pemegangAmanah?.telefon || "-"}</p>
+
+`;
+
+let hartaAlihHTML = "";
+
+(data.hartaAlih || []).forEach((item,index)=>{
+
+hartaAlihHTML += `
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${index+1}. ${item.nama}</strong></p>
+
+<p>No Rujukan: ${item.rujukan || "-"}</p>
+
+<p>Pemilikan: ${item.pemilikan || "-"}</p>
+
+<p>Nilai: ${item.nilai || "-"}</p>
+
+<p>Kategori: ${item.kategori || "-"}</p>
+
+</div>
+`;
+
+});
+
+document.getElementById(
+"hartaAlihList"
+).innerHTML = hartaAlihHTML;
+
+        
+let hartaTakAlihHTML = "";
+
+(data.hartaTakAlih || []).forEach((item,index)=>{
+
+hartaTakAlihHTML += `
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${index+1}. ${item.nama}</strong></p>
+
+<p>No Geran: ${item.rujukan || "-"}</p>
+
+<p>Nilai: ${item.nilai || "-"}</p>
+
+<p>Alamat: ${item.alamat || "-"}</p>
+
+<p>Kategori: ${item.kategori || "-"}</p>
+
+</div>
+`;
+
+});
+
+document.getElementById(
+"hartaTakAlihList"
+).innerHTML = hartaTakAlihHTML;
+
+let hartaBerpenamaHTML = "";
+
+(data.hartaBerpenama || []).forEach((item,index)=>{
+
+hartaBerpenamaHTML += `
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${item.jenis}</strong></p>
+
+<p>No Akaun: ${item.akaun}</p>
+
+<p>Penama: ${item.penama}</p>
+
+<p>IC: ${item.ic}</p>
+
+<p>Hubungan: ${item.hubungan}</p>
+
+<p>Bahagian: ${item.bahagian}%</p>
+
+</div>
+`;
+
+});
+
+document.getElementById(
+"hartaBerpenamaList"
+).innerHTML = hartaBerpenamaHTML;
+
+let takafulHTML = "";
+
+(data.takaful || []).forEach((item,index)=>{
+
+takafulHTML +=`
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${item.syarikat}</strong></p>
+
+<p>Polisi: ${item.polisi}</p>
+
+<p>Penerima: ${item.penerima}</p>
+
+<p>IC: ${item.ic}</p>
+
+<p>Hubungan: ${item.hubungan}</p>
+
+<p>Bahagian: ${item.bahagian}%</p>
+
+</div>
+`;
+
+});
+
+document.getElementById(
+"takafulList"
+).innerHTML = takafulHTML;
+
+let pemiutangHTML = "";
+
+(data.pemiutang || []).forEach((item,index)=>{
+
+pemiutangHTML += `
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${item.nama}</strong></p>
+
+<p>Jenis Hutang: ${item.jenis}</p>
+
+<p>Baki Hutang: ${item.baki}</p>
+
+<p>Kaedah Penyelesaian: ${item.kaedah}</p>
+
+</div>
+`;
+
+});
+
+document.getElementById(
+"pemiutangList"
+).innerHTML = pemiutangHTML;
+
+let penghutangHTML = "";
+
+(data.penghutang || []).forEach((item,index)=>{
+
+penghutangHTML +=`
+<div class="border rounded-lg p-3 mb-3">
+
+<p><strong>${item.nama}</strong></p>
+
+<p>Jenis Hutang: ${item.jenis}</p>
+
+<p>Baki Hutang: ${item.baki}</p>
+
+<p>Kaedah Penyelesaian: ${item.kaedah}</p>
+
+</div>
+`;
+
+});
+
+document.getElementById(
+"penghutangList"
+).innerHTML = penghutangHTML;
+
+        
+// LOAD LAMPIRAN
+const snapshot =
+await getDocs(
+
+  collection(
+    db,
+    "users",
+    currentUser.uid,
+    "mawarisDocuments"
+  )
+
+);
+
+let lampiranHTML = "";
+
+snapshot.forEach((doc)=>{
+
+  const file =
+  doc.data();
+
+  lampiranHTML += `
+
+<div class="bg-gray-100 p-4 rounded-xl space-y-3">
+
+  <div class="flex justify-between items-center">
+
+    <p class="text-sm font-medium text-gray-700">
+      ${file.fileName}
+    </p>
+
+    <a
+      href="${file.fileURL}"
+      target="_blank"
+      class="text-[#153638] font-semibold">
+
+      Buka
+
+    </a>
+
+  </div>
+
+  ${
+    file.fileName.endsWith(".pdf")
+
+    ?
+
+    `
+
+    <iframe
+      src="${file.fileURL}"
+      class="w-full h-96 rounded-lg border">
+    </iframe>
+
+    `
+
+    :
+
+    `
+
+    <img
+      src="${file.fileURL}"
+      class="w-full rounded-lg border">
+
+    `
+  }
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+  "lampiranList"
+).innerHTML = lampiranHTML;
+        
+      }
+
+  
+      
+      // SUBMIT
+      document
+      .getElementById("submitBtn")
+      .addEventListener("click", async()=>{
+
+        try{
+
+          await updateDoc(
+
+            doc(
+              db,
+              "users",
+              currentUser.uid,
+              "mawaris",
+              "maklumat"
+            ),
+
+            {
+
+              status:
+              "UNDER_REVIEW",
+              submittedAt:
+              new Date().toISOString()
+            }
+
+          );
+
+          document.getElementById(
+            "status"
+          ).innerHTML =
+
+          "Permohonan wasiat berjaya dihantar.";
+
+        }
+
+        catch(error){
+
+          document.getElementById(
+            "status"
+          ).innerHTML =
+
+          error.message;
+
+        }
+
+      });
+
+    });
+
+  </script>
+
+</body>
+</html>
