@@ -49,7 +49,7 @@ Jumlah
 </span>
 
 <span class="text-2xl font-bold text-[#153638]">
-RM350
+RM2,500
 </span>
 
 </div>
@@ -173,7 +173,7 @@ await getDoc(counterRef);
 
 const txnDate = new Date();
 
-const saleAmount = 350;
+const saleAmount = 2500;
   
 let memberNo =
 userData.memberNo;
@@ -243,7 +243,7 @@ collection(db,"ledger"),
 
 date:txnDate,
 
-accountCode:"4010",
+accountCode:"4020",
 account:"Sales - Hibah",
 
 category:"income",
@@ -257,7 +257,7 @@ credit:saleAmount,
 
 transactionGroup:memberNo,
 paymentType:"CUSTOMER",
-sourceAccount:"4010",
+sourceAccount:"4020",
   
 }
 );
@@ -279,7 +279,7 @@ debit:saleAmount,
 credit:0,
 
 paymentType:"CUSTOMER",
-sourceAccount:"4010",
+sourceAccount:"4020",
 transactionGroup:memberNo
 });
   
