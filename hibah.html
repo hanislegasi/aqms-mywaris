@@ -931,7 +931,7 @@ class="bg-[#153638] text-white px-4 py-2 rounded-lg">
   </button>
 
   <a
-    href="dashboard.html"
+    href="hibah-page.html"
     class="block text-center bg-gray-200 hover:bg-gray-300 transition text-gray-700 py-3 rounded-lg font-semibold">
 
     ← Kembali ke Dashboard
@@ -939,10 +939,10 @@ class="bg-[#153638] text-white px-4 py-2 rounded-lg">
   </a>
 
   <a
-    href="preview-draf-wasiat.html"
+    href="preview-draf-hibah.html"
     class="block text-center bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-lg font-semibold">
 
-    Preview Wasiat →
+    Preview Hibah →
 
   </a>
 
@@ -1039,7 +1039,7 @@ await getDoc(
     db,
     "users",
     currentUser.uid,
-    "wasiat",
+    "hibah",
     "maklumat"
   )
 );
@@ -2255,7 +2255,7 @@ async function loadFiles(){
       db,
       "users",
       currentUser.uid,
-      "wasiatDocuments"
+      "hibahDocuments"
     )
 
   );
@@ -2370,7 +2370,7 @@ await addDoc(
     db,
     "users",
     currentUser.uid,
-    "wasiatDocuments"
+    "hibahDocuments"
   ),
 
   {
@@ -2426,7 +2426,7 @@ await addDoc(
    
     // SUBMIT FORM
     document
-      .getElementById("wasiatForm")
+      .getElementById("hibahForm")
       .addEventListener("submit", async(e)=>{
 
         e.preventDefault();
@@ -2790,7 +2790,7 @@ document.getElementById(
               db,
               "users",
               currentUser.uid,
-              "wasiat",
+              "hibah",
               "maklumat"
             ),
 
