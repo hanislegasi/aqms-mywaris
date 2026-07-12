@@ -1117,20 +1117,24 @@ document.getElementById(
 <input
 type="text"
 class="w-full border rounded-lg p-3 hartaWasiat"
+placeholder="Butiran Harta"
 value="${item.harta || ''}">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 bahagianWasiat"
+placeholder="Bahagian (RM atau %)"
 value="${item.bahagian || ''}">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 penerimaWasiat"
+placeholder="Penerima"
 value="${item.penerima || ''}">
 
 <textarea
-class="w-full border rounded-lg p-3 notaWasiat">${item.nota || ''}</textarea>
+class="w-full border rounded-lg p-3 notaWasiat"
+placeholder="Nota">${item.nota || ''}</textarea>
 
 </div>
 `
@@ -1158,21 +1162,25 @@ document.getElementById(
 <input
 type="text"
 class="w-full border rounded-lg p-3 namaWaris"
+placeholder="Nama Waris"
 value="${item.nama || ''}">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 icWaris"
+placeholder="No IC"
 value="${item.ic || ''}">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 hubunganWaris"
+placeholder="Hubungan"
 value="${item.hubungan || ''}">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 telefonWaris"
+placeholder="No Telefon"
 value="${item.telefon || ''}">
 
 <select
@@ -1321,11 +1329,13 @@ document.getElementById(
 <input
 type="text"
 class="w-full border rounded-lg p-3 namaHartaAlih"
+placeholder="Nama Harta"
 value="${item.nama || ''}">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 noRujukanAlih"
+placeholder="No Akaun / Rujukan"
 value="${item.rujukan || ''}">
 
 <select
@@ -1352,6 +1362,7 @@ Perkongsian Nama
 <input
 type="text"
 class="w-full border rounded-lg p-3 nilaiAlih"
+placeholder="Anggaran Nilai"
 value="${item.nilai || ''}">
 
 <select
@@ -1571,11 +1582,13 @@ document.getElementById(
 <input
 type="text"
 class="w-full border rounded-lg p-3 namaHartaTakAlih"
+placeholder="Nama Harta"
 value="${item.nama || ''}">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 noRujukanTakAlih"
+placeholder="No Geran / Rujukan"
 value="${item.rujukan || ''}">
 
 <select
@@ -1602,11 +1615,13 @@ Perkongsian Nama
 <input
 type="text"
 class="w-full border rounded-lg p-3 nilaiTakAlih"
+placeholder="Anggaran Nilai"
 value="${item.nilai || ''}">
 
 <textarea
 class="w-full border rounded-lg p-3 alamatTakAlih"
-rows="3">${item.alamat || ''}</textarea>
+rows="3"
+placeholder="Alamat Harta">${item.alamat || ''}</textarea>
 
 <select
 class="w-full border rounded-lg p-3 kategoriTakAlih">
@@ -1847,27 +1862,27 @@ ASB
 <input
 type="text"
 class="w-full border rounded-lg p-3 akaunBerpenama"
-value="${item.akaun || ''}"placeholder="No Akaun">
+value="${item.akaun || ''}" placeholder="No Akaun">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 penamaBerpenama"
-value="${item.penama || ''}"placeholder="Nama Penama">
+value="${item.penama || ''}" placeholder="Nama Penama">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 icPenamaBerpenama"
-value="${item.ic || ''}"placeholder="No IC">
+value="${item.ic || ''}" placeholder="No IC">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 hubunganPenamaBerpenama"
-value="${item.hubungan || ''}"placeholder="Hubungan">
+value="${item.hubungan || ''}" placeholder="Hubungan">
 
 <input
 type="number"
 class="w-full border rounded-lg p-3 bahagianBerpenama"
-value="${item.bahagian || ''}"placeholder="Bahagian (%)">
+value="${item.bahagian || ''}" placeholder="Bahagian (%)">
 
 <button
 type="button"
@@ -1905,32 +1920,32 @@ document.getElementById(
 <input
 type="text"
 class="w-full border rounded-lg p-3 syarikatTakaful"
-value="${item.syarikat || ''}"placeholder="Nama Syarikat">
+value="${item.syarikat || ''}" placeholder="Nama Syarikat">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 polisiTakaful"
-value="${item.polisi || ''}"placeholder="Nama Polisi">
+value="${item.polisi || ''}" placeholder="Nama Polisi">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 penerimaTakaful"
-value="${item.penerima || ''}"placeholder="Nama Penerima Pampasan">
+value="${item.penerima || ''}" placeholder="Nama Penerima Pampasan">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 icPenerimaTakaful"
-value="${item.ic || ''}"placeholder="No IC">
+value="${item.ic || ''}" placeholder="No IC">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 hubunganTakaful"
-value="${item.hubungan || ''}"placeholder="Hubungan">
+value="${item.hubungan || ''}" placeholder="Hubungan">
 
 <input
 type="number"
 class="w-full border rounded-lg p-3 bahagianTakaful"
-value="${item.bahagian || ''}"placeholder="Bahagian (%)">
+value="${item.bahagian || ''}" placeholder="Bahagian (%)">
 
 <button
 type="button"
@@ -1968,21 +1983,21 @@ document.getElementById(
 <input
 type="text"
 class="w-full border rounded-lg p-3 namaPemiutang"
-value="${item.nama || ''}"placeholder="Nama Pemiutang">
+value="${item.nama || ''}" placeholder="Nama Pemiutang">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 jenisHutangPemiutang"
-value="${item.jenis || ''}"placeholder="Jenis Hutang">
+value="${item.jenis || ''}" placeholder="Jenis Hutang">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 bakiHutangPemiutang"
-value="${item.baki || ''}"placeholder="Baki Hutang">
+value="${item.baki || ''}" placeholder="Baki Hutang">
 
 <textarea
 class="w-full border rounded-lg p-3 kaedahPenyelesaianPemiutang"
-rows="3"placeholder="Kaedah Penyelesaian">${item.kaedah || ''}</textarea>
+rows="3" placeholder="Kaedah Penyelesaian">${item.kaedah || ''}</textarea>
 
 <button
 type="button"
@@ -2020,21 +2035,21 @@ document.getElementById(
 <input
 type="text"
 class="w-full border rounded-lg p-3 namaPenghutang"
-value="${item.nama || ''}"placeholder="Nama Penghutang">
+value="${item.nama || ''}" placeholder="Nama Penghutang">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 jenisHutangPenghutang"
-value="${item.jenis || ''}"placeholder="Jenis Hutang">
+value="${item.jenis || ''}" placeholder="Jenis Hutang">
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 bakiHutangPenghutang"
-value="${item.baki || ''}"placeholder="Baki Hutang">
+value="${item.baki || ''}" placeholder="Baki Hutang">
 
 <textarea
 class="w-full border rounded-lg p-3 kaedahPenyelesaianPenghutang"
-rows="3"placeholder="Kaedah Penyelesaian">${item.kaedah || ''}</textarea>
+rows="3" placeholder="Kaedah Penyelesaian">${item.kaedah || ''}</textarea>
 
 <button
 type="button"
