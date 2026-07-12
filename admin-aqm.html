@@ -177,6 +177,8 @@ class="bg-white rounded-xl shadow overflow-x-auto overflow-y-auto max-h-[700px]"
 <th class="p-3 text-left">Email</th>
 <th class="p-3 text-left">Referral</th>
 <th class="p-3 text-center">Status</th>
+<th class="p-3 text-center">Pending Approval</th>
+<th class="p-3 text-center">Action</th>  
 
 </tr>
 
@@ -311,13 +313,26 @@ return;
 
 totalCustomer++;
 
-if(user.paymentStatus==="paid"){
-aktif++;
-}else{
-prospek++;
+let wasiatAktif = 0;
+let hibahAktif = 0;
+let sepencarianAktif = 0;
+let mawarisAktif = 0;
+  
+if(user.wasiatPaymentStatus === "paid"){
+    wasiatAktif++;
+}
+
+if(user.hibahPaymentStatus === "paid"){
+    hibahAktif++;
+}
+
+if(user.sepencarianPaymentStatus === "paid"){
+    sepencarianAktif++;
 }
   
-
+if(user.mawarisPaymentStatus === "paid"){
+    mawarisAktif++;
+}
 
 if(user.expiryDate){
 
@@ -337,7 +352,10 @@ expired++;
 const memberNo = user.memberNo || "-";
 
 const status =
-user.paymentStatus === "paid"
+user.wasiatPaymentStatus === "paid" ||
+user.hibahPaymentStatus==="paid" ||
+user.sepencarianPaymentStatus==="paid" ||
+user.mawarisPaymentStatus==="paid"; 
 ? "AHLI AKTIF"
 : "PROSPEK";
 
