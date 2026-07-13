@@ -107,7 +107,7 @@ position:relative;
 
     <!-- HEADER -->
     <div class="bg-[#153638] text-white p-5 shadow-md sticky top-0 z-50">
-        <h1 class="text-2xl font-bold font-inter">Admin Preview Wasiat</h1>
+        <h1 class="text-2xl font-bold font-inter">Admin Preview Hibah</h1>
         <p class="text-gray-300 text-sm">Semakan Dokumen Customer</p>
     </div>
 
@@ -123,7 +123,7 @@ position:relative;
                 <!-- PAGE 1 (COVER) -->
                 <div class="a4-page">
                     <!-- Gunakan fallback imej jika gambar tempatan tiada untuk preview -->
-                    <img src="images/hibah-cover.png" 
+                    <img src="images/wasiat-cover.png" 
                          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2100&auto=format&fit=crop';" 
                          class="absolute inset-0 w-full h-full object-cover" alt="Cover Wasiat" />
                     
@@ -218,14 +218,7 @@ class="border border-gray-300 p-5 font-medium">
 <div id="sectionWasiat">
 </div>
 
-<!-- PAGE 4 -->
-
-              
-<div
-<div id="sectionHibah">
-</div>
-
-                
+  
 </div>
                 
  </main>
@@ -299,6 +292,32 @@ Reject Permohonan
             setTimeout(updateScale, 100);
         });
 
+async function imageToBase64(url){
+
+    const response = await fetch(url);
+
+if(!response.ok){
+    throw new Error("Image gagal dimuatkan");
+}
+    
+    const blob = await response.blob();
+
+    return new Promise((resolve)=>{
+
+        const reader = new FileReader();
+
+        reader.onloadend = ()=>{
+
+            resolve(reader.result);
+
+        };
+
+        reader.readAsDataURL(blob);
+
+    });
+
+}
+        
         // Download Logik PDF
         document.getElementById("downloadBtn").addEventListener("click", async () => {
             const wrapper = document.getElementById('scale-wrapper');
@@ -316,9 +335,11 @@ Reject Permohonan
             element.style.margin = '0'; // Buang margin auto sementara
 
             // 3. Beri masa kepada browser untuk kemaskini DOM
-            await new Promise(r => setTimeout(r, 150));
+            await new Promise(r => setTimeout(r,150));
 
-            const options = {
+            await document.fonts.ready;
+            
+             const options = {
                 margin: 0,
                 filename: "Hibah.pdf",
                 image: { type: "jpeg", quality: 1 },
@@ -328,11 +349,15 @@ Reject Permohonan
                     scrollY: 0,
                     scrollX: 0, // Set koordinat X ke 0
                     windowWidth: document.documentElement.offsetWidth
-                },
-                pagebreak: { mode: ['css'] }, // Pastikan html2pdf__page-break berfungsi
+                },                
+                 pagebreak: { mode: ['css'] }, // Pastikan html2pdf__page-break berfungsi
                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
             };
 
+console.log(getComputedStyle(wrapper).transform);
+
+console.log(getComputedStyle(element).transform);
+            
             // 4. Proses render PDF
             html2pdf().set(options).from(element).save().then(() => {
                 // 5. Kembalikan semua tetapan asal
@@ -1103,11 +1128,14 @@ data.icWasi2 || "-"
 );
 
 let hurufLampiran = "I".charCodeAt(0);
-
-lampiranSnap.forEach(doc=>{
+                       
+for(const doc of lampiranSnap.docs){
 
 const file = doc.data();
 
+const base64Image =
+await imageToBase64(file.fileURL);
+    
 finalContent += `
 
 <div class="a4-page p-[18mm]">
@@ -1134,14 +1162,16 @@ ${file.fileName}
 </p>
 
 <img
-
-src="${file.fileURL}"
-
+src="${base64Image}"
 style="
-width:100%;
-height:220mm;
-object-fit:contain;
+display:block;
+max-width:170mm;
+max-height:220mm;
+width:auto;
+height:auto;
+margin:20px auto;
 border:1px solid #ccc;
+object-fit:contain;
 ">
 
 <div class="pdf-footer"></div>
@@ -1152,7 +1182,7 @@ border:1px solid #ccc;
 
 hurufLampiran++;
 
-});
+}
                         
 document.getElementById(
 "sectionWasiat"
@@ -1277,7 +1307,7 @@ await addDoc(
     </script>
 
 <script src="wasiat-content.js"></script>
-
+    
 <script src="hibah-content.js"></script>
     
 </body>
