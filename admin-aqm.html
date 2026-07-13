@@ -334,25 +334,7 @@ if(user.mawarisPaymentStatus === "paid"){
     mawarisAktif++;
 }
 
-const isExpired =
-user.expiryDate &&
-new Date(user.expiryDate) < new Date();
 
-if(isExpired){
-
-    expired++;
-
-}
-else if(isActive){
-
-    aktif++;
-
-}
-else{
-
-    prospek++;
-
-}
   
 
 
@@ -386,6 +368,25 @@ prospek++;
 
 }
 
+const isExpired =
+user.expiryDate &&
+new Date(user.expiryDate) < new Date();
+
+if(isExpired){
+
+    expired++;
+
+}
+else if(isActive){
+
+    aktif++;
+
+}
+else{
+
+    prospek++;
+
+}
   
 let registerDate = "-";
 
