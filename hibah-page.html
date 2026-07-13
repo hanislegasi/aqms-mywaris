@@ -103,13 +103,9 @@ Loading...
   
 
 
-<div id="hibahNotification"></div>
+<div id="hibahNotification" class="mb-6"></div>
 
-
-
-  
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-
 <a
 id="hibahButton"
 href="payment-hibah.html"
@@ -429,13 +425,9 @@ ${(userData.nama || "U")[0]}
   
 if(hibahData.status === "UNDER_REVIEW"){
   
-document.getElementById(
-"hibahNotification"
-).innerHTML = `
+document.getElementById("hibahNotification").innerHTML = `
 
-
-
-<div class="bg-yellow-50 border border-yellow-300 rounded-xl p-4">
+<div class="bg-yellow-50 border border-yellow-300 rounded-xl p-4 mb-6">
 
 <h3 class="font-bold">
 Permohonan Hibah Sedang Disemak
@@ -447,9 +439,7 @@ Permohonan anda sedang dalam proses semakan.
 
 </div>
 
-`;  
-
-}
+`;
 
 
 
