@@ -309,23 +309,32 @@ Reject Permohonan
             element.style.margin = '0'; // Buang margin auto sementara
 
             // 3. Beri masa kepada browser untuk kemaskini DOM
-            await new Promise(r => setTimeout(r, 150));
+            await new Promise(r => setTimeout(r,150));
 
+            await document.fonts.ready;
+            
             const options = {
                 margin: 0,
                 filename: "Wasiat.pdf",
                 image: { type: "jpeg", quality: 1 },
-                html2canvas: { 
-                    scale: 2, 
-                    useCORS: true, 
-                    scrollY: 0,
-                    scrollX: 0, // Set koordinat X ke 0
-                    windowWidth: document.documentElement.offsetWidth
-                },
+                html2canvas:{
+    scale:2,
+    useCORS:true,
+    letterRendering:true,
+    foreignObjectRendering:true,
+    scrollY:0,
+    scrollX:0,
+    windowWidth: element.scrollWidth,
+    windowHeight: element.scrollHeight
+},
                 pagebreak: { mode: ['css'] }, // Pastikan html2pdf__page-break berfungsi
                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
             };
 
+console.log(getComputedStyle(wrapper).transform);
+
+console.log(getComputedStyle(element).transform);
+            
             // 4. Proses render PDF
             html2pdf().set(options).from(element).save().then(() => {
                 // 5. Kembalikan semua tetapan asal
