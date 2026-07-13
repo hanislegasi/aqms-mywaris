@@ -29,17 +29,24 @@ body{
 font-family: Inter, sans-serif;
 }
 
+#listContainer{
+    overflow-y:auto;
+    overflow-x:auto;
+    max-height:700px;
+}
+
+#listContainer table{
+    border-collapse:separate;
+    border-spacing:0;
+}
+
 #listContainer thead th{
-
-position:sticky;
-
-top:0;
-
-background:#153638;
-
-z-index:50;
-
-} 
+    position:sticky;
+    top:0;
+    background:#153638;
+    color:#fff;
+    z-index:100;
+}
   
 </style>  
   
@@ -177,9 +184,9 @@ id="printArea">
 id="listContainer"
 class="bg-white rounded-xl shadow max-h-[700px] overflow-y-auto overflow-x-auto">
 
-<table class="min-w-full bg-white rounded-xl overflow-hidden">
+<table class="min-w-full bg-white">
 
-<thead class="sticky top-0 z-50 bg-[#153638] text-white shadow">
+<thead>
   
 <tr>
   
