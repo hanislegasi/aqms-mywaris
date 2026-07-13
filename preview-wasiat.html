@@ -186,7 +186,7 @@ position:relative;
 
 <tr>
 <td class="border border-gray-300 p-5 font-semibold bg-gray-50">
-TARIKH DAFTAR
+TARIKH DOKUMEN
 </td>
 
 <td id="approvedTable"
@@ -439,14 +439,8 @@ userId,
                         
                         const userDoc = await getDoc(
     doc(db, "users", userId)
-);
-
-
-
-
-                      
-         
-                      
+);                
+                              
 const userData = userDoc.data();
 
                         console.log("FULL DATA");
@@ -498,7 +492,7 @@ console.log(wasiat13Html);
                        const approvedDate =
 data.approvedAt
 ? new Date(data.approvedAt)
-: null;
+: new Date();
                         document.getElementById("tahun").innerHTML = approvedDate.getFullYear();
                         document.getElementById("namaCover").innerHTML = (data.nama || "-").toUpperCase();
                         document.getElementById("icCover").innerHTML = data.ic || "-";
