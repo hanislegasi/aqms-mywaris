@@ -149,12 +149,7 @@ position:relative;
                         000000-00-0000
                     </p>
 
-                    <!-- APPROVED DATE -->
-                    <p id="approvedDate" class="absolute bottom-[3%] right-[3%] text-dark azure text-sm font-cinzel tracking-widest drop-shadow-sm">
-                        24 MEI 2026
-                    </p>
-
-
+                   
                     
                 </div>
 
@@ -188,6 +183,18 @@ position:relative;
                             <td class="border border-gray-300 p-5 font-semibold bg-gray-50">NO. KOD PERUNDING</td>
                             <td id="kodTable" class="border border-gray-300 p-5 font-medium">-</td>
                         </tr>
+
+<tr>
+<td class="border border-gray-300 p-5 font-semibold bg-gray-50">
+TARIKH DAFTAR
+</td>
+
+<td id="approvedTable"
+class="border border-gray-300 p-5 font-medium">
+-
+</td>
+</tr>
+                      
                     </table>
 
 <div class="pdf-footer">
@@ -419,7 +426,17 @@ if(!data.firstViewedAt){
    });
 
 }             
-                      
+
+const lampiranSnap =
+await getDocs(
+collection(
+db,
+"users",
+userId,
+"wasiatDocuments"
+)
+);
+                        
                         const userDoc = await getDoc(
     doc(db, "users", userId)
 );
@@ -478,19 +495,25 @@ console.log(wasiat13Html);
                         document.getElementById("docRef").innerHTML = data.docRef || "-";
                         document.getElementById("docRef2").innerHTML = `DOC REF: ${data.docRef || "-"}`;
                         
-                        const approvedDate = data.approvedAt ? new Date(data.approvedAt) : new Date();
+                       const approvedDate =
+data.approvedAt
+? new Date(data.approvedAt)
+: null;
                         document.getElementById("tahun").innerHTML = approvedDate.getFullYear();
-                        
                         document.getElementById("namaCover").innerHTML = (data.nama || "-").toUpperCase();
                         document.getElementById("icCover").innerHTML = data.ic || "-";
-                        document.getElementById("approvedDate").innerHTML = approvedDate.toLocaleDateString("ms-MY", { day: "numeric", month: "long", year: "numeric" });
                         
                         document.getElementById("namaTable").innerHTML = data.nama || "-";
                         document.getElementById("icTable").innerHTML = data.ic || "-";
                         document.getElementById("telefonTable").innerHTML = data.telefon || "-";
                         document.getElementById("alamatTable").innerHTML = data.alamat || "-";
                         document.getElementById("kodTable").innerHTML = userData?.referral || "-";
+document.getElementById("approvedTable").innerHTML = 
+approvedDate
+? approvedDate.toLocaleDateString("ms-MY")
+: "-";
 
+                        
 let lampiranWaris = `
 <table
 style="
@@ -1036,7 +1059,7 @@ ${pagesPesanan[i]}
 }
                         
                         
-                        let finalContent =
+let finalContent =
 wasiatContent
 
 .replaceAll(
@@ -1118,6 +1141,58 @@ data.icWasi2 || "-"
   "{{WASIAT_SATU_PER_TIGA}}",
   wasiat13Html
 );
+
+let hurufLampiran = "I".charCodeAt(0);
+
+lampiranSnap.forEach(doc=>{
+
+const file = doc.data();
+
+finalContent += `
+
+<div class="a4-page p-[18mm]">
+
+<h2
+style="
+font-size:22px;
+font-weight:bold;
+margin-bottom:15px;
+">
+
+Lampiran ${String.fromCharCode(hurufLampiran)}
+
+</h2>
+
+<p
+style="
+margin-bottom:20px;
+font-size:15px;
+">
+
+${file.fileName}
+
+</p>
+
+<img
+
+src="${file.fileURL}"
+
+style="
+width:100%;
+height:220mm;
+object-fit:contain;
+border:1px solid #ccc;
+">
+
+<div class="pdf-footer"></div>
+
+</div>
+
+`;
+
+hurufLampiran++;
+
+});
                         
 document.getElementById(
 "sectionWasiat"
