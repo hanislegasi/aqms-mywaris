@@ -1260,7 +1260,7 @@ currentDocRef;
                     currentNumber = (counterSnap.data().mawarisCounter || 0) + 1;
                 }
 
-                const docRefNo = `AQMS-WST-${year}-${String(currentNumber).padStart(3,"0")}`;
+                const docRefNo = `AQMS-MAW-${year}-${String(currentNumber).padStart(3,"0")}`;
 
                 await updateDoc(doc(db, "users", userId, "mawaris", "maklumat"), {
                     status: "APPROVED",
