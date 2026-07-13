@@ -299,7 +299,7 @@ let bil = 1;
 
 
    
-users.forEach((doc)=>{
+for(const doc of users){
 
 const user = doc.data();
 
@@ -351,14 +351,35 @@ expired++;
 
 const memberNo = user.memberNo || "-";
 
-const status =
+const isActive =
+
 user.wasiatPaymentStatus === "paid" ||
-user.hibahPaymentStatus==="paid" ||
-user.sepencarianPaymentStatus==="paid" ||
-user.mawarisPaymentStatus==="paid"; 
+
+user.hibahPaymentStatus === "paid" ||
+
+user.sepencarianPaymentStatus === "paid" ||
+
+user.mawarisPaymentStatus === "paid";
+
+const status =
+
+isActive
+
 ? "AHLI AKTIF"
+
 : "PROSPEK";
 
+if(isActive){
+
+aktif++;
+
+}else{
+
+prospek++;
+
+}
+
+  
 let registerDate = "-";
 
 if(user.createdAt){
@@ -369,6 +390,132 @@ user.createdAt
 .toLocaleDateString("ms-MY");
 
 }
+
+let pendingList = [];
+
+let actionList = [];
+
+// =====================
+// WASIAT
+// =====================
+
+const wasiatSnap =
+await getDoc(
+doc(db,"users",doc.id,"wasiat","maklumat")
+);
+
+if(
+wasiatSnap.exists() &&
+wasiatSnap.data().status==="UNDER_REVIEW"
+){
+
+pendingList.push("🟡 Wasiat");
+
+actionList.push(`
+<a
+href="admin-preview-wasiat.html?uid=${doc.id}"
+class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-xs block mb-1">
+
+Review Wasiat
+
+</a>
+`);
+
+}
+
+// =====================
+// HIBAH
+// =====================
+
+const hibahSnap =
+await getDoc(
+doc(db,"users",doc.id,"hibah","maklumat")
+);
+
+if(
+hibahSnap.exists() &&
+hibahSnap.data().status==="UNDER_REVIEW"
+){
+
+pendingList.push("🟠 Hibah");
+
+actionList.push(`
+<a
+href="admin-preview-hibah.html?uid=${doc.id}"
+class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-xs block mb-1">
+
+Review Hibah
+
+</a>
+`);
+
+}
+
+// =====================
+// HARTA SEPENCARIAN
+// =====================
+
+const sepencarianSnap =
+await getDoc(
+doc(db,"users",doc.id,"sepencarian","maklumat")
+);
+
+if(
+sepencarianSnap.exists() &&
+sepencarianSnap.data().status==="UNDER_REVIEW"
+){
+
+pendingList.push("🟣 Sepencarian");
+
+actionList.push(`
+<a
+href="admin-preview-sepencarian.html?uid=${doc.id}"
+class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-xs block mb-1">
+
+Review Sepencarian
+
+</a>
+`);
+
+}
+
+// =====================
+// MAWARIS
+// =====================
+
+const mawarisSnap =
+await getDoc(
+doc(db,"users",doc.id,"mawaris","maklumat")
+);
+
+if(
+mawarisSnap.exists() &&
+mawarisSnap.data().status==="UNDER_REVIEW"
+){
+
+pendingList.push("🔵 Mawaris");
+
+actionList.push(`
+<a
+href="admin-preview-mawaris.html?uid=${doc.id}"
+class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-xs block mb-1">
+
+Review Mawaris
+
+</a>
+`);
+
+}
+
+const pending =
+pendingList.length
+? pendingList.join("<br>")
+: "-";
+
+const action =
+actionList.length
+? actionList.join("")
+: "-";
   
 html += `
 
@@ -414,12 +561,26 @@ ${user.referral || "-"}
 <td class="p-3 text-center">
 
 <span
+
+<td class="p-3 text-center">
+
+${pending}
+
+</td>
+
+<td class="p-3 text-center">
+
+${action}
+
+</td>
+
 class="
 px-3 py-1 rounded-full text-xs
-${user.paymentStatus==="paid"
-? "bg-green-100 text-green-700"
-: "bg-yellow-100 text-yellow-700"}">
+${isActive
 
+? "bg-green-100 text-green-700"
+
+: "bg-yellow-100 text-yellow-700"}
 ${status}
 
 </span>
@@ -430,7 +591,7 @@ ${status}
 
 `;
   
-});
+}
 
 document
 .getElementById("pdfBtn")
