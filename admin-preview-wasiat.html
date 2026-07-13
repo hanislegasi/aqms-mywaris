@@ -292,6 +292,28 @@ Reject Permohonan
             setTimeout(updateScale, 100);
         });
 
+async function imageToBase64(url){
+
+    const response = await fetch(url);
+
+    const blob = await response.blob();
+
+    return new Promise((resolve)=>{
+
+        const reader = new FileReader();
+
+        reader.onloadend = ()=>{
+
+            resolve(reader.result);
+
+        };
+
+        reader.readAsDataURL(blob);
+
+    });
+
+}
+        
         // Download Logik PDF
         document.getElementById("downloadBtn").addEventListener("click", async () => {
             const wrapper = document.getElementById('scale-wrapper');
@@ -1103,10 +1125,13 @@ data.icWasi2 || "-"
 
 let hurufLampiran = "I".charCodeAt(0);
 
-lampiranSnap.forEach(doc=>{
+for(const doc of lampiranSnap.docs){
 
 const file = doc.data();
 
+const base64Image =
+await imageToBase64(file.fileURL);
+    
 finalContent += `
 
 <div class="a4-page p-[18mm]">
@@ -1133,8 +1158,7 @@ ${file.fileName}
 </p>
 
 <img
-
-src="${file.fileURL}"
+src="${base64Image}"
 
 style="
 width:100%;
