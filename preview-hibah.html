@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preview Wasiat</title>
+    <title>Preview Hibah</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- HTML2PDF Library -->
@@ -107,8 +107,8 @@ position:relative;
 
     <!-- HEADER -->
     <div class="bg-[#153638] text-white p-5 shadow-md sticky top-0 z-50">
-        <h1 class="text-2xl font-bold font-inter">Preview Wasiat</h1>
-        <p class="text-gray-300 text-sm">Dokumen Wasiat Saya</p>
+        <h1 class="text-2xl font-bold font-inter">Preview Hibah</h1>
+        <p class="text-gray-300 text-sm">Dokumen Hibah Saya</p>
     </div>
 
     <!-- MAIN CONTENT & PDF PREVIEW WRAPPER -->
@@ -127,35 +127,29 @@ position:relative;
                          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2100&auto=format&fit=crop';" 
                          class="absolute inset-0 w-full h-full object-cover" alt="Cover Wasiat" />
                     
-                    <!-- Overlay gelap sedikit (optional) supaya teks mudah dibaca -->
-                    <div class="absolute inset-0 bg-black/20"></div>
 
+                    
                     <!-- DOC REF -->
-                    <p id="docRef" class="absolute top-[5%] left-[8%] text-[#d8c08f] text-xl font-cinzel tracking-widest font-semibold drop-shadow-md">
+                    <p id="docRef" class="absolute top-[5%] left-[8%] text-[#153638] text-xl font-cinzel tracking-widest font-semibold drop-shadow-md">
                         AQMS-HIB-2026-001
                     </p>
 
                     <!-- YEAR -->
-                    <p id="tahun" class="absolute top-[5%] right-[8%] text-white text-4xl font-bold font-cinzel tracking-widest drop-shadow-lg">
+                    <p id="tahun" class="absolute top-[5%] right-[8%] text-dark azure text-4xl font-bold font-cinzel tracking-widest drop-shadow-lg">
                         2026
                     </p>
 
                     <!-- NAMA -->
-                    <p id="namaCover" class="absolute top-[56%] left-[11%] text-white text-2xl font-bold uppercase font-cinzel tracking-widest drop-shadow-lg">
+                    <p id="namaCover" class="absolute top-[56%] left-[11%] text-dark azure text-2xl font-bold uppercase font-cinzel tracking-widest drop-shadow-lg">
                         ALI BIN ABU
                     </p>
 
                     <!-- IC -->
-                    <p id="icCover" class="absolute top-[62%] left-[11%] text-white text-xl font-bold font-cinzel tracking-widest drop-shadow-md">
+                    <p id="icCover" class="absolute top-[62%] left-[11%] text-dark azure text-xl font-bold font-cinzel tracking-widest drop-shadow-md">
                         000000-00-0000
                     </p>
 
-                    <!-- APPROVED DATE -->
-                    <p id="approvedDate" class="absolute bottom-[3%] right-[3%] text-white text-sm font-cinzel tracking-widest drop-shadow-sm">
-                        24 MEI 2026
-                    </p>
-
-
+                   
                     
                 </div>
 
@@ -189,6 +183,18 @@ position:relative;
                             <td class="border border-gray-300 p-5 font-semibold bg-gray-50">NO. KOD PERUNDING</td>
                             <td id="kodTable" class="border border-gray-300 p-5 font-medium">-</td>
                         </tr>
+
+<tr>
+<td class="border border-gray-300 p-5 font-semibold bg-gray-50">
+TARIKH DOKUMEN
+</td>
+
+<td id="approvedTable"
+class="border border-gray-300 p-5 font-medium">
+-
+</td>
+</tr>
+                      
                     </table>
 
 <div class="pdf-footer">
@@ -271,6 +277,32 @@ position:relative;
             setTimeout(updateScale, 100);
         });
 
+async function imageToBase64(url){
+
+    const response = await fetch(url);
+
+if(!response.ok){
+    throw new Error("Image gagal dimuatkan");
+}
+    
+    const blob = await response.blob();
+
+    return new Promise((resolve)=>{
+
+        const reader = new FileReader();
+
+        reader.onloadend = ()=>{
+
+            resolve(reader.result);
+
+        };
+
+        reader.readAsDataURL(blob);
+
+    });
+
+}
+        
         // Download Logik PDF
         document.getElementById("downloadBtn").addEventListener("click", async () => {
             const wrapper = document.getElementById('scale-wrapper');
@@ -278,7 +310,7 @@ position:relative;
 
 if(window.wasiatData?.status !== "APPROVED"){
    alert(
-      "Dokumen Wasiat anda masih belum diluluskan."
+      "Dokumen Hibah anda masih belum diluluskan."
    );
    return;
 }
@@ -299,7 +331,7 @@ if(window.wasiatData?.status !== "APPROVED"){
 
             const options = {
                 margin: 0,
-                filename: "Wasiat.pdf",
+                filename: "Hibah.pdf",
                 image: { type: "jpeg", quality: 1 },
                 html2canvas: { 
                     scale: 2, 
@@ -354,7 +386,7 @@ await new Promise(r=>setTimeout(r,1000));
                 
                 // LOAD CUSTOMER DATA
                 if (userId) {
-                    const docRef = doc(db, "users", userId, "wasiat", "maklumat");
+                    const docRef = doc(db, "users", userId, "hibah", "maklumat");
                     const docSnap = await getDoc(docRef);
 
                     if (docSnap.exists()) {
@@ -373,11 +405,11 @@ if(data.status !== "APPROVED"){
          padding:30px;
       ">
          <h2>
-            Dokumen Wasiat Masih Dalam Semakan
+            Dokumen Hibah Masih Dalam Semakan
          </h2>
 
          <p>
-            Dokumen Wasiat anda masih belum
+            Dokumen Hibah anda masih belum
             diluluskan oleh pihak admin.
          </p>
 
@@ -420,17 +452,21 @@ if(!data.firstViewedAt){
    });
 
 }             
-                      
+
+const lampiranSnap =
+await getDocs(
+collection(
+db,
+"users",
+userId,
+"hibahDocuments"
+)
+);
+                        
                         const userDoc = await getDoc(
     doc(db, "users", userId)
-);
-
-
-
-
-                      
-         
-                      
+);                
+                              
 const userData = userDoc.data();
 
                         console.log("FULL DATA");
@@ -479,19 +515,29 @@ console.log(wasiat13Html);
                         document.getElementById("docRef").innerHTML = data.docRef || "-";
                         document.getElementById("docRef2").innerHTML = `DOC REF: ${data.docRef || "-"}`;
                         
-                        const approvedDate = data.approvedAt ? new Date(data.approvedAt) : new Date();
-                        document.getElementById("tahun").innerHTML = approvedDate.getFullYear();
-                        
+                       const approvedDate =
+data.approvedAt
+? new Date(data.approvedAt)
+: null;
+
+document.getElementById("tahun").innerHTML =
+approvedDate
+? approvedDate.getFullYear()
+: new Date().getFullYear();
                         document.getElementById("namaCover").innerHTML = (data.nama || "-").toUpperCase();
                         document.getElementById("icCover").innerHTML = data.ic || "-";
-                        document.getElementById("approvedDate").innerHTML = approvedDate.toLocaleDateString("ms-MY", { day: "numeric", month: "long", year: "numeric" });
                         
                         document.getElementById("namaTable").innerHTML = data.nama || "-";
                         document.getElementById("icTable").innerHTML = data.ic || "-";
                         document.getElementById("telefonTable").innerHTML = data.telefon || "-";
                         document.getElementById("alamatTable").innerHTML = data.alamat || "-";
                         document.getElementById("kodTable").innerHTML = userData?.referral || "-";
+document.getElementById("approvedTable").innerHTML = 
+approvedDate
+? approvedDate.toLocaleDateString("ms-MY")
+: "-";
 
+                        
 let lampiranWaris = `
 <table
 style="
@@ -1037,7 +1083,7 @@ ${pagesPesanan[i]}
 }
                         
                         
-                        let finalContent =
+let finalContent =
 wasiatContent
 
 .replaceAll(
@@ -1119,6 +1165,63 @@ data.icWasi2 || "-"
   "{{WASIAT_SATU_PER_TIGA}}",
   wasiat13Html
 );
+
+let hurufLampiran = "I".charCodeAt(0);
+                       
+for(const doc of lampiranSnap.docs){
+
+const file = doc.data();
+
+const base64Image =
+await imageToBase64(file.fileURL);
+    
+finalContent += `
+
+<div class="a4-page p-[18mm]">
+
+<h2
+style="
+font-size:22px;
+font-weight:bold;
+margin-bottom:15px;
+">
+
+Lampiran ${String.fromCharCode(hurufLampiran)}
+
+</h2>
+
+<p
+style="
+margin-bottom:20px;
+font-size:15px;
+">
+
+${file.fileName}
+
+</p>
+
+<img
+src="${base64Image}"
+style="
+display:block;
+max-width:170mm;
+max-height:220mm;
+width:auto;
+height:auto;
+margin:20px auto;
+border:1px solid #ccc;
+object-fit:contain;
+">
+
+<div class="pdf-footer"></div>
+
+</div>
+
+`;
+
+hurufLampiran++;
+
+}
                         
 document.getElementById(
 "sectionWasiat"
@@ -1184,6 +1287,8 @@ currentDocRef;
     </script>
 
 <script src="wasiat-content.js"></script>
+
+<script src="hibah-content.js"></script>    
     
 </body>
 </html>
