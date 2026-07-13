@@ -28,6 +28,19 @@ rel="stylesheet">
 body{
 font-family: Inter, sans-serif;
 }
+
+#listContainer thead th{
+
+position:sticky;
+
+top:0;
+
+background:#153638;
+
+z-index:50;
+
+} 
+  
 </style>  
   
 </head>
@@ -162,23 +175,29 @@ id="printArea">
 
 <div
 id="listContainer"
-class="bg-white rounded-xl shadow overflow-x-auto overflow-y-auto max-h-[700px]">
+class="bg-white rounded-xl shadow max-h-[700px] overflow-y-auto overflow-x-auto">
 
 <table class="min-w-full bg-white rounded-xl overflow-hidden">
 
-<thead class="sticky top-0 z-10 bg-[#153638] text-white">
+<thead class="sticky top-0 z-50 bg-[#153638] text-white shadow">
   
 <tr>
   
-<th class="p-3 text-center">Bil</th>
-<th class="p-3 text-left">Tarikh Daftar</th>
-<th class="p-3 text-left">No AQM</th>
-<th class="p-3 text-left">Nama</th>
-<th class="p-3 text-left">Email</th>
-<th class="p-3 text-left">Referral</th>
-<th class="p-3 text-center">Status</th>
-<th class="p-3 text-center">Pending Approval</th>
-<th class="p-3 text-center">Action</th>  
+<th class="w-12 p-3 text-center">Bil</th>
+
+<th class="w-28 p-3 text-left">Tarikh Daftar</th>
+
+<th class="w-28 p-3 text-left">No AQM</th>
+
+<th class="w-52 p-3 text-left">Nama</th>
+
+<th class="w-72 p-3 text-left">Email</th>
+
+<th class="w-28 p-3 text-center">Referral</th>
+
+<th class="w-28 p-3 text-center">Status</th>
+
+<th class="w-48 p-3 text-center">Pending</th>
 
 </tr>
 
@@ -313,10 +332,7 @@ continue;
 
 totalCustomer++;
 
-let wasiatAktif = 0;
-let hibahAktif = 0;
-let sepencarianAktif = 0;
-let mawarisAktif = 0;
+
   
 if(user.wasiatPaymentStatus === "paid"){
     wasiatAktif++;
@@ -570,13 +586,20 @@ ${user.referral || "-"}
 
 <span
 class="
-px-3 py-1 rounded-full text-xs
-${isActive
-? "bg-green-100 text-green-700"
-: "bg-yellow-100 text-yellow-700"}
+inline-flex
+items-center
+justify-center
+px-2
+py-1
+rounded-full
+text-[11px]
+font-semibold
+whitespace-nowrap
+bg-green-100
+text-green-700
 ">
 
-${status}
+AKTIF
 
 </span>
 
@@ -588,11 +611,6 @@ ${pending}
 
 </td>
 
-<td class="p-3 text-center">
-
-${action}
-
-</td>
 </tr>
 
 `;
