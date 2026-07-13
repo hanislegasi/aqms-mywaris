@@ -332,28 +332,6 @@ continue;
 
 totalCustomer++;
 
-
-  
-if(user.wasiatPaymentStatus === "paid"){
-    wasiatAktif++;
-}
-
-if(user.hibahPaymentStatus === "paid"){
-    hibahAktif++;
-}
-
-if(user.sepencarianPaymentStatus === "paid"){
-    sepencarianAktif++;
-}
-  
-if(user.mawarisPaymentStatus === "paid"){
-    mawarisAktif++;
-}
-
-
-  
-
-
 const memberNo = user.memberNo || "-";
 
 const isActive =
@@ -374,15 +352,7 @@ isActive
 
 : "PROSPEK";
 
-if(isActive){
 
-aktif++;
-
-}else{
-
-prospek++;
-
-}
 
 const isExpired =
 user.expiryDate &&
@@ -417,7 +387,6 @@ user.createdAt
 
 let pendingList = [];
 
-let actionList = [];
 
 // =====================
 // WASIAT
@@ -435,15 +404,7 @@ wasiatSnap.data().status==="UNDER_REVIEW"
 
 pendingList.push("🟡 Wasiat");
 
-actionList.push(`
-<a
-href="admin-preview-wasiat.html?uid=${doc.id}"
-class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-xs block mb-1">
 
-Review Wasiat
-
-</a>
-`);
 
 }
 
@@ -463,15 +424,7 @@ hibahSnap.data().status==="UNDER_REVIEW"
 
 pendingList.push("🟠 Hibah");
 
-actionList.push(`
-<a
-href="admin-preview-hibah.html?uid=${doc.id}"
-class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-xs block mb-1">
 
-Review Hibah
-
-</a>
-`);
 
 }
 
@@ -491,15 +444,7 @@ sepencarianSnap.data().status==="UNDER_REVIEW"
 
 pendingList.push("🟣 Sepencarian");
 
-actionList.push(`
-<a
-href="admin-preview-sepencarian.html?uid=${doc.id}"
-class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-xs block mb-1">
 
-Review Sepencarian
-
-</a>
-`);
 
 }
 
@@ -519,15 +464,6 @@ mawarisSnap.data().status==="UNDER_REVIEW"
 
 pendingList.push("🔵 Mawaris");
 
-actionList.push(`
-<a
-href="admin-preview-mawaris.html?uid=${doc.id}"
-class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-xs block mb-1">
-
-Review Mawaris
-
-</a>
-`);
 
 }
 
@@ -536,10 +472,7 @@ pendingList.length
 ? pendingList.join("<br>")
 : "-";
 
-const action =
-actionList.length
-? actionList.join("")
-: "-";
+
   
 html += `
 
@@ -595,11 +528,12 @@ rounded-full
 text-[11px]
 font-semibold
 whitespace-nowrap
-bg-green-100
-text-green-700
+${isActive
+? "bg-green-100 text-green-700"
+: "bg-yellow-100 text-yellow-700"}
 ">
 
-AKTIF
+${status}
 
 </span>
 
