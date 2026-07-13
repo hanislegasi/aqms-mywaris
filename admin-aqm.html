@@ -299,9 +299,9 @@ let bil = 1;
 
 
    
-for(const doc of users){
+for(const userDoc of users){
 
-const user = doc.data();
+const user = userDoc.data();
 
 // Skip admin & consultant
 if(
@@ -409,7 +409,7 @@ let actionList = [];
 
 const wasiatSnap =
 await getDoc(
-doc(db,"users",doc.id,"wasiat","maklumat")
+doc(db,"users",userDoc.id,"wasiat","maklumat")
 );
 
 if(
@@ -437,7 +437,7 @@ Review Wasiat
 
 const hibahSnap =
 await getDoc(
-doc(db,"users",doc.id,"hibah","maklumat")
+doc(db,"users",userDoc.id,"hibah","maklumat")
 );
 
 if(
@@ -465,7 +465,7 @@ Review Hibah
 
 const sepencarianSnap =
 await getDoc(
-doc(db,"users",doc.id,"sepencarian","maklumat")
+doc(db,"users",userDoc.id,"sepencarian","maklumat")
 );
 
 if(
@@ -493,7 +493,7 @@ Review Sepencarian
 
 const mawarisSnap =
 await getDoc(
-doc(db,"users",doc.id,"mawaris","maklumat")
+doc(db,"users",userDoc.id,"mawaris","maklumat")
 );
 
 if(
@@ -529,7 +529,7 @@ html += `
 
 <tr
 class="border-b hover:bg-gray-50 cursor-pointer"
-onclick="window.location='customer-details.html?id=${doc.id}'">
+onclick="window.location='customer-details.html?id=${userDoc.id}'">
 
 <td class="p-3">
 ${bil++}
