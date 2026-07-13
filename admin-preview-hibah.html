@@ -383,7 +383,7 @@ Reject Permohonan
 
                 // LOAD CUSTOMER DATA
                 if (userId) {
-                    const docRef = doc(db, "users", userId, "wasiat", "maklumat");
+                    const docRef = doc(db, "users", userId, "hibah", "maklumat");
                     const docSnap = await getDoc(docRef);
 
                     if (docSnap.exists()) {
@@ -399,7 +399,7 @@ collection(
 db,
 "users",
 userId,
-"wasiatDocuments"
+"hibahDocuments"
 )
 );
                         
@@ -1227,26 +1227,26 @@ currentDocRef;
                 let currentNumber = 1;
 
                 if (counterSnap.exists()) {
-                    currentNumber = (counterSnap.data().wasiatCounter || 0) + 1;
+                    currentNumber = (counterSnap.data().hibahCounter || 0) + 1;
                 }
 
                 const docRefNo = `AQMS-WST-${year}-${String(currentNumber).padStart(3,"0")}`;
 
-                await updateDoc(doc(db, "users", userId, "wasiat", "maklumat"), {
+                await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
                     status: "APPROVED",
                     approvedAt: today.toISOString(),
                     docRef: docRefNo,
                     docNumber: currentNumber
                 });
 
-                await setDoc(counterRef, { wasiatCounter: currentNumber }, { merge: true });
+                await setDoc(counterRef, { hibahCounter: currentNumber }, { merge: true });
 
 await addDoc(
     collection(db, "users", userId, "notifications"),
     {
-        title: "Dokumen Wasiat Diluluskan",
-        message: `Dokumen Wasiat anda (${docRefNo}) telah diluluskan dan sedia untuk dilihat.`,
-        type: "WASIAT_APPROVED",
+        title: "Dokumen Hibah Diluluskan",
+        message: `Dokumen Hibah anda (${docRefNo}) telah diluluskan dan sedia untuk dilihat.`,
+        type: "HIBAH_APPROVED",
         read: false,
         createdAt: today.toISOString()
     }
@@ -1265,7 +1265,7 @@ await addDoc(
             if(!userId) return alert("User ID tidak sah!");
 
             try {
-                await updateDoc(doc(db, "users", userId, "wasiat", "maklumat"), {
+                await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
                     status: "REJECTED"
                 });
                 alert("Permohonan berjaya ditolak.");
