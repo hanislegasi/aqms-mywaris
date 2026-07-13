@@ -296,6 +296,10 @@ async function imageToBase64(url){
 
     const response = await fetch(url);
 
+if(!response.ok){
+    throw new Error("Image gagal dimuatkan");
+}
+    
     const blob = await response.blob();
 
     return new Promise((resolve)=>{
@@ -1124,7 +1128,7 @@ data.icWasi2 || "-"
 );
 
 let hurufLampiran = "I".charCodeAt(0);
-
+                       
 for(const doc of lampiranSnap.docs){
 
 const file = doc.data();
