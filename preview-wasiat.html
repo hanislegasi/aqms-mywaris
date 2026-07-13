@@ -492,8 +492,12 @@ console.log(wasiat13Html);
                        const approvedDate =
 data.approvedAt
 ? new Date(data.approvedAt)
-: new Date();
-                        document.getElementById("tahun").innerHTML = approvedDate.getFullYear();
+: null;
+
+document.getElementById("tahun").innerHTML =
+approvedDate
+? approvedDate.getFullYear()
+: new Date().getFullYear();
                         document.getElementById("namaCover").innerHTML = (data.nama || "-").toUpperCase();
                         document.getElementById("icCover").innerHTML = data.ic || "-";
                         
