@@ -1307,22 +1307,19 @@ let hibahHTML = "";
 
 Object.values(groupedHibah).forEach(item=>{
 
-    hibahHTML += `
-        <div class="a4-page p-[18mm]">
-
-            <h2 style="font-size:30px;font-weight:bold;">
-                DOKUMEN AKAD HIBAH
-            </h2>
-
-            <br>
-
-            <p>
-                Penerima Hibah :
-                <strong>${item.nama}</strong>
-            </p>
-
-        </div>
-    `;
+    hibahHTML += hibahContent
+        .replaceAll(
+            "{{NAMA_PENERIMA}}",
+            item.nama
+        )
+        .replaceAll(
+            "{{TABLE_ALIH}}",
+            ""
+        )
+        .replaceAll(
+            "{{TABLE_TAK_ALIH}}",
+            ""
+        );
 
 });
 
