@@ -35,16 +35,23 @@
     margin-right: auto;
         }
 
-        .a4-page {
-            width: 210mm;
-            height: 296.5mm; /* Dikurangkan sikit dari 297mm untuk elak blank page ke-3 */
-            background:white;
-            margin:0 auto;
-            box-sizing:border-box;
-            position:relative;
-            overflow:hidden;
-            page-break-after:auto; /* Paksa page break yang sekata */
-        }
+        .a4-page{
+    width:210mm;
+    min-height:297mm;
+    height:297mm;
+
+    background:white;
+
+    margin:0;
+
+    box-sizing:border-box;
+
+    position:relative;
+
+    overflow:hidden;
+
+    page-break-after:always;
+}
         
         .a4-page:last-child {
             page-break-after: auto; /* Tiada pemisah selepas page terakhir */
@@ -101,11 +108,11 @@ position:relative;
             transition: transform 0.2s ease, margin-bottom 0.2s ease;
         }
 
-        @page{
+       @page{
 
-size:A4 portrait;
+size:A4;
 
-margin:10mm;
+margin:0;
 
 }
 
@@ -114,10 +121,12 @@ margin:10mm;
 html,
 body{
 
-    width:210mm;
-    margin:0 !important;
-    padding:0 !important;
-    background:white !important;
+width:210mm;
+height:297mm;
+
+zoom:100%;
+
+}
 
 }
 
