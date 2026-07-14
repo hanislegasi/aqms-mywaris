@@ -100,6 +100,38 @@ position:relative;
             transform-origin: top center;
             transition: transform 0.2s ease, margin-bottom 0.2s ease;
         }
+
+        @page{
+
+size:A4 portrait;
+
+margin:10mm;
+
+}
+
+@media print{
+
+body{
+
+background:white !important;
+
+}
+
+.no-print{
+
+display:none !important;
+
+}
+
+#scale-wrapper{
+
+transform:none !important;
+
+margin:0 !important;
+
+}
+
+}
     </style>
 </head>
 
@@ -223,16 +255,25 @@ class="border border-gray-300 p-5 font-medium">
                 
  </main>
         
-    <div class="max-w-[210mm] mx-auto mt-6 mb-20">
-    <!-- ACTION BUTTONS -->
-    <div class="w-full max-w-3xl mx-auto p-4 mb-8 space-y-4">
-        <button id="downloadBtn" class="w-full bg-black hover:bg-gray-800 transition-all text-white py-4 rounded-xl font-semibold shadow-lg text-lg flex justify-center items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-            </svg>
-            Download PDF
-        </button>
+    <div class="w-full max-w-3xl mx-auto p-4 mb-8 space-y-4 no-print">
 
+    <button
+    id="printBtn"
+    class="w-full bg-green-600 hover:bg-green-700 transition-all text-white py-4 rounded-xl font-semibold shadow-lg text-lg flex justify-center items-center gap-2">
+
+        🖨️ Cetak / Save as PDF (Disyorkan)
+
+    </button>
+
+    <button
+    id="downloadBtn"
+    class="w-full bg-black hover:bg-gray-800 transition-all text-white py-4 rounded-xl font-semibold shadow-lg text-lg flex justify-center items-center gap-2">
+
+        📥 Download PDF (Legacy)
+
+    </button>
+        
+</div>
         <div class="flex justify-center gap-4 mt-6">
 
 <button
@@ -368,6 +409,20 @@ console.log(getComputedStyle(element).transform);
             });
         });
 
+document
+.getElementById("printBtn")
+.onclick=()=>{
+
+window.open(
+
+`print-wasiat.html?id=${userId}`,
+
+"_blank"
+
+);
+
+};
+        
         // --------------------------------------------------------
         // FIREBASE LOGIC
         // --------------------------------------------------------
