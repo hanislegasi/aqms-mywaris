@@ -1173,6 +1173,21 @@ ${index + 1}
 `;
 
 });    
+
+await document.fonts.ready;
+
+await new Promise(resolve=>requestAnimationFrame(resolve));
+await new Promise(resolve=>requestAnimationFrame(resolve));
+
+setTimeout(()=>{
+
+console.log(
+    document.querySelectorAll(".a4-page").length
+);
+    
+    window.print();
+
+},500);
                         
 /*
 document.getElementById(
@@ -1197,15 +1212,7 @@ currentDocRef;
             }
         });
 
-       window.onload = () => {
-
-    setTimeout(() => {
-
-        window.print();
-
-    }, 500);
-
-};
+      
     </script>
 
 <script src="wasiat-content.js"></script>
