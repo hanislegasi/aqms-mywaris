@@ -351,7 +351,7 @@ if(!response.ok){
         const db = getFirestore(app);
 
         const params = new URLSearchParams(window.location.search);
-        const userId = params.get("id");
+        let userId = params.get("id");
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
