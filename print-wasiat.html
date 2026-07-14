@@ -38,22 +38,15 @@
 
         .a4-page{
     width:210mm;
-    min-height:297mm;
-    height:297mm;
-
+    height:296.5mm;
     background:white;
-
-    margin:0;
-
+    margin:0 auto;
     box-sizing:border-box;
-
     position:relative;
-
-    overflow:visible;
-
-    page-break-after:always;
+    overflow:hidden;
+    page-break-after:auto;
 }
-        
+      
         .a4-page:last-child {
             page-break-after: auto; /* Tiada pemisah selepas page terakhir */
         }
@@ -123,9 +116,8 @@ html,
 body{
 
 width:210mm;
-height:297mm;
-
-zoom:100%;
+margin:0;
+padding:0;
 
 }
 
