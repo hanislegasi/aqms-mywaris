@@ -418,7 +418,7 @@ document
 
 window.open(
 
-`print-wasiat.html?id=${userId}`,
+`print-hibah.html?id=${userId}`,
 
 "_blank"
 
@@ -472,6 +472,57 @@ window.open(
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
+function groupHibahByRecipient(data){
+
+    const grouped = {};
+
+    function addProperty(item, jenis){
+
+        if(!item.penerimaHibah) return;
+
+        item.penerimaHibah.forEach(penerima=>{
+
+            const nama = penerima.nama?.trim();
+
+            if(!nama) return;
+
+            if(!grouped[nama]){
+
+                grouped[nama]={
+                    nama,
+                    hartaAlih:[],
+                    hartaTakAlih:[]
+                };
+
+            }
+
+            grouped[nama][jenis].push({
+
+                namaHarta:item.nama || "-",
+                rujukan:item.rujukan || "-",
+                nilai:item.nilai || "-",
+                pemilikan:item.pemilikan || "-",
+                kategori:item.kategori || "-",
+                peratus:penerima.peratus || "-"
+
+            });
+
+        });
+
+    }
+
+    (data.hartaAlih || []).forEach(item=>{
+        addProperty(item,"hartaAlih");
+    });
+
+    (data.hartaTakAlih || []).forEach(item=>{
+        addProperty(item,"hartaTakAlih");
+    });
+
+    return grouped;
+
+}
+                        
                         const userDoc = await getDoc(
     doc(db, "users", userId)
 );
@@ -488,6 +539,11 @@ userId,
                         
 const userData = userDoc.data();
 
+const groupedHibah = groupHibahByRecipient(data);
+
+console.log("GROUPED HIBAH");
+console.log(groupedHibah);
+                        
                         console.log("FULL DATA");
                         console.log(data);
                         console.log(Object.keys(data));
