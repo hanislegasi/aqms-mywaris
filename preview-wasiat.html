@@ -398,19 +398,7 @@ await new Promise(r=>setTimeout(r,1000));
             });
         });
 
-document
-.getElementById("printBtn")
-.onclick=()=>{
 
-window.open(
-
-`print-wasiat.html?id=${userId}`,
-
-"_blank"
-
-);
-
-};
         
         // --------------------------------------------------------
         // FIREBASE LOGIC
@@ -437,6 +425,20 @@ window.open(
 
    const userId = user.uid;
 
+document
+.getElementById("printBtn")
+.onclick=()=>{
+
+window.open(
+
+`print-wasiat.html?id=${userId}`,
+
+"_blank"
+
+);
+
+};
+            
             try {
                 
                 // LOAD CUSTOMER DATA
