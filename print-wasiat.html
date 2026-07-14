@@ -363,14 +363,39 @@ if(!response.ok){
 
             try {
                 // CHECK ADMIN ROLE
-                const adminDoc = await getDoc(doc(db, "users", user.uid));
-                const adminData = adminDoc.data();
+                // CHECK USER ROLE
 
-                if (adminData?.role !== "admin") {
-                    alert("Akses ditolak");
-                    window.location.href = "dashboard.html";
-                    return;
-                }
+const loginUserId = user.uid;
+
+const loginSnap = await getDoc(
+    doc(db, "users", loginUserId)
+);
+
+const loginData = loginSnap.data();
+
+if(loginData?.role === "admin"){
+
+    // Admin boleh buka mana-mana customer
+    // userId kekal daripada URL
+
+}else{
+
+    // Customer hanya boleh buka dokumen sendiri
+
+    if(loginUserId !== userId){
+
+        alert("Akses ditolak");
+
+        window.location.href="dashboard.html";
+
+        return;
+
+    }
+
+    // Paksa baca dokumen sendiri
+    userId = loginUserId;
+
+}
 
                 // LOAD CUSTOMER DATA
                 if (userId) {
