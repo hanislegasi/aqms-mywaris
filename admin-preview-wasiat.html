@@ -409,11 +409,17 @@ if(!response.ok){
 
 document
 .getElementById("printBtn")
-.addEventListener("click",()=>{
+.onclick=()=>{
 
-    window.print();
+window.open(
 
-});
+`print-wasiat.html?id=${userId}`,
+
+"_blank"
+
+);
+
+};
         
         // --------------------------------------------------------
         // FIREBASE LOGIC
