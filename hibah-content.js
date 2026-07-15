@@ -7,36 +7,39 @@ style="
 font-family:'Times New Roman', serif;
 font-size:42px;
 font-weight:700;
-letter-spacing:1px;
-text-align:center;
+margin-top:0;
+margin-bottom:20px;
 color:#153638;
-margin-bottom:30px;
+text-align:center;
+letter-spacing:1px;
 ">
-
-DOKUMEN AKAD HIBAH
-
+DOKUMEN HIBAH
 </h2>
 
-<div style="
+<div
+style="
 text-align:center;
 font-size:30px;
-margin-top:25px;
-margin-bottom:15px;
-font-family:'Amiri',serif;
+margin-bottom:10;
+font-family:'Amiri', serif;
 ">
 بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
 </div>
 
-<p style="
+<div
+style="
 font-family:'Times New Roman', serif;
 font-size:15px;
 line-height:1.6;
 text-align:justify;
+color:#222;
 ">
 
-Dengan nama Allah Yang Maha Pemurah lagi Maha Mengasihani.
+<p style="text-align:center; margin-bottom:20px;">
+<strong>Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani</strong>
+</p>
 
-Dokumen Akad Hibah ini disediakan sebagai rekod bertulis mengenai akad hibah yang dibuat secara sukarela oleh Pemberi Hibah kepada Penerima Hibah. Dokumen ini merekodkan butiran pihak-pihak, harta yang dihibahkan, kadar bahagian hibah serta syarat-syarat yang berkaitan sebagai dokumen sokongan dan pembuktian menurut Hukum Syarak serta undang-undang yang berkuat kuasa di Malaysia.</p>
+<p>Dokumen Akad Hibah ini disediakan sebagai rekod bertulis mengenai akad hibah yang dibuat secara sukarela oleh Pemberi Hibah kepada Penerima Hibah. Dokumen ini merekodkan butiran pihak-pihak, harta yang dihibahkan, kadar bahagian hibah serta syarat-syarat yang berkaitan sebagai dokumen sokongan dan pembuktian menurut Hukum Syarak serta undang-undang yang berkuat kuasa di Malaysia.</p>
 
 <p>Sesungguhnya Harta adalah amanah Allah kepada hambanya, maka adalah atas setiap hamba itu tanggungjawab sebagai Pemegang Amanah untuk mengurus harta dengan sempurna agar sentiasa dimanfaat menurut peraturan yang digariskan oleh Allah S.W.T.</p>
 
