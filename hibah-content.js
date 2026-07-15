@@ -50,6 +50,15 @@ Walaupun begitu, sekiranya wujud keperluan di mana suatu Perintah Pengesahan Hib
 
 <p>Bahawasanya SURAT IKATAN HIBAH DAN AMANAH ini adalah pengisytiharan terakhir dan mana-mana pengisytiharan hibah yang telah dinyatakan terdahulu ke atas harta hibah ini adalah terbatal.</p>
 
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
 
 <br>
 
