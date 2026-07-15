@@ -262,6 +262,15 @@ type="text"
 class="w-full border rounded-lg p-3 telefonWaris"
 placeholder="No Telefon">
 
+<input
+type="date"
+class="w-full border rounded-lg p-3 tarikhLahirWaris">
+
+<textarea
+rows="2"
+class="w-full border rounded-lg p-3 alamatWaris"
+placeholder="Alamat"></textarea>
+  
 <select
 class="w-full border rounded-lg p-3 statusWaris">
 
@@ -1182,6 +1191,18 @@ type="text"
 class="w-full border rounded-lg p-3 telefonWaris"
 placeholder="No Telefon"
 value="${item.telefon || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 tarikhLahirWaris"
+placeholder="Tarikh Lahir"
+value="${item.tarikhLahir || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 alamatWaris"
+placeholder="Alamat"
+value="${item.alamat || ''}">
 
 <select
 class="w-full border rounded-lg p-3 statusWaris">
