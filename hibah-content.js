@@ -46,7 +46,7 @@ Dokumen Akad Hibah ini disediakan sebagai rekod bertulis mengenai akad hibah yan
 Sesungguhnya Harta adalah amanah Allah kepada hambanya, maka adalah atas setiap hamba itu tanggungjawab sebagai Pemegang Amanah untuk mengurus harta dengan sempurna agar sentiasa dimanfaat menurut peraturan yang digariskan oleh Allah S.W.T.
 </p>
 <p>
-Saya, <strong>{{NAMA_PEWASIAT}}</strong>, No. K/P <strong>{{NO_IC_PEWASIAT}}</strong> (selepas ini disebut Pemegang Amanah) yang beralamat di <strong>{{ALAMAT_PEWASIAT}}</strong> adalah seorang warga Malaysia yang mukallaf, sihat tubuh badan dan waras fikiran semasa membuat PENGISYTIHARAN HIBAH ini. 
+Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. K/P <strong>{{IC_PEMBERI}}</strong> (selepas ini disebut Pemegang Amanah) yang beralamat di <strong>{{ALAMAT_PEMBERI}}</strong> adalah seorang warga Malaysia yang mukallaf, sihat tubuh badan dan waras fikiran semasa membuat PENGISYTIHARAN HIBAH ini. 
 (Sesalinan Kad Pengenalan Pemegang Amanah dilampirkan dan ditandakan dilampiran A).
 </p>
 
