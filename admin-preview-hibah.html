@@ -78,7 +78,38 @@ break-before:page;
     font-size:16px;
 }
 
-    
+ #sectionHibah{
+
+    font-family:'Times New Roman', serif;
+    color:#222;
+    line-height:1.7;
+
+}
+
+#sectionHibah p{
+
+    font-size:16px;
+    text-align:justify;
+    line-height:1.7;
+    margin-top:0;
+    margin-bottom:14px;
+
+}
+
+#sectionHibah td,
+#sectionHibah li{
+
+    font-size:16px;
+    text-align:justify;
+
+}
+
+#sectionHibah h3{
+
+    font-family:'Times New Roman', serif;
+color:#222;
+    line-height:1.7;
+}   
         .pdf-footer{
 position:absolute;
 bottom:5mm;
@@ -1466,7 +1497,17 @@ Object.values(groupedHibah).forEach(item=>{
 .replaceAll("{{HUBUNGAN}}", item.hubungan || "-")
 .replaceAll("{{ALAMAT_PENERIMA}}", item.alamat || "-")
 .replaceAll("{{PERATUS}}", item.peratus || "-")
-    
+.replaceAll(
+   "{{TARIKH_DOKUMEN}}",
+   approvedDate
+      ? approvedDate.toLocaleDateString("ms-MY")
+      : "-"
+)
+
+.replaceAll(
+   "{{TARIKH_LAHIR}}",
+   item.tarikhLahir || "-"
+)
 });
 
 document.getElementById("sectionHibah").innerHTML = hibahHTML;                        
