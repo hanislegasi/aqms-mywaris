@@ -1359,6 +1359,56 @@ function generateAlihTable(list){
 
 }
 
+function generateTakAlihTable(list){
+
+    if(!list.length){
+        return "<p>Tiada Harta Tak Alih.</p>";
+    }
+
+    let html = `
+    <table style="
+        width:100%;
+        border-collapse:collapse;
+        font-size:14px;
+        margin-top:10px;
+    ">
+    <tr>
+        <th style="border:1px solid #000;padding:8px;">Nama Harta</th>
+        <th style="border:1px solid #000;padding:8px;">No. Geran</th>
+        <th style="border:1px solid #000;padding:8px;">Nilai</th>
+        <th style="border:1px solid #000;padding:8px;">Peratus</th>
+    </tr>
+    `;
+
+    list.forEach(item=>{
+
+        html += `
+        <tr>
+            <td style="border:1px solid #000;padding:8px;">
+                ${item.namaHarta}
+            </td>
+
+            <td style="border:1px solid #000;padding:8px;">
+                ${item.rujukan}
+            </td>
+
+            <td style="border:1px solid #000;padding:8px;">
+                ${item.nilai}
+            </td>
+
+            <td style="border:1px solid #000;padding:8px;text-align:center;">
+                ${item.peratus}%
+            </td>
+        </tr>
+        `;
+
+    });
+
+    html += "</table>";
+
+    return html;
+
+}
                         
 let hibahHTML = "";
 
@@ -1374,9 +1424,9 @@ Object.values(groupedHibah).forEach(item=>{
     generateAlihTable(item.hartaAlih)
 )
         .replaceAll(
-            "{{TABLE_TAK_ALIH}}",
-            ""
-        );
+    "{{TABLE_TAK_ALIH}}",
+    generateTakAlihTable(item.hartaTakAlih)
+)
 
 });
 
