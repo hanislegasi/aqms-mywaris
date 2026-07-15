@@ -485,9 +485,6 @@ const warisMap = {};
 function groupHibahByRecipient(data){
 
     const grouped = {};
-const waris = (data.waris || []).find(
-    w => (w.nama || "").trim() === nama
-);
 
     function addProperty(item, jenis){
 
@@ -506,25 +503,26 @@ senaraiPenerima.forEach(penerima=>{
 
             if(!grouped[nama]){
 
-                const info = warisMap[nama] || {};
+    const info = warisMap[nama] || {};
 
-grouped[nama]={
+    grouped[nama] = {
 
-    nama,
+        nama,
 
-    ic: info.ic || "",
-    ic: waris?.ic || "",
-    hubungan: info.hubungan || "",
-    hubungan: waris?.hubungan || "",
-    alamat: info.alamat || "",
-    alamat: waris?.alamat || "",
-    tarikhLahir: info.tarikhLahir || "",
-    telefon: info.telefon || "",
-    peratus: penerima.peratus || "",
-    hartaAlih:[],
-    hartaTakAlih:[]
+        ic: info.ic || "",
+        hubungan: info.hubungan || "",
+        alamat: info.alamat || "",
+        tarikhLahir: info.tarikhLahir || "",
+        telefon: info.telefon || "",
 
-};
+        peratus: penerima.peratus || "",
+
+        hartaAlih: [],
+        hartaTakAlih: []
+
+    };
+
+}
 
             }
 
@@ -1443,7 +1441,8 @@ let hibahHTML = "";
 
 Object.values(groupedHibah).forEach(item=>{
 
-   
+   console.log(groupedHibah);
+    
     hibahHTML += hibahContent
               .replaceAll(
             "{{NAMA_PENERIMA}}",
