@@ -56,130 +56,91 @@ Dokumen Akad Hibah ini hendaklah dibaca bersama semua jadual, lampiran dan penge
 </div>
 <div class="a4-page p-[18mm]">
 
-SURAT IKATAN HIBAH DAN AMANAH ini diperbuat pada 	 
+<p>
+SURAT IKATAN HIBAH DAN AMANAH ini diperbuat pada
+<strong>{{TARIKH_DOKUMEN}}</strong>.
+</p>
 
-ANTARA
+<br>
 
-<strong>{{NAMA_PEMBERI}}</strong> (NO. K/P:<strong>{{IC_PEMBERI}}</strong>)(selepas ini disebut Pemberi Hibah) yang beralamat di <strong>{{ALAMAT_PEMBERI}}</strong> (selepas ini disebut sebagai "Pemberi Hibah") bagi Harta Amanah seperti yang dinyatakan di dalam Jadual 1.
+<p style="text-align:center;"><strong>ANTARA</strong></p>
 
-DENGAN
+<br>
 
-{{NAMA_PENERIMA}} (K/P :{{IC_PENERIMA}})
+<p style="text-align:justify;">
+<strong>{{NAMA_PEMBERI}}</strong>
+(No. Kad Pengenalan <strong>{{IC_PEMBERI}}</strong>)
+yang beralamat di
+<strong>{{ALAMAT_PEMBERI}}</strong>
+(selepas ini disebut sebagai
+<strong>"Pemberi Hibah"</strong>)
+bagi harta yang diperincikan di dalam
+<strong>Jadual 1</strong>.
+</p>
 
-(selepas ini disebut sebagai "Penerima Hibah") bagi Harta Amanah seperti yang dinyatakan di dalam Jadual 1.
+<br>
 
+<p style="text-align:center;"><strong>DENGAN</strong></p>
 
-<h3 style="
-margin-bottom:15px;
-font-family:Times New Roman, serif;
-font-size:16px;
-font-weight:600;
-color:#153638;
-">
+<br>
 
-MAKLUMAT PEMBERI HIBAH
+<p style="text-align:justify;">
+<strong>{{NAMA_PENERIMA}}</strong>
+(No. Kad Pengenalan
+<strong>{{IC_PENERIMA}}</strong>)
+yang beralamat di
+<strong>{{ALAMAT_PENERIMA}}</strong>
+(selepas ini disebut sebagai
+<strong>"Penerima Hibah"</strong>)
+bagi harta yang diperincikan di dalam
+<strong>Jadual 1</strong>.
+</p>
 
-</h3>
+<br><br>
 
-<table
-style="
-width:100%;
-border-collapse:collapse;
-font-family:'Times New Roman', serif;
-font-size:14px;
-margin-top:15px;
-margin-bottom:25px;
-">
+<h3>BAHAWASANYA</h3>
 
-<tr>
+<table style="width:100%; border-collapse:collapse;">
 
-<td width="30%"><strong>Nama</strong></td>
-
-<td>{{NAMA_PEMBERI}}</td>
-
+<tr valign="top">
+<td width="30">A.</td>
+<td style="text-align:justify;">
+Pemberi Hibah merupakan pemilik yang sah ke atas harta-harta yang dinyatakan di dalam Jadual 1.
+</td>
 </tr>
 
-<tr>
-
-<td><strong>No. Kad Pengenalan</strong></td>
-
-<td>{{IC_PEMBERI}}</td>
-
+<tr valign="top">
+<td>B.</td>
+<td style="text-align:justify;">
+Pemberi Hibah berhasrat menghibahkan harta tersebut kepada Penerima Hibah secara sukarela tanpa sebarang paksaan.
+</td>
 </tr>
 
-<tr>
-
-<td><strong>Alamat</strong></td>
-
-<td>{{ALAMAT_PEMBERI}}</td>
-
+<tr valign="top">
+<td>C.</td>
+<td style="text-align:justify;">
+Penerima Hibah bersetuju menerima hibah tersebut mengikut kadar bahagian yang dinyatakan di dalam Jadual 1.
+</td>
 </tr>
 
-<tr>
-
-<td><strong>No. Telefon</strong></td>
-
-<td>{{TELEFON_PEMBERI}}</td>
-
-</tr>
-
-</table>
-
-<h3 style="
-margin-bottom:15px;
-font-family:Times New Roman, serif;
-font-size:16px;
-font-weight:600;
-color:#153638;
-">
-
-MAKLUMAT PENERIMA HIBAH
-
-</h3>
-
-<table
-style="
-width:100%;
-border-collapse:collapse;
-font-family:Times New Roman, serif;
-font-size:13px;
-margin-bottom:25px;
-">
-
-<tr>
-
-<td width="30%"><strong>Nama Penerima</strong></td>
-
-<td>{{NAMA_PENERIMA}}</td>
-
-</tr>
-
-<tr>
-
-<td><strong>No. Kad Pengenalan</strong></td>
-
-<td>{{IC_PENERIMA}}</td>
-
-</tr>
-
-<tr>
-
-<td><strong>Hubungan</strong></td>
-
-<td>{{HUBUNGAN}}</td>
-
-</tr>
-
-<tr>
-
-<td><strong>Bahagian Hibah</strong></td>
-
-<td>{{PERATUS}}%</td>
-
+<tr valign="top">
+<td>D.</td>
+<td style="text-align:justify;">
+Semua pihak bersetuju bahawa dokumen ini menjadi rekod bertulis mengenai akad hibah yang dibuat menurut Hukum Syarak dan undang-undang yang berkuat kuasa di Malaysia.
+</td>
 </tr>
 
 </table>
 
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
 
 
 <br>
