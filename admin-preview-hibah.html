@@ -1409,6 +1409,46 @@ function generateTakAlihTable(list){
     return html;
 
 }
+
+function addProperty(item, jenis){
+
+    const senaraiPenerima =
+        item.penerimaHibah ||
+        item.penerimaHibahTakAlih ||
+        [];
+
+    if(!senaraiPenerima.length) return;
+
+    senaraiPenerima.forEach(penerima=>{
+
+        const nama = penerima.nama?.trim();
+
+        if(!nama) return;
+
+        if(!grouped[nama]){
+
+            grouped[nama]={
+                nama,
+                hartaAlih:[],
+                hartaTakAlih:[]
+            };
+
+        }
+
+        grouped[nama][jenis].push({
+
+            namaHarta : item.nama || "-",
+            rujukan : item.rujukan || "-",
+            nilai : item.nilai || "-",
+            pemilikan : item.pemilikan || "-",
+            kategori : item.kategori || "-",
+            peratus : penerima.peratus || "-"
+
+        });
+
+    });
+
+}
                         
 let hibahHTML = "";
 
