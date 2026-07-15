@@ -26,14 +26,7 @@ font-family:'Amiri', serif;
 بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
 </div>
 
-<div
-style="
-font-family:'Times New Roman', serif;
-font-size:15px;
-line-height:1.6;
-text-align:justify;
-color:#222;
-">
+
 
 <p style="text-align:center; margin-bottom:20px;">
 <strong>Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani</strong>
@@ -42,9 +35,11 @@ color:#222;
 <p>
 Dokumen Akad Hibah ini disediakan sebagai rekod bertulis mengenai akad hibah yang dibuat secara sukarela oleh Pemberi Hibah kepada Penerima Hibah. Dokumen ini merekodkan butiran pihak-pihak, harta yang dihibahkan, kadar bahagian hibah serta syarat-syarat yang berkaitan sebagai dokumen sokongan dan pembuktian menurut Hukum Syarak serta undang-undang yang berkuat kuasa di Malaysia.
 </p>
+
 <p>
 Sesungguhnya Harta adalah amanah Allah kepada hambanya, maka adalah atas setiap hamba itu tanggungjawab sebagai Pemegang Amanah untuk mengurus harta dengan sempurna agar sentiasa dimanfaat menurut peraturan yang digariskan oleh Allah S.W.T.
 </p>
+
 <p>
 Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. K/P <strong>{{IC_PEMBERI}}</strong> (selepas ini disebut Pemegang Amanah) yang beralamat di <strong>{{ALAMAT_PEMBERI}}</strong> adalah seorang warga Malaysia yang mukallaf, sihat tubuh badan dan waras fikiran semasa membuat PENGISYTIHARAN HIBAH ini. 
 (Sesalinan Kad Pengenalan Pemegang Amanah dilampirkan dan ditandakan dilampiran A).
@@ -63,7 +58,6 @@ Walaupun begitu, sekiranya wujud keperluan di mana suatu Perintah Pengesahan Hib
 Bahawasanya SURAT IKATAN HIBAH DAN AMANAH ini adalah pengisytiharan terakhir dan mana-mana pengisytiharan hibah yang telah dinyatakan terdahulu ke atas harta hibah ini adalah terbatal.
 </p>
 
-</div>
 
 <div class="pdf-footer">
 
