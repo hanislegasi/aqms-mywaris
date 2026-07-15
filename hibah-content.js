@@ -28,22 +28,22 @@ font-family:'Amiri',serif;
 </div>
 
 <p style="
-font-family:Inter,sans-serif;
-font-size:14px;
+font-family:'Times New Roman', serif;
+font-size:15px;
 line-height:1.8;
 text-align:justify;
 ">
 
 Dengan nama Allah Yang Maha Pemurah lagi Maha Mengasihani.
 
-Dokumen Akad Hibah ini dibuat secara sukarela oleh Pemberi Hibah sebagai bukti nyata hasrat untuk menghibahkan harta kepada Penerima Hibah sebagaimana yang diperincikan dalam dokumen ini. Dokumen ini turut merekodkan butiran harta, kadar bahagian hibah, serta persetujuan pihak-pihak yang terlibat sebagai rekod bertulis bagi tujuan pembuktian sekiranya diperlukan menurut undang-undang dan Hukum Syarak.
+Dokumen Akad Hibah ini disediakan sebagai rekod bertulis mengenai akad hibah yang dibuat secara sukarela oleh Pemberi Hibah kepada Penerima Hibah. Dokumen ini merekodkan butiran pihak-pihak, harta yang dihibahkan, kadar bahagian hibah serta syarat-syarat yang berkaitan sebagai dokumen sokongan dan pembuktian menurut Hukum Syarak serta undang-undang yang berkuat kuasa di Malaysia.
 
 </p>
 
 <h3 style="
 margin-top:30px;
 margin-bottom:15px;
-font-family:Inter,sans-serif;
+font-family:Times New Roman, serif;
 font-size:16px;
 font-weight:600;
 color:#153638;
@@ -57,8 +57,8 @@ MAKLUMAT PEMBERI HIBAH
 style="
 width:100%;
 border-collapse:collapse;
-font-family:Inter,sans-serif;
-font-size:13px;
+font-family:'Times New Roman', serif;
+font-size:14px;
 margin-bottom:25px;
 ">
 
@@ -98,7 +98,7 @@ margin-bottom:25px;
 
 <h3 style="
 margin-bottom:15px;
-font-family:Inter,sans-serif;
+font-family:Times New Roman, serif;
 font-size:16px;
 font-weight:600;
 color:#153638;
@@ -112,7 +112,7 @@ MAKLUMAT PENERIMA HIBAH
 style="
 width:100%;
 border-collapse:collapse;
-font-family:Inter,sans-serif;
+font-family:Times New Roman, serif;
 font-size:13px;
 margin-bottom:25px;
 ">
@@ -151,19 +151,37 @@ margin-bottom:25px;
 
 </table>
 
-</strong>
 
-</p>
 
 <br>
 
-<h3>HARTA ALIH</h3>
+<h3
+style="
+font-family:'Times New Roman', serif;
+font-size:18px;
+font-weight:bold;
+color:#153638;
+margin-top:25px;
+margin-bottom:12px;
+">
+JADUAL HARTA ALIH
+</h3>
 
 {{TABLE_ALIH}}
 
 <br><br>
 
-<h3>HARTA TAK ALIH</h3>
+<h3
+style="
+font-family:'Times New Roman', serif;
+font-size:18px;
+font-weight:bold;
+color:#153638;
+margin-top:25px;
+margin-bottom:12px;
+">
+JADUAL HARTA TAK ALIH
+</h3>
 
 {{TABLE_TAK_ALIH}}
 
