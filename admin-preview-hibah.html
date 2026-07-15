@@ -494,10 +494,13 @@ senaraiPenerima.forEach(penerima=>{
             if(!grouped[nama]){
 
                 grouped[nama]={
-                    nama,
-                    hartaAlih:[],
-                    hartaTakAlih:[]
-                };
+    nama,
+    ic: penerima.ic || "",
+    hubungan: penerima.hubungan || "",
+    peratus: penerima.peratus || "",
+    hartaAlih:[],
+    hartaTakAlih:[]
+};
 
             }
 
