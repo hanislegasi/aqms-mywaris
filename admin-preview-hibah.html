@@ -472,6 +472,16 @@ window.open(
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
+const warisMap = {};
+
+(data.waris || []).forEach(w => {
+
+    warisMap[(w.nama || "").trim()] = w;
+
+});
+
+
+                        
 function groupHibahByRecipient(data){
 
     const grouped = {};
@@ -493,13 +503,28 @@ senaraiPenerima.forEach(penerima=>{
 
             if(!grouped[nama]){
 
-                grouped[nama]={
+                const info = warisMap[nama] || {};
+
+grouped[nama]={
+
     nama,
-    ic: penerima.ic || "",
-    hubungan: penerima.hubungan || "",
+
+    ic: info.ic || "",
+
+    hubungan: info.hubungan || "",
+
+    alamat: info.alamat || "",
+
+    tarikhLahir: info.tarikhLahir || "",
+
+    telefon: info.telefon || "",
+
     peratus: penerima.peratus || "",
+
     hartaAlih:[],
+
     hartaTakAlih:[]
+
 };
 
             }
