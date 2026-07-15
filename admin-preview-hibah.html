@@ -1444,6 +1444,15 @@ console.log(hibahContent);
     generateTakAlihTable(item.hartaTakAlih)
 )
 
+.replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
+.replaceAll("{{IC_PEMBERI}}", data.ic || "-")
+.replaceAll("{{ALAMAT_PEMBERI}}", data.alamat || "-")
+.replaceAll("{{TELEFON_PEMBERI}}", data.telefon || "-")
+
+.replaceAll("{{IC_PENERIMA}}", item.ic || "-")
+.replaceAll("{{HUBUNGAN}}", item.hubungan || "-")
+.replaceAll("{{PERATUS}}", item.peratus || "-")
+    
 });
 
 document.getElementById("sectionHibah").innerHTML = hibahHTML;                        
