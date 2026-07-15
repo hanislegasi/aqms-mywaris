@@ -41,7 +41,7 @@ Sesungguhnya Harta adalah amanah Allah kepada hambanya, maka adalah atas setiap 
 </p>
 
 <p>
-Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. K/P <strong>{{IC_PEMBERI}}</strong> (selepas ini disebut Pemegang Amanah) yang beralamat di <strong>{{ALAMAT_PEMBERI}}</strong> adalah seorang warga Malaysia yang mukallaf, sihat tubuh badan dan waras fikiran semasa membuat PENGISYTIHARAN HIBAH ini. 
+Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. K/P <strong>{{IC_PEMBERI}}</strong> (selepas ini disebut Pemberi Hibah) yang beralamat di <strong>{{ALAMAT_PEMBERI}}</strong> adalah seorang warga Malaysia yang mukallaf, sihat tubuh badan dan waras fikiran semasa membuat PENGISYTIHARAN HIBAH ini. 
 (Sesalinan Kad Pengenalan Pemegang Amanah dilampirkan dan ditandakan dilampiran A).
 </p>
 
@@ -70,6 +70,19 @@ Bahawasanya SURAT IKATAN HIBAH DAN AMANAH ini adalah pengisytiharan terakhir dan
 </div>
 
 <div class="a4-page p-[18mm]">
+
+SURAT IKATAN HIBAH DAN AMANAH ini diperbuat pada 	 
+
+ANTARA
+
+<strong>{{NAMA_PEMBERI}}</strong> (NO. K/P:<strong>{{IC_PEMBERI}}</strong>)(selepas ini disebut Pemberi Hibah) yang beralamat di <strong>{{ALAMAT_PEMBERI}}</strong> (selepas ini disebut sebagai "Pemberi Hibah") bagi Harta Amanah seperti yang dinyatakan di dalam Jadual 1.
+
+DENGAN
+
+{{NAMA_PENERIMA}} (K/P :{{IC_PENERIMA}})
+
+(selepas ini disebut sebagai "Penerima Hibah") bagi Harta Amanah seperti yang dinyatakan di dalam Jadual 1.
+
 
 <h3 style="
 margin-bottom:15px;
