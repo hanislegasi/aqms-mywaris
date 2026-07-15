@@ -40,14 +40,15 @@ Dokumen Akad Hibah ini disediakan sebagai rekod bertulis mengenai akad hibah yan
 
 </p>
 
-<h3
-style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-
-<strong>
+<h3 style="
+margin-bottom:15px;
+font-family:Times New Roman, serif;
+font-size:16px;
+font-weight:600;
+color:#153638;
+">
 
 MAKLUMAT PEMBERI HIBAH
-
-</strong>
 
 </h3>
 
