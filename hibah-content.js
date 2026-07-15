@@ -160,9 +160,8 @@ Semua pihak bersetuju bahawa dokumen ini menjadi rekod bertulis mengenai akad hi
 </h3>
 
 <p>
-<strong>1.1
-Bahawa Pemegang Amanah secara sedar, waras, dengan sukarelanya dan bukan dalam keadaan sakit, atas dasar kasih sayang dan tanpa mendapat apa-apa balasan dengan ini membuat hibah ke atas Harta Amanah tersebut kepada Benefisiari dengan kadar seperti di dalam Jadual 2.
-</p>
+1.1
+Bahawa Pemegang Amanah secara sedar, waras, dengan sukarelanya dan bukan dalam keadaan sakit, atas dasar kasih sayang dan tanpa mendapat apa-apa balasan dengan ini membuat hibah ke atas Harta Amanah tersebut kepada Benefisiari dengan kadar seperti di dalam Jadual 2.</p>
 
 
 
