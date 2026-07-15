@@ -31,7 +31,7 @@ Dokumen Akad Hibah ini disediakan sebagai suatu rekod bertulis berhubung akad hi
 </p>
 
 <p>
-Sesungguhnya segala harta adalah amanah Allah SWT kepada hamba-Nya. Setiap pemilik harta bertanggungjawab mengurus dan memanfaatkan harta tersebut dengan sebaik-baiknya menurut syariat Islam serta tidak menzalimi hak mana-mana pihak.
+Sesungguhnya Harta adalah amanah Allah kepada hambanya, maka adalah atas setiap hamba itu tanggungjawab sebagai Pemegang Amanah untuk mengurus harta dengan sempurna agar sentiasa dimanfaat menurut peraturan yang digariskan oleh Allah S.W.T.
 </p>
 
 <p>
@@ -41,12 +41,17 @@ Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. Kad Pengenalan
 </p>
 
 <p>
-Dokumen ini disediakan sebagai bukti nyata hasrat dan niat Pemberi Hibah semasa hayatnya serta bertujuan mengelakkan sebarang kekeliruan, pertikaian atau pertindihan tuntutan terhadap harta yang dihibahkan selepas kematian Pemberi Hibah.
+Matlamat saya menulis SURAT IKATAN HIBAH DAN AMANAH ini adalah sebagai pernyataan bertulis yang menjelaskan kedudukan harta yang telah dihibahkan kepada Benefisiari semasa hayat Pemegang Amanah, dengan harapan agar memudahkan proses penyelesaian pusaka mana-mana pihak sama ada Pemegang Amanah mahupun Benefisiari tanpa wujudnya apa-apa kekeliruan terhadap status harta yang telah dihibahkan tersebut selepas kematian mana-mana pihak.
 </p>
 
 <p>
-Dokumen Akad Hibah ini hendaklah dibaca bersama semua jadual, lampiran dan pengesahan yang terkandung di dalamnya dan menjadi rujukan utama berhubung pengisytiharan hibah ini.
+Oleh yang demikian, SURAT IKATAN HIBAH DAN AMANAH ini diyakini berfungsi sebagai dokumen yang menyumbang kepada penyelesaian pusaka yang sempurna, adil dan saksama secara SULH dikalangan ahli waris mana-mana pihak yang meninggal dunia.  Walaupun begitu, sekiranya wujud keperluan di mana suatu Perintah Pengesahan Hibah akan dituntut dari mana-mana Mahkamah Syariah yang berbidangkuasa, hendaklah SURAT IKATAN HIBAH DAN AMANAH ini menjadi bahan pembuktian penting dan sumber utama yang harus mendapat pertimbangan Mahkamah.
 </p>
+
+<p>
+Bahawasanya SURAT IKATAN HIBAH DAN AMANAH ini adalah pengisytiharan terakhir dan mana-mana pengisytiharan hibah yang telah dinyatakan terdahulu ke atas harta hibah ini adalah terbatal.
+</p>
+
 
 <div class="pdf-footer">
 <span class="footer-docref"></span>
