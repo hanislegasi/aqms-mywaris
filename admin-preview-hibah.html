@@ -1467,7 +1467,16 @@ function generateTakAlihTable(list){
 
 }
 
-                       
+function formatDateMY(dateStr){
+
+    if(!dateStr) return "-";
+
+    return new Date(dateStr)
+        .toLocaleDateString("ms-MY");
+
+}
+
+                        
 let hibahHTML = "";
 
 Object.values(groupedHibah).forEach(item=>{
@@ -1505,8 +1514,8 @@ Object.values(groupedHibah).forEach(item=>{
 )
 
 .replaceAll(
-   "{{TARIKH_LAHIR}}",
-   item.tarikhLahir || "-"
+    "{{TARIKH_LAHIR}}",
+    formatDateMY(item.tarikhLahir)
 )
 });
 
