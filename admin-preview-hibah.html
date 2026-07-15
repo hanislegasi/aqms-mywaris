@@ -1427,12 +1427,11 @@ Object.values(groupedHibah).forEach(item=>{
 console.log(item.nama);
     console.log(item.hartaAlih);
     console.log(item.hartaTakAlih);
-    
-    hibahHTML += hibahContent
 
 console.log(hibahContent);
-        
-        .replaceAll(
+    
+    hibahHTML += hibahContent
+              .replaceAll(
             "{{NAMA_PENERIMA}}",
             item.nama
         )
