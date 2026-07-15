@@ -1,5 +1,7 @@
 const hibahContent = `
 
+console.log("HIBAH VERSION 99");
+
 <div class="a4-page p-[18mm]">
 
 <h2 style="
