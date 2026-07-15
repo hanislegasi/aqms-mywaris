@@ -36,29 +36,29 @@ color:#222;
 <p style="text-align:center; margin-bottom:20px;">
 <strong>Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani</strong>
 </p>
-
+<br>
 <p>
 Dokumen Akad Hibah ini disediakan sebagai suatu rekod bertulis berhubung akad hibah yang dibuat secara sukarela oleh <strong>Pemberi Hibah</strong> kepada <strong>Penerima Hibah</strong>. Dokumen ini merekodkan identiti pihak-pihak yang terlibat, butiran harta yang dihibahkan, kadar bahagian hibah serta syarat-syarat yang dipersetujui sebagai dokumen sokongan dan pembuktian menurut Hukum Syarak serta undang-undang yang berkuat kuasa di Malaysia.
 </p>
-
+<br>
 <p>
 Sesungguhnya Harta adalah amanah Allah kepada hambanya, maka adalah atas setiap hamba itu tanggungjawab sebagai Pemegang Amanah untuk mengurus harta dengan sempurna agar sentiasa dimanfaat menurut peraturan yang digariskan oleh Allah S.W.T.
 </p>
-
+<br>
 <p>
 Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. Kad Pengenalan
 <strong>{{IC_PEMBERI}}</strong>, yang beralamat di
 <strong>{{ALAMAT_PEMBERI}}</strong>, dengan ini secara sukarela, tanpa sebarang paksaan, tekanan atau pengaruh mana-mana pihak, mengisytiharkan bahawa saya berhasrat menghibahkan harta-harta yang dinyatakan di dalam dokumen ini kepada Penerima Hibah sebagaimana yang diperincikan di dalam Jadual 1.
 </p>
-
+<br>
 <p>
 Matlamat saya menulis SURAT IKATAN HIBAH DAN AMANAH ini adalah sebagai pernyataan bertulis yang menjelaskan kedudukan harta yang telah dihibahkan kepada Benefisiari semasa hayat Pemegang Amanah, dengan harapan agar memudahkan proses penyelesaian pusaka mana-mana pihak sama ada Pemegang Amanah mahupun Benefisiari tanpa wujudnya apa-apa kekeliruan terhadap status harta yang telah dihibahkan tersebut selepas kematian mana-mana pihak.
 </p>
-
+<br>
 <p>
 Oleh yang demikian, SURAT IKATAN HIBAH DAN AMANAH ini diyakini berfungsi sebagai dokumen yang menyumbang kepada penyelesaian pusaka yang sempurna, adil dan saksama secara SULH dikalangan ahli waris mana-mana pihak yang meninggal dunia.  Walaupun begitu, sekiranya wujud keperluan di mana suatu Perintah Pengesahan Hibah akan dituntut dari mana-mana Mahkamah Syariah yang berbidangkuasa, hendaklah SURAT IKATAN HIBAH DAN AMANAH ini menjadi bahan pembuktian penting dan sumber utama yang harus mendapat pertimbangan Mahkamah.
 </p>
-
+<br>
 <p>
 Bahawasanya SURAT IKATAN HIBAH DAN AMANAH ini adalah pengisytiharan terakhir dan mana-mana pengisytiharan hibah yang telah dinyatakan terdahulu ke atas harta hibah ini adalah terbatal.
 </p>
@@ -75,7 +75,14 @@ Bahawasanya SURAT IKATAN HIBAH DAN AMANAH ini adalah pengisytiharan terakhir dan
 
 </div>
 
-<div class="a4-page p-[18mm]">
+<div
+class="a4-page p-[18mm]"
+style="
+font-family:'Times New Roman',serif;
+font-size:15px;
+line-height:1.6;
+text-align:justify;
+">
 
 <p>
 SURAT IKATAN HIBAH DAN AMANAH ini diperbuat pada
@@ -129,21 +136,21 @@ bagi harta yang diperincikan di dalam
 Pemberi Hibah merupakan pemilik yang sah ke atas harta-harta yang dinyatakan di dalam Jadual 1.
 </td>
 </tr>
-
+<br>
 <tr valign="top">
 <td>B.</td>
 <td style="text-align:justify;">
 Pemberi Hibah berhasrat menghibahkan harta tersebut kepada Penerima Hibah secara sukarela tanpa sebarang paksaan.
 </td>
 </tr>
-
+<br>
 <tr valign="top">
 <td>C.</td>
 <td style="text-align:justify;">
 Penerima Hibah bersetuju menerima hibah tersebut mengikut kadar bahagian yang dinyatakan di dalam Jadual 1.
 </td>
 </tr>
-
+<br>
 <tr valign="top">
 <td>D.</td>
 <td style="text-align:justify;">
@@ -163,7 +170,14 @@ Semua pihak bersetuju bahawa dokumen ini menjadi rekod bertulis mengenai akad hi
 
 </div>
 
-<div class="a4-page p-[18mm]">
+<div
+class="a4-page p-[18mm]"
+style="
+font-family:'Times New Roman',serif;
+font-size:15px;
+line-height:1.6;
+text-align:justify;
+">
 
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
@@ -196,7 +210,7 @@ Bahawa saya, <strong>{{NAMA_PEMBERI}}</strong> (No. K/P: <strong>{{IC_PEMBERI}}<
 <strong>{{IC_PENERIMA}}</strong>)("Benefisiari").
 </td>
 </tr>
-
+<br>
 <tr valign="top">
 <td>2.2</td>
 <td style="text-align:justify;">
