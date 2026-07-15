@@ -222,7 +222,23 @@ Bahawa kami, <strong>{{NAMA_PENERIMA}}</strong>
 </tr>
 </table>
 
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>3.	KETIDAKDAFTARAN PINDAHMILIK</strong>
+</h3> 
 
+<p>Walauapapun jika ada mana-mana peruntukkan yang terkandung di dalam Perjanjian Hibah ini berlawanan, jika sekiranya permohonan pendaftaran pindahmilik Harta Amanah tersebut ke atas nama Benefisiari tidak dapat disempurnakan oleh Pihak Berkuasa Yang Berkenaan atas apa jua sebab yang mana ia bukan merupakan pelanggaran atau salahlaku oleh Pemegang Amanah atau Benefisiari, maka Pemegang Amanah atau Benefisiari boleh membawa/mengambil tindakan bagi berkaitan dan diperuntukkan dalam mana-mana undang-undang di Malaysia ini bagi tujuan pendaftaran.</p>
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>4.	PEMERIKSAAN HARTA AMANAH</strong>
+</h3> 
+
+<p>Adalah dipersetujui oleh kedua-dua pihak bahawa risiko terhadap Harta Amanah tersebut kekal kepada Pemegang Amanah sehinggalah kepada tarikh semasa penyerahan milikan kosong Harta Amanah tersebut oleh Pemegang Amanah kepada Benefisiari tersebut.</p>
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>5.	EFEK SURAT IKATAN HIBAH</strong>
+</h3> 
+
+<p>Pemegang Amanah bersetuju bahawa melalui Surat Ikatan ini dan berkuatkuasa serta merta, Pemegang Amanah kini tidak lagi mempunyai hak, kepentingan dan manfaat ke atas harta-harta tersebut melainkan hanya menjalankan tugas sebagai Pemegang Amanah kepada Benefisiari seperti yang diperincikan di dalam Surat Ikatan ini melainkan dinyatakan sebaliknya.</p>
 <div class="pdf-footer">
 
 <span class="footer-docref"></span>
