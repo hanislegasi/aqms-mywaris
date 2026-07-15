@@ -3019,14 +3019,14 @@ class="w-full border rounded-lg p-3 telefonWaris"
 placeholder="No Telefon">
 
 <input
-type="text"
-class="w-full border rounded-lg p-3 telefonWaris"
-placeholder="Tarikh Lahir">
+type="date"
+class="w-full border rounded-lg p-3 warisTarikhLahir"
+value="${data.tarikhLahir || ""}">
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 telefonWaris"
-placeholder="Alamat">
+<textarea
+class="w-full border rounded-lg p-3 warisAlamat"
+rows="2"
+placeholder="Alamat">${data.alamat || ""}</textarea>
 
 <select
 class="w-full border rounded-lg p-3 statusWaris">
