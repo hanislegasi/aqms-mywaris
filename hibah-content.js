@@ -22,8 +22,17 @@ margin-bottom:8px;
 بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
 </div>
 
-<p style="text-align:center;">
-<strong>Dengan Nama Allah Yang Maha Pemurah Lagi Maha Mengasihani</strong>
+<div
+style="
+font-family:'Times New Roman', serif;
+font-size:15px;
+line-height:1.6;
+text-align:justify;
+color:#222;
+">
+
+<p style="text-align:center; margin-bottom:20px;">
+<strong>Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani</strong>
 </p>
 
 <p>
@@ -136,6 +145,24 @@ Semua pihak bersetuju bahawa dokumen ini menjadi rekod bertulis mengenai akad hi
 </tr>
 
 </table>
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>MAKA PERJANJIAN HIBAH INI MENYAKSIKAN SEPERTI BERIKUT:-</strong>
+</h3>
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>1.	HIBAH</strong>
+</h3>
+
+<p>
+<strong>1.1
+Bahawa Pemegang Amanah secara sedar, waras, dengan sukarelanya dan bukan dalam keadaan sakit, atas dasar kasih sayang dan tanpa mendapat apa-apa balasan dengan ini membuat hibah ke atas Harta Amanah tersebut kepada Benefisiari dengan kadar seperti di dalam Jadual 2.
+</p>
+
+
+
+
+
 
 <div class="pdf-footer">
 
