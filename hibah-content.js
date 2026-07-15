@@ -232,11 +232,31 @@ Bahawa kami, <strong>{{NAMA_PENERIMA}}</strong>
 
 <p>Adalah dipersetujui oleh kedua-dua pihak bahawa risiko terhadap Harta Amanah tersebut kekal kepada Pemegang Amanah sehinggalah kepada tarikh semasa penyerahan milikan kosong Harta Amanah tersebut oleh Pemegang Amanah kepada Benefisiari tersebut.</p>
 
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
+
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>5.	EFEK SURAT IKATAN HIBAH</strong>
 </h3> 
 
 <p>Pemegang Amanah bersetuju bahawa melalui Surat Ikatan ini dan berkuatkuasa serta merta, Pemegang Amanah kini tidak lagi mempunyai hak, kepentingan dan manfaat ke atas harta-harta tersebut melainkan hanya menjalankan tugas sebagai Pemegang Amanah kepada Benefisiari seperti yang diperincikan di dalam Surat Ikatan ini melainkan dinyatakan sebaliknya.</p>
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>6.	KOS</strong>
+</h3>
+
+<p>Segala kos dan perbelanjaan dalam penyediaan Perjanjian Hibah ini ditanggung oleh Pemegang Amanah.</p>
+
+
 <div class="pdf-footer">
 
 <span class="footer-docref"></span>
