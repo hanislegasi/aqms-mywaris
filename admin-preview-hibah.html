@@ -485,6 +485,9 @@ const warisMap = {};
 function groupHibahByRecipient(data){
 
     const grouped = {};
+const waris = (data.waris || []).find(
+    w => (w.nama || "").trim() === nama
+);
 
     function addProperty(item, jenis){
 
