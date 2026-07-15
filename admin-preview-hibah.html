@@ -574,16 +574,11 @@ const userData = userDoc.data();
 
 const groupedHibah = groupHibahByRecipient(data);
 
-console.log("GROUPED HIBAH");
-console.log(groupedHibah);
+
 
                        
-                        console.log("FULL DATA");
-                        console.log(data);
-                        console.log(Object.keys(data));
-
-                        console.log("WASIAT 1/3");
-console.log(data.wasiatSatuPerTiga);
+                       
+                        
 
 const huruf = "abcdefghijklmnopqrstuvwxyz";
 
@@ -1449,12 +1444,7 @@ let hibahHTML = "";
 
 Object.values(groupedHibah).forEach(item=>{
 
-console.log(item.nama);
-    console.log(item.hartaAlih);
-    console.log(item.hartaTakAlih);
-
-console.log(hibahContent);
-    
+   
     hibahHTML += hibahContent
               .replaceAll(
             "{{NAMA_PENERIMA}}",
@@ -1476,6 +1466,7 @@ console.log(hibahContent);
 
 .replaceAll("{{IC_PENERIMA}}", item.ic || "-")
 .replaceAll("{{HUBUNGAN}}", item.hubungan || "-")
+.replaceAll("{{ALAMAT_PENERIMA}}", item.alamat || "-")
 .replaceAll("{{PERATUS}}", item.peratus || "-")
     
 });
