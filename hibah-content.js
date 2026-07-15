@@ -113,15 +113,7 @@ Dokumen ini merupakan Akad Hibah bagi penerima hibah yang dinamakan di bawah.
 
 
 
-<div class="pdf-footer">
 
-<span class="docRef"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
 
 <div class="a4-page p-[18mm]">
 
