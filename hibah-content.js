@@ -2,73 +2,58 @@ const hibahContent = `
 
 <div class="a4-page p-[18mm]">
 
-<h2
-style="
-font-family:'Times New Roman', serif;
+<h2 style="
+font-family:'Times New Roman',serif;
 font-size:42px;
-font-weight:700;
-margin-top:0;
-margin-bottom:20px;
-color:#153638;
+font-weight:bold;
 text-align:center;
-letter-spacing:1px;
+color:#153638;
+margin-bottom:18px;
 ">
-DOKUMEN HIBAH
+DOKUMEN AKAD HIBAH
 </h2>
 
-<div
-style="
+<div style="
 text-align:center;
+font-family:'Amiri',serif;
 font-size:30px;
-margin-bottom:10;
-font-family:'Amiri', serif;
+margin-bottom:8px;
 ">
 بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
 </div>
 
-
-
-<p style="text-align:center; margin-bottom:20px;">
-<strong>Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani</strong>
+<p style="text-align:center;">
+<strong>Dengan Nama Allah Yang Maha Pemurah Lagi Maha Mengasihani</strong>
 </p>
 
 <p>
-Dokumen Akad Hibah ini disediakan sebagai rekod bertulis mengenai akad hibah yang dibuat secara sukarela oleh Pemberi Hibah kepada Penerima Hibah. Dokumen ini merekodkan butiran pihak-pihak, harta yang dihibahkan, kadar bahagian hibah serta syarat-syarat yang berkaitan sebagai dokumen sokongan dan pembuktian menurut Hukum Syarak serta undang-undang yang berkuat kuasa di Malaysia.
+Dokumen Akad Hibah ini disediakan sebagai suatu rekod bertulis berhubung akad hibah yang dibuat secara sukarela oleh <strong>Pemberi Hibah</strong> kepada <strong>Penerima Hibah</strong>. Dokumen ini merekodkan identiti pihak-pihak yang terlibat, butiran harta yang dihibahkan, kadar bahagian hibah serta syarat-syarat yang dipersetujui sebagai dokumen sokongan dan pembuktian menurut Hukum Syarak serta undang-undang yang berkuat kuasa di Malaysia.
 </p>
 
 <p>
-Sesungguhnya Harta adalah amanah Allah kepada hambanya, maka adalah atas setiap hamba itu tanggungjawab sebagai Pemegang Amanah untuk mengurus harta dengan sempurna agar sentiasa dimanfaat menurut peraturan yang digariskan oleh Allah S.W.T.
+Sesungguhnya segala harta adalah amanah Allah SWT kepada hamba-Nya. Setiap pemilik harta bertanggungjawab mengurus dan memanfaatkan harta tersebut dengan sebaik-baiknya menurut syariat Islam serta tidak menzalimi hak mana-mana pihak.
 </p>
 
 <p>
-Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. K/P <strong>{{IC_PEMBERI}}</strong> (selepas ini disebut Pemberi Hibah) yang beralamat di <strong>{{ALAMAT_PEMBERI}}</strong> adalah seorang warga Malaysia yang mukallaf, sihat tubuh badan dan waras fikiran semasa membuat PENGISYTIHARAN HIBAH ini. 
-(Sesalinan Kad Pengenalan Pemegang Amanah dilampirkan dan ditandakan dilampiran A).
+Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. Kad Pengenalan
+<strong>{{IC_PEMBERI}}</strong>, yang beralamat di
+<strong>{{ALAMAT_PEMBERI}}</strong>, dengan ini secara sukarela, tanpa sebarang paksaan, tekanan atau pengaruh mana-mana pihak, mengisytiharkan bahawa saya berhasrat menghibahkan harta-harta yang dinyatakan di dalam dokumen ini kepada Penerima Hibah sebagaimana yang diperincikan di dalam Jadual 1.
 </p>
 
 <p>
-Matlamat saya menulis SURAT IKATAN HIBAH DAN AMANAH ini adalah sebagai pernyataan bertulis yang menjelaskan kedudukan harta yang telah dihibahkan kepada Benefisiari semasa hayat Pemegang Amanah, dengan harapan agar memudahkan proses penyelesaian pusaka mana-mana pihak sama ada Pemegang Amanah mahupun Benefisiari tanpa wujudnya apa-apa kekeliruan terhadap status harta yang telah dihibahkan tersebut selepas kematian mana-mana pihak.
+Dokumen ini disediakan sebagai bukti nyata hasrat dan niat Pemberi Hibah semasa hayatnya serta bertujuan mengelakkan sebarang kekeliruan, pertikaian atau pertindihan tuntutan terhadap harta yang dihibahkan selepas kematian Pemberi Hibah.
 </p>
 
 <p>
-Oleh yang demikian, SURAT IKATAN HIBAH DAN AMANAH ini diyakini berfungsi sebagai dokumen yang menyumbang kepada penyelesaian pusaka yang sempurna, adil dan saksama secara SULH dikalangan ahli waris mana-mana pihak yang meninggal dunia.  
-Walaupun begitu, sekiranya wujud keperluan di mana suatu Perintah Pengesahan Hibah akan dituntut dari mana-mana Mahkamah Syariah yang berbidangkuasa, hendaklah SURAT IKATAN HIBAH DAN AMANAH ini menjadi bahan pembuktian penting dan sumber utama yang harus mendapat pertimbangan Mahkamah.
+Dokumen Akad Hibah ini hendaklah dibaca bersama semua jadual, lampiran dan pengesahan yang terkandung di dalamnya dan menjadi rujukan utama berhubung pengisytiharan hibah ini.
 </p>
-
-<p>
-Bahawasanya SURAT IKATAN HIBAH DAN AMANAH ini adalah pengisytiharan terakhir dan mana-mana pengisytiharan hibah yang telah dinyatakan terdahulu ke atas harta hibah ini adalah terbatal.
-</p>
-
 
 <div class="pdf-footer">
-
 <span class="footer-docref"></span>
-
 <span class="page-number"></span>
-
 </div>
 
 </div>
-
 <div class="a4-page p-[18mm]">
 
 SURAT IKATAN HIBAH DAN AMANAH ini diperbuat pada 	 
