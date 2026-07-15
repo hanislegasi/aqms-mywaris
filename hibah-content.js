@@ -231,4 +231,3 @@ SENARAI HARTA TAK ALIH YANG DIHIBAHKAN
 
 `;
 
-window.hibahContent = hibahContent;
