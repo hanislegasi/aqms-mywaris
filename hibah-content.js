@@ -5,7 +5,7 @@ const hibahContent = `
 <h2
 style="
 font-family:'Times New Roman', serif;
-font-size:48px;
+font-size:42px;
 font-weight:700;
 letter-spacing:1px;
 text-align:center;
@@ -30,7 +30,7 @@ font-family:'Amiri',serif;
 <p style="
 font-family:'Times New Roman', serif;
 font-size:15px;
-line-height:1.8;
+line-height:1.6;
 text-align:justify;
 ">
 
@@ -40,16 +40,14 @@ Dokumen Akad Hibah ini disediakan sebagai rekod bertulis mengenai akad hibah yan
 
 </p>
 
-<h3 style="
-margin-top:30px;
-margin-bottom:15px;
-font-family:Times New Roman, serif;
-font-size:16px;
-font-weight:600;
-color:#153638;
-">
+<h3
+style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+
+<strong>
 
 MAKLUMAT PEMBERI HIBAH
+
+</strong>
 
 </h3>
 
@@ -59,6 +57,7 @@ width:100%;
 border-collapse:collapse;
 font-family:'Times New Roman', serif;
 font-size:14px;
+margin-top:15px;
 margin-bottom:25px;
 ">
 
@@ -164,10 +163,22 @@ color:#153638;
 margin-top:25px;
 margin-bottom:12px;
 ">
-JADUAL HARTA ALIH
+SENARAI HARTA ALIH YANG DIHIBAHKAN
 </h3>
 
 {{TABLE_ALIH}}
+
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
 
 <br><br>
 
@@ -180,14 +191,14 @@ color:#153638;
 margin-top:25px;
 margin-bottom:12px;
 ">
-JADUAL HARTA TAK ALIH
+SENARAI HARTA TAK ALIH YANG DIHIBAHKAN
 </h3>
 
 {{TABLE_TAK_ALIH}}
 
 <div class="pdf-footer">
 
-<span class="docRef"></span>
+<span class="footer-docref"></span>
 
 <span class="page-number"></span>
 
