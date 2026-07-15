@@ -148,7 +148,7 @@ Semua pihak bersetuju bahawa dokumen ini menjadi rekod bertulis mengenai akad hi
 </div>
 
 
-<br>
+<div class="a4-page p-[18mm]">
 
 <h3
 style="
