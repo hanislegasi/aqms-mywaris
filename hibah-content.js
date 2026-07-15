@@ -41,7 +41,7 @@ Dokumen Akad Hibah ini disediakan sebagai rekod bertulis mengenai akad hibah yan
 
 <p>Sesungguhnya Harta adalah amanah Allah kepada hambanya, maka adalah atas setiap hamba itu tanggungjawab sebagai Pemegang Amanah untuk mengurus harta dengan sempurna agar sentiasa dimanfaat menurut peraturan yang digariskan oleh Allah S.W.T.
 </p>
-<p>Saya, {{NAMA_PEMBERI}} (NO. K/P:660824-02-5002) (selepas ini disebut Pemegang Amanah) yang beralamat di NO. 3226, Lorong Selasih 1E/1, Taman Selasih, 09000 Kulim, Kedah adalah seorang warga Malaysia yang mukallaf, sihat tubuh badan dan waras fikiran semasa membuat PENGISYTIHARAN HIBAH ini. (Sesalinan Kad Pengenalan Pemegang Amanah dilampirkan dan ditandakan dilampiran A).
+<p>Saya, <strong>{{NAMA_PEWASIAT}}</strong>, No. K/P <strong>{{NO_IC_PEWASIAT}}</strong> (selepas ini disebut Pemegang Amanah) yang beralamat di <strong>{{ALAMAT_PEWASIAT}}</strong> adalah seorang warga Malaysia yang mukallaf, sihat tubuh badan dan waras fikiran semasa membuat PENGISYTIHARAN HIBAH ini. (Sesalinan Kad Pengenalan Pemegang Amanah dilampirkan dan ditandakan dilampiran A).
 </p>
 <p>Matlamat saya menulis SURAT IKATAN HIBAH DAN AMANAH ini adalah sebagai pernyataan bertulis yang menjelaskan kedudukan harta yang telah dihibahkan kepada Benefisiari semasa hayat Pemegang Amanah, dengan harapan agar memudahkan proses penyelesaian pusaka mana-mana pihak sama ada Pemegang Amanah mahupun Benefisiari tanpa wujudnya apa-apa kekeliruan terhadap status harta yang telah dihibahkan tersebut selepas kematian mana-mana pihak.
 </p>
