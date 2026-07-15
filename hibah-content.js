@@ -5,8 +5,9 @@ const hibahContent = `
 <h2
 style="
 font-family:'Times New Roman', serif;
-font-size:42px;
-font-weight:bold;
+font-size:48px;
+font-weight:700;
+letter-spacing:1px;
 text-align:center;
 color:#153638;
 margin-bottom:30px;
@@ -16,13 +17,139 @@ DOKUMEN AKAD HIBAH
 
 </h2>
 
-<p>
+<div style="
+text-align:center;
+font-size:30px;
+margin-top:25px;
+margin-bottom:15px;
+font-family:'Amiri',serif;
+">
+بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
+</div>
 
-Nama Penerima :
+<p style="
+font-family:Inter,sans-serif;
+font-size:14px;
+line-height:1.8;
+text-align:justify;
+">
 
-<strong>
+Dengan nama Allah Yang Maha Pemurah lagi Maha Mengasihani.
 
-{{NAMA_PENERIMA}}
+Dokumen Akad Hibah ini dibuat secara sukarela oleh Pemberi Hibah sebagai bukti nyata hasrat untuk menghibahkan harta kepada Penerima Hibah sebagaimana yang diperincikan dalam dokumen ini. Dokumen ini turut merekodkan butiran harta, kadar bahagian hibah, serta persetujuan pihak-pihak yang terlibat sebagai rekod bertulis bagi tujuan pembuktian sekiranya diperlukan menurut undang-undang dan Hukum Syarak.
+
+</p>
+
+<h3 style="
+margin-top:30px;
+margin-bottom:15px;
+font-family:Inter,sans-serif;
+font-size:16px;
+font-weight:600;
+color:#153638;
+">
+
+MAKLUMAT PEMBERI HIBAH
+
+</h3>
+
+<table
+style="
+width:100%;
+border-collapse:collapse;
+font-family:Inter,sans-serif;
+font-size:13px;
+margin-bottom:25px;
+">
+
+<tr>
+
+<td width="30%"><strong>Nama</strong></td>
+
+<td>{{NAMA_PEMBERI}}</td>
+
+</tr>
+
+<tr>
+
+<td><strong>No. Kad Pengenalan</strong></td>
+
+<td>{{IC_PEMBERI}}</td>
+
+</tr>
+
+<tr>
+
+<td><strong>Alamat</strong></td>
+
+<td>{{ALAMAT_PEMBERI}}</td>
+
+</tr>
+
+<tr>
+
+<td><strong>No. Telefon</strong></td>
+
+<td>{{TELEFON_PEMBERI}}</td>
+
+</tr>
+
+</table>
+
+<h3 style="
+margin-bottom:15px;
+font-family:Inter,sans-serif;
+font-size:16px;
+font-weight:600;
+color:#153638;
+">
+
+MAKLUMAT PENERIMA HIBAH
+
+</h3>
+
+<table
+style="
+width:100%;
+border-collapse:collapse;
+font-family:Inter,sans-serif;
+font-size:13px;
+margin-bottom:25px;
+">
+
+<tr>
+
+<td width="30%"><strong>Nama Penerima</strong></td>
+
+<td>{{NAMA_PENERIMA}}</td>
+
+</tr>
+
+<tr>
+
+<td><strong>No. Kad Pengenalan</strong></td>
+
+<td>{{IC_PENERIMA}}</td>
+
+</tr>
+
+<tr>
+
+<td><strong>Hubungan</strong></td>
+
+<td>{{HUBUNGAN}}</td>
+
+</tr>
+
+<tr>
+
+<td><strong>Bahagian Hibah</strong></td>
+
+<td>{{PERATUS}}%</td>
+
+</tr>
+
+</table>
 
 </strong>
 
