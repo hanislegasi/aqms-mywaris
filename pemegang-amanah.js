@@ -159,6 +159,262 @@ dan oleh itu segala hak, kepentingan serta manfaat daripada harta yang dihibahka
 
 <p>
 Pemegang Amanah hendaklah menjalankan tanggungjawab dengan jujur, ikhlas dan amanah bagi menjaga kepentingan Penerima-Penerima Harta seperti yang termaktub di dalam Hukum Syarak.</p>
+<p
+style="
+text-align:center;
+margin-top:10px;
+font-style:italic;
+">
+(Ruangan ini sengaja dibiarkan kosong)
+</p>
+
+<div class="pdf-footer">
+
+<span class="docRef"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+   
+<div class="a4-page p-[18mm]">
+
+<div class="mt-8">
+
+<strong>PENGAKUAN PEWASIAT</strong>
+<p>
+Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Wasiat ini adalah benar dan tepat mengikut pengetahuan saya.
+</p>
+<br>
+
+
+<p>.......................................</p>
+
+<p>
+(Tandatangan Pewasiat)
+</p>
+
+<table
+style="
+margin-top:30px;
+font-size:14px;
+">
+
+<tr>
+<td width="100">
+Nama
+</td>
+
+<td width="20">
+:
+</td>
+
+<td>
+<strong>{{NAMA_PEWASIAT}}</strong>
+</td>
+</tr>
+
+<tr>
+<td>
+No. K/P
+</td>
+
+<td>
+:
+</td>
+
+<td>
+<strong>{{NO_IC_PEWASIAT}}</strong>
+</td>
+</tr>
+
+<tr>
+<td>
+Tarikh
+</td>
+
+<td>
+:
+</td>
+
+<td>
+</td>
+</tr>
+
+</table>
+
+</div>
+<br>
+<strong>PENGESAHAN SAKSI</strong>
+<p>
+Kami yang bertandatangan di bawah mengesahkan bahawa Pewasiat telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
+Pewasiat berada dalam keadaan waras serta membuat Wasiat ini secara sukarela.
+</p>
+
+<table
+style="
+width:100%;
+margin-top:50px;
+">
+
+<tr valign="top">
+
+<td width="45%">
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 1</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+<td width="10%"></td>
+
+<td width="45%">
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 2</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+<tr>
+<td colspan="3" height="60"></td>
+</tr>
+
+<tr valign="top">
+
+<td>
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 3</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+<td></td>
+
+<td>
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 4</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+<div class="pdf-footer">
+
+<span class="docRef"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+</div>
+
+
+
 `;
 
 }
