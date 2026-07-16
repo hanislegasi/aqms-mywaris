@@ -196,7 +196,7 @@ font-style:italic;
 
 <div class="mt-8">
 
-<strong>PENGAKUAN PEWASIAT</strong>
+<strong>PENGAKUAN PEMBERI HIBAH</strong>
 <p>
 Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Wasiat ini adalah benar dan tepat mengikut pengetahuan saya.
 </p>
@@ -206,7 +206,7 @@ Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Was
 <p>.......................................</p>
 
 <p>
-(Tandatangan Pewasiat)
+(Tandatangan Pemberi Hibah)
 </p>
 
 <table
