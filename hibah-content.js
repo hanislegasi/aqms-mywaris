@@ -2,6 +2,12 @@ const hibahContent = `
 
 {{PEMEGANG_AMANAH}}
 
+<div class="pdf-footer">
+<span class="footer-docref"></span>
+<span class="page-number"></span>
+</div>
+</div>
+
 <div class="a4-page p-[18mm]">
 
 <h2 style="
