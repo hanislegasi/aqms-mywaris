@@ -60,7 +60,7 @@
                 <p id="expiredCount" class="text-3xl font-bold text-gray-800">0</p>
             </div>
             <div class="bg-white p-5 rounded-xl shadow">
-                <h3 class="text-gray-500 text-sm md:text-base font-medium">Wasiat Diluluskan</h3>
+                <h3 class="text-gray-500 text-sm md:text-base font-medium">Dokumen Diluluskan</h3>
                 <p id="approvedCount" class="text-3xl font-bold text-gray-800">0</p>
             </div>
             <div class="bg-white p-5 rounded-xl shadow">
@@ -218,18 +218,36 @@
                     const hibahSnap = await getDoc(doc(db, "users", userDoc.id, "hibah", "maklumat"));
                     if (hibahSnap.exists()) {
                         if (hibahSnap.data().status === "UNDER_REVIEW") queueHibah++;
+                        if (hibah.docRef) approved++;
+                        if (hibah.renewedAt) renewal++;
+                        if (hibah.expiryDate) {
+                            const expiry = new Date(hibah.expiryDate);
+                            if (expiry < new Date()) tamat++;
+                        }
                     }
 
                     // Harta Sepencarian
                     const sepencarianSnap = await getDoc(doc(db, "users", userDoc.id, "hartaSepencarian", "maklumat"));
                     if (sepencarianSnap.exists()) {
                         if (sepencarianSnap.data().status === "UNDER_REVIEW") queueSepencarian++;
+                        if (sepencarian.docRef) approved++;
+                        if (sepencarian.renewedAt) renewal++;
+                        if (sepencarian.expiryDate) {
+                            const expiry = new Date(sepencarian.expiryDate);
+                            if (expiry < new Date()) tamat++;
+                        }
                     }
 
                     // Mawaris
                     const mawarisSnap = await getDoc(doc(db, "users", userDoc.id, "mawaris", "maklumat"));
                     if (mawarisSnap.exists()) {
                         if (mawarisSnap.data().status === "UNDER_REVIEW") queueMawaris++;
+                        if (mawaris.docRef) approved++;
+                        if (mawaris.renewedAt) renewal++;
+                        if (mawaris.expiryDate) {
+                            const expiry = new Date(mawaris.expiryDate);
+                            if (expiry < new Date()) tamat++;
+                        }
                     }
                 }
 
