@@ -98,18 +98,12 @@ break-before:page;
 
 #sectionHibah td,
 #sectionHibah li{
-
     font-size:16px;
     text-align:justify;
 
 }
 
-#sectionHibah h3{
-
-    font-family:'Times New Roman', serif;
-color:#222;
-    line-height:1.7;
-}   
+ 
         .pdf-footer{
 position:absolute;
 bottom:5mm;
@@ -545,9 +539,8 @@ senaraiPenerima.forEach(penerima=>{
         alamat: info.alamat || "",
         tarikhLahir: info.tarikhLahir || "",
         telefon: info.telefon || "",
-
         peratus: penerima.peratus || "",
-
+        pemegangAmanah: data.pemegangAmanah || {}
         hartaAlih: [],
         hartaTakAlih: []
 
@@ -1476,7 +1469,87 @@ function formatDateMY(dateStr){
 
 }
 
-                        
+function generatePemegangAmanah(item){
+
+    if(
+        item.status !== "bawah18" &&
+        item.status !== "oku"
+    ){
+        return "";
+    }
+
+    const p = item.pemegangAmanah;
+
+    if(
+        !p ||
+        p.pilihan !== "ya"
+    ){
+        return "";
+    }
+
+    return `
+
+<h3>PEMEGANG AMANAH</h3>
+
+<table style="
+width:100%;
+border-collapse:collapse;
+font-size:14px;
+">
+
+<tr>
+
+<td width="30%"><strong>Nama</strong></td>
+
+<td>${p.nama}</td>
+
+</tr>
+
+<tr>
+
+<td><strong>No. IC</strong></td>
+
+<td>${p.ic}</td>
+
+</tr>
+
+<tr>
+
+<td><strong>Hubungan</strong></td>
+
+<td>${p.hubungan}</td>
+
+</tr>
+
+<tr>
+
+<td><strong>No Telefon</strong></td>
+
+<td>${p.telefon}</td>
+
+</tr>
+
+</table>
+
+<p style="margin-top:15px;text-align:justify;">
+
+Benefisiari merupakan
+${
+item.status=="bawah18"
+?
+"kanak-kanak di bawah umur lapan belas (18) tahun."
+:
+"individu yang tidak berkeupayaan."
+}
+
+Oleh itu segala hak dan kepentingan Benefisiari hendaklah diurus oleh Pemegang Amanah yang dinamakan di atas sehingga tamat Tempoh Amanah atau menurut Hukum Syarak.
+
+</p>
+
+`;
+
+}
+                    
 let hibahHTML = "";
 
 Object.values(groupedHibah).forEach(item=>{
@@ -1497,6 +1570,11 @@ Object.values(groupedHibah).forEach(item=>{
     generateTakAlihTable(item.hartaTakAlih)
 )
 
+.replaceAll(
+"{{PEMEGANG_AMANAH}}",
+generatePemegangAmanah(item)
+)
+        
 .replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
 .replaceAll("{{IC_PEMBERI}}", data.ic || "-")
 .replaceAll("{{ALAMAT_PEMBERI}}", data.alamat || "-")
