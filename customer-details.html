@@ -257,32 +257,58 @@ hibahData.status ||
 
 }
 
-// PUSAKA STATUS
-const pusakaSnap =
+// SEPENCARIAN STATUS
+const sepencarianSnap =
 await getDoc(
 doc(
 db,
 "users",
 userId,
-"pusaka",
+"sepencarian",
 "maklumat"
 )
 );
 
-let pusakaStatus =
+let sepencarianStatus =
 "BELUM DIISI";
 
-if(pusakaSnap.exists()){
+if(sepencarianSnap.exists()){
 
-const pusakaData =
-pusakaSnap.data();
+const sepencarianData =
+sepencarianSnap.data();
 
-pusakaStatus =
-pusakaData.status ||
+sepencarianStatus =
+sepencarianData.status ||
 "DRAFT";
 
 }
 
+// MAWARIS STATUS
+const mawarisSnap =
+await getDoc(
+doc(
+db,
+"users",
+userId,
+"mawaris",
+"maklumat"
+)
+);
+
+let mawarisStatus =
+"BELUM DIISI";
+
+if(mawarisSnap.exists()){
+
+const mawarisData =
+mawarisSnap.data();
+
+mawarisStatus =
+mawarisData.status ||
+"DRAFT";
+
+}
+  
 document.getElementById(
 "customerInfo"
 ).innerHTML = `
