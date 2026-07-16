@@ -58,11 +58,12 @@ Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. Kad Pengenalan
 </p>
 
 <p>
-Matlamat saya menulis Dokumen Pengisytiharan Hibah ini adalah sebagai pernyataan bertulis yang menjelaskan kedudukan harta yang telah dihibahkan kepada Penerima Hibah semasa hayat Pemegang Amanah, dengan harapan agar memudahkan proses penyelesaian pusaka mana-mana pihak sama ada Pemegang Amanah mahupun Benefisiari tanpa wujudnya apa-apa kekeliruan terhadap status harta yang telah dihibahkan tersebut selepas kematian mana-mana pihak.
+Matlamat saya menulis Dokumen Pengisytiharan Hibah ini adalah sebagai pernyataan bertulis yang menjelaskan kedudukan harta yang telah dihibahkan kepada Penerima Hibah semasa hayat Pemberi Hibah, dengan harapan agar memudahkan proses penyelesaian pusaka mana-mana pihak sama ada Pemegang Amanah mahupun Benefisiari tanpa wujudnya apa-apa kekeliruan terhadap status harta yang telah dihibahkan tersebut selepas kematian mana-mana pihak.
 </p>
 
 <p>
-Oleh yang demikian, Dokumen Pengisytiharan Hibah ini diyakini berfungsi sebagai dokumen yang menyumbang kepada penyelesaian pusaka yang sempurna, adil dan saksama secara SULH dikalangan ahli waris mana-mana pihak yang meninggal dunia.  Walaupun begitu, sekiranya wujud keperluan di mana suatu Perintah Pengesahan Hibah akan dituntut dari mana-mana Mahkamah Syariah yang berbidangkuasa, hendaklah SDokumen Pengisytiharan Hibah ini menjadi bahan pembuktian penting dan sumber utama yang harus mendapat pertimbangan Mahkamah.
+Oleh yang demikian, Dokumen Pengisytiharan Hibah ini diyakini berfungsi sebagai dokumen yang menyumbang kepada penyelesaian pusaka yang sempurna, adil dan saksama secara SULH dikalangan ahli waris mana-mana pihak yang meninggal dunia.  
+Walaupun begitu, sekiranya wujud keperluan di mana suatu Perintah Pengesahan Hibah akan dituntut dari mana-mana Mahkamah Syariah yang berbidangkuasa, hendaklah Dokumen Pengisytiharan Hibah ini menjadi bahan pembuktian penting dan sumber utama yang harus mendapat pertimbangan Mahkamah.
 </p>
 
 <p>
@@ -117,40 +118,67 @@ bagi harta yang diperincikan di dalam
 <strong>Jadual 1</strong>.
 </p>
 
-<h3>BAHAWASANYA</h3>
+<h3 style="
+margin-top:15px;
+margin-bottom:8px;
+font-family:'Times New Roman',serif;
+font-size:16px;
+font-weight:bold;
+">
+BAHAWASANYA
+</h3>
 
-<table style="width:100%; border-collapse:collapse;">
+<table style="
+width:100%;
+border-collapse:collapse;
+margin-top:0;
+">
 
 <tr valign="top">
 <td width="30">A.</td>
-<td style="text-align:justify;">
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
 Pemberi Hibah adalah <strong>{{HUBUNGAN}}</strong> kepada Penerima Hibah;
 </td>
 </tr>
-<br>
+
 <tr valign="top">
 <td>B.</td>
-<td style="text-align:justify;">
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
 Pemberi Hibah adalah pemilik yang sah kepada harta tak alih berikut seperti di dalam Jadual 1 (selepas ini dirujuk sebagai "Harta Amanah tersebut").
 </td>
 </tr>
-<br>
+
 <tr valign="top">
 <td>C.</td>
-<td style="text-align:justify;">
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
 Pemberi Hibah berhasrat untuk memberi Harta Amanah secara Hibah kepada Penerima Hibah yang dinyatakan di dalam Jadual 1.
 </td>
 </tr>
-<br>
+
 <tr valign="top">
 <td>D.</td>
-<td style="text-align:justify;">
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
 Pemberi Hibah berhasrat untuk memegang Harta Amanah sebagai Pemberi Hibah untuk kepentingan Penerima Hibah.
 </tr>
-<br>
+
 <tr valign="top">
 <td>E.</td>
-<td style="text-align:justify;">
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
 Penerima Hibah bersetuju untuk menerima Harta Amanah secara Hibah serta bersetuju bahawa Pemberi Hibah akan bertindak sebagai Pemberi Hibah bagi Harta Amanah semasa Tempoh Amanah.
 </tr>
 
