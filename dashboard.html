@@ -80,13 +80,16 @@ Loading...
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
 
 <a
+id="wasiatCard"
 href="wasiat-page.html"
 class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-gray-100 min-h-[320px]">
 
     <!-- Header -->
     <div class="flex items-center gap-3 mb-4">
 
-        <div class="bg-[#153638]/10 p-3 rounded-xl">
+       <div
+id="wasiatIcon"
+class="bg-[#153638]/10 p-3 rounded-xl">
 
             <svg xmlns="http://www.w3.org/2000/svg"
                 class="w-7 h-7 text-[#153638]"
@@ -104,7 +107,9 @@ class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-
 
         </div>
 
-        <h3 class="text-lg font-bold text-[#153638]">
+        <h3
+id="wasiatTitle"
+class="text-lg font-bold text-[#153638]">
             Wasiat <span class="text-orange-600">RM350</span>
         </h3>
 
@@ -133,6 +138,7 @@ class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-
     </ul>
 
 <div
+id="wasiatButton"
 class="mt-6 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition">
 
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -148,20 +154,25 @@ d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1 5h12M10 21a1 1 0 100-2 1 1 0 0
 
 </svg>
 
-<span>Beli Sekarang</span>
+<span id="wasiatButtonText">
+Beli Sekarang
+</span>
 
 </div>
   
 </a>
 
 <a
+id="hibahCard"  
 href="hibah-page.html"
 class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-gray-100 min-h-[320px]">
 
     <!-- Header -->
     <div class="flex items-center gap-3 mb-4">
 
-         <div class="bg-[#153638]/10 p-3 rounded-xl">
+         <div 
+          id="hibahIcon"
+          class="bg-[#153638]/10 p-3 rounded-xl">
 
   <svg xmlns="http://www.w3.org/2000/svg"
 fill="none"
@@ -177,7 +188,9 @@ class="w-6 h-6">
 
         </div>
 
-        <h3 class="text-lg font-bold text-[#153638]">
+        <h3 
+          id="hibahTitle"
+          class="text-lg font-bold text-[#153638]">
             Hibah <span class="text-orange-600">RM2,500</span>
         </h3>
 
@@ -206,6 +219,7 @@ class="w-6 h-6">
     </ul>
 
 <div
+id="hibahButton" 
 class="mt-6 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition">
 
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -221,7 +235,9 @@ d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1 5h12M10 21a1 1 0 100-2 1 1 0 0
 
 </svg>
 
-<span>Beli Sekarang</span>
+<span id="hibahButtonText">
+Beli Sekarang
+</span>
 
 </div>
   
@@ -437,6 +453,50 @@ getAuth(app);
 const db =
 getFirestore(app);
 
+function updateProductCard(
+status,
+cardId,
+titleId,
+buttonId,
+buttonTextId,
+iconId,
+page,
+productName
+){
+
+if(status !== "paid") return;
+
+document.getElementById(cardId).href = page;
+
+document.getElementById(titleId).innerHTML =
+"📂 My-" + productName;
+
+document.getElementById(buttonTextId).innerHTML =
+"Buka Dokumen";
+
+document.getElementById(buttonId).className =
+"mt-6 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition";
+
+document.getElementById(iconId).innerHTML = `
+
+<svg xmlns="http://www.w3.org/2000/svg"
+class="w-6 h-6 text-green-600"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M9 12h6m-6 4h6M7 4h10a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z"/>
+
+</svg>
+
+`;
+
+}
+  
 onAuthStateChanged(auth, async(user)=>{
 
 if(!user){
@@ -454,6 +514,50 @@ if(docSnap.exists()){
 
 const userData =
 docSnap.data();
+
+updateProductCard(
+userData.paymentStatus,
+"wasiatCard",
+"wasiatTitle",
+"wasiatButton",
+"wasiatButtonText",
+"wasiatIcon",
+"my-wasiat.html",
+"Wasiat"
+);
+
+updateProductCard(
+userData.hibahPaymentStatus,
+"hibahCard",
+"hibahTitle",
+"hibahButton",
+"hibahButtonText",
+"hibahIcon",
+"my-hibah.html",
+"Hibah"
+);
+
+updateProductCard(
+userData.sepencarianPaymentStatus,
+"sepencarianCard",
+"sepencarianTitle",
+"sepencarianButton",
+"sepencarianButtonText",
+"sepencarianIcon",
+"my-sepencarian.html",
+"Harta Sepencarian"
+);
+
+updateProductCard(
+userData.mawarisPaymentStatus,
+"mawarisCard",
+"mawarisTitle",
+"mawarisButton",
+"mawarisButtonText",
+"mawarisIcon",
+"my-mawaris.html",
+"Mawaris"
+);  
   
 document.getElementById(
 "namaUser"
