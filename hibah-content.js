@@ -196,6 +196,12 @@ Saya juga faham dan mengesahkan, walaupun dinyatakan di dalam Dokumen Pengisytih
 Bahawa Pemberi Hibah Amanah secara sedar, waras, dengan sukarelanya dan bukan dalam keadaan sakit, atas dasar kasih sayang dan tanpa mendapat apa-apa balasan dengan ini membuat hibah ke atas Harta Amanah tersebut kepada Penerima Hibah dengan kadar seperti di dalam Jadual 1.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>2.	PEMEGANG AMANAH</strong>
+</h3>
+
+{{PEMEGANG_AMANAH}}
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>2. AQAD</strong>
 </h3>
 
@@ -420,6 +426,8 @@ SENARAI HARTA TAK ALIH YANG DIHIBAHKAN
 </div>
 
 </div>
+
+
 
 `;
 
