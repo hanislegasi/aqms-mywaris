@@ -380,111 +380,36 @@ ${
 wasiatSnap.exists()
 ?
 `
-<div class="bg-green-50 border border-green-200 rounded-xl p-4">
+<div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col justify-between min-h-[220px]">
 
-<h3 class="font-bold text-green-700">
+<div>
+
+<h3 class="font-bold text-green-700 text-lg">
 Wasiat
 </h3>
 
-<p class="text-sm mt-2">
+<p class="text-sm mt-4">
 No Dokumen :
 <strong>${docRef}</strong>
 </p>
 
-<p class="text-sm">
+<p class="text-sm mt-1">
 Status :
-${wasiatStatus}
+<strong>${wasiatStatus}</strong>
 </p>
 
 </div>
-`
-:
-""
-}
 
-${
-hibahSnap.exists()
-?
-`
-<div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
-
-<h3 class="font-bold text-blue-700">
-Hibah
-</h3>
-
-<p class="text-sm mt-2">
-Status :
-${hibahStatus}
-</p>
-
-</div>
-`
-:
-""
-}
-
-${
-sepencarianSnap.exists()
-?
-`
-<div class="bg-orange-50 border border-orange-200 rounded-xl p-4">
-
-<h3 class="font-bold text-orange-700">
-Harta Sepencarian
-</h3>
-
-<p class="text-sm mt-2">
-Status :
-${sepencarianStatus}
-</p>
-
-</div>
-`
-:
-""
-}
-
-${
-mawarisSnap.exists()
-?
-`
-<div class="bg-yellow-50 border border-orange-200 rounded-xl p-4">
-
-<h3 class="font-bold text-yellow-700">
-Pakej Mawaris
-</h3>
-
-<p class="text-sm mt-2">
-Status :
-${mawarisStatus}
-</p>
-
-</div>
-`
-:
-""
-}
-
-<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-
-${
-wasiatSnap.exists()
-?
-`
 <a
 href="admin-preview-wasiat.html?id=${userId}"
 target="_blank"
-class="flex items-center justify-center
-bg-[#153638]
-text-white
-rounded-xl
-font-semibold
-h-full
-min-h-[110px]">
+class="mt-5 w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold transition">
 
-View Wasiat
+👁 View Dokumen
 
 </a>
+
+</div>
 `
 :
 ""
@@ -494,20 +419,31 @@ ${
 hibahSnap.exists()
 ?
 `
+<div class="bg-blue-50 border border-blue-200 rounded-xl p-5 flex flex-col justify-between min-h-[220px]">
+
+<div>
+
+<h3 class="font-bold text-blue-700 text-lg">
+Hibah
+</h3>
+
+<p class="text-sm mt-4">
+Status :
+<strong>${hibahStatus}</strong>
+</p>
+
+</div>
+
 <a
 href="admin-preview-hibah.html?id=${userId}"
 target="_blank"
-class="flex items-center justify-center
-bg-[#153638]
-text-white
-rounded-xl
-font-semibold
-h-full
-min-h-[110px]">
+class="mt-5 w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold transition">
 
-View Hibah
+👁 View Dokumen
 
 </a>
+
+</div>
 `
 :
 ""
@@ -517,20 +453,31 @@ ${
 sepencarianSnap.exists()
 ?
 `
+<div class="bg-blue-50 border border-blue-200 rounded-xl p-5 flex flex-col justify-between min-h-[220px]">
+
+<div>
+
+<h3 class="font-bold text-blue-700 text-lg">
+Harta Sepencarian
+</h3>
+
+<p class="text-sm mt-4">
+Status :
+<strong>${sepencarianStatus}</strong>
+</p>
+
+</div>
+
 <a
 href="admin-preview-sepencarian.html?id=${userId}"
 target="_blank"
-class="flex items-center justify-center
-bg-[#153638]
-text-white
-rounded-xl
-font-semibold
-h-full
-min-h-[110px]">
+class="mt-5 w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold transition">
 
-View Harta Sepencarian
+👁 View Dokumen
 
 </a>
+
+</div>
 `
 :
 ""
@@ -540,26 +487,35 @@ ${
 mawarisSnap.exists()
 ?
 `
+<div class="bg-blue-50 border border-blue-200 rounded-xl p-5 flex flex-col justify-between min-h-[220px]">
+
+<div>
+
+<h3 class="font-bold text-blue-700 text-lg">
+Mawaris
+</h3>
+
+<p class="text-sm mt-4">
+Status :
+<strong>${mawarisStatus}</strong>
+</p>
+
+</div>
+
 <a
 href="admin-preview-mawaris.html?id=${userId}"
 target="_blank"
-class="flex items-center justify-center
-bg-[#153638]
-text-white
-rounded-xl
-font-semibold
-h-full
-min-h-[110px]">
+class="mt-5 w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold transition">
 
-View Pakej Mawaris
+👁 View Dokumen
 
 </a>
+
+</div>
 `
 :
 ""
 }
-
-</div>
 
 `;
 
