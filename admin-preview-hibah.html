@@ -541,6 +541,7 @@ senaraiPenerima.forEach(penerima=>{
         telefon: info.telefon || "",
         peratus: penerima.peratus || "",
         
+        status: info.status || "",
         pemegangAmanah: data.pemegangAmanah || {},
             
         hartaAlih: [],
@@ -1489,9 +1490,19 @@ function generatePemegangAmanah(item){
         return "";
     }
 
-    return `
+    <h2
+style="
+font-family:'Times New Roman',serif;
+font-size:24px;
+font-weight:bold;
+text-align:center;
+color:#153638;
+margin-bottom:25px;
+">
 
-<h3>PEMEGANG AMANAH</h3>
+PEMEGANG AMANAH 
+
+</h2>
 
 <table style="
 width:100%;
@@ -1556,6 +1567,8 @@ let hibahHTML = "";
 
 Object.values(groupedHibah).forEach(item=>{
 
+console.log(item);
+    
    console.log(groupedHibah);
     
     hibahHTML += hibahContent
