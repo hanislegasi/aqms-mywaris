@@ -474,7 +474,13 @@ wasiatSnap.exists()
 <a
 href="admin-preview-wasiat.html?id=${userId}"
 target="_blank"
-class="bg-[#153638] text-white py-3 rounded-xl text-center font-semibold hover:bg-[#1f4c4f]">
+class="flex items-center justify-center
+bg-[#153638]
+text-white
+rounded-xl
+font-semibold
+h-full
+min-h-[110px]">
 
 View Wasiat
 
@@ -491,7 +497,13 @@ hibahSnap.exists()
 <a
 href="admin-preview-hibah.html?id=${userId}"
 target="_blank"
-class="bg-[#153638] text-white py-3 rounded-xl text-center font-semibold hover:bg-[#1f4c4f]">
+class="flex items-center justify-center
+bg-[#153638]
+text-white
+rounded-xl
+font-semibold
+h-full
+min-h-[110px]">
 
 View Hibah
 
@@ -508,7 +520,13 @@ sepencarianSnap.exists()
 <a
 href="admin-preview-sepencarian.html?id=${userId}"
 target="_blank"
-class="bg-[#153638] text-white py-3 rounded-xl text-center font-semibold hover:bg-[#1f4c4f]">
+class="flex items-center justify-center
+bg-[#153638]
+text-white
+rounded-xl
+font-semibold
+h-full
+min-h-[110px]">
 
 View Harta Sepencarian
 
@@ -525,7 +543,13 @@ mawarisSnap.exists()
 <a
 href="admin-preview-mawaris.html?id=${userId}"
 target="_blank"
-class="bg-[#153638] text-white py-3 rounded-xl text-center font-semibold hover:bg-[#1f4c4f]">
+class="flex items-center justify-center
+bg-[#153638]
+text-white
+rounded-xl
+font-semibold
+h-full
+min-h-[110px]">
 
 View Pakej Mawaris
 
@@ -561,13 +585,16 @@ user.referral || "-";
 document.getElementById("telefon").innerHTML =
 user.telefon || "-";
   
-document.getElementById(
-"memberStatus"
-).innerHTML =
-user.paymentStatus === "paid"
+document.getElementById("memberStatus").innerHTML =
+(
+user.paymentStatus === "paid" ||
+user.wasiatPaymentStatus === "paid" ||
+user.hibahPaymentStatus === "paid" ||
+user.sepencarianPaymentStatus === "paid" ||
+user.mawarisPaymentStatus === "paid"
+)
 ? "AHLI AKTIF"
-: "PROSPEK";  
-
+: "PROSPEK";
 }
 
 </script>
