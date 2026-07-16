@@ -1,5 +1,7 @@
 const hibahContent = `
 
+{{PEMEGANG_AMANAH}}
+
 <div class="a4-page p-[18mm]">
 
 <h2 style="
@@ -176,16 +178,6 @@ Penerima Hibah bersetuju untuk menerima Harta Amanah secara Hibah serta bersetuj
 </p>
 Saya juga faham dan mengesahkan, walaupun dinyatakan di dalam Dokumen Pengisytiharan Hibah bahawa saya telah menghibahkan harta tersebut kepada Penerima-penerima Hibah, namun saya dibenarkan menikmati manfaat fizikal dan ekonomi dari harta tersebut selagi ada hayat saya.
 </p>
-
-<div class="pdf-footer">
-<span class="footer-docref"></span>
-<span class="page-number"></span>
-</div>
-</div>
-
-<div class="a4-page p-[18mm]">
-
-{{PEMEGANG_AMANAH}}
 
 <div class="pdf-footer">
 <span class="footer-docref"></span>
