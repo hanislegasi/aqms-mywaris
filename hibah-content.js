@@ -309,68 +309,57 @@ Bahawa saya,
 <p>Segala kos dan perbelanjaan dalam penyediaan Perjanjian Hibah ini ditanggung oleh Pemberi Hibah.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>7.  WAAD DAN OBLIGASI PEMBERI HIBAH</strong>
-</h3> 
+<strong>7. WAAD DAN OBLIGASI PEMBERI HIBAH</strong>
+</h3>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-7.1  Pemberi Hibah dengan ini berwaad memberi akujanji mengakui dan memberi jaminan kepada Penerima Hibah seperti berikut:
+7.1 Pemberi Hibah dengan ini berwaad memberi akujanji mengakui dan memberi jaminan kepada Penerima Hibah seperti berikut:
 </h3>
 
 <table style="width:100%; border-collapse:collapse;">
 
 <tr valign="top">
-<td>7.1.1</td>
-<td style="
-padding-bottom:12px;
-text-align:justify;
-">
-Bahawa pada tarikh Perjanjian hibah ini beliau bukan seorang muflis (bankrap), juga tidak ada petisyen untuk kebankrapan telah difailkan terhadapnya sama ada bersama-sama atau berasingan;
+<td width="30">7.1.1</td>
+<td style="text-align:justify;">
+Bahawa pada tarikh Perjanjian Hibah ini beliau bukan seorang muflis (bankrap), juga tidak ada petisyen untuk kebankrapan telah difailkan terhadapnya sama ada bersama-sama atau berasingan;
 </td>
 </tr>
 
 <tr valign="top">
 <td>7.1.2</td>
-<td style="
-padding-bottom:12px;
-text-align:justify;
-">
+<td style="text-align:justify;">
 Bahawa beliau mempunyai hak dan kuasa untuk menghibahkan Harta Amanah tersebut;
-
 </td>
 </tr>
+
 </table>
 
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>8.  OBLIGASI PENERIMA HIBAH</strong>
-</h3> 
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-8.1	Penerima Hibah dengan ini memberi jaminan seperti berikut:-
-</h3
+<strong>8. OBLIGASI PENERIMA HIBAH</strong>
+</h3>
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+8.1 Penerima Hibah dengan ini memberi jaminan seperti berikut:-
+</h3>
 
 <table style="width:100%; border-collapse:collapse;">
 
 <tr valign="top">
-<td>8.1.1</td>
-<td style="
-padding-bottom:12px;
-text-align:justify;
-">
+<td width="30">8.1.1</td>
+<td style="text-align:justify;">
 Penerima Hibah selepas daripada Surat Ikatan ini ditandatangani bersetuju dan dengan rela hati untuk membenarkan Pemberi Hibah selaku Pemberi Hibah terus menikmati dan menggunakan segala manfaat yang terhasil dari harta-harta tersebut tanpa dikenakan apa-apa sewa dan/atau bayaran selagi mana Pemberi Hibah masih hidup.
 </td>
 </tr>
 
-
 <tr valign="top">
 <td>8.1.2</td>
-<td style="
-padding-bottom:12px;
-text-align:justify;
-">
-Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini adalah berdasarkan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut di atas dan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut yang merupakan asas kepada tanggungjawab Pemberi Hibah untuk menghibahkan Harta Amanah tersebut; 
+<td style="text-align:justify;">
+Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini adalah berdasarkan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut di atas dan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut merupakan asas kepada tanggungjawab Pemberi Hibah untuk menghibahkan Harta Amanah tersebut;
 </td>
 </tr>
-</table> 
+
+</table>
 
 <div class="pdf-footer">
 <span class="footer-docref"></span>
