@@ -148,6 +148,8 @@ Penerima Hibah bersetuju untuk menerima Harta Amanah secara Hibah serta bersetuj
 
 </table>
 
+{{PEMEGANG_AMANAH}}
+
 <div class="pdf-footer">
 <span class="footer-docref"></span>
 <span class="page-number"></span>
@@ -194,8 +196,6 @@ Saya juga faham dan mengesahkan, walaupun dinyatakan di dalam Dokumen Pengisytih
 <p>
 1.1
 Bahawa Pemberi Hibah Amanah secara sedar, waras, dengan sukarelanya dan bukan dalam keadaan sakit, atas dasar kasih sayang dan tanpa mendapat apa-apa balasan dengan ini membuat hibah ke atas Harta Amanah tersebut kepada Penerima Hibah dengan kadar seperti di dalam Jadual 1.</p>
-
-{{PEMEGANG_AMANAH}}
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>2. AQAD</strong>
