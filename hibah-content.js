@@ -149,13 +149,9 @@ Penerima Hibah bersetuju untuk menerima Harta Amanah secara Hibah serta bersetuj
 </table>
 
 <div class="pdf-footer">
-
 <span class="footer-docref"></span>
-
 <span class="page-number"></span>
-
 </div>
-
 </div>
 
 <div class="a4-page p-[18mm]">
@@ -180,13 +176,9 @@ Saya juga faham dan mengesahkan, walaupun dinyatakan di dalam Dokumen Pengisytih
 </p>
 
 <div class="pdf-footer">
-
 <span class="footer-docref"></span>
-
 <span class="page-number"></span>
-
 </div>
-
 </div>
 
 <div class="a4-page p-[18mm]">
@@ -259,13 +251,9 @@ Bahawa saya,
 <p>Adalah dipersetujui oleh kedua-dua pihak bahawa risiko terhadap Harta Amanah tersebut kekal kepada Pemberi Hibah sehinggalah kepada tarikh semasa penyerahan milikan kosong Harta Amanah tersebut oleh Pemberi Hibah kepada Penerima Hibah tersebut.</p>
 
 <div class="pdf-footer">
-
 <span class="footer-docref"></span>
-
 <span class="page-number"></span>
-
 </div>
-
 </div>
 
 <div class="a4-page p-[18mm]">
@@ -336,13 +324,9 @@ Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini
 </table>
 
 <div class="pdf-footer">
-
 <span class="footer-docref"></span>
-
 <span class="page-number"></span>
-
 </div>
-
 </div>
 
 <div class="a4-page p-[18mm]">
@@ -377,7 +361,11 @@ Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini
 
 <p>Pemberi Hibah adalah tidak bertanggungjawab kepada Penerima Hibah di atas apa-apa kegagalan untuk memenuhi apa-apa syarat Perjanjian Hibah ini jika penyempurnaannya itu dilambatkan, dihindarkan atau dihalang oleh malapetaka termasuklah tetapi tidak terhad kepada kuasa-kuasa Tuhan, mogok, dharurat, rusuhan, kekecohan awam, tindakan-tindakan perang atau kegagalan untuk mendapatkan kebenaran atau kelulusan mana-mana pihak berkuasa tempatan atau lain-lain pihak berkuasa yang berkenaan atau lain-lain keadaan dalam apa juga bentuk di luar kawalan Pemberi Hibah.</p>
 
-
+<div class="pdf-footer">
+<span class="footer-docref"></span>
+<span class="page-number"></span>
+</div>
+</div>
 
 <div class="a4-page p-[18mm]">
 
