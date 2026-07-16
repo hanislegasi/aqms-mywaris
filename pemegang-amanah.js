@@ -159,6 +159,15 @@ dan oleh itu segala hak, kepentingan serta manfaat daripada harta yang dihibahka
 
 <p>
 Pemegang Amanah hendaklah menjalankan tanggungjawab dengan jujur, ikhlas dan amanah bagi menjaga kepentingan Penerima-Penerima Harta seperti yang termaktub di dalam Hukum Syarak.</p>
+
+<div
+style="
+margin-top:60px;
+border-top:1px solid #000;
+width:100%;
+">
+</div>
+
 <p
 style="
 text-align:center;
@@ -216,7 +225,7 @@ Nama
 </td>
 
 <td>
-<strong>{{NAMA_PEWASIAT}}</strong>
+<strong>{{NAMA_PEMBERI}}</strong>
 </td>
 </tr>
 
@@ -230,7 +239,7 @@ No. K/P
 </td>
 
 <td>
-<strong>{{NO_IC_PEWASIAT}}</strong>
+<strong>{{IC_PEMBERI}}</strong>
 </td>
 </tr>
 
