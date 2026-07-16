@@ -54,7 +54,7 @@ Matlamat saya menulis Dokumen Pengisytiharan Hibah ini adalah sebagai pernyataan
 </p>
 
 <p>
-Oleh yang demikian, Dokumen Pengisytiharan Hibah ini diyakini berfungsi sebagai dokumen yang menyumbang kepada penyelesaian pusaka yang sempurna, adil dan saksama secara SULH dikalangan ahli waris mana-mana pihak yang meninggal dunia.  Walaupun begitu, sekiranya wujud keperluan di mana suatu Perintah Pengesahan Hibah akan dituntut dari mana-mana Mahkamah Syariah yang berbidangkuasa, hendaklah SURAT IKATAN HIBAH DAN AMANAH ini menjadi bahan pembuktian penting dan sumber utama yang harus mendapat pertimbangan Mahkamah.
+Oleh yang demikian, Dokumen Pengisytiharan Hibah ini diyakini berfungsi sebagai dokumen yang menyumbang kepada penyelesaian pusaka yang sempurna, adil dan saksama secara SULH dikalangan ahli waris mana-mana pihak yang meninggal dunia.  Walaupun begitu, sekiranya wujud keperluan di mana suatu Perintah Pengesahan Hibah akan dituntut dari mana-mana Mahkamah Syariah yang berbidangkuasa, hendaklah SDokumen Pengisytiharan Hibah ini menjadi bahan pembuktian penting dan sumber utama yang harus mendapat pertimbangan Mahkamah.
 </p>
 
 <p>
@@ -178,6 +178,18 @@ Penerima Hibah bersetuju untuk menerima Harta Amanah secara Hibah serta bersetuj
 </p>
 Saya juga faham dan mengesahkan, walaupun dinyatakan di dalam Dokumen Pengisytiharan Hibah bahawa saya telah menghibahkan harta tersebut kepada Penerima-penerima Hibah, namun saya dibenarkan menikmati manfaat fizikal dan ekonomi dari harta tersebut selagi ada hayat saya.
 </p>
+
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>MAKA PERJANJIAN HIBAH INI MENYAKSIKAN SEPERTI BERIKUT:-</strong>
@@ -365,11 +377,7 @@ Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini
 
 <p>Pemberi Hibah adalah tidak bertanggungjawab kepada Penerima Hibah di atas apa-apa kegagalan untuk memenuhi apa-apa syarat Perjanjian Hibah ini jika penyempurnaannya itu dilambatkan, dihindarkan atau dihalang oleh malapetaka termasuklah tetapi tidak terhad kepada kuasa-kuasa Tuhan, mogok, dharurat, rusuhan, kekecohan awam, tindakan-tindakan perang atau kegagalan untuk mendapatkan kebenaran atau kelulusan mana-mana pihak berkuasa tempatan atau lain-lain pihak berkuasa yang berkenaan atau lain-lain keadaan dalam apa juga bentuk di luar kawalan Pemberi Hibah.</p>
 
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>14.	 PERUBAHAN DALAM TERMA DAN SYARAT PERJANJIAN</strong>
-</h3>
 
-<p>Masa di mana-mana juga disebutkan di dalam Perjanjian Hibah ini hendaklah dianggap penting dan menjadi pati kepada kontrak.</p>
 
 <div class="a4-page p-[18mm]">
 
