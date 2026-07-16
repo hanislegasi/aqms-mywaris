@@ -131,7 +131,7 @@ bagi harta yang diperincikan di dalam
 <tr valign="top">
 <td width="30">A.</td>
 <td style="text-align:justify;">
-Pemberi Hibah adalah Ibu saudara/kakak kandung kepada Penerima Hibah;
+Pemberi Hibah adalah <strong>{{HUBUNGAN}}</strong> kepada Penerima Hibah;
 </td>
 </tr>
 <br>
@@ -196,38 +196,46 @@ text-align:justify;
 Bahawa Pemberi Hibah Amanah secara sedar, waras, dengan sukarelanya dan bukan dalam keadaan sakit, atas dasar kasih sayang dan tanpa mendapat apa-apa balasan dengan ini membuat hibah ke atas Harta Amanah tersebut kepada Penerima Hibah dengan kadar seperti di dalam Jadual 1.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>2.	AQAD</strong>
+<strong>2. AQAD</strong>
 </h3>
 
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>Lafaz Ijab</strong>
-</h3>
+<h4 style="margin-top:20px; margin-bottom:10px; font-weight:bold;">
+Lafaz Ijab
+</h4>
 
 <table style="width:100%; border-collapse:collapse;">
 
 <tr valign="top">
-<td width="30">2.1</td>
+<td width="35">2.1</td>
 <td style="text-align:justify;">
-Bahawa saya, <strong>{{NAMA_PEMBERI}}</strong> (No. K/P: <strong>{{IC_PEMBERI}}</strong>) adalah Pemberi Hibah dengan ini menghibahkan semua bahagian daripada bahagian saya ke atas harta tak alih tersebut kepada <strong>{{NAMA_PENERIMA}}</strong>
-(No. K/P:
-<strong>{{IC_PENERIMA}}</strong>)("Penerima Hibah").
+Bahawa saya, <strong>{{NAMA_PEMBERI}}</strong>
+(No. K/P: <strong>{{IC_PEMBERI}}</strong>)
+adalah Pemberi Hibah dengan ini menghibahkan semua bahagian daripada bahagian saya ke atas harta tak alih tersebut kepada
+<strong>{{NAMA_PENERIMA}}</strong>
+(No. K/P: <strong>{{IC_PENERIMA}}</strong>)
+("Penerima Hibah").
 </td>
 </tr>
-<br>
 
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>Lafaz Qabul</strong>
-</h3>
+</table>
+
+<h4 style="margin-top:25px; margin-bottom:10px; font-weight:bold;">
+Lafaz Qabul
+</h4>
+
+<table style="width:100%; border-collapse:collapse;">
 
 <tr valign="top">
-<td>2.2</td>
+<td width="35">2.2</td>
 <td style="text-align:justify;">
-Bahawa saya, <strong>{{NAMA_PENERIMA}}</strong>
+Bahawa saya,
+<strong>{{NAMA_PENERIMA}}</strong>
 (No. K/P:
-<strong>{{IC_PENERIMA}}</strong>) ("Penerima Hibah") menerima Harta Amanah secara Hibah serta bersetuju bahawa Pemegang Amanah akan bertindak sebagai Pemegang Amanah bagi Harta Amanah semasa Tempoh Amanah.
-
+<strong>{{IC_PENERIMA}}</strong>)
+("Penerima Hibah") menerima Harta Amanah secara Hibah serta bersetuju bahawa Pemegang Amanah akan bertindak sebagai Pemegang Amanah bagi Harta Amanah semasa Tempoh Amanah.
 </td>
 </tr>
+
 </table>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
