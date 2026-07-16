@@ -131,29 +131,34 @@ bagi harta yang diperincikan di dalam
 <tr valign="top">
 <td width="30">A.</td>
 <td style="text-align:justify;">
-Pemberi Hibah merupakan pemilik yang sah ke atas harta-harta yang dinyatakan di dalam Jadual 1.
+Pemberi Hibah adalah Ibu saudara/kakak kandung kepada Penerima Hibah;
 </td>
 </tr>
 <br>
 <tr valign="top">
 <td>B.</td>
 <td style="text-align:justify;">
-Pemberi Hibah berhasrat menghibahkan harta tersebut kepada Penerima Hibah secara sukarela tanpa sebarang paksaan.
+Pemberi Hibah adalah pemilik yang sah kepada harta tak alih berikut seperti di dalam Jadual 1 (selepas ini dirujuk sebagai "Harta Amanah tersebut").
 </td>
 </tr>
 <br>
 <tr valign="top">
 <td>C.</td>
 <td style="text-align:justify;">
-Penerima Hibah bersetuju menerima hibah tersebut mengikut kadar bahagian yang dinyatakan di dalam Jadual 1.
+Pemberi Hibah berhasrat untuk memberi Harta Amanah secara Hibah kepada Penerima Hibah yang dinyatakan di dalam Jadual 1.
 </td>
 </tr>
 <br>
 <tr valign="top">
 <td>D.</td>
 <td style="text-align:justify;">
-Semua pihak bersetuju bahawa dokumen ini menjadi rekod bertulis mengenai akad hibah yang dibuat menurut Hukum Syarak dan undang-undang yang berkuat kuasa di Malaysia.
-</td>
+Pemberi Hibah berhasrat untuk memegang Harta Amanah sebagai Pemberi Hibah untuk kepentingan Penerima Hibah.
+</tr>
+<br>
+<tr valign="top">
+<td>E.</td>
+<td style="text-align:justify;">
+Penerima Hibah bersetuju untuk menerima Harta Amanah secara Hibah serta bersetuju bahawa Pemberi Hibah akan bertindak sebagai Pemberi Hibah bagi Harta Amanah semasa Tempoh Amanah.
 </tr>
 
 </table>
@@ -188,7 +193,7 @@ text-align:justify;
 
 <p>
 1.1
-Bahawa Pemegang Amanah secara sedar, waras, dengan sukarelanya dan bukan dalam keadaan sakit, atas dasar kasih sayang dan tanpa mendapat apa-apa balasan dengan ini membuat hibah ke atas Harta Amanah tersebut kepada Benefisiari dengan kadar seperti di dalam Jadual 2.</p>
+Bahawa Pemberi Hibah Amanah secara sedar, waras, dengan sukarelanya dan bukan dalam keadaan sakit, atas dasar kasih sayang dan tanpa mendapat apa-apa balasan dengan ini membuat hibah ke atas Harta Amanah tersebut kepada Penerima Hibah dengan kadar seperti di dalam Jadual 1.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>2.	AQAD</strong>
@@ -205,14 +210,19 @@ Bahawa Pemegang Amanah secara sedar, waras, dengan sukarelanya dan bukan dalam k
 <td style="text-align:justify;">
 Bahawa saya, <strong>{{NAMA_PEMBERI}}</strong> (No. K/P: <strong>{{IC_PEMBERI}}</strong>) adalah Pemberi Hibah dengan ini menghibahkan semua bahagian daripada bahagian saya ke atas harta tak alih tersebut kepada <strong>{{NAMA_PENERIMA}}</strong>
 (No. K/P:
-<strong>{{IC_PENERIMA}}</strong>)("Benefisiari").
+<strong>{{IC_PENERIMA}}</strong>)("Penerima Hibah").
 </td>
 </tr>
 <br>
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>Lafaz Qabul</strong>
+</h3>
+
 <tr valign="top">
 <td>2.2</td>
 <td style="text-align:justify;">
-Bahawa kami, <strong>{{NAMA_PENERIMA}}</strong>
+Bahawa saya, <strong>{{NAMA_PENERIMA}}</strong>
 (No. K/P:
 <strong>{{IC_PENERIMA}}</strong>) ("Penerima Hibah") menerima Harta Amanah secara Hibah serta bersetuju bahawa Pemegang Amanah akan bertindak sebagai Pemegang Amanah bagi Harta Amanah semasa Tempoh Amanah.
 
@@ -224,13 +234,13 @@ Bahawa kami, <strong>{{NAMA_PENERIMA}}</strong>
 <strong>3.	KETIDAKDAFTARAN PINDAHMILIK</strong>
 </h3> 
 
-<p>Walauapapun jika ada mana-mana peruntukkan yang terkandung di dalam Perjanjian Hibah ini berlawanan, jika sekiranya permohonan pendaftaran pindahmilik Harta Amanah tersebut ke atas nama Benefisiari tidak dapat disempurnakan oleh Pihak Berkuasa Yang Berkenaan atas apa jua sebab yang mana ia bukan merupakan pelanggaran atau salahlaku oleh Pemegang Amanah atau Benefisiari, maka Pemegang Amanah atau Benefisiari boleh membawa/mengambil tindakan bagi berkaitan dan diperuntukkan dalam mana-mana undang-undang di Malaysia ini bagi tujuan pendaftaran.</p>
+<p>Walauapapun jika ada mana-mana peruntukkan yang terkandung di dalam Perjanjian Hibah ini berlawanan, jika sekiranya permohonan pendaftaran pindahmilik Harta Amanah tersebut ke atas nama Penerima Hibah tidak dapat disempurnakan oleh Pihak Berkuasa Yang Berkenaan atas apa jua sebab yang mana ia bukan merupakan pelanggaran atau salahlaku oleh Pemberi Hibah atau Penerima Hibah, maka Pemberi Hibah atau Penerima Hibah boleh membawa/mengambil tindakan bagi berkaitan dan diperuntukkan dalam mana-mana undang-undang di Malaysia ini bagi tujuan pendaftaran.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>4.	PEMERIKSAAN HARTA AMANAH</strong>
 </h3> 
 
-<p>Adalah dipersetujui oleh kedua-dua pihak bahawa risiko terhadap Harta Amanah tersebut kekal kepada Pemegang Amanah sehinggalah kepada tarikh semasa penyerahan milikan kosong Harta Amanah tersebut oleh Pemegang Amanah kepada Benefisiari tersebut.</p>
+<p>Adalah dipersetujui oleh kedua-dua pihak bahawa risiko terhadap Harta Amanah tersebut kekal kepada Pemberi Hibah sehinggalah kepada tarikh semasa penyerahan milikan kosong Harta Amanah tersebut oleh Pemberi Hibah kepada Penerima Hibah tersebut.</p>
 
 <div class="pdf-footer">
 
@@ -248,13 +258,41 @@ Bahawa kami, <strong>{{NAMA_PENERIMA}}</strong>
 <strong>5.	EFEK SURAT IKATAN HIBAH</strong>
 </h3> 
 
-<p>Pemegang Amanah bersetuju bahawa melalui Surat Ikatan ini dan berkuatkuasa serta merta, Pemegang Amanah kini tidak lagi mempunyai hak, kepentingan dan manfaat ke atas harta-harta tersebut melainkan hanya menjalankan tugas sebagai Pemegang Amanah kepada Benefisiari seperti yang diperincikan di dalam Surat Ikatan ini melainkan dinyatakan sebaliknya.</p>
+<p>Pemberi Hibah bersetuju bahawa melalui Surat Ikatan ini dan berkuatkuasa serta merta, Pemberi Hibah kini tidak lagi mempunyai hak, kepentingan dan manfaat ke atas harta-harta tersebut melainkan hanya menjalankan tugas sebagai Pemegang Amanah kepada Penerima Hibah seperti yang diperincikan di dalam Surat Ikatan ini melainkan dinyatakan sebaliknya.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>6.	KOS</strong>
 </h3>
 
-<p>Segala kos dan perbelanjaan dalam penyediaan Perjanjian Hibah ini ditanggung oleh Pemegang Amanah.</p>
+<p>Segala kos dan perbelanjaan dalam penyediaan Perjanjian Hibah ini ditanggung oleh Pemberi Hibah.</p>
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>7.  WAAD DAN OBLIGASI PEMBERI HIBAH</strong>
+</h3> 
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>7.1  Pemberi Hibah dengan ini berwaad memberi akujanji mengakui dan memberi jaminan kepada Penerima Hibah seperti berikut:-</strong>
+</h3>
+
+<table style="width:100%; border-collapse:collapse;">
+
+<tr valign="top">
+<td width="30">7.1.1</td>
+<td style="text-align:justify;">
+7.1.1	bahawa pada tarikh Perjanjian hibah ini beliau bukan seorang muflis (bankrap), juga tidak ada petisyen untuk kebankrapan telah difailkan terhadapnya sama ada bersama-sama atau berasingan;
+</td>
+</tr>
+<br>
+
+<tr valign="top">
+<td>7.1.2</td>
+<td style="text-align:justify;">
+7.1.2	bahawa beliau mempunyai hak dan kuasa untuk menghibahkan Harta Amanah tersebut;
+
+</td>
+</tr>
+</table>
+
 
 
 <div class="pdf-footer">
