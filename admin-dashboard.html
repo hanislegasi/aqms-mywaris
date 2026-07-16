@@ -217,6 +217,7 @@
                     // Hibah
                     const hibahSnap = await getDoc(doc(db, "users", userDoc.id, "hibah", "maklumat"));
                     if (hibahSnap.exists()) {
+                        const hibah = hibahSnap.data();
                         if (hibahSnap.data().status === "UNDER_REVIEW") queueHibah++;
                         if (hibah.docRef) approved++;
                         if (hibah.renewedAt) renewal++;
@@ -227,8 +228,9 @@
                     }
 
                     // Harta Sepencarian
-                    const sepencarianSnap = await getDoc(doc(db, "users", userDoc.id, "hartaSepencarian", "maklumat"));
+                    const sepencarianSnap = await getDoc(doc(db, "users", userDoc.id, "sepencarian", "maklumat"));
                     if (sepencarianSnap.exists()) {
+                        const sepencarian = sepencarianSnap.data();
                         if (sepencarianSnap.data().status === "UNDER_REVIEW") queueSepencarian++;
                         if (sepencarian.docRef) approved++;
                         if (sepencarian.renewedAt) renewal++;
@@ -241,6 +243,7 @@
                     // Mawaris
                     const mawarisSnap = await getDoc(doc(db, "users", userDoc.id, "mawaris", "maklumat"));
                     if (mawarisSnap.exists()) {
+                        const mawaris = mawarisSnap.data();
                         if (mawarisSnap.data().status === "UNDER_REVIEW") queueMawaris++;
                         if (mawaris.docRef) approved++;
                         if (mawaris.renewedAt) renewal++;
