@@ -140,7 +140,7 @@ margin-top:0;
 padding-bottom:12px;
 text-align:justify;
 ">
-Pemberi Hibah adalah <strong>{{HUBUNGAN}}</strong> kepada Penerima Hibah;
+Penerima Hibah adalah <strong>{{HUBUNGAN}}</strong> kepada Pemberi Hibah;
 </td>
 </tr>
 
@@ -319,16 +319,21 @@ Bahawa saya,
 <table style="width:100%; border-collapse:collapse;">
 
 <tr valign="top">
-<td width="30">7.1.1</td>
-<td style="text-align:justify;">
+<td>7.1.1</td>
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
 Bahawa pada tarikh Perjanjian hibah ini beliau bukan seorang muflis (bankrap), juga tidak ada petisyen untuk kebankrapan telah difailkan terhadapnya sama ada bersama-sama atau berasingan;
 </td>
 </tr>
-<br>
 
 <tr valign="top">
 <td>7.1.2</td>
-<td style="text-align:justify;">
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
 Bahawa beliau mempunyai hak dan kuasa untuk menghibahkan Harta Amanah tersebut;
 
 </td>
@@ -346,20 +351,26 @@ Bahawa beliau mempunyai hak dan kuasa untuk menghibahkan Harta Amanah tersebut;
 <table style="width:100%; border-collapse:collapse;">
 
 <tr valign="top">
-<td width="30">8.1.1</td>
-<td style="text-align:justify;">
+<td>8.1.1</td>
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
 Penerima Hibah selepas daripada Surat Ikatan ini ditandatangani bersetuju dan dengan rela hati untuk membenarkan Pemberi Hibah selaku Pemberi Hibah terus menikmati dan menggunakan segala manfaat yang terhasil dari harta-harta tersebut tanpa dikenakan apa-apa sewa dan/atau bayaran selagi mana Pemberi Hibah masih hidup.
 </td>
 </tr>
-<br>
+
 
 <tr valign="top">
 <td>8.1.2</td>
-<td style="text-align:justify;">
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
 Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini adalah berdasarkan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut di atas dan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut yang merupakan asas kepada tanggungjawab Pemberi Hibah untuk menghibahkan Harta Amanah tersebut; 
 </td>
 </tr>
-</table>
+</table> 
 
 <div class="pdf-footer">
 <span class="footer-docref"></span>
