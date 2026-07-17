@@ -273,25 +273,97 @@ Bahawa Pemberi Hibah Amanah secara sedar, waras, dengan sukarelanya dan bukan da
 <strong>6.  HAK MENIKMATI MANFAAT OLEH PEMBERI HIBAH</strong>
 </h3>
 
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-6.1 Pemberi Hibah dengan ini berwaad memberi akujanji mengakui dan memberi jaminan kepada Penerima Hibah seperti berikut:
-</h3>
-
-<table style="width:100%; border-collapse:collapse;">
+<table
+style="
+width:100%;
+border-collapse:collapse;
+margin-top:12px;
+margin-bottom:18px;
+">
 
 <tr valign="top">
-<td width="30">7.1.1</td>
-<td style="text-align:justify;">
-Bahawa pada tarikh Perjanjian Hibah ini beliau bukan seorang muflis (bankrap), juga tidak ada petisyen untuk kebankrapan telah difailkan terhadapnya sama ada bersama-sama atau berasingan;
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+6.1
 </td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Walau apa pun yang terkandung dalam Dokumen Pengisytiharan Hibah ini, Pemberi Hibah berhak untuk terus menikmati manfaat fizikal dan/atau manfaat ekonomi daripada Harta Amanah tersebut sepanjang hayatnya atau sepanjang Tempoh Amanah sebagaimana yang diperuntukkan dalam Dokumen Pengisytiharan Hibah ini.
+</td>
+
+</tr>
+
+<tr>
+<td colspan="2" style="height:18px;"></td>
 </tr>
 
 <tr valign="top">
-<td>7.1.2</td>
-<td style="text-align:justify;">
-Bahawa beliau mempunyai hak dan kuasa untuk menghibahkan Harta Amanah tersebut;
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+6.2
 </td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Hak menikmati manfaat tersebut termasuk tetapi tidak terhad kepada hak untuk menduduki, menggunakan, mengusahakan, menyewakan, menerima hasil, atau menikmati apa-apa manfaat lain daripada Harta Amanah, tanpa menjejaskan hak benefisial Penerima Hibah.
 </tr>
+
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+6.3
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Penerima Hibah mengakui dan bersetuju bahawa hak menikmati manfaat oleh Pemberi Hibah sebagaimana diperuntukkan dalam Klausa ini adalah sebahagian daripada syarat Hibah dan tidak boleh diganggu atau dihalang sepanjang Tempoh Amanah.
 
 </table>
 
