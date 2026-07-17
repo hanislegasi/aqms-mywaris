@@ -58,7 +58,7 @@ Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. Kad Pengenalan
 </p>
 
 <p>
-Matlamat saya menulis Dokumen Pengisytiharan Hibah ini adalah sebagai pernyataan bertulis yang menjelaskan kedudukan harta yang telah dihibahkan kepada Penerima Hibah semasa hayat Pemberi Hibah, dengan harapan agar memudahkan proses penyelesaian pusaka mana-mana pihak sama ada Pemegang Amanah mahupun Benefisiari tanpa wujudnya apa-apa kekeliruan terhadap status harta yang telah dihibahkan tersebut selepas kematian mana-mana pihak.
+Matlamat saya menulis Dokumen Pengisytiharan Hibah ini adalah sebagai pernyataan bertulis yang menjelaskan kedudukan harta yang telah dihibahkan kepada Penerima Hibah semasa hayat Pemberi Hibah, dengan harapan agar memudahkan proses penyelesaian pusaka mana-mana pihak sama ada Pemegang Amanah mahupun Penerima Hibah tanpa wujudnya apa-apa kekeliruan terhadap status harta yang telah dihibahkan tersebut selepas kematian mana-mana pihak.
 </p>
 
 <p>
@@ -170,7 +170,7 @@ Pemberi Hibah berhasrat untuk memberi Harta Amanah secara Hibah kepada Penerima 
 padding-bottom:12px;
 text-align:justify;
 ">
-Pemberi Hibah berhasrat untuk memegang Harta Amanah sebagai Pemberi Hibah untuk kepentingan Penerima Hibah.
+Pemberi Hibah berhasrat untuk terus memegang Harta Amanah tersebut sebagai Pemegang Amanah (Trustee) bagi manfaat Penerima Hibah sepanjang Tempoh Amanah.
 </tr>
 
 <tr valign="top">
@@ -179,39 +179,43 @@ Pemberi Hibah berhasrat untuk memegang Harta Amanah sebagai Pemberi Hibah untuk 
 padding-bottom:12px;
 text-align:justify;
 ">
-Penerima Hibah bersetuju untuk menerima Harta Amanah secara Hibah serta bersetuju bahawa Pemberi Hibah akan bertindak sebagai Pemberi Hibah bagi Harta Amanah semasa Tempoh Amanah.
+Penerima Hibah bersetuju menerima Hibah tersebut dan bersetuju bahawa Pemberi Hibah akan bertindak sebagai Pemegang Amanah ke atas Harta Amanah sepanjang Tempoh Amanah mengikut terma-terma Dokumen Pengisytiharan Hibah ini.
+</tr>
+
+<tr valign="top">
+<td>F.</td>
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
+Pemberi Hibah memahami dan bersetuju bahawa walaupun Harta Amanah telah dihibahkan kepada Penerima Hibah, Pemberi Hibah berhak menikmati manfaat fizikal dan/atau manfaat ekonomi daripada Harta Amanah tersebut sepanjang hayatnya atau sehingga Tempoh Amanah berakhir, tertakluk kepada terma-terma Dokumen Pengisytiharan Hibah ini.
+</tr>
+
+<tr valign="top">
+<td>G.</td>
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
+<strong>Pengesahan Hak Menarik Balik Hibah</strong>
+
+ <ol type="i" style="margin-top:8px; padding-left:22px;">
+            <li style="margin-bottom:8px;">
+                <strong>Jika Penerima Hibah ialah anak kandung, cucu kandung atau cicit kandung</strong><br>
+                Pemberi Hibah memahami bahawa selaras dengan Hukum Syarak, Hibah ini boleh ditarik balik oleh Pemberi Hibah pada bila-bila masa sepanjang hayatnya tertakluk kepada hukum Syarak dan terma-terma Dokumen Pengisytiharan Hibah ini.
+            </li>
+
+            <li>
+                <strong>Jika Penerima Hibah bukan anak kandung, cucu kandung atau cicit kandung</strong><br>
+                Pemberi Hibah memahami bahawa Hibah ini tidak boleh ditarik balik kecuali dengan persetujuan Penerima Hibah atau sebagaimana yang dibenarkan menurut Hukum Syarak dan tertakluk kepada terma-terma Dokumen Pengisytiharan Hibah ini.
+            </li>
+        </ol>
+    </td>
 </tr>
 
 </table>
 
 
-
-<div class="pdf-footer">
-<span class="footer-docref"></span>
-<span class="page-number"></span>
-</div>
-</div>
-
-<div class="a4-page p-[18mm]">
-
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>(Klausa untuk Hibah kepada anak kandung, cucu kandung, cicit kandung)</strong>
-</h3>
-
-<p>Saya juga mengaku dan berikrar bahawa saya adalah pemilik sah kepada harta di atas dari segi undang-undang. Seterusnya di dalam Dokumen Pengisytiharan Hibah ini, saya mengaku faham bahawa pembatalan/penarikan balik Hibah ini boleh dilakukan pada bila-bila masa tanpa persetujuan anak saya.</p>
-
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>(Klausa untuk Hibah kepada selain daripada anak kandung, cucu kandung, cicit kandung)</strong>
-</h3>
-
-<p>Saya juga mengaku dan berikrar bahawa saya adalah pemilik sah kepada harta di atas dari segi undang-undang. Seterusnya di dalam Dokumen Pengisytiharan Hibah ini, saya mengaku faham bahawa pembatalan/penarikan balik Hibah ini hanya boleh dilakukan apabila mendapat persetujuan daripada Penerima/ Penerima-Penerima Hibah di atas.
-</p>
-<p>Saya juga dengan ini mengaku mulai pada hari ini, saya dengan suci dan rela hati telah memberi segala hak, kuasa dan tanggungjawab terhadap harta ini kepada Penerima/Penerima-Penerima Hibah di atas yang telah memenuhi rukun-rukun dan menyempurnakan Qabd dengan menyerahkan salinan geran/salinan perjanjian jual beli/kunci rumah/Penerima Hibah menduduki/menguasai harta ini.
-</p>
-<p>Saya juga dengan ini mengaku bahawa mulai pada hari ini, saya dengan suci dan rela hati telah memberi segala hak, kuasa dan tanggungjawab terhadap harta ini kepada Penerima Hibah di atas yang telah memenuhi rukun-rukun dan menyempurnakan syarat Qabd di dalam hibah.
-</p>
-Saya juga faham dan mengesahkan, walaupun dinyatakan di dalam Dokumen Pengisytiharan Hibah bahawa saya telah menghibahkan harta tersebut kepada Penerima-penerima Hibah, namun saya dibenarkan menikmati manfaat fizikal dan ekonomi dari harta tersebut selagi ada hayat saya.
-</p>
 
 <div class="pdf-footer">
 <span class="footer-docref"></span>
@@ -234,47 +238,10 @@ Saya juga faham dan mengesahkan, walaupun dinyatakan di dalam Dokumen Pengisytih
 Bahawa Pemberi Hibah Amanah secara sedar, waras, dengan sukarelanya dan bukan dalam keadaan sakit, atas dasar kasih sayang dan tanpa mendapat apa-apa balasan dengan ini membuat hibah ke atas Harta Amanah tersebut kepada Penerima Hibah dengan kadar seperti di dalam Jadual 1.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>2. AQAD</strong>
+<strong>2. QABD DAN PENYERAHAN MILIKAN</strong>
 </h3>
 
-<h4 style="margin-top:20px; margin-bottom:10px; font-weight:bold;">
-Lafaz Ijab
-</h4>
-
-<table style="width:100%; border-collapse:collapse;">
-
-<tr valign="top">
-<td width="35">2.1</td>
-<td style="text-align:justify;">
-Bahawa saya, <strong>{{NAMA_PEMBERI}}</strong>
-(No. K/P: <strong>{{IC_PEMBERI}}</strong>)
-adalah Pemberi Hibah dengan ini menghibahkan semua bahagian daripada bahagian saya ke atas harta tak alih tersebut kepada
-<strong>{{NAMA_PENERIMA}}</strong>
-(No. K/P: <strong>{{IC_PENERIMA}}</strong>)
-("Penerima Hibah").
-</td>
-</tr>
-
-</table>
-
-<h4 style="margin-top:25px; margin-bottom:10px; font-weight:bold;">
-Lafaz Qabul
-</h4>
-
-<table style="width:100%; border-collapse:collapse;">
-
-<tr valign="top">
-<td width="35">2.2</td>
-<td style="text-align:justify;">
-Bahawa saya,
-<strong>{{NAMA_PENERIMA}}</strong>
-(No. K/P:
-<strong>{{IC_PENERIMA}}</strong>)
-("Penerima Hibah") menerima Harta Amanah secara Hibah serta bersetuju bahawa Pemegang Amanah akan bertindak sebagai Pemegang Amanah bagi Harta Amanah semasa Tempoh Amanah.
-</td>
-</tr>
-
-</table>
+<p>Pemberi Hibah dan Penerima Hibah mengesahkan bahawa Qabd terhadap Harta Amanah telah disempurnakan mengikut Hukum Syarak melalui penyerahan milikan sebenar atau milikan secara konstruktif, termasuk tetapi tidak terhad kepada penyerahan dokumen hak milik, kunci, penguasaan, atau apa-apa bentuk penyerahan yang diiktiraf oleh Hukum Syarak.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>3.	KETIDAKDAFTARAN PINDAHMILIK</strong>
@@ -283,7 +250,7 @@ Bahawa saya,
 <p>Walauapapun jika ada mana-mana peruntukkan yang terkandung di dalam Perjanjian Hibah ini berlawanan, jika sekiranya permohonan pendaftaran pindahmilik Harta Amanah tersebut ke atas nama Penerima Hibah tidak dapat disempurnakan oleh Pihak Berkuasa Yang Berkenaan atas apa jua sebab yang mana ia bukan merupakan pelanggaran atau salahlaku oleh Pemberi Hibah atau Penerima Hibah, maka Pemberi Hibah atau Penerima Hibah boleh membawa/mengambil tindakan bagi berkaitan dan diperuntukkan dalam mana-mana undang-undang di Malaysia ini bagi tujuan pendaftaran.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>4.	PEMERIKSAAN HARTA AMANAH</strong>
+<strong>4.	RISIKO TERHADAP HARTA AMANAH</strong>
 </h3> 
 
 <p>Adalah dipersetujui oleh kedua-dua pihak bahawa risiko terhadap Harta Amanah tersebut kekal kepada Pemberi Hibah sehinggalah kepada tarikh semasa penyerahan milikan kosong Harta Amanah tersebut oleh Pemberi Hibah kepada Penerima Hibah tersebut.</p>
@@ -297,19 +264,39 @@ Bahawa saya,
 <div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>5.	EFEK SURAT IKATAN HIBAH</strong>
+<strong>5.	HAK DAN TANGGUNGJAWAB PEMEGANG AMANAH</strong>
 </h3> 
 
-<p>Pemberi Hibah bersetuju bahawa melalui Surat Ikatan ini dan berkuatkuasa serta merta, Pemberi Hibah kini tidak lagi mempunyai hak, kepentingan dan manfaat ke atas harta-harta tersebut melainkan hanya menjalankan tugas sebagai Pemegang Amanah kepada Penerima Hibah seperti yang diperincikan di dalam Surat Ikatan ini melainkan dinyatakan sebaliknya.</p>
+<p>Pemberi Hibah tidak lagi mempunyai hak milik benefisial terhadap Harta Amanah kecuali hak menikmati manfaat sebagaimana diperuntukkan di bawah Dokumen Pengisytiharan Hibah ini serta hak-hak lain yang dibenarkan menurut Hukum Syarak dan terma dokumen ini.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>6.	KOS</strong>
+<strong>6.  HAK MENIKMATI MANFAAT OLEH PEMBERI HIBAH</strong>
 </h3>
 
-<p>Segala kos dan perbelanjaan dalam penyediaan Perjanjian Hibah ini ditanggung oleh Pemberi Hibah.</p>
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+6.1 Pemberi Hibah dengan ini berwaad memberi akujanji mengakui dan memberi jaminan kepada Penerima Hibah seperti berikut:
+</h3>
+
+<table style="width:100%; border-collapse:collapse;">
+
+<tr valign="top">
+<td width="30">7.1.1</td>
+<td style="text-align:justify;">
+Bahawa pada tarikh Perjanjian Hibah ini beliau bukan seorang muflis (bankrap), juga tidak ada petisyen untuk kebankrapan telah difailkan terhadapnya sama ada bersama-sama atau berasingan;
+</td>
+</tr>
+
+<tr valign="top">
+<td>7.1.2</td>
+<td style="text-align:justify;">
+Bahawa beliau mempunyai hak dan kuasa untuk menghibahkan Harta Amanah tersebut;
+</td>
+</tr>
+
+</table>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>7. WAAD DAN OBLIGASI PEMBERI HIBAH</strong>
+<strong>7. WAAD DAN AKUJANJI PEMBERI HIBAH</strong>
 </h3>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
@@ -336,7 +323,7 @@ Bahawa beliau mempunyai hak dan kuasa untuk menghibahkan Harta Amanah tersebut;
 
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>8. OBLIGASI PENERIMA HIBAH</strong>
+<strong>8. AKUJANJI PENERIMA HIBAH</strong>
 </h3>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
@@ -348,7 +335,7 @@ Bahawa beliau mempunyai hak dan kuasa untuk menghibahkan Harta Amanah tersebut;
 <tr valign="top">
 <td width="30">8.1.1</td>
 <td style="text-align:justify;">
-Penerima Hibah selepas daripada Surat Ikatan ini ditandatangani bersetuju dan dengan rela hati untuk membenarkan Pemberi Hibah selaku Pemberi Hibah terus menikmati dan menggunakan segala manfaat yang terhasil dari harta-harta tersebut tanpa dikenakan apa-apa sewa dan/atau bayaran selagi mana Pemberi Hibah masih hidup.
+Penerima Hibah mengakui bahawa hak Pemberi Hibah untuk terus menikmati manfaat fizikal dan ekonomi Harta Amanah adalah sebahagian daripada syarat Hibah ini dan tidak boleh diganggu sepanjang Tempoh Amanah.
 </td>
 </tr>
 
@@ -361,6 +348,12 @@ Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini
 
 </table>
 
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>9.	PENGESAHAN TIADA PAKSAAN</strong>
+</h3>
+
+<p>Pemberi Hibah mengesahkan bahawa Dokumen Pengisytiharan Hibah ini dibuat secara sukarela, tanpa sebarang paksaan, ugutan, pengaruh tidak wajar atau kekhilafan daripada mana-mana pihak.</p>
+
 <div class="pdf-footer">
 <span class="footer-docref"></span>
 <span class="page-number"></span>
@@ -370,34 +363,34 @@ Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini
 <div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>9.	NOTIS DAN PENYAMPAIAN DOKUMEN </strong>
+<strong>10.	KOS</strong>
+</h3>
+
+<p>Segala kos dan perbelanjaan dalam penyediaan Perjanjian Hibah ini ditanggung oleh Pemberi Hibah.</p>
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>11.	NOTIS DAN PENYAMPAIAN DOKUMEN </strong>
 </h3> 
 
 <p>Apa-apa Notis permintaan atau tuntutan yang dikehendaki disampaikan oleh mana-mana pihak kepada Perjanjian Hibah ini kepada pihak yang satu lagi di bawah Perjanjian Hibah ini hendaklah secara bertulis ke alamat terakhir pihak-pihak yang diketahui dan hendaklah disifatkan sebagai penyampaian yang mencukupi.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>10.	MASA MERUPAKAN PATI KONTRAK</strong>
+<strong>12.	MASA MERUPAKAN PATI KONTRAK</strong>
 </h3>
 
 <p>Masa di mana-mana juga disebutkan di dalam Perjanjian Hibah ini hendaklah dianggap penting dan menjadi pati kepada kontrak.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>11.	 ORANG-ORANG YANG TERIKAT KEPADA PERJANJIAN</strong>
+<strong>13.	 ORANG-ORANG YANG TERIKAT KEPADA PERJANJIAN</strong>
 </h3>
 
 <p>Perjanjian Hibah ini hendaklah terikat kepada kesemua waris, wakil peribadi, pemegang wasi, pengganti dalam hakmilik atau penerima serahhak yang dibenarkan bagi pihak- pihak di dalam Perjanjian ini.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>12.	 BIDANGKUASA UNDANG-UNDANG </strong>
+<strong>14.	 BIDANGKUASA UNDANG-UNDANG </strong>
 </h3>
 
 <p>Perjanjian Hibah ini adalah dikuasai dan ditafsirkan menurut undang-undang di Malaysia dan tidak berlawanan dengan Hukum Syarak dan kedua-dua pihak adalah dengan ini patuh kepada bidang kuasa Mahkamah-Mahkamah di Malaysia.</p>
-
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>13.	 MALAPETAKA</strong>
-</h3>
-
-<p>Pemberi Hibah adalah tidak bertanggungjawab kepada Penerima Hibah di atas apa-apa kegagalan untuk memenuhi apa-apa syarat Perjanjian Hibah ini jika penyempurnaannya itu dilambatkan, dihindarkan atau dihalang oleh malapetaka termasuklah tetapi tidak terhad kepada kuasa-kuasa Tuhan, mogok, dharurat, rusuhan, kekecohan awam, tindakan-tindakan perang atau kegagalan untuk mendapatkan kebenaran atau kelulusan mana-mana pihak berkuasa tempatan atau lain-lain pihak berkuasa yang berkenaan atau lain-lain keadaan dalam apa juga bentuk di luar kawalan Pemberi Hibah.</p>
 
 <div class="pdf-footer">
 <span class="footer-docref"></span>
@@ -448,16 +441,6 @@ SENARAI HARTA TAK ALIH YANG DIHIBAHKAN
 </h3>
 
 {{TABLE_TAK_ALIH}}
-
-<div class="pdf-footer">
-
-<span class="footer-docref"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
 
 <div
 style="
