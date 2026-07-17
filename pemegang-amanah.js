@@ -422,6 +422,315 @@ margin-top:50px;
 
 </div>
 
+<div class="a4-page p-[18mm]">
+
+<h2
+style="
+font-family:'Times New Roman',serif;
+font-size:38px;
+font-weight:bold;
+text-align:center;
+color:#153638;
+margin-bottom:20px;
+">
+PERAKUAN PENERIMAAN PELANTIKAN PEMEGANG AMANAH
+</h2>
+
+<div
+style="
+text-align:center;
+font-family:'Amiri',serif;
+font-size:28px;
+margin-bottom:15px;
+">
+بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
+</div>
+
+<p style="text-align:center;">
+<strong>
+Dengan Nama Allah Yang Maha Pemurah Lagi Maha Mengasihani
+</strong>
+</p>
+
+<p>
+Saya naik saksi bahawa tiada Tuhan yang disembah melainkan Allah S.W.T. dan Nabi Muhammad S.A.W. ialah Pesuruh Allah. Segala puji bagi Allah Tuhan sekalian alam. Selawat dan salam ke atas junjungan besar Nabi Muhammad S.A.W.
+</p>
+
+<p>
+
+Saya,
+
+<strong>${p.nama}</strong>
+
+(No. Kad Pengenalan
+
+<strong>${p.ic}</strong>)
+
+dengan ini mengaku bahawa saya seorang Islam, cukup umur, sempurna akal fikiran serta bertindak secara sukarela tanpa sebarang paksaan dan penuh kerelaan hati saya sendiri bersetuju dilantik sebagai Pemegang Amanah bagi Penerima-Penerima harta yang tersebut.
+
+</p>
+
+<p>Saya juga dengan ini mengaku bahawa mulai pada hari ini, saya akan melaksanakan tanggungjawab sebagai Pemegang Amanah dengan jujur, amanah dan ikhlas bagi menjaga kepentingan Penerima-Penerima harta tersebut.</p>
+
+<div
+style="
+margin-top:60px;
+border-top:1px solid #000;
+width:100%;
+">
+</div>
+
+<p
+style="
+text-align:center;
+margin-top:10px;
+font-style:italic;
+">
+(Ruangan ini sengaja dibiarkan kosong)
+</p>
+
+<div class="pdf-footer">
+
+<span class="docRef"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+</div>
+
+  
+<div class="a4-page p-[18mm]">
+
+<div class="mt-8">
+
+<strong>PENGAKUAN PEMEGANG AMANAH</strong>
+<p>
+Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Wasiat ini adalah benar dan tepat mengikut pengetahuan saya.
+</p>
+<br>
+
+
+<p>.......................................</p>
+
+<p>
+(Tandatangan Pemegang Amanah)
+</p>
+
+<table
+style="
+margin-top:30px;
+font-size:14px;
+">
+
+<tr>
+<td width="100">
+Nama
+</td>
+
+<td width="20">
+:
+</td>
+
+<td>
+<strong>${p.nama}</strong>
+</td>
+</tr>
+
+<tr>
+<td>
+No. K/P
+</td>
+
+<td>
+:
+</td>
+
+<td>
+<strong>${p.ic}</strong>)
+</td>
+</tr>
+
+<tr>
+<td>
+Tarikh
+</td>
+
+<td>
+:
+</td>
+
+<td>
+</td>
+</tr>
+
+</table>
+
+</div>
+<br>
+<strong>PENGESAHAN SAKSI</strong>
+<p>
+Kami yang bertandatangan di bawah mengesahkan bahawa Pewasiat telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
+Pewasiat berada dalam keadaan waras serta membuat Wasiat ini secara sukarela.
+</p>
+
+<table
+style="
+width:100%;
+margin-top:50px;
+">
+
+<tr valign="top">
+
+<td width="45%">
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 1</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+<td width="10%"></td>
+
+<td width="45%">
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 2</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+<tr>
+<td colspan="3" height="60"></td>
+</tr>
+
+<tr valign="top">
+
+<td>
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 3</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+<td></td>
+
+<td>
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 4</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+<div class="pdf-footer">
+
+<span class="docRef"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+</div>
 
 
 `;
