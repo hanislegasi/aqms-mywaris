@@ -197,20 +197,7 @@ Pemberi Hibah memahami dan bersetuju bahawa walaupun Harta Amanah telah dihibahk
 padding-bottom:12px;
 text-align:justify;
 ">
-<strong>Pengesahan Hak Menarik Balik Hibah</strong>
-
- <ol type="i" style="margin-top:8px; padding-left:22px;">
-            <li style="margin-bottom:8px;">
-                <strong>Jika Penerima Hibah ialah anak kandung, cucu kandung atau cicit kandung</strong><br>
-                Pemberi Hibah memahami bahawa selaras dengan Hukum Syarak, Hibah ini boleh ditarik balik oleh Pemberi Hibah pada bila-bila masa sepanjang hayatnya tertakluk kepada hukum Syarak dan terma-terma Dokumen Pengisytiharan Hibah ini.
-            </li>
-
-            <li>
-                <strong>Jika Penerima Hibah bukan anak kandung, cucu kandung atau cicit kandung</strong><br>
-                Pemberi Hibah memahami bahawa Hibah ini tidak boleh ditarik balik kecuali dengan persetujuan Penerima Hibah atau sebagaimana yang dibenarkan menurut Hukum Syarak dan tertakluk kepada terma-terma Dokumen Pengisytiharan Hibah ini.
-            </li>
-        </ol>
-    </td>
+Pemberi Hibah memahami bahawa hak untuk menarik balik Hibah ini adalah tertakluk kepada Hukum Syarak serta terma-terma Dokumen Pengisytiharan Hibah ini.
 </tr>
 
 </table>
@@ -393,6 +380,13 @@ Bahawa beliau mempunyai hak dan kuasa untuk menghibahkan Harta Amanah tersebut;
 
 </table>
 
+<div class="pdf-footer">
+<span class="footer-docref"></span>
+<span class="page-number"></span>
+</div>
+</div>
+
+<div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>8. AKUJANJI PENERIMA HIBAH</strong>
@@ -425,14 +419,6 @@ Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini
 </h3>
 
 <p>Pemberi Hibah mengesahkan bahawa Dokumen Pengisytiharan Hibah ini dibuat secara sukarela, tanpa sebarang paksaan, ugutan, pengaruh tidak wajar atau kekhilafan daripada mana-mana pihak.</p>
-
-<div class="pdf-footer">
-<span class="footer-docref"></span>
-<span class="page-number"></span>
-</div>
-</div>
-
-<div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>10.	KOS</strong>
