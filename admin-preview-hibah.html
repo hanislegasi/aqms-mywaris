@@ -1477,11 +1477,59 @@ function formatDateMY(dateStr){
 let hibahHTML = "";
 
 Object.values(groupedHibah).forEach(item=>{
-   
+
+function getPihakPenerima(item){
+
+    const bawahUmur =
+        item.status === "bawah18" ||
+        item.status === "oku";
+
+    if(bawahUmur){
+
+        const p = item.pemegangAmanah || {};
+
+        return{
+
+            nama: p.nama || "-",
+            ic: p.ic || "-",
+            alamat: p.alamat || item.alamat || "-",
+
+            gelaran: "Pemegang Amanah",
+
+            intro:
+`selaku <strong>"Pemegang Amanah"</strong> bagi pihak
+<strong>${item.nama}</strong>
+(Penerima Hibah)`,
+
+            benefisiari:item.nama
+
+        };
+
+    }
+
+    return{
+
+        nama:item.nama,
+        ic:item.ic,
+        alamat:item.alamat,
+
+        gelaran:"Penerima Hibah",
+
+        intro:`(selepas ini disebut sebagai
+<strong>"Penerima Hibah"</strong>)`,
+
+        benefisiari:item.nama
+
+    };
+
+}
+
+const pihak = getPihakPenerima(item);   
+    
     hibahHTML += hibahContent
               .replaceAll(
             "{{NAMA_PENERIMA}}",
-            item.nama
+            pihak.nama
         )
        .replaceAll(
     "{{TABLE_ALIH}}",
@@ -1502,9 +1550,9 @@ generatePemegangAmanah(item)
 .replaceAll("{{ALAMAT_PEMBERI}}", data.alamat || "-")
 .replaceAll("{{TELEFON_PEMBERI}}", data.telefon || "-")
 
-.replaceAll("{{IC_PENERIMA}}", item.ic || "-")
+.replaceAll("{{IC_PENERIMA}}", pihak.ic || "-")
 .replaceAll("{{HUBUNGAN}}", item.hubungan || "-")
-.replaceAll("{{ALAMAT_PENERIMA}}", item.alamat || "-")
+.replaceAll("{{ALAMAT_PENERIMA}}", pihak.alamat || "-")
 .replaceAll("{{PERATUS}}", item.peratus || "-")
 .replaceAll(
    "{{TARIKH_DOKUMEN}}",
@@ -1519,6 +1567,21 @@ generatePemegangAmanah(item)
 )
 });
 
+.replaceAll(
+"{{LABEL_PENERIMA}}",
+pihak.gelaran
+)
+
+.replaceAll(
+"{{INTRO_PENERIMA}}",
+pihak.intro
+)
+
+.replaceAll(
+"{{BENEFISIARI}}",
+pihak.benefisiari
+)
+                        
 document.getElementById("sectionHibah").innerHTML = hibahHTML;                        
 
 const currentDocRef =
