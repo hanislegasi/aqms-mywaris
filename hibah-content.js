@@ -44,7 +44,7 @@ color:#222;
 </p>
 
 <p>
-Dokumen Akad Hibah ini disediakan sebagai suatu rekod bertulis berhubung akad hibah yang dibuat secara sukarela oleh <strong>Pemberi Hibah</strong> kepada <strong>Penerima Hibah</strong>. Dokumen ini merekodkan identiti pihak-pihak yang terlibat, butiran harta yang dihibahkan, kadar bahagian hibah serta syarat-syarat yang dipersetujui sebagai dokumen sokongan dan pembuktian menurut Hukum Syarak serta undang-undang yang berkuat kuasa di Malaysia.
+Dokumen Hibah ini disediakan sebagai suatu rekod bertulis berhubung akad hibah yang dibuat secara sukarela oleh <strong>Pemberi Hibah</strong> kepada <strong>Penerima Hibah</strong>. Dokumen ini merekodkan identiti pihak-pihak yang terlibat, butiran harta yang dihibahkan, kadar bahagian hibah serta syarat-syarat yang dipersetujui sebagai dokumen sokongan dan pembuktian menurut Hukum Syarak serta undang-undang yang berkuat kuasa di Malaysia.
 </p>
 
 <p>
@@ -58,16 +58,16 @@ Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. Kad Pengenalan
 </p>
 
 <p>
-Matlamat saya menulis Dokumen Pengisytiharan Hibah ini adalah sebagai pernyataan bertulis yang menjelaskan kedudukan harta yang telah dihibahkan kepada Penerima Hibah semasa hayat Pemberi Hibah, dengan harapan agar memudahkan proses penyelesaian pusaka mana-mana pihak sama ada Pemegang Amanah mahupun Penerima Hibah tanpa wujudnya apa-apa kekeliruan terhadap status harta yang telah dihibahkan tersebut selepas kematian mana-mana pihak.
+Matlamat saya menulis Dokumen Hibah ini adalah sebagai pernyataan bertulis yang menjelaskan kedudukan harta yang telah dihibahkan kepada Penerima Hibah semasa hayat Pemberi Hibah, dengan harapan agar memudahkan proses penyelesaian pusaka mana-mana pihak sama ada Pemegang Amanah mahupun Penerima Hibah tanpa wujudnya apa-apa kekeliruan terhadap status harta yang telah dihibahkan tersebut selepas kematian mana-mana pihak.
 </p>
 
 <p>
-Oleh yang demikian, Dokumen Pengisytiharan Hibah ini diyakini berfungsi sebagai dokumen yang menyumbang kepada penyelesaian pusaka yang sempurna, adil dan saksama secara SULH dikalangan ahli waris mana-mana pihak yang meninggal dunia.  
-Walaupun begitu, sekiranya wujud keperluan di mana suatu Perintah Pengesahan Hibah akan dituntut dari mana-mana Mahkamah Syariah yang berbidangkuasa, hendaklah Dokumen Pengisytiharan Hibah ini menjadi bahan pembuktian penting dan sumber utama yang harus mendapat pertimbangan Mahkamah.
+Oleh yang demikian, Dokumen Hibah ini diyakini berfungsi sebagai dokumen yang menyumbang kepada penyelesaian pusaka yang sempurna, adil dan saksama secara SULH dikalangan ahli waris mana-mana pihak yang meninggal dunia.  
+Walaupun begitu, sekiranya wujud keperluan di mana suatu Perintah Pengesahan Hibah akan dituntut dari mana-mana Mahkamah Syariah yang berbidangkuasa, hendaklah Dokumen Hibah ini menjadi bahan pembuktian penting dan sumber utama yang harus mendapat pertimbangan Mahkamah.
 </p>
 
 <p>
-Bahawasanya Dokumen Pengisytiharan Hibah ini adalah pengisytiharan terakhir dan mana-mana pengisytiharan hibah yang telah dinyatakan terdahulu ke atas harta hibah ini adalah terbatal.
+Bahawasanya Dokumen Hibah ini adalah pengisytiharan terakhir dan mana-mana pengisytiharan hibah yang telah dinyatakan terdahulu ke atas harta hibah ini adalah terbatal.
 </p>
 
 
@@ -87,7 +87,7 @@ Bahawasanya Dokumen Pengisytiharan Hibah ini adalah pengisytiharan terakhir dan 
 <div class="a4-page p-[18mm]">
 
 <p>
-DOKUMEN PENGISYTIHARAN HIBAH ini diperbuat pada
+<strong>DOKUMEN HIBAH</strong> ini diperbuat pada
 <strong>{{TARIKH_DOKUMEN}}</strong>.
 </p>
 
@@ -932,7 +932,7 @@ font-style:italic;
 
 <strong>PENGAKUAN PENERIMA HIBAH</strong>
 <p>
-Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Wasiat ini adalah benar dan tepat mengikut pengetahuan saya.
+Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Hibah ini adalah benar dan tepat mengikut pengetahuan saya.
 </p>
 <br>
 
