@@ -7,7 +7,7 @@ const wasiatContent = `
 <h2
 style="
 font-family:'Times New Roman', serif;
-font-size:42px;
+font-size:32px;
 font-weight:700;
 margin-top:0;
 margin-bottom:20px;
