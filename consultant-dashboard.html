@@ -25,7 +25,7 @@ style="font-family: Inter, sans-serif;">
 <!-- HEADER -->
 
 <div class="bg-[#153638] text-white p-5 shadow">
-
+ 
 <div class="flex justify-between items-center">
 
 <div>
@@ -270,8 +270,26 @@ RM0.00
 Performance Summary
 </h3>
 
-<div class="relative w-full h-52 md:h-72 lg:h-80">
-    <canvas id="salesChart"></canvas>
+<div class="grid lg:grid-cols-2 gap-5">
+
+    <div class="bg-white p-5 rounded-2xl shadow">
+        <h3 class="text-xl font-bold mb-4">
+            Sales by Product
+        </h3>
+
+        <canvas id="productChart"></canvas>
+    </div>
+
+    <div class="bg-white p-5 rounded-2xl shadow">
+        <h3 class="text-xl font-bold mb-4">
+            Monthly Performance
+        </h3>
+
+        <div class="relative h-72">
+            <canvas id="salesChart"></canvas>
+        </div>
+    </div>
+
 </div>
 
 </div>
@@ -576,6 +594,11 @@ const monthlyOverride = [
 let activeClients = 0;
 let totalSales = 0;
 
+let wasiatSales = 0;
+let hibahSales = 0;
+let sepencarianSales = 0;
+let mawarisSales = 0;
+
 const usersSnap =
 await getDocs(
 collection(db,"users")
@@ -587,13 +610,36 @@ const u =
 d.data();
 
 if(
+u.role==="customer" &&
+(u.referral || "").trim()===data.consultantNo
+){
+
+    activeClients++;
+ 
+if(u.wasiatPaymentStatus === "paid"){
+    wasiatSales++;
+}
+
+if(u.hibahPaymentStatus === "paid"){
+    hibahSales++;
+}
+
+if(u.sepencarianPaymentStatus === "paid"){
+    sepencarianSales++;
+}
+
+if(u.mawarisPaymentStatus === "paid"){
+    mawarisSales++;
+}
+ 
+if(
 u.role === "customer" &&
 (u.referral || "").trim() === data.consultantNo
 ){
 
 activeClients++;
 
-if(u.paymentStatus === "paid"){
+if(u.wasiatPaymentStatus === "paid"){
 
 totalSales += 350;
 
@@ -621,7 +667,7 @@ monthlySales[m] += 2500;
 
 }
 
-if(u.pusakaPaymentStatus === "paid"){
+if(u.sepencarianPaymentStatus === "paid"){
 
 totalSales += 800;
 
@@ -633,6 +679,20 @@ if(m){
 monthlySales[m] += 800;
 }
 
+}
+
+if(u.mawarisPaymentStatus === "paid"){
+
+totalSales += 3000;
+
+const m =
+u.joinDate?.toDate()
+?.getMonth() + 1;
+
+if(m){
+monthlySales[m] += 3000;
+}
+ 
 }
 
 }
@@ -1068,7 +1128,29 @@ console.log("monthlyCommission", monthlyCommission);
 console.log("monthlyOverride", monthlyOverride);
 
 
+new Chart(document.getElementById("productChart"), {
 
+    type:"pie",
+
+    data:{
+        labels:[
+            "Wasiat",
+            "Hibah",
+            "Sepencarian",
+            "Mawaris"
+        ],
+
+        datasets:[{
+            data:[
+                wasiatSales,
+                hibahSales,
+                sepencarianSales,
+                mawarisSales
+            ]
+        }]
+    }
+
+});
 
 const ctx =
 document
