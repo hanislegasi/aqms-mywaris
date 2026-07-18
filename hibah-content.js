@@ -893,7 +893,7 @@ color:#222;
 <p>Saya, <strong>{{NAMA_PENERIMA}}</strong> (No. K/P:
 <strong>{{IC_PENERIMA}}</strong>) yang bermastautin di <strong>{{ALAMAT_PENERIMA}}</strong> {{INTRO_PENERIMA}} dengan ini mengakui bahawa saya adalah seorang Islam yang cukup umur, berada di dalam keadaan sihat tubuh badan dan waras fikiran, tanpa sebarang paksaan dan penuh kerelaan hati saya sendiri bersetuju menerima Hibah yang tersebut di atas.</p>
 <p>Saya juga dengan ini mengaku bahawa mulai pada hari ini, saya dengan suci dan rela hati telah menerima segala hak, kuasa dan tanggungjawab terhadap harta ini yang telah memenuhi rukun-rukun dan menyempurnakan syarat Qabd di dalam hibah dari pemberi di atas.</p>
-<p>Seterusnya di dalam Dokumen Hibah ini, saya juga faham Hibah ini hanya boleh ditarik balik dengan persetujuan saya.(Klausa untuk Hibah kepada selain daripada anak kandung, cucu kandung, cicit kandung)</p>
+<p>Seterusnya di dalam Dokumen Hibah ini, saya juga faham Hibah ini hanya boleh ditarik balik dengan persetujuan saya. (Klausa untuk Hibah kepada selain daripada anak kandung, cucu kandung, cicit kandung)</p>
 <p>Saya dengan ini bersetuju dan redha Pemberi Hibah menikmati manfaat fizikal dan ekonomi dari harta tersebut selagi ada hayat beliau.</p>
 
 <div
