@@ -1,4 +1,24 @@
-function generatePemegangAmanah(item, data){
+function kiraUmur(tarikhLahir){
+
+    if(!tarikhLahir) return "-";
+
+    const lahir = new Date(tarikhLahir);
+    const hariIni = new Date();
+
+    let umur = hariIni.getFullYear() - lahir.getFullYear();
+
+    const m = hariIni.getMonth() - lahir.getMonth();
+
+    if(
+        m < 0 ||
+        (m === 0 && hariIni.getDate() < lahir.getDate())
+    ){
+        umur--;
+    }
+
+    return umur + " Tahun";
+
+}function generatePemegangAmanah(item, data){
     if(
         item.status !== "bawah18" &&
         item.status !== "oku"
@@ -14,7 +34,7 @@ function generatePemegangAmanah(item, data){
     ){
         return "";
     }
-
+    
 return `
 
 <div class="a4-page p-[18mm]">
@@ -112,7 +132,7 @@ Hubungan
 </th>
 
 <th style="border:1px solid #000;padding:8px;">
-Status
+Umur
 </th>
 
 </tr>
@@ -131,14 +151,8 @@ ${item.ic}
 ${item.hubungan}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
-${
-item.status=="bawah18"
-?"Bawah 18 Tahun"
-:item.status=="oku"
-?"OKU"
-:"Dewasa"
-}
+<td style="border:1px solid #000;padding:8px;text-align:center;">
+${kiraUmur(item.tarikhLahir)}
 </td>
 
 </tr>
