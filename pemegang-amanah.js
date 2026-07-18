@@ -57,7 +57,7 @@ console.log(item.tarikhLahir);
 
 }
 
-}function generatePemegangAmanah(item, data){
+function generatePemegangAmanah(item, data){
     if(
         item.status !== "bawah18" &&
         item.status !== "oku"
