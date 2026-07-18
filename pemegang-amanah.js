@@ -166,7 +166,7 @@ ${item.hubungan}
 </td>
 
 <td style="border:1px solid #000;padding:8px;text-align:center;">
-    ${kiraUmur(item.tarikhLahir)} Tahun
+    ${kiraUmur(item.tarikhLahir)} 
 </td>
 
 </tr>
