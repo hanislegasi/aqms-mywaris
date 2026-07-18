@@ -693,9 +693,11 @@ if(m){
 monthlySales[m] += 3000;
 }
  
-}
+}   // <-- tutup if
 
-});
+}   // <-- tutup if role customer
+
+}); // <-- tutup usersSnap.forEach
 
 const historySnap =
 await getDocs(
