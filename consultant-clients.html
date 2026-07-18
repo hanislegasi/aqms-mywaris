@@ -264,7 +264,7 @@ client.nama
 let clientSales = 0;
 let commission = 0;
 
-if(client.paymentStatus === "paid"){
+if(client.wasiatPaymentStatus === "paid"){
 
     const sales = 350;
 
@@ -282,7 +282,7 @@ if(client.hibahPaymentStatus === "paid"){
 
 }
 
-if(client.pusakaPaymentStatus === "paid"){
+if(client.sepencarianPaymentStatus === "paid"){
 
     const sales = 800;
 
@@ -291,6 +291,15 @@ if(client.pusakaPaymentStatus === "paid"){
 
 }
 
+if(client.mawarisPaymentStatus === "paid"){
+
+    const sales = 3000;
+
+    clientSales += sales;
+    commission += sales * (commissionRate / 100);
+
+}
+  
 totalClients++;
 totalClientSales += clientSales;
 totalCommission += commission;  
@@ -358,14 +367,21 @@ ${expiryDate}
 
 <span class="
 px-3 py-1 rounded-full text-xs
-${client.paymentStatus === "paid"
+client.wasiatPaymentStatus==="paid" ||
+client.hibahPaymentStatus==="paid" ||
+client.sepencarianPaymentStatus==="paid" ||
+client.mawarisPaymentStatus==="paid"
 ? "bg-green-100 text-green-700"
 : "bg-yellow-100 text-yellow-700"}">
 
-${client.paymentStatus === "paid"
+${
+client.wasiatPaymentStatus==="paid" ||
+client.hibahPaymentStatus==="paid" ||
+client.sepencarianPaymentStatus==="paid" ||
+client.mawarisPaymentStatus==="paid"
 ? "AHLI AKTIF"
-: "PROSPEK"}
-
+: "PROSPEK"
+}
 </span>
 
 </td>
@@ -393,17 +409,19 @@ document.getElementById(
 ).innerHTML =
 totalClients;
 
-document.getElementById(
-"totalClientSales"
-).innerHTML =
-"RM" +
-totalClientSales.toLocaleString();
+document.getElementById("totalClientSales").innerHTML =
+"RM " +
+totalClientSales.toLocaleString("en-US",{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+});
 
-document.getElementById(
-"totalCommission"
-).innerHTML =
-"RM" +
-totalCommission.toLocaleString();
+document.getElementById("totalCommission").innerHTML =
+"RM " +
+totalCommission.toLocaleString("en-US",{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+});
 
   
 document.getElementById(
