@@ -2,32 +2,36 @@ function kiraUmur(tarikhLahir){
 
     if(!tarikhLahir) return "-";
 
-    const lahir = new Date(tarikhLahir);
+    const [hari, bulan, tahun] = tarikhLahir.split("-");
 
-    if(isNaN(lahir.getTime())){
-        return "-";
-    }
+    const lahir = new Date(
+        tahun,
+        bulan - 1,
+        hari
+    );
 
     const hariIni = new Date();
 
-    let umur = hariIni.getFullYear() - lahir.getFullYear();
+    let umur =
+        hariIni.getFullYear() -
+        lahir.getFullYear();
 
-    const bulan = hariIni.getMonth() - lahir.getMonth();
+    const m =
+        hariIni.getMonth() -
+        lahir.getMonth();
 
     if(
-        bulan < 0 ||
+        m < 0 ||
         (
-            bulan === 0 &&
+            m === 0 &&
             hariIni.getDate() < lahir.getDate()
         )
     ){
         umur--;
     }
 
-    return umur;
-
+    return umur + " Tahun";
 }
-
 function generatePemegangAmanah(item, data){
     if(
         item.status !== "bawah18" &&
