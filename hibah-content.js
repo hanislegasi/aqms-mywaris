@@ -54,7 +54,7 @@ Sesungguhnya Harta adalah amanah Allah kepada hambanya, maka adalah atas setiap 
 <p>
 Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. Kad Pengenalan
 <strong>{{IC_PEMBERI}}</strong>, yang beralamat di
-<strong>{{ALAMAT_PEMBERI}}</strong>, dengan ini secara sukarela, tanpa sebarang paksaan, tekanan atau pengaruh mana-mana pihak, mengisytiharkan bahawa saya berhasrat menghibahkan harta-harta yang dinyatakan di dalam dokumen ini kepada Penerima Hibah sebagaimana yang diperincikan di dalam Jadual 1.
+<strong>{{ALAMAT_PEMBERI}}</strong>, dengan ini secara sukarela, tanpa sebarang paksaan, tekanan atau pengaruh mana-mana pihak, mengisytiharkan bahawa saya berhasrat menghibahkan harta-harta yang dinyatakan di dalam dokumen ini kepada Penerima Hibah sebagaimana yang diperincikan di dalam Jadual 1 dan 2.
 </p>
 
 <p>
@@ -101,7 +101,7 @@ yang beralamat di
 (selepas ini disebut sebagai
 <strong>"Pemberi Hibah"</strong>)
 bagi harta yang diperincikan di dalam
-<strong>Jadual 1</strong>.
+<strong>Jadual 1 dan 2</strong>.
 </p>
 
 <p style="text-align:center;"><strong>DENGAN</strong></p>
@@ -115,7 +115,7 @@ yang beralamat di
 (selepas ini disebut sebagai
 <strong>"Penerima Hibah"</strong>)
 bagi harta yang diperincikan di dalam
-<strong>Jadual 1</strong>.
+<strong>Jadual 1 dan 2</strong>.
 </p>
 
 <h3 style="
@@ -150,7 +150,7 @@ Penerima Hibah adalah <strong>{{HUBUNGAN}}</strong> kepada Pemberi Hibah;
 padding-bottom:12px;
 text-align:justify;
 ">
-Pemberi Hibah adalah pemilik yang sah kepada harta tak alih berikut seperti di dalam Jadual 1 (selepas ini dirujuk sebagai "Harta Amanah tersebut").
+Pemberi Hibah adalah pemilik yang sah kepada harta tak alih berikut seperti di dalam Jadual 1 dan 2 (selepas ini dirujuk sebagai "Harta Amanah tersebut").
 </td>
 </tr>
 
@@ -160,7 +160,7 @@ Pemberi Hibah adalah pemilik yang sah kepada harta tak alih berikut seperti di d
 padding-bottom:12px;
 text-align:justify;
 ">
-Pemberi Hibah berhasrat untuk memberi Harta Amanah secara Hibah kepada Penerima Hibah yang dinyatakan di dalam Jadual 1.
+Pemberi Hibah berhasrat untuk memberi Harta Amanah secara Hibah kepada Penerima Hibah yang dinyatakan di dalam Jadual 1 dan 2.
 </td>
 </tr>
 
@@ -222,7 +222,7 @@ Pemberi Hibah memahami bahawa hak untuk menarik balik Hibah ini adalah tertakluk
 
 <p>
 1.1
-Bahawa Pemberi Hibah Amanah secara sedar, waras, dengan sukarelanya dan bukan dalam keadaan sakit, atas dasar kasih sayang dan tanpa mendapat apa-apa balasan dengan ini membuat hibah ke atas Harta Amanah tersebut kepada Penerima Hibah dengan kadar seperti di dalam Jadual 1.</p>
+Bahawa Pemberi Hibah Amanah secara sedar, waras, dengan sukarelanya dan bukan dalam keadaan sakit, atas dasar kasih sayang dan tanpa mendapat apa-apa balasan dengan ini membuat hibah ke atas Harta Amanah tersebut kepada Penerima Hibah dengan kadar seperti di dalam Jadual 1 dan 2.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>2. QABD DAN PENYERAHAN MILIKAN</strong>
@@ -358,24 +358,68 @@ Penerima Hibah mengakui dan bersetuju bahawa hak menikmati manfaat oleh Pemberi 
 <strong>7. WAAD DAN AKUJANJI PEMBERI HIBAH</strong>
 </h3>
 
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-7.1 Pemberi Hibah dengan ini berwaad memberi akujanji mengakui dan memberi jaminan kepada Penerima Hibah seperti berikut:
-</h3>
-
-<table style="width:100%; border-collapse:collapse;">
+<table
+style="
+width:100%;
+border-collapse:collapse;
+margin-top:12px;
+margin-bottom:18px;
+">
 
 <tr valign="top">
-<td width="30">7.1.1</td>
-<td style="text-align:justify;">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+7.1
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
 Bahawa pada tarikh Perjanjian Hibah ini beliau bukan seorang muflis (bankrap), juga tidak ada petisyen untuk kebankrapan telah difailkan terhadapnya sama ada bersama-sama atau berasingan;
 </td>
+
+</tr>
+
+<tr>
+<td colspan="2" style="height:18px;"></td>
 </tr>
 
 <tr valign="top">
-<td>7.1.2</td>
-<td style="text-align:justify;">
-Bahawa beliau mempunyai hak dan kuasa untuk menghibahkan Harta Amanah tersebut;
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+7.2
 </td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Bahawa beliau mempunyai hak dan kuasa untuk menghibahkan Harta Amanah tersebut.
 </tr>
 
 </table>
@@ -392,24 +436,68 @@ Bahawa beliau mempunyai hak dan kuasa untuk menghibahkan Harta Amanah tersebut;
 <strong>8. AKUJANJI PENERIMA HIBAH</strong>
 </h3>
 
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-8.1 Penerima Hibah dengan ini memberi jaminan seperti berikut:-
-</h3>
-
-<table style="width:100%; border-collapse:collapse;">
+<table
+style="
+width:100%;
+border-collapse:collapse;
+margin-top:12px;
+margin-bottom:18px;
+">
 
 <tr valign="top">
-<td width="30">8.1.1</td>
-<td style="text-align:justify;">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+8.1
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
 Penerima Hibah mengakui bahawa hak Pemberi Hibah untuk terus menikmati manfaat fizikal dan ekonomi Harta Amanah adalah sebahagian daripada syarat Hibah ini dan tidak boleh diganggu sepanjang Tempoh Amanah.
 </td>
+
+</tr>
+
+<tr>
+<td colspan="2" style="height:18px;"></td>
 </tr>
 
 <tr valign="top">
-<td>8.1.2</td>
-<td style="text-align:justify;">
-Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini adalah berdasarkan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut di atas dan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut merupakan asas kepada tanggungjawab Pemberi Hibah untuk menghibahkan Harta Amanah tersebut;
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+8.2
 </td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini adalah berdasarkan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut di atas dan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut merupakan asas kepada tanggungjawab Pemberi Hibah untuk menghibahkan Harta Amanah tersebut.
 </tr>
 
 </table>
@@ -438,6 +526,14 @@ Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini
 
 <p>Masa di mana-mana juga disebutkan di dalam Perjanjian Hibah ini hendaklah dianggap penting dan menjadi pati kepada kontrak.</p>
 
+<div class="pdf-footer">
+<span class="footer-docref"></span>
+<span class="page-number"></span>
+</div>
+</div>
+
+<div class="a4-page p-[18mm]">
+
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>13.	 ORANG-ORANG YANG TERIKAT KEPADA PERJANJIAN</strong>
 </h3>
@@ -450,13 +546,6 @@ Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini
 
 <p>Perjanjian Hibah ini adalah dikuasai dan ditafsirkan menurut undang-undang di Malaysia dan tidak berlawanan dengan Hukum Syarak dan kedua-dua pihak adalah dengan ini patuh kepada bidang kuasa Mahkamah-Mahkamah di Malaysia.</p>
 
-<div class="pdf-footer">
-<span class="footer-docref"></span>
-<span class="page-number"></span>
-</div>
-</div>
-
-<div class="a4-page p-[18mm]">
 
 <h3
 style="
@@ -467,7 +556,7 @@ color:#153638;
 margin-top:25px;
 margin-bottom:12px;
 ">
-SENARAI HARTA ALIH YANG DIHIBAHKAN
+JADUAL 1 - SENARAI HARTA ALIH YANG DIHIBAHKAN
 </h3>
 
 {{TABLE_ALIH}}
@@ -495,7 +584,7 @@ color:#153638;
 margin-top:25px;
 margin-bottom:12px;
 ">
-SENARAI HARTA TAK ALIH YANG DIHIBAHKAN
+JADUAL 2 - SENARAI HARTA TAK ALIH YANG DIHIBAHKAN
 </h3>
 
 {{TABLE_TAK_ALIH}}
@@ -600,8 +689,8 @@ Tarikh
 <br>
 <strong>PENGESAHAN SAKSI</strong>
 <p>
-Kami yang bertandatangan di bawah mengesahkan bahawa Pewasiat telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
-Pewasiat berada dalam keadaan waras serta membuat Wasiat ini secara sukarela.
+Kami yang bertandatangan di bawah mengesahkan bahawa Pemberi Hibah telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
+Pemberi Hibah berada dalam keadaan waras serta membuat Hibah ini secara sukarela.
 </p>
 
 <table
@@ -759,6 +848,308 @@ margin-top:50px;
 </div>
 
 </div>
+
+<div class="a4-page p-[18mm]">
+
+<h2 style="
+font-family:'Times New Roman',serif;
+font-size:32px;
+font-weight:bold;
+text-align:center;
+color:#153638;
+margin-bottom:18px;
+">
+PERAKUAN PENERIMAAN HIBAH
+</h2>
+
+<div style="
+text-align:center;
+font-family:'Amiri',serif;
+font-size:30px;
+margin-bottom:8px;
+">
+بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
+</div>
+
+<div
+style="
+font-family:'Times New Roman', serif;
+font-size:15px;
+line-height:1.6;
+text-align:justify;
+color:#222;
+">
+
+<p style="text-align:center; margin-bottom:20px;">
+<strong>Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani</strong>
+</p>
+
+<p>Saya, <strong>{{NAMA_PENERIMA}}</strong> (No. K/P:
+<strong>{{IC_PENERIMA}}</strong>) yang bermastautin di <strong>{{ALAMAT_PENERIMA}}</strong> dengan ini mengakui bahawa saya adalah seorang Islam yang cukup umur, berada di dalam keadaan sihat tubuh badan dan waras fikiran, tanpa sebarang paksaan dan penuh kerelaan hati saya sendiri bersetuju menerima Hibah yang tersebut di atas.</p>
+<p>Saya juga dengan ini mengaku bahawa mulai pada hari ini, saya dengan suci dan rela hati telah menerima segala hak, kuasa dan tanggungjawab terhadap harta ini yang telah memenuhi rukun-rukun dan menyempurnakan syarat Qabd di dalam hibah dari pemberi di atas.</p>
+<p>Seterusnya di dalam Dokumen Pengisytiharan Hibah ini, saya juga faham Hibah ini hanya boleh ditarik balik dengan persetujuan saya.(Klausa untuk Hibah kepada selain daripada anak kandung, cucu kandung, cicit kandung)</p>
+<p>Saya dengan ini bersetuju dan redha Pemberi Hibah menikmati manfaat fizikal dan ekonomi dari harta tersebut selagi ada hayat beliau.</p>
+
+<div
+style="
+margin-top:60px;
+border-top:1px solid #000;
+width:100%;
+">
+</div>
+
+<p
+style="
+text-align:center;
+margin-top:10px;
+font-style:italic;
+">
+(Ruangan ini sengaja dibiarkan kosong)
+</p>
+
+<div class="pdf-footer">
+
+<span class="docRef"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+</div>
+
+   
+<div class="a4-page p-[18mm]">
+
+<div class="mt-8">
+
+<strong>PENGAKUAN PENERIMA HIBAH</strong>
+<p>
+Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Wasiat ini adalah benar dan tepat mengikut pengetahuan saya.
+</p>
+<br>
+
+
+<p>.......................................</p>
+
+<p>
+(Tandatangan Penerima Hibah)
+</p>
+
+<table
+style="
+margin-top:30px;
+font-size:14px;
+">
+
+<tr>
+<td width="100">
+Nama
+</td>
+
+<td width="20">
+:
+</td>
+
+<td>
+<strong>{{NAMA_PENERIMA}}</strong>
+</td>
+</tr>
+
+<tr>
+<td>
+No. K/P
+</td>
+
+<td>
+:
+</td>
+
+<td>
+<strong>{{IC_PENERIMA}}</strong>
+</td>
+</tr>
+
+<tr>
+<td>
+Tarikh
+</td>
+
+<td>
+:
+</td>
+
+<td>
+</td>
+</tr>
+
+</table>
+
+</div>
+<br>
+<strong>PENGESAHAN SAKSI</strong>
+<p>
+Kami yang bertandatangan di bawah mengesahkan bahawa Pemberi Hibah telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
+Pemberi Hibah berada dalam keadaan waras serta membuat Hibah ini secara sukarela.
+</p>
+
+<table
+style="
+width:100%;
+margin-top:50px;
+">
+
+<tr valign="top">
+
+<td width="45%">
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 1</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+<td width="10%"></td>
+
+<td width="45%">
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 2</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+<tr>
+<td colspan="3" height="60"></td>
+</tr>
+
+<tr valign="top">
+
+<td>
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 3</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+<td></td>
+
+<td>
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 4</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+<div class="pdf-footer">
+
+<span class="docRef"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+</div>
+
 
 
 `;
