@@ -22,7 +22,7 @@ return `
 <h2
 style="
 font-family:'Times New Roman',serif;
-font-size:42px;
+font-size:32px;
 font-weight:bold;
 text-align:center;
 color:#153638;
@@ -427,7 +427,7 @@ margin-top:50px;
 <h2
 style="
 font-family:'Times New Roman',serif;
-font-size:38px;
+font-size:32px;
 font-weight:bold;
 text-align:center;
 color:#153638;
