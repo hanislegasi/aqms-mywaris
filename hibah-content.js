@@ -112,8 +112,7 @@ bagi harta yang diperincikan di dalam
 <strong>{{IC_PENERIMA}}</strong>)
 yang beralamat di
 <strong>{{ALAMAT_PENERIMA}}</strong>
-(selepas ini disebut sebagai
-<strong>"Penerima Hibah"</strong>)
+{{INTRO_PENERIMA}}
 bagi harta yang diperincikan di dalam
 <strong>Jadual 1 dan 2</strong>.
 </p>
