@@ -632,13 +632,6 @@ if(u.mawarisPaymentStatus === "paid"){
     mawarisSales++;
 }
  
-if(
-u.role === "customer" &&
-(u.referral || "").trim() === data.consultantNo
-){
-
-activeClients++;
-
 if(u.wasiatPaymentStatus === "paid"){
 
 totalSales += 350;
