@@ -1,13 +1,50 @@
 function kiraUmur(tarikhLahir){
 
+console.log(item.tarikhLahir);
+    
     if(!tarikhLahir) return "-";
 
-    const lahir = new Date(tarikhLahir);
+    let lahir;
+
+    if(tarikhLahir.includes("-")){
+
+        const part = tarikhLahir.split("-");
+
+        // jika format yyyy-mm-dd
+        if(part[0].length === 4){
+
+            lahir = new Date(
+                part[0],
+                part[1]-1,
+                part[2]
+            );
+
+        }else{
+
+            // format dd-mm-yyyy
+            lahir = new Date(
+                part[2],
+                part[1]-1,
+                part[0]
+            );
+
+        }
+
+    }else{
+
+        lahir = new Date(tarikhLahir);
+
+    }
+
     const hariIni = new Date();
 
-    let umur = hariIni.getFullYear() - lahir.getFullYear();
+    let umur =
+        hariIni.getFullYear() -
+        lahir.getFullYear();
 
-    const m = hariIni.getMonth() - lahir.getMonth();
+    const m =
+        hariIni.getMonth() -
+        lahir.getMonth();
 
     if(
         m < 0 ||
@@ -17,6 +54,8 @@ function kiraUmur(tarikhLahir){
     }
 
     return umur + " Tahun";
+
+}
 
 }function generatePemegangAmanah(item, data){
     if(
