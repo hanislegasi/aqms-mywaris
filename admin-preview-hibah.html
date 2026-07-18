@@ -1565,7 +1565,6 @@ generatePemegangAmanah(item)
     "{{TARIKH_LAHIR}}",
     formatDateMY(item.tarikhLahir)
 )
-});
 
 .replaceAll(
 "{{LABEL_PENERIMA}}",
@@ -1581,6 +1580,8 @@ pihak.intro
 "{{BENEFISIARI}}",
 pihak.benefisiari
 )
+
+});   
                         
 document.getElementById("sectionHibah").innerHTML = hibahHTML;                        
 
