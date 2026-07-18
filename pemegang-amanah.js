@@ -1,59 +1,30 @@
 function kiraUmur(tarikhLahir){
 
-console.log(item.tarikhLahir);
-    
     if(!tarikhLahir) return "-";
 
-    let lahir;
+    const lahir = new Date(tarikhLahir);
 
-    if(tarikhLahir.includes("-")){
-
-        const part = tarikhLahir.split("-");
-
-        // jika format yyyy-mm-dd
-        if(part[0].length === 4){
-
-            lahir = new Date(
-                part[0],
-                part[1]-1,
-                part[2]
-            );
-
-        }else{
-
-            // format dd-mm-yyyy
-            lahir = new Date(
-                part[2],
-                part[1]-1,
-                part[0]
-            );
-
-        }
-
-    }else{
-
-        lahir = new Date(tarikhLahir);
-
+    if(isNaN(lahir.getTime())){
+        return "-";
     }
 
     const hariIni = new Date();
 
-    let umur =
-        hariIni.getFullYear() -
-        lahir.getFullYear();
+    let umur = hariIni.getFullYear() - lahir.getFullYear();
 
-    const m =
-        hariIni.getMonth() -
-        lahir.getMonth();
+    const bulan = hariIni.getMonth() - lahir.getMonth();
 
     if(
-        m < 0 ||
-        (m === 0 && hariIni.getDate() < lahir.getDate())
+        bulan < 0 ||
+        (
+            bulan === 0 &&
+            hariIni.getDate() < lahir.getDate()
+        )
     ){
         umur--;
     }
 
-    return umur + " Tahun";
+    return umur;
 
 }
 
@@ -191,7 +162,7 @@ ${item.hubungan}
 </td>
 
 <td style="border:1px solid #000;padding:8px;text-align:center;">
-${kiraUmur(item.tarikhLahir)}
+    ${kiraUmur(item.tarikhLahir)} Tahun
 </td>
 
 </tr>
