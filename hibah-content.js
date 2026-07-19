@@ -545,12 +545,6 @@ Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini
 
 <p>Perjanjian Hibah ini adalah dikuasai dan ditafsirkan menurut undang-undang di Malaysia dan tidak berlawanan dengan Hukum Syarak dan kedua-dua pihak adalah dengan ini patuh kepada bidang kuasa Mahkamah-Mahkamah di Malaysia.</p>
 
-<div class="pdf-footer">
-<span class="footer-docref"></span>
-<span class="page-number"></span>
-</div>
-</div>
-
 <div
 style="
 margin-top:60px;
