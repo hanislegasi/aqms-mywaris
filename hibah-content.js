@@ -18,7 +18,7 @@ text-align:center;
 color:#153638;
 margin-bottom:18px;
 ">
-DOKUMEN HIBAH
+DOKUMEN PENGISYTIHARAN HIBAH
 </h2>
 
 <div style="
@@ -44,7 +44,7 @@ color:#222;
 </p>
 
 <p>
-Dokumen Hibah ini disediakan sebagai suatu rekod bertulis berhubung akad hibah yang dibuat secara sukarela oleh <strong>Pemberi Hibah</strong> kepada <strong>Penerima Hibah</strong>. Dokumen ini merekodkan identiti pihak-pihak yang terlibat, butiran harta yang dihibahkan, kadar bahagian hibah serta syarat-syarat yang dipersetujui sebagai dokumen sokongan dan pembuktian menurut Hukum Syarak serta undang-undang yang berkuat kuasa di Malaysia.
+Dokumen Pengisytiharan Hibah ini disediakan sebagai suatu rekod bertulis berhubung akad hibah yang dibuat secara sukarela oleh <strong>Pemberi Hibah</strong> kepada <strong>Penerima Hibah</strong>. Dokumen ini merekodkan identiti pihak-pihak yang terlibat, butiran harta yang dihibahkan, kadar bahagian hibah serta syarat-syarat yang dipersetujui sebagai dokumen sokongan dan pembuktian menurut Hukum Syarak serta undang-undang yang berkuat kuasa di Malaysia.
 </p>
 
 <p>
@@ -58,16 +58,16 @@ Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. Kad Pengenalan
 </p>
 
 <p>
-Matlamat saya menulis Dokumen Hibah ini adalah sebagai pernyataan bertulis yang menjelaskan kedudukan harta yang telah dihibahkan kepada Penerima Hibah semasa hayat Pemberi Hibah, dengan harapan agar memudahkan proses penyelesaian pusaka mana-mana pihak sama ada Pemegang Amanah mahupun Penerima Hibah tanpa wujudnya apa-apa kekeliruan terhadap status harta yang telah dihibahkan tersebut selepas kematian mana-mana pihak.
+Matlamat saya menulis Dokumen Pengisytiharan Hibah ini adalah sebagai pernyataan bertulis yang menjelaskan kedudukan harta yang telah dihibahkan kepada Penerima Hibah semasa hayat Pemberi Hibah, dengan harapan agar memudahkan proses penyelesaian pusaka mana-mana pihak sama ada Pemegang Amanah mahupun Penerima Hibah tanpa wujudnya apa-apa kekeliruan terhadap status harta yang telah dihibahkan tersebut selepas kematian mana-mana pihak.
 </p>
 
 <p>
-Oleh yang demikian, Dokumen Hibah ini diyakini berfungsi sebagai dokumen yang menyumbang kepada penyelesaian pusaka yang sempurna, adil dan saksama secara SULH dikalangan ahli waris mana-mana pihak yang meninggal dunia.  
-Walaupun begitu, sekiranya wujud keperluan di mana suatu Perintah Pengesahan Hibah akan dituntut dari mana-mana Mahkamah Syariah yang berbidangkuasa, hendaklah Dokumen Hibah ini menjadi bahan pembuktian penting dan sumber utama yang harus mendapat pertimbangan Mahkamah.
+Oleh yang demikian, Dokumen Pengisytiharan Hibah ini diyakini berfungsi sebagai dokumen yang menyumbang kepada penyelesaian pusaka yang sempurna, adil dan saksama secara SULH dikalangan ahli waris mana-mana pihak yang meninggal dunia.  
+Walaupun begitu, sekiranya wujud keperluan di mana suatu Perintah Pengesahan Hibah akan dituntut dari mana-mana Mahkamah Syariah yang berbidangkuasa, hendaklah Dokumen Pengisytiharan Hibah ini menjadi bahan pembuktian penting dan sumber utama yang harus mendapat pertimbangan Mahkamah.
 </p>
 
 <p>
-Bahawasanya Dokumen Hibah ini adalah pengisytiharan terakhir dan mana-mana pengisytiharan hibah yang telah dinyatakan terdahulu ke atas harta hibah ini adalah terbatal.
+Bahawasanya Dokumen Pengisytiharan Hibah ini adalah pengisytiharan terakhir dan mana-mana pengisytiharan hibah yang telah dinyatakan terdahulu ke atas harta hibah ini adalah terbatal.
 </p>
 
 
@@ -87,7 +87,7 @@ Bahawasanya Dokumen Hibah ini adalah pengisytiharan terakhir dan mana-mana pengi
 <div class="a4-page p-[18mm]">
 
 <p>
-<strong>DOKUMEN HIBAH</strong> ini diperbuat pada
+<strong>DOKUMEN PENGISYTIHARAN HIBAH</strong> ini diperbuat pada
 <strong>{{TARIKH_DOKUMEN}}</strong>.
 </p>
 
@@ -387,7 +387,7 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Bahawa pada tarikh Perjanjian Hibah ini beliau bukan seorang muflis (bankrap), juga tidak ada petisyen untuk kebankrapan telah difailkan terhadapnya sama ada bersama-sama atau berasingan;
+Bahawa pada tarikh Dokumen Pengisytiharan Hibah ini beliau bukan seorang muflis (bankrap), juga tidak ada petisyen untuk kebankrapan telah difailkan terhadapnya sama ada bersama-sama atau berasingan;
 </td>
 
 </tr>
@@ -496,7 +496,7 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini adalah berdasarkan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut di atas dan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut merupakan asas kepada tanggungjawab Pemberi Hibah untuk menghibahkan Harta Amanah tersebut.
+Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Dokumen Pengisytiharan Hibah ini adalah berdasarkan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut di atas dan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut merupakan asas kepada tanggungjawab Pemberi Hibah untuk menghibahkan Harta Amanah tersebut.
 </tr>
 
 </table>
@@ -511,19 +511,19 @@ Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini
 <strong>10.	KOS</strong>
 </h3>
 
-<p>Segala kos dan perbelanjaan dalam penyediaan Perjanjian Hibah ini ditanggung oleh Pemberi Hibah.</p>
+<p>Segala kos dan perbelanjaan dalam penyediaan Dokumen Pengisytiharan Hibah ini ditanggung oleh Pemberi Hibah.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>11.	NOTIS DAN PENYAMPAIAN DOKUMEN </strong>
 </h3> 
 
-<p>Apa-apa Notis permintaan atau tuntutan yang dikehendaki disampaikan oleh mana-mana pihak kepada Perjanjian Hibah ini kepada pihak yang satu lagi di bawah Perjanjian Hibah ini hendaklah secara bertulis ke alamat terakhir pihak-pihak yang diketahui dan hendaklah disifatkan sebagai penyampaian yang mencukupi.</p>
+<p>Apa-apa Notis permintaan atau tuntutan yang dikehendaki disampaikan oleh mana-mana pihak kepada Dokumen Pengisytiharan Hibah ini kepada pihak yang satu lagi di bawah Dokumen Pengisytiharan Hibah ini hendaklah secara bertulis ke alamat terakhir pihak-pihak yang diketahui dan hendaklah disifatkan sebagai penyampaian yang mencukupi.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>12.	MASA MERUPAKAN PATI KONTRAK</strong>
 </h3>
 
-<p>Masa di mana-mana juga disebutkan di dalam Perjanjian Hibah ini hendaklah dianggap penting dan menjadi pati kepada kontrak.</p>
+<p>Masa di mana-mana juga disebutkan di dalam Dokumen Pengisytiharan Hibah ini hendaklah dianggap penting dan menjadi pati kepada kontrak.</p>
 
 <div class="pdf-footer">
 <span class="footer-docref"></span>
@@ -537,13 +537,13 @@ Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini
 <strong>13.	 ORANG-ORANG YANG TERIKAT KEPADA PERJANJIAN</strong>
 </h3>
 
-<p>Perjanjian Hibah ini hendaklah terikat kepada kesemua waris, wakil peribadi, pemegang wasi, pengganti dalam hakmilik atau penerima serahhak yang dibenarkan bagi pihak- pihak di dalam Perjanjian ini.</p>
+<p>Dokumen Pengisytiharan Hibah ini hendaklah terikat kepada kesemua waris, wakil peribadi, pemegang wasi, pengganti dalam hakmilik atau penerima serahhak yang dibenarkan bagi pihak- pihak di dalam Dokumen Pengisytiharan Hibah ini.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>14.	 BIDANGKUASA UNDANG-UNDANG </strong>
 </h3>
 
-<p>Perjanjian Hibah ini adalah dikuasai dan ditafsirkan menurut undang-undang di Malaysia dan tidak berlawanan dengan Hukum Syarak dan kedua-dua pihak adalah dengan ini patuh kepada bidang kuasa Mahkamah-Mahkamah di Malaysia.</p>
+<p>Dokumen Pengisytiharan Hibah ini adalah dikuasai dan ditafsirkan menurut undang-undang di Malaysia dan tidak berlawanan dengan Hukum Syarak dan kedua-dua pihak adalah dengan ini patuh kepada bidang kuasa Mahkamah-Mahkamah di Malaysia.</p>
 
 <div
 style="
@@ -897,7 +897,7 @@ color:#222;
 <p>Saya, <strong>{{NAMA_PENERIMA}}</strong> (No. K/P:
 <strong>{{IC_PENERIMA}}</strong>) yang bermastautin di <strong>{{ALAMAT_PENERIMA}}</strong> {{INTRO_PENERIMA}} dengan ini mengakui bahawa saya adalah seorang Islam yang cukup umur, berada di dalam keadaan sihat tubuh badan dan waras fikiran, tanpa sebarang paksaan dan penuh kerelaan hati saya sendiri bersetuju menerima Hibah yang tersebut di atas.</p>
 <p>Saya juga dengan ini mengaku bahawa mulai pada hari ini, saya dengan suci dan rela hati telah menerima segala hak, kuasa dan tanggungjawab terhadap harta ini yang telah memenuhi rukun-rukun dan menyempurnakan syarat Qabd di dalam hibah dari pemberi di atas.</p>
-<p>Seterusnya di dalam Dokumen Hibah ini, saya juga faham Hibah ini hanya boleh ditarik balik dengan persetujuan saya. (Klausa untuk Hibah kepada selain daripada anak kandung, cucu kandung, cicit kandung)</p>
+<p>Seterusnya di dalam Dokumen Pengisytiharan Hibah ini, saya juga faham Hibah ini hanya boleh ditarik balik dengan persetujuan saya. (Klausa untuk Hibah kepada selain daripada anak kandung, cucu kandung, cicit kandung)</p>
 <p>Saya dengan ini bersetuju dan redha Pemberi Hibah menikmati manfaat fizikal dan ekonomi dari harta tersebut selagi ada hayat beliau.</p>
 
 <div
