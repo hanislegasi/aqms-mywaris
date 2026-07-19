@@ -1477,6 +1477,117 @@ vertical-align:top;
 ">
 Kami juga faham jika Pemberi Hibah memberikan maklumat pemilikan harta yang tidak tepat atau tidak benar, ketika dokumen hibah ini disediakan, maka kami melepaskan (indemnify) Al-Qawthar Mawaris Synergy jika urusan hibah ini tidak dapat dikuatkuasakan.
 
+ </table>
+
+  <div class="pdf-footer">
+    <span class="footer-docref"></span>
+    <span class="page-number"></span>
+  </div>
+</div>
+
+<div class="a4-page p-[18mm]">
+
+<table
+style="
+width:100%;
+border-collapse:collapse;
+margin-top:12px;
+margin-bottom:18px;
+">
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+10.
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Kami faham dan bersetuju bahawa kami telah dimaklumkan oleh Hans Legasi Resources Sdn.Bhd., jika ada harta yang dihibahkan ini adalah harta yang berada di luar negara Malaysia, Dokumen Pengisytiharan Hibah yang dibuat bagi harta tersebut hanya bertindak sebagai panduan untuk agihan harta tersebut. Tukarmilik harta tersebut dari nama Pemberi Hibah kepada nama Penerima Hibah adalah menjadi tanggungjawab penuh Pentadbir/Wasi harta pusaka Pemberi Hibah yang diberikan kuasa oleh Mahkamah yang kompeten di mana harta tersebut berada dan ditadbir sepenuhnya mengikut peruntukan undang-undang negara berkenaan (klausa ini digunapakai untuk pelanggan yang menghibahkan harta yang berada di luar Malaysia).
+
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+11.
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Kami mengaku faham bahawa jika ada harta yang dihibahkan adalah harta yang masih bercagar,
+kami akan memastikan segala bayaran yang tertakluk ke atas harta tersebut akan dibayar mengikut Perjanjian yang telah ditandatangani bersama Pembiaya. 
+Kami faham bahawa jika syarat ini gagal dipatuhi dan tindakan undang-undang diambil oleh Pembiaya, maka hibah ini akan terbatal.
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+12.
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Kami mengaku faham bahawa jika ada harta yang dihibahkan adalah harta yang masih bercagar,
+kami akan menyimpan dan mengumpul dokumen berkaitan seperti Perjanjian Jual Beli, Geran Hakmilik, Surat Tawaran Pinjaman (loan offer letter) atau apa sahaja dokumen yang berkaitan dengan pemilikan harta tersebut bagi tujuan perlaksanaan hibah ini di Mahkamah Tinggi Syariah. 
+Kami dengan ini bersetuju untuk melepaskan (indemnify) Al-Qawthar Mawaris Synergy jika hibah ini gagal dilaksanakan kesan dari kegagalan kami bertindak mengikut klausa ini.
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
+
 </table>
+
+<div class="pdf-footer">
+    <span class="footer-docref"></span>
+    <span class="page-number"></span>
+  </div>
+</div>
+
 `;
 
