@@ -1362,7 +1362,13 @@ Pemberi Hibah faham dengan jelas mengenai konsep di atas dan mengisytiharkan bah
 
 <div class="a4-page p-[18mm]">
 
-<table style="width:100%; border-collapse:collapse;">
+<table
+style="
+width:100%;
+border-collapse:collapse;
+margin-top:12px;
+margin-bottom:18px;
+">
 
 <tr valign="top">
 
