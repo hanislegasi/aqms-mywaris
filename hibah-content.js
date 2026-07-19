@@ -551,50 +551,6 @@ Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Perjanjian Hibah ini
 </div>
 </div>
 
-<div class="a4-page p-[18mm]">
-
-<h3
-style="
-font-family:'Times New Roman', serif;
-font-size:18px;
-font-weight:bold;
-color:#153638;
-margin-top:25px;
-margin-bottom:12px;
-">
-JADUAL 1 - SENARAI HARTA ALIH YANG DIHIBAHKAN
-</h3>
-
-{{TABLE_ALIH}}
-
-<div class="pdf-footer">
-
-<span class="footer-docref"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
-
-<div class="a4-page p-[18mm]">
-
-<br><br>
-
-<h3
-style="
-font-family:'Times New Roman', serif;
-font-size:18px;
-font-weight:bold;
-color:#153638;
-margin-top:25px;
-margin-bottom:12px;
-">
-JADUAL 2 - SENARAI HARTA TAK ALIH YANG DIHIBAHKAN
-</h3>
-
-{{TABLE_TAK_ALIH}}
-
 <div
 style="
 margin-top:60px;
@@ -850,6 +806,60 @@ margin-top:50px;
 <span class="page-number"></span>
 
 </div>
+
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
+
+<h3
+style="
+font-family:'Times New Roman', serif;
+font-size:18px;
+font-weight:bold;
+color:#153638;
+margin-top:25px;
+margin-bottom:12px;
+">
+JADUAL 1 - SENARAI HARTA ALIH YANG DIHIBAHKAN
+</h3>
+
+{{TABLE_ALIH}}
+
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
+
+<br><br>
+
+<h3
+style="
+font-family:'Times New Roman', serif;
+font-size:18px;
+font-weight:bold;
+color:#153638;
+margin-top:25px;
+margin-bottom:12px;
+">
+JADUAL 2 - SENARAI HARTA TAK ALIH YANG DIHIBAHKAN
+</h3>
+
+{{TABLE_TAK_ALIH}}
+
+<div class="pdf-footer">
+
+<span class="footer-docref"></span>
+
+<span class="page-number"></span>
 
 </div>
 
