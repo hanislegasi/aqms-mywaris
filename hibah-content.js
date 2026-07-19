@@ -1357,6 +1357,14 @@ vertical-align:top;
 ">
 Pemberi Hibah faham dengan jelas mengenai konsep di atas dan mengisytiharkan bahawa ketika dokumen hibah ini disempurnakan, Pemberi Hibah adalah seorang yang sihat tubuh badan dan tidak menanggung apa-apa penyakit yang membawa kepada keadaan Marad al-Maut berkenaan.
 
+<div class="pdf-footer">
+<span class="footer-docref"></span>
+<span class="page-number"></span>
+</div>
+</div>
+
+<div class="a4-page p-[18mm]">
+
 <tr>
 <td colspan="2" style="height:18px;"></td>
 </tr>
