@@ -1401,7 +1401,8 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Sekiranya Pemberi Hibah menyembunyikan apa-apa maklumat mengenai tahap kesihatannya yang boleh dianggap sebagai penyakit yang membawa kepada tahap Marad al-Maut di atas dan tindakannya telah menjejaskan hak Penerima Hibah, maka kami melepaskan (indemnify) Hans Legasi Resources Sdn.Bhd. dan waris Pemberi Hibah tidak boleh membuat sebarang tuntutan.
+Sekiranya Pemberi Hibah menyembunyikan apa-apa maklumat mengenai tahap kesihatannya yang boleh dianggap sebagai penyakit yang membawa kepada tahap Marad al-Maut di atas dan tindakannya telah menjejaskan hak Penerima Hibah, 
+maka kami melepaskan (indemnify) Al-Qawthar Mawaris Synergy dan waris Pemberi Hibah tidak boleh membuat sebarang tuntutan.
 </td>
 </tr>
 
@@ -1612,11 +1613,266 @@ Kami dengan ini bersetuju untuk melepaskan (indemnify) Al-Qawthar Mawaris Synerg
 
 </table>
 
-<div class="pdf-footer">
-    <span class="footer-docref"></span>
-    <span class="page-number"></span>
-  </div>
+<div
+style="
+margin-top:60px;
+border-top:1px solid #000;
+width:100%;
+">
 </div>
+
+<p
+style="
+text-align:center;
+margin-top:10px;
+font-style:italic;
+">
+(Ruangan ini sengaja dibiarkan kosong)
+</p>
+
+<div class="pdf-footer">
+
+<span class="docRef"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+</div>
+
+   
+<div class="a4-page p-[18mm]">
+
+<div class="mt-8">
+
+<strong>PENGAKUAN PENERIMA HIBAH</strong>
+<p>
+Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Hibah ini adalah benar dan tepat mengikut pengetahuan saya.
+</p>
+<br>
+
+
+<p>.......................................</p>
+
+<p>
+(Tandatangan Penerima Hibah)
+</p>
+
+<table
+style="
+margin-top:30px;
+font-size:14px;
+">
+
+<tr>
+<td width="100">
+Nama
+</td>
+
+<td width="20">
+:
+</td>
+
+<td>
+<strong>{{NAMA_PENERIMA}}</strong>
+</td>
+</tr>
+
+<tr>
+<td>
+No. K/P
+</td>
+
+<td>
+:
+</td>
+
+<td>
+<strong>{{IC_PENERIMA}}</strong>
+</td>
+</tr>
+
+<tr>
+<td>
+Tarikh
+</td>
+
+<td>
+:
+</td>
+
+<td>
+</td>
+</tr>
+
+</table>
+
+</div>
+<br>
+<strong>PENGESAHAN SAKSI</strong>
+<p>
+Kami yang bertandatangan di bawah mengesahkan bahawa Pemberi Hibah telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
+Pemberi Hibah berada dalam keadaan waras serta membuat Hibah ini secara sukarela.
+</p>
+
+<table
+style="
+width:100%;
+margin-top:50px;
+">
+
+<tr valign="top">
+
+<td width="45%">
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 1</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+<td width="10%"></td>
+
+<td width="45%">
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 2</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+<tr>
+<td colspan="3" height="60"></td>
+</tr>
+
+<tr valign="top">
+
+<td>
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 3</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+<td></td>
+
+<td>
+
+<p>.......................................</p>
+
+<p>Tandatangan saksi 4</p>
+
+<table style="margin-top:15px;">
+
+<tr>
+<td width="80">Nama</td>
+<td width="20">:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>No. K/P</td>
+<td>:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+<div class="pdf-footer">
+
+<span class="docRef"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+</div>
+
 
 `;
 
