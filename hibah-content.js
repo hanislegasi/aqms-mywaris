@@ -1160,7 +1160,314 @@ margin-top:50px;
 
 </div>
 
+<div class="pdf-footer">
+<span class="footer-docref"></span>
+<span class="page-number"></span>
+</div>
+</div>
 
+<div class="a4-page p-[18mm]">
 
+<h2 style="
+font-family:'Times New Roman',serif;
+font-size:30px;
+font-weight:bold;
+text-align:center;
+color:#153638;
+margin-bottom:18px;
+">
+PENGISYTIHARAN PEMBERI HIBAH DAN PENERIMA HIBAH
+</h2>
+
+<div style="
+text-align:center;
+font-family:'Amiri',serif;
+font-size:30px;
+margin-bottom:8px;
+">
+بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
+</div>
+
+<div
+style="
+font-family:'Times New Roman', serif;
+font-size:15px;
+line-height:1.6;
+text-align:justify;
+color:#222;
+">
+
+<p style="text-align:center; margin-bottom:20px;">
+<strong>Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani</strong>
+</p>
+
+<p>
+Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. K/P:
+<strong>{{IC_PEMBERI}}</strong>, yang beralamat di
+<strong>{{ALAMAT_PEMBERI}}</strong> dan <strong>{{NAMA_PENERIMA}}</strong>
+(No. K/P: <strong>{{IC_PENERIMA}}</strong>) yang bermastautin di <strong>{{ALAMAT_PENERIMA}}</strong>
+{{INTRO_PENERIMA}} dengan ini bersetuju bahawa: -
+</p>
+
+<table
+style="
+width:100%;
+border-collapse:collapse;
+margin-top:12px;
+margin-bottom:18px;
+">
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+1.
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Hibah yang kami sempurnakan ini adalah hibah bersyarat iaitu sekiranya Penerima Hibah meninggal dunia terlebih dahulu sebelum Pemberi Hibah maka harta yang dihibahkan akan dikembalikan semula kepada Pemberi Hibah. (Klausa ini hanya tergunapakai kepada pelanggan yang melanggan hibah bersyarat sahaja).
+</td>
+
+</tr>
+
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+2.
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Dokumen hibah ini disediakan untuk menzahirkan tindakan Pemberi Hibah menghibahkan harta/harta-hartanya kepada Penerima/Penerima-Penerima Hibah tertentu seperti yang telah ditetapkan di dalam Dokumen Pengisytiharan Hibah yang telah disediakan oleh pihak Hans Legasi Resources Sdn.Bhd. dan telah ditandatangani pada ...............................
+</tr>
+
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+3.
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Semasa hibah tersebut disediakan, Pemberi Hibah adalah seorang yang Mukallaf dan Sui Juris iaitu seorang yang mempunyai kapasiti untuk bertindak sendirian, mampu dan berkeupayaan, juga berada dalam keadaan sihat tubuh badan dan waras fikiran serta di dalam keadaan faham dan sedar tentang segala tindakan yang dilakukan.
+
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+4.
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Di dalam proses melengkapkan Hibah ini, Pemberi Hibah telah faham mengenai keadaan Marad al-Maut (penyakit yang menghampiri mati) iaitu orang yang telah menghidapi sesuatu penyakit sehingga terlantar lemah dan tidak berdaya untuk menjalani kehidupannya seperti biasa dan penyakit ini juga telah menyebabkan kematiannya di dalam tempoh setahun selepas penyakit tersebut dihidapinya.
+
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+5.
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Pemberi Hibah faham dengan jelas mengenai konsep di atas dan mengisytiharkan bahawa ketika dokumen hibah ini disempurnakan, Pemberi Hibah adalah seorang yang sihat tubuh badan dan tidak menanggung apa-apa penyakit yang membawa kepada keadaan Marad al-Maut berkenaan.
+
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+6.
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Sekiranya Pemberi Hibah menyembunyikan apa-apa maklumat mengenai tahap kesihatannya yang boleh dianggap sebagai penyakit yang membawa kepada tahap Marad al-Maut di atas dan tindakannya telah menjejaskan hak Penerima Hibah, maka kami melepaskan (indemnify) Hans Legasi Resources Sdn.Bhd. dan waris Pemberi Hibah tidak boleh membuat sebarang tuntutan.
+
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+7.
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Sekiranya harta belum mempunyai hak milik berdaftar, pihak-pihak memahami bahawa proses pelaksanaan hibah tertakluk kepada undang-undang dan perintah Mahkamah Syariah serta pihak berkuasa yang berkaitan.
+
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+8.
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Kami juga faham sekiranya berlaku apa-apa perubahan terhadap status hartanah yang dihibahkan (seperti dinaiktaraf, diganti dengan pampasan dan seumpamanya), maka kami mengemaskini dokumen hibah untuk dibuat sebarang perubahan terhadap dokumen hibah yang telah disediakan (jika perlu). 
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+9.
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Kami juga faham jika Pemberi Hibah memberikan maklumat pemilikan harta yang tidak tepat atau tidak benar, ketika dokumen hibah ini disediakan, maka kami melepaskan (indemnify) Al-Qawthar Mawaris Synergy jika urusan hibah ini tidak dapat dikuatkuasakan.
+
+</table>
 `;
 
