@@ -226,7 +226,7 @@ font-style:italic;
 
 <strong>PENGAKUAN PEMBERI HIBAH</strong>
 <p>
-Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Wasiat ini adalah benar dan tepat mengikut pengetahuan saya.
+Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam Dokumen Pelantikan Pemegang Amanah ini adalah benar dan tepat mengikut pengetahuan saya.
 </p>
 <br>
 
@@ -290,8 +290,8 @@ Tarikh
 <br>
 <strong>PENGESAHAN SAKSI</strong>
 <p>
-Kami yang bertandatangan di bawah mengesahkan bahawa Pewasiat telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
-Pewasiat berada dalam keadaan waras serta membuat Wasiat ini secara sukarela.
+Kami yang bertandatangan di bawah mengesahkan bahawa Pemberi Hibah telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
+Pemberi Hibah berada dalam keadaan waras serta membuat Dokumen Pelantikan Pemegang Amanah ini secara sukarela.
 </p>
 
 <table
@@ -536,7 +536,7 @@ font-style:italic;
 
 <strong>PENGAKUAN PEMEGANG AMANAH</strong>
 <p>
-Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Wasiat ini adalah benar dan tepat mengikut pengetahuan saya.
+Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam Dokumen Pelantikan Pemegang Amanah ini adalah benar dan tepat mengikut pengetahuan saya.
 </p>
 <br>
 
@@ -600,8 +600,8 @@ Tarikh
 <br>
 <strong>PENGESAHAN SAKSI</strong>
 <p>
-Kami yang bertandatangan di bawah mengesahkan bahawa Pewasiat telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
-Pewasiat berada dalam keadaan waras serta membuat Wasiat ini secara sukarela.
+Kami yang bertandatangan di bawah mengesahkan bahawa Pemberi Hibah telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
+Pemberi Hibah berada dalam keadaan waras serta membuat Dokumen Pelantikan Pemegang Amanah ini secara sukarela.
 </p>
 
 <table
