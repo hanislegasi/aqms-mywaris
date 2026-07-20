@@ -1200,7 +1200,7 @@ Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. K/P:
 <strong>{{IC_PEMBERI}}</strong>, yang beralamat di
 <strong>{{ALAMAT_PEMBERI}}</strong> dan <strong>{{NAMA_PENERIMA}}</strong>
 (No. K/P: <strong>{{IC_PENERIMA}}</strong>) yang bermastautin di <strong>{{ALAMAT_PENERIMA}}</strong>
-{{INTRO_PENERIMA}} dengan ini bersetuju bahawa: -
+{{INTRO_PENERIMA}} dengan ini bersetuju bahawa:-
 </p>
 
 <table
@@ -1360,12 +1360,12 @@ Pemberi Hibah faham dengan jelas mengenai konsep di atas dan mengisytiharkan bah
 </td>
 </tr>
 
- </table>
+</table>
 
-  <div class="pdf-footer">
-    <span class="footer-docref"></span>
-    <span class="page-number"></span>
-  </div>
+<div class="pdf-footer">
+<span class="footer-docref"></span>
+<span class="page-number"></span>
+</div>
 </div>
 </div>
 
@@ -1498,16 +1498,6 @@ ketika dokumen hibah ini disediakan, maka kami melepaskan (indemnify) Al-Qawthar
 </td>
 </tr>
 
- </table>
-
-  <div class="pdf-footer">
-    <span class="footer-docref"></span>
-    <span class="page-number"></span>
-  </div>
-</div>
-
-<div class="a4-page p-[18mm]">
-
 <table
 style="
 width:100%;
@@ -1579,6 +1569,16 @@ Kami faham bahawa jika syarat ini gagal dipatuhi dan tindakan undang-undang diam
 <td colspan="2" style="height:18px;"></td>
 </tr>
 
+</table>
+
+<div class="pdf-footer">
+<span class="footer-docref"></span>
+<span class="page-number"></span>
+</div>
+</div>
+
+<div class="a4-page p-[18mm]">
+
 <tr valign="top">
 
 <td
@@ -1647,12 +1647,78 @@ font-style:italic;
 
 <div class="mt-8">
 
-<strong>PENGAKUAN PENERIMA HIBAH</strong>
+<strong>PENGAKUAN PEMBERI DAN PENERIMA HIBAH</strong>
 <p>
-Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Hibah ini adalah benar dan tepat mengikut pengetahuan saya.
+Kmai dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Hibah ini adalah benar dan tepat mengikut pengetahuan kami.
 </p>
 <br>
 
+<table
+style="
+width:100%;
+margin-top:50px;
+">
+
+<tr valign="top">
+
+<td width="45%">
+
+<p>.......................................</p>
+
+<p>
+(Tandatangan Pemberi Hibah)
+</p>
+
+<table
+style="
+margin-top:30px;
+font-size:14px;
+">
+
+<tr>
+<td width="100">
+Nama
+</td>
+
+<td width="20">
+:
+</td>
+
+<td>
+<strong>{{NAMA_PEMBERI}}</strong>
+</td>
+</tr>
+
+<tr>
+<td>
+No. K/P
+</td>
+
+<td>
+:
+</td>
+
+<td>
+<strong>{{IC_PEMBERI}}</strong>
+</td>
+</tr>
+
+<tr>
+<td>
+Tarikh
+</td>
+
+<td>
+:
+</td>
+
+<td>
+</td>
+</tr>
+
+<tr valign="top">
+
+<td width="45%">
 
 <p>.......................................</p>
 
@@ -1707,14 +1773,15 @@ Tarikh
 </td>
 </tr>
 
+
 </table>
 
 </div>
 <br>
 <strong>PENGESAHAN SAKSI</strong>
 <p>
-Kami yang bertandatangan di bawah mengesahkan bahawa Pemberi Hibah telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
-Pemberi Hibah berada dalam keadaan waras serta membuat Hibah ini secara sukarela.
+Kami yang bertandatangan di bawah mengesahkan bahawa Pemberi dan Penerima Hibah telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
+Pemberi dan Penerima Hibah berada dalam keadaan waras serta membuat Hibah ini secara sukarela.
 </p>
 
 <table
