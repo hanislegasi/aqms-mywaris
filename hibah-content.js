@@ -1579,6 +1579,14 @@ Kami faham bahawa jika syarat ini gagal dipatuhi dan tindakan undang-undang diam
 
 <div class="a4-page p-[18mm]">
 
+<table
+style="
+width:100%;
+border-collapse:collapse;
+margin-top:12px;
+margin-bottom:18px;
+">
+
 <tr valign="top">
 
 <td
@@ -1642,16 +1650,17 @@ font-style:italic;
 
 </div>
 
+
    
 <div class="a4-page p-[18mm]">
 
 <div class="mt-8">
 
 <strong>PENGAKUAN PEMBERI DAN PENERIMA HIBAH</strong>
+
 <p>
-Kmai dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Hibah ini adalah benar dan tepat mengikut pengetahuan kami.
+Kami dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Hibah ini adalah benar dan tepat mengikut pengetahuan kami.
 </p>
-<br>
 
 <table
 style="
@@ -1665,119 +1674,71 @@ margin-top:50px;
 
 <p>.......................................</p>
 
-<p>
-(Tandatangan Pemberi Hibah)
-</p>
+<p>(Tandatangan Pemberi Hibah)</p>
 
-<table
-style="
-margin-top:30px;
-font-size:14px;
-">
+<table style="margin-top:30px;font-size:14px;">
 
 <tr>
-<td width="100">
-Nama
-</td>
-
-<td width="20">
-:
-</td>
-
-<td>
-<strong>{{NAMA_PEMBERI}}</strong>
-</td>
+<td width="100">Nama</td>
+<td width="20">:</td>
+<td><strong>{{NAMA_PEMBERI}}</strong></td>
 </tr>
 
 <tr>
-<td>
-No. K/P
-</td>
-
-<td>
-:
-</td>
-
-<td>
-<strong>{{IC_PEMBERI}}</strong>
-</td>
+<td>No. K/P</td>
+<td>:</td>
+<td><strong>{{IC_PEMBERI}}</strong></td>
 </tr>
 
 <tr>
-<td>
-Tarikh
-</td>
-
-<td>
-:
-</td>
-
-<td>
-</td>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
 </tr>
 
-<tr valign="top">
+</table>
+
+</td>
+
+<td width="10%"></td>
 
 <td width="45%">
 
 <p>.......................................</p>
 
-<p>
-(Tandatangan Penerima Hibah)
-</p>
+<p>(Tandatangan Penerima Hibah)</p>
 
-<table
-style="
-margin-top:30px;
-font-size:14px;
-">
+<table style="margin-top:30px;font-size:14px;">
 
 <tr>
-<td width="100">
-Nama
-</td>
-
-<td width="20">
-:
-</td>
-
-<td>
-<strong>{{NAMA_PENERIMA}}</strong>
-</td>
+<td width="100">Nama</td>
+<td width="20">:</td>
+<td><strong>{{NAMA_PENERIMA}}</strong></td>
 </tr>
 
 <tr>
-<td>
-No. K/P
-</td>
-
-<td>
-:
-</td>
-
-<td>
-<strong>{{IC_PENERIMA}}</strong>
-</td>
+<td>No. K/P</td>
+<td>:</td>
+<td><strong>{{IC_PENERIMA}}</strong></td>
 </tr>
 
 <tr>
-<td>
-Tarikh
-</td>
-
-<td>
-:
-</td>
-
-<td>
-</td>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
 </tr>
 
+</table>
+
+</td>
+
+</tr>
 
 </table>
 
 </div>
 <br>
+
 <strong>PENGESAHAN SAKSI</strong>
 <p>
 Kami yang bertandatangan di bawah mengesahkan bahawa Pemberi dan Penerima Hibah telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
