@@ -3887,20 +3887,54 @@ type="text"
 class="w-full border rounded-lg p-3 akaunBerpenama"
 placeholder="No Akaun">
 
+<select
+class="w-full border rounded-lg p-3 jenisPenama">
+
+<option value="">
+Pilih Penama
+</option>
+
+<option value="waris">
+Waris
+</option>
+
+<option value="lain">
+Orang Lain
+</option>
+
+</select>
+
+<div class="penamaWarisSection hidden">
+
+<select
+class="w-full border rounded-lg p-3 pilihWarisPenama">
+
+<option value="">
+Pilih Waris
+</option>
+
+</select>
+
+</div>
+
+<div class="penamaLainSection hidden">
+
 <input
 type="text"
-class="w-full border rounded-lg p-3 penamaBerpenama"
+class="w-full border rounded-lg p-3 penama"
 placeholder="Nama Penama">
 
 <input
 type="text"
-class="w-full border rounded-lg p-3 icPenamaBerpenama"
+class="w-full border rounded-lg p-3 penamaIC"
 placeholder="No IC">
 
 <input
 type="text"
-class="w-full border rounded-lg p-3 hubunganPenamaBerpenama"
+class="w-full border rounded-lg p-3 penamaHubungan"
 placeholder="Hubungan">
+
+</div>
 
 <input
 type="number"
