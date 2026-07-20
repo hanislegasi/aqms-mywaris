@@ -408,7 +408,7 @@ if(!response.ok){
              const options = {
                 margin: 0,
                 filename: "Hibah.pdf",
-                image: { type: "jpeg", quality: 1 },
+                image: { type: "jpeg", quality: 0.92 },
                 html2canvas: { 
                     scale: 2, 
                     useCORS: true, 
@@ -417,12 +417,9 @@ if(!response.ok){
                     windowWidth: document.documentElement.offsetWidth
                 },                
                  pagebreak: { mode: ['css'] }, // Pastikan html2pdf__page-break berfungsi
-                jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait", compress: true }
             };
 
-console.log(getComputedStyle(wrapper).transform);
-
-console.log(getComputedStyle(element).transform);
             
             // 4. Proses render PDF
             html2pdf().set(options).from(element).save().then(() => {
