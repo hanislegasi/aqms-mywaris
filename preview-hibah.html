@@ -404,7 +404,7 @@ if(!response.ok){
                     windowWidth: document.documentElement.offsetWidth
                 },                
                  pagebreak: { mode: ['css'] }, // Pastikan html2pdf__page-break berfungsi
-                jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+               jsPDF: { unit: "mm", format: "a4", orientation: "portrait", compress: true }
             };
 
 console.log(getComputedStyle(wrapper).transform);
