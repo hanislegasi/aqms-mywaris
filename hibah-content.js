@@ -1528,7 +1528,7 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Kami faham dan bersetuju bahawa kami telah dimaklumkan oleh Hans Legasi Resources Sdn.Bhd., jika ada harta yang dihibahkan ini adalah harta yang berada di luar negara Malaysia, 
+Kami faham dan bersetuju bahawa kami telah dimaklumkan oleh Al-Qawthar Mawaris Synergy, jika ada harta yang dihibahkan ini adalah harta yang berada di luar negara Malaysia, 
 Dokumen Pengisytiharan Hibah yang dibuat bagi harta tersebut hanya bertindak sebagai panduan untuk agihan harta tersebut. 
 Tukarmilik harta tersebut dari nama Pemberi Hibah kepada nama Penerima Hibah adalah menjadi tanggungjawab penuh Pentadbir/Wasi harta pusaka Pemberi Hibah yang diberikan kuasa oleh Mahkamah yang kompeten di mana harta tersebut berada dan ditadbir sepenuhnya mengikut peruntukan undang-undang negara berkenaan (klausa ini digunapakai untuk pelanggan yang menghibahkan harta yang berada di luar Malaysia).
 </td>
