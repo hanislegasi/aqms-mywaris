@@ -257,41 +257,38 @@ class="border border-gray-300 p-5 font-medium">
         
     <div class="w-full max-w-3xl mx-auto p-4 mb-8 space-y-4 no-print">
 
-    <button
-    id="printBtn"
-    class="w-full bg-green-600 hover:bg-green-700 transition-all text-white py-4 rounded-xl font-semibold shadow-lg text-lg flex justify-center items-center gap-2">
+    <!-- Print & Download -->
+    <div class="space-y-4">
 
-        🖨️ Cetak / Save as PDF (Disyorkan)
+        <button
+            id="printBtn"
+            class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold shadow-lg text-lg transition">
+            🖨️ Cetak / Save as PDF (Disyorkan)
+        </button>
 
-    </button>
+        <button
+            id="downloadBtn"
+            class="w-full bg-black hover:bg-gray-800 text-white py-4 rounded-xl font-semibold shadow-lg text-lg transition">
+            📥 Download PDF (Legacy)
+        </button>
 
-    <button
-    id="downloadBtn"
-    class="w-full bg-black hover:bg-gray-800 transition-all text-white py-4 rounded-xl font-semibold shadow-lg text-lg flex justify-center items-center gap-2">
+    </div>
 
-        📥 Download PDF (Legacy)
+    <!-- Approve / Reject -->
+    <div class="grid grid-cols-2 gap-4 mt-4">
 
-    </button>
+        <button
+            id="approveBtn"
+            class="bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold shadow-lg transition">
+            ✅ Approve Permohonan
+        </button>
 
-</div>
+        <button
+            id="rejectBtn"
+            class="bg-red-600 hover:bg-red-700 text-white py-4 rounded-xl font-semibold shadow-lg transition">
+            ❌ Reject Permohonan
+        </button>
 
-       <div class="flex justify-center items-center gap-4 mt-10 mb-12 no-print">
-
-<button
-id="approveBtn"
-class="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition"
->
-Approve Permohonan
-</button>
-
-<button
-id="rejectBtn"
-class="bg-red-600 hover:bg-red-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition"
->
-Reject Permohonan
-</button>
-
-</div>
     </div>
 
 </div>    
