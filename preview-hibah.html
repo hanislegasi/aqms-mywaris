@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Preview Hibah</title>
+    <title>Preview Hibah</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- HTML2PDF Library -->
@@ -164,8 +164,8 @@ margin:0 !important;
 
     <!-- HEADER -->
     <div class="bg-[#153638] text-white p-5 shadow-md sticky top-0 z-50">
-        <h1 class="text-2xl font-bold font-inter">Admin Preview Hibah</h1>
-        <p class="text-gray-300 text-sm">Semakan Dokumen Customer</p>
+        <h1 class="text-2xl font-bold font-inter">Preview Hibah</h1>
+        <p class="text-gray-300 text-sm">Dokumen Hibah Saya</p>
     </div>
 
     <!-- MAIN CONTENT & PDF PREVIEW WRAPPER -->
@@ -300,23 +300,10 @@ class="border border-gray-300 p-5 font-medium">
             📥 Download PDF (Legacy)
         </button>
 
+        <div class="flex justify-center gap-4 mt-6">
+
     </div>
-
-    <!-- Approve / Reject -->
-    <div class="grid grid-cols-2 gap-4 mt-4">
-
-        <button
-            id="approveBtn"
-            class="bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold shadow-lg transition">
-            ✅ Approve Permohonan
-        </button>
-
-        <button
-            id="rejectBtn"
-            class="bg-red-600 hover:bg-red-700 text-white py-4 rounded-xl font-semibold shadow-lg transition">
-            ❌ Reject Permohonan
-        </button>
-
+      
     </div>
 
 </div>
@@ -1636,66 +1623,7 @@ currentDocRef;
             }
         });
 
-        // APPROVE BUTTON
-        document.getElementById("approveBtn").addEventListener("click", async () => {
-            if(!userId) return alert("User ID tidak sah!");
-            
-            try {
-                const today = new Date();
-                const year = today.getFullYear();
-                
-                const counterRef = doc(db, "system", "counter");
-                const counterSnap = await getDoc(counterRef);
-                let currentNumber = 1;
-
-                if (counterSnap.exists()) {
-                    currentNumber = (counterSnap.data().hibahCounter || 0) + 1;
-                }
-
-                const docRefNo = `AQMS-HIB-${year}-${String(currentNumber).padStart(3,"0")}`;
-
-                await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
-                    status: "APPROVED",
-                    approvedAt: today.toISOString(),
-                    docRef: docRefNo,
-                    docNumber: currentNumber
-                });
-
-                await setDoc(counterRef, { hibahCounter: currentNumber }, { merge: true });
-
-await addDoc(
-    collection(db, "users", userId, "notifications"),
-    {
-        title: "Dokumen Hibah Diluluskan",
-        message: `Dokumen Hibah anda (${docRefNo}) telah diluluskan dan sedia untuk dilihat.`,
-        type: "HIBAH_APPROVED",
-        read: false,
-        createdAt: today.toISOString()
-    }
-);
-                
-                alert("Dokumen berjaya diluluskan");
-                location.reload();
-            } catch (error) {
-                console.log(error);
-                alert("Ralat semasa meluluskan: " + error.message);
-            }
-        });
-
-        // REJECT BUTTON
-        document.getElementById("rejectBtn").addEventListener("click", async () => {
-            if(!userId) return alert("User ID tidak sah!");
-
-            try {
-                await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
-                    status: "REJECTED"
-                });
-                alert("Permohonan berjaya ditolak.");
-            } catch (error) {
-                console.log(error);
-                alert("Ralat semasa menolak: " + error.message);
-            }
-        });
+        
     </script>
 
 <script src="wasiat-content.js"></script>
