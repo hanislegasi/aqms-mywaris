@@ -35,7 +35,7 @@ style="font-family: Inter, sans-serif;">
 <div class="bg-[#153638] text-white p-5 shadow">
 
 <h1 class="text-2xl font-bold">
-Maklumat Pelanggan
+Customer Details
 </h1>
 
 <p class="text-gray-200">
@@ -52,7 +52,7 @@ href="consultant-clients.html"
 class="inline-block mb-5 bg-gray-200 hover:bg-gray-300 transition text-gray-700 px-5 py-3 rounded-xl font-semibold">
 
 ← Kembali ke My Clients
-  
+
 </a>
   
 <div
@@ -139,7 +139,7 @@ onAuthStateChanged(auth, async(user)=>{
   const userData =
   userDoc.data();
 
-  if(userData.role !== "consultant"){
+   if(userData.role !== "consultant"){
 
     alert(
       "Akses ditolak"
@@ -257,32 +257,58 @@ hibahData.status ||
 
 }
 
-// PUSAKA STATUS
-const pusakaSnap =
+// SEPENCARIAN STATUS
+const sepencarianSnap =
 await getDoc(
 doc(
 db,
 "users",
 userId,
-"pusaka",
+"sepencarian",
 "maklumat"
 )
 );
 
-let pusakaStatus =
+let sepencarianStatus =
 "BELUM DIISI";
 
-if(pusakaSnap.exists()){
+if(sepencarianSnap.exists()){
 
-const pusakaData =
-pusakaSnap.data();
+const sepencarianData =
+sepencarianSnap.data();
 
-pusakaStatus =
-pusakaData.status ||
+sepencarianStatus =
+sepencarianData.status ||
 "DRAFT";
 
 }
 
+// MAWARIS STATUS
+const mawarisSnap =
+await getDoc(
+doc(
+db,
+"users",
+userId,
+"mawaris",
+"maklumat"
+)
+);
+
+let mawarisStatus =
+"BELUM DIISI";
+
+if(mawarisSnap.exists()){
+
+const mawarisData =
+mawarisSnap.data();
+
+mawarisStatus =
+mawarisData.status ||
+"DRAFT";
+
+}
+  
 document.getElementById(
 "customerInfo"
 ).innerHTML = `
@@ -329,10 +355,10 @@ Referral
 </div>
 
 <div>
-<p class="text-gray-500 text-sm">
-Telefon
-</p>
-<p id="telefon"></p>
+    <p class="text-gray-500 text-sm">
+        Telefon
+    </p>
+    <p id="telefon"></p>
 </div>
 
 <div>
@@ -348,171 +374,148 @@ Status
 
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-
-
-<!-- WASIAT -->
-<div class="bg-green-50 border border-green-200 rounded-2xl p-5 shadow-sm">
-
-<div class="flex items-center justify-between mb-4">
-
-<h3 class="font-bold text-green-800 text-lg">
-e-Wasiat
-</h3>
-
-
-
-</div>
-
-
-<p class="text-sm text-gray-600">
-No Dokumen
-</p>
-
-<p class="font-semibold mb-3">
-${docRef}
-</p>
-
-
-<p class="text-sm text-gray-600">
-Tarikh Lulus
-</p>
-
-<p class="mb-3">
-${approvedDate}
-</p>
-
-
-<p class="text-sm text-gray-600">
-Tamat Keahlian
-</p>
-
-<p class="mb-3">
-${expiryDate}
-</p>
-
-
-<p class="text-sm text-gray-600">
-Baki Hari
-</p>
-
-<p class="font-bold text-green-700 text-xl">
-${bakiHari} Hari
-</p>
-
-
-<div class="mt-4">
-
-<span
-class="
-bg-green-100 
-text-green-700 
-px-4 
-py-2 
-rounded-full 
-text-xs 
-font-bold
-">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
 ${
-bakiHari <= 0
-? "KEAHLIAN TAMAT"
-: wasiatStatus
+wasiatSnap.exists()
+?
+`
+<div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col justify-between min-h-[220px]">
+
+<div>
+
+<h3 class="font-bold text-green-700 text-lg">
+Wasiat
+</h3>
+
+<p class="text-sm mt-4">
+No Dokumen :
+<strong>${docRef}</strong>
+</p>
+
+<p class="text-sm mt-1">
+Status :
+<strong>${wasiatStatus}</strong>
+</p>
+
+</div>
+
+<a
+href="admin-preview-wasiat.html?id=${userId}"
+target="_blank"
+class="mt-5 w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold transition">
+
+👁 View Dokumen
+
+</a>
+
+</div>
+`
+:
+""
 }
 
-</span>
+${
+hibahSnap.exists()
+?
+`
+<div class="bg-blue-50 border border-blue-200 rounded-xl p-5 flex flex-col justify-between min-h-[220px]">
 
-</div>
+<div>
 
-</div>
-
-
-
-<!-- HIBAH -->
-<div class="bg-blue-50 border border-blue-200 rounded-2xl p-5 shadow-sm">
-
-<div class="flex items-center justify-between mb-4">
-
-<h3 class="font-bold text-blue-800 text-lg">
+<h3 class="font-bold text-blue-700 text-lg">
 Hibah
 </h3>
 
-
-
-</div>
-
-
-<p class="text-sm text-gray-500">
-Status Permohonan
-</p>
-
-
-<p class="font-bold text-blue-700 text-xl mt-2">
-${hibahStatus}
-</p>
-
-
-<div class="mt-5 bg-white rounded-xl p-3">
-
-<p class="text-xs text-gray-500">
-Perancangan Harta
-</p>
-
-<p class="font-semibold">
-Hibah Keluarga
+<p class="text-sm mt-4">
+Status :
+<strong>${hibahStatus}</strong>
 </p>
 
 </div>
 
+<a
+href="admin-preview-hibah.html?id=${userId}"
+target="_blank"
+class="mt-5 w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold transition">
+
+👁 View Dokumen
+
+</a>
 
 </div>
+`
+:
+""
+}
 
+${
+sepencarianSnap.exists()
+?
+`
+<div class="bg-blue-50 border border-blue-200 rounded-xl p-5 flex flex-col justify-between min-h-[220px]">
 
+<div>
 
-
-<!-- HARTA SEPENCARIAN -->
-<div class="bg-purple-50 border border-purple-200 rounded-2xl p-5 shadow-sm">
-
-
-<div class="flex items-center justify-between mb-4">
-
-<h3 class="font-bold text-purple-800 text-lg">
+<h3 class="font-bold text-blue-700 text-lg">
 Harta Sepencarian
 </h3>
 
-
-
-</div>
-
-
-
-<p class="text-sm text-gray-500">
-Status Rekod
-</p>
-
-
-<p class="font-bold text-purple-700 text-xl mt-2">
-${pusakaStatus}
-</p>
-
-
-<div class="mt-5 bg-white rounded-xl p-3">
-
-<p class="text-xs text-gray-500">
-Perlindungan Aset
-</p>
-
-<p class="font-semibold">
-Dokumen Keluarga
+<p class="text-sm mt-4">
+Status :
+<strong>${sepencarianStatus}</strong>
 </p>
 
 </div>
 
+<a
+href="admin-preview-sepencarian.html?id=${userId}"
+target="_blank"
+class="mt-5 w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold transition">
+
+👁 View Dokumen
+
+</a>
+
+</div>
+`
+:
+""
+}
+
+${
+mawarisSnap.exists()
+?
+`
+<div class="bg-blue-50 border border-blue-200 rounded-xl p-5 flex flex-col justify-between min-h-[220px]">
+
+<div>
+
+<h3 class="font-bold text-blue-700 text-lg">
+Mawaris
+</h3>
+
+<p class="text-sm mt-4">
+Status :
+<strong>${mawarisStatus}</strong>
+</p>
 
 </div>
 
+<a
+href="admin-preview-mawaris.html?id=${userId}"
+target="_blank"
+class="mt-5 w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold transition">
+
+👁 View Dokumen
+
+</a>
 
 </div>
+`
+:
+""
+}
 
 `;
 
@@ -535,18 +538,19 @@ document.getElementById(
 ).innerHTML =
 user.referral || "-";
 
-document.getElementById(
-"telefon"
-).innerHTML =
+document.getElementById("telefon").innerHTML =
 user.telefon || "-";
   
-document.getElementById(
-"memberStatus"
-).innerHTML =
-user.paymentStatus === "paid"
+document.getElementById("memberStatus").innerHTML =
+(
+user.paymentStatus === "paid" ||
+user.wasiatPaymentStatus === "paid" ||
+user.hibahPaymentStatus === "paid" ||
+user.sepencarianPaymentStatus === "paid" ||
+user.mawarisPaymentStatus === "paid"
+)
 ? "AHLI AKTIF"
-: "PROSPEK";  
-
+: "PROSPEK";
 }
 
 </script>
