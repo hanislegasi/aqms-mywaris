@@ -1867,158 +1867,82 @@ item.penerimaSepencarianTakAlih || "";
 
 }
 
-if(data.hartaBerpenama){
- 
-document.getElementById(
-"hartaBerpenamaContainer"
-).innerHTML = "";
+if (data.hartaBerpenama) {
 
-data.hartaBerpenama.forEach(item=>{
+    document.getElementById("hartaBerpenamaContainer").innerHTML = "";
 
-document.getElementById(
-"hartaBerpenamaContainer"
-).insertAdjacentHTML(
-"beforeend",
-  
-`
-<div class="border rounded-xl p-4 space-y-3 mb-4">
+    data.hartaBerpenama.forEach(item => {
 
-<select class="w-full border rounded-lg p-3 jenisBerpenama">
+        // Guna function yang dah kita buat dalam Part 1
+        document.getElementById("addBerpenamaBtn").click();
 
-<option value="">Pilih Jenis</option>
+        const row = document.querySelector(
+            "#hartaBerpenamaContainer > div:last-child"
+        );
 
-<option value="KWSP" ${item.jenis==="KWSP"?"selected":""}>KWSP</option>
+        row.querySelector(".jenisBerpenama").value =
+            item.jenis || "";
 
-<option value="Tabung Haji" ${item.jenis==="Tabung Haji"?"selected":""}>Tabung Haji</option>
+        row.querySelector(".akaunBerpenama").value =
+            item.akaun || "";
 
-<option value="ASB" ${item.jenis==="ASB"?"selected":""}>ASB</option>
+        row.querySelector(".jenisPenama").value =
+            item.jenisPenama || "";
 
-</select>
+        // trigger show/hide section
+        row.querySelector(".jenisPenama")
+            .dispatchEvent(new Event("change"));
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 akaunBerpenama"
-value="${item.akaun || ''}"
-placeholder="No Akaun">
+        //---------------------------------
+        // WARIS
+        //---------------------------------
 
-<select
-class="w-full border rounded-lg p-3 jenisPenama">
+        if (item.jenisPenama === "waris") {
 
-<option value="">Pilih Penama</option>
+            const container =
+                row.querySelector(".penamaWarisContainer");
 
-<option value="waris" ${item.jenisPenama==="waris"?"selected":""}>Waris</option>
+            container.innerHTML = "";
 
-<option value="lain" ${item.jenisPenama==="lain"?"selected":""}>Orang Lain</option>
+            (item.penamaWaris || []).forEach(w => {
 
-</select>
+                addPenamaWaris(container);
 
-<div class="penamaWarisSection hidden">
+                const last =
+                    container.lastElementChild;
 
-<select
-class="w-full border rounded-lg p-3 pilihWarisPenama">
+                last.querySelector(".pilihWarisPenama").value =
+                    w.nama || "";
 
-<option value="">Pilih Waris</option>
+                last.querySelector(".bahagianPenamaWaris").value =
+                    w.bahagian || "";
 
-</select>
-
-</div>
-
-<div class="penamaLainSection hidden">
-
-<input
-type="text"
-class="w-full border rounded-lg p-3 penama"
-value="${item.penama || ''}"
-placeholder="Nama Penama">
-
-<input
-type="text"
-class="w-full border rounded-lg p-3 penamaIC"
-value="${item.ic || ''}"
-placeholder="No IC">
-
-<input
-type="text"
-class="w-full border rounded-lg p-3 penamaHubungan"
-value="${item.hubungan || ''}"
-placeholder="Hubungan">
-
-</div>
-
-<input
-type="number"
-class="w-full border rounded-lg p-3 bahagianBerpenama"
-value="${item.bahagian || ''}"
-placeholder="Bahagian (%)">
-
-<button
-type="button"
-class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
-
-Padam
-
-</button>
-
-</div>
-
-`
-);
-
-});
-
-populateWarisDropdownPenama();
-  
-document
-.querySelectorAll("#hartaBerpenamaContainer > div")
-.forEach((row,index)=>{
-
-    const item = data.hartaBerpenama[index];
-  
-    const jenisPenama =
-    row.querySelector(".jenisPenama");
-
-    const warisSection =
-    row.querySelector(".penamaWarisSection");
-
-    const lainSection =
-    row.querySelector(".penamaLainSection");
-
-    if(!jenisPenama) return;
-
-    const updatePenama = ()=>{
-
-        warisSection.classList.add("hidden");
-        lainSection.classList.add("hidden");
-
-        if(jenisPenama.value==="waris"){
-
-            warisSection.classList.remove("hidden");
+            });
 
         }
 
-        if(jenisPenama.value==="lain"){
+        //---------------------------------
+        // ORANG LAIN
+        //---------------------------------
 
-            lainSection.classList.remove("hidden");
+        if (item.jenisPenama === "lain") {
+
+            row.querySelector(".penama").value =
+                item.penamaLain?.nama || "";
+
+            row.querySelector(".penamaIC").value =
+                item.penamaLain?.ic || "";
+
+            row.querySelector(".penamaHubungan").value =
+                item.penamaLain?.hubungan || "";
+
+            row.querySelector(".bahagianPenamaLain").value =
+                item.penamaLain?.bahagian || "";
 
         }
 
-    };
+    });
 
-    jenisPenama.addEventListener(
-        "change",
-        updatePenama
-    );
-
-    updatePenama();
-
-row.querySelector(".pilihWarisPenama").value =
-item.warisDipilih || "";
-
-row.querySelector(".pilihWarisPenama")
-.dispatchEvent(new Event("change"));
-  
-});
-  
 }
 
 if(data.takaful){
@@ -2771,87 +2695,101 @@ document
 
 });
 
-const hartaBerpenama = [];
+const hartaBerpenama=[];
 
 document
-.querySelectorAll(".jenisBerpenama")
-.forEach((item,index)=>{
+.querySelectorAll(
+"#hartaBerpenamaContainer > div"
+)
+.forEach(row=>{
 
-const jenisPenama =
-document.querySelectorAll(".jenisPenama")[index].value;
+const jenis=
+row.querySelector(".jenisBerpenama").value;
 
-let penama = "";
-let ic = "";
-let hubungan = "";
-let warisDipilih = "";
+const akaun=
+row.querySelector(".akaunBerpenama").value;
+
+const jenisPenama=
+row.querySelector(".jenisPenama").value;
+
+const penamaWaris=[];
 
 if(jenisPenama==="waris"){
 
-    warisDipilih =
-    document.querySelectorAll(".pilihWarisPenama")[index].value;
+row
+.querySelectorAll(".penamaWarisRow")
+.forEach(r=>{
 
-    const warisIndex =
-    [...document.querySelectorAll(".namaWaris")]
-    .findIndex(x=>x.value===warisDipilih);
+const nama=
+r.querySelector(".pilihWarisPenama").value;
 
-    if(warisIndex>=0){
+const bahagian=
+r.querySelector(".bahagianPenamaWaris").value;
 
-        penama =
-        document.querySelectorAll(".namaWaris")[warisIndex].value;
+const idx=
+[...document.querySelectorAll(".namaWaris")]
+.findIndex(
+x=>x.value===nama
+);
 
-        ic =
-        document.querySelectorAll(".icWaris")[warisIndex].value;
+penamaWaris.push({
 
-        hubungan =
-        document.querySelectorAll(".hubunganWaris")[warisIndex].value;
+nama,
 
-    }
+ic:
+idx>=0
+?
+document.querySelectorAll(".icWaris")[idx].value
+:
+"",
+
+hubungan:
+idx>=0
+?
+document.querySelectorAll(".hubunganWaris")[idx].value
+:
+"",
+
+bahagian
+
+});
+
+});
 
 }
 
-else{
+const penamaLain={
 
-    penama =
-    document.querySelectorAll(".penama")[index].value;
+nama:
+row.querySelector(".penama")?.value || "",
 
-    ic =
-    document.querySelectorAll(".penamaIC")[index].value;
+ic:
+row.querySelector(".penamaIC")?.value || "",
 
-    hubungan =
-    document.querySelectorAll(".penamaHubungan")[index].value;
+hubungan:
+row.querySelector(".penamaHubungan")?.value || "",
 
-}
+bahagian:
+row.querySelector(".bahagianPenamaLain")?.value || ""
+
+};
 
 hartaBerpenama.push({
 
-jenis:
-document.querySelectorAll(".jenisBerpenama")[index].value,
+jenis,
 
-akaun:
-document.querySelectorAll(".akaunBerpenama")[index].value,
+akaun,
 
-jenisPenama:
 jenisPenama,
 
-warisDipilih:
-warisDipilih,
+penamaWaris,
 
-penama:
-penama,
-
-ic:
-ic,
-
-hubungan:
-hubungan,
-
-bahagian:
-document.querySelectorAll(".bahagianBerpenama")[index].value
+penamaLain
 
 });
 
 });
-
+          
 const takaful = [];
 
 document
@@ -4102,28 +4040,17 @@ document
 .getElementById("addBerpenamaBtn")
 .addEventListener("click",()=>{
 
-const html = `
+const html=`
 
 <div class="border rounded-xl p-4 space-y-3 mb-4">
 
 <select
 class="w-full border rounded-lg p-3 jenisBerpenama">
 
-<option value="">
-Pilih Jenis
-</option>
-
-<option value="KWSP">
-KWSP
-</option>
-
-<option value="Tabung Haji">
-Tabung Haji
-</option>
-
-<option value="ASB">
-ASB
-</option>
+<option value="">Pilih Jenis</option>
+<option value="KWSP">KWSP</option>
+<option value="Tabung Haji">Tabung Haji</option>
+<option value="ASB">ASB</option>
 
 </select>
 
@@ -4135,34 +4062,40 @@ placeholder="No Akaun">
 <select
 class="w-full border rounded-lg p-3 jenisPenama">
 
-<option value="">
-Pilih Penama
-</option>
-
-<option value="waris">
-Waris
-</option>
-
-<option value="lain">
-Orang Lain
-</option>
+<option value="">Pilih Penama</option>
+<option value="waris">Waris</option>
+<option value="lain">Orang Lain</option>
 
 </select>
 
 <div class="penamaWarisSection hidden">
 
-<select
-class="w-full border rounded-lg p-3 pilihWarisPenama">
+<div class="penamaWarisContainer">
+</div>
 
-<option value="">
-Pilih Waris
-</option>
+<div class="flex gap-2 mt-3">
 
-</select>
+<button
+type="button"
+class="addPenamaWarisBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
+
++ Tambah Penama
+
+</button>
+
+<button
+type="button"
+class="deletePenamaWarisBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam Penama
+
+</button>
 
 </div>
 
-<div class="penamaLainSection hidden">
+</div>
+
+<div class="penamaLainSection hidden space-y-3">
 
 <input
 type="text"
@@ -4179,18 +4112,18 @@ type="text"
 class="w-full border rounded-lg p-3 penamaHubungan"
 placeholder="Hubungan">
 
-</div>
-
 <input
 type="number"
-class="w-full border rounded-lg p-3 bahagianBerpenama"
+class="w-full border rounded-lg p-3 bahagianPenamaLain"
 placeholder="Bahagian (%)">
+
+</div>
 
 <button
 type="button"
 class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
 
-Padam
+Padam Harta
 
 </button>
 
@@ -4205,106 +4138,84 @@ document
 html
 );
 
-populateWarisDropdownPenama();
-  
-const row =
+const row=
 document.querySelector(
 "#hartaBerpenamaContainer > div:last-child"
 );
 
-const jenisPenama =
+const jenisPenama=
 row.querySelector(".jenisPenama");
 
-const warisSection =
+const warisSection=
 row.querySelector(".penamaWarisSection");
 
-const lainSection =
+const lainSection=
 row.querySelector(".penamaLainSection");
 
-const penamaContainer =
+const penamaContainer=
 row.querySelector(".penamaWarisContainer");
 
-const addBtn =
+const addBtn=
 row.querySelector(".addPenamaWarisBtn");
 
-const deleteBtn =
+const deleteBtn=
 row.querySelector(".deletePenamaWarisBtn");
-  
-jenisPenama.addEventListener("change", function () {
 
-    warisSection.classList.add("hidden");
-    lainSection.classList.add("hidden");
+jenisPenama.addEventListener("change",()=>{
 
-    if (this.value === "waris") {
-        warisSection.classList.remove("hidden");
-    }
+warisSection.classList.add("hidden");
+lainSection.classList.add("hidden");
 
-    if (this.value === "lain") {
-        lainSection.classList.remove("hidden");
-    }
+if(jenisPenama.value==="waris"){
 
-});
+warisSection.classList.remove("hidden");
 
-addBtn.addEventListener("click",()=>{
+if(
+penamaContainer.children.length===0
+){
 
-    addPenamaWaris(penamaContainer);
-
-});
-
-deleteBtn.addEventListener("click",()=>{
-
-    const rows = penamaContainer.children;
-
-    if(rows.length>0){
-        rows[rows.length-1].remove();
-    }
-
-});
-  
-pilihWaris.addEventListener("change",()=>{
-
-const warisIndex =
-[...document.querySelectorAll(".namaWaris")]
-.findIndex(
-x=>x.value===pilihWaris.value
+addPenamaWaris(
+penamaContainer
 );
 
-if(warisIndex<0) return;
+}
 
-row.querySelector(".penama").value =
-document.querySelectorAll(".namaWaris")[warisIndex].value;
+}
 
-row.querySelector(".penamaIC").value =
-document.querySelectorAll(".icWaris")[warisIndex].value;
+if(jenisPenama.value==="lain"){
 
-row.querySelector(".penamaHubungan").value =
-document.querySelectorAll(".hubunganWaris")[warisIndex].value;
-  
+lainSection.classList.remove("hidden");
+
+}
+
 });
 
 addBtn.addEventListener("click",()=>{
 
-    addPenamaWaris(
-        penamaContainer
-    );
+addPenamaWaris(
+penamaContainer
+);
 
 });
 
 deleteBtn.addEventListener("click",()=>{
 
-    const rows =
-    penamaContainer.children;
+const rows=
+penamaContainer.querySelectorAll(
+".penamaWarisRow"
+);
 
-    if(rows.length>0){
+if(rows.length){
 
-        rows[rows.length-1].remove();
+rows[
+rows.length-1
+].remove();
 
-    }
+}
 
 });
-  
-});
 
+});
 document
 .getElementById("addTakafulBtn")
 .addEventListener("click",()=>{
