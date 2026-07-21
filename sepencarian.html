@@ -1865,58 +1865,77 @@ document.getElementById(
 "hartaBerpenamaContainer"
 ).insertAdjacentHTML(
 "beforeend",
+  
 `
-
 <div class="border rounded-xl p-4 space-y-3 mb-4">
 
-<select
-class="w-full border rounded-lg p-3 jenisBerpenama">
+<select class="w-full border rounded-lg p-3 jenisBerpenama">
 
-<option value="">
-Pilih Jenis
-</option>
+<option value="">Pilih Jenis</option>
 
-<option value="KWSP"
-${item.jenis==="KWSP"?"selected":""}>
-KWSP
-</option>
+<option value="KWSP" ${item.jenis==="KWSP"?"selected":""}>KWSP</option>
 
-<option value="Tabung Haji"
-${item.jenis==="Tabung Haji"?"selected":""}>
-Tabung Haji
-</option>
+<option value="Tabung Haji" ${item.jenis==="Tabung Haji"?"selected":""}>Tabung Haji</option>
 
-<option value="ASB"
-${item.jenis==="ASB"?"selected":""}>
-ASB
-</option>
+<option value="ASB" ${item.jenis==="ASB"?"selected":""}>ASB</option>
 
 </select>
 
 <input
 type="text"
 class="w-full border rounded-lg p-3 akaunBerpenama"
-value="${item.akaun || ''}" placeholder="No Akaun">
+value="${item.akaun || ''}"
+placeholder="No Akaun">
+
+<select
+class="w-full border rounded-lg p-3 jenisPenama">
+
+<option value="">Pilih Penama</option>
+
+<option value="waris" ${item.jenisPenama==="waris"?"selected":""}>Waris</option>
+
+<option value="lain" ${item.jenisPenama==="lain"?"selected":""}>Orang Lain</option>
+
+</select>
+
+<div class="penamaWarisSection hidden">
+
+<select
+class="w-full border rounded-lg p-3 pilihWarisPenama">
+
+<option value="">Pilih Waris</option>
+
+</select>
+
+</div>
+
+<div class="penamaLainSection hidden">
 
 <input
 type="text"
-class="w-full border rounded-lg p-3 penamaBerpenama"
-value="${item.penama || ''}" placeholder="Nama Penama">
+class="w-full border rounded-lg p-3 penama"
+value="${item.penama || ''}"
+placeholder="Nama Penama">
 
 <input
 type="text"
-class="w-full border rounded-lg p-3 icPenamaBerpenama"
-value="${item.ic || ''}" placeholder="No IC">
+class="w-full border rounded-lg p-3 penamaIC"
+value="${item.ic || ''}"
+placeholder="No IC">
 
 <input
 type="text"
-class="w-full border rounded-lg p-3 hubunganPenamaBerpenama"
-value="${item.hubungan || ''}" placeholder="Hubungan">
+class="w-full border rounded-lg p-3 penamaHubungan"
+value="${item.hubungan || ''}"
+placeholder="Hubungan">
+
+</div>
 
 <input
 type="number"
 class="w-full border rounded-lg p-3 bahagianBerpenama"
-value="${item.bahagian || ''}" placeholder="Bahagian (%)">
+value="${item.bahagian || ''}"
+placeholder="Bahagian (%)">
 
 <button
 type="button"
@@ -1933,6 +1952,49 @@ Padam
 
 });
 
+document
+.querySelectorAll("#hartaBerpenamaContainer > div")
+.forEach(row=>{
+
+    const jenisPenama =
+    row.querySelector(".jenisPenama");
+
+    const warisSection =
+    row.querySelector(".penamaWarisSection");
+
+    const lainSection =
+    row.querySelector(".penamaLainSection");
+
+    if(!jenisPenama) return;
+
+    const updatePenama = ()=>{
+
+        warisSection.classList.add("hidden");
+        lainSection.classList.add("hidden");
+
+        if(jenisPenama.value==="waris"){
+
+            warisSection.classList.remove("hidden");
+
+        }
+
+        if(jenisPenama.value==="lain"){
+
+            lainSection.classList.remove("hidden");
+
+        }
+
+    };
+
+    jenisPenama.addEventListener(
+        "change",
+        updatePenama
+    );
+
+    updatePenama();
+
+});
+  
 }
 
 if(data.takaful){
@@ -2690,7 +2752,52 @@ const hartaBerpenama = [];
 document
 .querySelectorAll(".jenisBerpenama")
 .forEach((item,index)=>{
- 
+
+const jenisPenama =
+document.querySelectorAll(".jenisPenama")[index].value;
+
+let penama = "";
+let ic = "";
+let hubungan = "";
+let warisDipilih = "";
+
+if(jenisPenama==="waris"){
+
+    warisDipilih =
+    document.querySelectorAll(".pilihWarisPenama")[index].value;
+
+    const warisIndex =
+    [...document.querySelectorAll(".namaWaris")]
+    .findIndex(x=>x.value===warisDipilih);
+
+    if(warisIndex>=0){
+
+        penama =
+        document.querySelectorAll(".namaWaris")[warisIndex].value;
+
+        ic =
+        document.querySelectorAll(".icWaris")[warisIndex].value;
+
+        hubungan =
+        document.querySelectorAll(".hubunganWaris")[warisIndex].value;
+
+    }
+
+}
+
+else{
+
+    penama =
+    document.querySelectorAll(".penama")[index].value;
+
+    ic =
+    document.querySelectorAll(".penamaIC")[index].value;
+
+    hubungan =
+    document.querySelectorAll(".penamaHubungan")[index].value;
+
+}
+
 hartaBerpenama.push({
 
 jenis:
@@ -2699,14 +2806,20 @@ document.querySelectorAll(".jenisBerpenama")[index].value,
 akaun:
 document.querySelectorAll(".akaunBerpenama")[index].value,
 
+jenisPenama:
+jenisPenama,
+
+warisDipilih:
+warisDipilih,
+
 penama:
-document.querySelectorAll(".penamaBerpenama")[index].value,
+penama,
 
 ic:
-document.querySelectorAll(".icPenamaBerpenama")[index].value,
+ic,
 
 hubungan:
-document.querySelectorAll(".hubunganPenamaBerpenama")[index].value,
+hubungan,
 
 bahagian:
 document.querySelectorAll(".bahagianBerpenama")[index].value
