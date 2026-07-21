@@ -951,7 +951,51 @@ font-size:14px;
 
 data.hartaBerpenama?.forEach(item=>{
 
-lampiranBerpenama += `
+    // PENAMA WARIS
+    if(item.jenisPenama==="waris"){
+
+        (item.penamaWaris || []).forEach((w,index)=>{
+
+            lampiranBerpenama += `
+
+<tr>
+
+<td style="border:1px solid #000;padding:8px;">
+${index===0 ? (item.jenis || "-") : ""}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${index===0 ? (item.akaun || "-") : ""}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.nama || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.ic || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.hubungan || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.bahagian || "-"}%
+</td>
+
+</tr>
+
+`;
+
+        });
+
+    }
+
+    // PENAMA ORANG LAIN
+    else{
+
+        lampiranBerpenama += `
 
 <tr>
 
@@ -964,27 +1008,28 @@ ${item.akaun || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.penama || "-"}
+${item.penamaLain?.nama || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.ic || "-"}
+${item.penamaLain?.ic || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.hubungan || "-"}
+${item.penamaLain?.hubungan || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.bahagian || "-"}
+${item.penamaLain?.bahagian || "-"}%
 </td>
 
 </tr>
 
 `;
 
-});
+    }
 
+});
 lampiranBerpenama += `
 </table>
 `;
