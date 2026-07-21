@@ -460,7 +460,7 @@ document.getElementById(
 
 let hartaBerpenamaHTML = "";
 
-(data.hartaBerpenama || []).forEach((item,index)=>{
+(data.hartaBerpenama || []).forEach(item=>{
 
 hartaBerpenamaHTML += `
 <div class="border rounded-lg p-3 mb-3">
@@ -468,15 +468,49 @@ hartaBerpenamaHTML += `
 <p><strong>${item.jenis}</strong></p>
 
 <p>No Akaun: ${item.akaun}</p>
+`;
 
-<p>Penama: ${item.penama}</p>
+if(item.jenisPenama==="waris"){
 
-<p>IC: ${item.ic}</p>
+(item.penamaWaris || []).forEach((w,index)=>{
 
-<p>Hubungan: ${item.hubungan}</p>
+hartaBerpenamaHTML += `
 
-<p>Bahagian: ${item.bahagian}%</p>
+<hr class="my-2">
 
+<p><strong>Penama ${index+1}</strong></p>
+
+<p>Nama: ${w.nama}</p>
+
+<p>IC: ${w.ic}</p>
+
+<p>Hubungan: ${w.hubungan}</p>
+
+<p>Bahagian: ${w.bahagian}%</p>
+
+`;
+
+});
+
+}
+
+else if(item.jenisPenama==="lain"){
+
+hartaBerpenamaHTML += `
+
+<p>Nama: ${item.penamaLain?.nama || ""}</p>
+
+<p>IC: ${item.penamaLain?.ic || ""}</p>
+
+<p>Hubungan: ${item.penamaLain?.hubungan || ""}</p>
+
+<p>Bahagian: ${item.penamaLain?.bahagian || ""}%</p>
+
+`;
+
+}
+
+hartaBerpenamaHTML += `
 </div>
 `;
 
