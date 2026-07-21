@@ -715,18 +715,32 @@ Orang Lain
 
 <div class="penamaWarisSection hidden">
 
-<select
-class="w-full border rounded-lg p-3 pilihWarisPenama">
+<div class="penamaWarisContainer">
+</div>
 
-<option value="">
-Pilih Waris
-</option>
+<div class="flex gap-2 mt-3">
 
-</select>
+<button
+type="button"
+class="addPenamaWarisBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
+
++ Tambah Penama
+
+</button>
+
+<button
+type="button"
+class="deletePenamaWarisBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam Penama
+
+</button>
 
 </div>
 
-<div class="penamaLainSection hidden">
+</div>
+
+<div class="penamaLainSection hidden space-y-3">
 
 <input
 type="text"
@@ -744,7 +758,6 @@ class="w-full border rounded-lg p-3 penamaHubungan"
 placeholder="Hubungan">
 
 </div>
-
 <input
 type="number"
 class="w-full border rounded-lg p-3 bahagianBerpenama"
@@ -3552,6 +3565,59 @@ populateWarisDropdownHibahTakAlih();
 
 }
 
+function addPenamaWaris(container){
+
+const html = `
+
+<div class="grid grid-cols-12 gap-3 mb-3 penamaWarisRow">
+
+<select
+class="col-span-8 w-full border rounded-lg p-3 pilihWarisPenama">
+
+<option value="">
+Pilih Waris
+</option>
+
+</select>
+
+<input
+type="number"
+class="col-span-4 w-full border rounded-lg p-3 bahagianPenamaWaris"
+placeholder="%">
+
+</div>
+
+`;
+
+container.insertAdjacentHTML("beforeend", html);
+
+populateWarisDropdownPenama();
+
+const newRow =
+container.querySelector(".penamaWarisRow:last-child");
+
+const dropdown =
+newRow.querySelector(".pilihWarisPenama");
+
+dropdown.addEventListener("change",()=>{
+
+    const warisIndex =
+    [...document.querySelectorAll(".namaWaris")]
+    .findIndex(
+        x=>x.value===dropdown.value
+    );
+
+    if(warisIndex<0) return;
+
+    console.log(
+        "Penama dipilih:",
+        dropdown.value
+    );
+
+});
+
+}
+    
 function populatePemegangAmanahPasangan(){
 
 const select =
@@ -4155,13 +4221,17 @@ row.querySelector(".penamaWarisSection");
 const lainSection =
 row.querySelector(".penamaLainSection");
 
-const pilihWaris =
-row.querySelector(".pilihWarisPenama");
+const penamaContainer =
+row.querySelector(".penamaWarisContainer");
+
+const addBtn =
+row.querySelector(".addPenamaWarisBtn");
+
+const deleteBtn =
+row.querySelector(".deletePenamaWarisBtn");
   
 jenisPenama.addEventListener("change", function () {
 
-  console.log("CHANGE", this.value);
-  
     warisSection.classList.add("hidden");
     lainSection.classList.add("hidden");
 
@@ -4175,6 +4245,22 @@ jenisPenama.addEventListener("change", function () {
 
 });
 
+addBtn.addEventListener("click",()=>{
+
+    addPenamaWaris(penamaContainer);
+
+});
+
+deleteBtn.addEventListener("click",()=>{
+
+    const rows = penamaContainer.children;
+
+    if(rows.length>0){
+        rows[rows.length-1].remove();
+    }
+
+});
+  
 pilihWaris.addEventListener("change",()=>{
 
 const warisIndex =
@@ -4194,6 +4280,27 @@ document.querySelectorAll(".icWaris")[warisIndex].value;
 row.querySelector(".penamaHubungan").value =
 document.querySelectorAll(".hubunganWaris")[warisIndex].value;
   
+});
+
+addBtn.addEventListener("click",()=>{
+
+    addPenamaWaris(
+        penamaContainer
+    );
+
+});
+
+deleteBtn.addEventListener("click",()=>{
+
+    const rows =
+    penamaContainer.children;
+
+    if(rows.length>0){
+
+        rows[rows.length-1].remove();
+
+    }
+
 });
   
 });
