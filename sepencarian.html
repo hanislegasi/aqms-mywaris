@@ -4746,25 +4746,27 @@ html
 function setupKategoriTakAlih(){
 
 document
-.queryorAll(".kategoriTakAlih")
-.forEach((,index)=>{
+.querySelectorAll(".kategoriTakAlih")
+.forEach((select,index)=>{
 
-.addEventListener(
+select.addEventListener(
 "change",
 ()=>{
 
 const detail =
-document.queryorAll(
+document.querySelectorAll(
 ".detailKategoriTakAlih"
 )[index];
 
+if(!detail) return;
+
 const hibah =
-detail.queryor(
+detail.querySelector(
 ".hibahSectionTakAlih"
 );
 
 const sepencarian =
-detail.queryor(
+detail.querySelector(
 ".sepencarianSectionTakAlih"
 );
 
@@ -4774,7 +4776,7 @@ hibah.classList.add("hidden");
 
 sepencarian.classList.add("hidden");
 
-if(.value==="hibah"){
+if(select.value==="hibah"){
 
 detail.classList.remove("hidden");
 
@@ -4794,7 +4796,7 @@ sepencarian.classList.remove("hidden");
 
 });
 
-}    
+}  
 
 document
 .addEventListener(
