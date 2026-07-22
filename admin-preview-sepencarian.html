@@ -1035,7 +1035,12 @@ lampiranBerpenama += `
 `;
 
 let lampiranTakaful = `
-<table style="width:100%;border-collapse:collapse;font-size:14px;">
+<table
+style="
+width:100%;
+border-collapse:collapse;
+font-size:14px;
+">
 
 <tr>
 <th style="border:1px solid #000;padding:8px;">Syarikat</th>
@@ -1049,7 +1054,51 @@ let lampiranTakaful = `
 
 data.takaful?.forEach(item=>{
 
-lampiranTakaful += `
+    // PENERIMA WARIS
+    if(item.jenisPenerima==="waris"){
+
+        (item.penerimaWaris || []).forEach((w,index)=>{
+
+            lampiranTakaful += `
+
+<tr>
+
+<td style="border:1px solid #000;padding:8px;">
+${index===0 ? (item.syarikat || "-") : ""}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${index===0 ? (item.polisi || "-") : ""}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.nama || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.ic || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.hubungan || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.bahagian || "-"}%
+</td>
+
+</tr>
+
+`;
+
+        });
+
+    }
+
+    // PENERIMA ORANG LAIN
+    else{
+
+        lampiranTakaful += `
 
 <tr>
 
@@ -1062,24 +1111,26 @@ ${item.polisi || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.penerima || "-"}
+${item.penerimaLain?.nama || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.ic || "-"}
+${item.penerimaLain?.ic || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.hubungan || "-"}
+${item.penerimaLain?.hubungan || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.bahagian || "-"}
+${item.penerimaLain?.bahagian || "-"}%
 </td>
 
 </tr>
 
 `;
+
+    }
 
 });
 
