@@ -1798,6 +1798,55 @@ pihak.benefisiari
                         
 document.getElementById("sectionSepencarian").innerHTML = hibahHTML;                        
 
+let sepencarianHTML = "";
+
+Object.values(groupedSepencarian).forEach(item=>{
+
+    const pihak = getPihakPenerima(item);
+
+    sepencarianHTML += sepencarianContent
+
+    .replaceAll(
+        "{{TABLE_ALIH}}",
+        generateAlihTable(item.hartaAlih)
+    )
+
+    .replaceAll(
+        "{{TABLE_TAK_ALIH}}",
+        generateTakAlihTable(item.hartaTakAlih)
+    )
+
+    .replaceAll(
+        "{{PEMEGANG_AMANAH}}",
+        generatePemegangAmanah(item)
+    )
+
+    .replaceAll(
+        "{{NAMA_PENERIMA}}",
+        pihak.nama
+    )
+
+    .replaceAll(
+        "{{IC_PENERIMA}}",
+        pihak.ic
+    )
+
+    .replaceAll(
+        "{{HUBUNGAN}}",
+        item.hubungan
+    )
+
+    .replaceAll(
+        "{{PERATUS}}",
+        item.peratus
+    );
+
+});
+
+document.getElementById(
+    "sectionSepencarian"
+).innerHTML = sepencarianHTML;
+                        
 const currentDocRef =
 data.docRef ||
 data.docRefNo ||
