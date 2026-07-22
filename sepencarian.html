@@ -2656,6 +2656,34 @@ document
 
 });
 
+let penerimaSepencarian = [];
+
+const namaSepencarian =
+document.querySelectorAll(
+".namaPenerimaSepencarian"
+)[index]?.value || "";
+
+if(namaSepencarian){
+
+    const waris =
+    data.waris.find(
+        w => w.nama === namaSepencarian
+    );
+
+    penerimaSepencarian.push({
+
+        nama: namaSepencarian,
+
+        ic: waris?.ic || "",
+
+        hubungan: waris?.hubungan || "",
+
+        peratus: "100"
+
+    });
+
+}
+  
 hartaAlih.push({
 
 nama:
@@ -2677,12 +2705,7 @@ penerimaHibah:
 penerimaHibah,
 
 penerimaSepencarian:
-document
-.querySelectorAll(
-".namaPenerimaSepencarian"
-)
-[index]
-?.value || ""
+penerimaSepencarian
 
 });
 
