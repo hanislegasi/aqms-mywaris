@@ -2842,35 +2842,98 @@ penamaLain
 
 });
           
-const takaful = [];
+const takaful=[];
 
 document
-.querySelectorAll(".syarikatTakaful")
-.forEach((item,index)=>{
+.querySelectorAll("#takafulContainer > div")
+.forEach(row=>{
 
-takaful.push({
+const syarikat=
+row.querySelector(".syarikatTakaful").value;
 
-syarikat:
-document.querySelectorAll(".syarikatTakaful")[index].value,
+const polisi=
+row.querySelector(".polisiTakaful").value;
 
-polisi:
-document.querySelectorAll(".polisiTakaful")[index].value,
+const jenisPenerima=
+row.querySelector(".jenisPenerimaTakaful").value;
 
-penerima:
-document.querySelectorAll(".penerimaTakaful")[index].value,
+const penerimaWaris=[];
+
+if(jenisPenerima==="waris"){
+
+row
+.querySelectorAll(".penerimaWarisTakafulRow")
+.forEach(r=>{
+
+const nama=
+r.querySelector(".pilihWarisTakaful").value;
+
+const bahagian=
+r.querySelector(".bahagianWarisTakaful").value;
+
+const idx=
+[...document.querySelectorAll(".namaWaris")]
+.findIndex(
+x=>x.value===nama
+);
+
+penerimaWaris.push({
+
+nama,
 
 ic:
-document.querySelectorAll(".icPenerimaTakaful")[index].value,
+idx>=0
+?
+document.querySelectorAll(".icWaris")[idx].value
+:
+"",
 
 hubungan:
-document.querySelectorAll(".hubunganTakaful")[index].value,
+idx>=0
+?
+document.querySelectorAll(".hubunganWaris")[idx].value
+:
+"",
 
-bahagian:
-document.querySelectorAll(".bahagianTakaful")[index].value
+bahagian
 
 });
 
-});         
+});
+
+}
+
+const penerimaLain={
+
+nama:
+row.querySelector(".penerimaTakaful")?.value || "",
+
+ic:
+row.querySelector(".icPenerimaTakaful")?.value || "",
+
+hubungan:
+row.querySelector(".hubunganTakaful")?.value || "",
+
+bahagian:
+row.querySelector(".bahagianPenerimaTakaful")?.value || ""
+
+};
+
+takaful.push({
+
+syarikat,
+
+polisi,
+
+jenisPenerima,
+
+penerimaWaris,
+
+penerimaLain
+
+});
+
+});
 
 const pemiutang = [];
 
