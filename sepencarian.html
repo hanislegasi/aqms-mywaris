@@ -2591,13 +2591,13 @@ document.querySelectorAll(".notaWasiat")[index].value
 
 });
 
-const waris = [];
+const warisList = [];
 
 document
 .querySelectorAll(".namaWaris")
 .forEach((item,index)=>{
 
-waris.push({
+warisList.push({
 
 nama:
 document.querySelectorAll(".namaWaris")[index].value,
@@ -2665,7 +2665,7 @@ document.querySelectorAll(
 
 if(namaSepencarian){
 
-    const waris =
+    const warisDipilih =
     data.find(
         w => w.nama === namaSepencarian
     );
@@ -2674,7 +2674,7 @@ if(namaSepencarian){
 
         nama: namaSepencarian,
 
-        ic: waris?.ic || "",
+        ic: warisDipilih?.ic || "",
 
         hubungan: warisDipilih?.hubungan || "",
 
@@ -2758,7 +2758,7 @@ document.querySelectorAll(
 
 if(namaSepencarianTakAlih){
 
-    const waris =
+    const warisDipilih =
     data.find(
         w => w.nama === namaSepencarianTakAlih
     );
@@ -2767,7 +2767,7 @@ if(namaSepencarianTakAlih){
 
         nama: namaSepencarianTakAlih,
 
-        ic: waris?.ic || "",
+        ic: warisDipilih?.ic || "",
 
         hubungan: warisDipilih?.hubungan || "",
 
