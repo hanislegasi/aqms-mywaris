@@ -2710,6 +2710,7 @@ penerimaSepencarian
 });
 
 });
+          
 const hartaTakAlih = [];
 
 document
@@ -2747,6 +2748,34 @@ document
 });
 
 });
+
+let penerimaSepencarianTakAlih = [];
+
+const namaSepencarianTakAlih =
+document.querySelectorAll(
+".namaPenerimaSepencarianTakAlih"
+)[index]?.value || "";
+
+if(namaSepencarianTakAlih){
+
+    const waris =
+    data.waris.find(
+        w => w.nama === namaSepencarianTakAlih
+    );
+
+    penerimaSepencarianTakAlih.push({
+
+        nama: namaSepencarianTakAlih,
+
+        ic: waris?.ic || "",
+
+        hubungan: waris?.hubungan || "",
+
+        peratus: "100"
+
+    });
+
+}
   
 hartaTakAlih.push({
 
@@ -2772,12 +2801,7 @@ penerimaHibahTakAlih:
 penerimaHibahTakAlih,
 
 penerimaSepencarianTakAlih:
-document
-.querySelectorAll(
-".namaPenerimaSepencarianTakAlih"
-)
-[index]
-?.value || ""
+penerimaSepencarianTakAlih
 
 });
 
