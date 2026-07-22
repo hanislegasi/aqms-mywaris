@@ -2666,7 +2666,7 @@ document.querySelectorAll(
 if(namaSepencarian){
 
     const waris =
-    data.waris.find(
+    data.find(
         w => w.nama === namaSepencarian
     );
 
@@ -2676,7 +2676,7 @@ if(namaSepencarian){
 
         ic: waris?.ic || "",
 
-        hubungan: waris?.hubungan || "",
+        hubungan: warisDipilih?.hubungan || "",
 
         peratus: "100"
 
@@ -2759,7 +2759,7 @@ document.querySelectorAll(
 if(namaSepencarianTakAlih){
 
     const waris =
-    data.waris.find(
+    data.find(
         w => w.nama === namaSepencarianTakAlih
     );
 
@@ -2769,7 +2769,7 @@ if(namaSepencarianTakAlih){
 
         ic: waris?.ic || "",
 
-        hubungan: waris?.hubungan || "",
+        hubungan: warisDipilih?.hubungan || "",
 
         peratus: "100"
 
