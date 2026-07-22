@@ -604,7 +604,7 @@ senaraiPenerima.forEach(penerima=>{
     doc(db, "users", userId)
 );
 
-const lampiranSnap =
+const hibahLampiranSnap =
 await getDocs(
 collection(
 db,
@@ -695,7 +695,7 @@ senaraiPenerima.forEach(penerima=>{
                         
                         
 
-const lampiranSnap =
+const sepencarianLampiranSnap =
 await getDocs(
 collection(
 db,
@@ -705,7 +705,7 @@ userId,
 )
 );
                         
-const userData = userDoc.data();
+
 
 const groupedSepencarian = groupSepencarianByRecipient(data);
 
