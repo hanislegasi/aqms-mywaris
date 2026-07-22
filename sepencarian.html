@@ -1653,7 +1653,7 @@ document.querySelectorAll(
 if(select){
 
 select.value =
-item.penerimaSepencarian || "";
+item.penerimaSepencarian?.[0]?.nama || "";
 
 }
 
@@ -1909,7 +1909,7 @@ document.querySelectorAll(
 if(pasangan){
 
 pasangan.value =
-item.penerimaSepencarianTakAlih || "";
+item.penerimaSepencarianTakAlih?.[0]?.nama || "";
 
 }
 
@@ -4501,7 +4501,7 @@ type="text"
 class="w-full border rounded-lg p-3 polisiTakaful"
 placeholder="Nama Polisi">
 
-<select
+<
 class="w-full border rounded-lg p-3 jenisPenerimaTakaful">
 
 <option value="">
@@ -4516,7 +4516,7 @@ Waris
 Orang Lain
 </option>
 
-</select>
+</>
 
 <div class="penerimaWarisTakafulSection hidden">
 
@@ -4589,18 +4589,18 @@ html
 );
 
 const row=
-document.querySelector(
+document.queryor(
 "#takafulContainer > div:last-child"
 );
 
 const jenis=
-row.querySelector(".jenisPenerimaTakaful");
+row.queryor(".jenisPenerimaTakaful");
 
 const warisSection=
-row.querySelector(".penerimaWarisTakafulSection");
+row.queryor(".penerimaWarisTakafulSection");
 
 const lainSection=
-row.querySelector(".penerimaLainTakafulSection");
+row.queryor(".penerimaLainTakafulSection");
 
 jenis.addEventListener("change",()=>{
 
@@ -4612,7 +4612,7 @@ if(jenis.value==="waris"){
 warisSection.classList.remove("hidden");
 
 const container=
-row.querySelector(".penerimaWarisTakafulContainer");
+row.queryor(".penerimaWarisTakafulContainer");
 
 if(container.children.length===0){
 
@@ -4631,23 +4631,23 @@ lainSection.classList.remove("hidden");
 });
 
 row
-.querySelector(".addPenerimaWarisTakafulBtn")
+.queryor(".addPenerimaWarisTakafulBtn")
 .onclick=()=>{
 
 addPenerimaWarisTakaful(
 
-row.querySelector(".penerimaWarisTakafulContainer")
+row.queryor(".penerimaWarisTakafulContainer")
 
 );
 
 };
 
 row
-.querySelector(".deletePenerimaWarisTakafulBtn")
+.queryor(".deletePenerimaWarisTakafulBtn")
 .onclick=()=>{
 
 const container=
-row.querySelector(".penerimaWarisTakafulContainer");
+row.queryor(".penerimaWarisTakafulContainer");
 
 if(container.lastElementChild){
 
@@ -4746,25 +4746,25 @@ html
 function setupKategoriTakAlih(){
 
 document
-.querySelectorAll(".kategoriTakAlih")
-.forEach((select,index)=>{
+.queryorAll(".kategoriTakAlih")
+.forEach((,index)=>{
 
-select.addEventListener(
+.addEventListener(
 "change",
 ()=>{
 
 const detail =
-document.querySelectorAll(
+document.queryorAll(
 ".detailKategoriTakAlih"
 )[index];
 
 const hibah =
-detail.querySelector(
+detail.queryor(
 ".hibahSectionTakAlih"
 );
 
 const sepencarian =
-detail.querySelector(
+detail.queryor(
 ".sepencarianSectionTakAlih"
 );
 
@@ -4774,7 +4774,7 @@ hibah.classList.add("hidden");
 
 sepencarian.classList.add("hidden");
 
-if(select.value==="hibah"){
+if(.value==="hibah"){
 
 detail.classList.remove("hidden");
 
