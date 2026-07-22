@@ -4501,7 +4501,7 @@ type="text"
 class="w-full border rounded-lg p-3 polisiTakaful"
 placeholder="Nama Polisi">
 
-<
+<select
 class="w-full border rounded-lg p-3 jenisPenerimaTakaful">
 
 <option value="">
@@ -4516,7 +4516,7 @@ Waris
 Orang Lain
 </option>
 
-</>
+</select>
 
 <div class="penerimaWarisTakafulSection hidden">
 
@@ -4589,18 +4589,18 @@ html
 );
 
 const row=
-document.queryor(
+document.querySelector(
 "#takafulContainer > div:last-child"
 );
 
 const jenis=
-row.queryor(".jenisPenerimaTakaful");
+row.querySelector(".jenisPenerimaTakaful");
 
 const warisSection=
-row.queryor(".penerimaWarisTakafulSection");
+row.querySelector(".penerimaWarisTakafulSection");
 
 const lainSection=
-row.queryor(".penerimaLainTakafulSection");
+row.querySelector(".penerimaLainTakafulSection");
 
 jenis.addEventListener("change",()=>{
 
@@ -4612,7 +4612,7 @@ if(jenis.value==="waris"){
 warisSection.classList.remove("hidden");
 
 const container=
-row.queryor(".penerimaWarisTakafulContainer");
+row.querySelector(".penerimaWarisTakafulContainer");
 
 if(container.children.length===0){
 
@@ -4631,23 +4631,23 @@ lainSection.classList.remove("hidden");
 });
 
 row
-.queryor(".addPenerimaWarisTakafulBtn")
+.querySelector(".addPenerimaWarisTakafulBtn")
 .onclick=()=>{
 
 addPenerimaWarisTakaful(
 
-row.queryor(".penerimaWarisTakafulContainer")
+row.querySelector(".penerimaWarisTakafulContainer")
 
 );
 
 };
 
 row
-.queryor(".deletePenerimaWarisTakafulBtn")
+.querySelector(".deletePenerimaWarisTakafulBtn")
 .onclick=()=>{
 
 const container=
-row.queryor(".penerimaWarisTakafulContainer");
+row.querySelector(".penerimaWarisTakafulContainer");
 
 if(container.lastElementChild){
 
