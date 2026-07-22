@@ -102,6 +102,31 @@ break-before:page;
     text-align:justify;
 
 }
+        
+ #sectionSepencarian{
+
+    font-family:'Times New Roman', serif;
+    color:#222;
+    line-height:1.7;
+
+}
+
+#sectionSepencarian p{
+
+    font-size:16px;
+    text-align:justify;
+    line-height:1.7;
+    margin-top:0;
+    margin-bottom:14px;
+
+}
+
+#sectionSepencarian td,
+#sectionSepencarian li{
+    font-size:16px;
+    text-align:justify;
+
+}
 
  
         .pdf-footer{
@@ -180,7 +205,7 @@ margin:0 !important;
                 <!-- PAGE 1 (COVER) -->
                 <div class="a4-page">
                     <!-- Gunakan fallback imej jika gambar tempatan tiada untuk preview -->
-                    <img src="images/hibah-cover.png" 
+                    <img src="images/sepencarian-cover.png" 
                          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2100&auto=format&fit=crop';" 
                          class="absolute inset-0 w-full h-full object-cover" alt="Cover Wasiat" />
                     
@@ -275,6 +300,9 @@ class="border border-gray-300 p-5 font-medium">
 <div id="sectionWasiat">
 </div>
 
+<div id="sectionHibah">
+</div>
+                
 <div id="sectionSepencarian">
 </div>
 
@@ -499,8 +527,6 @@ const warisMap = {};
 
 });
 
-
-                        
 function groupHibahByRecipient(data){
 
     const grouped = {};
@@ -591,6 +617,99 @@ userId,
 const userData = userDoc.data();
 
 const groupedHibah = groupHibahByRecipient(data);
+
+                        
+                        
+function groupSepencarianByRecipient(data){
+
+    const grouped = {};
+
+    function addProperty(item, jenis){
+
+       const senaraiPenerima =
+    item.penerimaSepencarian ||
+    item.penerimaSepencarianTakAlih ||
+    [];
+
+if(!senaraiPenerima.length) return;
+
+senaraiPenerima.forEach(penerima=>{
+
+            const nama = penerima.nama?.trim();
+
+            if(!nama) return;
+
+            if(!grouped[nama]){
+
+    const info = warisMap[nama] || {};
+
+    grouped[nama] = {
+
+        nama,
+
+        ic: info.ic || "",
+        hubungan: info.hubungan || "",
+        alamat: info.alamat || "",
+        tarikhLahir: info.tarikhLahir || "",
+        telefon: info.telefon || "",
+        peratus: penerima.peratus || "",
+        
+        status: info.status || "",
+        pemegangAmanah: data.pemegangAmanah || {},
+            
+        hartaAlih: [],
+        hartaTakAlih: []
+
+    };
+
+}
+
+            
+
+            grouped[nama][jenis].push({
+
+                namaHarta:item.nama || "-",
+                rujukan:item.rujukan || "-",
+                nilai:item.nilai || "-",
+                pemilikan:item.pemilikan || "-",
+                kategori:item.kategori || "-",
+                peratus:penerima.peratus || "-"
+
+            });
+
+        });
+
+    }
+
+    (data.hartaAlih || []).forEach(item=>{
+        addProperty(item,"hartaAlih");
+    });
+
+    (data.hartaTakAlih || []).forEach(item=>{
+        addProperty(item,"hartaTakAlih");
+    });
+
+    return grouped;
+
+}
+                        
+                        const userDoc = await getDoc(
+    doc(db, "users", userId)
+);
+
+const lampiranSnap =
+await getDocs(
+collection(
+db,
+"users",
+userId,
+"sepencarianDocuments"
+)
+);
+                        
+const userData = userDoc.data();
+
+const groupedSepencarian = groupSepencarianByRecipient(data);
 
 
 
@@ -1673,7 +1792,7 @@ pihak.benefisiari
 
 });   
                         
-document.getElementById("sectionHibah").innerHTML = hibahHTML;                        
+document.getElementById("sectionSepencarian").innerHTML = hibahHTML;                        
 
 const currentDocRef =
 data.docRef ||
@@ -1792,6 +1911,8 @@ await addDoc(
     </script>
 
 <script src="wasiat-content.js"></script>
+
+<script src="hibah-content.js"></script>
     
 <script src="sepencarian-content.js"></script>
   
