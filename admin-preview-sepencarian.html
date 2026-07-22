@@ -633,6 +633,12 @@ function groupSepencarianByRecipient(data){
 
 if(!senaraiPenerima.length) return;
 
+console.log(item);
+console.log(item.penerimaSepencarian);
+console.log(item.penerimaSepencarianTakAlih);
+console.log(Array.isArray(item.penerimaSepencarian));
+console.log(Array.isArray(item.penerimaSepencarianTakAlih));
+        
 senaraiPenerima.forEach(penerima=>{
 
             const nama = penerima.nama?.trim();
