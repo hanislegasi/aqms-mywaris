@@ -1997,69 +1997,82 @@ if (data.hartaBerpenama) {
 
 }
 
-if(data.takaful){
+if (data.takaful) {
 
-document.getElementById(
-"takafulContainer"
-).innerHTML = "";
+    document.getElementById("takafulContainer").innerHTML = "";
 
-data.takaful.forEach(item=>{
+    data.takaful.forEach(item => {
 
-document.getElementById(
-"takafulContainer"
-).insertAdjacentHTML(
-"beforeend",
-`
+        document.getElementById("addTakafulBtn").click();
 
-<div class="border rounded-xl p-4 space-y-3 mb-4">
+        const row = document.querySelector(
+            "#takafulContainer > div:last-child"
+        );
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 syarikatTakaful"
-value="${item.syarikat || ''}" placeholder="Nama Syarikat">
+        row.querySelector(".syarikatTakaful").value =
+            item.syarikat || "";
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 polisiTakaful"
-value="${item.polisi || ''}" placeholder="Nama Polisi">
+        row.querySelector(".polisiTakaful").value =
+            item.polisi || "";
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 penerimaTakaful"
-value="${item.penerima || ''}" placeholder="Nama Penerima Pampasan">
+        row.querySelector(".jenisPenerimaTakaful").value =
+            item.jenisPenerima || "";
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 icPenerimaTakaful"
-value="${item.ic || ''}" placeholder="No IC">
+        row.querySelector(".jenisPenerimaTakaful")
+            .dispatchEvent(new Event("change"));
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 hubunganTakaful"
-value="${item.hubungan || ''}" placeholder="Hubungan">
+        //---------------------------------
+        // WARIS
+        //---------------------------------
 
-<input
-type="number"
-class="w-full border rounded-lg p-3 bahagianTakaful"
-value="${item.bahagian || ''}" placeholder="Bahagian (%)">
+        if (item.jenisPenerima === "waris") {
 
-<button
-type="button"
-class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+            const container =
+                row.querySelector(".penerimaWarisTakafulContainer");
 
-Padam
+            container.innerHTML = "";
 
-</button>
+            (item.penerimaWaris || []).forEach(w => {
 
-</div>
+                addPenerimaWarisTakaful(container);
 
-`
-);
+                const last =
+                    container.lastElementChild;
 
-});
+                last.querySelector(".pilihWarisTakaful").value =
+                    w.nama || "";
 
-}  
+                last.querySelector(".bahagianWarisTakaful").value =
+                    w.bahagian || "";
 
+            });
+
+        }
+
+        //---------------------------------
+        // ORANG LAIN
+        //---------------------------------
+
+        if (item.jenisPenerima === "lain") {
+
+            row.querySelector(".penerimaTakaful").value =
+                item.penerimaLain?.nama || "";
+
+            row.querySelector(".icPenerimaTakaful").value =
+                item.penerimaLain?.ic || "";
+
+            row.querySelector(".hubunganTakaful").value =
+                item.penerimaLain?.hubungan || "";
+
+            row.querySelector(".bahagianPenerimaTakaful").value =
+                item.penerimaLain?.bahagian || "";
+
+        }
+
+    });
+
+}
+  
 if(data.pemiutang){
 
 document.getElementById(
