@@ -1527,27 +1527,10 @@ Sekiranya mana-mana harta masih tertakluk kepada gadaian, pembiayaan atau apa-ap
 Pihak Pertama bertanggungjawab memastikan segala obligasi kepada institusi pembiaya dipatuhi mengikut perjanjian yang berkuat kuasa.
 </td>
 </tr>
+
 <tr>
 <td colspan="2" style="height:18px;"></td>
 </tr>
-
-</table>
-
-<div class="pdf-footer">
-<span class="footer-docref"></span>
-<span class="page-number"></span>
-</div>
-</div>
-
-<div class="a4-page p-[18mm]">
-
-<table
-style="
-width:100%;
-border-collapse:collapse;
-margin-top:12px;
-margin-bottom:18px;
-">
 
 <tr valign="top">
 
