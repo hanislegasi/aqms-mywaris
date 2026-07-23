@@ -1301,25 +1301,38 @@ currentDocRef;
             try {
                 const today = new Date();
                 const year = today.getFullYear();
+
+const wasiatRef = doc(db, "users", userId, "wasiat", "maklumat");
+const wasiatSnap = await getDoc(wasiatRef);
+const wasiatData = hibahSnap.data();
                 
-                const counterRef = doc(db, "system", "counter");
-                const counterSnap = await getDoc(counterRef);
-                let currentNumber = 1;
+               let docRefNo = wasiatData?.docRef;
+let currentNumber = wasiatData?.docNumber;
 
-                if (counterSnap.exists()) {
-                    currentNumber = (counterSnap.data().wasiatCounter || 0) + 1;
-                }
+if (!docRefNo) {
 
-                const docRefNo = `AQMS-WST-${year}-${String(currentNumber).padStart(3,"0")}`;
+    const counterRef = doc(db, "system", "counter");
+    const counterSnap = await getDoc(counterRef);
 
-                await updateDoc(doc(db, "users", userId, "wasiat", "maklumat"), {
+    currentNumber = counterSnap.exists()
+        ? (counterSnap.data().wasiatCounter || 0) + 1
+        : 1;
+
+    docRefNo = `AQMS-WST-${year}-${String(currentNumber).padStart(3,"0")}`;
+
+    await setDoc(counterRef, {
+        wasiatCounter: currentNumber
+    }, { merge: true });
+}
+
+                await updateDoc(wasiatRef, {
                     status: "APPROVED",
                     approvedAt: today.toISOString(),
                     docRef: docRefNo,
                     docNumber: currentNumber
                 });
 
-                await setDoc(counterRef, { wasiatCounter: currentNumber }, { merge: true });
+                
 
 await addDoc(
     collection(db, "users", userId, "notifications"),
