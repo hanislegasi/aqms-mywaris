@@ -1597,6 +1597,26 @@ Object.values(groupedSepencarian).forEach(item=>{
         generateTakAlihTable(item.hartaTakAlih)
     )
 
+.replaceAll(
+"{{NAMA_PEMILIK}}",
+data.nama || "-"
+)
+
+.replaceAll(
+"{{IC_PEMILIK}}",
+data.ic || "-"
+)
+
+.replaceAll(
+"{{ALAMAT_PEMILIK}}",
+data.alamat || "-"
+)
+
+.replaceAll(
+"{{TELEFON_PEMILIK}}",
+data.telefon || "-"
+)
+        
        .replaceAll(
         "{{NAMA_PENERIMA}}",
         pihak.nama
