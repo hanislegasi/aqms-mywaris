@@ -357,20 +357,20 @@ class="border border-gray-300 p-5 font-medium">
 
         // Konfigurasi Responsif untuk Viewport Desktop & Mobile
         function updateScale() {
-            const wrapper = document.getElementById('scale-wrapper');
-            const pdfContent = document.getElementById('pdfContent');
-            const containerWidth = window.innerWidth;
-            const targetWidth = 794; // Lebar A4 (~210mm dalam piksel pada resolusi piawai)
-            const padding = 32;
+             wrapper = document.getElementById('scale-wrapper');
+             pdfContent = document.getElementById('pdfContent');
+             containerWidth = window.innerWidth;
+             targetWidth = 794; // Lebar A4 (~210mm dalam piksel pada resolusi piawai)
+             padding = 32;
 
             if (containerWidth < targetWidth + padding) {
                 // Kecilkan paparan untuk skrin mobile
-                const scale = (containerWidth - padding) / targetWidth;
+                 scale = (containerWidth - padding) / targetWidth;
                 wrapper.style.transform = `scale(${scale})`;
                 
                 // Baiki ketinggian bekas supaya tiada ruang kosong di bawah elemen
-                const actualHeight = pdfContent.offsetHeight;
-                const scaledHeight = actualHeight * scale;
+                 actualHeight = pdfContent.offsetHeight;
+                 scaledHeight = actualHeight * scale;
                 wrapper.style.marginBottom = `-${actualHeight - scaledHeight}px`;
             } else {
                 // Paparan desktop normal
@@ -388,17 +388,17 @@ class="border border-gray-300 p-5 font-medium">
 
 async function imageToBase64(url){
 
-    const response = await fetch(url);
+     response = await fetch(url);
 
 if(!response.ok){
     throw new Error("Image gagal dimuatkan");
 }
     
-    const blob = await response.blob();
+     blob = await response.blob();
 
     return new Promise((resolve)=>{
 
-        const reader = new FileReader();
+         reader = new FileReader();
 
         reader.onloadend = ()=>{
 
@@ -414,13 +414,13 @@ if(!response.ok){
         
         // Download Logik PDF
         document.getElementById("downloadBtn").addEventListener("click", async () => {
-            const wrapper = document.getElementById('scale-wrapper');
-            const element = document.getElementById("pdfContent");
+             wrapper = document.getElementById('scale-wrapper');
+             element = document.getElementById("pdfContent");
 
             // 1. Simpan tetapan skala dan margin asal
-            const originalTransform = wrapper.style.transform;
-            const originalMarginBottom = wrapper.style.marginBottom;
-            const originalMargin = element.style.margin;
+             originalTransform = wrapper.style.transform;
+             originalMarginBottom = wrapper.style.marginBottom;
+             originalMargin = element.style.margin;
 
             // 2. Buang skala sementara & paksa kedudukan paksi kiri (PUNCA ruang kosong)
             wrapper.style.transform = 'scale(1)';
@@ -1796,13 +1796,19 @@ pihak.benefisiari
 
 });   
                         
-document.getElementById("sectionSepencarian").innerHTML = hibahHTML;                        
+document.getElementById("sectionHibah").innerHTML = hibahHTML;                        
 
 let sepencarianHTML = "";
 
 Object.values(groupedSepencarian).forEach(item=>{
 
-    const pihak = getPihakPenerima(item);
+    const pihak = {
+
+        nama: item.nama,
+        ic: item.ic,
+        alamat: item.alamat
+
+    };
 
     sepencarianHTML += sepencarianContent
 
@@ -1906,18 +1912,18 @@ currentDocRef;
             if(!userId) return alert("User ID tidak sah!");
             
             try {
-                const today = new Date();
-                const year = today.getFullYear();
+                 today = new Date();
+                 year = today.getFullYear();
                 
-                const counterRef = doc(db, "system", "counter");
-                const counterSnap = await getDoc(counterRef);
+                 counterRef = doc(db, "system", "counter");
+                 counterSnap = await getDoc(counterRef);
                 let currentNumber = 1;
 
                 if (counterSnap.exists()) {
                     currentNumber = (counterSnap.data().hibahCounter || 0) + 1;
                 }
 
-                const docRefNo = `AQMS-HIB-${year}-${String(currentNumber).padStart(3,"0")}`;
+                 docRefNo = `AQMS-HIB-${year}-${String(currentNumber).padStart(3,"0")}`;
 
                 await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
                     status: "APPROVED",
