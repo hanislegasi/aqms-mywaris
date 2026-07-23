@@ -1640,25 +1640,37 @@ currentDocRef;
             try {
                 const today = new Date();
                 const year = today.getFullYear();
+
+const hibahRef = doc(db, "users", userId, "hibah", "maklumat");
+const hibahSnap = await getDoc(hibahRef);
+const hibahData = hibahSnap.data();
                 
-                const counterRef = doc(db, "system", "counter");
-                const counterSnap = await getDoc(counterRef);
-                let currentNumber = 1;
+                let docRefNo = hibahData?.docRef;
+let currentNumber = hibahData?.docNumber;
 
-                if (counterSnap.exists()) {
-                    currentNumber = (counterSnap.data().hibahCounter || 0) + 1;
-                }
+if (!docRefNo) {
 
-                const docRefNo = `AQMS-HIB-${year}-${String(currentNumber).padStart(3,"0")}`;
+    const counterRef = doc(db, "system", "counter");
+    const counterSnap = await getDoc(counterRef);
 
-                await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
+    currentNumber = counterSnap.exists()
+        ? (counterSnap.data().hibahCounter || 0) + 1
+        : 1;
+
+    docRefNo = `AQMS-HIB-${year}-${String(currentNumber).padStart(3,"0")}`;
+
+    await setDoc(counterRef, {
+        hibahCounter: currentNumber
+    }, { merge: true });
+}
+                await updateDoc(hibahRef, {
                     status: "APPROVED",
                     approvedAt: today.toISOString(),
                     docRef: docRefNo,
                     docNumber: currentNumber
                 });
 
-                await setDoc(counterRef, { hibahCounter: currentNumber }, { merge: true });
+                
 
 await addDoc(
     collection(db, "users", userId, "notifications"),
