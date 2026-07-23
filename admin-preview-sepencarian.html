@@ -491,6 +491,13 @@ window.open(
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
+const userDoc = await getDoc(
+    doc(db, "users", userId)
+);
+
+const userData = userDoc.data();
+
+                        
 const warisMap = {};
 
 (data.waris || []).forEach(w => {
