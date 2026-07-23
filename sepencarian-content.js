@@ -36,31 +36,27 @@ color:#222;
 </p>
 
 <p>
-Dokumen Deklarasi Harta Sepencarian ini disediakan sebagai suatu rekod bertulis berhubung akad hibah yang dibuat secara sukarela oleh <strong>Peihak Pertama</strong> kepada <strong>Pihak Yang Berhak Menerima Harta Sepencarian</strong> (selepas ini disebut sebagai <strong>"Pihak Kedua"</strong>)</strong>. Dokumen ini merekodkan identiti pihak-pihak yang terlibat, butiran harta yang diisyhtiharkan Harta Sepencarian, kadar bahagian serta syarat-syarat yang dipersetujui sebagai dokumen sokongan dan pembuktian menurut Hukum Syarak serta undang-undang yang berkuat kuasa di Malaysia.
+Dokumen Deklarasi Harta Sepencarian ini disediakan sebagai suatu rekod bertulis berhubung akad hibah yang dibuat secara sukarela oleh <strong>Pemilik Harta (selepas ini disebut sebagai <strong>"Pihak Pertama"</strong>)</strong> kepada <strong>Pihak Yang Berhak Menerima Harta Sepencarian</strong> (selepas ini disebut sebagai <strong>"Pihak Kedua"</strong>)</strong>. Dokumen ini merekodkan identiti pihak-pihak yang terlibat, butiran harta yang diisyhtiharkan Harta Sepencarian, kadar bahagian serta syarat-syarat yang dipersetujui sebagai dokumen sokongan dan pembuktian menurut Hukum Syarak serta undang-undang yang berkuat kuasa di Malaysia.
 </p>
 
 <p>
-Sesungguhnya Harta adalah amanah Allah kepada hambanya, maka adalah atas setiap hamba itu tanggungjawab sebagai Pemberi Hibah untuk mengurus harta dengan sempurna agar sentiasa dimanfaat menurut peraturan yang digariskan oleh Allah S.W.T.
+Sesungguhnya Harta adalah amanah Allah kepada hambanya, maka adalah atas setiap hamba itu tanggungjawab sebagai Pemilik Harta/ Pihak Pertama untuk mengurus harta dengan sempurna agar sentiasa dimanfaat menurut peraturan yang digariskan oleh Allah S.W.T.
 </p>
 
 <p>
-Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. Kad Pengenalan
-<strong>{{IC_PEMBERI}}</strong>, yang beralamat di
-<strong>{{ALAMAT_PEMBERI}}</strong>, dengan ini secara sukarela, tanpa sebarang paksaan, tekanan atau pengaruh mana-mana pihak, mengisytiharkan bahawa saya berhasrat menghibahkan harta-harta yang dinyatakan di dalam dokumen ini kepada Penerima Hibah sebagaimana yang diperincikan di dalam Jadual 1 dan 2.
+Saya, <strong>{{NAMA_PEMILIK}}</strong>, No. Kad Pengenalan
+<strong>{{IC_PEMILIK}}</strong>, yang beralamat di
+<strong>{{ALAMAT_PEMILIK}}</strong>, dengan ini secara sukarela, tanpa sebarang paksaan, tekanan atau pengaruh mana-mana pihak, mengisytiharkan bahawa saya berhasrat menghibahkan harta-harta yang dinyatakan di dalam dokumen ini kepada Pihak Kedua sebagaimana yang diperincikan di dalam Jadual 1 dan 2.
 </p>
 
 <p>
-Matlamat saya menulis Dokumen Pengisytiharan Hibah ini adalah sebagai pernyataan bertulis yang menjelaskan kedudukan harta yang telah dihibahkan kepada Penerima Hibah semasa hayat Pemberi Hibah, dengan harapan agar memudahkan proses penyelesaian pusaka mana-mana pihak sama ada Pemegang Amanah mahupun Penerima Hibah tanpa wujudnya apa-apa kekeliruan terhadap status harta yang telah dihibahkan tersebut selepas kematian mana-mana pihak.
+Saya juga mengesahkan bahawa pembahagian yang dinyatakan adalah berdasarkan persetujuan dan kefahaman saya sendiri tanpa sebarang paksaan daripada mana-mana pihak.
 </p>
 
 <p>
-Oleh yang demikian, Dokumen Pengisytiharan Hibah ini diyakini berfungsi sebagai dokumen yang menyumbang kepada penyelesaian pusaka yang sempurna, adil dan saksama secara SULH dikalangan ahli waris mana-mana pihak yang meninggal dunia.  
-Walaupun begitu, sekiranya wujud keperluan di mana suatu Perintah Pengesahan Hibah akan dituntut dari mana-mana Mahkamah Syariah yang berbidangkuasa, hendaklah Dokumen Pengisytiharan Hibah ini menjadi bahan pembuktian penting dan sumber utama yang harus mendapat pertimbangan Mahkamah.
+Dokumen ini disediakan sebagai rekod bertulis bagi memudahkan proses pembuktian dan pertimbangan oleh Mahkamah Syariah sekiranya diperlukan pada masa hadapan.
 </p>
 
-<p>
-Bahawasanya Dokumen Pengisytiharan Hibah ini adalah pengisytiharan terakhir dan mana-mana pengisytiharan hibah yang telah dinyatakan terdahulu ke atas harta hibah ini adalah terbatal.
-</p>
 
 
 <div class="pdf-footer">
@@ -78,19 +74,19 @@ Bahawasanya Dokumen Pengisytiharan Hibah ini adalah pengisytiharan terakhir dan 
 <div class="a4-page p-[18mm]">
 
 <p>
-<strong>DOKUMEN PENGISYTIHARAN HIBAH</strong> ini diperbuat pada
+<strong>DOKUMEN DEKLARASI HARTA SEPENCARIAN</strong> ini diperbuat pada
 <strong>{{TARIKH_DOKUMEN}}</strong>.
 </p>
 
 <p style="text-align:center;"><strong>ANTARA</strong></p>
 
 <p style="text-align:justify;">
-<strong>{{NAMA_PEMBERI}}</strong>
-(No. K/P: <strong>{{IC_PEMBERI}}</strong>)
+<strong>{{NAMA_PEMILIK}}</strong>
+(No. K/P: <strong>{{IC_PEMILIK}}</strong>)
 yang beralamat di
-<strong>{{ALAMAT_PEMBERI}}</strong>
+<strong>{{ALAMAT_PEMILIK}}</strong>
 (selepas ini disebut sebagai
-<strong>"Pemberi Hibah"</strong>)
+<strong>"Pihak Pertama"</strong>)
 bagi harta yang diperincikan di dalam
 <strong>Jadual 1 dan 2</strong>.
 </p>
@@ -103,7 +99,6 @@ bagi harta yang diperincikan di dalam
 <strong>{{IC_PENERIMA}}</strong>)
 yang beralamat di
 <strong>{{ALAMAT_PENERIMA}}</strong>
-{{INTRO_PENERIMA}}
 bagi harta yang diperincikan di dalam
 <strong>Jadual 1 dan 2</strong>.
 </p>
@@ -115,7 +110,7 @@ font-family:'Times New Roman',serif;
 font-size:16px;
 font-weight:bold;
 ">
-BAHAWASANYA
+PERAKUAN PIHAK PERTAMA
 </h3>
 
 <table style="
@@ -130,7 +125,7 @@ margin-top:0;
 padding-bottom:12px;
 text-align:justify;
 ">
-Penerima Hibah adalah <strong>{{HUBUNGAN}}</strong> kepada Pemberi Hibah;
+Semua maklumat yang dinyatakan adalah benar.
 </td>
 </tr>
 
@@ -140,7 +135,7 @@ Penerima Hibah adalah <strong>{{HUBUNGAN}}</strong> kepada Pemberi Hibah;
 padding-bottom:12px;
 text-align:justify;
 ">
-Pemberi Hibah adalah pemilik yang sah kepada harta tak alih berikut seperti di dalam Jadual 1 dan 2 (selepas ini dirujuk sebagai "Harta Amanah tersebut").
+Senarai harta yang dinyatakan merupakan harta yang saya isytiharkan sebagai Harta Sepencarian.
 </td>
 </tr>
 
@@ -150,7 +145,7 @@ Pemberi Hibah adalah pemilik yang sah kepada harta tak alih berikut seperti di d
 padding-bottom:12px;
 text-align:justify;
 ">
-Pemberi Hibah berhasrat untuk memberi Harta Amanah secara Hibah kepada Penerima Hibah yang dinyatakan di dalam Jadual 1 dan 2.
+Peratus pembahagian yang dinyatakan adalah berdasarkan persetujuan saya.
 </td>
 </tr>
 
@@ -160,7 +155,7 @@ Pemberi Hibah berhasrat untuk memberi Harta Amanah secara Hibah kepada Penerima 
 padding-bottom:12px;
 text-align:justify;
 ">
-Pemberi Hibah berhasrat untuk terus memegang Harta Amanah tersebut sebagai Pemegang Amanah (Trustee) bagi manfaat Penerima Hibah sepanjang Tempoh Amanah.
+Dokumen ini tidak menafikan kuasa Mahkamah Syariah untuk menentukan hak sebenar Harta Sepencarian mengikut Hukum Syarak dan undang-undang yang berkuat kuasa.
 </tr>
 
 <tr valign="top">
@@ -169,25 +164,7 @@ Pemberi Hibah berhasrat untuk terus memegang Harta Amanah tersebut sebagai Pemeg
 padding-bottom:12px;
 text-align:justify;
 ">
-Penerima Hibah bersetuju menerima Hibah tersebut dan bersetuju bahawa Pemberi Hibah akan bertindak sebagai Pemegang Amanah ke atas Harta Amanah sepanjang Tempoh Amanah mengikut terma-terma Dokumen Pengisytiharan Hibah ini.
-</tr>
-
-<tr valign="top">
-<td>F.</td>
-<td style="
-padding-bottom:12px;
-text-align:justify;
-">
-Pemberi Hibah memahami dan bersetuju bahawa walaupun Harta Amanah telah dihibahkan kepada Penerima Hibah, Pemberi Hibah berhak menikmati manfaat fizikal dan/atau manfaat ekonomi daripada Harta Amanah tersebut sepanjang hayatnya atau sehingga Tempoh Amanah berakhir, tertakluk kepada terma-terma Dokumen Pengisytiharan Hibah ini.
-</tr>
-
-<tr valign="top">
-<td>G.</td>
-<td style="
-padding-bottom:12px;
-text-align:justify;
-">
-Pemberi Hibah memahami bahawa hak untuk menarik balik Hibah ini adalah tertakluk kepada Hukum Syarak serta terma-terma Dokumen Pengisytiharan Hibah ini.
+Dokumen ini hendaklah dibaca bersama-sama Jadual 1 dan Jadual 2 yang menjadi sebahagian daripada dokumen ini.
 </tr>
 
 </table>
@@ -570,9 +547,9 @@ font-style:italic;
 
 <div class="mt-8">
 
-<strong>PENGAKUAN PEMBERI HIBAH</strong>
+<strong>PENGAKUAN PIHAK PERTAMA</strong>
 <p>
-Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam Dokumen Hibah ini adalah benar dan tepat mengikut pengetahuan saya.
+Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam Dokumen Deklarasi Harta Sepencarian ini adalah benar dan tepat mengikut pengetahuan saya.
 </p>
 <br>
 
@@ -580,7 +557,7 @@ Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam Dokumen Hib
 <p>.......................................</p>
 
 <p>
-(Tandatangan Pemberi Hibah)
+(Tandatangan Pihak Pertama)
 </p>
 
 <table
@@ -599,7 +576,7 @@ Nama
 </td>
 
 <td>
-<strong>{{NAMA_PEMBERI}}</strong>
+<strong>{{NAMA_PEMILIK}}</strong>
 </td>
 </tr>
 
@@ -613,7 +590,7 @@ No. K/P
 </td>
 
 <td>
-<strong>{{IC_PEMBERI}}</strong>
+<strong>{{IC_PEMILIK}}</strong>
 </td>
 </tr>
 
@@ -636,8 +613,8 @@ Tarikh
 <br>
 <strong>PENGESAHAN SAKSI</strong>
 <p>
-Kami yang bertandatangan di bawah mengesahkan bahawa Pemberi Hibah telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
-Pemberi Hibah berada dalam keadaan waras serta membuat Hibah ini secara sukarela.
+Kami yang bertandatangan di bawah mengesahkan bahawa Pihak Pertama telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
+Pihak Pertama berada dalam keadaan waras serta membuat Deklarasi ini secara sukarela.
 </p>
 
 <table
@@ -807,7 +784,7 @@ color:#153638;
 margin-top:25px;
 margin-bottom:12px;
 ">
-JADUAL 1 - SENARAI HARTA ALIH YANG DIHIBAHKAN
+JADUAL 1 - SENARAI HARTA YANG DIISYTIHARKAN SEBAGAI HARTA SEPENCARIAN
 </h3>
 
 {{TABLE_ALIH}}
@@ -835,7 +812,7 @@ color:#153638;
 margin-top:25px;
 margin-bottom:12px;
 ">
-JADUAL 2 - SENARAI HARTA TAK ALIH YANG DIHIBAHKAN
+JADUAL 2 - SENARAI HARTA TAK ALIH YANG DIISYTIHARKAN SEBAGAI HARTA SEPENCARIAN
 </h3>
 
 {{TABLE_TAK_ALIH}}
@@ -860,7 +837,7 @@ text-align:center;
 color:#153638;
 margin-bottom:18px;
 ">
-PERAKUAN PENERIMAAN HIBAH
+PERAKUAN PENERIMAAN HARTA YANG DIISYTIHARKAN SEBAGAI HARTA SEPENCARIAN
 </h2>
 
 <div style="
@@ -886,10 +863,10 @@ color:#222;
 </p>
 
 <p>Saya, <strong>{{NAMA_PENERIMA}}</strong> (No. K/P:
-<strong>{{IC_PENERIMA}}</strong>) yang bermastautin di <strong>{{ALAMAT_PENERIMA}}</strong> {{INTRO_PENERIMA}} dengan ini mengakui bahawa saya adalah seorang Islam yang cukup umur, berada di dalam keadaan sihat tubuh badan dan waras fikiran, tanpa sebarang paksaan dan penuh kerelaan hati saya sendiri bersetuju menerima Hibah yang tersebut di atas.</p>
-<p>Saya juga dengan ini mengaku bahawa mulai pada hari ini, saya dengan suci dan rela hati telah menerima segala hak, kuasa dan tanggungjawab terhadap harta ini yang telah memenuhi rukun-rukun dan menyempurnakan syarat Qabd di dalam hibah dari pemberi di atas.</p>
-<p>Seterusnya di dalam Dokumen Pengisytiharan Hibah ini, saya juga faham Hibah ini hanya boleh ditarik balik dengan persetujuan saya. (Klausa untuk Hibah kepada selain daripada anak kandung, cucu kandung, cicit kandung)</p>
-<p>Saya dengan ini bersetuju dan redha Pemberi Hibah menikmati manfaat fizikal dan ekonomi dari harta tersebut selagi ada hayat beliau.</p>
+<strong>{{IC_PENERIMA}}</strong>) yang bermastautin di <strong>{{ALAMAT_PENERIMA}}</strong> {{INTRO_PENERIMA}} dengan ini mengakui bahawa saya adalah seorang Islam yang cukup umur, berada di dalam keadaan sihat tubuh badan dan waras fikiran, tanpa sebarang paksaan dan penuh kerelaan hati saya sendiri bersetuju sepertimana yang tersebut di atas.</p>
+<p>Saya juga mengesahkan bahawa saya telah membaca kandungan dokumen ini dan memahami bahawa pengisytiharan ini adalah berkaitan Harta Sepencarian sebagaimana yang dinyatakan oleh Pihak Pertama.</p>
+<p>Saya juga memahami bahawa penentuan hak muktamad terhadap Harta Sepencarian adalah tertakluk kepada keputusan Mahkamah Syariah mengikut Hukum Syarak dan undang-undang yang berkuat kuasa.</p>
+
 
 <div
 style="
@@ -925,9 +902,9 @@ font-style:italic;
 
 <div class="mt-8">
 
-<strong>PENGAKUAN PENERIMA HIBAH</strong>
+<strong>PENGAKUAN PIHAK KEDUA</strong>
 <p>
-Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Hibah ini adalah benar dan tepat mengikut pengetahuan saya.
+Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen ini adalah benar dan tepat mengikut pengetahuan saya.
 </p>
 <br>
 
@@ -935,7 +912,7 @@ Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Hib
 <p>.......................................</p>
 
 <p>
-(Tandatangan Penerima Hibah)
+(Tandatangan Pihak Kedua)
 </p>
 
 <table
@@ -991,8 +968,8 @@ Tarikh
 <br>
 <strong>PENGESAHAN SAKSI</strong>
 <p>
-Kami yang bertandatangan di bawah mengesahkan bahawa Pemberi Hibah telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
-Pemberi Hibah berada dalam keadaan waras serta membuat Hibah ini secara sukarela.
+Kami yang bertandatangan di bawah mengesahkan bahawa Pihak Kedua telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
+Pihak Kedua berada dalam keadaan waras serta menerima secara sukarela.
 </p>
 
 <table
@@ -1162,7 +1139,7 @@ text-align:center;
 color:#153638;
 margin-bottom:18px;
 ">
-PENGISYTIHARAN PEMBERI HIBAH DAN PENERIMA HIBAH
+PENGISYTIHARAN PIHAK PERTAMA DAN PIHAK KEDUA
 </h2>
 
 <div style="
@@ -1188,11 +1165,11 @@ color:#222;
 </p>
 
 <p>
-Saya, <strong>{{NAMA_PEMBERI}}</strong>, No. K/P:
-<strong>{{IC_PEMBERI}}</strong>, yang beralamat di
-<strong>{{ALAMAT_PEMBERI}}</strong> dan <strong>{{NAMA_PENERIMA}}</strong>
+Saya, <strong>{{NAMA_PEMILIK}}</strong>, No. K/P:
+<strong>{{IC_PEMILIK}}</strong>, yang beralamat di
+<strong>{{ALAMAT_PEMILIK}}</strong> dan <strong>{{NAMA_PENERIMA}}</strong>
 (No. K/P: <strong>{{IC_PENERIMA}}</strong>) yang bermastautin di <strong>{{ALAMAT_PENERIMA}}</strong>
-{{INTRO_PENERIMA}} dengan ini bersetuju bahawa:-
+dengan ini bersetuju bahawa:-
 </p>
 
 <table
@@ -1225,7 +1202,7 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Hibah yang kami sempurnakan ini adalah hibah bersyarat iaitu sekiranya Penerima Hibah meninggal dunia terlebih dahulu sebelum Pemberi Hibah maka harta yang dihibahkan akan dikembalikan semula kepada Pemberi Hibah. 
+Deklarasi yang kami sempurnakan ini adalah hibah bersyarat iaitu sekiranya Penerima Hibah meninggal dunia terlebih dahulu sebelum Pemberi Hibah maka harta yang dihibahkan akan dikembalikan semula kepada Pemberi Hibah. 
 (Klausa ini hanya tergunapakai kepada pelanggan yang melanggan hibah bersyarat sahaja).</td>
 
 </tr>
@@ -1648,10 +1625,10 @@ font-style:italic;
 
 <div class="mt-8">
 
-<strong>PENGAKUAN PEMBERI DAN PENERIMA HIBAH</strong>
+<strong>PENGAKUAN PIHAK PERTAMA DAN PIHAK KEDUA</strong>
 
 <p>
-Kami dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Hibah ini adalah benar dan tepat mengikut pengetahuan kami.
+Kami dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen ini adalah benar dan tepat mengikut pengetahuan kami.
 </p>
 
 <table
@@ -1666,20 +1643,20 @@ margin-top:50px;
 
 <p>.......................................</p>
 
-<p>(Tandatangan Pemberi Hibah)</p>
+<p>(Tandatangan Pihak Pertama)</p>
 
 <table style="margin-top:30px;font-size:14px;">
 
 <tr>
 <td width="100">Nama</td>
 <td width="20">:</td>
-<td><strong>{{NAMA_PEMBERI}}</strong></td>
+<td><strong>{{NAMA_PEMILIK}}</strong></td>
 </tr>
 
 <tr>
 <td>No. K/P</td>
 <td>:</td>
-<td><strong>{{IC_PEMBERI}}</strong></td>
+<td><strong>{{IC_PEMILIK}}</strong></td>
 </tr>
 
 <tr>
@@ -1698,7 +1675,7 @@ margin-top:50px;
 
 <p>.......................................</p>
 
-<p>(Tandatangan Penerima Hibah)</p>
+<p>(Tandatangan Pihak Kedua)</p>
 
 <table style="margin-top:30px;font-size:14px;">
 
@@ -1733,8 +1710,8 @@ margin-top:50px;
 
 <strong>PENGESAHAN SAKSI</strong>
 <p>
-Kami yang bertandatangan di bawah mengesahkan bahawa Pemberi dan Penerima Hibah telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
-Pemberi dan Penerima Hibah berada dalam keadaan waras serta membuat Hibah ini secara sukarela.
+Kami yang bertandatangan di bawah mengesahkan bahawa Pihak Pertama dan Pihak Kedua telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
+Pihak Pertama dan Pihak Kedua berada dalam keadaan waras serta dilakukan secara sukarela.
 </p>
 
 <table
