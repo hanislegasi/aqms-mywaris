@@ -219,7 +219,6 @@ Pemberi Hibah memahami bahawa hak untuk menarik balik Hibah ini adalah tertakluk
 </h3>
 
 <p>
-1.1
 Bahawa Pemberi Hibah Amanah secara sedar, waras, dengan sukarelanya dan bukan dalam keadaan sakit, atas dasar kasih sayang dan tanpa mendapat apa-apa balasan dengan ini membuat hibah ke atas Harta Amanah tersebut kepada Penerima Hibah dengan kadar seperti di dalam Jadual 1 dan 2.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
