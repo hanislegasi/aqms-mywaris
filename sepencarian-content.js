@@ -46,7 +46,7 @@ Sesungguhnya Harta adalah amanah Allah kepada hambanya, maka adalah atas setiap 
 <p>
 Saya, <strong>{{NAMA_PEMILIK}}</strong>, No. Kad Pengenalan
 <strong>{{IC_PEMILIK}}</strong>, yang beralamat di
-<strong>{{ALAMAT_PEMILIK}}</strong>, dengan ini secara sukarela, tanpa sebarang paksaan, tekanan atau pengaruh mana-mana pihak, mengisytiharkan bahawa saya berhasrat menghibahkan harta-harta yang dinyatakan di dalam dokumen ini kepada Pihak Kedua sebagaimana yang diperincikan di dalam Jadual 1 dan 2.
+<strong>{{ALAMAT_PEMILIK}}</strong>, dengan ini secara sukarela, tanpa sebarang paksaan, tekanan atau pengaruh mana-mana pihak, mengisytiharkan harta-harta yang dinyatakan di dalam dokumen ini adalah harta sepencarian dengan Pihak Kedua sebagaimana yang diperincikan di dalam Jadual 1 dan 2.
 </p>
 
 <p>
@@ -776,7 +776,7 @@ color:#153638;
 margin-top:25px;
 margin-bottom:12px;
 ">
-JADUAL 1 - SENARAI HARTA YANG DIISYTIHARKAN SEBAGAI HARTA SEPENCARIAN
+JADUAL 1 - SENARAI HARTA ALIH YANG DIISYTIHARKAN SEBAGAI HARTA SEPENCARIAN
 </h3>
 
 {{TABLE_ALIH}}
@@ -1194,8 +1194,8 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Deklarasi yang kami sempurnakan ini adalah hibah bersyarat iaitu sekiranya Penerima Hibah meninggal dunia terlebih dahulu sebelum Pemberi Hibah maka harta yang dihibahkan akan dikembalikan semula kepada Pemberi Hibah. 
-(Klausa ini hanya tergunapakai kepada pelanggan yang melanggan hibah bersyarat sahaja).</td>
+Dokumen Deklarasi Harta Sepencarian ini disediakan secara sukarela sebagai rekod bertulis mengenai pengisytiharan, 
+persetujuan dan pengesahan berhubung harta yang diiktiraf sebagai Harta Sepencarian sebagaimana yang dinyatakan di dalam Jadual 1 dan Jadual 2.</td>
 
 </tr>
 
@@ -1225,7 +1225,7 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Dokumen hibah ini disediakan untuk menzahirkan tindakan Pemberi Hibah menghibahkan harta/harta-hartanya kepada Penerima/Penerima-Penerima Hibah tertentu seperti yang telah ditetapkan di dalam Dokumen Pengisytiharan Hibah yang telah disediakan oleh pihak Hans Legasi Resources Sdn.Bhd. dan telah ditandatangani pada ...............................
+Pihak Pertama mengesahkan bahawa semua maklumat yang diberikan mengenai pemilikan harta, kadar pembahagian dan butiran penerima adalah benar sepanjang pengetahuannya semasa dokumen ini ditandatangani.
 </td>
 </tr>
 
@@ -1255,8 +1255,8 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Semasa hibah tersebut disediakan, Pemberi Hibah adalah seorang yang Mukallaf dan Sui Juris iaitu seorang yang mempunyai kapasiti untuk bertindak sendirian, 
-mampu dan berkeupayaan, juga berada dalam keadaan sihat tubuh badan dan waras fikiran serta di dalam keadaan faham dan sedar tentang segala tindakan yang dilakukan.
+Pihak Pertama mengesahkan bahawa ketika dokumen ini disempurnakan, beliau merupakan seorang yang mukallaf, mempunyai kapasiti undang-undang (sui juris), 
+berfikiran waras serta bertindak secara sukarela tanpa sebarang paksaan, tekanan atau pengaruh yang tidak wajar daripada mana-mana pihak.
 </td>
 </tr>
 
@@ -1286,8 +1286,8 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Di dalam proses melengkapkan Hibah ini, 
-Pemberi Hibah telah faham mengenai keadaan Marad al-Maut (penyakit yang menghampiri mati) iaitu orang yang telah menghidapi sesuatu penyakit sehingga terlantar lemah dan tidak berdaya untuk menjalani kehidupannya seperti biasa dan penyakit ini juga telah menyebabkan kematiannya di dalam tempoh setahun selepas penyakit tersebut dihidapinya.
+Pihak Kedua mengesahkan bahawa beliau telah membaca, 
+memahami dan menerima kandungan dokumen ini serta memahami bahawa pengisytiharan ini merupakan rekod bertulis mengenai Harta Sepencarian yang boleh dijadikan rujukan sekiranya berlaku pertikaian atau prosiding di Mahkamah Syariah.
 </td>
 </tr>
 
@@ -1317,8 +1317,7 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Pemberi Hibah faham dengan jelas mengenai konsep di atas dan mengisytiharkan bahawa ketika dokumen hibah ini disempurnakan, Pemberi Hibah adalah seorang yang sihat tubuh badan dan tidak menanggung apa-apa penyakit yang membawa kepada keadaan Marad al-Maut berkenaan.
-</td>
+Kedua-dua pihak memahami bahawa pengesahan muktamad mengenai status Harta Sepencarian adalah tertakluk kepada bidang kuasa Mahkamah Syariah mengikut Hukum Syarak dan undang-undang yang berkuat kuasa di Malaysia.
 </tr>
 
 </table>
@@ -1362,8 +1361,9 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Sekiranya Pemberi Hibah menyembunyikan apa-apa maklumat mengenai tahap kesihatannya yang boleh dianggap sebagai penyakit yang membawa kepada tahap Marad al-Maut di atas dan tindakannya telah menjejaskan hak Penerima Hibah, 
-maka kami melepaskan (indemnify) Al-Qawthar Mawaris Synergy dan waris Pemberi Hibah tidak boleh membuat sebarang tuntutan.
+Sekiranya terdapat maklumat yang tidak benar, 
+tidak lengkap atau disembunyikan oleh mana-mana pihak sehingga menjejaskan pelaksanaan dokumen ini, 
+pihak tersebut hendaklah bertanggungjawab sepenuhnya terhadap akibat yang timbul dan melepaskan (indemnify) Al-Qawthar Mawaris Synergy daripada sebarang tuntutan yang berkaitan.
 </td>
 </tr>
 
@@ -1393,7 +1393,8 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Sekiranya harta belum mempunyai hak milik berdaftar, pihak-pihak memahami bahawa proses pelaksanaan hibah tertakluk kepada undang-undang dan perintah Mahkamah Syariah serta pihak berkuasa yang berkaitan.
+Sekiranya mana-mana harta yang dinyatakan masih belum mempunyai hak milik berdaftar, masih dalam proses pindah milik atau tertakluk kepada apa-apa sekatan undang-undang, 
+pihak-pihak memahami bahawa pelaksanaan hak ke atas harta tersebut adalah tertakluk kepada keputusan Mahkamah Syariah dan pihak berkuasa yang berkaitan.
 </td>
 </tr>
 
@@ -1423,8 +1424,9 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Kami juga faham sekiranya berlaku apa-apa perubahan terhadap status hartanah yang dihibahkan (seperti dinaiktaraf, diganti dengan pampasan dan seumpamanya), 
-maka kami mengemaskini dokumen hibah untuk dibuat sebarang perubahan terhadap dokumen hibah yang telah disediakan (jika perlu). 
+Sekiranya berlaku perubahan terhadap status sesuatu harta seperti penjualan, pelupusan, penggantian, 
+pampasan, pembangunan semula atau apa-apa perubahan material yang lain, 
+Pihak Pertama bersetuju untuk mengemaskini dokumen ini bagi memastikan rekod sentiasa tepat. 
 </td>
 </tr>
 
@@ -1454,8 +1456,8 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Kami juga faham jika Pemberi Hibah memberikan maklumat pemilikan harta yang tidak tepat atau tidak benar, 
-ketika dokumen hibah ini disediakan, maka kami melepaskan (indemnify) Al-Qawthar Mawaris Synergy jika urusan hibah ini tidak dapat dikuatkuasakan.
+Pihak Pertama mengaku bahawa segala maklumat pemilikan yang diberikan adalah benar. Sekiranya maklumat tersebut didapati palsu atau mengelirukan sehingga menjejaskan pelaksanaan dokumen ini, 
+Al-Qawthar Mawaris Synergy tidak boleh dipertanggungjawabkan terhadap sebarang kerugian atau tuntutan yang timbul.
 </td>
 </tr>
 
@@ -1489,9 +1491,9 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Kami faham dan bersetuju bahawa kami telah dimaklumkan oleh Al-Qawthar Mawaris Synergy, jika ada harta yang dihibahkan ini adalah harta yang berada di luar negara Malaysia, 
-Dokumen Pengisytiharan Hibah yang dibuat bagi harta tersebut hanya bertindak sebagai panduan untuk agihan harta tersebut. 
-Tukarmilik harta tersebut dari nama Pemberi Hibah kepada nama Penerima Hibah adalah menjadi tanggungjawab penuh Pentadbir/Wasi harta pusaka Pemberi Hibah yang diberikan kuasa oleh Mahkamah yang kompeten di mana harta tersebut berada dan ditadbir sepenuhnya mengikut peruntukan undang-undang negara berkenaan (klausa ini digunapakai untuk pelanggan yang menghibahkan harta yang berada di luar Malaysia).
+Sekiranya terdapat harta yang berada di luar Malaysia, 
+pihak-pihak memahami bahawa dokumen ini hanya berfungsi sebagai rekod dan panduan mengenai hasrat pembahagian Harta Sepencarian, 
+manakala pelaksanaan sebenar adalah tertakluk kepada undang-undang negara tempat harta tersebut berada.
 </td>
 </tr>
 
@@ -1521,9 +1523,8 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Kami mengaku faham bahawa jika ada harta yang dihibahkan adalah harta yang masih bercagar,
-kami akan memastikan segala bayaran yang tertakluk ke atas harta tersebut akan dibayar mengikut Perjanjian yang telah ditandatangani bersama Pembiaya. 
-Kami faham bahawa jika syarat ini gagal dipatuhi dan tindakan undang-undang diambil oleh Pembiaya, maka hibah ini akan terbatal.
+Sekiranya mana-mana harta masih tertakluk kepada gadaian, pembiayaan atau apa-apa bebanan, 
+Pihak Pertama bertanggungjawab memastikan segala obligasi kepada institusi pembiaya dipatuhi mengikut perjanjian yang berkuat kuasa.
 </td>
 </tr>
 <tr>
@@ -1570,9 +1571,8 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Kami mengaku faham bahawa jika ada harta yang dihibahkan adalah harta yang masih bercagar,
-kami akan menyimpan dan mengumpul dokumen berkaitan seperti Perjanjian Jual Beli, Geran Hakmilik, Surat Tawaran Pinjaman (loan offer letter) atau apa sahaja dokumen yang berkaitan dengan pemilikan harta tersebut bagi tujuan perlaksanaan hibah ini di Mahkamah Tinggi Syariah. 
-Kami dengan ini bersetuju untuk melepaskan (indemnify) Al-Qawthar Mawaris Synergy jika hibah ini gagal dilaksanakan kesan dari kegagalan kami bertindak mengikut klausa ini.
+Pihak Pertama bersetuju untuk menyimpan segala dokumen berkaitan seperti Geran Hak Milik, Perjanjian Jual Beli, 
+Surat Tawaran Pembiayaan, dokumen pemilikan atau apa-apa dokumen lain yang diperlukan bagi memudahkan proses pembuktian Harta Sepencarian sekiranya diperlukan oleh Mahkamah Syariah.
 </td>
 </tr>
 
