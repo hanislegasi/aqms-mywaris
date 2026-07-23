@@ -1684,25 +1684,38 @@ currentDocRef;
             try {
                  today = new Date();
                  year = today.getFullYear();
+
+const sepencarianRef = doc(db, "users", userId, "sepencarian", "maklumat");
+const sepencarianSnap = await getDoc(sepencarianRef);
+const sepencarianData = sepencarianSnap.data();
                 
-                 counterRef = doc(db, "system", "counter");
-                 counterSnap = await getDoc(counterRef);
-                let currentNumber = 1;
+                 let docRefNo = sepencarianData?.docRef;
+let currentNumber = sepencarianData?.docNumber;
 
-                if (counterSnap.exists()) {
-                    currentNumber = (counterSnap.data().hibahCounter || 0) + 1;
-                }
+if (!docRefNo) {
 
-                 docRefNo = `AQMS-HSP-${year}-${String(currentNumber).padStart(3,"0")}`;
+    const counterRef = doc(db, "system", "counter");
+    const counterSnap = await getDoc(counterRef);
 
-                await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
+    currentNumber = counterSnap.exists()
+        ? (counterSnap.data().sepencarianCounter || 0) + 1
+        : 1;
+
+    docRefNo = `AQMS-HSP-${year}-${String(currentNumber).padStart(3,"0")}`;
+
+    await setDoc(counterRef, {
+        sepencarianCounter: currentNumber
+    }, { merge: true });
+}
+
+                await updateDoc(sepencarianRef, {
                     status: "APPROVED",
                     approvedAt: today.toISOString(),
                     docRef: docRefNo,
                     docNumber: currentNumber
                 });
 
-                await setDoc(counterRef, { hibahCounter: currentNumber }, { merge: true });
+               
 
 await addDoc(
     collection(db, "users", userId, "notifications"),
