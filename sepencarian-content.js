@@ -36,7 +36,7 @@ color:#222;
 </p>
 
 <p>
-Dokumen Pengisytiharan Hibah ini disediakan sebagai suatu rekod bertulis berhubung akad hibah yang dibuat secara sukarela oleh <strong>Pemberi Hibah</strong> kepada <strong>Penerima Hibah</strong>. Dokumen ini merekodkan identiti pihak-pihak yang terlibat, butiran harta yang dihibahkan, kadar bahagian hibah serta syarat-syarat yang dipersetujui sebagai dokumen sokongan dan pembuktian menurut Hukum Syarak serta undang-undang yang berkuat kuasa di Malaysia.
+Dokumen Deklarasi Harta Sepencarian ini disediakan sebagai suatu rekod bertulis berhubung akad hibah yang dibuat secara sukarela oleh <strong>Peihak Pertama</strong> kepada <strong>Pihak Yang Berhak Menerima Harta Sepencarian</strong> (selepas ini disebut sebagai <strong>"Pihak Kedua"</strong>)</strong>. Dokumen ini merekodkan identiti pihak-pihak yang terlibat, butiran harta yang diisyhtiharkan Harta Sepencarian, kadar bahagian serta syarat-syarat yang dipersetujui sebagai dokumen sokongan dan pembuktian menurut Hukum Syarak serta undang-undang yang berkuat kuasa di Malaysia.
 </p>
 
 <p>
