@@ -74,8 +74,8 @@ Dokumen ini disediakan sebagai rekod bertulis bagi memudahkan proses pembuktian 
 <div class="a4-page p-[18mm]">
 
 <p>
-<strong>DOKUMEN DEKLARASI HARTA SEPENCARIAN</strong> ini diperbuat pada
-<strong>{{TARIKH_DOKUMEN}}</strong>.
+<strong>DOKUMEN DEKLARASI HARTA SEPENCARIAN</strong> ini diperbuat pada -
+
 </p>
 
 <p style="text-align:center;"><strong>ANTARA</strong></p>
@@ -180,51 +180,81 @@ Dokumen ini hendaklah dibaca bersama-sama Jadual 1 dan Jadual 2 yang menjadi seb
 <div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>MAKA PERJANJIAN HIBAH INI MENYAKSIKAN SEPERTI BERIKUT:-</strong>
+<strong>PERSETUJUAN DAN PENGISYTIHARAN HARTA SEPENCARIAN</strong>
 </h3>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>1.	HIBAH</strong>
+<strong>1.	PENGISYTIHARAN HARTA SEPENCARIAN</strong>
 </h3>
 
-<p>
+<table
+style="
+width:100%;
+border-collapse:collapse;
+margin-top:12px;
+margin-bottom:18px;
+">
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
 1.1
-Bahawa Pemberi Hibah Amanah secara sedar, waras, dengan sukarelanya dan bukan dalam keadaan sakit, atas dasar kasih sayang dan tanpa mendapat apa-apa balasan dengan ini membuat hibah ke atas Harta Amanah tersebut kepada Penerima Hibah dengan kadar seperti di dalam Jadual 1 dan 2.</p>
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Pihak Pertama dengan ini mengisytiharkan bahawa harta-harta yang dinyatakan dalam Jadual 1 dan Jadual 2 merupakan harta yang diiktiraf olehnya sebagai Harta Sepencarian.
+</td>
+
+</tr>
+
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+1.2
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Pihak Pertama mengesahkan bahawa kadar pembahagian yang dinyatakan bagi setiap harta adalah berdasarkan persetujuan dan niatnya sendiri tanpa sebarang paksaan, tekanan atau pengaruh daripada mana-mana pihak.
+</tr>
+</table>
+
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>2. QABD DAN PENYERAHAN MILIKAN</strong>
-</h3>
-
-<p>Pemberi Hibah dan Penerima Hibah mengesahkan bahawa Qabd terhadap Harta Amanah telah disempurnakan mengikut Hukum Syarak melalui penyerahan milikan sebenar atau milikan secara konstruktif, termasuk tetapi tidak terhad kepada penyerahan dokumen hak milik, kunci, penguasaan, atau apa-apa bentuk penyerahan yang diiktiraf oleh Hukum Syarak.</p>
-
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>3.	KETIDAKDAFTARAN PINDAHMILIK</strong>
-</h3> 
-
-<p>Walauapapun jika ada mana-mana peruntukkan yang terkandung di dalam Perjanjian Hibah ini berlawanan, jika sekiranya permohonan pendaftaran pindahmilik Harta Amanah tersebut ke atas nama Penerima Hibah tidak dapat disempurnakan oleh Pihak Berkuasa Yang Berkenaan atas apa jua sebab yang mana ia bukan merupakan pelanggaran atau salahlaku oleh Pemberi Hibah atau Penerima Hibah, maka Pemberi Hibah atau Penerima Hibah boleh membawa/mengambil tindakan bagi berkaitan dan diperuntukkan dalam mana-mana undang-undang di Malaysia ini bagi tujuan pendaftaran.</p>
-
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>4.	RISIKO TERHADAP HARTA AMANAH</strong>
-</h3> 
-
-<p>Adalah dipersetujui oleh kedua-dua pihak bahawa risiko terhadap Harta Amanah tersebut kekal kepada Pemberi Hibah sehinggalah kepada tarikh semasa penyerahan milikan kosong Harta Amanah tersebut oleh Pemberi Hibah kepada Penerima Hibah tersebut.</p>
-
-<div class="pdf-footer">
-<span class="footer-docref"></span>
-<span class="page-number"></span>
-</div>
-</div>
-
-<div class="a4-page p-[18mm]">
-
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>5.	HAK DAN TANGGUNGJAWAB PEMEGANG AMANAH</strong>
-</h3> 
-
-<p>Pemberi Hibah tidak lagi mempunyai hak milik benefisial terhadap Harta Amanah kecuali hak menikmati manfaat sebagaimana diperuntukkan di bawah Dokumen Pengisytiharan Hibah ini serta hak-hak lain yang dibenarkan menurut Hukum Syarak dan terma dokumen ini.</p>
-
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>6.  HAK MENIKMATI MANFAAT OLEH PEMBERI HIBAH</strong>
+<strong>2. PENGAKUAN PEMILIKAN</strong>
 </h3>
 
 <table
@@ -247,7 +277,7 @@ line-height:1.6;
 vertical-align:top;
 padding-top:1px;
 ">
-6.1
+2.1
 </td>
 
 <td
@@ -257,7 +287,7 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Walau apa pun yang terkandung dalam Dokumen Pengisytiharan Hibah ini, Pemberi Hibah berhak untuk terus menikmati manfaat fizikal dan/atau manfaat ekonomi daripada Harta Amanah tersebut sepanjang hayatnya atau sepanjang Tempoh Amanah sebagaimana yang diperuntukkan dalam Dokumen Pengisytiharan Hibah ini.
+Pihak Pertama mengesahkan bahawa maklumat pemilikan dan butiran harta yang dinyatakan adalah benar sepanjang pengetahuannya.
 </td>
 
 </tr>
@@ -278,7 +308,7 @@ line-height:1.6;
 vertical-align:top;
 padding-top:1px;
 ">
-6.2
+2.2
 </td>
 
 <td
@@ -288,210 +318,172 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Hak menikmati manfaat tersebut termasuk tetapi tidak terhad kepada hak untuk menduduki, menggunakan, mengusahakan, menyewakan, menerima hasil, atau menikmati apa-apa manfaat lain daripada Harta Amanah, tanpa menjejaskan hak benefisial Penerima Hibah.
+Sekiranya terdapat pertikaian berhubung status sesuatu harta, penentuan muktamad adalah tertakluk kepada keputusan Mahkamah Syariah.
 </tr>
-
-<tr>
-<td colspan="2" style="height:18px;"></td>
-</tr>
-
-<tr valign="top">
-
-<td
-style="
-width:70px;
-padding:0;
-font-weight:bold;
-font-size:15px;
-line-height:1.6;
-vertical-align:top;
-padding-top:1px;
-">
-6.3
-</td>
-
-<td
-style="
-padding:0;
-text-align:justify;
-line-height:1.6;
-vertical-align:top;
-">
-Penerima Hibah mengakui dan bersetuju bahawa hak menikmati manfaat oleh Pemberi Hibah sebagaimana diperuntukkan dalam Klausa ini adalah sebahagian daripada syarat Hibah dan tidak boleh diganggu atau dihalang sepanjang Tempoh Amanah.
-
 </table>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>7. WAAD DAN AKUJANJI PEMBERI HIBAH</strong>
-</h3>
-
-<table
-style="
-width:100%;
-border-collapse:collapse;
-margin-top:12px;
-margin-bottom:18px;
-">
-
-<tr valign="top">
-
-<td
-style="
-width:70px;
-padding:0;
-font-weight:bold;
-font-size:15px;
-line-height:1.6;
-vertical-align:top;
-padding-top:1px;
-">
-7.1
-</td>
-
-<td
-style="
-padding:0;
-text-align:justify;
-line-height:1.6;
-vertical-align:top;
-">
-Bahawa pada tarikh Dokumen Pengisytiharan Hibah ini beliau bukan seorang muflis (bankrap), juga tidak ada petisyen untuk kebankrapan telah difailkan terhadapnya sama ada bersama-sama atau berasingan;
-</td>
-
-</tr>
-
-<tr>
-<td colspan="2" style="height:18px;"></td>
-</tr>
-
-<tr valign="top">
-
-<td
-style="
-width:70px;
-padding:0;
-font-weight:bold;
-font-size:15px;
-line-height:1.6;
-vertical-align:top;
-padding-top:1px;
-">
-7.2
-</td>
-
-<td
-style="
-padding:0;
-text-align:justify;
-line-height:1.6;
-vertical-align:top;
-">
-Bahawa beliau mempunyai hak dan kuasa untuk menghibahkan Harta Amanah tersebut.
-</tr>
-
-</table>
-
-<div class="pdf-footer">
-<span class="footer-docref"></span>
-<span class="page-number"></span>
-</div>
-</div>
-
-<div class="a4-page p-[18mm]">
-
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>8. AKUJANJI PENERIMA HIBAH</strong>
-</h3>
-
-<table
-style="
-width:100%;
-border-collapse:collapse;
-margin-top:12px;
-margin-bottom:18px;
-">
-
-<tr valign="top">
-
-<td
-style="
-width:70px;
-padding:0;
-font-weight:bold;
-font-size:15px;
-line-height:1.6;
-vertical-align:top;
-padding-top:1px;
-">
-8.1
-</td>
-
-<td
-style="
-padding:0;
-text-align:justify;
-line-height:1.6;
-vertical-align:top;
-">
-Penerima Hibah mengakui bahawa hak Pemberi Hibah untuk terus menikmati manfaat fizikal dan ekonomi Harta Amanah adalah sebahagian daripada syarat Hibah ini dan tidak boleh diganggu sepanjang Tempoh Amanah.
-</td>
-
-</tr>
-
-<tr>
-<td colspan="2" style="height:18px;"></td>
-</tr>
-
-<tr valign="top">
-
-<td
-style="
-width:70px;
-padding:0;
-font-weight:bold;
-font-size:15px;
-line-height:1.6;
-vertical-align:top;
-padding-top:1px;
-">
-8.2
-</td>
-
-<td
-style="
-padding:0;
-text-align:justify;
-line-height:1.6;
-vertical-align:top;
-">
-Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Dokumen Pengisytiharan Hibah ini adalah berdasarkan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut di atas dan waad, akujanji, perakuan dan jaminan Penerima Hibah tersebut merupakan asas kepada tanggungjawab Pemberi Hibah untuk menghibahkan Harta Amanah tersebut.
-</tr>
-
-</table>
-
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>9.	PENGESAHAN TIADA PAKSAAN</strong>
-</h3>
-
-<p>Pemberi Hibah mengesahkan bahawa Dokumen Pengisytiharan Hibah ini dibuat secara sukarela, tanpa sebarang paksaan, ugutan, pengaruh tidak wajar atau kekhilafan daripada mana-mana pihak.</p>
-
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>10.	KOS</strong>
-</h3>
-
-<p>Segala kos dan perbelanjaan dalam penyediaan Dokumen Pengisytiharan Hibah ini ditanggung oleh Pemberi Hibah.</p>
-
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>11.	NOTIS DAN PENYAMPAIAN DOKUMEN </strong>
+<strong>3.	PEMBAHAGIAN HARTA SEPENCARIAN</strong>
 </h3> 
 
-<p>Apa-apa Notis permintaan atau tuntutan yang dikehendaki disampaikan oleh mana-mana pihak kepada Dokumen Pengisytiharan Hibah ini kepada pihak yang satu lagi di bawah Dokumen Pengisytiharan Hibah ini hendaklah secara bertulis ke alamat terakhir pihak-pihak yang diketahui dan hendaklah disifatkan sebagai penyampaian yang mencukupi.</p>
+<table
+style="
+width:100%;
+border-collapse:collapse;
+margin-top:12px;
+margin-bottom:18px;
+">
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+3.1
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Pembahagian yang dinyatakan dalam Jadual 1 dan Jadual 2 adalah cadangan pembahagian Harta Sepencarian berdasarkan persetujuan Pihak Pertama.
+</td>
+
+</tr>
+
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+3.2
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Pembahagian tersebut hendaklah dibaca bersama keseluruhan dokumen ini.
+</tr>
+</table>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>12.	MASA MERUPAKAN PATI KONTRAK</strong>
+<strong>4.  HAK DAN KEPENTINGAN PIHAK KEDUA</strong>
 </h3>
 
-<p>Masa di mana-mana juga disebutkan di dalam Dokumen Pengisytiharan Hibah ini hendaklah dianggap penting dan menjadi pati kepada kontrak.</p>
+<table
+style="
+width:100%;
+border-collapse:collapse;
+margin-top:12px;
+margin-bottom:18px;
+">
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+4.1
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Pihak Kedua mengakui bahawa pengisytiharan ini merupakan rekod bertulis mengenai hasrat Pihak Pertama.
+</td>
+
+</tr>
+
+<tr>
+<td colspan="2" style="height:18px;"></td>
+</tr>
+
+<tr valign="top">
+
+<td
+style="
+width:70px;
+padding:0;
+font-weight:bold;
+font-size:15px;
+line-height:1.6;
+vertical-align:top;
+padding-top:1px;
+">
+4.2
+</td>
+
+<td
+style="
+padding:0;
+text-align:justify;
+line-height:1.6;
+vertical-align:top;
+">
+Pihak Kedua memahami bahawa penentuan hak sebenar terhadap Harta Sepencarian adalah tertakluk kepada peruntukan undang-undang dan keputusan Mahkamah Syariah.
+</tr>
+
+</table>
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>5. TIADA PAKSAAN</strong>
+</h3>
+
+<p>Pihak Pertama mengesahkan bahawa dokumen ini dibuat secara sukarela tanpa sebarang ugutan, paksaan, tekanan atau salah nyata daripada mana-mana pihak.</p>
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>6.	PINDAAN</strong>
+</h3>
+
+<p>Sebarang pindaan terhadap dokumen ini hendaklah dibuat secara bertulis dan dipersetujui oleh pihak-pihak yang berkaitan.</p>
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>7.	KOS</strong>
+</h3> 
+
+<p>Segala kos penyediaan dokumen ini ditanggung oleh Pihak Pertama kecuali dipersetujui sebaliknya.</p>
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>8.	NOTIS</strong>
+</h3>
+
+<p>Sebarang notis atau komunikasi hendaklah dibuat secara bertulis kepada alamat terakhir yang diketahui.</p>
 
 <div class="pdf-footer">
 <span class="footer-docref"></span>
@@ -502,16 +494,16 @@ Penerima Hibah mengakui bahawa Pemberi Hibah menandatangani Dokumen Pengisytihar
 <div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>13.	 ORANG-ORANG YANG TERIKAT KEPADA PERJANJIAN</strong>
+<strong>9.	 ORANG YANG TERIKAT</strong>
 </h3>
 
-<p>Dokumen Pengisytiharan Hibah ini hendaklah terikat kepada kesemua waris, wakil peribadi, pemegang wasi, pengganti dalam hakmilik atau penerima serahhak yang dibenarkan bagi pihak- pihak di dalam Dokumen Pengisytiharan Hibah ini.</p>
+<p>Dokumen ini mengikat waris, wakil diri, pentadbir harta pusaka dan mana-mana pihak yang dibenarkan di sisi undang-undang setakat yang dibenarkan oleh Hukum Syarak.</p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>14.	 BIDANGKUASA UNDANG-UNDANG </strong>
+<strong>10.	 BIDANGKUASA UNDANG-UNDANG </strong>
 </h3>
 
-<p>Dokumen Pengisytiharan Hibah ini adalah dikuasai dan ditafsirkan menurut undang-undang di Malaysia dan tidak berlawanan dengan Hukum Syarak dan kedua-dua pihak adalah dengan ini patuh kepada bidang kuasa Mahkamah-Mahkamah di Malaysia.</p>
+<p>Dokumen ini hendaklah ditafsirkan menurut undang-undang Malaysia serta tertakluk kepada bidang kuasa Mahkamah Syariah yang berkenaan.</p>
 
 <div
 style="
