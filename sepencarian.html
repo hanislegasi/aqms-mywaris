@@ -262,6 +262,16 @@ type="text"
 class="w-full border rounded-lg p-3 telefonWaris"
 placeholder="No Telefon">
 
+<input
+type="date"
+class="w-full border rounded-lg p-3 tarikhLahirWaris">
+placeholder="Tarikh Lahir">
+  
+<textarea
+rows="2"
+class="w-full border rounded-lg p-3 alamatWaris"
+placeholder="Alamat"></textarea>
+  
 <select
 class="w-full border rounded-lg p-3 statusWaris">
 
@@ -1281,6 +1291,18 @@ type="text"
 class="w-full border rounded-lg p-3 telefonWaris"
 placeholder="No Telefon"
 value="${item.telefon || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 tarikhLahirWaris"
+placeholder="Tarikh Lahir"
+value="${item.tarikhLahir || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 alamatWaris"
+placeholder="Alamat"
+value="${item.alamat || ''}">
 
 <select
 class="w-full border rounded-lg p-3 statusWaris">
@@ -2611,6 +2633,12 @@ document.querySelectorAll(".hubunganWaris")[index].value,
 telefon:
 document.querySelectorAll(".telefonWaris")[index].value,
 
+tarikhLahir:
+document.querySelectorAll(".tarikhLahirWaris")[index].value,
+
+alamat:
+document.querySelectorAll(".alamatWaris")[index].value,
+  
 status:
 document.querySelectorAll(".statusWaris")[index].value
 
@@ -3277,6 +3305,15 @@ placeholder="Hubungan">
 type="text"
 class="w-full border rounded-lg p-3 telefonWaris"
 placeholder="No Telefon">
+
+<input
+type="date"
+class="w-full border rounded-lg p-3 tarikhLahirWaris">
+
+<textarea
+class="w-full border rounded-lg p-3 alamatWaris"
+rows="2"
+placeholder="Alamat"></textarea>
 
 <select
 class="w-full border rounded-lg p-3 statusWaris">
