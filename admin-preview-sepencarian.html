@@ -1597,12 +1597,7 @@ Object.values(groupedSepencarian).forEach(item=>{
         generateTakAlihTable(item.hartaTakAlih)
     )
 
-    .replaceAll(
-        "{{PEMEGANG_AMANAH}}",
-        generatePemegangAmanah(item)
-    )
-
-    .replaceAll(
+       .replaceAll(
         "{{NAMA_PENERIMA}}",
         pihak.nama
     )
@@ -1698,7 +1693,7 @@ currentDocRef;
                     currentNumber = (counterSnap.data().hibahCounter || 0) + 1;
                 }
 
-                 docRefNo = `AQMS-HIB-${year}-${String(currentNumber).padStart(3,"0")}`;
+                 docRefNo = `AQMS-HSP-${year}-${String(currentNumber).padStart(3,"0")}`;
 
                 await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
                     status: "APPROVED",
@@ -1712,9 +1707,9 @@ currentDocRef;
 await addDoc(
     collection(db, "users", userId, "notifications"),
     {
-        title: "Dokumen Hibah Diluluskan",
-        message: `Dokumen Hibah anda (${docRefNo}) telah diluluskan dan sedia untuk dilihat.`,
-        type: "HIBAH_APPROVED",
+        title: "Dokumen Sepencarian Diluluskan",
+        message: `Dokumen Sepencarian anda (${docRefNo}) telah diluluskan dan sedia untuk dilihat.`,
+        type: "SEPENCARIAN_APPROVED",
         read: false,
         createdAt: today.toISOString()
     }
