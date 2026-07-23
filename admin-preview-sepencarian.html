@@ -1627,6 +1627,11 @@ data.telefon || "-"
         pihak.ic
     )
 
+.replaceAll(
+"{{ALAMAT_PENERIMA}}",
+pihak.alamat || "-"
+)
+        
     .replaceAll(
         "{{HUBUNGAN}}",
         item.hubungan
