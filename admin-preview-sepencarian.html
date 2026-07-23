@@ -360,17 +360,17 @@ class="border border-gray-300 p-5 font-medium">
 
 async function imageToBase64(url){
 
-     response = await fetch(url);
+      const response = await fetch(url);
 
 if(!response.ok){
     throw new Error("Image gagal dimuatkan");
 }
     
-     blob = await response.blob();
+    const blob = await response.blob();
 
     return new Promise((resolve)=>{
 
-         reader = new FileReader();
+         const reader = new FileReader();
 
         reader.onloadend = ()=>{
 
