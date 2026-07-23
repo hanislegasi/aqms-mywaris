@@ -467,6 +467,14 @@ Pihak Kedua memahami bahawa penentuan hak sebenar terhadap Harta Sepencarian ada
 
 <p>Pihak Pertama mengesahkan bahawa dokumen ini dibuat secara sukarela tanpa sebarang ugutan, paksaan, tekanan atau salah nyata daripada mana-mana pihak.</p>
 
+<div class="pdf-footer">
+<span class="footer-docref"></span>
+<span class="page-number"></span>
+</div>
+</div>
+
+<div class="a4-page p-[18mm]">
+
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>6.	PINDAAN</strong>
 </h3>
@@ -484,14 +492,6 @@ Pihak Kedua memahami bahawa penentuan hak sebenar terhadap Harta Sepencarian ada
 </h3>
 
 <p>Sebarang notis atau komunikasi hendaklah dibuat secara bertulis kepada alamat terakhir yang diketahui.</p>
-
-<div class="pdf-footer">
-<span class="footer-docref"></span>
-<span class="page-number"></span>
-</div>
-</div>
-
-<div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>9.	 ORANG YANG TERIKAT</strong>
