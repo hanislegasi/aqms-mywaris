@@ -1954,6 +1954,9 @@ if (data.hartaBerpenama) {
             "#hartaBerpenamaContainer > div:last-child"
         );
 
+console.log(row);
+console.log(row.querySelector(".jenisPenama"));
+      
         row.querySelector(".jenisBerpenama").value =
             item.jenis || "";
 
@@ -1967,6 +1970,14 @@ if (data.hartaBerpenama) {
         row.querySelector(".jenisPenama")
             .dispatchEvent(new Event("change"));
 
+console.log(
+row.querySelector(".penamaWarisSection")
+);
+
+console.log(
+row.querySelector(".penamaLainSection")
+);
+      
         //---------------------------------
         // WARIS
         //---------------------------------
