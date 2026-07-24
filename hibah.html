@@ -706,24 +706,71 @@ type="text"
 class="w-full border rounded-lg p-3 akaunBerpenama"
 placeholder="No Akaun">
 
+<select
+class="w-full border rounded-lg p-3 jenisPenama">
+
+<option value="">
+Pilih Penama
+</option>
+
+<option value="waris">
+Waris
+</option>
+
+<option value="lain">
+Orang Lain
+</option>
+
+</select>
+
+<div class="penamaWarisSection hidden">
+
+<div class="penamaWarisContainer">
+</div>
+
+<div class="flex gap-2 mt-3">
+
+<button
+type="button"
+class="addPenamaWarisBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
+
++ Tambah Penama
+
+</button>
+
+<button
+type="button"
+class="deletePenamaWarisBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam Penama
+
+</button>
+
+</div>
+
+</div>
+
+<div class="penamaLainSection hidden space-y-3">
+
 <input
 type="text"
-class="w-full border rounded-lg p-3 penamaBerpenama"
+class="w-full border rounded-lg p-3 penama"
 placeholder="Nama Penama">
 
 <input
 type="text"
-class="w-full border rounded-lg p-3 icPenamaBerpenama"
+class="w-full border rounded-lg p-3 penamaIC"
 placeholder="No IC">
 
 <input
 type="text"
-class="w-full border rounded-lg p-3 hubunganPenamaBerpenama"
+class="w-full border rounded-lg p-3 penamaHubungan"
 placeholder="Hubungan">
 
+</div>
 <input
 type="number"
-class="w-full border rounded-lg p-3 bahagianBerpenama"
+class="w-full border rounded-lg p-3 bahagianPenamaLain"
 placeholder="Bahagian (%)">
 
 <button
@@ -770,10 +817,60 @@ type="text"
 class="w-full border rounded-lg p-3 polisiTakaful"
 placeholder="Nama Polisi">
 
+<select
+class="w-full border rounded-lg p-3 jenisPenerimaTakaful">
+
+<option value="">
+Pilih Penerima
+</option>
+
+<option value="waris">
+Waris
+</option>
+
+<option value="lain">
+Orang Lain
+</option>
+
+</select>
+
+<!-- WARIS -->
+
+<div class="penerimaWarisTakafulSection hidden">
+
+<div class="penerimaWarisTakafulContainer">
+</div>
+
+<div class="flex gap-2 mt-3">
+
+<button
+type="button"
+class="addPenerimaWarisTakafulBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
+
++ Tambah Penerima
+
+</button>
+
+<button
+type="button"
+class="deletePenerimaWarisTakafulBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam Penerima
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ORANG LAIN -->
+
+<div class="penerimaLainTakafulSection hidden space-y-3">
+
 <input
 type="text"
 class="w-full border rounded-lg p-3 penerimaTakaful"
-placeholder="Nama Penerima Pampasan">
+placeholder="Nama Penerima">
 
 <input
 type="text"
@@ -787,8 +884,10 @@ placeholder="Hubungan">
 
 <input
 type="number"
-class="w-full border rounded-lg p-3 bahagianTakaful"
+class="w-full border rounded-lg p-3 bahagianPenerimaTakaful"
 placeholder="Bahagian (%)">
+
+</div>
 
 <button
 type="button"
@@ -1242,6 +1341,7 @@ populateWarisDropdownTakAlih();
 populateWarisDropdownHibah();
 populatePasanganDropdown();
 populatePemegangAmanahPasangan();
+populateWarisDropdownPenama();
   
 checkPemegangAmanah();
 
@@ -1841,85 +1941,157 @@ item.penerimaSepencarianTakAlih || "";
 
 }
 
-if(data.hartaBerpenama){
- 
-document.getElementById(
-"hartaBerpenamaContainer"
-).innerHTML = "";
+if (data.hartaBerpenama) {
 
-data.hartaBerpenama.forEach(item=>{
+    document.getElementById("hartaBerpenamaContainer").innerHTML = "";
 
-document.getElementById(
-"hartaBerpenamaContainer"
-).insertAdjacentHTML(
-"beforeend",
-`
+    data.hartaBerpenama.forEach(item => {
 
-<div class="border rounded-xl p-4 space-y-3 mb-4">
+        // Guna function yang dah kita buat dalam Part 1
+        document.getElementById("addBerpenamaBtn").click();
 
-<select
-class="w-full border rounded-lg p-3 jenisBerpenama">
+        const row = document.querySelector(
+            "#hartaBerpenamaContainer > div:last-child"
+        );
 
-<option value="">
-Pilih Jenis
-</option>
+        row.querySelector(".jenisBerpenama").value =
+            item.jenis || "";
 
-<option value="KWSP"
-${item.jenis==="KWSP"?"selected":""}>
-KWSP
-</option>
+        row.querySelector(".akaunBerpenama").value =
+            item.akaun || "";
 
-<option value="Tabung Haji"
-${item.jenis==="Tabung Haji"?"selected":""}>
-Tabung Haji
-</option>
+        row.querySelector(".jenisPenama").value =
+            item.jenisPenama || "";
 
-<option value="ASB"
-${item.jenis==="ASB"?"selected":""}>
-ASB
-</option>
+        // trigger show/hide section
+        row.querySelector(".jenisPenama")
+            .dispatchEvent(new Event("change"));
 
-</select>
+        //---------------------------------
+        // WARIS
+        //---------------------------------
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 akaunBerpenama"
-value="${item.akaun || ''}" placeholder="No Akaun">
+        if (item.jenisPenama === "waris") {
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 penamaBerpenama"
-value="${item.penama || ''}" placeholder="Nama Penama">
+            const container =
+                row.querySelector(".penamaWarisContainer");
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 icPenamaBerpenama"
-value="${item.ic || ''}" placeholder="No IC">
+            container.innerHTML = "";
 
-<input
-type="text"
-class="w-full border rounded-lg p-3 hubunganPenamaBerpenama"
-value="${item.hubungan || ''}" placeholder="Hubungan">
+            (item.penamaWaris || []).forEach(w => {
 
-<input
-type="number"
-class="w-full border rounded-lg p-3 bahagianBerpenama"
-value="${item.bahagian || ''}" placeholder="Bahagian (%)">
+                addPenamaWaris(container);
 
-<button
-type="button"
-class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+                const last =
+                    container.lastElementChild;
 
-Padam
+                last.querySelector(".pilihWarisPenama").value =
+                    w.nama || "";
 
-</button>
+                last.querySelector(".bahagianPenamaWaris").value =
+                    w.bahagian || "";
 
-</div>
+            });
 
-`
-);
+        }
 
-});
+        //---------------------------------
+        // ORANG LAIN
+        //---------------------------------
+
+        if (item.jenisPenama === "lain") {
+
+            row.querySelector(".penama").value =
+                item.penamaLain?.nama || "";
+
+            row.querySelector(".penamaIC").value =
+                item.penamaLain?.ic || "";
+
+            row.querySelector(".penamaHubungan").value =
+                item.penamaLain?.hubungan || "";
+
+            row.querySelector(".bahagianPenamaLain").value =
+                item.penamaLain?.bahagian || "";
+
+        }
+
+    });
+
+}
+
+if (data.takaful) {
+
+    document.getElementById("takafulContainer").innerHTML = "";
+
+    data.takaful.forEach(item => {
+
+        document.getElementById("addTakafulBtn").click();
+
+        const row = document.querySelector(
+            "#takafulContainer > div:last-child"
+        );
+
+        row.querySelector(".syarikatTakaful").value =
+            item.syarikat || "";
+
+        row.querySelector(".polisiTakaful").value =
+            item.polisi || "";
+
+        row.querySelector(".jenisPenerimaTakaful").value =
+            item.jenisPenerima || "";
+
+        row.querySelector(".jenisPenerimaTakaful")
+            .dispatchEvent(new Event("change"));
+
+        //---------------------------------
+        // WARIS
+        //---------------------------------
+
+        if (item.jenisPenerima === "waris") {
+
+            const container =
+                row.querySelector(".penerimaWarisTakafulContainer");
+
+            container.innerHTML = "";
+
+            (item.penerimaWaris || []).forEach(w => {
+
+                addPenerimaWarisTakaful(container);
+
+                const last =
+                    container.lastElementChild;
+
+                last.querySelector(".pilihWarisTakaful").value =
+                    w.nama || "";
+
+                last.querySelector(".bahagianWarisTakaful").value =
+                    w.bahagian || "";
+
+            });
+
+        }
+
+        //---------------------------------
+        // ORANG LAIN
+        //---------------------------------
+
+        if (item.jenisPenerima === "lain") {
+
+            row.querySelector(".penerimaTakaful").value =
+                item.penerimaLain?.nama || "";
+
+            row.querySelector(".icPenerimaTakaful").value =
+                item.penerimaLain?.ic || "";
+
+            row.querySelector(".hubunganTakaful").value =
+                item.penerimaLain?.hubungan || "";
+
+            row.querySelector(".bahagianPenerimaTakaful").value =
+                item.penerimaLain?.bahagian || "";
+
+        }
+
+    });
 
 }
 
@@ -2504,13 +2676,13 @@ document.querySelectorAll(".notaWasiat")[index].value
 
 });
 
-const waris = [];
+const warisList = [];
 
 document
 .querySelectorAll(".namaWaris")
 .forEach((item,index)=>{
 
-waris.push({
+warisList.push({
 
 nama:
 document.querySelectorAll(".namaWaris")[index].value,
@@ -2529,13 +2701,13 @@ document.querySelectorAll(".tarikhLahirWaris")[index].value,
 
 alamat:
 document.querySelectorAll(".alamatWaris")[index].value,
-
+  
 status:
 document.querySelectorAll(".statusWaris")[index].value
 
 });
 
-});          
+});           
 
 const hartaAlih = [];
 
@@ -2679,65 +2851,193 @@ document
 
 });
 
-const hartaBerpenama = [];
+const hartaBerpenama=[];
 
 document
-.querySelectorAll(".jenisBerpenama")
-.forEach((item,index)=>{
- 
-hartaBerpenama.push({
+.querySelectorAll(
+"#hartaBerpenamaContainer > div"
+)
+.forEach(row=>{
 
-jenis:
-document.querySelectorAll(".jenisBerpenama")[index].value,
+const jenis=
+row.querySelector(".jenisBerpenama").value;
 
-akaun:
-document.querySelectorAll(".akaunBerpenama")[index].value,
+const akaun=
+row.querySelector(".akaunBerpenama").value;
 
-penama:
-document.querySelectorAll(".penamaBerpenama")[index].value,
+const jenisPenama=
+row.querySelector(".jenisPenama").value;
+
+const penamaWaris=[];
+
+if(jenisPenama==="waris"){
+
+row
+.querySelectorAll(".penamaWarisRow")
+.forEach(r=>{
+
+const nama=
+r.querySelector(".pilihWarisPenama").value;
+
+const bahagian=
+r.querySelector(".bahagianPenamaWaris").value;
+
+const idx=
+[...document.querySelectorAll(".namaWaris")]
+.findIndex(
+x=>x.value===nama
+);
+
+penamaWaris.push({
+
+nama,
 
 ic:
-document.querySelectorAll(".icPenamaBerpenama")[index].value,
+idx>=0
+?
+document.querySelectorAll(".icWaris")[idx].value
+:
+"",
 
 hubungan:
-document.querySelectorAll(".hubunganPenamaBerpenama")[index].value,
+idx>=0
+?
+document.querySelectorAll(".hubunganWaris")[idx].value
+:
+"",
+
+bahagian
+
+});
+
+});
+
+}
+
+const penamaLain={
+
+nama:
+row.querySelector(".penama")?.value || "",
+
+ic:
+row.querySelector(".penamaIC")?.value || "",
+
+hubungan:
+row.querySelector(".penamaHubungan")?.value || "",
 
 bahagian:
-document.querySelectorAll(".bahagianBerpenama")[index].value
+row.querySelector(".bahagianPenamaLain")?.value || ""
+
+};
+
+hartaBerpenama.push({
+
+jenis,
+
+akaun,
+
+jenisPenama,
+
+penamaWaris,
+
+penamaLain
 
 });
 
 });
-
-const takaful = [];
+          
+const takaful=[];
 
 document
-.querySelectorAll(".syarikatTakaful")
-.forEach((item,index)=>{
+.querySelectorAll("#takafulContainer > div")
+.forEach(row=>{
+
+const syarikat=
+row.querySelector(".syarikatTakaful").value;
+
+const polisi=
+row.querySelector(".polisiTakaful").value;
+
+const jenisPenerima=
+row.querySelector(".jenisPenerimaTakaful").value;
+
+const penerimaWaris=[];
+
+if(jenisPenerima==="waris"){
+
+row
+.querySelectorAll(".penerimaWarisTakafulRow")
+.forEach(r=>{
+
+const nama=
+r.querySelector(".pilihWarisTakaful").value;
+
+const bahagian=
+r.querySelector(".bahagianWarisTakaful").value;
+
+const idx=
+[...document.querySelectorAll(".namaWaris")]
+.findIndex(
+x=>x.value===nama
+);
+
+penerimaWaris.push({
+
+nama,
+
+ic:
+idx>=0
+?
+document.querySelectorAll(".icWaris")[idx].value
+:
+"",
+
+hubungan:
+idx>=0
+?
+document.querySelectorAll(".hubunganWaris")[idx].value
+:
+"",
+
+bahagian
+
+});
+
+});
+
+}
+
+const penerimaLain={
+
+nama:
+row.querySelector(".penerimaTakaful")?.value || "",
+
+ic:
+row.querySelector(".icPenerimaTakaful")?.value || "",
+
+hubungan:
+row.querySelector(".hubunganTakaful")?.value || "",
+
+bahagian:
+row.querySelector(".bahagianPenerimaTakaful")?.value || ""
+
+};
 
 takaful.push({
 
-syarikat:
-document.querySelectorAll(".syarikatTakaful")[index].value,
+syarikat,
 
-polisi:
-document.querySelectorAll(".polisiTakaful")[index].value,
+polisi,
 
-penerima:
-document.querySelectorAll(".penerimaTakaful")[index].value,
+jenisPenerima,
 
-ic:
-document.querySelectorAll(".icPenerimaTakaful")[index].value,
+penerimaWaris,
 
-hubungan:
-document.querySelectorAll(".hubunganTakaful")[index].value,
-
-bahagian:
-document.querySelectorAll(".bahagianTakaful")[index].value
+penerimaLain
 
 });
 
-});         
+});
 
 const pemiutang = [];
 
@@ -2897,7 +3197,7 @@ pesananWasiat:
 document.getElementById("pesananWasiat").value,  
 
 waris: 
-waris,      
+warisList,         
 
 hartaAlih:
 hartaAlih,        
@@ -3070,7 +3370,8 @@ populateWarisDropdownTakAlih();
 populateWarisDropdownHibah();
 populatePasanganDropdown();
 populatePemegangAmanahPasangan();
-
+populateWarisDropdownPenama();  
+  
 checkPemegangAmanah();  
   
 });
@@ -3309,7 +3610,60 @@ setupKategoriAlih();
 populateWarisDropdown();
 populatePasanganDropdown();
 
-    
+function populateWarisDropdownPenama(){
+
+const waris = [];
+
+document
+.querySelectorAll(".namaWaris")
+.forEach((item,index)=>{
+
+waris.push({
+
+nama:item.value,
+
+ic:
+document.querySelectorAll(".icWaris")[index].value,
+
+hubungan:
+document.querySelectorAll(".hubunganWaris")[index].value
+
+});
+
+});
+
+document
+.querySelectorAll(".pilihWarisPenama")
+.forEach(select=>{
+
+const currentValue = select.value;
+
+select.innerHTML = `
+<option value="">
+Pilih Waris
+</option>
+`;
+
+waris.forEach(w=>{
+
+if(w.nama){
+
+select.innerHTML += `
+<option value="${w.nama}">
+${w.nama} (${w.hubungan})
+</option>
+`;
+
+}
+
+});
+
+select.value = currentValue;
+
+});
+
+}
+  
 function addPenerimaHibah(container){
 
 const html = `
@@ -3376,6 +3730,147 @@ populateWarisDropdownHibahTakAlih();
 
 }
 
+function addPenamaWaris(container){
+
+const html = `
+
+<div class="grid grid-cols-12 gap-3 mb-3 penamaWarisRow">
+
+<select
+class="col-span-8 w-full border rounded-lg p-3 pilihWarisPenama">
+
+<option value="">
+Pilih Waris
+</option>
+
+</select>
+
+<input
+type="number"
+class="col-span-4 w-full border rounded-lg p-3 bahagianPenamaWaris"
+placeholder="%">
+
+</div>
+
+`;
+
+container.insertAdjacentHTML("beforeend", html);
+
+populateWarisDropdownPenama();
+
+const newRow =
+container.querySelector(".penamaWarisRow:last-child");
+
+const dropdown =
+newRow.querySelector(".pilihWarisPenama");
+
+dropdown.addEventListener("change",()=>{
+
+    const warisIndex =
+    [...document.querySelectorAll(".namaWaris")]
+    .findIndex(
+        x=>x.value===dropdown.value
+    );
+
+    if(warisIndex<0) return;
+
+    console.log(
+        "Penama dipilih:",
+        dropdown.value
+    );
+
+});
+
+}
+
+function populateWarisDropdownTakaful(){
+
+const waris=[];
+
+document
+.querySelectorAll(".namaWaris")
+.forEach((item,index)=>{
+
+waris.push({
+
+nama:item.value,
+
+hubungan:
+document.querySelectorAll(".hubunganWaris")[index].value
+
+});
+
+});
+
+document
+.querySelectorAll(".pilihWarisTakaful")
+.forEach(select=>{
+
+const currentValue=
+select.value;
+
+select.innerHTML=`
+<option value="">
+Pilih Waris
+</option>
+`;
+
+waris.forEach(w=>{
+
+if(w.nama){
+
+select.innerHTML+=`
+
+<option value="${w.nama}">
+${w.nama} (${w.hubungan})
+</option>
+
+`;
+
+}
+
+});
+
+select.value=currentValue;
+
+});
+
+}
+    
+function addPenerimaWarisTakaful(container){
+
+const html = `
+
+<div class="grid grid-cols-12 gap-3 mb-3 penerimaWarisTakafulRow">
+
+<select
+class="col-span-8 w-full border rounded-lg p-3 pilihWarisTakaful">
+
+<option value="">
+Pilih Waris
+</option>
+
+</select>
+
+<input
+type="number"
+class="col-span-4 w-full border rounded-lg p-3 bahagianWarisTakaful"
+placeholder="%">
+
+</div>
+
+`;
+
+container.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+populateWarisDropdownTakaful();
+
+}
+
+    
 function populatePemegangAmanahPasangan(){
 
 const select =
@@ -3860,28 +4355,17 @@ document
 .getElementById("addBerpenamaBtn")
 .addEventListener("click",()=>{
 
-const html = `
+const html=`
 
 <div class="border rounded-xl p-4 space-y-3 mb-4">
 
 <select
 class="w-full border rounded-lg p-3 jenisBerpenama">
 
-<option value="">
-Pilih Jenis
-</option>
-
-<option value="KWSP">
-KWSP
-</option>
-
-<option value="Tabung Haji">
-Tabung Haji
-</option>
-
-<option value="ASB">
-ASB
-</option>
+<option value="">Pilih Jenis</option>
+<option value="KWSP">KWSP</option>
+<option value="Tabung Haji">Tabung Haji</option>
+<option value="ASB">ASB</option>
 
 </select>
 
@@ -3890,31 +4374,71 @@ type="text"
 class="w-full border rounded-lg p-3 akaunBerpenama"
 placeholder="No Akaun">
 
+<select
+class="w-full border rounded-lg p-3 jenisPenama">
+
+<option value="">Pilih Penama</option>
+<option value="waris">Waris</option>
+<option value="lain">Orang Lain</option>
+
+</select>
+
+<div class="penamaWarisSection hidden">
+
+<div class="penamaWarisContainer">
+</div>
+
+<div class="flex gap-2 mt-3">
+
+<button
+type="button"
+class="addPenamaWarisBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
+
++ Tambah Penama
+
+</button>
+
+<button
+type="button"
+class="deletePenamaWarisBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam Penama
+
+</button>
+
+</div>
+
+</div>
+
+<div class="penamaLainSection hidden space-y-3">
+
 <input
 type="text"
-class="w-full border rounded-lg p-3 penamaBerpenama"
+class="w-full border rounded-lg p-3 penama"
 placeholder="Nama Penama">
 
 <input
 type="text"
-class="w-full border rounded-lg p-3 icPenamaBerpenama"
+class="w-full border rounded-lg p-3 penamaIC"
 placeholder="No IC">
 
 <input
 type="text"
-class="w-full border rounded-lg p-3 hubunganPenamaBerpenama"
+class="w-full border rounded-lg p-3 penamaHubungan"
 placeholder="Hubungan">
 
 <input
 type="number"
-class="w-full border rounded-lg p-3 bahagianBerpenama"
+class="w-full border rounded-lg p-3 bahagianPenamaLain"
 placeholder="Bahagian (%)">
+
+</div>
 
 <button
 type="button"
 class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
 
-Padam
+Padam Harta
 
 </button>
 
@@ -3929,13 +4453,90 @@ document
 html
 );
 
+const row=
+document.querySelector(
+"#hartaBerpenamaContainer > div:last-child"
+);
+
+const jenisPenama=
+row.querySelector(".jenisPenama");
+
+const warisSection=
+row.querySelector(".penamaWarisSection");
+
+const lainSection=
+row.querySelector(".penamaLainSection");
+
+const penamaContainer=
+row.querySelector(".penamaWarisContainer");
+
+const addBtn=
+row.querySelector(".addPenamaWarisBtn");
+
+const deleteBtn=
+row.querySelector(".deletePenamaWarisBtn");
+
+jenisPenama.addEventListener("change",()=>{
+
+warisSection.classList.add("hidden");
+lainSection.classList.add("hidden");
+
+if(jenisPenama.value==="waris"){
+
+warisSection.classList.remove("hidden");
+
+if(
+penamaContainer.children.length===0
+){
+
+addPenamaWaris(
+penamaContainer
+);
+
+}
+
+}
+
+if(jenisPenama.value==="lain"){
+
+lainSection.classList.remove("hidden");
+
+}
+
 });
 
+addBtn.addEventListener("click",()=>{
+
+addPenamaWaris(
+penamaContainer
+);
+
+});
+
+deleteBtn.addEventListener("click",()=>{
+
+const rows=
+penamaContainer.querySelectorAll(
+".penamaWarisRow"
+);
+
+if(rows.length){
+
+rows[
+rows.length-1
+].remove();
+
+}
+
+});
+
+});
+    
 document
 .getElementById("addTakafulBtn")
 .addEventListener("click",()=>{
 
-const html = `
+const html=`
 
 <div class="border rounded-xl p-4 space-y-3 mb-4">
 
@@ -3949,10 +4550,56 @@ type="text"
 class="w-full border rounded-lg p-3 polisiTakaful"
 placeholder="Nama Polisi">
 
+<select
+class="w-full border rounded-lg p-3 jenisPenerimaTakaful">
+
+<option value="">
+Pilih Penerima
+</option>
+
+<option value="waris">
+Waris
+</option>
+
+<option value="lain">
+Orang Lain
+</option>
+
+</select>
+
+<div class="penerimaWarisTakafulSection hidden">
+
+<div class="penerimaWarisTakafulContainer">
+</div>
+
+<div class="flex gap-2 mt-3">
+
+<button
+type="button"
+class="addPenerimaWarisTakafulBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
+
++ Tambah Penerima
+
+</button>
+
+<button
+type="button"
+class="deletePenerimaWarisTakafulBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam Penerima
+
+</button>
+
+</div>
+
+</div>
+
+<div class="penerimaLainTakafulSection hidden space-y-3">
+
 <input
 type="text"
 class="w-full border rounded-lg p-3 penerimaTakaful"
-placeholder="Nama Penerima Pampasan">
+placeholder="Nama Penerima">
 
 <input
 type="text"
@@ -3966,8 +4613,10 @@ placeholder="Hubungan">
 
 <input
 type="number"
-class="w-full border rounded-lg p-3 bahagianTakaful"
+class="w-full border rounded-lg p-3 bahagianPenerimaTakaful"
 placeholder="Bahagian (%)">
+
+</div>
 
 <button
 type="button"
@@ -3988,8 +4637,79 @@ document
 html
 );
 
+const row=
+document.querySelector(
+"#takafulContainer > div:last-child"
+);
+
+const jenis=
+row.querySelector(".jenisPenerimaTakaful");
+
+const warisSection=
+row.querySelector(".penerimaWarisTakafulSection");
+
+const lainSection=
+row.querySelector(".penerimaLainTakafulSection");
+
+jenis.addEventListener("change",()=>{
+
+warisSection.classList.add("hidden");
+lainSection.classList.add("hidden");
+
+if(jenis.value==="waris"){
+
+warisSection.classList.remove("hidden");
+
+const container=
+row.querySelector(".penerimaWarisTakafulContainer");
+
+if(container.children.length===0){
+
+addPenerimaWarisTakaful(container);
+
+}
+
+}
+
+if(jenis.value==="lain"){
+
+lainSection.classList.remove("hidden");
+
+}
+
 });
 
+row
+.querySelector(".addPenerimaWarisTakafulBtn")
+.onclick=()=>{
+
+addPenerimaWarisTakaful(
+
+row.querySelector(".penerimaWarisTakafulContainer")
+
+);
+
+};
+
+row
+.querySelector(".deletePenerimaWarisTakafulBtn")
+.onclick=()=>{
+
+const container=
+row.querySelector(".penerimaWarisTakafulContainer");
+
+if(container.lastElementChild){
+
+container.lastElementChild.remove();
+
+}
+
+};
+
+populateWarisDropdownTakaful();
+
+});
+    
 document
 .getElementById("addPemiutangBtn")
 .addEventListener("click",()=>{
