@@ -855,7 +855,7 @@ color:#222;
 </p>
 
 <p>Saya, <strong>{{NAMA_PENERIMA}}</strong> (No. K/P:
-<strong>{{IC_PENERIMA}}</strong>) yang bermastautin di <strong>{{ALAMAT_PENERIMA}}</strong> {{INTRO_PENERIMA}} dengan ini mengakui bahawa saya adalah seorang Islam yang cukup umur, berada di dalam keadaan sihat tubuh badan dan waras fikiran, tanpa sebarang paksaan dan penuh kerelaan hati saya sendiri bersetuju sepertimana yang tersebut di atas.</p>
+<strong>{{IC_PENERIMA}}</strong>) yang bermastautin di <strong>{{ALAMAT_PENERIMA}}</strong> dengan ini mengakui bahawa saya adalah seorang Islam yang cukup umur, berada di dalam keadaan sihat tubuh badan dan waras fikiran, tanpa sebarang paksaan dan penuh kerelaan hati saya sendiri bersetuju sepertimana yang tersebut di atas.</p>
 <p>Saya juga mengesahkan bahawa saya telah membaca kandungan dokumen ini dan memahami bahawa pengisytiharan ini adalah berkaitan Harta Sepencarian sebagaimana yang dinyatakan oleh Pihak Pertama.</p>
 <p>Saya juga memahami bahawa penentuan hak muktamad terhadap Harta Sepencarian adalah tertakluk kepada keputusan Mahkamah Syariah mengikut Hukum Syarak dan undang-undang yang berkuat kuasa.</p>
 
