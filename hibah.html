@@ -2095,69 +2095,6 @@ if (data.takaful) {
 
 }
 
-if(data.takaful){
-
-document.getElementById(
-"takafulContainer"
-).innerHTML = "";
-
-data.takaful.forEach(item=>{
-
-document.getElementById(
-"takafulContainer"
-).insertAdjacentHTML(
-"beforeend",
-`
-
-<div class="border rounded-xl p-4 space-y-3 mb-4">
-
-<input
-type="text"
-class="w-full border rounded-lg p-3 syarikatTakaful"
-value="${item.syarikat || ''}" placeholder="Nama Syarikat">
-
-<input
-type="text"
-class="w-full border rounded-lg p-3 polisiTakaful"
-value="${item.polisi || ''}" placeholder="Nama Polisi">
-
-<input
-type="text"
-class="w-full border rounded-lg p-3 penerimaTakaful"
-value="${item.penerima || ''}" placeholder="Nama Penerima Pampasan">
-
-<input
-type="text"
-class="w-full border rounded-lg p-3 icPenerimaTakaful"
-value="${item.ic || ''}" placeholder="No IC">
-
-<input
-type="text"
-class="w-full border rounded-lg p-3 hubunganTakaful"
-value="${item.hubungan || ''}" placeholder="Hubungan">
-
-<input
-type="number"
-class="w-full border rounded-lg p-3 bahagianTakaful"
-value="${item.bahagian || ''}" placeholder="Bahagian (%)">
-
-<button
-type="button"
-class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
-
-Padam
-
-</button>
-
-</div>
-
-`
-);
-
-});
-
-}  
-
 if(data.pemiutang){
 
 document.getElementById(
