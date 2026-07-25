@@ -2805,15 +2805,15 @@ document
 .querySelectorAll(
 "#hartaBerpenamaContainer > div"
 )
-.forEach(row=>{
+.forEach((row,i)=>{
 
 console.log("ROW",i,row);
 
     console.log(
         row.querySelector(".jenisBerpenama"),
         row.querySelector(".akaunBerpenama"),
-        row.querySelector(".jenisPenama"),
-  
+        row.querySelector(".jenisPenama")
+  );
 const jenis=
 row.querySelector(".jenisBerpenama").value;
 
