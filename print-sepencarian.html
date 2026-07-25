@@ -128,31 +128,44 @@ position:relative;
 
         @page{
 
-size:A4 portrait;
+size:A4;
 
-margin:10mm;
+margin:0;
 
 }
 
 @media print{
 
+html,
 body{
 
-background:white !important;
+width:210mm;
+margin:0;
+padding:0;
 
 }
 
-.no-print{
+main{
 
-display:none !important;
+    display:block !important;
+    padding:0 !important;
+    margin:0 !important;
 
 }
 
 #scale-wrapper{
+    
+box-shadow:none !important;
+filter:none !important;
+    transform:none !important;
+    margin:0 !important;
+    width:210mm !important;
 
-transform:none !important;
+}
 
-margin:0 !important;
+#pdfContent{
+
+    margin:0 !important;
 
 }
 
