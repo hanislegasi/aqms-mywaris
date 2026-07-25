@@ -1766,7 +1766,7 @@ await addDoc(
             if(!userId) return alert("User ID tidak sah!");
 
             try {
-                await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
+                await updateDoc(doc(db, "users", userId, "sepencarian", "maklumat"), {
                     status: "REJECTED"
                 });
                 alert("Permohonan berjaya ditolak.");
