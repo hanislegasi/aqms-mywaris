@@ -365,7 +365,7 @@ if(!response.ok){
         const db = getFirestore(app);
 
         const params = new URLSearchParams(window.location.search);
-        const userId = params.get("id");
+        let userId = params.get("id");
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
@@ -1605,7 +1605,22 @@ ${index + 1}
 `;
 
 });    
-                        
+
+await document.fonts.ready;
+
+await new Promise(resolve=>requestAnimationFrame(resolve));
+await new Promise(resolve=>requestAnimationFrame(resolve));
+
+setTimeout(()=>{
+
+console.log(
+    document.querySelectorAll(".a4-page").length
+);
+    
+    window.print();
+
+},500);
+           
 /*
 document.getElementById(
 "footerDocRef1"
