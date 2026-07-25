@@ -2454,7 +2454,7 @@ async function loadFiles(){
       db,
       "users",
       currentUser.uid,
-      "sepencarianDocuments"
+      "mawarisDocuments"
     )
 
   );
@@ -2546,7 +2546,7 @@ document
     const storageRef =
     ref(
       storage,
-      "sepencarian/" +
+      "mawaris/" +
       currentUser.uid +
       "/" +
       file.name
@@ -2569,7 +2569,7 @@ await addDoc(
     db,
     "users",
     currentUser.uid,
-    "sepencarianDocuments"
+    "mawarisDocuments"
   ),
 
   {
@@ -3180,7 +3180,7 @@ document.getElementById(
               db,
               "users",
               currentUser.uid,
-              "sepencarian",
+              "mawaris",
               "maklumat"
             ),
 
