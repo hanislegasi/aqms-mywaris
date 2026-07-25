@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Preview Mawaris</title>
+    <title>Admin Preview Mawaris/title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- HTML2PDF Library -->
@@ -78,7 +78,51 @@ break-before:page;
     font-size:16px;
 }
 
-    
+#sectionHibah{
+    font-family:'Times New Roman', serif;
+    line-height:1.7;
+    color:#222;
+}
+
+#sectionHibah p{
+    font-size:16px;
+    text-align:justify;
+    line-height:1.7;
+    margin-top:0;
+    margin-bottom:14px;
+}
+#sectionHibah td,
+#sectionHibah li{
+    text-align:justify !important;
+    font-size:16px;
+}
+        
+ #sectionSepencarian{
+
+    font-family:'Times New Roman', serif;
+    color:#222;
+    line-height:1.7;
+
+}
+
+#sectionSepencarian p{
+
+    font-size:16px;
+    text-align:justify;
+    line-height:1.7;
+    margin-top:0;
+    margin-bottom:14px;
+
+}
+
+#sectionSepencarian td,
+#sectionSepencarian li{
+    font-size:16px;
+    text-align:justify;
+
+}
+
+ 
         .pdf-footer{
 position:absolute;
 bottom:5mm;
@@ -100,6 +144,38 @@ position:relative;
             transform-origin: top center;
             transition: transform 0.2s ease, margin-bottom 0.2s ease;
         }
+
+        @page{
+
+size:A4 portrait;
+
+margin:10mm;
+
+}
+
+@media print{
+
+body{
+
+background:white !important;
+
+}
+
+.no-print{
+
+display:none !important;
+
+}
+
+#scale-wrapper{
+
+transform:none !important;
+
+margin:0 !important;
+
+}
+
+}
     </style>
 </head>
 
@@ -107,7 +183,7 @@ position:relative;
 
     <!-- HEADER -->
     <div class="bg-[#153638] text-white p-5 shadow-md sticky top-0 z-50">
-        <h1 class="text-2xl font-bold font-inter">Admin Preview Mawaris</h1>
+        <h1 class="text-2xl font-bold font-inter">Admin Preview Harta Sepencarian</h1>
         <p class="text-gray-300 text-sm">Semakan Dokumen Customer</p>
     </div>
 
@@ -123,7 +199,7 @@ position:relative;
                 <!-- PAGE 1 (COVER) -->
                 <div class="a4-page">
                     <!-- Gunakan fallback imej jika gambar tempatan tiada untuk preview -->
-                    <img src="images/wasiat-cover.png" 
+                    <img src="images/sepencarian-cover.png" 
                          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2100&auto=format&fit=crop';" 
                          class="absolute inset-0 w-full h-full object-cover" alt="Cover Wasiat" />
                     
@@ -132,7 +208,7 @@ position:relative;
 
                     <!-- DOC REF -->
                     <p id="docRef" class="absolute top-[5%] left-[8%] text-[#153638] text-xl font-cinzel tracking-widest font-semibold drop-shadow-md">
-                        AQMS-MAW-2026-001
+                        AQMS-HSP-2026-001
                     </p>
 
                     <!-- YEAR -->
@@ -161,7 +237,7 @@ position:relative;
                     
                     <div class="border-b-2 border-[#153638] pb-4 mb-10 mt-5">
                         <p id="docRef2" class="text-[#153638] text-xl font-bold font-cinzel tracking-widest">
-                            DOC REF: AQMS-MAW-2026-001
+                            DOC REF: AQMS-HSP-2026-001
                         </p>
                     </div>
 
@@ -217,43 +293,52 @@ class="border border-gray-300 p-5 font-medium">
 <div
 <div id="sectionWasiat">
 </div>
+               
+<div id="sectionSepencarian">
+</div>
 
   
 </div>
                 
  </main>
         
-    <div class="max-w-[210mm] mx-auto mt-6 mb-20">
-    <!-- ACTION BUTTONS -->
-    <div class="w-full max-w-3xl mx-auto p-4 mb-8 space-y-4">
-        <button id="downloadBtn" class="w-full bg-black hover:bg-gray-800 transition-all text-white py-4 rounded-xl font-semibold shadow-lg text-lg flex justify-center items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-            </svg>
-            Download PDF
+    <div class="w-full max-w-3xl mx-auto p-4 mb-8 no-print">
+
+    <!-- Print & Download -->
+    <div class="space-y-4">
+
+        <button
+            id="printBtn"
+            class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold shadow-lg text-lg transition">
+            🖨️ Cetak / Save as PDF (Disyorkan)
         </button>
 
-        <div class="flex justify-center gap-4 mt-6">
+        <button
+            id="downloadBtn"
+            class="w-full bg-black hover:bg-gray-800 text-white py-4 rounded-xl font-semibold shadow-lg text-lg transition">
+            📥 Download PDF (Legacy)
+        </button>
 
-<button
-id="approveBtn"
-class="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition"
->
-Approve Permohonan
-</button>
-
-<button
-id="rejectBtn"
-class="bg-red-600 hover:bg-red-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition"
->
-Reject Permohonan
-</button>
-
-</div>
     </div>
 
-</div>    
+    <!-- Approve / Reject -->
+    <div class="grid grid-cols-2 gap-4 mt-4">
 
+        <button
+            id="approveBtn"
+            class="bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold shadow-lg transition">
+            ✅ Approve Permohonan
+        </button>
+
+        <button
+            id="rejectBtn"
+            class="bg-red-600 hover:bg-red-700 text-white py-4 rounded-xl font-semibold shadow-lg transition">
+            ❌ Reject Permohonan
+        </button>
+
+    </div>
+
+</div>
         
     <!-- SCRIPT FIREBASE & LOGIK APLIKASI -->
     <script type="module">
@@ -263,20 +348,20 @@ Reject Permohonan
 
         // Konfigurasi Responsif untuk Viewport Desktop & Mobile
         function updateScale() {
-            const wrapper = document.getElementById('scale-wrapper');
-            const pdfContent = document.getElementById('pdfContent');
-            const containerWidth = window.innerWidth;
-            const targetWidth = 794; // Lebar A4 (~210mm dalam piksel pada resolusi piawai)
-            const padding = 32;
+             wrapper = document.getElementById('scale-wrapper');
+             pdfContent = document.getElementById('pdfContent');
+             containerWidth = window.innerWidth;
+             targetWidth = 794; // Lebar A4 (~210mm dalam piksel pada resolusi piawai)
+             padding = 32;
 
             if (containerWidth < targetWidth + padding) {
                 // Kecilkan paparan untuk skrin mobile
-                const scale = (containerWidth - padding) / targetWidth;
+                 scale = (containerWidth - padding) / targetWidth;
                 wrapper.style.transform = `scale(${scale})`;
                 
                 // Baiki ketinggian bekas supaya tiada ruang kosong di bawah elemen
-                const actualHeight = pdfContent.offsetHeight;
-                const scaledHeight = actualHeight * scale;
+                 actualHeight = pdfContent.offsetHeight;
+                 scaledHeight = actualHeight * scale;
                 wrapper.style.marginBottom = `-${actualHeight - scaledHeight}px`;
             } else {
                 // Paparan desktop normal
@@ -294,7 +379,7 @@ Reject Permohonan
 
 async function imageToBase64(url){
 
-    const response = await fetch(url);
+      const response = await fetch(url);
 
 if(!response.ok){
     throw new Error("Image gagal dimuatkan");
@@ -304,7 +389,7 @@ if(!response.ok){
 
     return new Promise((resolve)=>{
 
-        const reader = new FileReader();
+         const reader = new FileReader();
 
         reader.onloadend = ()=>{
 
@@ -320,13 +405,13 @@ if(!response.ok){
         
         // Download Logik PDF
         document.getElementById("downloadBtn").addEventListener("click", async () => {
-            const wrapper = document.getElementById('scale-wrapper');
-            const element = document.getElementById("pdfContent");
+             wrapper = document.getElementById('scale-wrapper');
+             element = document.getElementById("pdfContent");
 
             // 1. Simpan tetapan skala dan margin asal
-            const originalTransform = wrapper.style.transform;
-            const originalMarginBottom = wrapper.style.marginBottom;
-            const originalMargin = element.style.margin;
+             originalTransform = wrapper.style.transform;
+             originalMarginBottom = wrapper.style.marginBottom;
+             originalMargin = element.style.margin;
 
             // 2. Buang skala sementara & paksa kedudukan paksi kiri (PUNCA ruang kosong)
             wrapper.style.transform = 'scale(1)';
@@ -341,8 +426,8 @@ if(!response.ok){
             
              const options = {
                 margin: 0,
-                filename: "Mawaris.pdf",
-                image: { type: "jpeg", quality: 1 },
+                filename: "Sepencarian.pdf",
+                image: { type: "jpeg", quality: 0.92 },
                 html2canvas: { 
                     scale: 2, 
                     useCORS: true, 
@@ -351,12 +436,9 @@ if(!response.ok){
                     windowWidth: document.documentElement.offsetWidth
                 },                
                  pagebreak: { mode: ['css'] }, // Pastikan html2pdf__page-break berfungsi
-                jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait", compress: true }
             };
 
-console.log(getComputedStyle(wrapper).transform);
-
-console.log(getComputedStyle(element).transform);
             
             // 4. Proses render PDF
             html2pdf().set(options).from(element).save().then(() => {
@@ -368,6 +450,20 @@ console.log(getComputedStyle(element).transform);
             });
         });
 
+document
+.getElementById("printBtn")
+.onclick=()=>{
+
+window.open(
+
+`print-sepencarian.html?id=${userId}`,
+
+"_blank"
+
+);
+
+};
+        
         // --------------------------------------------------------
         // FIREBASE LOGIC
         // --------------------------------------------------------
@@ -408,34 +504,127 @@ console.log(getComputedStyle(element).transform);
 
                 // LOAD CUSTOMER DATA
                 if (userId) {
-                    const docRef = doc(db, "users", userId, "mawaris", "maklumat");
+                    const docRef = doc(db, "users", userId, "sepencarian", "maklumat");
                     const docSnap = await getDoc(docRef);
 
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
-                        const userDoc = await getDoc(
+const userDoc = await getDoc(
     doc(db, "users", userId)
 );
 
-const lampiranSnap =
+const userData = userDoc.data();
+
+                        
+const warisMap = {};
+
+(data.waris || []).forEach(w => {
+
+    warisMap[(w.nama || "").trim()] = w;
+
+});                     
+                        
+function groupSepencarianByRecipient(data){
+
+    const grouped = {};
+
+    function addProperty(item, jenis){
+
+       const senaraiPenerima =
+    item.penerimaSepencarian ||
+    item.penerimaSepencarianTakAlih ||
+    [];
+
+if(!senaraiPenerima.length) return;
+
+console.log(item);
+console.log(item.penerimaSepencarian);
+console.log(item.penerimaSepencarianTakAlih);
+console.log(Array.isArray(item.penerimaSepencarian));
+console.log(Array.isArray(item.penerimaSepencarianTakAlih));
+        
+senaraiPenerima.forEach(penerima=>{
+
+            const nama = penerima.nama?.trim();
+
+            if(!nama) return;
+
+            if(!grouped[nama]){
+
+    const info = warisMap[nama] || {};
+
+    grouped[nama] = {
+
+        nama,
+
+        ic: info.ic || "",
+        hubungan: info.hubungan || "",
+        alamat: info.alamat || "",
+        tarikhLahir: info.tarikhLahir || "",
+        telefon: info.telefon || "",
+        peratus: penerima.peratus || "",
+        
+        status: info.status || "",
+        pemegangAmanah: data.pemegangAmanah || {},
+            
+        hartaAlih: [],
+        hartaTakAlih: []
+
+    };
+
+}
+
+            
+
+            grouped[nama][jenis].push({
+
+                namaHarta:item.nama || "-",
+                rujukan:item.rujukan || "-",
+                nilai:item.nilai || "-",
+                pemilikan:item.pemilikan || "-",
+                kategori:item.kategori || "-",
+                peratus:penerima.peratus || "-"
+
+            });
+
+        });
+
+    }
+
+    (data.hartaAlih || []).forEach(item=>{
+        addProperty(item,"hartaAlih");
+    });
+
+    (data.hartaTakAlih || []).forEach(item=>{
+        addProperty(item,"hartaTakAlih");
+    });
+
+    return grouped;
+
+}
+                        
+                        
+
+const sepencarianLampiranSnap =
 await getDocs(
 collection(
 db,
 "users",
 userId,
-"mawarisDocuments"
+"sepencarianDocuments"
 )
 );
                         
-const userData = userDoc.data();
 
-                        console.log("FULL DATA");
-                        console.log(data);
-                        console.log(Object.keys(data));
 
-                        console.log("WASIAT 1/3");
-console.log(data.wasiatSatuPerTiga);
+const groupedSepencarian = groupSepencarianByRecipient(data);
+
+
+
+                       
+                       
+                        
 
 const huruf = "abcdefghijklmnopqrstuvwxyz";
 
@@ -470,7 +659,7 @@ ${item.nota ? `, ${item.nota}` : ""}.
 `)
 .join("");
 
-console.log(wasiat13Html);                        
+                       
                         
                         // UPDATE UI
                         document.getElementById("docRef").innerHTML = data.docRef || "-";
@@ -790,7 +979,51 @@ font-size:14px;
 
 data.hartaBerpenama?.forEach(item=>{
 
-lampiranBerpenama += `
+    // PENAMA WARIS
+    if(item.jenisPenama==="waris"){
+
+        (item.penamaWaris || []).forEach((w,index)=>{
+
+            lampiranBerpenama += `
+
+<tr>
+
+<td style="border:1px solid #000;padding:8px;">
+${index===0 ? (item.jenis || "-") : ""}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${index===0 ? (item.akaun || "-") : ""}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.nama || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.ic || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.hubungan || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.bahagian || "-"}%
+</td>
+
+</tr>
+
+`;
+
+        });
+
+    }
+
+    // PENAMA ORANG LAIN
+    else{
+
+        lampiranBerpenama += `
 
 <tr>
 
@@ -803,33 +1036,39 @@ ${item.akaun || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.penama || "-"}
+${item.penamaLain?.nama || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.ic || "-"}
+${item.penamaLain?.ic || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.hubungan || "-"}
+${item.penamaLain?.hubungan || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.bahagian || "-"}
+${item.penamaLain?.bahagian || "-"}%
 </td>
 
 </tr>
 
 `;
 
-});
+    }
 
+});
 lampiranBerpenama += `
 </table>
 `;
 
 let lampiranTakaful = `
-<table style="width:100%;border-collapse:collapse;font-size:14px;">
+<table
+style="
+width:100%;
+border-collapse:collapse;
+font-size:14px;
+">
 
 <tr>
 <th style="border:1px solid #000;padding:8px;">Syarikat</th>
@@ -843,7 +1082,51 @@ let lampiranTakaful = `
 
 data.takaful?.forEach(item=>{
 
-lampiranTakaful += `
+    // PENERIMA WARIS
+    if(item.jenisPenerima==="waris"){
+
+        (item.penerimaWaris || []).forEach((w,index)=>{
+
+            lampiranTakaful += `
+
+<tr>
+
+<td style="border:1px solid #000;padding:8px;">
+${index===0 ? (item.syarikat || "-") : ""}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${index===0 ? (item.polisi || "-") : ""}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.nama || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.ic || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.hubungan || "-"}
+</td>
+
+<td style="border:1px solid #000;padding:8px;">
+${w.bahagian || "-"}%
+</td>
+
+</tr>
+
+`;
+
+        });
+
+    }
+
+    // PENERIMA ORANG LAIN
+    else{
+
+        lampiranTakaful += `
 
 <tr>
 
@@ -856,24 +1139,26 @@ ${item.polisi || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.penerima || "-"}
+${item.penerimaLain?.nama || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.ic || "-"}
+${item.penerimaLain?.ic || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.hubungan || "-"}
+${item.penerimaLain?.hubungan || "-"}
 </td>
 
 <td style="border:1px solid #000;padding:8px;">
-${item.bahagian || "-"}
+${item.penerimaLain?.bahagian || "-"}%
 </td>
 
 </tr>
 
 `;
+
+    }
 
 });
 
@@ -1129,7 +1414,7 @@ data.icWasi2 || "-"
 
 let hurufLampiran = "I".charCodeAt(0);
                        
-for(const doc of lampiranSnap.docs){
+for(const doc of sepencarianLampiranSnap.docs){
 
 const file = doc.data();
 
@@ -1188,8 +1473,200 @@ document.getElementById(
 "sectionWasiat"
 ).innerHTML =
 finalContent;
-          
+                       
+function generateAlihTable(list){
 
+    if(!list.length){
+
+        return "<p>Tiada Harta Alih.</p>";
+
+    }
+
+    let html = `
+    <table style="
+        width:100%;
+        border-collapse:collapse;
+        font-size:14px;
+        margin-top:10px;
+    ">
+
+    <tr>
+        <th style="border:1px solid #000;padding:8px;">Nama Harta</th>
+        <th style="border:1px solid #000;padding:8px;">Rujukan</th>
+        <th style="border:1px solid #000;padding:8px;">Nilai</th>
+        <th style="border:1px solid #000;padding:8px;">Peratus</th>
+    </tr>
+    `;
+
+    list.forEach(item=>{
+
+        html += `
+        <tr>
+
+            <td style="border:1px solid #000;padding:8px;">
+                ${item.namaHarta}
+            </td>
+
+            <td style="border:1px solid #000;padding:8px;">
+                ${item.rujukan}
+            </td>
+
+            <td style="border:1px solid #000;padding:8px;">
+                ${item.nilai}
+            </td>
+
+            <td style="border:1px solid #000;padding:8px;text-align:center;">
+                ${item.peratus}%
+            </td>
+
+        </tr>
+        `;
+
+    });
+
+    html += "</table>";
+
+    return html;
+
+}
+
+function generateTakAlihTable(list){
+
+    if(!list.length){
+        return "<p>Tiada Harta Tak Alih.</p>";
+    }
+
+    let html = `
+    <table style="
+        width:100%;
+        border-collapse:collapse;
+        font-size:14px;
+        margin-top:10px;
+    ">
+    <tr>
+        <th style="border:1px solid #000;padding:8px;">Nama Harta</th>
+        <th style="border:1px solid #000;padding:8px;">No. Geran</th>
+        <th style="border:1px solid #000;padding:8px;">Nilai</th>
+        <th style="border:1px solid #000;padding:8px;">Peratus</th>
+    </tr>
+    `;
+
+    list.forEach(item=>{
+
+        html += `
+        <tr>
+            <td style="border:1px solid #000;padding:8px;">
+                ${item.namaHarta}
+            </td>
+
+            <td style="border:1px solid #000;padding:8px;">
+                ${item.rujukan}
+            </td>
+
+            <td style="border:1px solid #000;padding:8px;">
+                ${item.nilai}
+            </td>
+
+            <td style="border:1px solid #000;padding:8px;text-align:center;">
+                ${item.peratus}%
+            </td>
+        </tr>
+        `;
+
+    });
+
+    html += "</table>";
+
+    return html;
+
+}
+
+function formatDateMY(dateStr){
+
+    if(!dateStr) return "-";
+
+    return new Date(dateStr)
+        .toLocaleDateString("ms-MY");
+
+}
+
+                   
+                
+let sepencarianHTML = "";
+
+Object.values(groupedSepencarian).forEach(item=>{
+
+    const pihak = {
+
+        nama: item.nama,
+        ic: item.ic,
+        alamat: item.alamat
+
+    };
+console.log("PIHAK:", pihak);
+    sepencarianHTML += sepencarianContent
+
+    .replaceAll(
+        "{{TABLE_ALIH}}",
+        generateAlihTable(item.hartaAlih)
+    )
+
+    .replaceAll(
+        "{{TABLE_TAK_ALIH}}",
+        generateTakAlihTable(item.hartaTakAlih)
+    )
+
+.replaceAll(
+"{{NAMA_PEMILIK}}",
+data.nama || "-"
+)
+
+.replaceAll(
+"{{IC_PEMILIK}}",
+data.ic || "-"
+)
+
+.replaceAll(
+"{{ALAMAT_PEMILIK}}",
+data.alamat || "-"
+)
+
+.replaceAll(
+"{{TELEFON_PEMILIK}}",
+data.telefon || "-"
+)
+        
+       .replaceAll(
+        "{{NAMA_PENERIMA}}",
+        pihak.nama
+    )
+
+    .replaceAll(
+        "{{IC_PENERIMA}}",
+        pihak.ic
+    )
+
+.replaceAll(
+"{{ALAMAT_PENERIMA}}",
+pihak.alamat || "-"
+)
+        
+    .replaceAll(
+        "{{HUBUNGAN}}",
+        item.hubungan
+    )
+
+    .replaceAll(
+        "{{PERATUS}}",
+        item.peratus
+    );
+
+});
+
+document.getElementById(
+    "sectionSepencarian"
+).innerHTML = sepencarianHTML;
+                        
 const currentDocRef =
 data.docRef ||
 data.docRefNo ||
@@ -1249,34 +1726,47 @@ currentDocRef;
             if(!userId) return alert("User ID tidak sah!");
             
             try {
-                const today = new Date();
-                const year = today.getFullYear();
+                 today = new Date();
+                 year = today.getFullYear();
+
+const sepencarianRef = doc(db, "users", userId, "sepencarian", "maklumat");
+const sepencarianSnap = await getDoc(sepencarianRef);
+const sepencarianData = sepencarianSnap.data();
                 
-                const counterRef = doc(db, "system", "counter");
-                const counterSnap = await getDoc(counterRef);
-                let currentNumber = 1;
+                 let docRefNo = sepencarianData?.docRef;
+let currentNumber = sepencarianData?.docNumber;
 
-                if (counterSnap.exists()) {
-                    currentNumber = (counterSnap.data().mawarisCounter || 0) + 1;
-                }
+if (!docRefNo) {
 
-                const docRefNo = `AQMS-MAW-${year}-${String(currentNumber).padStart(3,"0")}`;
+    const counterRef = doc(db, "system", "counter");
+    const counterSnap = await getDoc(counterRef);
 
-                await updateDoc(doc(db, "users", userId, "mawaris", "maklumat"), {
+    currentNumber = counterSnap.exists()
+        ? (counterSnap.data().sepencarianCounter || 0) + 1
+        : 1;
+
+    docRefNo = `AQMS-HSP-${year}-${String(currentNumber).padStart(3,"0")}`;
+
+    await setDoc(counterRef, {
+        sepencarianCounter: currentNumber
+    }, { merge: true });
+}
+
+                await updateDoc(sepencarianRef, {
                     status: "APPROVED",
                     approvedAt: today.toISOString(),
                     docRef: docRefNo,
                     docNumber: currentNumber
                 });
 
-                await setDoc(counterRef, { mawarisCounter: currentNumber }, { merge: true });
+               
 
 await addDoc(
     collection(db, "users", userId, "notifications"),
     {
-        title: "Dokumen Mawaris Diluluskan",
-        message: `Dokumen Mawaris anda (${docRefNo}) telah diluluskan dan sedia untuk dilihat.`,
-        type: "MAWARIS_APPROVED",
+        title: "Dokumen Sepencarian Diluluskan",
+        message: `Dokumen Sepencarian anda (${docRefNo}) telah diluluskan dan sedia untuk dilihat.`,
+        type: "SEPENCARIAN_APPROVED",
         read: false,
         createdAt: today.toISOString()
     }
@@ -1295,7 +1785,7 @@ await addDoc(
             if(!userId) return alert("User ID tidak sah!");
 
             try {
-                await updateDoc(doc(db, "users", userId, "mawaris", "maklumat"), {
+                await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
                     status: "REJECTED"
                 });
                 alert("Permohonan berjaya ditolak.");
@@ -1307,10 +1797,8 @@ await addDoc(
     </script>
 
 <script src="wasiat-content.js"></script>
-
-<script src="hibah-content.js"></script>
-  
+   
 <script src="sepencarian-content.js"></script>
-    
+  
 </body>
 </html>
