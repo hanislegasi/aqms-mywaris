@@ -183,7 +183,7 @@ margin:0 !important;
 
     <!-- HEADER -->
     <div class="bg-[#153638] text-white p-5 shadow-md sticky top-0 z-50">
-        <h1 class="text-2xl font-bold font-inter">Admin Preview Harta Sepencarian</h1>
+        <h1 class="text-2xl font-bold font-inter">Admin Preview Mawaris</h1>
         <p class="text-gray-300 text-sm">Semakan Dokumen Customer</p>
     </div>
 
@@ -199,7 +199,7 @@ margin:0 !important;
                 <!-- PAGE 1 (COVER) -->
                 <div class="a4-page">
                     <!-- Gunakan fallback imej jika gambar tempatan tiada untuk preview -->
-                    <img src="images/sepencarian-cover.png" 
+                    <img src="images/mawaris-cover.png" 
                          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2100&auto=format&fit=crop';" 
                          class="absolute inset-0 w-full h-full object-cover" alt="Cover Wasiat" />
                     
@@ -208,7 +208,7 @@ margin:0 !important;
 
                     <!-- DOC REF -->
                     <p id="docRef" class="absolute top-[5%] left-[8%] text-[#153638] text-xl font-cinzel tracking-widest font-semibold drop-shadow-md">
-                        AQMS-HSP-2026-001
+                        AQMS-MAW-2026-001
                     </p>
 
                     <!-- YEAR -->
@@ -237,7 +237,7 @@ margin:0 !important;
                     
                     <div class="border-b-2 border-[#153638] pb-4 mb-10 mt-5">
                         <p id="docRef2" class="text-[#153638] text-xl font-bold font-cinzel tracking-widest">
-                            DOC REF: AQMS-HSP-2026-001
+                            DOC REF: AQMS-MAW-2026-001
                         </p>
                     </div>
 
@@ -293,7 +293,10 @@ class="border border-gray-300 p-5 font-medium">
 <div
 <div id="sectionWasiat">
 </div>
-               
+
+<div id="sectionHibah">
+</div>
+                
 <div id="sectionSepencarian">
 </div>
 
@@ -426,7 +429,7 @@ if(!response.ok){
             
              const options = {
                 margin: 0,
-                filename: "Sepencarian.pdf",
+                filename: "Mawaris.pdf",
                 image: { type: "jpeg", quality: 0.92 },
                 html2canvas: { 
                     scale: 2, 
@@ -456,7 +459,7 @@ document
 
 window.open(
 
-`print-sepencarian.html?id=${userId}`,
+`print-mawaris.html?id=${userId}`,
 
 "_blank"
 
@@ -504,7 +507,7 @@ window.open(
 
                 // LOAD CUSTOMER DATA
                 if (userId) {
-                    const docRef = doc(db, "users", userId, "sepencarian", "maklumat");
+                    const docRef = doc(db, "users", userId, "mawaris", "maklumat");
                     const docSnap = await getDoc(docRef);
 
                     if (docSnap.exists()) {
@@ -524,6 +527,98 @@ const warisMap = {};
     warisMap[(w.nama || "").trim()] = w;
 
 });                     
+
+function groupHibahByRecipient(data){
+
+    const grouped = {};
+
+    function addProperty(item, jenis){
+
+       const senaraiPenerima =
+    item.penerimaHibah ||
+    item.penerimaHibahTakAlih ||
+    [];
+
+if(!senaraiPenerima.length) return;
+
+senaraiPenerima.forEach(penerima=>{
+
+            const nama = penerima.nama?.trim();
+
+            if(!nama) return;
+
+            if(!grouped[nama]){
+
+    const info = warisMap[nama] || {};
+
+    grouped[nama] = {
+
+        nama,
+
+        ic: info.ic || "",
+        hubungan: info.hubungan || "",
+        alamat: info.alamat || "",
+        tarikhLahir: info.tarikhLahir || "",
+        telefon: info.telefon || "",
+        peratus: penerima.peratus || "",
+        
+        status: info.status || "",
+        pemegangAmanah: data.pemegangAmanah || {},
+            
+        hartaAlih: [],
+        hartaTakAlih: []
+
+    };
+
+}
+
+            
+
+            grouped[nama][jenis].push({
+
+                namaHarta:item.nama || "-",
+                rujukan:item.rujukan || "-",
+                nilai:item.nilai || "-",
+                pemilikan:item.pemilikan || "-",
+                kategori:item.kategori || "-",
+                peratus:penerima.peratus || "-"
+
+            });
+
+        });
+
+    }
+
+    (data.hartaAlih || []).forEach(item=>{
+        addProperty(item,"hartaAlih");
+    });
+
+    (data.hartaTakAlih || []).forEach(item=>{
+        addProperty(item,"hartaTakAlih");
+    });
+
+    return grouped;
+
+}
+                        
+                        const userDoc = await getDoc(
+    doc(db, "users", userId)
+);
+
+const lampiranSnap =
+await getDocs(
+collection(
+db,
+"users",
+userId,
+"hibahDocuments"
+)
+);
+                        
+const userData = userDoc.data();
+
+const groupedHibah = groupHibahByRecipient(data);
+                        
                         
 function groupSepencarianByRecipient(data){
 
@@ -1590,7 +1685,120 @@ function formatDateMY(dateStr){
 
 }
 
-                   
+                        
+
+let hibahHTML = "";
+
+Object.values(groupedHibah).forEach(item=>{
+
+function getPihakPenerima(item){
+
+    const bawahUmur =
+        item.status === "bawah18" ||
+        item.status === "oku";
+
+    if(bawahUmur){
+
+        const p = item.pemegangAmanah || {};
+
+        return{
+
+            nama: p.nama || "-",
+            ic: p.ic || "-",
+            alamat: p.alamat || item.alamat || "-",
+
+            gelaran: "Pemegang Amanah",
+
+            intro:
+`selaku <strong>"Pemegang Amanah"</strong> bagi pihak
+<strong>${item.nama}</strong>
+(Penerima Hibah)`,
+
+            benefisiari:item.nama
+
+        };
+
+    }
+
+    return{
+
+        nama:item.nama,
+        ic:item.ic,
+        alamat:item.alamat,
+
+        gelaran:"Penerima Hibah",
+
+        intro:`(selepas ini disebut sebagai
+<strong>"Penerima Hibah"</strong>)`,
+
+        benefisiari:item.nama
+
+    };
+
+}
+
+const pihak = getPihakPenerima(item);   
+    console.log(item);
+    hibahHTML += hibahContent
+              .replaceAll(
+            "{{NAMA_PENERIMA}}",
+            pihak.nama
+        )
+       .replaceAll(
+    "{{TABLE_ALIH}}",
+    generateAlihTable(item.hartaAlih)
+)
+        .replaceAll(
+    "{{TABLE_TAK_ALIH}}",
+    generateTakAlihTable(item.hartaTakAlih)
+)
+
+.replaceAll(
+"{{PEMEGANG_AMANAH}}",
+generatePemegangAmanah(item)
+)
+        
+.replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
+.replaceAll("{{IC_PEMBERI}}", data.ic || "-")
+.replaceAll("{{ALAMAT_PEMBERI}}", data.alamat || "-")
+.replaceAll("{{TELEFON_PEMBERI}}", data.telefon || "-")
+
+.replaceAll("{{IC_PENERIMA}}", pihak.ic || "-")
+.replaceAll("{{HUBUNGAN}}", item.hubungan || "-")
+.replaceAll("{{ALAMAT_PENERIMA}}", pihak.alamat || "-")
+.replaceAll("{{PERATUS}}", item.peratus || "-")
+.replaceAll(
+   "{{TARIKH_DOKUMEN}}",
+   approvedDate
+      ? approvedDate.toLocaleDateString("ms-MY")
+      : "-"
+)
+
+.replaceAll(
+    "{{TARIKH_LAHIR}}",
+    formatDateMY(item.tarikhLahir)
+)
+
+.replaceAll(
+"{{LABEL_PENERIMA}}",
+pihak.gelaran
+)
+
+.replaceAll(
+"{{INTRO_PENERIMA}}",
+pihak.intro
+)
+
+.replaceAll(
+"{{BENEFISIARI}}",
+pihak.benefisiari
+)
+
+});   
+                        
+document.getElementById("sectionHibah").innerHTML = hibahHTML;  
+                        
+                        
                 
 let sepencarianHTML = "";
 
@@ -1729,12 +1937,12 @@ currentDocRef;
                  today = new Date();
                  year = today.getFullYear();
 
-const sepencarianRef = doc(db, "users", userId, "sepencarian", "maklumat");
-const sepencarianSnap = await getDoc(sepencarianRef);
-const sepencarianData = sepencarianSnap.data();
+const sepencarianRef = doc(db, "users", userId, "mawaris", "maklumat");
+const sepencarianSnap = await getDoc(mawarisRef);
+const sepencarianData = mawarisSnap.data();
                 
-                 let docRefNo = sepencarianData?.docRef;
-let currentNumber = sepencarianData?.docNumber;
+                 let docRefNo = mawarisData?.docRef;
+let currentNumber = mawarisData?.docNumber;
 
 if (!docRefNo) {
 
@@ -1742,17 +1950,17 @@ if (!docRefNo) {
     const counterSnap = await getDoc(counterRef);
 
     currentNumber = counterSnap.exists()
-        ? (counterSnap.data().sepencarianCounter || 0) + 1
+        ? (counterSnap.data().mawarisCounter || 0) + 1
         : 1;
 
-    docRefNo = `AQMS-HSP-${year}-${String(currentNumber).padStart(3,"0")}`;
+    docRefNo = `AQMS-MAW-${year}-${String(currentNumber).padStart(3,"0")}`;
 
     await setDoc(counterRef, {
-        sepencarianCounter: currentNumber
+        mawarisCounter: currentNumber
     }, { merge: true });
 }
 
-                await updateDoc(sepencarianRef, {
+                await updateDoc(mawarisRef, {
                     status: "APPROVED",
                     approvedAt: today.toISOString(),
                     docRef: docRefNo,
@@ -1764,9 +1972,9 @@ if (!docRefNo) {
 await addDoc(
     collection(db, "users", userId, "notifications"),
     {
-        title: "Dokumen Sepencarian Diluluskan",
-        message: `Dokumen Sepencarian anda (${docRefNo}) telah diluluskan dan sedia untuk dilihat.`,
-        type: "SEPENCARIAN_APPROVED",
+        title: "Dokumen Mawaris Diluluskan",
+        message: `Dokumen Mawaris anda (${docRefNo}) telah diluluskan dan sedia untuk dilihat.`,
+        type: "MAWARIS_APPROVED",
         read: false,
         createdAt: today.toISOString()
     }
@@ -1785,7 +1993,7 @@ await addDoc(
             if(!userId) return alert("User ID tidak sah!");
 
             try {
-                await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
+                await updateDoc(doc(db, "users", userId, "mawaris", "maklumat"), {
                     status: "REJECTED"
                 });
                 alert("Permohonan berjaya ditolak.");
@@ -1797,7 +2005,11 @@ await addDoc(
     </script>
 
 <script src="wasiat-content.js"></script>
-   
+
+<script src="hibah-content.js"></script>
+
+<script src="pemegang-amanah.js"></script>
+    
 <script src="sepencarian-content.js"></script>
   
 </body>
