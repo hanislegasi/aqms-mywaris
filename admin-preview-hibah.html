@@ -1740,6 +1740,8 @@ currentDocRef;
 const hibahRef = doc(db, "users", userId, "hibah", "maklumat");
 const hibahSnap = await getDoc(hibahRef);
 const hibahData = hibahSnap.data();
+
+console.log(hibahData);
                 
                 let docRefNo = hibahData?.docRef;
 let currentNumber = hibahData?.docNumber;
