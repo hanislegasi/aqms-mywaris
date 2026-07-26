@@ -454,24 +454,30 @@ window.open(
         const params = new URLSearchParams(window.location.search);
         const userId = params.get("id");
 
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                // Boleh diselaraskan jika perlukan login aktif
-                console.log("No user logged in. Redirecting...");
-                // window.location.href = "login.html";
-                return;
-            }
+        onAuthStateChanged(auth, async(user)=>{
 
+   if(!user){
+      location.href="login.html";
+      return;
+   }
+
+   const userId = user.uid;
+
+document
+.getElementById("printBtn")
+.onclick=()=>{
+
+window.open(
+
+`print-wasiat.html?id=${userId}`,
+
+"_blank"
+
+);
+
+};
+            
             try {
-                // CHECK ADMIN ROLE
-                const adminDoc = await getDoc(doc(db, "users", user.uid));
-                const adminData = adminDoc.data();
-
-                if (adminData?.role !== "admin") {
-                    alert("Akses ditolak");
-                    window.location.href = "dashboard.html";
-                    return;
-                }
                 // LOAD CUSTOMER DATA
                 if (userId) {
                     const docRef = doc(db, "users", userId, "hibah", "maklumat");
