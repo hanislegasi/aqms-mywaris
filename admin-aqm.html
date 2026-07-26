@@ -395,91 +395,90 @@ user.createdAt
 
 let pendingList = [];
 
-
 // =====================
 // WASIAT
 // =====================
-
-const wasiatSnap =
-await getDoc(
-doc(db,"users",userDoc.id,"wasiat","maklumat")
+const wasiatSnap = await getDoc(
+    doc(db,"users",userDoc.id,"wasiat","maklumat")
 );
 
-if(
-wasiatSnap.exists() &&
-wasiatSnap.data().status==="UNDER_REVIEW"
-){
+if (wasiatSnap.exists()) {
 
-pendingList.push("🟡 Wasiat");
+    const data = wasiatSnap.data();
 
+    if (data.status === "UNDER_REVIEW") {
+        pendingList.push("🟡 Wasiat");
+    }
 
-
+    else if (data.status === "APPROVED") {
+        pendingList.push(`🟢 ${data.docRef || "-"}`);
+    }
 }
 
 // =====================
 // HIBAH
 // =====================
-
-const hibahSnap =
-await getDoc(
-doc(db,"users",userDoc.id,"hibah","maklumat")
+const hibahSnap = await getDoc(
+    doc(db,"users",userDoc.id,"hibah","maklumat")
 );
 
-if(
-hibahSnap.exists() &&
-hibahSnap.data().status==="UNDER_REVIEW"
-){
+if (hibahSnap.exists()) {
 
-pendingList.push("🟠 Hibah");
+    const data = hibahSnap.data();
 
+    if (data.status === "UNDER_REVIEW") {
+        pendingList.push("🟠 Hibah");
+    }
 
-
+    else if (data.status === "APPROVED") {
+        pendingList.push(`🟢 ${data.docRef || "-"}`);
+    }
 }
 
 // =====================
 // HARTA SEPENCARIAN
 // =====================
-
-const sepencarianSnap =
-await getDoc(
-doc(db,"users",userDoc.id,"sepencarian","maklumat")
+const sepencarianSnap = await getDoc(
+    doc(db,"users",userDoc.id,"sepencarian","maklumat")
 );
 
-if(
-sepencarianSnap.exists() &&
-sepencarianSnap.data().status==="UNDER_REVIEW"
-){
+if (sepencarianSnap.exists()) {
 
-pendingList.push("🟣 Sepencarian");
+    const data = sepencarianSnap.data();
 
+    if (data.status === "UNDER_REVIEW") {
+        pendingList.push("🟣 Sepencarian");
+    }
 
-
+    else if (data.status === "APPROVED") {
+        pendingList.push(`🟢 ${data.docRef || "-"}`);
+    }
 }
 
 // =====================
 // MAWARIS
 // =====================
-
-const mawarisSnap =
-await getDoc(
-doc(db,"users",userDoc.id,"mawaris","maklumat")
+const mawarisSnap = await getDoc(
+    doc(db,"users",userDoc.id,"mawaris","maklumat")
 );
 
-if(
-mawarisSnap.exists() &&
-mawarisSnap.data().status==="UNDER_REVIEW"
-){
+if (mawarisSnap.exists()) {
 
-pendingList.push("🔵 Mawaris");
+    const data = mawarisSnap.data();
 
+    if (data.status === "UNDER_REVIEW") {
+        pendingList.push("🔵 Mawaris");
+    }
 
+    else if (data.status === "APPROVED") {
+        pendingList.push(`🟢 ${data.docRef || "-"}`);
+    }
 }
 
 const pending =
 pendingList.length
 ? pendingList.join("<br>")
 : "-";
-
 
   
 html += `
