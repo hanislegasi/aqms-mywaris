@@ -1328,6 +1328,7 @@ if (!docRefNo) {
                 await updateDoc(wasiatRef, {
                     status: "APPROVED",
                     approvedAt: today.toISOString(),
+                    expiryDate: expiry.toISOString(),
                     docRef: docRefNo,
                     docNumber: currentNumber
                 });
