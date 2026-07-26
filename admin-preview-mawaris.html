@@ -1965,6 +1965,7 @@ if (!docRefNo) {
                 await updateDoc(mawarisRef, {
                     status: "APPROVED",
                     approvedAt: today.toISOString(),
+                    expiryDate: expiry.toISOString(),
                     docRef: docRefNo,
                     docNumber: currentNumber
                 });
