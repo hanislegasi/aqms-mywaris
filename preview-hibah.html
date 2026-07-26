@@ -464,22 +464,14 @@ window.open(
 
             try {
                 // CHECK ADMIN ROLE
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-const userData = userDoc.data();
-const role = userData?.role;
+                const adminDoc = await getDoc(doc(db, "users", user.uid));
+                const adminData = adminDoc.data();
 
-if (role === "admin") {
-    // boleh teruskan
-}
-else if (role === "consultant") {
-    window.location.href = "consultant-clients.html";
-    return;
-}
-else {
-    window.location.href = "dashboard.html";
-    return;
-}
-
+                if (adminData?.role !== "admin") {
+                    alert("Akses ditolak");
+                    window.location.href = "dashboard.html";
+                    return;
+                }
                 // LOAD CUSTOMER DATA
                 if (userId) {
                     const docRef = doc(db, "users", userId, "hibah", "maklumat");
