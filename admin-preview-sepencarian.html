@@ -1736,6 +1736,7 @@ if (!docRefNo) {
                 await updateDoc(sepencarianRef, {
                     status: "APPROVED",
                     approvedAt: today.toISOString(),
+                    expiryDate: expiry.toISOString(),
                     docRef: docRefNo,
                     docNumber: currentNumber
                 });
