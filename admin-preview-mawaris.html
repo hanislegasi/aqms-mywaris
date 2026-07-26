@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Preview Mawaris/title>
+    <title>Admin Preview Mawaris</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- HTML2PDF Library -->
@@ -180,9 +180,7 @@ margin:0 !important;
 </head>
 
 <body class="min-h-screen flex flex-col font-sans">
-<h1 style="color:red;font-size:40px">
-TEST MAWARIS
-</h1>
+
     <!-- HEADER -->
     <div class="bg-[#153638] text-white p-5 shadow-md sticky top-0 z-50">
         <h1 class="text-2xl font-bold font-inter">Admin Preview Mawaris</h1>
@@ -1940,9 +1938,9 @@ currentDocRef;
                  today = new Date();
                  year = today.getFullYear();
 
-const sepencarianRef = doc(db, "users", userId, "mawaris", "maklumat");
-const sepencarianSnap = await getDoc(mawarisRef);
-const sepencarianData = mawarisSnap.data();
+const mawarisRef = doc(db, "users", userId, "mawaris", "maklumat");
+const mawarisSnap = await getDoc(mawarisRef);
+const mawarisData = mawarisSnap.data();
                 
                  let docRefNo = mawarisData?.docRef;
 let currentNumber = mawarisData?.docNumber;
