@@ -2,13 +2,7 @@ function kiraUmur(tarikhLahir){
 
     if(!tarikhLahir) return "-";
 
-    const [hari, bulan, tahun] = tarikhLahir.split("-");
-
-    const lahir = new Date(
-        tahun,
-        bulan - 1,
-        hari
-    );
+    const lahir = new Date(tarikhLahir);
 
     const hariIni = new Date();
 
@@ -32,6 +26,7 @@ function kiraUmur(tarikhLahir){
 
     return umur + " Tahun";
 }
+
 function generatePemegangAmanah(item, data){
     if(
         item.status !== "bawah18" &&
