@@ -197,6 +197,8 @@ margin:0 !important;
             <div id="pdfContent">
 
                 <!-- PAGE 1 (COVER) -->
+<div id="wrapper">
+                
                 <div class="a4-page">
                     <!-- Gunakan fallback imej jika gambar tempatan tiada untuk preview -->
                     <img src="images/mawaris-cover.png" 
@@ -300,7 +302,7 @@ class="border border-gray-300 p-5 font-medium">
 <div id="sectionSepencarian">
 </div>
 
-  
+ </div>  
 </div>
                 
  </main>
@@ -345,18 +347,22 @@ class="border border-gray-300 p-5 font-medium">
         
     <!-- SCRIPT FIREBASE & LOGIK APLIKASI -->
     <script type="module">
-        alert("SCRIPT LOADED");
+        
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, doc, getDoc, updateDoc, collection, getDocs, setDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // Konfigurasi Responsif untuk Viewport Desktop & Mobile
         function updateScale() {
-             wrapper = document.getElementById('scale-wrapper');
-             pdfContent = document.getElementById('pdfContent');
-             containerWidth = window.innerWidth;
-             targetWidth = 794; // Lebar A4 (~210mm dalam piksel pada resolusi piawai)
-             padding = 32;
+
+             const wrapper = document.getElementById('scale-wrapper');
+             const pdfContent = document.getElementById('pdfContent');
+
+            if (!wrapper || !pdfContent) return;
+            
+             const containerWidth = window.innerWidth;
+             const targetWidth = 794; // Lebar A4 (~210mm dalam piksel pada resolusi piawai)
+             const padding = 32;
 
             if (containerWidth < targetWidth + padding) {
                 // Kecilkan paparan untuk skrin mobile
