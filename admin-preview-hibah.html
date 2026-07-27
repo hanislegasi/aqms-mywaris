@@ -1384,9 +1384,67 @@ data.icWasi2 || "-"
   wasiat13Html
 );
 
-finalContent += await generateLampiran(lampiranSnap);
+let hurufLampiran = "I".charCodeAt(0);
+                       
+for(const doc of sepencarianLampiranSnap.docs){
 
-document.getElementById("sectionWasiat").innerHTML = finalContent;
+const file = doc.data();
+
+const base64Image =
+await imageToBase64(file.fileURL);
+    
+finalContent += `
+
+<div class="a4-page p-[18mm]">
+
+<h2
+style="
+font-size:22px;
+font-weight:bold;
+margin-bottom:15px;
+">
+
+Lampiran ${String.fromCharCode(hurufLampiran)}
+
+</h2>
+
+<p
+style="
+margin-bottom:20px;
+font-size:15px;
+">
+
+${file.fileName}
+
+</p>
+
+<img
+src="${base64Image}"
+style="
+display:block;
+max-width:170mm;
+max-height:220mm;
+width:auto;
+height:auto;
+margin:20px auto;
+border:1px solid #ccc;
+object-fit:contain;
+">
+
+<div class="pdf-footer"></div>
+
+</div>
+
+`;
+
+hurufLampiran++;
+
+}
+                        
+document.getElementById(
+"sectionWasiat"
+).innerHTML =
+finalContent;
                        
 function generateAlihTable(list){
 
@@ -1755,8 +1813,6 @@ await addDoc(
 <script src="wasiat-content.js"></script>
     
 <script src="hibah-content.js"></script>
-
-<script src="lampiran-content.js"></script>    
 
 <script src="pemegang-amanah.js"></script>
     
