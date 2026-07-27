@@ -1707,8 +1707,8 @@ currentDocRef;
             if(!userId) return alert("User ID tidak sah!");
             
             try {
-                 today = new Date();
-                 year = today.getFullYear();
+                 const today = new Date();
+                 const year = today.getFullYear();
 
 const expiry = new Date(today);
 expiry.setFullYear(expiry.getFullYear() + 1);
