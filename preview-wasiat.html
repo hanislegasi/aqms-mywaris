@@ -490,25 +490,14 @@ if(data.status !== "APPROVED"){
 
 
                       
-if(!data.firstViewedAt){
+if (!data.firstViewedAt) {
 
-   const firstViewedAt = new Date();
+    await updateDoc(docRef, {
+        firstViewedAt: new Date().toISOString()
+    });
 
-   const expiryDate = new Date();
-
-   expiryDate.setFullYear(
-      expiryDate.getFullYear() + 1
-   );
-
-   await updateDoc(docRef,{
-      firstViewedAt:
-         firstViewedAt.toISOString(),
-
-      expiryDate:
-         expiryDate.toISOString()
-   });
-
-}             
+    data.firstViewedAt = new Date().toISOString();
+}
 
 const lampiranSnap =
 await getDocs(
