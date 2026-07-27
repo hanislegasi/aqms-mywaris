@@ -3262,11 +3262,15 @@ penghutang,
 pemegangAmanah:
 pemegangAmanah,              
               
-  createdAt:
-  new Date()
+createdAt: new Date(),   // sementara dulu
+updatedAt: new Date()    // setiap kali save
+},
+
+{
+merge: true
 }
 
-          );
+);
 
           document.getElementById(
             "status"
