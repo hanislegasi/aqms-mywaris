@@ -449,19 +449,6 @@ if(!response.ok){
             });
         });
 
-document
-.getElementById("printBtn")
-.onclick=()=>{
-
-window.open(
-
-`print-mawaris.html?id=${userId}`,
-
-"_blank"
-
-);
-
-};
         
         // --------------------------------------------------------
         // FIREBASE LOGIC
@@ -479,27 +466,30 @@ window.open(
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const params = new URLSearchParams(window.location.search);
-        const userId = params.get("id");
+        onAuthStateChanged(auth, async(user)=>{
 
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                // Boleh diselaraskan jika perlukan login aktif
-                console.log("No user logged in. Redirecting...");
-                // window.location.href = "login.html";
-                return;
-            }
+   if(!user){
+      location.href="login.html";
+      return;
+   }
 
+   const userId = user.uid;
+
+document
+.getElementById("printBtn")
+.onclick=()=>{
+
+window.open(
+
+`print-mawaris.html?id=${userId}`,
+
+"_blank"
+
+);
+
+};
+            
             try {
-                // CHECK ADMIN ROLE
-                const adminDoc = await getDoc(doc(db, "users", user.uid));
-                const adminData = adminDoc.data();
-
-                if (adminData?.role !== "admin") {
-                    alert("Akses ditolak");
-                    window.location.href = "dashboard.html";
-                    return;
-                }
 
                 // LOAD CUSTOMER DATA
                 if (userId) {
@@ -509,6 +499,56 @@ window.open(
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
+window.wasiatData = data;
+
+if(data.status !== "APPROVED"){
+
+   document.body.innerHTML = `
+      <div style="
+         max-width:700px;
+         margin:120px auto;
+         text-align:center;
+         font-family:Arial,sans-serif;
+         padding:30px;
+      ">
+         <h2>
+            Dokumen Wasiat Masih Dalam Semakan
+         </h2>
+
+         <p>
+            Dokumen Wasiat anda masih belum
+            diluluskan oleh pihak admin.
+         </p>
+
+         <a href="dashboard.html"
+            style="
+               display:inline-block;
+               margin-top:20px;
+               padding:12px 24px;
+               background:#153638;
+               color:white;
+               text-decoration:none;
+               border-radius:8px;
+            ">
+            Kembali ke Dashboard
+         </a>
+      </div>
+   `;
+
+   return;
+}
+
+
+                      
+if (!data.firstViewedAt) {
+
+    await updateDoc(docRef, {
+        firstViewedAt: new Date().toISOString()
+    });
+
+    data.firstViewedAt = new Date().toISOString();
+}
+                        
 const userDoc = await getDoc(
     doc(db, "users", userId)
 );
@@ -1920,84 +1960,7 @@ currentDocRef;
             }
         });
 
-        // APPROVE BUTTON
-        document.getElementById("approveBtn").addEventListener("click", async () => {
-            if(!userId) return alert("User ID tidak sah!");
-            
-            try {
-                 const today = new Date();
-                 const year = today.getFullYear();
-
-const expiry = new Date(today);
-expiry.setFullYear(expiry.getFullYear() + 1);
-                
-const mawarisRef = doc(db, "users", userId, "mawaris", "maklumat");
-const mawarisSnap = await getDoc(mawarisRef);
-const mawarisData = mawarisSnap.data();
-                
-                 let docRefNo = mawarisData?.docRef;
-let currentNumber = mawarisData?.docNumber;
-
-if (!docRefNo) {
-
-    const counterRef = doc(db, "system", "counter");
-    const counterSnap = await getDoc(counterRef);
-
-    currentNumber = counterSnap.exists()
-        ? (counterSnap.data().mawarisCounter || 0) + 1
-        : 1;
-
-    docRefNo = `AQMS-MAW-${year}-${String(currentNumber).padStart(3,"0")}`;
-
-    await setDoc(counterRef, {
-        mawarisCounter: currentNumber
-    }, { merge: true });
-}
-
-                await updateDoc(mawarisRef, {
-                    status: "APPROVED",
-                    approvedAt: today.toISOString(),
-                    expiryDate: expiry.toISOString(),
-                    docRef: docRefNo,
-                    docNumber: currentNumber
-                });
-
-               
-
-await addDoc(
-    collection(db, "users", userId, "notifications"),
-    {
-        title: "Dokumen Mawaris Diluluskan",
-        message: `Dokumen Mawaris anda (${docRefNo}) telah diluluskan dan sedia untuk dilihat.`,
-        type: "MAWARIS_APPROVED",
-        read: false,
-        createdAt: today.toISOString()
-    }
-);
-                
-                alert("Dokumen berjaya diluluskan");
-                location.reload();
-            } catch (error) {
-                console.log(error);
-                alert("Ralat semasa meluluskan: " + error.message);
-            }
-        });
-
-        // REJECT BUTTON
-        document.getElementById("rejectBtn").addEventListener("click", async () => {
-            if(!userId) return alert("User ID tidak sah!");
-
-            try {
-                await updateDoc(doc(db, "users", userId, "mawaris", "maklumat"), {
-                    status: "REJECTED"
-                });
-                alert("Permohonan berjaya ditolak.");
-            } catch (error) {
-                console.log(error);
-                alert("Ralat semasa menolak: " + error.message);
-            }
-        });
-    </script>
+      </script>
 
 <script src="wasiat-content.js"></script>
 
