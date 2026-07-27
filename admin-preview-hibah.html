@@ -1737,6 +1737,10 @@ currentDocRef;
                 const today = new Date();
                 const year = today.getFullYear();
 
+                const expiry = new Date(today);
+expiry.setFullYear(expiry.getFullYear() + 1);
+
+                
 const hibahRef = doc(db, "users", userId, "hibah", "maklumat");
 const hibahSnap = await getDoc(hibahRef);
 const hibahData = hibahSnap.data();
