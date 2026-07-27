@@ -1936,9 +1936,12 @@ currentDocRef;
             if(!userId) return alert("User ID tidak sah!");
             
             try {
-                 today = new Date();
-                 year = today.getFullYear();
+                 const today = new Date();
+                 const year = today.getFullYear();
 
+const expiry = new Date(today);
+expiry.setFullYear(expiry.getFullYear() + 1);
+                
 const mawarisRef = doc(db, "users", userId, "mawaris", "maklumat");
 const mawarisSnap = await getDoc(mawarisRef);
 const mawarisData = mawarisSnap.data();
