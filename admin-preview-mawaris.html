@@ -366,12 +366,12 @@ class="border border-gray-300 p-5 font-medium">
 
             if (containerWidth < targetWidth + padding) {
                 // Kecilkan paparan untuk skrin mobile
-                 scale = (containerWidth - padding) / targetWidth;
+                const scale = (containerWidth - padding) / targetWidth;
                 wrapper.style.transform = `scale(${scale})`;
                 
                 // Baiki ketinggian bekas supaya tiada ruang kosong di bawah elemen
-                 actualHeight = pdfContent.offsetHeight;
-                 scaledHeight = actualHeight * scale;
+                 const actualHeight = pdfContent.offsetHeight;
+                 const scaledHeight = actualHeight * scale;
                 wrapper.style.marginBottom = `-${actualHeight - scaledHeight}px`;
             } else {
                 // Paparan desktop normal
@@ -1511,7 +1511,7 @@ data.icWasi2 || "-"
 
 let hurufLampiran = "I".charCodeAt(0);
                        
-for(const doc of lampiranSnap.docs){
+for(const doc of mawarisLampiranSnap.docs){
 
 const file = doc.data();
 
