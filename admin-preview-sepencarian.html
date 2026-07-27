@@ -1710,6 +1710,9 @@ currentDocRef;
                  today = new Date();
                  year = today.getFullYear();
 
+const expiry = new Date(today);
+expiry.setFullYear(expiry.getFullYear() + 1);
+                
 const sepencarianRef = doc(db, "users", userId, "sepencarian", "maklumat");
 const sepencarianSnap = await getDoc(sepencarianRef);
 const sepencarianData = sepencarianSnap.data();
