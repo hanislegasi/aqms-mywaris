@@ -318,20 +318,20 @@ class="border border-gray-300 p-5 font-medium">
 
         // Konfigurasi Responsif untuk Viewport Desktop & Mobile
         function updateScale() {
-             wrapper = document.getElementById('scale-wrapper');
-             pdfContent = document.getElementById('pdfContent');
-             containerWidth = window.innerWidth;
-             targetWidth = 794; // Lebar A4 (~210mm dalam piksel pada resolusi piawai)
-             padding = 32;
+             const wrapper = document.getElementById('scale-wrapper');
+             const pdfContent = document.getElementById('pdfContent');
+             const containerWidth = window.innerWidth;
+             const targetWidth = 794; // Lebar A4 (~210mm dalam piksel pada resolusi piawai)
+             const padding = 32;
 
             if (containerWidth < targetWidth + padding) {
                 // Kecilkan paparan untuk skrin mobile
-                 scale = (containerWidth - padding) / targetWidth;
+                const scale = (containerWidth - padding) / targetWidth;
                 wrapper.style.transform = `scale(${scale})`;
                 
                 // Baiki ketinggian bekas supaya tiada ruang kosong di bawah elemen
-                 actualHeight = pdfContent.offsetHeight;
-                 scaledHeight = actualHeight * scale;
+                 const actualHeight = pdfContent.offsetHeight;
+                 const scaledHeight = actualHeight * scale;
                 wrapper.style.marginBottom = `-${actualHeight - scaledHeight}px`;
             } else {
                 // Paparan desktop normal
