@@ -522,31 +522,50 @@ document.getElementById(
 
 let takafulHTML = "";
 
-(data.takaful || []).forEach((item,index)=>{
+(data.takaful || []).forEach((item)=>{
 
-takafulHTML +=`
+let penerimaHTML = "";
+
+if(item.jenisPenerima === "waris"){
+
+(item.penerimaWaris || []).forEach(w=>{
+
+penerimaHTML += `
+<p>Penerima: ${w.nama}</p>
+<p>IC: ${w.ic}</p>
+<p>Hubungan: ${w.hubungan}</p>
+<p>Bahagian: ${w.bahagian}%</p>
+<hr class="my-2">
+`;
+
+});
+
+}else{
+
+penerimaHTML = `
+<p>Penerima: ${item.penerimaLain?.nama || "-"}</p>
+<p>IC: ${item.penerimaLain?.ic || "-"}</p>
+<p>Hubungan: ${item.penerimaLain?.hubungan || "-"}</p>
+<p>Bahagian: ${item.penerimaLain?.bahagian || "-"}%</p>
+`;
+
+}
+
+takafulHTML += `
 <div class="border rounded-lg p-3 mb-3">
 
 <p><strong>${item.syarikat}</strong></p>
 
 <p>Polisi: ${item.polisi}</p>
 
-<p>Penerima: ${item.penerima}</p>
-
-<p>IC: ${item.ic}</p>
-
-<p>Hubungan: ${item.hubungan}</p>
-
-<p>Bahagian: ${item.bahagian}%</p>
+${penerimaHTML}
 
 </div>
 `;
 
 });
 
-document.getElementById(
-"takafulList"
-).innerHTML = takafulHTML;
+document.getElementById("takafulList").innerHTML = takafulHTML;
 
 let pemiutangHTML = "";
 
