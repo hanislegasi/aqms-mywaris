@@ -1384,14 +1384,9 @@ data.icWasi2 || "-"
   wasiat13Html
 );
 
-finalContent = await appendLampiran(
-    finalContent,
-    userId,
-    "hibah"
-);
+finalContent += await generateLampiran(lampiranSnap);
 
-document.getElementById("sectionWasiat").innerHTML =
-    finalContent;
+document.getElementById("sectionWasiat").innerHTML = finalContent;
                        
 function generateAlihTable(list){
 
