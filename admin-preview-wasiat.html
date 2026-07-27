@@ -1302,9 +1302,12 @@ currentDocRef;
                 const today = new Date();
                 const year = today.getFullYear();
 
+const expiry = new Date(today);
+expiry.setFullYear(expiry.getFullYear() + 1);
+                
 const wasiatRef = doc(db, "users", userId, "wasiat", "maklumat");
 const wasiatSnap = await getDoc(wasiatRef);
-const wasiatData = hibahSnap.data();
+const wasiatData = wasiatSnap.data();
                 
                let docRefNo = wasiatData?.docRef;
 let currentNumber = wasiatData?.docNumber;
