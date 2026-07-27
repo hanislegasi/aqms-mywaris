@@ -283,43 +283,32 @@ class="border border-gray-300 p-5 font-medium">
                 
  </main>
         
-    <div class="w-full max-w-3xl mx-auto p-4 mb-8 no-print">
+     <div class="w-full max-w-3xl mx-auto p-4 mb-8 space-y-4 no-print">
 
-    <!-- Print & Download -->
-    <div class="space-y-4">
+    <button
+    id="printBtn"
+    class="w-full bg-green-600 hover:bg-green-700 transition-all text-white py-4 rounded-xl font-semibold shadow-lg text-lg flex justify-center items-center gap-2">
 
-        <button
-            id="printBtn"
-            class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold shadow-lg text-lg transition">
-            🖨️ Cetak / Save as PDF (Disyorkan)
-        </button>
+        🖨️ Cetak / Save as PDF (Disyorkan)
 
-        <button
-            id="downloadBtn"
-            class="w-full bg-black hover:bg-gray-800 text-white py-4 rounded-xl font-semibold shadow-lg text-lg transition">
-            📥 Download PDF (Legacy)
-        </button>
+    </button>
 
-    </div>
+    <button
+    id="downloadBtn"
+    class="w-full bg-black hover:bg-gray-800 transition-all text-white py-4 rounded-xl font-semibold shadow-lg text-lg flex justify-center items-center gap-2">
 
-    <!-- Approve / Reject -->
-    <div class="grid grid-cols-2 gap-4 mt-4">
+        📥 Download PDF (Legacy)
 
-        <button
-            id="approveBtn"
-            class="bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold shadow-lg transition">
-            ✅ Approve Permohonan
-        </button>
+    </button>
 
-        <button
-            id="rejectBtn"
-            class="bg-red-600 hover:bg-red-700 text-white py-4 rounded-xl font-semibold shadow-lg transition">
-            ❌ Reject Permohonan
-        </button>
 
-    </div>
+        <div class="flex justify-center gap-4 mt-6">
+
 
 </div>
+    </div>
+
+</div>    
         
     <!-- SCRIPT FIREBASE & LOGIK APLIKASI -->
     <script type="module">
@@ -431,19 +420,6 @@ if(!response.ok){
             });
         });
 
-document
-.getElementById("printBtn")
-.onclick=()=>{
-
-window.open(
-
-`print-sepencarian.html?id=${userId}`,
-
-"_blank"
-
-);
-
-};
         
         // --------------------------------------------------------
         // FIREBASE LOGIC
@@ -491,6 +467,56 @@ window.open(
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
+window.wasiatData = data;
+
+if(data.status !== "APPROVED"){
+
+   document.body.innerHTML = `
+      <div style="
+         max-width:700px;
+         margin:120px auto;
+         text-align:center;
+         font-family:Arial,sans-serif;
+         padding:30px;
+      ">
+         <h2>
+            Dokumen Wasiat Masih Dalam Semakan
+         </h2>
+
+         <p>
+            Dokumen Wasiat anda masih belum
+            diluluskan oleh pihak admin.
+         </p>
+
+         <a href="dashboard.html"
+            style="
+               display:inline-block;
+               margin-top:20px;
+               padding:12px 24px;
+               background:#153638;
+               color:white;
+               text-decoration:none;
+               border-radius:8px;
+            ">
+            Kembali ke Dashboard
+         </a>
+      </div>
+   `;
+
+   return;
+}
+
+
+                      
+if (!data.firstViewedAt) {
+
+    await updateDoc(docRef, {
+        firstViewedAt: new Date().toISOString()
+    });
+
+    data.firstViewedAt = new Date().toISOString();
+}
+                        
 const userDoc = await getDoc(
     doc(db, "users", userId)
 );
@@ -1702,83 +1728,6 @@ currentDocRef;
             }
         });
 
-        // APPROVE BUTTON
-        document.getElementById("approveBtn").addEventListener("click", async () => {
-            if(!userId) return alert("User ID tidak sah!");
-            
-            try {
-                 const today = new Date();
-                 const year = today.getFullYear();
-
-const expiry = new Date(today);
-expiry.setFullYear(expiry.getFullYear() + 1);
-                
-const sepencarianRef = doc(db, "users", userId, "sepencarian", "maklumat");
-const sepencarianSnap = await getDoc(sepencarianRef);
-const sepencarianData = sepencarianSnap.data();
-                
-                 let docRefNo = sepencarianData?.docRef;
-let currentNumber = sepencarianData?.docNumber;
-
-if (!docRefNo) {
-
-    const counterRef = doc(db, "system", "counter");
-    const counterSnap = await getDoc(counterRef);
-
-    currentNumber = counterSnap.exists()
-        ? (counterSnap.data().sepencarianCounter || 0) + 1
-        : 1;
-
-    docRefNo = `AQMS-HSP-${year}-${String(currentNumber).padStart(3,"0")}`;
-
-    await setDoc(counterRef, {
-        sepencarianCounter: currentNumber
-    }, { merge: true });
-}
-
-                await updateDoc(sepencarianRef, {
-                    status: "APPROVED",
-                    approvedAt: today.toISOString(),
-                    expiryDate: expiry.toISOString(),
-                    docRef: docRefNo,
-                    docNumber: currentNumber
-                });
-
-               
-
-await addDoc(
-    collection(db, "users", userId, "notifications"),
-    {
-        title: "Dokumen Sepencarian Diluluskan",
-        message: `Dokumen Sepencarian anda (${docRefNo}) telah diluluskan dan sedia untuk dilihat.`,
-        type: "SEPENCARIAN_APPROVED",
-        read: false,
-        createdAt: today.toISOString()
-    }
-);
-                
-                alert("Dokumen berjaya diluluskan");
-                location.reload();
-            } catch (error) {
-                console.log(error);
-                alert("Ralat semasa meluluskan: " + error.message);
-            }
-        });
-
-        // REJECT BUTTON
-        document.getElementById("rejectBtn").addEventListener("click", async () => {
-            if(!userId) return alert("User ID tidak sah!");
-
-            try {
-                await updateDoc(doc(db, "users", userId, "sepencarian", "maklumat"), {
-                    status: "REJECTED"
-                });
-                alert("Permohonan berjaya ditolak.");
-            } catch (error) {
-                console.log(error);
-                alert("Ralat semasa menolak: " + error.message);
-            }
-        });
     </script>
 
 <script src="wasiat-content.js"></script>
