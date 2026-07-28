@@ -423,6 +423,12 @@ await new Promise(r=>setTimeout(r,1000));
       return;
    }
 
+const loginDoc = await getDoc(
+    doc(db,"users",user.uid)
+);
+
+const loginUser = loginDoc.data();
+            
    const params = new URLSearchParams(window.location.search);
 
 const previewUid =
@@ -535,9 +541,7 @@ userId,
                         const userDoc = await getDoc(
     doc(db, "users", userId)
 );                
-
-const loginUser = userDoc.data();
-                        
+                       
 const userData = userDoc.data();
 
                         console.log("FULL DATA");
