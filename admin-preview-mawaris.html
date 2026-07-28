@@ -1537,18 +1537,10 @@ margin-bottom:20px;
 color:#153638;
 text-transform:uppercase;
 ">
-LAMPIRAN ${String.fromCharCode(hurufLampiran)} :
+LAMPIRAN ${String.fromCharCode(hurufLampiran)}
+:
+${(file.namaLampiran || file.fileName).toUpperCase()}
 </h2>
-
-<p
-style="
-font-family:'Times New Roman', serif;
-font-size:14px;
-margin-bottom:20px;
-color:#222;
-">
-${file.fileName}
-</p>
 
 <img
 src="${base64Image}"
