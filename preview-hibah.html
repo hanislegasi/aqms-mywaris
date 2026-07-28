@@ -278,7 +278,9 @@ class="border border-gray-300 p-5 font-medium">
 <div id="sectionHibah">
 </div>
 
-  
+<div id="sectionLampiran">
+</div>
+                
 </div>
                 
  </main>
@@ -1418,38 +1420,42 @@ data.icWasi2 || "-"
   wasiat13Html
 );
 
+let lampiranHTML = "";
+
 let hurufLampiran = "I".charCodeAt(0);
-                       
+
 for(const doc of lampiranSnap.docs){
 
-const file = doc.data();
+    const file = doc.data();
 
-const base64Image =
-await imageToBase64(file.fileURL);
-    
-finalContent += `
+    const base64Image =
+    await imageToBase64(file.fileURL);
+
+    lampiranHTML += `
 
 <div class="a4-page p-[18mm]">
 
 <h2
 style="
-font-size:22px;
-font-weight:bold;
-margin-bottom:15px;
+font-family:'Times New Roman', serif;
+font-size:28px;
+font-weight:400;
+margin-top:30px;
+margin-bottom:20px;
+color:#153638;
+text-transform:uppercase;
 ">
-
-Lampiran ${String.fromCharCode(hurufLampiran)}
-
+LAMPIRAN ${String.fromCharCode(hurufLampiran)} :
 </h2>
 
 <p
 style="
+font-family:'Times New Roman', serif;
+font-size:14px;
 margin-bottom:20px;
-font-size:15px;
+color:#222;
 ">
-
 ${file.fileName}
-
 </p>
 
 <img
@@ -1471,14 +1477,13 @@ object-fit:contain;
 
 `;
 
-hurufLampiran++;
+    hurufLampiran++;
 
 }
-                        
-document.getElementById(
-"sectionWasiat"
-).innerHTML =
-finalContent;
+
+document.getElementById("sectionWasiat").innerHTML = finalContent;
+
+document.getElementById("sectionLampiran").innerHTML = lampiranHTML;
                        
 function generateAlihTable(list){
 
