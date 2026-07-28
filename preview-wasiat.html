@@ -423,8 +423,31 @@ await new Promise(r=>setTimeout(r,1000));
       return;
    }
 
-   const userId = user.uid;
+   const params = new URLSearchParams(window.location.search);
 
+const previewUid =
+params.get("uid");
+
+const userId =
+previewUid || user.uid;
+
+if(previewUid){
+
+    if(
+        loginUser.role !== "admin" &&
+        loginUser.role !== "consultant"
+    ){
+
+        alert("Akses ditolak.");
+
+        location.href="dashboard.html";
+
+        return;
+
+    }
+
+}
+            
 document
 .getElementById("printBtn")
 .onclick=()=>{
@@ -512,7 +535,9 @@ userId,
                         const userDoc = await getDoc(
     doc(db, "users", userId)
 );                
-                              
+
+const loginUser = userDoc.data();
+                        
 const userData = userDoc.data();
 
                         console.log("FULL DATA");
