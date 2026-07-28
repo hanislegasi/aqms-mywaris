@@ -277,7 +277,8 @@ class="border border-gray-300 p-5 font-medium">
 
 <div id="sectionHibah">
 </div>
-
+                
+<div id="sectionLampiran"></div>
   
 </div>
                 
@@ -1384,16 +1385,18 @@ data.icWasi2 || "-"
   wasiat13Html
 );
 
+let lampiranHTML = "";
+
 let hurufLampiran = "I".charCodeAt(0);
-                       
+
 for(const doc of lampiranSnap.docs){
 
-const file = doc.data();
+    const file = doc.data();
 
-const base64Image =
-await imageToBase64(file.fileURL);
-    
-finalContent += `
+    const base64Image =
+    await imageToBase64(file.fileURL);
+
+    lampiranHTML += `
 
 <div class="a4-page p-[18mm]">
 
@@ -1437,14 +1440,9 @@ object-fit:contain;
 
 `;
 
-hurufLampiran++;
+    hurufLampiran++;
 
 }
-                        
-document.getElementById(
-"sectionWasiat"
-).innerHTML =
-finalContent;
                        
 function generateAlihTable(list){
 
