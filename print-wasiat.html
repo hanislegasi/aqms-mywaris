@@ -1133,24 +1133,18 @@ finalContent += `
 
 <h2
 style="
-font-size:22px;
-font-weight:bold;
-margin-bottom:15px;
-">
-
-Lampiran ${String.fromCharCode(hurufLampiran)}
-
-</h2>
-
-<p
-style="
+font-family:'Times New Roman', serif;
+font-size:28px;
+font-weight:400;
+margin-top:30px;
 margin-bottom:20px;
-font-size:15px;
+color:#153638;
+text-transform:uppercase;
 ">
-
-${file.fileName}
-
-</p>
+LAMPIRAN ${String.fromCharCode(hurufLampiran)}
+:
+${(file.namaLampiran || file.fileName).toUpperCase()}
+</h2>
 
 <img
 src="${base64Image}"
