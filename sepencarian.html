@@ -1023,6 +1023,21 @@ class="bg-[#153638] text-white px-4 py-2 rounded-lg">
     Lampiran Dokumen
   </h2>
 
+<div class="mb-3">
+
+<label class="block font-medium mb-1">
+Nama Lampiran
+</label>
+
+<input
+type="text"
+id="namaLampiran"
+class="w-full border rounded-lg p-2 mb-3"
+placeholder="Contoh: Salinan Geran Rumah"
+required>
+
+</div>
+  
   <input
     type="file"
     id="fileInput"
@@ -2489,7 +2504,7 @@ async function loadFiles(){
       <div class="flex justify-between items-center">
 
         <p class="text-sm font-medium text-gray-700">
-          ${data.fileName}
+          ${data.namaLampiran || data.fileName}
         </p>
 
         <a
@@ -2550,6 +2565,17 @@ document
   document.getElementById("fileInput")
   .files[0];
 
+const namaLampiran =
+document.getElementById("namaLampiran")
+.value.trim();
+  
+  if(!namaLampiran){
+
+    alert("Sila masukkan Nama Lampiran.");
+    return;
+
+}
+  
   if(!file){
 
     alert("Sila pilih fail.");
@@ -2590,16 +2616,16 @@ await addDoc(
 
   {
 
-    fileName:
-    file.name,
+    fileName: file.name,
 
-    fileURL:
-    downloadURL,
+    namaLampiran:
+        namaLampiran || file.name,
 
-    createdAt:
-    new Date()
+    fileURL: downloadURL,
 
-  }
+    createdAt: new Date()
+
+}
 
 );
     
@@ -2608,7 +2634,7 @@ await addDoc(
     <div class="bg-gray-100 p-3 rounded-lg flex justify-between items-center">
 
       <p class="text-sm text-gray-700">
-        ${file.name}
+        ${namaLampiran || file.name}
       </p>
 
       <a
@@ -2628,6 +2654,10 @@ await addDoc(
       "fileList"
     ).innerHTML += fileHTML;
 
+document.getElementById("namaLampiran").value = "";
+
+document.getElementById("fileInput").value = "";
+    
   }
 
   catch(error){
