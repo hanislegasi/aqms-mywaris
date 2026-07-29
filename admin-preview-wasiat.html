@@ -290,13 +290,7 @@ class="border border-gray-300 p-5 font-medium">
             ❌ Reject Permohonan
         </button>
 
-    </div>
-                
-<div
-id="workflowButtons"
-class="mt-4">
-</div>
-       
+    </div>    
     
 </div>    
 
@@ -1358,111 +1352,6 @@ await addDoc(
             }
         });
 
-// ==============================
-// WORKFLOW BUTTONS
-// ==============================
-
-const workflow =
-document.getElementById("workflowButtons");
-
-const wasiatRef =
-doc(db,"users",userId,"wasiat","maklumat");
-
-const wasiatSnap2 =
-await getDoc(wasiatRef);
-
-if(wasiatSnap2.exists()){
-
-    const data = wasiatSnap2.data();
-
-    // VERIFIED → PRINT
-    if(data.status==="VERIFIED"){
-
-        workflow.innerHTML=`
-        <button
-        id="printWorkflowBtn"
-        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-semibold shadow-lg">
-        🖨 Print Dokumen
-        </button>
-        `;
-
-        document
-        .getElementById("printWorkflowBtn")
-        .onclick = async()=>{
-
-            await updateDoc(wasiatRef,{
-                status:"PRINTED",
-                printedAt:new Date().toISOString(),
-                printedBy:user.uid
-            });
-
-            alert("Status bertukar kepada PRINTED");
-
-            location.reload();
-
-        };
-
-    }
-
-    // PRINTED → SEND
-    else if(data.status==="PRINTED"){
-
-        workflow.innerHTML=`
-        <button
-        id="sendWorkflowBtn"
-        class="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-semibold shadow-lg">
-        📦 Send Dokumen
-        </button>
-        `;
-
-        document
-        .getElementById("sendWorkflowBtn")
-        .onclick = async()=>{
-
-            await updateDoc(wasiatRef,{
-                status:"SENT",
-                sentAt:new Date().toISOString(),
-                sentBy:user.uid
-            });
-
-            alert("Dokumen dihantar");
-
-            location.reload();
-
-        };
-
-    }
-
-    // SENT → COMPLETE
-    else if(data.status==="SENT"){
-
-        workflow.innerHTML=`
-        <button
-        id="completeWorkflowBtn"
-        class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold shadow-lg">
-        ✔ Complete
-        </button>
-        `;
-
-        document
-        .getElementById("completeWorkflowBtn")
-        .onclick = async()=>{
-
-            await updateDoc(wasiatRef,{
-                status:"COMPLETED",
-                completedAt:new Date().toISOString(),
-                completedBy:user.uid
-            });
-
-            alert("Workflow selesai");
-
-            location.reload();
-
-        };
-
-    }
-
-}
         
         // REJECT BUTTON
         document.getElementById("rejectBtn").addEventListener("click", async () => {
