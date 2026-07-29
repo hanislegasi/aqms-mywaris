@@ -400,110 +400,122 @@ ${wasiatSnap.exists() ? `
 
 <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
 
-        <div class="bg-green-50 border border-green-200 rounded-xl p-5">
-        
-            <h3 class="text-2xl font-bold text-green-700">📄 Wasiat</h3>
+    <!-- CARD WASIAT -->
+    <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
 
-            <p class="text-sm mt-2">
-                No Dokumen :
-                <strong>${docRef}</strong>
-            </p>
+        <h3 class="text-xl font-bold text-green-700 mb-4">
+            📄 Wasiat
+        </h3>
 
-            <p class="text-sm">
-                Status :
-                <strong>${wasiatStatus}</strong>
-            </p>
-        </div>
+        <p class="text-sm text-gray-500">
+            No Dokumen
+        </p>
+
+        <p class="font-semibold mb-3">
+            ${docRef}
+        </p>
+
+        <p class="text-sm text-gray-500">
+            Status
+        </p>
+
+        <p class="font-semibold mb-6">
+            ${wasiatStatus}
+        </p>
 
         <a
             href="admin-preview-wasiat.html?id=${userId}"
             target="_blank"
-            class="bg-[#153638] hover:bg-[#1d4a4d] text-white px-6 py-3 rounded-xl font-semibold">
+            class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">
             👁 View Dokumen
         </a>
 
     </div>
 
-   
-        <!-- PRINT -->
-        <div class="col-span-1 bg-white border rounded-xl p-5">
-            <h4 class="font-bold text-blue-700 mb-3">
-                🖨 PRINT
-            </h4>
+    <!-- CARD PRINT -->
+    <div class="bg-white border rounded-xl p-5 flex flex-col">
 
-            <p class="text-sm text-gray-500">
-                Tarikh Cetak
-            </p>
+        <h3 class="text-xl font-bold text-blue-700 mb-4">
+            🖨 PRINT
+        </h3>
 
-            <p class="font-semibold">
-${printedAt
-? new Date(printedAt).toLocaleDateString("ms-MY")
-: "-"}
-</p>
+        <p class="text-sm text-gray-500">
+            Tarikh Cetak
+        </p>
 
-            <button
-                class="mt-4 w-full bg-blue-600 text-white py-3 rounded-xl">
-                Tandakan Dicetak
-            </button>
-        </div>
+        <p class="font-semibold mb-6">
+            ${printedAt
+                ? new Date(printedAt).toLocaleDateString("ms-MY")
+                : "-"}
+        </p>
 
-        <!-- SEND -->
-       <div class="col-span-2 bg-white border rounded-xl p-5">
-            <h4 class="font-bold text-orange-600 mb-3">
-                📦 SEND
-            </h4>
+        <button
+            class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
+            ✔ Tandakan Dicetak
+        </button>
 
-            <input
-class="w-full border rounded-lg p-2 mb-2"
-placeholder="Courier"
-value="${courier}">
+    </div>
 
-           <input
-class="w-full border rounded-lg p-2 mb-2"
-placeholder="Tracking No"
-value="${trackingNo}">
+    <!-- CARD SEND -->
+    <div class="bg-white border rounded-xl p-5 flex flex-col">
 
-            <input
-class="w-full border rounded-lg p-2 mb-2"
-placeholder="Receiver"
-value="${receiver}">
+        <h3 class="text-xl font-bold text-orange-600 mb-4">
+            📦 SEND
+        </h3>
 
-            <textarea
-class="w-full border rounded-lg p-2"
-rows="3"
-placeholder="Remarks">${remarks}</textarea>
+        <input
+            class="w-full border rounded-lg p-2 mb-2"
+            placeholder="Courier"
+            value="${courier}">
 
-            <button
-                class="mt-4 w-full bg-orange-500 text-white py-3 rounded-xl">
-                Tandakan Dihantar
-            </button>
-        </div>
+        <input
+            class="w-full border rounded-lg p-2 mb-2"
+            placeholder="Tracking No"
+            value="${trackingNo}">
 
-        <!-- COMPLETE -->
-       <div class="col-span-1 bg-white border rounded-xl p-5">
-            <h4 class="font-bold text-green-700 mb-3">
-                ✅ COMPLETE
-            </h4>
+        <input
+            class="w-full border rounded-lg p-2 mb-2"
+            placeholder="Receiver"
+            value="${receiver}">
 
-            <p class="text-sm text-gray-500">
-                Tarikh
-            </p>
+        <textarea
+            class="w-full border rounded-lg p-2 mb-3"
+            rows="3"
+            placeholder="Remarks">${remarks}</textarea>
 
-            <p class="font-semibold">
-${completedAt
-? new Date(completedAt).toLocaleDateString("ms-MY")
-: "-"}
-</p>
+        <button
+            class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
+            📦 Tandakan Dihantar
+        </button>
 
-            <button
-                class="mt-4 w-full bg-green-600 text-white py-3 rounded-xl">
-                Lengkapkan
-            </button>
-        </div>
- </div>
+    </div>
+
+    <!-- CARD COMPLETE -->
+    <div class="bg-white border rounded-xl p-5 flex flex-col">
+
+        <h3 class="text-xl font-bold text-green-700 mb-4">
+            ✅ COMPLETE
+        </h3>
+
+        <p class="text-sm text-gray-500">
+            Tarikh Lengkap
+        </p>
+
+        <p class="font-semibold mb-6">
+            ${completedAt
+                ? new Date(completedAt).toLocaleDateString("ms-MY")
+                : "-"}
+        </p>
+
+        <button
+            class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
+            ✔ Lengkapkan
+        </button>
+
     </div>
 
 </div>
+
 ` : ""}
 
 ${
