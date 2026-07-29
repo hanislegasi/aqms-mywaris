@@ -223,24 +223,24 @@ wasiatStatus =
 wasiatData.status ||
 "DRAFT";
 
-docRef =
+wasiatDocRef =
 wasiatData.docRef || "-";
 
-approvedDate =
+wasiatApprovedDate =
 wasiatData.approvedAt
 ? new Date(
 wasiatData.approvedAt
 ).toLocaleDateString("ms-MY")
 : "-";
 
-expiryDate =
+wasiatExpiryDate =
 wasiatData.expiryDate
 ? new Date(
 wasiatData.expiryDate
 ).toLocaleDateString("ms-MY")
 : "-";
 
-bakiHari =
+wasiatBakiHari =
 expiryDate !== "-"
 ? Math.ceil(
 (
@@ -303,24 +303,24 @@ hibahStatus =
 hibahData.status ||
 "DRAFT";
 
-docRef =
+hibahDocRef =
 hibahData.docRef || "-";
 
-approvedDate =
+hibahApprovedDate =
 hibahData.approvedAt
 ? new Date(
 hibahData.approvedAt
 ).toLocaleDateString("ms-MY")
 : "-";
 
-expiryDate =
+hibahExpiryDate =
 hibahData.expiryDate
 ? new Date(
 hibahData.expiryDate
 ).toLocaleDateString("ms-MY")
 : "-";
 
-bakiHari =
+hibahBakiHari =
 expiryDate !== "-"
 ? Math.ceil(
 (
@@ -383,24 +383,24 @@ sepencarianStatus =
 sepencarianData.status ||
 "DRAFT";
 
-docRef =
+sepencarianDocRef =
 sepencarianData.docRef || "-";
 
-approvedDate =
+sepencarianApprovedDate =
 sepencarianData.approvedAt
 ? new Date(
 sepencarianData.approvedAt
 ).toLocaleDateString("ms-MY")
 : "-";
 
-expiryDate =
+sepencarianExpiryDate =
 sepencarianData.expiryDate
 ? new Date(
 sepencarianData.expiryDate
 ).toLocaleDateString("ms-MY")
 : "-";
 
-bakiHari =
+sepencarianBakiHari =
 expiryDate !== "-"
 ? Math.ceil(
 (
@@ -463,24 +463,24 @@ mawarisStatus =
 mawarisData.status ||
 "DRAFT";
 
-docRef =
+mawarisDocRef =
 mawarisData.docRef || "-";
 
-approvedDate =
+mawarisApprovedDate =
 mawarisData.approvedAt
 ? new Date(
 mawarisData.approvedAt
 ).toLocaleDateString("ms-MY")
 : "-";
 
-expiryDate =
+mawarisExpiryDate =
 mawarisData.expiryDate
 ? new Date(
 mawarisData.expiryDate
 ).toLocaleDateString("ms-MY")
 : "-";
 
-bakiHari =
+mawarisBakiHari =
 expiryDate !== "-"
 ? Math.ceil(
 (
@@ -576,7 +576,7 @@ ${wasiatSnap.exists() ? `
         </p>
 
         <p class="font-semibold mb-3">
-            ${docRef}
+            ${wasiatDocRef}
         </p>
 
         <p class="text-sm text-gray-500">
@@ -705,7 +705,7 @@ ${hibahSnap.exists() ? `
         </p>
 
         <p class="font-semibold mb-3">
-            ${docRef}
+            ${hibahDocRef}
         </p>
 
         <p class="text-sm text-gray-500">
@@ -834,7 +834,7 @@ ${sepencarianSnap.exists() ? `
         </p>
 
         <p class="font-semibold mb-3">
-            ${docRef}
+            ${sepencarianDocRef}
         </p>
 
         <p class="text-sm text-gray-500">
@@ -963,7 +963,7 @@ ${mawarisSnap.exists() ? `
         </p>
 
         <p class="font-semibold mb-3">
-            ${docRef}
+            ${mawarisDocRef}
         </p>
 
         <p class="text-sm text-gray-500">
