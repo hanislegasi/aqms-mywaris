@@ -191,20 +191,31 @@ let docRef = "-";
 let approvedDate = "-";
 let expiryDate = "-";
 let bakiHari = 0;
+  
+let printedAt = null;
+let sentAt = null;
+let completedAt = null;
+
+let deliveryMethod = "";
+let courier = "";
+let trackingNo = "";
+let receiver = "";
+let remarks = "";
+  
 if(wasiatSnap.exists()){
 
 const wasiatData =
 wasiatSnap.data();
 
-const printedAt = wasiatData.printedAt || null;
-const sentAt = wasiatData.sentAt || null;
-const completedAt = wasiatData.completedAt || null;
+printedAt = wasiatData.printedAt || null;
+sentAt = wasiatData.sentAt || null;
+completedAt = wasiatData.completedAt || null;
 
-const deliveryMethod = wasiatData.deliveryMethod || "";
-const courier = wasiatData.courier || "";
-const trackingNo = wasiatData.trackingNo || "";
-const receiver = wasiatData.receiver || "";
-const remarks = wasiatData.remarks || "";
+deliveryMethod = wasiatData.deliveryMethod || "";
+courier = wasiatData.courier || "";
+trackingNo = wasiatData.trackingNo || "";
+receiver = wasiatData.receiver || "";
+remarks = wasiatData.remarks || "";
   
 wasiatStatus =
 wasiatData.status ||
