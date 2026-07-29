@@ -241,7 +241,7 @@ wasiatData.expiryDate
 : "-";
 
 wasiatBakiHari =
-expiryDate !== "-"
+wasiatExpiryDate !== "-"
 ? Math.ceil(
 (
 new Date(wasiatData.expiryDate)
@@ -321,7 +321,7 @@ hibahData.expiryDate
 : "-";
 
 hibahBakiHari =
-expiryDate !== "-"
+hibahExpiryDate !== "-"
 ? Math.ceil(
 (
 new Date(hibahData.expiryDate)
@@ -401,7 +401,7 @@ sepencarianData.expiryDate
 : "-";
 
 sepencarianBakiHari =
-expiryDate !== "-"
+sepencarianExpiryDate !== "-"
 ? Math.ceil(
 (
 new Date(sepencarianData.expiryDate)
@@ -481,7 +481,7 @@ mawarisData.expiryDate
 : "-";
 
 mawarisBakiHari =
-expiryDate !== "-"
+mawarisExpiryDate !== "-"
 ? Math.ceil(
 (
 new Date(mawarisData.expiryDate)
@@ -632,25 +632,25 @@ ${wasiatSnap.exists() ? `
             id="wasiatCourier"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Courier"
-            value="${courier}">
+            value="${wasiatCourier}">
 
         <input
             id="wasiatTrackingNo"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Tracking No"
-            value="${trackingNo}">
+            value="${wasiatTrackingNo}">
 
         <input
             id="wasiatReceiver"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Receiver"
-            value="${receiver}">
+            value="${wasiatReceiver}">
 
         <textarea
             id="wasiatRemarks"
             class="w-full border rounded-lg p-2 mb-3"
             rows="3"
-            placeholder="Remarks">${remarks}</textarea>
+            placeholder="Remarks">${wasiatRemarks}</textarea>
 
         <button
             id="btnSendWasiat"
@@ -761,25 +761,25 @@ ${hibahSnap.exists() ? `
             id="hibahCourier"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Courier"
-            value="${courier}">
+            value="${hibahCourier}">
 
         <input
             id="hibahTrackingNo"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Tracking No"
-            value="${trackingNo}">
+            value="${hibahTrackingNo}">
 
         <input
             id="hibahReceiver"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Receiver"
-            value="${receiver}">
+            value="${hibahReceiver}">
 
         <textarea
             id="hibahRemarks"
             class="w-full border rounded-lg p-2 mb-3"
             rows="3"
-            placeholder="Remarks">${remarks}</textarea>
+            placeholder="Remarks">${hibahRemarks}</textarea>
 
         <button
             id="btnSendHibah"
@@ -890,25 +890,25 @@ ${sepencarianSnap.exists() ? `
             id="sepencarianCourier"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Courier"
-            value="${courier}">
+            value="${sepencarianCourier}">
 
         <input
             id="sepencarianTrackingNo"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Tracking No"
-            value="${trackingNo}">
+            value="${sepencarianTrackingNo}">
 
         <input
             id="sepencarianReceiver"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Receiver"
-            value="${receiver}">
+            value="${sepencarianReceiver}">
 
         <textarea
             id="sepencarianRemarks"
             class="w-full border rounded-lg p-2 mb-3"
             rows="3"
-            placeholder="Remarks">${remarks}</textarea>
+            placeholder="Remarks">${sepencarianRemarks}</textarea>
 
         <button
             id="btnSendSepencarian"
@@ -1019,25 +1019,25 @@ ${mawarisSnap.exists() ? `
             id="mawarisCourier"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Courier"
-            value="${courier}">
+            value="${mawarisCourier}">
 
         <input
             id="mawarisTrackingNo"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Tracking No"
-            value="${trackingNo}">
+            value="${mawarisTrackingNo}">
 
         <input
             id="mawarisReceiver"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Receiver"
-            value="${receiver}">
+            value="${mawarisReceiver}">
 
         <textarea
             id="mawarisRemarks"
             class="w-full border rounded-lg p-2 mb-3"
             rows="3"
-            placeholder="Remarks">${remarks}</textarea>
+            placeholder="Remarks">${mawarisRemarks}</textarea>
 
         <button
             id="btnSendMawaris"
@@ -1290,7 +1290,7 @@ sentBy:auth.currentUser.uid,
 
 courier:document.getElementById("hibahCourier").value,
 
-trackingNo:document.getElementById("HibahTrackingNo").value,
+trackingNo:document.getElementById("hibahTrackingNo").value,
 
 receiver:document.getElementById("hibahReceiver").value,
 
