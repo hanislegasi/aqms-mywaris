@@ -163,6 +163,13 @@ window.location.search
 const userId =
 params.get("id");
 
+// ===== Workflow Status =====
+let wasiatStatus = "BELUM DIISI";
+let hibahStatus = "BELUM DIISI";
+let sepencarianStatus = "BELUM DIISI";
+let mawarisStatus = "BELUM DIISI";
+
+  
 // LOAD USER
 const docSnap =
 await getDoc(
@@ -1403,7 +1410,7 @@ location.reload();
 
 }
 
-const btnSend=document.getElementById("btnSendSepencarian");
+const btnSendSepencarian=document.getElementById("btnSendSepencarian");
 
 if(btnSendSepencarian){
 
