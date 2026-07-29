@@ -75,7 +75,9 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
 getFirestore,
 doc,
-getDoc
+getDoc,
+updateDoc,
+serverTimestamp
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -450,6 +452,7 @@ ${wasiatSnap.exists() ? `
         </p>
 
         <button
+            id="btnPrint"
             class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
             ✔ Tandakan Dicetak
         </button>
@@ -656,6 +659,33 @@ user.mawarisPaymentStatus === "paid"
 : "PROSPEK";
 }
 
+const btnPrint = document.getElementById("btnPrint");
+
+if(btnPrint){
+
+    btnPrint.onclick = async () => {
+
+        if(!confirm("Tandakan dokumen ini sebagai telah dicetak?")){
+            return;
+        }
+
+        await updateDoc(
+            doc(db,"users",userId,"wasiat","maklumat"),
+            {
+                status: "PRINTED",
+                printedAt: new Date().toISOString(),
+                printedBy: auth.currentUser.uid
+            }
+        );
+
+        alert("Dokumen berjaya ditandakan sebagai PRINTED.");
+
+        location.reload();
+
+    };
+
+}
+  
 </script>
 
 </body>
