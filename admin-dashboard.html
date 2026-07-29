@@ -239,6 +239,16 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
+// ===============================
+// FORMAT CURRENCY
+// ===============================
+function formatRM(value) {
+    return Number(value).toLocaleString("en-MY", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
+}
+        
         async function loadKPI() {
             try {
                 // Fetch basic collections simultaneously to save loading time
@@ -282,8 +292,21 @@
                         aktif++;
                     }
 
+                    const [
+        wasiatSnap,
+        hibahSnap,
+        sepencarianSnap,
+        mawarisSnap
+    ] = await Promise.all([
+
+        getDoc(doc(db, "users", userDoc.id, "wasiat", "maklumat")),
+        getDoc(doc(db, "users", userDoc.id, "hibah", "maklumat")),
+        getDoc(doc(db, "users", userDoc.id, "sepencarian", "maklumat")),
+        getDoc(doc(db, "users", userDoc.id, "mawaris", "maklumat"))
+
+    ]);
                     // Wasiat
-                    const wasiatSnap = await getDoc(doc(db, "users", userDoc.id, "wasiat", "maklumat"));
+                   
                     if (wasiatSnap.exists()) {
                         // Workflow
                         const wasiat = wasiatSnap.data();
@@ -311,7 +334,7 @@ switch (wasiat.status) {
                     }
 
                     // Hibah
-                    const hibahSnap = await getDoc(doc(db, "users", userDoc.id, "hibah", "maklumat"));
+                    
                     if (hibahSnap.exists()) {
                         const hibah = hibahSnap.data();
                         switch (hibah.status) {
@@ -328,7 +351,7 @@ switch (wasiat.status) {
         waitingSign++;
         break;
 }
-                        if (hibahSnap.data().status === "UNDER_REVIEW") queueHibah++;
+                        if (hibahSnap.data().status === "UNDER_REVIEW") 
                         if (hibah.docRef) approved++;
                         if (hibah.renewedAt) renewal++;
                         if (hibah.expiryDate) {
@@ -338,7 +361,7 @@ switch (wasiat.status) {
                     }
 
                     // Harta Sepencarian
-                    const sepencarianSnap = await getDoc(doc(db, "users", userDoc.id, "sepencarian", "maklumat"));
+                    
                     if (sepencarianSnap.exists()) {
                         const sepencarian = sepencarianSnap.data();
                         switch (sepencarian.status) {
@@ -355,7 +378,7 @@ switch (wasiat.status) {
         waitingSign++;
         break;
 }
-                        if (sepencarianSnap.data().status === "UNDER_REVIEW") queueSepencarian++;
+                        if (sepencarianSnap.data().status === "UNDER_REVIEW") 
                         if (sepencarian.docRef) approved++;
                         if (sepencarian.renewedAt) renewal++;
                         if (sepencarian.expiryDate) {
@@ -365,7 +388,7 @@ switch (wasiat.status) {
                     }
 
                     // Mawaris
-                    const mawarisSnap = await getDoc(doc(db, "users", userDoc.id, "mawaris", "maklumat"));
+                  
                     if (mawarisSnap.exists()) {
                         const mawaris = mawarisSnap.data();
                         switch (mawaris.status) {
@@ -382,7 +405,7 @@ switch (wasiat.status) {
         waitingSign++;
         break;
 }
-                        if (mawarisSnap.data().status === "UNDER_REVIEW") queueMawaris++;
+                        if (mawarisSnap.data().status === "UNDER_REVIEW") 
                         if (mawaris.docRef) approved++;
                         if (mawaris.renewedAt) renewal++;
                         if (mawaris.expiryDate) {
@@ -467,9 +490,9 @@ document.getElementById("readySend").innerHTML = readySend;
 document.getElementById("waitingSign").innerHTML = waitingSign;
                 
                 // Account DOM Updates (Ini tiada pada kod asal anda)
-                document.getElementById("monthlySales").innerHTML = `RM${monthlySales.toFixed(2)}`;
-                document.getElementById("totalSales").innerHTML = `RM${totalSales.toFixed(2)}`;
-                document.getElementById("cashBalance").innerHTML = `RM${cashBalance.toFixed(2)}`;
+                document.getElementById("monthlySales").innerHTML = `RM${formatRM(monthlySales)}`;
+                document.getElementById("cashBalance").innerHTML = `RM${formatRM(cashBalance)}`;
+                document.getElementById("totalSales").innerHTML = `RM${formatRM(totalSales)}`;
 
                 // Audit & Activity DOM Updates
                 document.getElementById("todayActivity").innerHTML = activityHTML;
