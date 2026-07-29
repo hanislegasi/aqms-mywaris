@@ -194,7 +194,7 @@ let wasiatApprovedDate = "-";
 let wasiatExpiryDate = "-";
 let wasiatBakiHari = 0;
   
-let wasuatPrintedAt = null;
+let wasiatPrintedAt = null;
 let wasiatSentAt = null;
 let wasiatCompletedAt = null;
 
@@ -209,15 +209,15 @@ if(wasiatSnap.exists()){
 const wasiatData =
 wasiatSnap.data();
 
-printedAt = wasiatData.printedAt || null;
-sentAt = wasiatData.sentAt || null;
-completedAt = wasiatData.completedAt || null;
+wasiatPrintedAt = wasiatData.printedAt || null;
+wasiatSentAt = wasiatData.sentAt || null;
+wasiatCompletedAt = wasiatData.completedAt || null;
 
-deliveryMethod = wasiatData.deliveryMethod || "";
-courier = wasiatData.courier || "";
-trackingNo = wasiatData.trackingNo || "";
-receiver = wasiatData.receiver || "";
-remarks = wasiatData.remarks || "";
+wasiatDeliveryMethod = wasiatData.deliveryMethod || "";
+wasiatCourier = wasiatData.courier || "";
+wasiatTrackingNo = wasiatData.trackingNo || "";
+wasiatReceiver = wasiatData.receiver || "";
+wasiatRemarks = wasiatData.remarks || "";
   
 wasiatStatus =
 wasiatData.status ||
@@ -289,15 +289,15 @@ if(hibahSnap.exists()){
 const hibahData =
 hibahSnap.data();
 
-printedAt = hibahData.printedAt || null;
-sentAt = hibahData.sentAt || null;
-completedAt = hibahData.completedAt || null;
+hibahPrintedAt = hibahData.printedAt || null;
+hibahSentAt = hibahData.sentAt || null;
+hibahCompletedAt = hibahData.completedAt || null;
 
-deliveryMethod = hibahData.deliveryMethod || "";
-courier = hibahData.courier || "";
-trackingNo = hibahData.trackingNo || "";
-receiver = hibahData.receiver || "";
-remarks = hibahData.remarks || "";  
+hibahDeliveryMethod = hibahData.deliveryMethod || "";
+hibahCourier = hibahData.courier || "";
+hibahTrackingNo = hibahData.trackingNo || "";
+hibahReceiver = hibahData.receiver || "";
+hibahRemarks = hibahData.remarks || "";  
   
 hibahStatus =
 hibahData.status ||
@@ -369,15 +369,15 @@ if(sepencarianSnap.exists()){
 const sepencarianData =
 sepencarianSnap.data();
 
-printedAt = sepencarianData.printedAt || null;
-sentAt = sepencarianData.sentAt || null;
-completedAt = sepencarianData.completedAt || null;
+sepencarianPrintedAt = sepencarianData.printedAt || null;
+sepencarianSentAt = sepencarianData.sentAt || null;
+sepencarianCompletedAt = sepencarianData.completedAt || null;
 
-deliveryMethod = sepencarianData.deliveryMethod || "";
-courier = sepencarianData.courier || "";
-trackingNo = sepencarianData.trackingNo || "";
-receiver = sepencarianData.receiver || "";
-remarks = sepencarianData.remarks || "";
+sepencarianDeliveryMethod = sepencarianData.deliveryMethod || "";
+sepencarianCourier = sepencarianData.courier || "";
+sepencarianTrackingNo = sepencarianData.trackingNo || "";
+sepencarianReceiver = sepencarianData.receiver || "";
+sepencarianRemarks = sepencarianData.remarks || "";
   
 sepencarianStatus =
 sepencarianData.status ||
@@ -449,15 +449,15 @@ if(mawarisSnap.exists()){
 const mawarisData =
 mawarisSnap.data();
 
-printedAt = mawarisData.printedAt || null;
-sentAt = mawarisData.sentAt || null;
-completedAt = mawarisData.completedAt || null;
+mawarisPrintedAt = mawarisData.printedAt || null;
+mawarisSentAt = mawarisData.sentAt || null;
+mawarisCompletedAt = mawarisData.completedAt || null;
 
-deliveryMethod = mawarisData.deliveryMethod || "";
-courierMawaris = mawarisData.courier || "";
-trackingNoMawaris = mawarisData.trackingNo || "";
-receiverMawaris = mawarisData.receiver || "";
-remarksMawaris = mawarisData.remarks || "";
+mawarisDeliveryMethod = mawarisData.deliveryMethod || "";
+mawarisCourier = mawarisData.courier || "";
+mawarisTrackingNo = mawarisData.trackingNo || "";
+mawarisReceiver = mawarisData.receiver || "";
+mawarisRemarks = mawarisData.remarks || "";
   
 mawarisStatus =
 mawarisData.status ||
@@ -608,8 +608,8 @@ ${wasiatSnap.exists() ? `
         </p>
 
         <p class="font-semibold mb-6">
-            ${printedAt
-                ? new Date(printedAt).toLocaleDateString("ms-MY")
+            ${wasiatPrintedAt
+                ? new Date(wasiatPrintedAt).toLocaleDateString("ms-MY")
                 : "-"}
         </p>
 
@@ -672,8 +672,8 @@ ${wasiatSnap.exists() ? `
         </p>
 
         <p class="font-semibold mb-6">
-            ${completedAt
-                ? new Date(completedAt).toLocaleDateString("ms-MY")
+            ${wasiatCompletedAt
+                ? new Date(wasiatCompletedAt).toLocaleDateString("ms-MY")
                 : "-"}
         </p>
 
@@ -737,8 +737,8 @@ ${hibahSnap.exists() ? `
         </p>
 
         <p class="font-semibold mb-6">
-            ${printedAt
-                ? new Date(printedAt).toLocaleDateString("ms-MY")
+            ${hibahPrintedAt
+                ? new Date(hibahPrintedAt).toLocaleDateString("ms-MY")
                 : "-"}
         </p>
 
@@ -801,8 +801,8 @@ ${hibahSnap.exists() ? `
         </p>
 
         <p class="font-semibold mb-6">
-            ${completedAt
-                ? new Date(completedAt).toLocaleDateString("ms-MY")
+            ${hibahCompletedAt
+                ? new Date(hibahCompletedAt).toLocaleDateString("ms-MY")
                 : "-"}
         </p>
 
@@ -866,8 +866,8 @@ ${sepencarianSnap.exists() ? `
         </p>
 
         <p class="font-semibold mb-6">
-            ${printedAt
-                ? new Date(printedAt).toLocaleDateString("ms-MY")
+            ${sepencarianPrintedAt
+                ? new Date(sepencarianPrintedAt).toLocaleDateString("ms-MY")
                 : "-"}
         </p>
 
@@ -930,8 +930,8 @@ ${sepencarianSnap.exists() ? `
         </p>
 
         <p class="font-semibold mb-6">
-            ${completedAt
-                ? new Date(completedAt).toLocaleDateString("ms-MY")
+            ${sepencarianCompletedAt
+                ? new Date(sepencarianCompletedAt).toLocaleDateString("ms-MY")
                 : "-"}
         </p>
 
@@ -995,8 +995,8 @@ ${mawarisSnap.exists() ? `
         </p>
 
         <p class="font-semibold mb-6">
-            ${printedAt
-                ? new Date(printedAt).toLocaleDateString("ms-MY")
+            ${mawarisPrintedAt
+                ? new Date(mawarisPrintedAt).toLocaleDateString("ms-MY")
                 : "-"}
         </p>
 
@@ -1059,8 +1059,8 @@ ${mawarisSnap.exists() ? `
         </p>
 
         <p class="font-semibold mb-6">
-            ${completedAt
-                ? new Date(completedAt).toLocaleDateString("ms-MY")
+            ${mawarisCompletedAt
+                ? new Date(mawarisCompletedAt).toLocaleDateString("ms-MY")
                 : "-"}
         </p>
 
@@ -1155,13 +1155,13 @@ sentAt:new Date().toISOString(),
 
 sentBy:auth.currentUser.uid,
 
-courier:document.getElementById("courierWasiat").value,
+courier:document.getElementById("wasiatCourier").value,
 
-trackingNo:document.getElementById("trackingNoWasiat").value,
+trackingNo:document.getElementById("wasiatTrackingNo").value,
 
-receiver:document.getElementById("receiverWasiat").value,
+receiver:document.getElementById("wasiatReceiver").value,
 
-remarks:document.getElementById("remarksWasiat").value
+remarks:document.getElementById("wasiatRemarks").value
 
 }
 );
