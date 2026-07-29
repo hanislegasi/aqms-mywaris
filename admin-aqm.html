@@ -269,7 +269,11 @@ getFirestore(app);
 const auth =
 getAuth(app);  
   
+const params =
+new URLSearchParams(location.search);
 
+const filterStatus =
+params.get("status");
 
 onAuthStateChanged(auth, async(user)=>{
 
@@ -393,19 +397,33 @@ user.createdAt
 
 }
 
+let matchFilter = !filterStatus;  
 let pendingList = [];
 
+const [
+    wasiatSnap,
+    hibahSnap,
+    sepencarianSnap,
+    mawarisSnap
+] = await Promise.all([
+    getDoc(doc(db,"users",userDoc.id,"wasiat","maklumat")),
+    getDoc(doc(db,"users",userDoc.id,"hibah","maklumat")),
+    getDoc(doc(db,"users",userDoc.id,"sepencarian","maklumat")),
+    getDoc(doc(db,"users",userDoc.id,"mawaris","maklumat"))
+]);
+  
 // =====================
 // WASIAT
 // =====================
-const wasiatSnap = await getDoc(
-    doc(db,"users",userDoc.id,"wasiat","maklumat")
-);
 
 if (wasiatSnap.exists()) {
 
     const data = wasiatSnap.data();
 
+if(filterStatus && data.status === filterStatus){
+    matchFilter = true;
+}
+  
     if (data.status === "UNDER_REVIEW") {
         pendingList.push("🟡 Wasiat");
     }
@@ -418,14 +436,15 @@ if (wasiatSnap.exists()) {
 // =====================
 // HIBAH
 // =====================
-const hibahSnap = await getDoc(
-    doc(db,"users",userDoc.id,"hibah","maklumat")
-);
 
 if (hibahSnap.exists()) {
 
     const data = hibahSnap.data();
 
+if(filterStatus && data.status === filterStatus){
+    matchFilter = true;
+}
+  
     if (data.status === "UNDER_REVIEW") {
         pendingList.push("🟠 Hibah");
     }
@@ -438,14 +457,15 @@ if (hibahSnap.exists()) {
 // =====================
 // HARTA SEPENCARIAN
 // =====================
-const sepencarianSnap = await getDoc(
-    doc(db,"users",userDoc.id,"sepencarian","maklumat")
-);
 
 if (sepencarianSnap.exists()) {
 
     const data = sepencarianSnap.data();
 
+if(filterStatus && data.status === filterStatus){
+    matchFilter = true;
+}
+  
     if (data.status === "UNDER_REVIEW") {
         pendingList.push("🟣 Sepencarian");
     }
@@ -458,14 +478,15 @@ if (sepencarianSnap.exists()) {
 // =====================
 // MAWARIS
 // =====================
-const mawarisSnap = await getDoc(
-    doc(db,"users",userDoc.id,"mawaris","maklumat")
-);
 
 if (mawarisSnap.exists()) {
 
     const data = mawarisSnap.data();
 
+if(filterStatus && data.status === filterStatus){
+    matchFilter = true;
+}
+  
     if (data.status === "UNDER_REVIEW") {
         pendingList.push("🔵 Mawaris");
     }
@@ -480,6 +501,9 @@ pendingList.length
 ? pendingList.join("<br>")
 : "-";
 
+if(!matchFilter){
+    continue;
+}
   
 html += `
 
