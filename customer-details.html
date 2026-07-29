@@ -629,25 +629,25 @@ ${wasiatSnap.exists() ? `
         </h3>
 
         <input
-            id="courier"
+            id="wasiatCourier"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Courier"
             value="${courier}">
 
         <input
-            id="trackingNo"
+            id="wasiatTrackingNo"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Tracking No"
             value="${trackingNo}">
 
         <input
-            id="receiver"
+            id="wasiatReceiver"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Receiver"
             value="${receiver}">
 
         <textarea
-            id="remarks"
+            id="wasiatRemarks"
             class="w-full border rounded-lg p-2 mb-3"
             rows="3"
             placeholder="Remarks">${remarks}</textarea>
@@ -758,25 +758,25 @@ ${hibahSnap.exists() ? `
         </h3>
 
         <input
-            id="courier"
+            id="hibahCourier"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Courier"
             value="${courier}">
 
         <input
-            id="trackingNo"
+            id="hibahTrackingNo"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Tracking No"
             value="${trackingNo}">
 
         <input
-            id="receiver"
+            id="hibahReceiver"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Receiver"
             value="${receiver}">
 
         <textarea
-            id="remarks"
+            id="hibahRemarks"
             class="w-full border rounded-lg p-2 mb-3"
             rows="3"
             placeholder="Remarks">${remarks}</textarea>
@@ -887,25 +887,25 @@ ${sepencarianSnap.exists() ? `
         </h3>
 
         <input
-            id="courier"
+            id="sepencarianCourier"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Courier"
             value="${courier}">
 
         <input
-            id="trackingNo"
+            id="sepencarianTrackingNo"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Tracking No"
             value="${trackingNo}">
 
         <input
-            id="receiver"
+            id="sepencarianReceiver"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Receiver"
             value="${receiver}">
 
         <textarea
-            id="remarks"
+            id="sepencarianRemarks"
             class="w-full border rounded-lg p-2 mb-3"
             rows="3"
             placeholder="Remarks">${remarks}</textarea>
@@ -1016,25 +1016,25 @@ ${mawarisSnap.exists() ? `
         </h3>
 
         <input
-            id="courier"
+            id="mawarisCourier"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Courier"
             value="${courier}">
 
         <input
-            id="trackingNo"
+            id="mawarisTrackingNo"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Tracking No"
             value="${trackingNo}">
 
         <input
-            id="receiver"
+            id="mawarisReceiver"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Receiver"
             value="${receiver}">
 
         <textarea
-            id="remarks"
+            id="mawarisRemarks"
             class="w-full border rounded-lg p-2 mb-3"
             rows="3"
             placeholder="Remarks">${remarks}</textarea>
@@ -1378,11 +1378,11 @@ location.reload();
 
 //SEPENCARIAN
 
-const btnPrint=document.getElementById("btnPrint");
+const btnPrintSepencarian=document.getElementById("btnPrintSepencarian");
 
-if(btnPrint){
+if(btnPrintSepencarian){
 
-btnPrint.onclick=async()=>{
+btnPrintSepencarian.onclick=async()=>{
 
 if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
 
@@ -1403,11 +1403,11 @@ location.reload();
 
 }
 
-const btnSend=document.getElementById("btnSend");
+const btnSend=document.getElementById("btnSendSepencarian");
 
-if(btnSend){
+if(btnSendSepencarian){
 
-btnSend.onclick=async()=>{
+btnSendSepencarian.onclick=async()=>{
 
 if(!confirm("Tandakan dokumen telah dihantar?")) return;
 
@@ -1421,13 +1421,13 @@ sentAt:new Date().toISOString(),
 
 sentBy:auth.currentUser.uid,
 
-courier:document.getElementById("courier").value,
+courier:document.getElementById("sepencarianCourier").value,
 
-trackingNo:document.getElementById("trackingNo").value,
+trackingNo:document.getElementById("sepencarianTrackingNo").value,
 
-receiver:document.getElementById("receiver").value,
+receiver:document.getElementById("sepencarianReceiver").value,
 
-remarks:document.getElementById("remarks").value
+remarks:document.getElementById("sepencarianRemarks").value
 
 }
 );
@@ -1440,55 +1440,55 @@ location.reload();
 
 }
 
-const btnComplete=document.getElementById("btnComplete");
+const btnCompleteSepencarian=document.getElementById("btnCompleteSepencarian");
 
 // ===== Workflow Lock =====
 
-if(btnPrint){
+if(btnPrintSepencarian){
 
-    btnPrint.disabled = sepencarianStatus !== "VERIFIED";
+    btnPrintSepencarian.disabled = sepencarianStatus !== "VERIFIED";
 
-    if(btnPrint.disabled){
+    if(btnPrintSepencarian.disabled){
 
-        btnPrint.classList.remove("bg-blue-600","hover:bg-blue-700");
+        btnPrintSepencarian.classList.remove("bg-blue-600","hover:bg-blue-700");
 
-        btnPrint.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnSend){
-
-    btnSend.disabled = sepencarianStatus !== "PRINTED";
-
-    if(btnSend.disabled){
-
-        btnSend.classList.remove("bg-orange-500","hover:bg-orange-600");
-
-        btnSend.classList.add("bg-gray-300","cursor-not-allowed");
+        btnPrintSepencarian.classList.add("bg-gray-300","cursor-not-allowed");
 
     }
 
 }
 
-if(btnComplete){
+if(btnSendSepencarian){
 
-    btnComplete.disabled = sepencarianStatus !== "SENT";
+    btnSendSepencarian.disabled = sepencarianStatus !== "PRINTED";
 
-    if(btnComplete.disabled){
+    if(btnSendSepencarian.disabled){
 
-        btnComplete.classList.remove("bg-green-600","hover:bg-green-700");
+        btnSendSepencarian.classList.remove("bg-orange-500","hover:bg-orange-600");
 
-        btnComplete.classList.add("bg-gray-300","cursor-not-allowed");
+        btnSendSepencarian.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+
+if(btnCompleteSepencarian){
+
+    btnCompleteSepencarian.disabled = sepencarianStatus !== "SENT";
+
+    if(btnCompleteSepencarian.disabled){
+
+        btnCompleteSepencarian.classList.remove("bg-green-600","hover:bg-green-700");
+
+        btnCompleteSepencarian.classList.add("bg-gray-300","cursor-not-allowed");
 
     }
 
 }
   
-if(btnComplete){
+if(btnCompleteSepencarian){
 
-btnComplete.onclick=async()=>{
+btnCompleteSepencarian.onclick=async()=>{
 
 if(!confirm("Lengkapkan proses ini?")) return;
 
@@ -1511,11 +1511,11 @@ location.reload();
 
 //MAWARIS
 
-const btnPrint=document.getElementById("btnPrint");
+const btnPrintMawaris=document.getElementById("btnPrintMawaris");
 
-if(btnPrint){
+if(btnPrintMawaris){
 
-btnPrint.onclick=async()=>{
+btnPrintMawaris.onclick=async()=>{
 
 if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
 
@@ -1536,11 +1536,11 @@ location.reload();
 
 }
 
-const btnSend=document.getElementById("btnSend");
+const btnSendMawaris=document.getElementById("btnSendMawaris");
 
-if(btnSend){
+if(btnSendMawaris){
 
-btnSend.onclick=async()=>{
+btnSendMawaris.onclick=async()=>{
 
 if(!confirm("Tandakan dokumen telah dihantar?")) return;
 
@@ -1554,13 +1554,13 @@ sentAt:new Date().toISOString(),
 
 sentBy:auth.currentUser.uid,
 
-courier:document.getElementById("courier").value,
+courier:document.getElementById("mawarisCourier").value,
 
-trackingNo:document.getElementById("trackingNo").value,
+trackingNo:document.getElementById("mawarisTrackingNo").value,
 
-receiver:document.getElementById("receiver").value,
+receiver:document.getElementById("mawarisReceiver").value,
 
-remarks:document.getElementById("remarks").value
+remarks:document.getElementById("mawarisRemarks").value
 
 }
 );
@@ -1573,55 +1573,55 @@ location.reload();
 
 }
 
-const btnComplete=document.getElementById("btnComplete");
+const btnCompleteMawaris=document.getElementById("btnCompleteMawaris");
 
 // ===== Workflow Lock =====
 
-if(btnPrint){
+if(btnPrintMawaris){
 
-    btnPrint.disabled = mawarisStatus !== "VERIFIED";
+    btnPrintMawaris.disabled = mawarisStatus !== "VERIFIED";
 
-    if(btnPrint.disabled){
+    if(btnPrintMawaris.disabled){
 
-        btnPrint.classList.remove("bg-blue-600","hover:bg-blue-700");
+        btnPrintMawaris.classList.remove("bg-blue-600","hover:bg-blue-700");
 
-        btnPrint.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnSend){
-
-    btnSend.disabled = mawarisStatus !== "PRINTED";
-
-    if(btnSend.disabled){
-
-        btnSend.classList.remove("bg-orange-500","hover:bg-orange-600");
-
-        btnSend.classList.add("bg-gray-300","cursor-not-allowed");
+        btnPrintMawaris.classList.add("bg-gray-300","cursor-not-allowed");
 
     }
 
 }
 
-if(btnComplete){
+if(btnSendMawaris){
 
-    btnComplete.disabled = mawarisStatus !== "SENT";
+    btnSendMawaris.disabled = mawarisStatus !== "PRINTED";
 
-    if(btnComplete.disabled){
+    if(btnSendMawaris.disabled){
 
-        btnComplete.classList.remove("bg-green-600","hover:bg-green-700");
+        btnSendMawaris.classList.remove("bg-orange-500","hover:bg-orange-600");
 
-        btnComplete.classList.add("bg-gray-300","cursor-not-allowed");
+        btnSendMawaris.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+
+if(btnCompleteMawaris){
+
+    btnCompleteMawaris.disabled = mawarisStatus !== "SENT";
+
+    if(btnCompleteMawaris.disabled){
+
+        btnCompleteMawaris.classList.remove("bg-green-600","hover:bg-green-700");
+
+        btnCompleteMawaris.classList.add("bg-gray-300","cursor-not-allowed");
 
     }
 
 }
   
-if(btnComplete){
+if(btnCompleteMawaris){
 
-btnComplete.onclick=async()=>{
+btnCompleteMawaris.onclick=async()=>{
 
 if(!confirm("Lengkapkan proses ini?")) return;
 
