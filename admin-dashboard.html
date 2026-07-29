@@ -314,7 +314,7 @@ switch (wasiat.status) {
                     const hibahSnap = await getDoc(doc(db, "users", userDoc.id, "hibah", "maklumat"));
                     if (hibahSnap.exists()) {
                         const hibah = hibahSnap.data();
-                        switch (wasiat.status) {
+                        switch (hibah.status) {
     case "APPROVED":
         waitingVerify++;
         break;
@@ -341,7 +341,7 @@ switch (wasiat.status) {
                     const sepencarianSnap = await getDoc(doc(db, "users", userDoc.id, "sepencarian", "maklumat"));
                     if (sepencarianSnap.exists()) {
                         const sepencarian = sepencarianSnap.data();
-                        switch (wasiat.status) {
+                        switch (sepencarian.status) {
     case "APPROVED":
         waitingVerify++;
         break;
@@ -368,7 +368,7 @@ switch (wasiat.status) {
                     const mawarisSnap = await getDoc(doc(db, "users", userDoc.id, "mawaris", "maklumat"));
                     if (mawarisSnap.exists()) {
                         const mawaris = mawarisSnap.data();
-                        switch (wasiat.status) {
+                        switch (mawaris.status) {
     case "APPROVED":
         waitingVerify++;
         break;
