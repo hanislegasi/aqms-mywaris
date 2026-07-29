@@ -557,7 +557,7 @@ verifyBtn.addEventListener("click", async () => {
 
       try {
 
-        const docRef = doc(db, "users", userId, "wasiat", "maklumat");
+        const docRef = doc(db, "users", userId, "hibah", "maklumat");
 
         await updateDoc(docRef, {
             status: "VERIFIED",
