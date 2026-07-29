@@ -269,15 +269,69 @@ userId,
 let hibahStatus =
 "BELUM DIISI";
 
+let docRef = "-";
+let approvedDate = "-";
+let expiryDate = "-";
+let bakiHari = 0;
+  
+let printedAt = null;
+let sentAt = null;
+let completedAt = null;
+
+let deliveryMethod = "";
+let courier = "";
+let trackingNo = "";
+let receiver = "";
+let remarks = "";
+  
 if(hibahSnap.exists()){
 
 const hibahData =
 hibahSnap.data();
 
+printedAt = wasiatData.printedAt || null;
+sentAt = wasiatData.sentAt || null;
+completedAt = wasiatData.completedAt || null;
+
+deliveryMethod = wasiatData.deliveryMethod || "";
+courier = wasiatData.courier || "";
+trackingNo = wasiatData.trackingNo || "";
+receiver = wasiatData.receiver || "";
+remarks = wasiatData.remarks || "";  
+  
 hibahStatus =
 hibahData.status ||
 "DRAFT";
 
+docRef =
+hibahData.docRef || "-";
+
+approvedDate =
+hibahData.approvedAt
+? new Date(
+hibahData.approvedAt
+).toLocaleDateString("ms-MY")
+: "-";
+
+expiryDate =
+hibahData.expiryDate
+? new Date(
+hibahtData.expiryDate
+).toLocaleDateString("ms-MY")
+: "-";
+
+bakiHari =
+expiryDate !== "-"
+? Math.ceil(
+(
+new Date(hibahData.expiryDate)
+- new Date()
+)
+/
+(1000*60*60*24)
+)
+: 0;
+  
 }
 
 // SEPENCARIAN STATUS
@@ -295,15 +349,69 @@ userId,
 let sepencarianStatus =
 "BELUM DIISI";
 
+let docRef = "-";
+let approvedDate = "-";
+let expiryDate = "-";
+let bakiHari = 0;
+  
+let printedAt = null;
+let sentAt = null;
+let completedAt = null;
+
+let deliveryMethod = "";
+let courier = "";
+let trackingNo = "";
+let receiver = "";
+let remarks = "";
+  
 if(sepencarianSnap.exists()){
 
 const sepencarianData =
 sepencarianSnap.data();
 
+printedAt = wasiatData.printedAt || null;
+sentAt = wasiatData.sentAt || null;
+completedAt = wasiatData.completedAt || null;
+
+deliveryMethod = wasiatData.deliveryMethod || "";
+courier = wasiatData.courier || "";
+trackingNo = wasiatData.trackingNo || "";
+receiver = wasiatData.receiver || "";
+remarks = wasiatData.remarks || "";
+  
 sepencarianStatus =
 sepencarianData.status ||
 "DRAFT";
 
+docRef =
+sepencarianData.docRef || "-";
+
+approvedDate =
+sepencarianData.approvedAt
+? new Date(
+sepencarianData.approvedAt
+).toLocaleDateString("ms-MY")
+: "-";
+
+expiryDate =
+sepencarianData.expiryDate
+? new Date(
+sepencarianData.expiryDate
+).toLocaleDateString("ms-MY")
+: "-";
+
+bakiHari =
+expiryDate !== "-"
+? Math.ceil(
+(
+new Date(sepencarianData.expiryDate)
+- new Date()
+)
+/
+(1000*60*60*24)
+)
+: 0;
+  
 }
 
 // MAWARIS STATUS
@@ -321,15 +429,69 @@ userId,
 let mawarisStatus =
 "BELUM DIISI";
 
+let docRef = "-";
+let approvedDate = "-";
+let expiryDate = "-";
+let bakiHari = 0;
+  
+let printedAt = null;
+let sentAt = null;
+let completedAt = null;
+
+let deliveryMethod = "";
+let courier = "";
+let trackingNo = "";
+let receiver = "";
+let remarks = "";
+  
 if(mawarisSnap.exists()){
 
 const mawarisData =
 mawarisSnap.data();
 
+printedAt = wasiatData.printedAt || null;
+sentAt = wasiatData.sentAt || null;
+completedAt = wasiatData.completedAt || null;
+
+deliveryMethod = wasiatData.deliveryMethod || "";
+courier = wasiatData.courier || "";
+trackingNo = wasiatData.trackingNo || "";
+receiver = wasiatData.receiver || "";
+remarks = wasiatData.remarks || "";
+  
 mawarisStatus =
 mawarisData.status ||
 "DRAFT";
 
+docRef =
+mawarisData.docRef || "-";
+
+approvedDate =
+mawarisData.approvedAt
+? new Date(
+mawarisData.approvedAt
+).toLocaleDateString("ms-MY")
+: "-";
+
+expiryDate =
+mawarisData.expiryDate
+? new Date(
+mawarisData.expiryDate
+).toLocaleDateString("ms-MY")
+: "-";
+
+bakiHari =
+expiryDate !== "-"
+? Math.ceil(
+(
+new Date(mawarisData.expiryDate)
+- new Date()
+)
+/
+(1000*60*60*24)
+)
+: 0;
+  
 }
   
 document.getElementById(
@@ -527,107 +689,392 @@ ${wasiatSnap.exists() ? `
 
 ` : ""}
 
-${
-hibahSnap.exists()
-?
-`
-<div class="bg-blue-50 border border-blue-200 rounded-xl p-5 flex flex-col justify-between min-h-[220px]">
+${hibahSnap.exists() ? `
 
-<div>
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
 
-<h3 class="font-bold text-blue-700 text-lg">
-Hibah
-</h3>
+    <!-- CARD HIBAH -->
+    <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
 
-<p class="text-sm mt-4">
-Status :
-<strong>${hibahStatus}</strong>
-</p>
+        <h3 class="text-xl font-bold text-green-700 mb-4">
+            📄 Hibah
+        </h3>
+
+        <p class="text-sm text-gray-500">
+            No Dokumen
+        </p>
+
+        <p class="font-semibold mb-3">
+            ${docRef}
+        </p>
+
+        <p class="text-sm text-gray-500">
+            Status
+        </p>
+
+        <p class="font-semibold mb-6">
+            ${hibahStatus}
+        </p>
+
+        <a
+            href="admin-preview-hibah.html?id=${userId}"
+            target="_blank"
+            class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">
+            👁 View Dokumen
+        </a>
+
+    </div>
+
+    <!-- CARD PRINT -->
+    <div class="bg-white border rounded-xl p-5 flex flex-col">
+
+        <h3 class="text-xl font-bold text-blue-700 mb-4">
+            🖨 PRINT
+        </h3>
+
+        <p class="text-sm text-gray-500">
+            Tarikh Cetak
+        </p>
+
+        <p class="font-semibold mb-6">
+            ${printedAt
+                ? new Date(printedAt).toLocaleDateString("ms-MY")
+                : "-"}
+        </p>
+
+        <button
+            id="btnPrint"
+            class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
+            ✔ Tandakan Dicetak
+        </button>
+
+    </div>
+
+    <!-- CARD SEND -->
+    <div class="bg-white border rounded-xl p-5 flex flex-col">
+
+        <h3 class="text-xl font-bold text-orange-600 mb-4">
+            📦 SEND
+        </h3>
+
+        <input
+            id="courier"
+            class="w-full border rounded-lg p-2 mb-2"
+            placeholder="Courier"
+            value="${courier}">
+
+        <input
+            id="trackingNo"
+            class="w-full border rounded-lg p-2 mb-2"
+            placeholder="Tracking No"
+            value="${trackingNo}">
+
+        <input
+            id="receiver"
+            class="w-full border rounded-lg p-2 mb-2"
+            placeholder="Receiver"
+            value="${receiver}">
+
+        <textarea
+            id="remarks"
+            class="w-full border rounded-lg p-2 mb-3"
+            rows="3"
+            placeholder="Remarks">${remarks}</textarea>
+
+        <button
+            id="btnSend"
+            class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
+            📦 Tandakan Dihantar
+        </button>
+
+    </div>
+
+    <!-- CARD COMPLETE -->
+    <div class="bg-white border rounded-xl p-5 flex flex-col">
+
+        <h3 class="text-xl font-bold text-green-700 mb-4">
+            ✅ COMPLETE
+        </h3>
+
+        <p class="text-sm text-gray-500">
+            Tarikh Lengkap
+        </p>
+
+        <p class="font-semibold mb-6">
+            ${completedAt
+                ? new Date(completedAt).toLocaleDateString("ms-MY")
+                : "-"}
+        </p>
+
+        <button
+            id="btnComplete"
+            class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
+            ✔ Lengkapkan
+        </button>
+
+    </div>
 
 </div>
 
-<a
-href="admin-preview-hibah.html?id=${userId}"
-target="_blank"
-class="mt-5 w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold transition">
+` : ""}
 
-👁 View Dokumen
+${sepencarianSnap.exists() ? `
 
-</a>
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+
+    <!-- CARD SEPENCARIAN -->
+    <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
+
+        <h3 class="text-xl font-bold text-green-700 mb-4">
+            📄 Harta Sepencarian
+        </h3>
+
+        <p class="text-sm text-gray-500">
+            No Dokumen
+        </p>
+
+        <p class="font-semibold mb-3">
+            ${docRef}
+        </p>
+
+        <p class="text-sm text-gray-500">
+            Status
+        </p>
+
+        <p class="font-semibold mb-6">
+            ${sepencarianStatus}
+        </p>
+
+        <a
+            href="admin-preview-sepencarian.html?id=${userId}"
+            target="_blank"
+            class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">
+            👁 View Dokumen
+        </a>
+
+    </div>
+
+    <!-- CARD PRINT -->
+    <div class="bg-white border rounded-xl p-5 flex flex-col">
+
+        <h3 class="text-xl font-bold text-blue-700 mb-4">
+            🖨 PRINT
+        </h3>
+
+        <p class="text-sm text-gray-500">
+            Tarikh Cetak
+        </p>
+
+        <p class="font-semibold mb-6">
+            ${printedAt
+                ? new Date(printedAt).toLocaleDateString("ms-MY")
+                : "-"}
+        </p>
+
+        <button
+            id="btnPrint"
+            class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
+            ✔ Tandakan Dicetak
+        </button>
+
+    </div>
+
+    <!-- CARD SEND -->
+    <div class="bg-white border rounded-xl p-5 flex flex-col">
+
+        <h3 class="text-xl font-bold text-orange-600 mb-4">
+            📦 SEND
+        </h3>
+
+        <input
+            id="courier"
+            class="w-full border rounded-lg p-2 mb-2"
+            placeholder="Courier"
+            value="${courier}">
+
+        <input
+            id="trackingNo"
+            class="w-full border rounded-lg p-2 mb-2"
+            placeholder="Tracking No"
+            value="${trackingNo}">
+
+        <input
+            id="receiver"
+            class="w-full border rounded-lg p-2 mb-2"
+            placeholder="Receiver"
+            value="${receiver}">
+
+        <textarea
+            id="remarks"
+            class="w-full border rounded-lg p-2 mb-3"
+            rows="3"
+            placeholder="Remarks">${remarks}</textarea>
+
+        <button
+            id="btnSend"
+            class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
+            📦 Tandakan Dihantar
+        </button>
+
+    </div>
+
+    <!-- CARD COMPLETE -->
+    <div class="bg-white border rounded-xl p-5 flex flex-col">
+
+        <h3 class="text-xl font-bold text-green-700 mb-4">
+            ✅ COMPLETE
+        </h3>
+
+        <p class="text-sm text-gray-500">
+            Tarikh Lengkap
+        </p>
+
+        <p class="font-semibold mb-6">
+            ${completedAt
+                ? new Date(completedAt).toLocaleDateString("ms-MY")
+                : "-"}
+        </p>
+
+        <button
+            id="btnComplete"
+            class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
+            ✔ Lengkapkan
+        </button>
+
+    </div>
 
 </div>
-`
-:
-""
-}
 
-${
-sepencarianSnap.exists()
-?
-`
-<div class="bg-blue-50 border border-blue-200 rounded-xl p-5 flex flex-col justify-between min-h-[220px]">
+` : ""}
 
-<div>
+${mawarisSnap.exists() ? `
 
-<h3 class="font-bold text-blue-700 text-lg">
-Harta Sepencarian
-</h3>
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
 
-<p class="text-sm mt-4">
-Status :
-<strong>${sepencarianStatus}</strong>
-</p>
+    <!-- CARD MAWARIS -->
+    <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
+
+        <h3 class="text-xl font-bold text-green-700 mb-4">
+            📄 Mawaris
+        </h3>
+
+        <p class="text-sm text-gray-500">
+            No Dokumen
+        </p>
+
+        <p class="font-semibold mb-3">
+            ${docRef}
+        </p>
+
+        <p class="text-sm text-gray-500">
+            Status
+        </p>
+
+        <p class="font-semibold mb-6">
+            ${mawarisStatus}
+        </p>
+
+        <a
+            href="admin-preview-mawaris.html?id=${userId}"
+            target="_blank"
+            class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">
+            👁 View Dokumen
+        </a>
+
+    </div>
+
+    <!-- CARD PRINT -->
+    <div class="bg-white border rounded-xl p-5 flex flex-col">
+
+        <h3 class="text-xl font-bold text-blue-700 mb-4">
+            🖨 PRINT
+        </h3>
+
+        <p class="text-sm text-gray-500">
+            Tarikh Cetak
+        </p>
+
+        <p class="font-semibold mb-6">
+            ${printedAt
+                ? new Date(printedAt).toLocaleDateString("ms-MY")
+                : "-"}
+        </p>
+
+        <button
+            id="btnPrint"
+            class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
+            ✔ Tandakan Dicetak
+        </button>
+
+    </div>
+
+    <!-- CARD SEND -->
+    <div class="bg-white border rounded-xl p-5 flex flex-col">
+
+        <h3 class="text-xl font-bold text-orange-600 mb-4">
+            📦 SEND
+        </h3>
+
+        <input
+            id="courier"
+            class="w-full border rounded-lg p-2 mb-2"
+            placeholder="Courier"
+            value="${courier}">
+
+        <input
+            id="trackingNo"
+            class="w-full border rounded-lg p-2 mb-2"
+            placeholder="Tracking No"
+            value="${trackingNo}">
+
+        <input
+            id="receiver"
+            class="w-full border rounded-lg p-2 mb-2"
+            placeholder="Receiver"
+            value="${receiver}">
+
+        <textarea
+            id="remarks"
+            class="w-full border rounded-lg p-2 mb-3"
+            rows="3"
+            placeholder="Remarks">${remarks}</textarea>
+
+        <button
+            id="btnSend"
+            class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
+            📦 Tandakan Dihantar
+        </button>
+
+    </div>
+
+    <!-- CARD COMPLETE -->
+    <div class="bg-white border rounded-xl p-5 flex flex-col">
+
+        <h3 class="text-xl font-bold text-green-700 mb-4">
+            ✅ COMPLETE
+        </h3>
+
+        <p class="text-sm text-gray-500">
+            Tarikh Lengkap
+        </p>
+
+        <p class="font-semibold mb-6">
+            ${completedAt
+                ? new Date(completedAt).toLocaleDateString("ms-MY")
+                : "-"}
+        </p>
+
+        <button
+            id="btnComplete"
+            class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
+            ✔ Lengkapkan
+        </button>
+
+    </div>
 
 </div>
 
-<a
-href="admin-preview-sepencarian.html?id=${userId}"
-target="_blank"
-class="mt-5 w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold transition">
-
-👁 View Dokumen
-
-</a>
-
-</div>
-`
-:
-""
-}
-
-${
-mawarisSnap.exists()
-?
-`
-<div class="bg-blue-50 border border-blue-200 rounded-xl p-5 flex flex-col justify-between min-h-[220px]">
-
-<div>
-
-<h3 class="font-bold text-blue-700 text-lg">
-Mawaris
-</h3>
-
-<p class="text-sm mt-4">
-Status :
-<strong>${mawarisStatus}</strong>
-</p>
-
-</div>
-
-<a
-href="admin-preview-mawaris.html?id=${userId}"
-target="_blank"
-class="mt-5 w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold transition">
-
-👁 View Dokumen
-
-</a>
-
-</div>
-`
-:
-""
-}
+` : ""}
 
 `;
 
@@ -781,6 +1228,405 @@ if(!confirm("Lengkapkan proses ini?")) return;
 
 await updateDoc(
 doc(db,"users",userId,"wasiat","maklumat"),
+{
+status:"COMPLETED",
+completedAt:new Date().toISOString(),
+completedBy:auth.currentUser.uid
+}
+);
+
+alert("Kes selesai.");
+
+location.reload();
+
+};
+
+}
+
+//HIBAH
+  
+const btnPrint=document.getElementById("btnPrint");
+
+if(btnPrint){
+
+btnPrint.onclick=async()=>{
+
+if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
+
+await updateDoc(
+doc(db,"users",userId,"hibah","maklumat"),
+{
+status:"PRINTED",
+printedAt:new Date().toISOString(),
+printedBy:auth.currentUser.uid
+}
+);
+
+alert("Status berjaya dikemaskini.");
+
+location.reload();
+
+};
+
+}
+
+const btnSend=document.getElementById("btnSend");
+
+if(btnSend){
+
+btnSend.onclick=async()=>{
+
+if(!confirm("Tandakan dokumen telah dihantar?")) return;
+
+await updateDoc(
+doc(db,"users",userId,"hibah","maklumat"),
+{
+
+status:"SENT",
+
+sentAt:new Date().toISOString(),
+
+sentBy:auth.currentUser.uid,
+
+courier:document.getElementById("courier").value,
+
+trackingNo:document.getElementById("trackingNo").value,
+
+receiver:document.getElementById("receiver").value,
+
+remarks:document.getElementById("remarks").value
+
+}
+);
+
+alert("Dokumen berjaya dihantar.");
+
+location.reload();
+
+};
+
+}
+
+const btnComplete=document.getElementById("btnComplete");
+
+// ===== Workflow Lock =====
+
+if(btnPrint){
+
+    btnPrint.disabled = hibahStatus !== "VERIFIED";
+
+    if(btnPrint.disabled){
+
+        btnPrint.classList.remove("bg-blue-600","hover:bg-blue-700");
+
+        btnPrint.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+
+if(btnSend){
+
+    btnSend.disabled = hibahStatus !== "PRINTED";
+
+    if(btnSend.disabled){
+
+        btnSend.classList.remove("bg-orange-500","hover:bg-orange-600");
+
+        btnSend.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+
+if(btnComplete){
+
+    btnComplete.disabled = hibahStatus !== "SENT";
+
+    if(btnComplete.disabled){
+
+        btnComplete.classList.remove("bg-green-600","hover:bg-green-700");
+
+        btnComplete.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+  
+if(btnComplete){
+
+btnComplete.onclick=async()=>{
+
+if(!confirm("Lengkapkan proses ini?")) return;
+
+await updateDoc(
+doc(db,"users",userId,"hibah","maklumat"),
+{
+status:"COMPLETED",
+completedAt:new Date().toISOString(),
+completedBy:auth.currentUser.uid
+}
+);
+
+alert("Kes selesai.");
+
+location.reload();
+
+};
+
+}
+
+//SEPENCARIAN
+
+const btnPrint=document.getElementById("btnPrint");
+
+if(btnPrint){
+
+btnPrint.onclick=async()=>{
+
+if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
+
+await updateDoc(
+doc(db,"users",userId,"sepencarian","maklumat"),
+{
+status:"PRINTED",
+printedAt:new Date().toISOString(),
+printedBy:auth.currentUser.uid
+}
+);
+
+alert("Status berjaya dikemaskini.");
+
+location.reload();
+
+};
+
+}
+
+const btnSend=document.getElementById("btnSend");
+
+if(btnSend){
+
+btnSend.onclick=async()=>{
+
+if(!confirm("Tandakan dokumen telah dihantar?")) return;
+
+await updateDoc(
+doc(db,"users",userId,"sepencarian","maklumat"),
+{
+
+status:"SENT",
+
+sentAt:new Date().toISOString(),
+
+sentBy:auth.currentUser.uid,
+
+courier:document.getElementById("courier").value,
+
+trackingNo:document.getElementById("trackingNo").value,
+
+receiver:document.getElementById("receiver").value,
+
+remarks:document.getElementById("remarks").value
+
+}
+);
+
+alert("Dokumen berjaya dihantar.");
+
+location.reload();
+
+};
+
+}
+
+const btnComplete=document.getElementById("btnComplete");
+
+// ===== Workflow Lock =====
+
+if(btnPrint){
+
+    btnPrint.disabled = sepencarianStatus !== "VERIFIED";
+
+    if(btnPrint.disabled){
+
+        btnPrint.classList.remove("bg-blue-600","hover:bg-blue-700");
+
+        btnPrint.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+
+if(btnSend){
+
+    btnSend.disabled = sepencarianStatus !== "PRINTED";
+
+    if(btnSend.disabled){
+
+        btnSend.classList.remove("bg-orange-500","hover:bg-orange-600");
+
+        btnSend.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+
+if(btnComplete){
+
+    btnComplete.disabled = sepencarianStatus !== "SENT";
+
+    if(btnComplete.disabled){
+
+        btnComplete.classList.remove("bg-green-600","hover:bg-green-700");
+
+        btnComplete.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+  
+if(btnComplete){
+
+btnComplete.onclick=async()=>{
+
+if(!confirm("Lengkapkan proses ini?")) return;
+
+await updateDoc(
+doc(db,"users",userId,"sepencarian","maklumat"),
+{
+status:"COMPLETED",
+completedAt:new Date().toISOString(),
+completedBy:auth.currentUser.uid
+}
+);
+
+alert("Kes selesai.");
+
+location.reload();
+
+};
+
+}
+
+//MAWARIS
+
+const btnPrint=document.getElementById("btnPrint");
+
+if(btnPrint){
+
+btnPrint.onclick=async()=>{
+
+if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
+
+await updateDoc(
+doc(db,"users",userId,"mawaris","maklumat"),
+{
+status:"PRINTED",
+printedAt:new Date().toISOString(),
+printedBy:auth.currentUser.uid
+}
+);
+
+alert("Status berjaya dikemaskini.");
+
+location.reload();
+
+};
+
+}
+
+const btnSend=document.getElementById("btnSend");
+
+if(btnSend){
+
+btnSend.onclick=async()=>{
+
+if(!confirm("Tandakan dokumen telah dihantar?")) return;
+
+await updateDoc(
+doc(db,"users",userId,"mawaris","maklumat"),
+{
+
+status:"SENT",
+
+sentAt:new Date().toISOString(),
+
+sentBy:auth.currentUser.uid,
+
+courier:document.getElementById("courier").value,
+
+trackingNo:document.getElementById("trackingNo").value,
+
+receiver:document.getElementById("receiver").value,
+
+remarks:document.getElementById("remarks").value
+
+}
+);
+
+alert("Dokumen berjaya dihantar.");
+
+location.reload();
+
+};
+
+}
+
+const btnComplete=document.getElementById("btnComplete");
+
+// ===== Workflow Lock =====
+
+if(btnPrint){
+
+    btnPrint.disabled = mawarisStatus !== "VERIFIED";
+
+    if(btnPrint.disabled){
+
+        btnPrint.classList.remove("bg-blue-600","hover:bg-blue-700");
+
+        btnPrint.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+
+if(btnSend){
+
+    btnSend.disabled = mawarisStatus !== "PRINTED";
+
+    if(btnSend.disabled){
+
+        btnSend.classList.remove("bg-orange-500","hover:bg-orange-600");
+
+        btnSend.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+
+if(btnComplete){
+
+    btnComplete.disabled = mawarisStatus !== "SENT";
+
+    if(btnComplete.disabled){
+
+        btnComplete.classList.remove("bg-green-600","hover:bg-green-700");
+
+        btnComplete.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+  
+if(btnComplete){
+
+btnComplete.onclick=async()=>{
+
+if(!confirm("Lengkapkan proses ini?")) return;
+
+await updateDoc(
+doc(db,"users",userId,"mawaris","maklumat"),
 {
 status:"COMPLETED",
 completedAt:new Date().toISOString(),
