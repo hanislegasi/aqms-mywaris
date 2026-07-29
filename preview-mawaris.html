@@ -9,6 +9,13 @@
     <!-- HTML2PDF Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
 
@@ -312,30 +319,66 @@ class="border border-gray-300 p-5 font-medium">
         
     <div class="w-full max-w-3xl mx-auto p-4 mb-8 space-y-4 no-print">
 
+    <!-- Customer Verification -->
+   <div
+    id="verificationSection"
+    class="bg-amber-50 border border-amber-300 rounded-xl p-6 font-[Inter] shadow-sm">
+
+        <h3 class="text-2xl font-bold text-amber-800 flex items-center gap-2">
+    ✅ Pengesahan Maklumat
+</h3>
+
+        <p class="mt-4 text-[15px] leading-7 text-gray-700">
+    Saya telah menyemak semua maklumat dalam dokumen ini dan
+    mengesahkan bahawa ia adalah benar serta tepat.
+    Saya juga membenarkan Al-Qawthar Mawaris Synergy
+    meneruskan proses percetakan dokumen rasmi.
+</p>
+
+      <label class="mt-5 flex items-start gap-3 cursor-pointer">
+
+    <input
+        id="agreeVerify"
+        type="checkbox"
+        class="mt-1 h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+
+    <span class="text-[15px] leading-6 text-gray-800">
+        Saya telah menyemak semua maklumat dan mengesahkan bahawa
+        dokumen ini adalah benar, lengkap dan tepat.
+    </span>
+
+</label>
+
+       <button
+    id="verifyBtn"
+    disabled
+    class="mt-5 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all text-white py-4 rounded-xl font-semibold text-lg shadow-lg">
+
+    ✔ Sahkan Maklumat
+
+</button>
+
+    </div>
+
+    <!-- Print -->
     <button
-    id="printBtn"
-    class="w-full bg-green-600 hover:bg-green-700 transition-all text-white py-4 rounded-xl font-semibold shadow-lg text-lg flex justify-center items-center gap-2">
+        id="printBtn"
+        class="w-full bg-green-600 hover:bg-green-700 transition-all text-white py-4 rounded-xl font-semibold shadow-lg text-lg flex justify-center items-center gap-2">
 
         🖨️ Cetak / Save as PDF (Disyorkan)
 
     </button>
 
+    <!-- Download -->
     <button
-    id="downloadBtn"
-    class="w-full bg-black hover:bg-gray-800 transition-all text-white py-4 rounded-xl font-semibold shadow-lg text-lg flex justify-center items-center gap-2">
+        id="downloadBtn"
+        class="w-full bg-black hover:bg-gray-800 transition-all text-white py-4 rounded-xl font-semibold shadow-lg text-lg flex justify-center items-center gap-2">
 
         📥 Download PDF (Legacy)
 
     </button>
 
-
-        <div class="flex justify-center gap-4 mt-6">
-
-
 </div>
-    </div>
-
-</div>    
         
     <!-- SCRIPT FIREBASE & LOGIK APLIKASI -->
     <script type="module">
@@ -476,7 +519,36 @@ if(!response.ok){
       return;
    }
 
-   const userId = user.uid;
+  const loginDoc = await getDoc(
+    doc(db,"users",user.uid)
+);
+
+const loginUser = loginDoc.data();
+            
+   const params = new URLSearchParams(window.location.search);
+
+const previewUid =
+params.get("uid");
+
+const userId =
+previewUid || user.uid;
+
+if(previewUid){
+
+    if(
+        loginUser.role !== "admin" &&
+        loginUser.role !== "consultant"
+    ){
+
+        alert("Akses ditolak.");
+
+        location.href="dashboard.html";
+
+        return;
+
+    }
+
+}
 
 document
 .getElementById("printBtn")
@@ -491,6 +563,44 @@ window.open(
 );
 
 };
+
+const agreeVerify = document.getElementById("agreeVerify");
+const verifyBtn = document.getElementById("verifyBtn");
+
+agreeVerify.addEventListener("change", () => {
+    verifyBtn.disabled = !agreeVerify.checked;
+});
+
+verifyBtn.addEventListener("click", async () => {
+
+    if (!agreeVerify.checked) return;
+
+    if (!confirm("Adakah anda pasti semua maklumat adalah betul?")) return;
+
+    try {
+
+        const docRef = doc(db, "users", userId, "mawaris", "maklumat");
+
+        await updateDoc(docRef, {
+            status: "VERIFIED",
+            verified: true,
+            verifiedAt: new Date().toISOString(),
+            verifiedBy: user.uid
+        });
+
+        alert("Terima kasih. Pengesahan anda telah berjaya direkodkan.");
+
+        location.reload();
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert("Gagal menyimpan pengesahan.");
+
+    }
+
+});
             
             try {
 
@@ -502,9 +612,29 @@ window.open(
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
+if (data.status === "VERIFIED") {
+
+    document.getElementById("verificationSection").innerHTML = `
+        <div class="bg-green-50 border border-green-300 rounded-xl p-5 text-center">
+            <h3 class="text-lg font-bold text-green-700">
+                ✅ Maklumat Telah Disahkan
+            </h3>
+
+            <p class="mt-2 text-gray-700">
+                Terima kasih. Pengesahan anda telah direkodkan.
+                Dokumen akan diproses untuk percetakan.
+            </p>
+        </div>
+    `;
+
+}
+                        
 window.wasiatData = data;
 
-if(data.status !== "APPROVED"){
+if (
+    data.status !== "APPROVED" &&
+    data.status !== "VERIFIED"
+) {
 
    document.body.innerHTML = `
       <div style="
