@@ -189,20 +189,20 @@ userId,
 let wasiatStatus =
 "BELUM DIISI";
 
-let docRef = "-";
-let approvedDate = "-";
-let expiryDate = "-";
-let bakiHari = 0;
+let wasiatDocRef = "-";
+let wasiatApprovedDate = "-";
+let wasiatExpiryDate = "-";
+let wasiatBakiHari = 0;
   
-let printedAt = null;
-let sentAt = null;
-let completedAt = null;
+let wasuatPrintedAt = null;
+let wasiatSentAt = null;
+let wasiatCompletedAt = null;
 
-let deliveryMethod = "";
-let courier = "";
-let trackingNo = "";
-let receiver = "";
-let remarks = "";
+let wasiatDeliveryMethod = "";
+let wasiatCourier = "";
+let wasiatTrackingNo = "";
+let wasiatReceiver = "";
+let wasiatRemarks = "";
   
 if(wasiatSnap.exists()){
 
@@ -269,35 +269,35 @@ userId,
 let hibahStatus =
 "BELUM DIISI";
 
-let docRef = "-";
-let approvedDate = "-";
-let expiryDate = "-";
-let bakiHari = 0;
-  
-let printedAt = null;
-let sentAt = null;
-let completedAt = null;
+let hibahDocRef = "-";
+let hibahApprovedDate = "-";
+let hibahExpiryDate = "-";
+let hibahBakiHari = 0;
 
-let deliveryMethod = "";
-let courier = "";
-let trackingNo = "";
-let receiver = "";
-let remarks = "";
+let hibahPrintedAt = null;
+let hibahSentAt = null;
+let hibahCompletedAt = null;
+
+let hibahDeliveryMethod = "";
+let hibahCourier = "";
+let hibahTrackingNo = "";
+let hibahReceiver = "";
+let hibahRemarks = "";
   
 if(hibahSnap.exists()){
 
 const hibahData =
 hibahSnap.data();
 
-printedAt = wasiatData.printedAt || null;
-sentAt = wasiatData.sentAt || null;
-completedAt = wasiatData.completedAt || null;
+printedAt = hibahData.printedAt || null;
+sentAt = hibahData.sentAt || null;
+completedAt = hibahData.completedAt || null;
 
-deliveryMethod = wasiatData.deliveryMethod || "";
-courier = wasiatData.courier || "";
-trackingNo = wasiatData.trackingNo || "";
-receiver = wasiatData.receiver || "";
-remarks = wasiatData.remarks || "";  
+deliveryMethod = hibahData.deliveryMethod || "";
+courier = hibahData.courier || "";
+trackingNo = hibahData.trackingNo || "";
+receiver = hibahData.receiver || "";
+remarks = hibahData.remarks || "";  
   
 hibahStatus =
 hibahData.status ||
@@ -316,7 +316,7 @@ hibahData.approvedAt
 expiryDate =
 hibahData.expiryDate
 ? new Date(
-hibahtData.expiryDate
+hibahData.expiryDate
 ).toLocaleDateString("ms-MY")
 : "-";
 
@@ -349,35 +349,35 @@ userId,
 let sepencarianStatus =
 "BELUM DIISI";
 
-let docRef = "-";
-let approvedDate = "-";
-let expiryDate = "-";
-let bakiHari = 0;
+let sepencarianDocRef = "-";
+let sepencarianApprovedDate = "-";
+let sepencarianExpiryDate = "-";
+let sepencarianBakiHari = 0;
   
-let printedAt = null;
-let sentAt = null;
-let completedAt = null;
+let sepencarianPrintedAt = null;
+let sepencarianSentAt = null;
+let sepencarianCompletedAt = null;
 
-let deliveryMethod = "";
-let courier = "";
-let trackingNo = "";
-let receiver = "";
-let remarks = "";
+let sepencarianDeliveryMethod = "";
+let sepencarianCourier = "";
+let sepencarianTrackingNo = "";
+let sepencarianReceiver = "";
+let sepencarianRemarks = "";
   
 if(sepencarianSnap.exists()){
 
 const sepencarianData =
 sepencarianSnap.data();
 
-printedAt = wasiatData.printedAt || null;
-sentAt = wasiatData.sentAt || null;
-completedAt = wasiatData.completedAt || null;
+printedAt = sepencarianData.printedAt || null;
+sentAt = sepencarianData.sentAt || null;
+completedAt = sepencarianData.completedAt || null;
 
-deliveryMethod = wasiatData.deliveryMethod || "";
-courier = wasiatData.courier || "";
-trackingNo = wasiatData.trackingNo || "";
-receiver = wasiatData.receiver || "";
-remarks = wasiatData.remarks || "";
+deliveryMethod = sepencarianData.deliveryMethod || "";
+courier = sepencarianData.courier || "";
+trackingNo = sepencarianData.trackingNo || "";
+receiver = sepencarianData.receiver || "";
+remarks = sepencarianData.remarks || "";
   
 sepencarianStatus =
 sepencarianData.status ||
@@ -429,35 +429,35 @@ userId,
 let mawarisStatus =
 "BELUM DIISI";
 
-let docRef = "-";
-let approvedDate = "-";
-let expiryDate = "-";
-let bakiHari = 0;
-  
-let printedAt = null;
-let sentAt = null;
-let completedAt = null;
+let mawarisDocRef = "-";
+let mawarisApprovedDate = "-";
+let mawarisExpiryDate = "-";
+let mawarisBakiHari = 0;
 
-let deliveryMethod = "";
-let courier = "";
-let trackingNo = "";
-let receiver = "";
-let remarks = "";
+let mawarisPrintedAt = null;
+let mawarisSentAt = null;
+let mawarisCompletedAt = null;
+
+let mawarisDeliveryMethod = "";
+let mawarisCourier = "";
+let mawarisTrackingNo = "";
+let mawarisReceiver = "";
+let mawarisRemarks = "";
   
 if(mawarisSnap.exists()){
 
 const mawarisData =
 mawarisSnap.data();
 
-printedAt = wasiatData.printedAt || null;
-sentAt = wasiatData.sentAt || null;
-completedAt = wasiatData.completedAt || null;
+printedAt = mawarisData.printedAt || null;
+sentAt = mawarisData.sentAt || null;
+completedAt = mawarisData.completedAt || null;
 
-deliveryMethod = wasiatData.deliveryMethod || "";
-courier = wasiatData.courier || "";
-trackingNo = wasiatData.trackingNo || "";
-receiver = wasiatData.receiver || "";
-remarks = wasiatData.remarks || "";
+deliveryMethod = mawarisData.deliveryMethod || "";
+courierMawaris = mawarisData.courier || "";
+trackingNoMawaris = mawarisData.trackingNo || "";
+receiverMawaris = mawarisData.receiver || "";
+remarksMawaris = mawarisData.remarks || "";
   
 mawarisStatus =
 mawarisData.status ||
@@ -614,7 +614,7 @@ ${wasiatSnap.exists() ? `
         </p>
 
         <button
-            id="btnPrint"
+            id="btnPrintWasiat"
             class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
             ✔ Tandakan Dicetak
         </button>
@@ -653,7 +653,7 @@ ${wasiatSnap.exists() ? `
             placeholder="Remarks">${remarks}</textarea>
 
         <button
-            id="btnSend"
+            id="btnSendWasiat"
             class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
             📦 Tandakan Dihantar
         </button>
@@ -678,7 +678,7 @@ ${wasiatSnap.exists() ? `
         </p>
 
         <button
-            id="btnComplete"
+            id="btnCompleteWasiat"
             class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
             ✔ Lengkapkan
         </button>
@@ -743,7 +743,7 @@ ${hibahSnap.exists() ? `
         </p>
 
         <button
-            id="btnPrint"
+            id="btnPrintHibah"
             class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
             ✔ Tandakan Dicetak
         </button>
@@ -782,7 +782,7 @@ ${hibahSnap.exists() ? `
             placeholder="Remarks">${remarks}</textarea>
 
         <button
-            id="btnSend"
+            id="btnSendHibah"
             class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
             📦 Tandakan Dihantar
         </button>
@@ -807,7 +807,7 @@ ${hibahSnap.exists() ? `
         </p>
 
         <button
-            id="btnComplete"
+            id="btnCompleteHibah"
             class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
             ✔ Lengkapkan
         </button>
@@ -872,7 +872,7 @@ ${sepencarianSnap.exists() ? `
         </p>
 
         <button
-            id="btnPrint"
+            id="btnPrintSepencarian"
             class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
             ✔ Tandakan Dicetak
         </button>
@@ -911,7 +911,7 @@ ${sepencarianSnap.exists() ? `
             placeholder="Remarks">${remarks}</textarea>
 
         <button
-            id="btnSend"
+            id="btnSendSepencarian"
             class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
             📦 Tandakan Dihantar
         </button>
@@ -936,7 +936,7 @@ ${sepencarianSnap.exists() ? `
         </p>
 
         <button
-            id="btnComplete"
+            id="btnCompleteSepencarian"
             class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
             ✔ Lengkapkan
         </button>
@@ -1001,7 +1001,7 @@ ${mawarisSnap.exists() ? `
         </p>
 
         <button
-            id="btnPrint"
+            id="btnPrintMawaris"
             class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
             ✔ Tandakan Dicetak
         </button>
@@ -1040,7 +1040,7 @@ ${mawarisSnap.exists() ? `
             placeholder="Remarks">${remarks}</textarea>
 
         <button
-            id="btnSend"
+            id="btnSendMawaris"
             class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
             📦 Tandakan Dihantar
         </button>
@@ -1065,7 +1065,7 @@ ${mawarisSnap.exists() ? `
         </p>
 
         <button
-            id="btnComplete"
+            id="btnCompleteMawaris"
             class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
             ✔ Lengkapkan
         </button>
@@ -1112,11 +1112,11 @@ user.mawarisPaymentStatus === "paid"
 : "PROSPEK";
 }
 
-const btnPrint=document.getElementById("btnPrint");
+const btnPrintWasiat=document.getElementById("btnPrintWasiat");
 
-if(btnPrint){
+if(btnPrintWasiat){
 
-btnPrint.onclick=async()=>{
+btnPrintWasiat.onclick=async()=>{
 
 if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
 
@@ -1137,11 +1137,11 @@ location.reload();
 
 }
 
-const btnSend=document.getElementById("btnSend");
+const btnSendWasiat=document.getElementById("btnSendWasiat");
 
-if(btnSend){
+if(btnSendWasiat){
 
-btnSend.onclick=async()=>{
+btnSendWasiat.onclick=async()=>{
 
 if(!confirm("Tandakan dokumen telah dihantar?")) return;
 
@@ -1155,13 +1155,13 @@ sentAt:new Date().toISOString(),
 
 sentBy:auth.currentUser.uid,
 
-courier:document.getElementById("courier").value,
+courier:document.getElementById("courierWasiat").value,
 
-trackingNo:document.getElementById("trackingNo").value,
+trackingNo:document.getElementById("trackingNoWasiat").value,
 
-receiver:document.getElementById("receiver").value,
+receiver:document.getElementById("receiverWasiat").value,
 
-remarks:document.getElementById("remarks").value
+remarks:document.getElementById("remarksWasiat").value
 
 }
 );
@@ -1174,55 +1174,55 @@ location.reload();
 
 }
 
-const btnComplete=document.getElementById("btnComplete");
+const btnCompleteWasiat=document.getElementById("btnCompleteWasiat");
 
 // ===== Workflow Lock =====
 
-if(btnPrint){
+if(btnPrintWasiat){
 
-    btnPrint.disabled = wasiatStatus !== "VERIFIED";
+    btnPrintWasiat.disabled = wasiatStatus !== "VERIFIED";
 
-    if(btnPrint.disabled){
+    if(btnPrintWasiat.disabled){
 
-        btnPrint.classList.remove("bg-blue-600","hover:bg-blue-700");
+        btnPrintWasiat.classList.remove("bg-blue-600","hover:bg-blue-700");
 
-        btnPrint.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnSend){
-
-    btnSend.disabled = wasiatStatus !== "PRINTED";
-
-    if(btnSend.disabled){
-
-        btnSend.classList.remove("bg-orange-500","hover:bg-orange-600");
-
-        btnSend.classList.add("bg-gray-300","cursor-not-allowed");
+        btnPrintWasiat.classList.add("bg-gray-300","cursor-not-allowed");
 
     }
 
 }
 
-if(btnComplete){
+if(btnSendWasiat){
 
-    btnComplete.disabled = wasiatStatus !== "SENT";
+    btnSendWasiat.disabled = wasiatStatus !== "PRINTED";
 
-    if(btnComplete.disabled){
+    if(btnSendWasiat.disabled){
 
-        btnComplete.classList.remove("bg-green-600","hover:bg-green-700");
+        btnSendWasiat.classList.remove("bg-orange-500","hover:bg-orange-600");
 
-        btnComplete.classList.add("bg-gray-300","cursor-not-allowed");
+        btnSendWasiat.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+
+if(btnCompleteWasiat){
+
+    btnCompleteWasiat.disabled = wasiatStatus !== "SENT";
+
+    if(btnCompleteWasiat.disabled){
+
+        btnCompleteWasiat.classList.remove("bg-green-600","hover:bg-green-700");
+
+        btnCompleteWasiat.classList.add("bg-gray-300","cursor-not-allowed");
 
     }
 
 }
   
-if(btnComplete){
+if(btnCompleteWasiat){
 
-btnComplete.onclick=async()=>{
+btnCompleteWasiat.onclick=async()=>{
 
 if(!confirm("Lengkapkan proses ini?")) return;
 
@@ -1245,11 +1245,11 @@ location.reload();
 
 //HIBAH
   
-const btnPrint=document.getElementById("btnPrint");
+const btnPrintHibah=document.getElementById("btnPrintHibah");
 
-if(btnPrint){
+if(btnPrintHibah){
 
-btnPrint.onclick=async()=>{
+btnPrintHibah.onclick=async()=>{
 
 if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
 
@@ -1270,11 +1270,11 @@ location.reload();
 
 }
 
-const btnSend=document.getElementById("btnSend");
+const btnSendHibah=document.getElementById("btnSendHibah");
 
-if(btnSend){
+if(btnSendHibah){
 
-btnSend.onclick=async()=>{
+btnSendHibah.onclick=async()=>{
 
 if(!confirm("Tandakan dokumen telah dihantar?")) return;
 
@@ -1288,13 +1288,13 @@ sentAt:new Date().toISOString(),
 
 sentBy:auth.currentUser.uid,
 
-courier:document.getElementById("courier").value,
+courier:document.getElementById("hibahCourier").value,
 
-trackingNo:document.getElementById("trackingNo").value,
+trackingNo:document.getElementById("HibahTrackingNo").value,
 
-receiver:document.getElementById("receiver").value,
+receiver:document.getElementById("hibahReceiver").value,
 
-remarks:document.getElementById("remarks").value
+remarks:document.getElementById("hibahRemarks").value
 
 }
 );
@@ -1307,55 +1307,55 @@ location.reload();
 
 }
 
-const btnComplete=document.getElementById("btnComplete");
+const btnCompleteHibah=document.getElementById("btnCompleteHibah");
 
 // ===== Workflow Lock =====
 
-if(btnPrint){
+if(btnPrintHibah){
 
-    btnPrint.disabled = hibahStatus !== "VERIFIED";
+    btnPrintHibah.disabled = hibahStatus !== "VERIFIED";
 
-    if(btnPrint.disabled){
+    if(btnPrintHibah.disabled){
 
-        btnPrint.classList.remove("bg-blue-600","hover:bg-blue-700");
+        btnPrintHibah.classList.remove("bg-blue-600","hover:bg-blue-700");
 
-        btnPrint.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnSend){
-
-    btnSend.disabled = hibahStatus !== "PRINTED";
-
-    if(btnSend.disabled){
-
-        btnSend.classList.remove("bg-orange-500","hover:bg-orange-600");
-
-        btnSend.classList.add("bg-gray-300","cursor-not-allowed");
+        btnPrintHibah.classList.add("bg-gray-300","cursor-not-allowed");
 
     }
 
 }
 
-if(btnComplete){
+if(btnSendHibah){
 
-    btnComplete.disabled = hibahStatus !== "SENT";
+    btnSendHibah.disabled = hibahStatus !== "PRINTED";
 
-    if(btnComplete.disabled){
+    if(btnSendHibah.disabled){
 
-        btnComplete.classList.remove("bg-green-600","hover:bg-green-700");
+        btnSendHibah.classList.remove("bg-orange-500","hover:bg-orange-600");
 
-        btnComplete.classList.add("bg-gray-300","cursor-not-allowed");
+        btnSendHibah.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+
+if(btnCompleteHibah){
+
+    btnCompleteHibah.disabled = hibahStatus !== "SENT";
+
+    if(btnCompleteHibah.disabled){
+
+        btnCompleteHibah.classList.remove("bg-green-600","hover:bg-green-700");
+
+        btnCompleteHibah.classList.add("bg-gray-300","cursor-not-allowed");
 
     }
 
 }
   
-if(btnComplete){
+if(btnCompleteHibah){
 
-btnComplete.onclick=async()=>{
+btnCompleteHibah.onclick=async()=>{
 
 if(!confirm("Lengkapkan proses ini?")) return;
 
