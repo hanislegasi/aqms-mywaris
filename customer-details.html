@@ -467,26 +467,31 @@ ${wasiatSnap.exists() ? `
         </h3>
 
         <input
+            id="courier"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Courier"
             value="${courier}">
 
         <input
+            id="trackingNo"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Tracking No"
             value="${trackingNo}">
 
         <input
+            id="receiver"
             class="w-full border rounded-lg p-2 mb-2"
             placeholder="Receiver"
             value="${receiver}">
 
         <textarea
+            id="remarks"
             class="w-full border rounded-lg p-2 mb-3"
             rows="3"
             placeholder="Remarks">${remarks}</textarea>
 
         <button
+            id="btnSend"
             class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
             📦 Tandakan Dihantar
         </button>
@@ -511,6 +516,7 @@ ${wasiatSnap.exists() ? `
         </p>
 
         <button
+            id="btnComplete"
             class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
             ✔ Lengkapkan
         </button>
@@ -659,30 +665,134 @@ user.mawarisPaymentStatus === "paid"
 : "PROSPEK";
 }
 
-const btnPrint = document.getElementById("btnPrint");
+const btnPrint=document.getElementById("btnPrint");
 
 if(btnPrint){
 
-    btnPrint.onclick = async () => {
+btnPrint.onclick=async()=>{
 
-        if(!confirm("Tandakan dokumen ini sebagai telah dicetak?")){
-            return;
-        }
+if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
 
-        await updateDoc(
-            doc(db,"users",userId,"wasiat","maklumat"),
-            {
-                status: "PRINTED",
-                printedAt: new Date().toISOString(),
-                printedBy: auth.currentUser.uid
-            }
-        );
+await updateDoc(
+doc(db,"users",userId,"wasiat","maklumat"),
+{
+status:"PRINTED",
+printedAt:new Date().toISOString(),
+printedBy:auth.currentUser.uid
+}
+);
 
-        alert("Dokumen berjaya ditandakan sebagai PRINTED.");
+alert("Status berjaya dikemaskini.");
 
-        location.reload();
+location.reload();
 
-    };
+};
+
+}
+
+const btnSend=document.getElementById("btnSend");
+
+if(btnSend){
+
+btnSend.onclick=async()=>{
+
+if(!confirm("Tandakan dokumen telah dihantar?")) return;
+
+await updateDoc(
+doc(db,"users",userId,"wasiat","maklumat"),
+{
+
+status:"SENT",
+
+sentAt:new Date().toISOString(),
+
+sentBy:auth.currentUser.uid,
+
+courier:document.getElementById("courier").value,
+
+trackingNo:document.getElementById("trackingNo").value,
+
+receiver:document.getElementById("receiver").value,
+
+remarks:document.getElementById("remarks").value
+
+}
+);
+
+alert("Dokumen berjaya dihantar.");
+
+location.reload();
+
+};
+
+}
+
+const btnComplete=document.getElementById("btnComplete");
+
+// ===== Workflow Lock =====
+
+if(btnPrint){
+
+    btnPrint.disabled = wasiatStatus !== "VERIFIED";
+
+    if(btnPrint.disabled){
+
+        btnPrint.classList.remove("bg-blue-600","hover:bg-blue-700");
+
+        btnPrint.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+
+if(btnSend){
+
+    btnSend.disabled = wasiatStatus !== "PRINTED";
+
+    if(btnSend.disabled){
+
+        btnSend.classList.remove("bg-orange-500","hover:bg-orange-600");
+
+        btnSend.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+
+if(btnComplete){
+
+    btnComplete.disabled = wasiatStatus !== "SENT";
+
+    if(btnComplete.disabled){
+
+        btnComplete.classList.remove("bg-green-600","hover:bg-green-700");
+
+        btnComplete.classList.add("bg-gray-300","cursor-not-allowed");
+
+    }
+
+}
+  
+if(btnComplete){
+
+btnComplete.onclick=async()=>{
+
+if(!confirm("Lengkapkan proses ini?")) return;
+
+await updateDoc(
+doc(db,"users",userId,"wasiat","maklumat"),
+{
+status:"COMPLETED",
+completedAt:new Date().toISOString(),
+completedBy:auth.currentUser.uid
+}
+);
+
+alert("Kes selesai.");
+
+location.reload();
+
+};
 
 }
   
