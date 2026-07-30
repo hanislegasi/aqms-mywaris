@@ -424,13 +424,22 @@ if(filterStatus && data.status === filterStatus){
     matchFilter = true;
 }
   
-    if (data.status === "UNDER_REVIEW") {
-        pendingList.push("🟡 Wasiat");
-    }
+    const icon = {
+    DRAFT: "📝",
+    UNDER_REVIEW: "🟡",
+    APPROVED: "👍",
+    VERIFIED: "🟢",
+    PRINTED: "🖨",
+    SENT: "📦",
+    COMPLETED: "✅"
+};
 
-    else if (data.status === "APPROVED") {
-        pendingList.push(`🟢 ${data.docRef || "-"}`);
-    }
+pendingList.push(`
+<div class="text-left">
+    <div>${icon[data.status] || "📄"} ${data.docRef || "-"}</div>
+    <div class="text-xs text-gray-500">${data.status}</div>
+</div>
+`);
 }
 
 // =====================
@@ -445,13 +454,22 @@ if(filterStatus && data.status === filterStatus){
     matchFilter = true;
 }
   
-    if (data.status === "UNDER_REVIEW") {
-        pendingList.push("🟠 Hibah");
-    }
+    const icon = {
+    DRAFT: "📝",
+    UNDER_REVIEW: "🟡",
+    APPROVED: "👍",
+    VERIFIED: "🟢",
+    PRINTED: "🖨",
+    SENT: "📦",
+    COMPLETED: "✅"
+};
 
-    else if (data.status === "APPROVED") {
-        pendingList.push(`🟢 ${data.docRef || "-"}`);
-    }
+pendingList.push(`
+<div class="text-left">
+    <div>${icon[data.status] || "📄"} ${data.docRef || "-"}</div>
+    <div class="text-xs text-gray-500">${data.status}</div>
+</div>
+`);
 }
 
 // =====================
@@ -466,13 +484,22 @@ if(filterStatus && data.status === filterStatus){
     matchFilter = true;
 }
   
-    if (data.status === "UNDER_REVIEW") {
-        pendingList.push("🟣 Sepencarian");
-    }
+    const icon = {
+    DRAFT: "📝",
+    UNDER_REVIEW: "🟡",
+    APPROVED: "👍",
+    VERIFIED: "🟢",
+    PRINTED: "🖨",
+    SENT: "📦",
+    COMPLETED: "✅"
+};
 
-    else if (data.status === "APPROVED") {
-        pendingList.push(`🟢 ${data.docRef || "-"}`);
-    }
+pendingList.push(`
+<div class="text-left">
+    <div>${icon[data.status] || "📄"} ${data.docRef || "-"}</div>
+    <div class="text-xs text-gray-500">${data.status}</div>
+</div>
+`);
 }
 
 // =====================
@@ -487,13 +514,22 @@ if(filterStatus && data.status === filterStatus){
     matchFilter = true;
 }
   
-    if (data.status === "UNDER_REVIEW") {
-        pendingList.push("🔵 Mawaris");
-    }
+    const icon = {
+    DRAFT: "📝",
+    UNDER_REVIEW: "🟡",
+    APPROVED: "👍",
+    VERIFIED: "🟢",
+    PRINTED: "🖨",
+    SENT: "📦",
+    COMPLETED: "✅"
+};
 
-    else if (data.status === "APPROVED") {
-        pendingList.push(`🟢 ${data.docRef || "-"}`);
-    }
+pendingList.push(`
+<div class="text-left">
+    <div>${icon[data.status] || "📄"} ${data.docRef || "-"}</div>
+    <div class="text-xs text-gray-500">${data.status}</div>
+</div>
+`);
 }
 
 const pending =
