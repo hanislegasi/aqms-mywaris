@@ -349,6 +349,61 @@ preview:"preview-mawaris.html"
 
 ];
 
+const workflowSteps = [
+
+"UNDER_REVIEW",
+"APPROVED",
+"VERIFIED",
+"PRINTED",
+"SENT",
+"AKAD_SCHEDULED",
+"AKAD_COMPLETED",
+"STAMPING",
+"COMPLETED"
+
+];
+
+function renderTimeline(currentStatus){
+
+const currentIndex =
+workflowSteps.indexOf(currentStatus);
+
+document.getElementById("timelineContainer").innerHTML =
+workflowSteps.map((step,index)=>{
+
+const done = index <= currentIndex;
+
+return `
+
+<div class="flex items-center mb-3">
+
+<div class="w-8 h-8 rounded-full flex items-center justify-center
+${done
+? "bg-green-600 text-white"
+: "bg-gray-300 text-gray-500"}">
+
+${done ? "✓" : index+1}
+
+</div>
+
+<div class="ml-4">
+
+<p class="font-medium">
+
+${step.replaceAll("_"," ")}
+
+</p>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
 <div class="space-y-6">
 
 <!-- NOTIFICATION -->
@@ -630,6 +685,8 @@ user.mawarisPaymentStatus === "paid"
 : "PROSPEK";
 }
 
+renderTimeline(wasiatStatus);
+  
 </script>
 
 </body>
