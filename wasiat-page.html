@@ -734,25 +734,16 @@ ${wasiatData.trackingNo}
 
 <div class="mt-5">
 
-<a
-href="preview-wasiat.html"
-class="bg-green-600 text-white px-5 py-2 rounded-lg">
+${
+bakiHari <= 0
 
-Lihat Dokumen
+?
 
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-`;
+`
 
 <a
 href="renewal.html"
-class="inline-block mt-3 bg-red-600 text-white px-4 py-2 rounded-lg">
+class="inline-block bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-semibold">
 
 Perbaharui Keahlian
 
@@ -766,7 +757,7 @@ Perbaharui Keahlian
 
 <a
 href="preview-wasiat.html"
-class="inline-block mt-3 bg-green-600 text-white px-4 py-2 rounded-lg">
+class="inline-block bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-semibold">
 
 Lihat Dokumen
 
@@ -775,11 +766,9 @@ Lihat Dokumen
 `
 
 }
+
 </div>
 
-`;
-
-}
   
 // PAYMENT STATUS
 
