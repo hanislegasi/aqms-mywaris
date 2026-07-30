@@ -245,6 +245,28 @@ getAuth(app);
 const db =
 getFirestore(app);
 
+function timeAgo(timestamp){
+
+if(!timestamp?.seconds) return "Baru sahaja";
+
+const date = new Date(timestamp.seconds * 1000);
+const diff = Math.floor((Date.now() - date.getTime()) / 1000);
+
+if(diff < 60) return "Baru sahaja";
+
+if(diff < 3600)
+return Math.floor(diff/60) + " minit lalu";
+
+if(diff < 86400)
+return Math.floor(diff/3600) + " jam lalu";
+
+if(diff < 604800)
+return Math.floor(diff/86400) + " hari lalu";
+
+return date.toLocaleDateString("ms-MY");
+
+}
+  
 let currentUser = null;  
 
 onAuthStateChanged(auth, async(user)=>{
@@ -520,8 +542,7 @@ ${notif.title}
 
 <p class="text-xs text-gray-500 mt-1">
 
-${new Date(notif.createdAt?.seconds * 1000)
-.toLocaleString("ms-MY")}
+${timeAgo(notif.createdAt)}
 
 </p>
 
