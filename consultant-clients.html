@@ -313,17 +313,7 @@ client.expiryDate
 
 let workflowStatus = "PROSPEK";
 
-if(client.wasiatStatus){
-    workflowStatus = client.wasiatStatus;
-}
-  
-const registerDate =
-client.createdAt
-? client.createdAt.toDate().toLocaleDateString("ms-MY")
-: "-";
-
-const wasiatSnap =
-await getDoc(
+const wasiatSnap = await getDoc(
 doc(
 db,
 "users",
@@ -332,6 +322,22 @@ docSnap.id,
 "maklumat"
 )
 );
+
+if(wasiatSnap.exists()){
+
+const wasiatData = wasiatSnap.data();
+
+workflowStatus =
+wasiatData.status || "PROSPEK";
+
+}
+  
+const registerDate =
+client.createdAt
+? client.createdAt.toDate().toLocaleDateString("ms-MY")
+: "-";
+
+
 
 
   
