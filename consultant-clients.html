@@ -311,29 +311,61 @@ client.expiryDate
 .toLocaleDateString("ms-MY")
 : "-";
 
-let workflowStatus = "PROSPEK";
+const modules = [
 
-const wasiatSnap = await getDoc(
+{
+key:"hibah",
+label:"HIBAH"
+},
+
+{
+key:"wasiat",
+label:"WASIAT"
+},
+
+{
+key:"sepencarian",
+label:"SEPENCARIAN"
+},
+
+{
+key:"mawaris",
+label:"MAWARIS"
+}
+
+];
+
+let workflowStatus = "PROSPEK";
+let workflowModule = "";
+
+for(const module of modules){
+
+const moduleSnap = await getDoc(
+
 doc(
 db,
 "users",
 docSnap.id,
-"wasiat",
+module.key,
 "maklumat"
 )
+
 );
 
-if(wasiatSnap.exists()){
+if(moduleSnap.exists()){
 
-const wasiatData = wasiatSnap.data();
+const moduleData = moduleSnap.data();
 
-console.log(
-client.nama,
-wasiatData
-);
-  
-workflowStatus =
-wasiatData.status || "PROSPEK";
+if(moduleData.status){
+
+workflowStatus = moduleData.status;
+workflowModule = module.label;
+
+break;
+
+}
+
+}
 
 }
   
@@ -446,6 +478,14 @@ workflowStatus==="COMPLETED"
 }">
 
 ${workflowStatus}
+
+<br>
+
+<span class="text-[10px] opacity-70">
+
+${workflowModule}
+
+</span>
 
 </span>
 
