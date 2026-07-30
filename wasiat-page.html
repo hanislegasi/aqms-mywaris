@@ -81,17 +81,25 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 id="notifPanel"
 class="hidden absolute top-20 right-5 w-96 bg-white shadow-2xl rounded-2xl overflow-hidden z-50">
 
-<div class="bg-[#153638] text-white p-4 flex justify-between items-center">
+<div class="bg-[#153638] text-white px-4 py-3 flex justify-between items-center">
 
-<h3 class="font-bold">
-🔔 Notifikasi
-</h3>
+<div class="flex items-center gap-2">
+
+<span>🔔</span>
+
+<span class="font-semibold">
+
+Notifikasi
+
+</span>
+
+</div>
 
 <button
 id="markAllRead"
-class="text-xs underline">
+class="text-xs hover:underline">
 
-Tandakan Semua Dibaca
+Tandakan Semua
 
 </button>
 
@@ -498,40 +506,36 @@ notifDoc.id;
   
    notifHTML += `
 
-<div class="border-b py-3">
+<div class="p-4 border-b hover:bg-gray-50 transition">
 
-<p class="font-semibold">
+<div class="flex justify-between items-start">
+
+<div class="flex-1">
+
+<p class="font-semibold text-gray-800">
+
 ${notif.title}
+
 </p>
 
-<p class="text-sm text-gray-600">
-${notif.message}
+<p class="text-xs text-gray-500 mt-1">
+
+${new Date(notif.createdAt?.seconds * 1000)
+.toLocaleString("ms-MY")}
+
 </p>
 
-${
-bakiHari <= 0
+</div>
 
-?
-
-`<a
-href="renewal.html"
-class="inline-block mt-3 bg-red-600 text-white px-4 py-2 rounded-lg">
-
-Perbaharui Keahlian
-
-</a>`
-
-:
-
-`<a
+<a
 href="preview-wasiat.html"
-class="inline-block mt-3 bg-green-600 text-white px-4 py-2 rounded-lg">
+class="text-green-700 text-sm font-semibold hover:underline whitespace-nowrap">
 
-Lihat Dokumen
+Lihat →
 
-</a>`
+</a>
 
-}
+</div>
 
 </div>
 
