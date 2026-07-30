@@ -236,7 +236,7 @@ let totalClients = 0;
 let totalClientSales = 0;
 let totalCommission = 0;
 
-snap.forEach((docSnap)=>{
+for (const docSnap of snap.docs){
 
 const client =
 docSnap.data();
@@ -322,7 +322,21 @@ client.createdAt
 ? client.createdAt.toDate().toLocaleDateString("ms-MY")
 : "-";
 
+const wasiatSnap =
+await getDoc(
+doc(
+db,
+"users",
+docSnap.id,
+"wasiat",
+"maklumat"
+)
+);
 
+const workflowStatus =
+wasiatSnap.exists()
+? wasiatSnap.data().status
+: "PROSPEK";
   
 html += `
 
@@ -445,7 +459,7 @@ View
 
 `;
   
-});
+}
 
 document.getElementById(
 "totalClients"
