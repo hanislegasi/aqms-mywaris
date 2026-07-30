@@ -254,7 +254,7 @@ client.role !== "customer" ||
 !client.memberNo ||
 client.referral !== consultantNo
 ){
-return;
+continue;
 }
 
 console.log(
@@ -327,6 +327,11 @@ if(wasiatSnap.exists()){
 
 const wasiatData = wasiatSnap.data();
 
+console.log(
+client.nama,
+wasiatData
+);
+  
 workflowStatus =
 wasiatData.status || "PROSPEK";
 
