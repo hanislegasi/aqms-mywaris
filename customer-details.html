@@ -1136,6 +1136,17 @@ printedBy:auth.currentUser.uid
 }
 );
 
+await addDoc(
+collection(db,"users",userId,"notifications"),
+{
+title:"Dokumen Dicetak",
+message:"Dokumen Wasiat anda telah dicetak.",
+module:"wasiat",
+status:"PRINTED",
+read:false,
+createdAt:serverTimestamp()
+});
+  
 alert("Status berjaya dikemaskini.");
 
 location.reload();
@@ -1173,6 +1184,19 @@ remarks:document.getElementById("wasiatRemarks").value
 }
 );
 
+await addDoc(
+collection(db,"users",userId,"notifications"),
+{
+title:"Dokumen Dihantar",
+message:`Dokumen Wasiat anda telah dihantar. Tracking No: ${document.getElementById("wasiatTrackingNo").value}`,
+module:"wasiat",
+status:"SENT",
+type:"workflow",
+trackingNo:document.getElementById("wasiatTrackingNo").value,
+read:false,
+createdAt:serverTimestamp()
+});
+  
 alert("Dokumen berjaya dihantar.");
 
 location.reload();
@@ -1242,6 +1266,18 @@ completedBy:auth.currentUser.uid
 }
 );
 
+await addDoc(
+collection(db,"users",userId,"notifications"),
+{
+title:"Urusan Selesai",
+message:"Urusan Dokumen Wasiat anda telah selesai.",
+module:"wasiat",
+status:"COMPLETED",
+type:"workflow",
+read:false,
+createdAt:serverTimestamp()
+});
+  
 alert("Kes selesai.");
 
 location.reload();
