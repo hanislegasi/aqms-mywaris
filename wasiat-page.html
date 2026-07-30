@@ -79,13 +79,29 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
   
 <div
 id="notifPanel"
-class="hidden absolute top-20 right-5 w-96 bg-white shadow-2xl rounded-2xl p-4 z-50">
+class="hidden absolute top-20 right-5 w-96 bg-white shadow-2xl rounded-2xl overflow-hidden z-50">
 
-<h3 class="font-bold mb-3">
-Notifikasi
+<div class="bg-[#153638] text-white p-4 flex justify-between items-center">
+
+<h3 class="font-bold">
+🔔 Notifikasi
 </h3>
 
-<div id="notifList"></div>
+<button
+id="markAllRead"
+class="text-xs underline">
+
+Tandakan Semua Dibaca
+
+</button>
+
+</div>
+
+<div
+id="notifList"
+class="max-h-96 overflow-y-auto">
+
+</div>
 
 </div>
   
@@ -459,6 +475,7 @@ await getDocs(
 
 let notifHTML = "";
 let unread = 0;
+let unreadIds = [];
 
 notifSnap.forEach((notifDoc)=>{
 
@@ -467,9 +484,10 @@ notifDoc.data();
 
    if(!notif.read){
 
-      unread++;
+    unread++;
+    unreadIds.push(notifDoc.id);
 
-   }
+}
 
  if(!window.firstUnreadId){
 
@@ -537,12 +555,12 @@ if(unread > 0){
 
 }
 
-const readNotif =
-notifSnap.docs.find(
-d => d.data().read === true
-);
+const latestNotif =
+notifSnap.docs.length
+? notifSnap.docs[0].data()
+: null;
 
-if(readNotif){
+if(latestNotif){
 
 const notif =
 readNotif.data();
@@ -722,35 +740,36 @@ document
 
 document
 .getElementById("notifBtn")
-.addEventListener("click", async()=>{
+.addEventListener("click", ()=>{
 
 document
 .getElementById("notifPanel")
 .classList.toggle("hidden");
 
-if(window.firstUnreadId){
+});
+
+document
+.getElementById("markAllRead")
+.addEventListener("click", async()=>{
+
+for(const id of unreadIds){
 
 await updateDoc(
-
 doc(
 db,
 "users",
 currentUser.uid,
 "notifications",
-window.firstUnreadId
+id
 ),
-
 {
 read:true
 }
-
 );
 
-document
-.getElementById("notifCount")
-.classList.add("hidden");
-
 }
+
+location.reload();
 
 });
 
