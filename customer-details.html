@@ -1146,6 +1146,39 @@ status:"PRINTED",
 read:false,
 createdAt:serverTimestamp()
 });
+
+// ===============================
+// NOTIFY CONSULTANT (AQC)
+// ===============================
+
+const consultantQuery = await getDocs(
+    query(
+        collection(db,"users"),
+        where("role","==","consultant")
+    )
+);
+
+for (const consultant of consultantQuery.docs){
+
+    await addDoc(
+        collection(
+            db,
+            "users",
+            consultant.id,
+            "notifications"
+        ),
+        {
+            title:"Dokumen Dicetak",
+            message:`Dokumen Wasiat ${user.nama} telah dicetak dan sedia untuk tindakan.`,
+            module:"wasiat",
+            status:"PRINTED",
+            customerId:userId,
+            read:false,
+            createdAt:serverTimestamp()
+        }
+    );
+
+}
   
 alert("Status berjaya dikemaskini.");
 
@@ -1305,6 +1338,50 @@ printedBy:auth.currentUser.uid
 }
 );
 
+await addDoc(
+collection(db,"users",userId,"notifications"),
+{
+title:"Dokumen Dicetak",
+message:"Dokumen Hibah anda telah dicetak.",
+module:"hibah",
+status:"PRINTED",
+read:false,
+createdAt:serverTimestamp()
+});
+
+// ===============================
+// NOTIFY CONSULTANT (AQC)
+// ===============================
+
+const consultantQuery = await getDocs(
+    query(
+        collection(db,"users"),
+        where("role","==","consultant")
+    )
+);
+
+for (const consultant of consultantQuery.docs){
+
+    await addDoc(
+        collection(
+            db,
+            "users",
+            consultant.id,
+            "notifications"
+        ),
+        {
+            title:"Dokumen Dicetak",
+            message:`Dokumen Hibah ${user.nama} telah dicetak dan sedia untuk tindakan.`,
+            module:"hibah",
+            status:"PRINTED",
+            customerId:userId,
+            read:false,
+            createdAt:serverTimestamp()
+        }
+    );
+
+}
+  
 alert("Status berjaya dikemaskini.");
 
 location.reload();
@@ -1438,6 +1515,50 @@ printedBy:auth.currentUser.uid
 }
 );
 
+await addDoc(
+collection(db,"users",userId,"notifications"),
+{
+title:"Dokumen Dicetak",
+message:"Dokumen Sepencarian anda telah dicetak.",
+module:"sepencarian",
+status:"PRINTED",
+read:false,
+createdAt:serverTimestamp()
+});
+
+// ===============================
+// NOTIFY CONSULTANT (AQC)
+// ===============================
+
+const consultantQuery = await getDocs(
+    query(
+        collection(db,"users"),
+        where("role","==","consultant")
+    )
+);
+
+for (const consultant of consultantQuery.docs){
+
+    await addDoc(
+        collection(
+            db,
+            "users",
+            consultant.id,
+            "notifications"
+        ),
+        {
+            title:"Dokumen Dicetak",
+            message:`Dokumen Sepencarian ${user.nama} telah dicetak dan sedia untuk tindakan.`,
+            module:"sepencarian",
+            status:"PRINTED",
+            customerId:userId,
+            read:false,
+            createdAt:serverTimestamp()
+        }
+    );
+
+}
+  
 alert("Status berjaya dikemaskini.");
 
 location.reload();
@@ -1571,6 +1692,50 @@ printedBy:auth.currentUser.uid
 }
 );
 
+await addDoc(
+collection(db,"users",userId,"notifications"),
+{
+title:"Dokumen Dicetak",
+message:"Dokumen Mawaris anda telah dicetak.",
+module:"mawaris",
+status:"PRINTED",
+read:false,
+createdAt:serverTimestamp()
+});
+
+// ===============================
+// NOTIFY CONSULTANT (AQC)
+// ===============================
+
+const consultantQuery = await getDocs(
+    query(
+        collection(db,"users"),
+        where("role","==","consultant")
+    )
+);
+
+for (const consultant of consultantQuery.docs){
+
+    await addDoc(
+        collection(
+            db,
+            "users",
+            consultant.id,
+            "notifications"
+        ),
+        {
+            title:"Dokumen Dicetak",
+            message:`Dokumen Mawaris ${user.nama} telah dicetak dan sedia untuk tindakan.`,
+            module:"mawaris",
+            status:"PRINTED",
+            customerId:userId,
+            read:false,
+            createdAt:serverTimestamp()
+        }
+    );
+
+}
+  
 alert("Status berjaya dikemaskini.");
 
 location.reload();
