@@ -364,6 +364,14 @@ preview:"preview-mawaris.html"
 
 ];
 
+const activeProduct =
+products.find(product => product.snap.exists());
+
+const currentStatus =
+activeProduct
+? activeProduct.status
+: "UNDER_REVIEW";
+  
 const workflowSteps = [
   { key:"UNDER_REVIEW", label:"Under Review" },
   { key:"APPROVED", label:"Approved" },
@@ -684,7 +692,7 @@ user.mawarisPaymentStatus === "paid"
 ? "AHLI AKTIF"
 : "PROSPEK";
 
-renderTimeline(wasiatStatus);
+renderTimeline(currentStatus);
   
 }
 
