@@ -172,140 +172,104 @@ if(docSnap.exists()){
 const user =
 docSnap.data();
 
-// WASIAT STATUS
-const wasiatSnap =
-await getDoc(
-doc(
-db,
-"users",
-userId,
-"wasiat",
-"maklumat"
-)
-);
+// ======================
+// WASIAT
+// ======================
 
-let wasiatStatus =
-"BELUM DIISI";
+let wasiatStatus = "BELUM DIISI";
+let wasiatDocRef = "-";
+let wasiatApprovedDate = "-";
+let wasiatExpiryDate = "-";
+let wasiatBakiHari = 0;
 
-let docRef = "-";
-let approvedDate = "-";
-let expiryDate = "-";
-let bakiHari = 0;
-if(wasiatSnap.exists()){
+if (wasiatSnap.exists()) {
 
-const wasiatData =
-wasiatSnap.data();
+    const wasiatData = wasiatSnap.data();
 
-wasiatStatus =
-wasiatData.status ||
-"DRAFT";
+    wasiatStatus = wasiatData.status || "DRAFT";
 
-docRef =
-wasiatData.docRef || "-";
+    wasiatDocRef = wasiatData.docRef || "-";
 
-approvedDate =
-wasiatData.approvedAt
-? new Date(
-wasiatData.approvedAt
-).toLocaleDateString("ms-MY")
-: "-";
+    wasiatApprovedDate = wasiatData.approvedAt
+        ? new Date(wasiatData.approvedAt).toLocaleDateString("ms-MY")
+        : "-";
 
-expiryDate =
-wasiatData.expiryDate
-? new Date(
-wasiatData.expiryDate
-).toLocaleDateString("ms-MY")
-: "-";
+    wasiatExpiryDate = wasiatData.expiryDate
+        ? new Date(wasiatData.expiryDate).toLocaleDateString("ms-MY")
+        : "-";
 
-bakiHari =
-expiryDate !== "-"
-? Math.ceil(
-(
-new Date(wasiatData.expiryDate)
-- new Date()
-)
-/
-(1000*60*60*24)
-)
-: 0;
-  
-}
-
-// HIBAH STATUS
-const hibahSnap =
-await getDoc(
-doc(
-db,
-"users",
-userId,
-"hibah",
-"maklumat"
-)
-);
-
-let hibahStatus =
-"BELUM DIISI";
-
-if(hibahSnap.exists()){
-
-const hibahData =
-hibahSnap.data();
-
-hibahStatus =
-hibahData.status ||
-"DRAFT";
+    wasiatBakiHari = wasiatData.expiryDate
+        ? Math.ceil(
+            (new Date(wasiatData.expiryDate) - new Date())
+            / (1000 * 60 * 60 * 24)
+        )
+        : 0;
 
 }
 
-// SEPENCARIAN STATUS
-const sepencarianSnap =
-await getDoc(
-doc(
-db,
-"users",
-userId,
-"sepencarian",
-"maklumat"
-)
+
+// ======================
+// HIBAH
+// ======================
+
+const hibahSnap = await getDoc(
+    doc(db, "users", userId, "hibah", "maklumat")
 );
 
-let sepencarianStatus =
-"BELUM DIISI";
+let hibahStatus = "BELUM DIISI";
+let hibahDocRef = "-";
 
-if(sepencarianSnap.exists()){
+if (hibahSnap.exists()) {
 
-const sepencarianData =
-sepencarianSnap.data();
+    const hibahData = hibahSnap.data();
 
-sepencarianStatus =
-sepencarianData.status ||
-"DRAFT";
+    hibahStatus = hibahData.status || "DRAFT";
+
+    hibahDocRef = hibahData.docRef || "-";
 
 }
 
-// MAWARIS STATUS
-const mawarisSnap =
-await getDoc(
-doc(
-db,
-"users",
-userId,
-"mawaris",
-"maklumat"
-)
+
+// ======================
+// HARTA SEPENCARIAN
+// ======================
+
+const sepencarianSnap = await getDoc(
+    doc(db, "users", userId, "sepencarian", "maklumat")
 );
 
-let mawarisStatus =
-"BELUM DIISI";
+let sepencarianStatus = "BELUM DIISI";
+let sepencarianDocRef = "-";
 
-if(mawarisSnap.exists()){
+if (sepencarianSnap.exists()) {
 
-const mawarisData =
-mawarisSnap.data();
+    const sepencarianData = sepencarianSnap.data();
 
-mawarisStatus =
-mawarisData.status ||
-"DRAFT";
+    sepencarianStatus = sepencarianData.status || "DRAFT";
+
+    sepencarianDocRef = sepencarianData.docRef || "-";
+
+}
+
+
+// ======================
+// MAWARIS
+// ======================
+
+const mawarisSnap = await getDoc(
+    doc(db, "users", userId, "mawaris", "maklumat")
+);
+
+let mawarisStatus = "BELUM DIISI";
+let mawarisDocRef = "-";
+
+if (mawarisSnap.exists()) {
+
+    const mawarisData = mawarisSnap.data();
+
+    mawarisStatus = mawarisData.status || "DRAFT";
+
+    mawarisDocRef = mawarisData.docRef || "-";
 
 }
   
@@ -316,7 +280,7 @@ const products = [
 name:"Wasiat",
 snap:wasiatSnap,
 status:wasiatStatus,
-docRef:docRef,
+docRef:wasiatDocRef,
 preview:"preview-wasiat.html"
 },
 
@@ -324,7 +288,7 @@ preview:"preview-wasiat.html"
 name:"Hibah",
 snap:hibahSnap,
 status:hibahStatus,
-docRef:"-",
+docRef:"hibahDocRef",
 preview:"preview-hibah.html"
 },
 
@@ -332,7 +296,7 @@ preview:"preview-hibah.html"
 name:"Harta Sepencarian",
 snap:sepencarianSnap,
 status:sepencarianStatus,
-docRef:"-",
+docRef:"sepencarianDocRef",
 preview:"preview-sepencarian.html"
 },
 
@@ -340,7 +304,7 @@ preview:"preview-sepencarian.html"
 name:"Mawaris",
 snap:mawarisSnap,
 status:mawarisStatus,
-docRef:"-",
+docRef:"mawarisDocRef",
 preview:"preview-mawaris.html"
 }
 
@@ -490,162 +454,46 @@ id="timelineContainer">
 
 <div class="grid grid-cols-1 xl:grid-cols-4 gap-4">
 
-${
-wasiatSnap.exists()
-?
-`
+${products
+.filter(product => product.snap.exists())
+.map(product => `
+
 <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col h-full">
 
-<div>
+    <div>
 
-<h3 class="font-bold text-green-700 text-lg">
-Wasiat
-</h3>
+        <h3 class="font-bold text-green-700 text-lg">
+            ${product.name}
+        </h3>
 
-<p class="text-sm mt-4">
-No Dokumen :
-<strong>${docRef}</strong>
-</p>
+        <p class="text-sm mt-4">
+            No Dokumen :
+            <strong>${product.docRef}</strong>
+        </p>
 
-<p class="text-sm mt-1">
-Status :
-<strong>${wasiatStatus}</strong>
-</p>
+        <p class="text-sm mt-1">
+            Status :
+            <strong>${product.status}</strong>
+        </p>
 
-</div>
+    </div>
 
-<div class="mt-auto pt-5">
+    <div class="mt-auto pt-5">
 
-<a
-href="preview-wasiat.html?uid=${userId}"
-target="_blank"
-class="block w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold transition">
+        <a
+        href="${product.preview}?uid=${userId}"
+        target="_blank"
+        class="block w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold">
 
-👁 View Dokumen
+        👁 View Dokumen
 
-</a>
+        </a>
 
-</div>
-
-</div>
-`
-:
-""
-}
-
-${
-hibahSnap.exists()
-?
-`
-<div class="bg-blue-50 border border-blue-200 rounded-xl p-5 flex flex-col h-full">
-
-<div>
-
-<h3 class="font-bold text-blue-700 text-lg">
-Hibah
-</h3>
-
-<p class="text-sm mt-4">
-Status :
-<strong>${hibahStatus}</strong>
-</p>
+    </div>
 
 </div>
 
-<div class="mt-auto pt-5">
-
-<a
-href="preview-hibah.html?uid=${userId}"
-target="_blank"
-class="block w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold transition">
-👁 View Dokumen
-
-</a>
-
-</div>
-
-</div>
-`
-:
-""
-}
-
-${
-sepencarianSnap.exists()
-?
-`
-<div class="bg-blue-50 border border-blue-200 rounded-xl p-5 flex flex-col h-full">
-
-<div>
-
-<h3 class="font-bold text-blue-700 text-lg">
-Harta Sepencarian
-</h3>
-
-<p class="text-sm mt-4">
-Status :
-<strong>${sepencarianStatus}</strong>
-</p>
-
-</div>
-
-<div class="mt-auto pt-5">
-
-<a
-href="preview-sepencarian.html?uid=${userId}"
-target="_blank"
-class="block w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold transition">
-
-👁 View Dokumen
-
-</a>
-
-</div>
-
-</div>
-`
-:
-""
-}
-
-${
-mawarisSnap.exists()
-?
-`
-<div class="bg-blue-50 border border-blue-200 rounded-xl p-5 flex flex-col h-full">
-
-<div>
-
-<h3 class="font-bold text-blue-700 text-lg">
-Mawaris
-</h3>
-
-<p class="text-sm mt-4">
-Status :
-<strong>${mawarisStatus}</strong>
-</p>
-
-</div>
-
-<div class="mt-auto pt-5">
-
-<a
-href="preview-mawaris.html?uid=${userId}"
-target="_blank"
-class="mt-5 w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold transition">
-
-👁 View Dokumen
-
-</a>
-
-</div>
-
-</div>
-`
-:
-""
-}
-
+`).join("")}
 
 
 <div class="bg-white border rounded-xl p-5 flex flex-col h-full">
