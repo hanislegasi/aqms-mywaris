@@ -175,7 +175,19 @@ docSnap.data();
 // ======================
 // WASIAT
 // ======================
+// WASIAT STATUS
 
+const wasiatSnap =
+await getDoc(
+doc(
+db,
+"users",
+userId,
+"wasiat",
+"maklumat"
+)
+);
+  
 let wasiatStatus = "BELUM DIISI";
 let wasiatDocRef = "-";
 let wasiatApprovedDate = "-";
