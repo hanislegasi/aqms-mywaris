@@ -348,60 +348,53 @@ preview:"preview-mawaris.html"
 ];
 
 const workflowSteps = [
-
-"UNDER_REVIEW",
-"APPROVED",
-"VERIFIED",
-"PRINTED",
-"SENT",
-"AKAD_SCHEDULED",
-"AKAD_COMPLETED",
-"STAMPING",
-"COMPLETED"
-
+  { key:"UNDER_REVIEW", label:"Under Review" },
+  { key:"APPROVED", label:"Approved" },
+  { key:"VERIFIED", label:"Verified" },
+  { key:"PRINTED", label:"Printed" },
+  { key:"SENT", label:"Sent" },
+  { key:"AKAD_SCHEDULED", label:"Akad Scheduled" },
+  { key:"AKAD_COMPLETED", label:"Akad Completed" },
+  { key:"STAMPING", label:"Stamping" },
+  { key:"COMPLETED", label:"Completed" }
 ];
 
 function renderTimeline(currentStatus){
 
-const currentIndex =
-workflowSteps.indexOf(currentStatus);
+    const currentIndex =
+    workflowSteps.findIndex(
+        s => s.key === currentStatus
+    );
 
-document.getElementById("timelineContainer").innerHTML =
-workflowSteps.map((step,index)=>{
+    document.getElementById("timelineContainer").innerHTML =
+    workflowSteps.map((step,index)=>`
 
-const done = index <= currentIndex;
+    <div class="flex items-center gap-4 mb-4">
 
-return `
+        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold
+        ${index<=currentIndex
+        ?"bg-green-600 text-white"
+        :"bg-gray-200 text-gray-500"}">
 
-<div class="flex items-center mb-3">
+        ${index<=currentIndex?"✓":index+1}
 
-<div class="w-8 h-8 rounded-full flex items-center justify-center
-${done
-? "bg-green-600 text-white"
-: "bg-gray-300 text-gray-500"}">
+        </div>
 
-${done ? "✓" : index+1}
+        <span class="${
+            index<=currentIndex
+            ?"font-semibold text-green-700"
+            :"text-gray-500"
+        }">
 
-</div>
+        ${step.label}
 
-<div class="ml-4">
+        </span>
 
-<p class="font-medium">
+    </div>
 
-${step.replaceAll("_"," ")}
-
-</p>
-
-</div>
-
-</div>
-
-`;
-
-}).join("");
+    `).join("");
 
 }
-
 document.getElementById(
 "customerInfo"
 ).innerHTML = `
