@@ -176,17 +176,10 @@ docSnap.data();
 // WASIAT
 // ======================
 
-const wasiatSnap =
-await getDoc(
-doc(
-db,
-"users",
-userId,
-"wasiat",
-"maklumat"
-)
+const wasiatSnap = await getDoc(
+    doc(db, "users", userId, "wasiat", "maklumat")
 );
-  
+
 let wasiatStatus = "BELUM DIISI";
 let wasiatDocRef = "-";
 let wasiatApprovedDate = "-";
@@ -198,7 +191,6 @@ if (wasiatSnap.exists()) {
     const wasiatData = wasiatSnap.data();
 
     wasiatStatus = wasiatData.status || "DRAFT";
-
     wasiatDocRef = wasiatData.docRef || "-";
 
     wasiatApprovedDate = wasiatData.approvedAt
@@ -229,14 +221,31 @@ const hibahSnap = await getDoc(
 
 let hibahStatus = "BELUM DIISI";
 let hibahDocRef = "-";
+let hibahApprovedDate = "-";
+let hibahExpiryDate = "-";
+let hibahBakiHari = 0;
 
 if (hibahSnap.exists()) {
 
     const hibahData = hibahSnap.data();
 
     hibahStatus = hibahData.status || "DRAFT";
-
     hibahDocRef = hibahData.docRef || "-";
+
+    hibahApprovedDate = hibahData.approvedAt
+        ? new Date(hibahData.approvedAt).toLocaleDateString("ms-MY")
+        : "-";
+
+    hibahExpiryDate = hibahData.expiryDate
+        ? new Date(hibahData.expiryDate).toLocaleDateString("ms-MY")
+        : "-";
+
+    hibahBakiHari = hibahData.expiryDate
+        ? Math.ceil(
+            (new Date(hibahData.expiryDate) - new Date())
+            / (1000 * 60 * 60 * 24)
+        )
+        : 0;
 
 }
 
@@ -251,14 +260,31 @@ const sepencarianSnap = await getDoc(
 
 let sepencarianStatus = "BELUM DIISI";
 let sepencarianDocRef = "-";
+let sepencarianApprovedDate = "-";
+let sepencarianExpiryDate = "-";
+let sepencarianBakiHari = 0;
 
 if (sepencarianSnap.exists()) {
 
     const sepencarianData = sepencarianSnap.data();
 
     sepencarianStatus = sepencarianData.status || "DRAFT";
-
     sepencarianDocRef = sepencarianData.docRef || "-";
+
+    sepencarianApprovedDate = sepencarianData.approvedAt
+        ? new Date(sepencarianData.approvedAt).toLocaleDateString("ms-MY")
+        : "-";
+
+    sepencarianExpiryDate = sepencarianData.expiryDate
+        ? new Date(sepencarianData.expiryDate).toLocaleDateString("ms-MY")
+        : "-";
+
+    sepencarianBakiHari = sepencarianData.expiryDate
+        ? Math.ceil(
+            (new Date(sepencarianData.expiryDate) - new Date())
+            / (1000 * 60 * 60 * 24)
+        )
+        : 0;
 
 }
 
@@ -273,14 +299,31 @@ const mawarisSnap = await getDoc(
 
 let mawarisStatus = "BELUM DIISI";
 let mawarisDocRef = "-";
+let mawarisApprovedDate = "-";
+let mawarisExpiryDate = "-";
+let mawarisBakiHari = 0;
 
 if (mawarisSnap.exists()) {
 
     const mawarisData = mawarisSnap.data();
 
     mawarisStatus = mawarisData.status || "DRAFT";
-
     mawarisDocRef = mawarisData.docRef || "-";
+
+    mawarisApprovedDate = mawarisData.approvedAt
+        ? new Date(mawarisData.approvedAt).toLocaleDateString("ms-MY")
+        : "-";
+
+    mawarisExpiryDate = mawarisData.expiryDate
+        ? new Date(mawarisData.expiryDate).toLocaleDateString("ms-MY")
+        : "-";
+
+    mawarisBakiHari = mawarisData.expiryDate
+        ? Math.ceil(
+            (new Date(mawarisData.expiryDate) - new Date())
+            / (1000 * 60 * 60 * 24)
+        )
+        : 0;
 
 }
   
