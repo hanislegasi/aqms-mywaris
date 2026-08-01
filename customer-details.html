@@ -624,17 +624,7 @@ type="datetime-local"
 id="printedAt"
 class="w-full border rounded-lg p-2 mb-3">
 
-        <p class="text-sm text-gray-500">
-            Tarikh Cetak
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${wasiatPrintedAt
-                ? new Date(wasiatPrintedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
-
-        <button
+               <button
             id="btnPrintWasiat"
             class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
             ✔ Tandakan Dicetak
@@ -763,15 +753,14 @@ ${hibahSnap.exists() ? `
             🖨 PRINT
         </h3>
 
-        <p class="text-sm text-gray-500">
-            Tarikh Cetak
-        </p>
+        <label class="block text-sm mb-2">
+Tarikh & Masa Cetak
+</label>
 
-        <p class="font-semibold mb-6">
-            ${hibahPrintedAt
-                ? new Date(hibahPrintedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
+<input
+type="datetime-local"
+id="printedAt"
+class="w-full border rounded-lg p-2 mb-3">
 
         <button
             id="btnPrintHibah"
@@ -787,6 +776,15 @@ ${hibahSnap.exists() ? `
         <h3 class="text-xl font-bold text-orange-600 mb-4">
             📦 SEND
         </h3>
+
+<label class="block text-sm mb-2">
+Tarikh & Masa Hantar
+</label>
+
+<input
+type="datetime-local"
+id="sentAt"
+class="w-full border rounded-lg p-2 mb-3">
 
         <input
             id="hibahCourier"
@@ -892,15 +890,14 @@ ${sepencarianSnap.exists() ? `
             🖨 PRINT
         </h3>
 
-        <p class="text-sm text-gray-500">
-            Tarikh Cetak
-        </p>
+        <label class="block text-sm mb-2">
+Tarikh & Masa Cetak
+</label>
 
-        <p class="font-semibold mb-6">
-            ${sepencarianPrintedAt
-                ? new Date(sepencarianPrintedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
+<input
+type="datetime-local"
+id="printedAt"
+class="w-full border rounded-lg p-2 mb-3">
 
         <button
             id="btnPrintSepencarian"
@@ -916,6 +913,15 @@ ${sepencarianSnap.exists() ? `
         <h3 class="text-xl font-bold text-orange-600 mb-4">
             📦 SEND
         </h3>
+
+<label class="block text-sm mb-2">
+Tarikh & Masa Hantar
+</label>
+
+<input
+type="datetime-local"
+id="sentAt"
+class="w-full border rounded-lg p-2 mb-3">
 
         <input
             id="sepencarianCourier"
@@ -1021,15 +1027,14 @@ ${mawarisSnap.exists() ? `
             🖨 PRINT
         </h3>
 
-        <p class="text-sm text-gray-500">
-            Tarikh Cetak
-        </p>
+        <label class="block text-sm mb-2">
+Tarikh & Masa Cetak
+</label>
 
-        <p class="font-semibold mb-6">
-            ${mawarisPrintedAt
-                ? new Date(mawarisPrintedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
+<input
+type="datetime-local"
+id="printedAt"
+class="w-full border rounded-lg p-2 mb-3">
 
         <button
             id="btnPrintMawaris"
@@ -1045,6 +1050,15 @@ ${mawarisSnap.exists() ? `
         <h3 class="text-xl font-bold text-orange-600 mb-4">
             📦 SEND
         </h3>
+
+<label class="block text-sm mb-2">
+Tarikh & Masa Hantar
+</label>
+
+<input
+type="datetime-local"
+id="sentAt"
+class="w-full border rounded-lg p-2 mb-3">
 
         <input
             id="mawarisCourier"
@@ -1307,12 +1321,17 @@ await updateDoc(
 doc(db,"users",userId,"hibah","maklumat"),
 {
 status:"PRINTED",
-printedAt:new Date().toISOString(),
-printedBy:auth.currentUser.uid
+
+printedAt:
+document.getElementById("printedAt").value,
+
+printedUpdatedAt:
+serverTimestamp(),
+
+printedBy:
+auth.currentUser.uid
 }
 );
-
-
   
 alert("Status berjaya dikemaskini.");
 
@@ -1336,9 +1355,14 @@ doc(db,"users",userId,"hibah","maklumat"),
 
 status:"SENT",
 
-sentAt:new Date().toISOString(),
+sentAt:
+document.getElementById("sentAt").value,
 
-sentBy:auth.currentUser.uid,
+sentUpdatedAt:
+serverTimestamp(),
+
+sentBy:
+auth.currentUser.uid,
 
 courier:document.getElementById("hibahCourier").value,
 
@@ -1443,11 +1467,17 @@ await updateDoc(
 doc(db,"users",userId,"sepencarian","maklumat"),
 {
 status:"PRINTED",
-printedAt:new Date().toISOString(),
-printedBy:auth.currentUser.uid
+  
+printedAt:
+document.getElementById("printedAt").value,
+
+printedUpdatedAt:
+serverTimestamp(),
+
+printedBy:
+auth.currentUser.uid
 }
 );
-
  
 alert("Status berjaya dikemaskini.");
 
@@ -1471,9 +1501,14 @@ doc(db,"users",userId,"sepencarian","maklumat"),
 
 status:"SENT",
 
-sentAt:new Date().toISOString(),
+sentAt:
+document.getElementById("sentAt").value,
 
-sentBy:auth.currentUser.uid,
+sentUpdatedAt:
+serverTimestamp(),
+
+sentBy:
+auth.currentUser.uid,
 
 courier:document.getElementById("sepencarianCourier").value,
 
@@ -1578,8 +1613,15 @@ await updateDoc(
 doc(db,"users",userId,"mawaris","maklumat"),
 {
 status:"PRINTED",
-printedAt:new Date().toISOString(),
-printedBy:auth.currentUser.uid
+  
+printedAt:
+document.getElementById("printedAt").value,
+
+printedUpdatedAt:
+serverTimestamp(),
+
+printedBy:
+auth.currentUser.uid
 }
 );
 
@@ -1606,9 +1648,14 @@ doc(db,"users",userId,"mawaris","maklumat"),
 
 status:"SENT",
 
-sentAt:new Date().toISOString(),
+sentAt:
+document.getElementById("sentAt").value,
 
-sentBy:auth.currentUser.uid,
+sentUpdatedAt:
+serverTimestamp(),
+
+sentBy:
+auth.currentUser.uid,
 
 courier:document.getElementById("mawarisCourier").value,
 
