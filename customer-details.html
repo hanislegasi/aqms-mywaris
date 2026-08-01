@@ -221,6 +221,8 @@ if(wasiatSnap.exists()){
 const wasiatData =
 wasiatSnap.data();
 
+const printedAt = wasiatData.printedAt || "";
+  
 wasiatPrintedAt = wasiatData.printedAt || null;
 wasiatSentAt = wasiatData.sentAt || null;
 wasiatCompletedAt = wasiatData.completedAt || null;
@@ -301,6 +303,8 @@ if(hibahSnap.exists()){
 const hibahData =
 hibahSnap.data();
 
+const printedAt = hibahData.printedAt || "";
+  
 hibahPrintedAt = hibahData.printedAt || null;
 hibahSentAt = hibahData.sentAt || null;
 hibahCompletedAt = hibahData.completedAt || null;
@@ -381,6 +385,8 @@ if(sepencarianSnap.exists()){
 const sepencarianData =
 sepencarianSnap.data();
 
+const printedAt = sepencarianData.printedAt || "";
+  
 sepencarianPrintedAt = sepencarianData.printedAt || null;
 sepencarianSentAt = sepencarianData.sentAt || null;
 sepencarianCompletedAt = sepencarianData.completedAt || null;
@@ -461,6 +467,8 @@ if(mawarisSnap.exists()){
 const mawarisData =
 mawarisSnap.data();
 
+const printedAt = mawarisData.printedAt || "";
+  
 mawarisPrintedAt = mawarisData.printedAt || null;
 mawarisSentAt = mawarisData.sentAt || null;
 mawarisCompletedAt = mawarisData.completedAt || null;
@@ -622,7 +630,9 @@ Tarikh & Masa Cetak
 <input
 type="datetime-local"
 id="printedAt"
-class="w-full border rounded-lg p-2 mb-3">
+value="${printedAt}"
+${wasiatStatus==="PRINTED" || wasiatStatus==="SENT" ? "disabled" : ""}
+class="w-full border rounded-lg p-2">
 
                <button
             id="btnPrintWasiat"
@@ -646,7 +656,10 @@ Tarikh & Masa Hantar
 <input
 type="datetime-local"
 id="sentAt"
-class="w-full border rounded-lg p-2 mb-3">
+value="${sentAt}"
+${wasiatStatus==="SENT" ? "disabled" : ""}
+class="w-full border rounded-lg p-2">
+
 
 
         <input
