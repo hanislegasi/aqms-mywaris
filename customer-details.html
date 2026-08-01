@@ -630,7 +630,7 @@ Tarikh & Masa Cetak
 <input
 type="datetime-local"
 id="printedAt"
-value="${printedAt}"
+value="${wasiatPrintedAt ? wasiatPrintedAt.substring(0,16) : ""}"
 ${wasiatStatus==="PRINTED" || wasiatStatus==="SENT" ? "disabled" : ""}
 class="w-full border rounded-lg p-2">
 
@@ -656,7 +656,7 @@ Tarikh & Masa Hantar
 <input
 type="datetime-local"
 id="sentAt"
-value="${sentAt}"
+value="${wasiatSentAt ? wasiatSentAt.substring(0,16) : ""}"
 ${wasiatStatus==="SENT" ? "disabled" : ""}
 class="w-full border rounded-lg p-2">
 
