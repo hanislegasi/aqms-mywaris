@@ -28,40 +28,6 @@ Memuatkan...
 
 </div>
 
-<button
-id="notifBtn"
-class="relative">
-
-<svg
-xmlns="http://www.w3.org/2000/svg"
-class="w-7 h-7"
-fill="none"
-viewBox="0 0 24 24"
-stroke="currentColor">
-
-<path
-stroke-linecap="round"
-stroke-linejoin="round"
-stroke-width="2"
-d="M15 17h5l-1.405-1.405A2.032
-2.032 0 0118 14.158V11a6.002
-6.002 0 00-4-5.659V5a2 2 0
-10-4 0v.341C7.67 6.165 6 8.388
-6 11v3.159c0 .538-.214 1.055-.595
-1.436L4 17h5m6 0v1a3 3 0
-11-6 0v-1m6 0H9"/>
-
-</svg>
-
-<span
-id="notifCount"
-class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 rounded-full hidden">
-
-0
-
-</span>
-
-</button>
 
 </div>
 
@@ -77,42 +43,7 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 </a>
   
-<div
-id="notifPanel"
-class="hidden absolute top-20 right-5 w-96 bg-white shadow-2xl rounded-2xl overflow-hidden z-50">
-
-<div class="bg-[#ef4444] text-white px-4 py-3 flex justify-between items-center">
-
-<div class="flex items-center gap-2">
-
-<span>🔔</span>
-
-<span class="font-semibold">
-
-Notifikasi
-
-</span>
-
-</div>
-
-<button
-id="markAllRead"
-class="text-xs hover:underline">
-
-Tandakan Semua
-
-</button>
-
-</div>
-
-<div
-id="notifList"
-class="max-h-96 overflow-y-auto">
-
-</div>
-
-</div>
-  
+ 
 
 <h2 class="font-bold text-xl mb-4">
 Wasiat
@@ -235,13 +166,7 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
 getFirestore,
 doc,
-getDoc,
-getDocs,
-collection,
-updateDoc,
-query,
-orderBy,
-limit  
+getDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";  
 
@@ -265,38 +190,13 @@ getAuth(app);
 const db =
 getFirestore(app);
 
-function timeAgo(timestamp){
-
-if(!timestamp?.seconds) return "Baru sahaja";
-
-const date = new Date(timestamp.seconds * 1000);
-const diff = Math.floor((Date.now() - date.getTime()) / 1000);
-
-if(diff < 60) return "Baru sahaja";
-
-if(diff < 3600)
-return Math.floor(diff/60) + " minit lalu";
-
-if(diff < 86400)
-return Math.floor(diff/3600) + " jam lalu";
-
-if(diff < 604800)
-return Math.floor(diff/86400) + " hari lalu";
-
-return date.toLocaleDateString("ms-MY");
-
-}
   
-let currentUser = null;  
-
 onAuthStateChanged(auth, async(user)=>{
 
 if(!user){
 window.location.href="login.html";
 return;
 }
-
-currentUser = user;
 
 const docSnap =
 await getDoc(
@@ -487,134 +387,7 @@ ${(userData.nama || "U")[0]}
 
 `;
 
-  
 
-
-  
-if(wasiatData.status === "UNDER_REVIEW"){
-  
-document.getElementById("wasiathNotification").innerHTML = `
-
-<div class="bg-yellow-50 border border-yellow-300 rounded-xl p-4 mb-6">
-
-<h3 class="font-bold">
-Permohonan Wasiat Sedang Disemak
-</h3>
-
-<p>
-Permohonan anda sedang dalam proses semakan.
-</p>
-
-</div>
-
-`;
-
-}
-
-
-
-const notifSnap = await getDocs(
-
-query(
-
-collection(
-db,
-"users",
-user.uid,
-"notifications"
-),
-
-orderBy("createdAt","desc")
-
-)
-
-);
-
-let notifHTML = "";
-let unread = 0;
-let unreadIds = [];
-
-notifSnap.forEach((notifDoc)=>{
-
-   const notif =
-notifDoc.data();
-
-   if(!notif.read){
-
-    unread++;
-    unreadIds.push(notifDoc.id);
-
-}
-
- if(!window.firstUnreadId){
-
-window.firstUnreadId =
-notifDoc.id;
-
-}
-  
-   notifHTML += `
-
-<div class="p-4 border-b hover:bg-gray-50 transition">
-
-<div class="flex justify-between items-start">
-
-<div class="flex-1">
-
-<p class="font-semibold text-gray-800">
-
-${notif.title}
-
-</p>
-
-<p class="text-xs text-gray-500 mt-1">
-
-${timeAgo(notif.createdAt)}
-
-</p>
-
-</div>
-
-<a
-href="preview-wasiat.html"
-class="text-green-700 text-sm font-semibold hover:underline whitespace-nowrap">
-
-Lihat →
-
-</a>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-document.getElementById(
-"notifList"
-).innerHTML = notifHTML;
-
-if(unread > 0){
-
-   document.getElementById(
-      "notifCount"
-   ).innerHTML = unread;
-
-   document.getElementById(
-      "notifCount"
-   ).classList.remove("hidden");
-
-}
-
-const latestNotif =
-notifSnap.docs.length
-? notifSnap.docs[0].data()
-: null;
-
-if(latestNotif){
-
-const notif = latestNotif;
 
 const currentStatus = wasiatData.status || "DRAFT";
 
@@ -933,43 +706,12 @@ document
 
 });
 
-document
-.getElementById("notifBtn")
-.addEventListener("click", ()=>{
-
-document
-.getElementById("notifPanel")
-.classList.toggle("hidden");
-
-});
-
-document
-.getElementById("markAllRead")
-.addEventListener("click", async()=>{
-
-for(const id of unreadIds){
-
-await updateDoc(
-doc(
-db,
-"users",
-currentUser.uid,
-"notifications",
-id
-),
-{
-read:true
-}
-);
-
-}
-
-location.reload();
-
-});
 
 
-} // tutup if(latestNotif)  
+
+
+
+
 } // PENUTUP if(docSnap.exists()){ YANG TERCICIR
 }); // PENUTUP onAuthStateChanged YANG TERCICIR
   
