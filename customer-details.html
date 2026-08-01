@@ -1167,7 +1167,7 @@ console.error(err);
 // ===============================
 // NOTIFY CONSULTANT (AQC)
 // ===============================
-
+console.log(user.referral);
 const consultantQuery = await getDocs(
     query(
         collection(db,"consultants"),
@@ -1176,7 +1176,7 @@ const consultantQuery = await getDocs(
 );
 
 for (const consultant of consultantQuery.docs){
-
+console.log(consultantQuery.size);
     await addDoc(
         collection(
             db,
