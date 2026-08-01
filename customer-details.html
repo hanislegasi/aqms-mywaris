@@ -1141,6 +1141,8 @@ printedBy:auth.currentUser.uid
 }
 );
 
+try{
+  
 await addDoc(
 collection(db,"users",userId,"notifications"),
 {
@@ -1152,6 +1154,16 @@ read:false,
 createdAt:serverTimestamp()
 });
 
+console.log("Customer notification saved");
+
+console.log("SUCCESS");
+
+}catch(err){
+
+console.error(err);
+
+}
+  
 // ===============================
 // NOTIFY CONSULTANT (AQC)
 // ===============================
