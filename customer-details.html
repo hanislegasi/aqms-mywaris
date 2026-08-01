@@ -1158,8 +1158,8 @@ createdAt:serverTimestamp()
 
 const consultantQuery = await getDocs(
     query(
-        collection(db,"users"),
-        where("role","==","consultant")
+        collection(db,"consultants"),
+        where("consultantNo","==",user.referral)
     )
 );
 
@@ -1168,7 +1168,7 @@ for (const consultant of consultantQuery.docs){
     await addDoc(
         collection(
             db,
-            "users",
+            "consultants",
             consultant.id,
             "notifications"
         ),
@@ -1241,8 +1241,8 @@ createdAt:serverTimestamp()
 
 const consultantQuery = await getDocs(
     query(
-        collection(db,"users"),
-        where("role","==","consultant")
+        collection(db,"consultants"),
+        where("consultantNo","==",user.referral)
     )
 );
 
@@ -1251,7 +1251,7 @@ for (const consultant of consultantQuery.docs){
     await addDoc(
         collection(
             db,
-            "users",
+            "consultants",
             consultant.id,
             "notifications"
         ),
@@ -1394,8 +1394,8 @@ createdAt:serverTimestamp()
 
 const consultantQuery = await getDocs(
     query(
-        collection(db,"users"),
-        where("role","==","consultant")
+        collection(db,"consultants"),
+        where("consultantNo","==",user.referral)
     )
 );
 
@@ -1404,7 +1404,7 @@ for (const consultant of consultantQuery.docs){
     await addDoc(
         collection(
             db,
-            "users",
+            "consultants",
             consultant.id,
             "notifications"
         ),
@@ -1477,8 +1477,8 @@ createdAt:serverTimestamp()
 
 const consultantQuery = await getDocs(
     query(
-        collection(db,"users"),
-        where("role","==","consultant")
+        collection(db,"consultants"),
+        where("consultantNo","==",user.referral)
     )
 );
 
@@ -1487,7 +1487,7 @@ for (const consultant of consultantQuery.docs){
     await addDoc(
         collection(
             db,
-            "users",
+            "consultants",
             consultant.id,
             "notifications"
         ),
@@ -1618,8 +1618,8 @@ createdAt:serverTimestamp()
 
 const consultantQuery = await getDocs(
     query(
-        collection(db,"users"),
-        where("role","==","consultant")
+        collection(db,"consultants"),
+        where("consultantNo","==",user.referral)
     )
 );
 
@@ -1628,7 +1628,7 @@ for (const consultant of consultantQuery.docs){
     await addDoc(
         collection(
             db,
-            "users",
+            "consultants",
             consultant.id,
             "notifications"
         ),
@@ -1701,8 +1701,8 @@ createdAt:serverTimestamp()
 
 const consultantQuery = await getDocs(
     query(
-        collection(db,"users"),
-        where("role","==","consultant")
+        collection(db,"consultants"),
+        where("consultantNo","==",user.referral)
     )
 );
 
@@ -1711,7 +1711,7 @@ for (const consultant of consultantQuery.docs){
     await addDoc(
         collection(
             db,
-            "users",
+            "consultants",
             consultant.id,
             "notifications"
         ),
@@ -1842,8 +1842,8 @@ createdAt:serverTimestamp()
 
 const consultantQuery = await getDocs(
     query(
-        collection(db,"users"),
-        where("role","==","consultant")
+        collection(db,"consultants"),
+        where("consultantNo","==",user.referral)
     )
 );
 
@@ -1852,7 +1852,7 @@ for (const consultant of consultantQuery.docs){
     await addDoc(
         collection(
             db,
-            "users",
+            "consultants",
             consultant.id,
             "notifications"
         ),
@@ -1925,8 +1925,8 @@ createdAt:serverTimestamp()
 
 const consultantQuery = await getDocs(
     query(
-        collection(db,"users"),
-        where("role","==","consultant")
+        collection(db,"consultants"),
+        where("consultantNo","==",user.referral)
     )
 );
 
@@ -1935,7 +1935,7 @@ for (const consultant of consultantQuery.docs){
     await addDoc(
         collection(
             db,
-            "users",
+            "consultants",
             consultant.id,
             "notifications"
         ),
