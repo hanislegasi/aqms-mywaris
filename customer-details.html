@@ -1141,17 +1141,6 @@ printedBy:auth.currentUser.uid
 }
 );
 
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dicetak",
-message:"Dokumen Wasiat anda telah dicetak.",
-module:"wasiat",
-status:"PRINTED",
-read:false,
-createdAt:serverTimestamp()
-});
-
   
 alert("Status berjaya dikemaskini.");
 
@@ -1189,20 +1178,6 @@ remarks:document.getElementById("wasiatRemarks").value
 
 }
 );
-
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dihantar",
-message:`Dokumen Wasiat anda telah dihantar. Tracking No: ${document.getElementById("wasiatTrackingNo").value}`,
-module:"wasiat",
-status:"SENT",
-type:"workflow",
-trackingNo:document.getElementById("wasiatTrackingNo").value,
-read:false,
-createdAt:serverTimestamp()
-});
-
 
   
 alert("Dokumen berjaya dihantar.");
@@ -1274,17 +1249,6 @@ completedBy:auth.currentUser.uid
 }
 );
 
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Urusan Selesai",
-message:"Urusan Dokumen Wasiat anda telah selesai.",
-module:"wasiat",
-status:"COMPLETED",
-type:"workflow",
-read:false,
-createdAt:serverTimestamp()
-});
   
 alert("Kes selesai.");
 
@@ -1313,16 +1277,6 @@ printedBy:auth.currentUser.uid
 }
 );
 
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dicetak",
-message:"Dokumen Hibah anda telah dicetak.",
-module:"hibah",
-status:"PRINTED",
-read:false,
-createdAt:serverTimestamp()
-});
 
   
 alert("Status berjaya dikemaskini.");
@@ -1361,19 +1315,6 @@ remarks:document.getElementById("hibahRemarks").value
 
 }
 );
-
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dihantar",
-message:`Dokumen Hibah anda telah dihantar. Tracking No: ${document.getElementById("hibahTrackingNo").value}`,
-module:"hibah",
-status:"SENT",
-type:"workflow",
-trackingNo:document.getElementById("hibahTrackingNo").value,
-read:false,
-createdAt:serverTimestamp()
-});
 
   
 alert("Dokumen berjaya dihantar.");
@@ -1472,17 +1413,6 @@ printedBy:auth.currentUser.uid
 }
 );
 
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dicetak",
-message:"Dokumen Sepencarian anda telah dicetak.",
-module:"sepencarian",
-status:"PRINTED",
-read:false,
-createdAt:serverTimestamp()
-});
-
  
 alert("Status berjaya dikemaskini.");
 
@@ -1520,19 +1450,6 @@ remarks:document.getElementById("sepencarianRemarks").value
 
 }
 );
-
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dihantar",
-message:`Dokumen Sepencarian anda telah dihantar. Tracking No: ${document.getElementById("sepencarianTrackingNo").value}`,
-module:"sepencarian",
-status:"SENT",
-type:"workflow",
-trackingNo:document.getElementById("sepencarianTrackingNo").value,
-read:false,
-createdAt:serverTimestamp()
-});
 
 
 const btnCompleteSepencarian=document.getElementById("btnCompleteSepencarian");
@@ -1623,17 +1540,6 @@ printedBy:auth.currentUser.uid
 }
 );
 
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dicetak",
-message:"Dokumen Mawaris anda telah dicetak.",
-module:"mawaris",
-status:"PRINTED",
-read:false,
-createdAt:serverTimestamp()
-});
-
   
 alert("Status berjaya dikemaskini.");
 
@@ -1671,19 +1577,6 @@ remarks:document.getElementById("mawarisRemarks").value
 
 }
 );
-
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dihantar",
-message:`Dokumen Mawaris anda telah dihantar. Tracking No: ${document.getElementById("mawarisTrackingNo").value}`,
-module:"mawaris",
-status:"SENT",
-type:"workflow",
-trackingNo:document.getElementById("mawarisTrackingNo").value,
-read:false,
-createdAt:serverTimestamp()
-});
 
  
 alert("Dokumen berjaya dihantar.");
