@@ -773,7 +773,9 @@ Tarikh & Masa Cetak
 <input
 type="datetime-local"
 id="printedAt"
-class="w-full border rounded-lg p-2 mb-3">
+value="${hibahPrintedAt ? hibahPrintedAt.substring(0,16) : ""}"
+${hibahStatus==="PRINTED" || hibahStatus==="SENT" ? "disabled" : ""}
+class="w-full border rounded-lg p-2">
 
         <button
             id="btnPrintHibah"
@@ -797,7 +799,9 @@ Tarikh & Masa Hantar
 <input
 type="datetime-local"
 id="sentAt"
-class="w-full border rounded-lg p-2 mb-3">
+value="${hibahSentAt ? hibahSentAt.substring(0,16) : ""}"
+${hibahStatus==="SENT" ? "disabled" : ""}
+class="w-full border rounded-lg p-2">
 
         <input
             id="hibahCourier"
@@ -910,7 +914,10 @@ Tarikh & Masa Cetak
 <input
 type="datetime-local"
 id="printedAt"
-class="w-full border rounded-lg p-2 mb-3">
+value="${sepencarianPrintedAt ? sepencarianPrintedAt.substring(0,16) : ""}"
+${sepencarianStatus==="PRINTED" || sepencarianStatus==="SENT" ? "disabled" : ""}
+class="w-full border rounded-lg p-2">
+
 
         <button
             id="btnPrintSepencarian"
@@ -934,7 +941,9 @@ Tarikh & Masa Hantar
 <input
 type="datetime-local"
 id="sentAt"
-class="w-full border rounded-lg p-2 mb-3">
+value="${sepencarianSentAt ? sepencarianSentAt.substring(0,16) : ""}"
+${sepencarianStatus==="SENT" ? "disabled" : ""}
+class="w-full border rounded-lg p-2">
 
         <input
             id="sepencarianCourier"
@@ -1047,7 +1056,10 @@ Tarikh & Masa Cetak
 <input
 type="datetime-local"
 id="printedAt"
-class="w-full border rounded-lg p-2 mb-3">
+value="${mawarisPrintedAt ? mawarisPrintedAt.substring(0,16) : ""}"
+${mawarisStatus==="PRINTED" || mawarisStatus==="SENT" ? "disabled" : ""}
+class="w-full border rounded-lg p-2">
+
 
         <button
             id="btnPrintMawaris"
@@ -1071,7 +1083,9 @@ Tarikh & Masa Hantar
 <input
 type="datetime-local"
 id="sentAt"
-class="w-full border rounded-lg p-2 mb-3">
+value="${mawarisSentAt ? mawarisSentAt.substring(0,16) : ""}"
+${mawarisStatus==="SENT" ? "disabled" : ""}
+class="w-full border rounded-lg p-2">
 
         <input
             id="mawarisCourier"
