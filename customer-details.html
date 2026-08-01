@@ -615,6 +615,15 @@ ${wasiatSnap.exists() ? `
             🖨 PRINT
         </h3>
 
+<label class="block text-sm mb-2">
+Tarikh & Masa Cetak
+</label>
+
+<input
+type="datetime-local"
+id="printedAt"
+class="w-full border rounded-lg p-2 mb-3">
+
         <p class="text-sm text-gray-500">
             Tarikh Cetak
         </p>
@@ -639,6 +648,16 @@ ${wasiatSnap.exists() ? `
         <h3 class="text-xl font-bold text-orange-600 mb-4">
             📦 SEND
         </h3>
+
+<label class="block text-sm mb-2">
+Tarikh & Masa Hantar
+</label>
+
+<input
+type="datetime-local"
+id="sentAt"
+class="w-full border rounded-lg p-2 mb-3">
+
 
         <input
             id="wasiatCourier"
@@ -1136,8 +1155,15 @@ await updateDoc(
 doc(db,"users",userId,"wasiat","maklumat"),
 {
 status:"PRINTED",
-printedAt:new Date().toISOString(),
-printedBy:auth.currentUser.uid
+
+printedAt:
+document.getElementById("printedAt").value,
+
+printedUpdatedAt:
+serverTimestamp(),
+
+printedBy:
+auth.currentUser.uid
 }
 );
 
@@ -1164,17 +1190,26 @@ doc(db,"users",userId,"wasiat","maklumat"),
 
 status:"SENT",
 
-sentAt:new Date().toISOString(),
+sentAt:
+document.getElementById("sentAt").value,
 
-sentBy:auth.currentUser.uid,
+sentUpdatedAt:
+serverTimestamp(),
 
-courier:document.getElementById("wasiatCourier").value,
+sentBy:
+auth.currentUser.uid,
 
-trackingNo:document.getElementById("wasiatTrackingNo").value,
+courier:
+document.getElementById("wasiatCourier").value,
 
-receiver:document.getElementById("wasiatReceiver").value,
+trackingNo:
+document.getElementById("wasiatTrackingNo").value,
 
-remarks:document.getElementById("wasiatRemarks").value
+receiver:
+document.getElementById("wasiatReceiver").value,
+
+remarks:
+document.getElementById("wasiatRemarks").value
 
 }
 );
