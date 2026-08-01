@@ -1,2048 +1,384 @@
 <!DOCTYPE html>
 <html lang="ms">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-Customer Details
-</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap"
-rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Details - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-
-<body
-class="bg-gray-100 min-h-screen"
-style="font-family: Inter, sans-serif;">
-
-<!-- HEADER -->
-<div class="bg-[#153638] text-white p-5 shadow">
-
-<h1 class="text-2xl font-bold">
-Customer Details
-</h1>
-
-<p class="text-gray-200">
-Admin Review Center
-</p>
-
-</div>
-
-<!-- CONTENT -->
-<div class="p-5">
-
-<a
-href="admin-aqm.html"
-class="inline-block mb-5 bg-gray-200 hover:bg-gray-300 transition text-gray-700 px-5 py-3 rounded-xl font-semibold">
-
-← Kembali ke Admin Dashboard
-
-</a>
-  
-<div
-id="customerInfo"
-class="bg-white rounded-2xl shadow p-6">
-
-<p class="text-gray-500">
-Memuatkan data...
-</p>
-
-</div>
-
-</div>
-
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getFirestore,
-doc,
-getDoc,
-updateDoc,
-serverTimestamp,
-collection,
-addDoc,
-getDocs,
-query,
-where
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import {
-getAuth,
-onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-const firebaseConfig = {
-
-apiKey:
-"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-
-authDomain:
-"alqawthar-mywaris.firebaseapp.com",
-
-projectId:
-"alqawthar-mywaris",
-
-storageBucket:
-"alqawthar-mywaris.firebasestorage.app",
-
-messagingSenderId:
-"3498810778",
-
-appId:
-"1:3498810778:web:ee36e0fe42f76698046e23"
-
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const db =
-getFirestore(app);
-
-const auth =
-getAuth(app);
-
-onAuthStateChanged(auth, async(user)=>{
-
-  if(!user){
-
-    window.location.href =
-    "login.html";
-
-    return;
-
-  }
-
-  const userDoc =
-  await getDoc(
-    doc(
-      db,
-      "users",
-      user.uid
-    )
-  );
-
-  const userData =
-  userDoc.data();
-
-  if(userData.role !== "admin"){
-
-    alert(
-      "Akses ditolak"
-    );
-
-    window.location.href =
-    "index.html";
-
-  }
-
-});
-
-// GET ID
-const params =
-new URLSearchParams(
-window.location.search
-);
-
-const userId =
-params.get("id");
-
-// ===== Workflow Status =====
-let wasiatStatus = "BELUM DIISI";
-let hibahStatus = "BELUM DIISI";
-let sepencarianStatus = "BELUM DIISI";
-let mawarisStatus = "BELUM DIISI";
-
-  
-// LOAD USER
-const docSnap =
-await getDoc(
-doc(db,"users",userId)
-);
-
-if(docSnap.exists()){
-
-const user =
-docSnap.data();
-
-// WASIAT STATUS
-const wasiatSnap =
-await getDoc(
-doc(
-db,
-"users",
-userId,
-"wasiat",
-"maklumat"
-)
-);
-
-wasiatStatus =
-"BELUM DIISI";
-
-let wasiatDocRef = "-";
-let wasiatApprovedDate = "-";
-let wasiatExpiryDate = "-";
-let wasiatBakiHari = 0;
-  
-let wasiatPrintedAt = null;
-let wasiatSentAt = null;
-let wasiatCompletedAt = null;
-
-let wasiatDeliveryMethod = "";
-let wasiatCourier = "";
-let wasiatTrackingNo = "";
-let wasiatReceiver = "";
-let wasiatRemarks = "";
-  
-if(wasiatSnap.exists()){
-
-const wasiatData =
-wasiatSnap.data();
-
-wasiatPrintedAt = wasiatData.printedAt || null;
-wasiatSentAt = wasiatData.sentAt || null;
-wasiatCompletedAt = wasiatData.completedAt || null;
-
-wasiatDeliveryMethod = wasiatData.deliveryMethod || "";
-wasiatCourier = wasiatData.courier || "";
-wasiatTrackingNo = wasiatData.trackingNo || "";
-wasiatReceiver = wasiatData.receiver || "";
-wasiatRemarks = wasiatData.remarks || "";
-  
-wasiatStatus =
-wasiatData.status ||
-"DRAFT";
-
-wasiatDocRef =
-wasiatData.docRef || "-";
-
-wasiatApprovedDate =
-wasiatData.approvedAt
-? new Date(
-wasiatData.approvedAt
-).toLocaleDateString("ms-MY")
-: "-";
-
-wasiatExpiryDate =
-wasiatData.expiryDate
-? new Date(
-wasiatData.expiryDate
-).toLocaleDateString("ms-MY")
-: "-";
-
-wasiatBakiHari =
-wasiatExpiryDate !== "-"
-? Math.ceil(
-(
-new Date(wasiatData.expiryDate)
-- new Date()
-)
-/
-(1000*60*60*24)
-)
-: 0;
-  
-}
-
-// HIBAH STATUS
-const hibahSnap =
-await getDoc(
-doc(
-db,
-"users",
-userId,
-"hibah",
-"maklumat"
-)
-);
-
-hibahStatus =
-"BELUM DIISI";
-
-let hibahDocRef = "-";
-let hibahApprovedDate = "-";
-let hibahExpiryDate = "-";
-let hibahBakiHari = 0;
-
-let hibahPrintedAt = null;
-let hibahSentAt = null;
-let hibahCompletedAt = null;
-
-let hibahDeliveryMethod = "";
-let hibahCourier = "";
-let hibahTrackingNo = "";
-let hibahReceiver = "";
-let hibahRemarks = "";
-  
-if(hibahSnap.exists()){
-
-const hibahData =
-hibahSnap.data();
-
-hibahPrintedAt = hibahData.printedAt || null;
-hibahSentAt = hibahData.sentAt || null;
-hibahCompletedAt = hibahData.completedAt || null;
-
-hibahDeliveryMethod = hibahData.deliveryMethod || "";
-hibahCourier = hibahData.courier || "";
-hibahTrackingNo = hibahData.trackingNo || "";
-hibahReceiver = hibahData.receiver || "";
-hibahRemarks = hibahData.remarks || "";  
-  
-hibahStatus =
-hibahData.status ||
-"DRAFT";
-
-hibahDocRef =
-hibahData.docRef || "-";
-
-hibahApprovedDate =
-hibahData.approvedAt
-? new Date(
-hibahData.approvedAt
-).toLocaleDateString("ms-MY")
-: "-";
-
-hibahExpiryDate =
-hibahData.expiryDate
-? new Date(
-hibahData.expiryDate
-).toLocaleDateString("ms-MY")
-: "-";
-
-hibahBakiHari =
-hibahExpiryDate !== "-"
-? Math.ceil(
-(
-new Date(hibahData.expiryDate)
-- new Date()
-)
-/
-(1000*60*60*24)
-)
-: 0;
-  
-}
-
-// SEPENCARIAN STATUS
-const sepencarianSnap =
-await getDoc(
-doc(
-db,
-"users",
-userId,
-"sepencarian",
-"maklumat"
-)
-);
-
-sepencarianStatus =
-"BELUM DIISI";
-
-let sepencarianDocRef = "-";
-let sepencarianApprovedDate = "-";
-let sepencarianExpiryDate = "-";
-let sepencarianBakiHari = 0;
-  
-let sepencarianPrintedAt = null;
-let sepencarianSentAt = null;
-let sepencarianCompletedAt = null;
-
-let sepencarianDeliveryMethod = "";
-let sepencarianCourier = "";
-let sepencarianTrackingNo = "";
-let sepencarianReceiver = "";
-let sepencarianRemarks = "";
-  
-if(sepencarianSnap.exists()){
-
-const sepencarianData =
-sepencarianSnap.data();
-
-sepencarianPrintedAt = sepencarianData.printedAt || null;
-sepencarianSentAt = sepencarianData.sentAt || null;
-sepencarianCompletedAt = sepencarianData.completedAt || null;
-
-sepencarianDeliveryMethod = sepencarianData.deliveryMethod || "";
-sepencarianCourier = sepencarianData.courier || "";
-sepencarianTrackingNo = sepencarianData.trackingNo || "";
-sepencarianReceiver = sepencarianData.receiver || "";
-sepencarianRemarks = sepencarianData.remarks || "";
-  
-sepencarianStatus =
-sepencarianData.status ||
-"DRAFT";
-
-sepencarianDocRef =
-sepencarianData.docRef || "-";
-
-sepencarianApprovedDate =
-sepencarianData.approvedAt
-? new Date(
-sepencarianData.approvedAt
-).toLocaleDateString("ms-MY")
-: "-";
-
-sepencarianExpiryDate =
-sepencarianData.expiryDate
-? new Date(
-sepencarianData.expiryDate
-).toLocaleDateString("ms-MY")
-: "-";
-
-sepencarianBakiHari =
-sepencarianExpiryDate !== "-"
-? Math.ceil(
-(
-new Date(sepencarianData.expiryDate)
-- new Date()
-)
-/
-(1000*60*60*24)
-)
-: 0;
-  
-}
-
-// MAWARIS STATUS
-const mawarisSnap =
-await getDoc(
-doc(
-db,
-"users",
-userId,
-"mawaris",
-"maklumat"
-)
-);
-
-mawarisStatus =
-"BELUM DIISI";
-
-let mawarisDocRef = "-";
-let mawarisApprovedDate = "-";
-let mawarisExpiryDate = "-";
-let mawarisBakiHari = 0;
-
-let mawarisPrintedAt = null;
-let mawarisSentAt = null;
-let mawarisCompletedAt = null;
-
-let mawarisDeliveryMethod = "";
-let mawarisCourier = "";
-let mawarisTrackingNo = "";
-let mawarisReceiver = "";
-let mawarisRemarks = "";
-  
-if(mawarisSnap.exists()){
-
-const mawarisData =
-mawarisSnap.data();
-
-mawarisPrintedAt = mawarisData.printedAt || null;
-mawarisSentAt = mawarisData.sentAt || null;
-mawarisCompletedAt = mawarisData.completedAt || null;
-
-mawarisDeliveryMethod = mawarisData.deliveryMethod || "";
-mawarisCourier = mawarisData.courier || "";
-mawarisTrackingNo = mawarisData.trackingNo || "";
-mawarisReceiver = mawarisData.receiver || "";
-mawarisRemarks = mawarisData.remarks || "";
-  
-mawarisStatus =
-mawarisData.status ||
-"DRAFT";
-
-mawarisDocRef =
-mawarisData.docRef || "-";
-
-mawarisApprovedDate =
-mawarisData.approvedAt
-? new Date(
-mawarisData.approvedAt
-).toLocaleDateString("ms-MY")
-: "-";
-
-mawarisExpiryDate =
-mawarisData.expiryDate
-? new Date(
-mawarisData.expiryDate
-).toLocaleDateString("ms-MY")
-: "-";
-
-mawarisBakiHari =
-mawarisExpiryDate !== "-"
-? Math.ceil(
-(
-new Date(mawarisData.expiryDate)
-- new Date()
-)
-/
-(1000*60*60*24)
-)
-: 0;
-  
-}
-  
-document.getElementById(
-"customerInfo"
-).innerHTML = `
-
-<div class="space-y-6">
-
-<div>
-
-<h2 class="text-3xl font-bold text-[#153638]">
-${user.nama || "-"}
-</h2>
-
-<p class="text-gray-500">
-${user.email || "-"}
-</p>
-
-<div class="bg-gray-50 rounded-xl p-5 mt-5">
-
-<h3 class="font-bold mb-3">
-Maklumat Keahlian
-</h3>
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-<p class="text-gray-500 text-sm">
-No Ahli
-</p>
-<p id="memberNo"></p>
-</div>
-
-<div>
-<p class="text-gray-500 text-sm">
-Tarikh Daftar
-</p>
-<p id="memberSince"></p>
-</div>
-
-<div>
-<p class="text-gray-500 text-sm">
-Referral
-</p>
-<p id="referral"></p>
-</div>
-
-<div>
-    <p class="text-gray-500 text-sm">
-        Telefon
-    </p>
-    <p id="telefon"></p>
-</div>
-
-<div>
-<p class="text-gray-500 text-sm">
-Status
-</p>
-<p id="memberStatus"></p>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-${wasiatSnap.exists() ? `
-
-<div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
-
-    <!-- CARD WASIAT -->
-    <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            📄 Wasiat
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            No Dokumen
-        </p>
-
-        <p class="font-semibold mb-3">
-            ${wasiatDocRef}
-        </p>
-
-        <p class="text-sm text-gray-500">
-            Status
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${wasiatStatus}
-        </p>
-
-        <a
-            href="admin-preview-wasiat.html?id=${userId}"
-            target="_blank"
-            class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">
-            👁 View Dokumen
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- HEADER -->
+    <div class="bg-[#153638] text-white p-5 shadow">
+        <h1 class="text-2xl font-bold">Customer Details</h1>
+        <p class="text-gray-200">Admin Review Center</p>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="p-5 max-w-7xl mx-auto">
+        <a href="admin-aqm.html" class="inline-block mb-5 bg-gray-200 hover:bg-gray-300 transition text-gray-700 px-5 py-3 rounded-xl font-semibold">
+            &larr; Kembali ke Admin Dashboard
         </a>
-
+        <div id="customerInfo" class="bg-white rounded-2xl shadow p-6">
+            <p class="text-gray-500 animate-pulse">Memuatkan data pelanggan...</p>
+        </div>
     </div>
 
-    <!-- CARD PRINT -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-blue-700 mb-4">
-            🖨 PRINT
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            Tarikh Cetak
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${wasiatPrintedAt
-                ? new Date(wasiatPrintedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
-
-        <button
-            id="btnPrintWasiat"
-            class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
-            ✔ Tandakan Dicetak
-        </button>
-
+    <!-- CUSTOM CONFIRM MODAL -->
+    <div id="customModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex-col items-center justify-center z-50 transition-opacity">
+        <div class="bg-white rounded-2xl p-6 w-[90%] max-w-md shadow-2xl transform scale-100">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Pengesahan</h3>
+            <p id="customModalMessage" class="text-gray-600 mb-6">Adakah anda pasti?</p>
+            <div class="flex justify-end space-x-3">
+                <button id="customModalCancel" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 font-medium transition">
+                    Batal
+                </button>
+                <button id="customModalConfirm" class="px-5 py-2.5 bg-[#153638] text-white rounded-xl hover:bg-[#1d4a4d] font-medium transition shadow-lg">
+                    Ya, Teruskan
+                </button>
+            </div>
+        </div>
     </div>
 
-    <!-- CARD SEND -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-orange-600 mb-4">
-            📦 SEND
-        </h3>
-
-        <input
-            id="wasiatCourier"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Courier"
-            value="${wasiatCourier}">
-
-        <input
-            id="wasiatTrackingNo"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Tracking No"
-            value="${wasiatTrackingNo}">
-
-        <input
-            id="wasiatReceiver"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Receiver"
-            value="${wasiatReceiver}">
-
-        <textarea
-            id="wasiatRemarks"
-            class="w-full border rounded-lg p-2 mb-3"
-            rows="3"
-            placeholder="Remarks">${wasiatRemarks}</textarea>
-
-        <button
-            id="btnSendWasiat"
-            class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
-            ✔ Tandakan Dihantar
-        </button>
-
+    <!-- TOAST NOTIFICATION -->
+    <div id="toastNotification" class="fixed bottom-5 right-5 bg-green-600 text-white px-6 py-4 rounded-xl shadow-2xl transform transition-all duration-300 translate-y-20 opacity-0 hidden flex items-center space-x-3 z-50">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <span id="toastMessage" class="font-medium">Tindakan berjaya.</span>
     </div>
 
-    <!-- CARD COMPLETE -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            ✅ COMPLETE
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            Tarikh Lengkap
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${wasiatCompletedAt
-                ? new Date(wasiatCompletedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
-
-        <button
-            id="btnCompleteWasiat"
-            class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
-            ✔ Lengkapkan
-        </button>
-
-    </div>
-
-</div>
-
-` : ""}
-
-${hibahSnap.exists() ? `
-
-<div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
-
-    <!-- CARD HIBAH -->
-    <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            📄 Hibah
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            No Dokumen
-        </p>
-
-        <p class="font-semibold mb-3">
-            ${hibahDocRef}
-        </p>
-
-        <p class="text-sm text-gray-500">
-            Status
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${hibahStatus}
-        </p>
-
-        <a
-            href="admin-preview-hibah.html?id=${userId}"
-            target="_blank"
-            class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">
-            👁 View Dokumen
-        </a>
-
-    </div>
-
-    <!-- CARD PRINT -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-blue-700 mb-4">
-            🖨 PRINT
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            Tarikh Cetak
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${hibahPrintedAt
-                ? new Date(hibahPrintedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
-
-        <button
-            id="btnPrintHibah"
-            class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
-            ✔ Tandakan Dicetak
-        </button>
-
-    </div>
-
-    <!-- CARD SEND -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-orange-600 mb-4">
-            📦 SEND
-        </h3>
-
-        <input
-            id="hibahCourier"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Courier"
-            value="${hibahCourier}">
-
-        <input
-            id="hibahTrackingNo"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Tracking No"
-            value="${hibahTrackingNo}">
-
-        <input
-            id="hibahReceiver"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Receiver"
-            value="${hibahReceiver}">
-
-        <textarea
-            id="hibahRemarks"
-            class="w-full border rounded-lg p-2 mb-3"
-            rows="3"
-            placeholder="Remarks">${hibahRemarks}</textarea>
-
-        <button
-            id="btnSendHibah"
-            class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
-            ✔ Tandakan Dihantar
-        </button>
-
-    </div>
-
-    <!-- CARD COMPLETE -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            ✅ COMPLETE
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            Tarikh Lengkap
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${hibahCompletedAt
-                ? new Date(hibahCompletedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
-
-        <button
-            id="btnCompleteHibah"
-            class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
-            ✔ Lengkapkan
-        </button>
-
-    </div>
-
-</div>
-
-` : ""}
-
-${sepencarianSnap.exists() ? `
-
-<div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
-
-    <!-- CARD SEPENCARIAN -->
-    <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            📄 Harta Sepencarian
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            No Dokumen
-        </p>
-
-        <p class="font-semibold mb-3">
-            ${sepencarianDocRef}
-        </p>
-
-        <p class="text-sm text-gray-500">
-            Status
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${sepencarianStatus}
-        </p>
-
-        <a
-            href="admin-preview-sepencarian.html?id=${userId}"
-            target="_blank"
-            class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">
-            👁 View Dokumen
-        </a>
-
-    </div>
-
-    <!-- CARD PRINT -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-blue-700 mb-4">
-            🖨 PRINT
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            Tarikh Cetak
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${sepencarianPrintedAt
-                ? new Date(sepencarianPrintedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
-
-        <button
-            id="btnPrintSepencarian"
-            class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
-            ✔ Tandakan Dicetak
-        </button>
-
-    </div>
-
-    <!-- CARD SEND -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-orange-600 mb-4">
-            📦 SEND
-        </h3>
-
-        <input
-            id="sepencarianCourier"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Courier"
-            value="${sepencarianCourier}">
-
-        <input
-            id="sepencarianTrackingNo"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Tracking No"
-            value="${sepencarianTrackingNo}">
-
-        <input
-            id="sepencarianReceiver"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Receiver"
-            value="${sepencarianReceiver}">
-
-        <textarea
-            id="sepencarianRemarks"
-            class="w-full border rounded-lg p-2 mb-3"
-            rows="3"
-            placeholder="Remarks">${sepencarianRemarks}</textarea>
-
-        <button
-            id="btnSendSepencarian"
-            class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
-            ✔ Tandakan Dihantar
-        </button>
-
-    </div>
-
-    <!-- CARD COMPLETE -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            ✅ COMPLETE
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            Tarikh Lengkap
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${sepencarianCompletedAt
-                ? new Date(sepencarianCompletedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
-
-        <button
-            id="btnCompleteSepencarian"
-            class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
-            ✔ Lengkapkan
-        </button>
-
-    </div>
-
-</div>
-
-` : ""}
-
-${mawarisSnap.exists() ? `
-
-<div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
-
-    <!-- CARD MAWARIS -->
-    <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            📄 Mawaris
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            No Dokumen
-        </p>
-
-        <p class="font-semibold mb-3">
-            ${mawarisDocRef}
-        </p>
-
-        <p class="text-sm text-gray-500">
-            Status
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${mawarisStatus}
-        </p>
-
-        <a
-            href="admin-preview-mawaris.html?id=${userId}"
-            target="_blank"
-            class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">
-            👁 View Dokumen
-        </a>
-
-    </div>
-
-    <!-- CARD PRINT -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-blue-700 mb-4">
-            🖨 PRINT
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            Tarikh Cetak
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${mawarisPrintedAt
-                ? new Date(mawarisPrintedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
-
-        <button
-            id="btnPrintMawaris"
-            class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
-            ✔ Tandakan Dicetak
-        </button>
-
-    </div>
-
-    <!-- CARD SEND -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-orange-600 mb-4">
-            📦 SEND
-        </h3>
-
-        <input
-            id="mawarisCourier"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Courier"
-            value="${mawarisCourier}">
-
-        <input
-            id="mawarisTrackingNo"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Tracking No"
-            value="${mawarisTrackingNo}">
-
-        <input
-            id="mawarisReceiver"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Receiver"
-            value="${mawarisReceiver}">
-
-        <textarea
-            id="mawarisRemarks"
-            class="w-full border rounded-lg p-2 mb-3"
-            rows="3"
-            placeholder="Remarks">${mawarisRemarks}</textarea>
-
-        <button
-            id="btnSendMawaris"
-            class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
-            ✔ Tandakan Dihantar
-        </button>
-
-    </div>
-
-    <!-- CARD COMPLETE -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            ✅ COMPLETE
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            Tarikh Lengkap
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${mawarisCompletedAt
-                ? new Date(mawarisCompletedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
-
-        <button
-            id="btnCompleteMawaris"
-            class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
-            ✔ Lengkapkan
-        </button>
-
-    </div>
-
-</div>
-
-` : ""}
-
-`;
-
-document.getElementById(
-"memberNo"
-).innerHTML =
-user.memberNo || "-";
-
-document.getElementById(
-"memberSince"
-).innerHTML =
-user.memberSince
-? new Date(
-user.memberSince
-).toLocaleDateString("ms-MY")
-: "-";
-
-document.getElementById(
-"referral"
-).innerHTML =
-user.referral || "-";
-
-document.getElementById("telefon").innerHTML =
-user.telefon || "-";
-  
-document.getElementById("memberStatus").innerHTML =
-(
-user.paymentStatus === "paid" ||
-user.wasiatPaymentStatus === "paid" ||
-user.hibahPaymentStatus === "paid" ||
-user.sepencarianPaymentStatus === "paid" ||
-user.mawarisPaymentStatus === "paid"
-)
-? "AHLI AKTIF"
-: "PROSPEK";
-}
-
-const btnPrintWasiat=document.getElementById("btnPrintWasiat");
-
-if(btnPrintWasiat){
-
-btnPrintWasiat.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"wasiat","maklumat"),
-{
-status:"PRINTED",
-printedAt:new Date().toISOString(),
-printedBy:auth.currentUser.uid
-}
-);
-
-try{
-  
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dicetak",
-message:"Dokumen Wasiat anda telah dicetak.",
-module:"wasiat",
-status:"PRINTED",
-read:false,
-createdAt:serverTimestamp()
-});
-
-console.log("Customer notification saved");
-
-console.log("SUCCESS");
-
-}catch(err){
-
-console.error(err);
-
-}
-  
-// ===============================
-// NOTIFY CONSULTANT (AQC)
-// ===============================
-console.log(user.referral);
-const consultantQuery = await getDocs(
-    query(
-        collection(db,"consultants"),
-        where("consultantNo","==",user.referral)
-    )
-);
-
-for (const consultant of consultantQuery.docs){
-console.log(consultantQuery.size);
-    await addDoc(
-        collection(
-            db,
-            "consultants",
-            consultant.id,
-            "notifications"
-        ),
-        {
-            title:"Dokumen Dicetak",
-            message:`Dokumen Wasiat ${user.nama} telah dicetak dan sedia untuk tindakan.`,
-            module:"wasiat",
-            status:"PRINTED",
-            customerId:userId,
-            read:false,
-            createdAt:serverTimestamp()
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, doc, getDoc, updateDoc, serverTimestamp, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+            authDomain: "alqawthar-mywaris.firebaseapp.com",
+            projectId: "alqawthar-mywaris",
+            storageBucket: "alqawthar-mywaris.firebasestorage.app",
+            messagingSenderId: "3498810778",
+            appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // UI UTILITIES
+        function askConfirm(message, onConfirm) {
+            const modal = document.getElementById('customModal');
+            document.getElementById('customModalMessage').innerText = message;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            document.getElementById('customModalCancel').onclick = () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            };
+
+            document.getElementById('customModalConfirm').onclick = () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                onConfirm();
+            };
         }
-    );
 
-}
-  
-alert("Status berjaya dikemaskini.");
+        function showToast(message, reloadAfter = true) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').innerText = message;
+            toast.classList.remove('hidden');
+            
+            // Trigger animation
+            setTimeout(() => {
+                toast.classList.remove('translate-y-20', 'opacity-0');
+            }, 10);
 
-location.reload();
-
-};
-
-}
-
-const btnSendWasiat=document.getElementById("btnSendWasiat");
-
-if(btnSendWasiat){
-
-btnSendWasiat.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen telah dihantar?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"wasiat","maklumat"),
-{
-
-status:"SENT",
-
-sentAt:new Date().toISOString(),
-
-sentBy:auth.currentUser.uid,
-
-courier:document.getElementById("wasiatCourier").value,
-
-trackingNo:document.getElementById("wasiatTrackingNo").value,
-
-receiver:document.getElementById("wasiatReceiver").value,
-
-remarks:document.getElementById("wasiatRemarks").value
-
-}
-);
-
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dihantar",
-message:`Dokumen Wasiat anda telah dihantar. Tracking No: ${document.getElementById("wasiatTrackingNo").value}`,
-module:"wasiat",
-status:"SENT",
-type:"workflow",
-trackingNo:document.getElementById("wasiatTrackingNo").value,
-read:false,
-createdAt:serverTimestamp()
-});
-
-// ===============================
-// NOTIFY CONSULTANT (AQC)
-// ===============================
-
-const consultantQuery = await getDocs(
-    query(
-        collection(db,"consultants"),
-        where("consultantNo","==",user.referral)
-    )
-);
-
-for (const consultant of consultantQuery.docs){
-
-    await addDoc(
-        collection(
-            db,
-            "consultants",
-            consultant.id,
-            "notifications"
-        ),
-        {
-            title:"Dokumen Dihantar",
-            message:`Dokumen Wasiat ${user.nama} telah dihantar dan menunggu tindakan anda.`,
-            module:"wasiat",
-            status:"SENT",
-            customerId:userId,
-            trackingNo:document.getElementById("wasiatTrackingNo").value,
-            read:false,
-            createdAt:serverTimestamp()
+            setTimeout(() => {
+                if(reloadAfter) location.reload();
+                else {
+                    toast.classList.add('translate-y-20', 'opacity-0');
+                    setTimeout(() => toast.classList.add('hidden'), 300);
+                }
+            }, 1500);
         }
-    );
 
-}
-  
-alert("Dokumen berjaya dihantar.");
+        onAuthStateChanged(auth, async(user)=>{
+            if(!user){
+                window.location.href = "login.html";
+                return;
+            }
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if(userDoc.exists() && userDoc.data().role !== "admin"){
+                showToast("Akses ditolak. Mengubah hala...", false);
+                setTimeout(() => window.location.href = "index.html", 1500);
+            }
+        });
 
-location.reload();
+        const params = new URLSearchParams(window.location.search);
+        const userId = params.get("id");
 
-};
+        let customerData = {}; // GLOBAL VARIABEL untuk pelanggan ini supaya boleh diakses dalam fungsi butang
 
-}
+        let wasiatStatus = "BELUM DIISI";
+        let hibahStatus = "BELUM DIISI";
+        let sepencarianStatus = "BELUM DIISI";
+        let mawarisStatus = "BELUM DIISI";
 
-const btnCompleteWasiat=document.getElementById("btnCompleteWasiat");
+        const docSnap = await getDoc(doc(db,"users",userId));
 
-// ===== Workflow Lock =====
+        if(docSnap.exists()){
+            customerData = docSnap.data(); // Simpan maklumat ke dalam variable global customerData
+            const user = customerData; // Alias untuk senangkan penulisan innerHTML
+            
+            // WASIAT DATA
+            const wasiatSnap = await getDoc(doc(db,"users",userId,"wasiat","maklumat"));
+            let wasiatDocRef = "-", wasiatPrintedAt = null, wasiatSentAt = null, wasiatCompletedAt = null;
+            let wasiatDeliveryMethod = "", wasiatCourier = "", wasiatTrackingNo = "", wasiatReceiver = "", wasiatRemarks = "";
+            if(wasiatSnap.exists()){
+                const wasiatData = wasiatSnap.data();
+                wasiatStatus = wasiatData.status || "DRAFT";
+                wasiatDocRef = wasiatData.docRef || "-";
+                wasiatPrintedAt = wasiatData.printedAt || null;
+                wasiatSentAt = wasiatData.sentAt || null;
+                wasiatCompletedAt = wasiatData.completedAt || null;
+                wasiatCourier = wasiatData.courier || "";
+                wasiatTrackingNo = wasiatData.trackingNo || "";
+                wasiatReceiver = wasiatData.receiver || "";
+                wasiatRemarks = wasiatData.remarks || "";
+            }
 
-if(btnPrintWasiat){
+            // HIBAH DATA
+            const hibahSnap = await getDoc(doc(db,"users",userId,"hibah","maklumat"));
+            let hibahDocRef = "-", hibahPrintedAt = null, hibahSentAt = null, hibahCompletedAt = null;
+            let hibahCourier = "", hibahTrackingNo = "", hibahReceiver = "", hibahRemarks = "";
+            if(hibahSnap.exists()){
+                const hibahData = hibahSnap.data();
+                hibahStatus = hibahData.status || "DRAFT";
+                hibahDocRef = hibahData.docRef || "-";
+                hibahPrintedAt = hibahData.printedAt || null;
+                hibahSentAt = hibahData.sentAt || null;
+                hibahCompletedAt = hibahData.completedAt || null;
+                hibahCourier = hibahData.courier || "";
+                hibahTrackingNo = hibahData.trackingNo || "";
+                hibahReceiver = hibahData.receiver || "";
+                hibahRemarks = hibahData.remarks || "";
+            }
 
-    btnPrintWasiat.disabled = wasiatStatus !== "VERIFIED";
+            // SEPENCARIAN DATA
+            const sepencarianSnap = await getDoc(doc(db,"users",userId,"sepencarian","maklumat"));
+            let sepencarianDocRef = "-", sepencarianPrintedAt = null, sepencarianSentAt = null, sepencarianCompletedAt = null;
+            let sepencarianCourier = "", sepencarianTrackingNo = "", sepencarianReceiver = "", sepencarianRemarks = "";
+            if(sepencarianSnap.exists()){
+                const sepencarianData = sepencarianSnap.data();
+                sepencarianStatus = sepencarianData.status || "DRAFT";
+                sepencarianDocRef = sepencarianData.docRef || "-";
+                sepencarianPrintedAt = sepencarianData.printedAt || null;
+                sepencarianSentAt = sepencarianData.sentAt || null;
+                sepencarianCompletedAt = sepencarianData.completedAt || null;
+                sepencarianCourier = sepencarianData.courier || "";
+                sepencarianTrackingNo = sepencarianData.trackingNo || "";
+                sepencarianReceiver = sepencarianData.receiver || "";
+                sepencarianRemarks = sepencarianData.remarks || "";
+            }
 
-    if(btnPrintWasiat.disabled){
+            // MAWARIS DATA
+            const mawarisSnap = await getDoc(doc(db,"users",userId,"mawaris","maklumat"));
+            let mawarisDocRef = "-", mawarisPrintedAt = null, mawarisSentAt = null, mawarisCompletedAt = null;
+            let mawarisCourier = "", mawarisTrackingNo = "", mawarisReceiver = "", mawarisRemarks = "";
+            if(mawarisSnap.exists()){
+                const mawarisData = mawarisSnap.data();
+                mawarisStatus = mawarisData.status || "DRAFT";
+                mawarisDocRef = mawarisData.docRef || "-";
+                mawarisPrintedAt = mawarisData.printedAt || null;
+                mawarisSentAt = mawarisData.sentAt || null;
+                mawarisCompletedAt = mawarisData.completedAt || null;
+                mawarisCourier = mawarisData.courier || "";
+                mawarisTrackingNo = mawarisData.trackingNo || "";
+                mawarisReceiver = mawarisData.receiver || "";
+                mawarisRemarks = mawarisData.remarks || "";
+            }
 
-        btnPrintWasiat.classList.remove("bg-blue-600","hover:bg-blue-700");
+            document.getElementById("customerInfo").innerHTML = `
+                <div class="space-y-6">
+                    <div>
+                        <h2 class="text-3xl font-bold text-[#153638]">${user.nama || "-"}</h2>
+                        <p class="text-gray-500">${user.email || "-"}</p>
+                        
+                        <div class="bg-gray-50 rounded-xl p-5 mt-5 border">
+                            <h3 class="font-bold mb-3 text-gray-700">Maklumat Keahlian</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                                <div><p class="text-gray-500 text-sm">No Ahli</p><p class="font-semibold">${user.memberNo || "-"}</p></div>
+                                <div><p class="text-gray-500 text-sm">Tarikh Daftar</p><p class="font-semibold">${user.memberSince ? new Date(user.memberSince).toLocaleDateString("ms-MY") : "-"}</p></div>
+                                <div><p class="text-gray-500 text-sm">Referral</p><p class="font-semibold">${user.referral || "-"}</p></div>
+                                <div><p class="text-gray-500 text-sm">Telefon</p><p class="font-semibold">${user.telefon || "-"}</p></div>
+                                <div><p class="text-gray-500 text-sm">Status</p>
+                                    <p class="font-semibold text-[#153638]">
+                                        ${(user.paymentStatus === "paid" || user.wasiatPaymentStatus === "paid" || user.hibahPaymentStatus === "paid" || user.sepencarianPaymentStatus === "paid" || user.mawarisPaymentStatus === "paid") ? "AHLI AKTIF" : "PROSPEK"}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-        btnPrintWasiat.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnSendWasiat){
-
-    btnSendWasiat.disabled = wasiatStatus !== "PRINTED";
-
-    if(btnSendWasiat.disabled){
-
-        btnSendWasiat.classList.remove("bg-orange-500","hover:bg-orange-600");
-
-        btnSendWasiat.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnCompleteWasiat){
-
-    btnCompleteWasiat.disabled = wasiatStatus !== "SENT";
-
-    if(btnCompleteWasiat.disabled){
-
-        btnCompleteWasiat.classList.remove("bg-green-600","hover:bg-green-700");
-
-        btnCompleteWasiat.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-  
-if(btnCompleteWasiat){
-
-btnCompleteWasiat.onclick=async()=>{
-
-if(!confirm("Lengkapkan proses ini?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"wasiat","maklumat"),
-{
-status:"COMPLETED",
-completedAt:new Date().toISOString(),
-completedBy:auth.currentUser.uid
-}
-);
-
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Urusan Selesai",
-message:"Urusan Dokumen Wasiat anda telah selesai.",
-module:"wasiat",
-status:"COMPLETED",
-type:"workflow",
-read:false,
-createdAt:serverTimestamp()
-});
-  
-alert("Kes selesai.");
-
-location.reload();
-
-};
-
-}
-
-//HIBAH
-  
-const btnPrintHibah=document.getElementById("btnPrintHibah");
-
-if(btnPrintHibah){
-
-btnPrintHibah.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"hibah","maklumat"),
-{
-status:"PRINTED",
-printedAt:new Date().toISOString(),
-printedBy:auth.currentUser.uid
-}
-);
-
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dicetak",
-message:"Dokumen Hibah anda telah dicetak.",
-module:"hibah",
-status:"PRINTED",
-read:false,
-createdAt:serverTimestamp()
-});
-
-// ===============================
-// NOTIFY CONSULTANT (AQC)
-// ===============================
-
-const consultantQuery = await getDocs(
-    query(
-        collection(db,"consultants"),
-        where("consultantNo","==",user.referral)
-    )
-);
-
-for (const consultant of consultantQuery.docs){
-
-    await addDoc(
-        collection(
-            db,
-            "consultants",
-            consultant.id,
-            "notifications"
-        ),
-        {
-            title:"Dokumen Dicetak",
-            message:`Dokumen Hibah ${user.nama} telah dicetak dan sedia untuk tindakan.`,
-            module:"hibah",
-            status:"PRINTED",
-            customerId:userId,
-            read:false,
-            createdAt:serverTimestamp()
+                    ${wasiatSnap.exists() ? renderModuleCard('Wasiat', wasiatDocRef, wasiatStatus, wasiatPrintedAt, wasiatCompletedAt, wasiatCourier, wasiatTrackingNo, wasiatReceiver, wasiatRemarks) : ""}
+                    ${hibahSnap.exists() ? renderModuleCard('Hibah', hibahDocRef, hibahStatus, hibahPrintedAt, hibahCompletedAt, hibahCourier, hibahTrackingNo, hibahReceiver, hibahRemarks) : ""}
+                    ${sepencarianSnap.exists() ? renderModuleCard('Sepencarian', sepencarianDocRef, sepencarianStatus, sepencarianPrintedAt, sepencarianCompletedAt, sepencarianCourier, sepencarianTrackingNo, sepencarianReceiver, sepencarianRemarks) : ""}
+                    ${mawarisSnap.exists() ? renderModuleCard('Mawaris', mawarisDocRef, mawarisStatus, mawarisPrintedAt, mawarisCompletedAt, mawarisCourier, mawarisTrackingNo, mawarisReceiver, mawarisRemarks) : ""}
+                </div>
+            `;
         }
-    );
 
-}
-  
-alert("Status berjaya dikemaskini.");
+        // Helper untuk render module card bagi mengelakkan kod HTML diulang berkali-kali
+        function renderModuleCard(module, docRef, status, printedAt, completedAt, courier, tracking, receiver, remarks) {
+            const m = module.toLowerCase();
+            return `
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
+                <!-- CARD INFO -->
+                <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">📄 ${module}</h3>
+                    <p class="text-sm text-gray-500">No Dokumen</p>
+                    <p class="font-semibold mb-3">${docRef}</p>
+                    <p class="text-sm text-gray-500">Status</p>
+                    <p class="font-semibold mb-6">${status}</p>
+                    <a href="admin-preview-${m}.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold transition">
+                        👁 View Dokumen
+                    </a>
+                </div>
 
-location.reload();
+                <!-- CARD PRINT -->
+                <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">🖨 PRINT</h3>
+                    <p class="text-sm text-gray-500">Tarikh Cetak</p>
+                    <p class="font-semibold mb-6">${printedAt ? new Date(printedAt).toLocaleDateString("ms-MY") : "-"}</p>
+                    <button id="btnPrint${module}" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed">
+                        ✔ Tandakan Dicetak
+                    </button>
+                </div>
 
-};
+                <!-- CARD SEND -->
+                <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">📦 SEND</h3>
+                    <input id="${m}Courier" class="w-full border rounded-lg p-2 mb-2 focus:ring focus:ring-orange-200 focus:outline-none" placeholder="Courier" value="${courier}">
+                    <input id="${m}TrackingNo" class="w-full border rounded-lg p-2 mb-2 focus:ring focus:ring-orange-200 focus:outline-none" placeholder="Tracking No" value="${tracking}">
+                    <input id="${m}Receiver" class="w-full border rounded-lg p-2 mb-2 focus:ring focus:ring-orange-200 focus:outline-none" placeholder="Receiver" value="${receiver}">
+                    <textarea id="${m}Remarks" class="w-full border rounded-lg p-2 mb-3 focus:ring focus:ring-orange-200 focus:outline-none" rows="2" placeholder="Remarks">${remarks}</textarea>
+                    <button id="btnSend${module}" class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl transition shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed">
+                        ✔ Tandakan Dihantar
+                    </button>
+                </div>
 
-}
-
-const btnSendHibah=document.getElementById("btnSendHibah");
-
-if(btnSendHibah){
-
-btnSendHibah.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen telah dihantar?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"hibah","maklumat"),
-{
-
-status:"SENT",
-
-sentAt:new Date().toISOString(),
-
-sentBy:auth.currentUser.uid,
-
-courier:document.getElementById("hibahCourier").value,
-
-trackingNo:document.getElementById("hibahTrackingNo").value,
-
-receiver:document.getElementById("hibahReceiver").value,
-
-remarks:document.getElementById("hibahRemarks").value
-
-}
-);
-
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dihantar",
-message:`Dokumen Hibah anda telah dihantar. Tracking No: ${document.getElementById("hibahTrackingNo").value}`,
-module:"hibah",
-status:"SENT",
-type:"workflow",
-trackingNo:document.getElementById("hibahTrackingNo").value,
-read:false,
-createdAt:serverTimestamp()
-});
-
-// ===============================
-// NOTIFY CONSULTANT (AQC)
-// ===============================
-
-const consultantQuery = await getDocs(
-    query(
-        collection(db,"consultants"),
-        where("consultantNo","==",user.referral)
-    )
-);
-
-for (const consultant of consultantQuery.docs){
-
-    await addDoc(
-        collection(
-            db,
-            "consultants",
-            consultant.id,
-            "notifications"
-        ),
-        {
-            title:"Dokumen Dihantar",
-            message:`Dokumen Hibah ${user.nama} telah dihantar dan menunggu tindakan anda.`,
-            module:"hibah",
-            status:"SENT",
-            customerId:userId,
-            trackingNo:document.getElementById("hibahTrackingNo").value,
-            read:false,
-            createdAt:serverTimestamp()
+                <!-- CARD COMPLETE -->
+                <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">✅ COMPLETE</h3>
+                    <p class="text-sm text-gray-500">Tarikh Lengkap</p>
+                    <p class="font-semibold mb-6">${completedAt ? new Date(completedAt).toLocaleDateString("ms-MY") : "-"}</p>
+                    <button id="btnComplete${module}" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl transition shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed">
+                        ✔ Lengkapkan
+                    </button>
+                </div>
+            </div>`;
         }
-    );
 
-}
-  
-alert("Dokumen berjaya dihantar.");
+        async function notifyConsultant(moduleName, status, actionTitle, trackingMessage = "") {
+            if (customerData.referral) {
+                try {
+                    const consultantQuery = await getDocs(query(collection(db,"consultants"), where("consultantNo","==",customerData.referral)));
+                    let msg = `Dokumen ${moduleName} ${customerData.nama} telah ${actionTitle.toLowerCase()} dan sedia untuk tindakan.`;
+                    if (status === "SENT") msg = `Dokumen ${moduleName} ${customerData.nama} telah dihantar. ${trackingMessage}`;
+                    else if (status === "COMPLETED") msg = `Urusan Dokumen ${moduleName} ${customerData.nama} telah selesai sepenuhnya.`;
 
-location.reload();
-
-};
-
-}
-
-const btnCompleteHibah=document.getElementById("btnCompleteHibah");
-
-// ===== Workflow Lock =====
-
-if(btnPrintHibah){
-
-    btnPrintHibah.disabled = hibahStatus !== "VERIFIED";
-
-    if(btnPrintHibah.disabled){
-
-        btnPrintHibah.classList.remove("bg-blue-600","hover:bg-blue-700");
-
-        btnPrintHibah.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnSendHibah){
-
-    btnSendHibah.disabled = hibahStatus !== "PRINTED";
-
-    if(btnSendHibah.disabled){
-
-        btnSendHibah.classList.remove("bg-orange-500","hover:bg-orange-600");
-
-        btnSendHibah.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnCompleteHibah){
-
-    btnCompleteHibah.disabled = hibahStatus !== "SENT";
-
-    if(btnCompleteHibah.disabled){
-
-        btnCompleteHibah.classList.remove("bg-green-600","hover:bg-green-700");
-
-        btnCompleteHibah.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-  
-if(btnCompleteHibah){
-
-btnCompleteHibah.onclick=async()=>{
-
-if(!confirm("Lengkapkan proses ini?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"hibah","maklumat"),
-{
-status:"COMPLETED",
-completedAt:new Date().toISOString(),
-completedBy:auth.currentUser.uid
-}
-);
-
-alert("Kes selesai.");
-
-location.reload();
-
-};
-
-}
-
-//SEPENCARIAN
-
-const btnPrintSepencarian=document.getElementById("btnPrintSepencarian");
-
-if(btnPrintSepencarian){
-
-btnPrintSepencarian.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"sepencarian","maklumat"),
-{
-status:"PRINTED",
-printedAt:new Date().toISOString(),
-printedBy:auth.currentUser.uid
-}
-);
-
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dicetak",
-message:"Dokumen Sepencarian anda telah dicetak.",
-module:"sepencarian",
-status:"PRINTED",
-read:false,
-createdAt:serverTimestamp()
-});
-
-// ===============================
-// NOTIFY CONSULTANT (AQC)
-// ===============================
-
-const consultantQuery = await getDocs(
-    query(
-        collection(db,"consultants"),
-        where("consultantNo","==",user.referral)
-    )
-);
-
-for (const consultant of consultantQuery.docs){
-
-    await addDoc(
-        collection(
-            db,
-            "consultants",
-            consultant.id,
-            "notifications"
-        ),
-        {
-            title:"Dokumen Dicetak",
-            message:`Dokumen Sepencarian ${user.nama} telah dicetak dan sedia untuk tindakan.`,
-            module:"sepencarian",
-            status:"PRINTED",
-            customerId:userId,
-            read:false,
-            createdAt:serverTimestamp()
+                    for (const consultant of consultantQuery.docs) {
+                        await addDoc(collection(db,"consultants",consultant.id,"notifications"), {
+                            title: `Dokumen ${actionTitle}`,
+                            message: msg,
+                            module: moduleName.toLowerCase(),
+                            status: status,
+                            customerId: userId,
+                            read: false,
+                            createdAt: serverTimestamp()
+                        });
+                    }
+                } catch(e) {
+                    console.error("Gagal hantar notifikasi konsultan:", e);
+                }
+            }
         }
-    );
 
-}
-  
-alert("Status berjaya dikemaskini.");
+        function setupHandlers(moduleName, currentStatus) {
+            const m = moduleName.toLowerCase();
+            const btnPrint = document.getElementById(`btnPrint${moduleName}`);
+            const btnSend = document.getElementById(`btnSend${moduleName}`);
+            const btnComplete = document.getElementById(`btnComplete${moduleName}`);
 
-location.reload();
+            if(btnPrint) {
+                btnPrint.disabled = currentStatus !== "VERIFIED";
+                btnPrint.onclick = () => {
+                    askConfirm(`Tandakan dokumen ${moduleName} ini telah dicetak?`, async () => {
+                        try {
+                            await updateDoc(doc(db,"users",userId,m,"maklumat"), {
+                                status:"PRINTED", printedAt:new Date().toISOString(), printedBy:auth.currentUser.uid
+                            });
+                            await addDoc(collection(db,"users",userId,"notifications"), {
+                                title:"Dokumen Dicetak", message:`Dokumen ${moduleName} anda telah dicetak.`, module:m, status:"PRINTED", read:false, createdAt:serverTimestamp()
+                            });
+                            await notifyConsultant(moduleName, "PRINTED", "Dicetak");
+                            showToast("Status berjaya dikemaskini.");
+                        } catch(e) { console.error(e); }
+                    });
+                };
+            }
 
-};
+            if(btnSend) {
+                btnSend.disabled = currentStatus !== "PRINTED";
+                btnSend.onclick = () => {
+                    askConfirm(`Tandakan dokumen ${moduleName} telah dihantar?`, async () => {
+                        try {
+                            const trackNo = document.getElementById(`${m}TrackingNo`).value;
+                            await updateDoc(doc(db,"users",userId,m,"maklumat"), {
+                                status:"SENT", sentAt:new Date().toISOString(), sentBy:auth.currentUser.uid,
+                                courier:document.getElementById(`${m}Courier`).value, trackingNo:trackNo,
+                                receiver:document.getElementById(`${m}Receiver`).value, remarks:document.getElementById(`${m}Remarks`).value
+                            });
+                            await addDoc(collection(db,"users",userId,"notifications"), {
+                                title:"Dokumen Dihantar", message:`Dokumen ${moduleName} anda telah dihantar. Tracking No: ${trackNo}`, module:m, status:"SENT", trackingNo:trackNo, read:false, createdAt:serverTimestamp()
+                            });
+                            await notifyConsultant(moduleName, "SENT", "Dihantar", `Menunggu penerimaan dokumen (Tracking No: ${trackNo}).`);
+                            showToast("Dokumen berjaya dihantar.");
+                        } catch(e) { console.error(e); }
+                    });
+                };
+            }
 
-}
-
-const btnSendSepencarian=document.getElementById("btnSendSepencarian");
-
-if(btnSendSepencarian){
-
-btnSendSepencarian.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen telah dihantar?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"sepencarian","maklumat"),
-{
-
-status:"SENT",
-
-sentAt:new Date().toISOString(),
-
-sentBy:auth.currentUser.uid,
-
-courier:document.getElementById("sepencarianCourier").value,
-
-trackingNo:document.getElementById("sepencarianTrackingNo").value,
-
-receiver:document.getElementById("sepencarianReceiver").value,
-
-remarks:document.getElementById("sepencarianRemarks").value
-
-}
-);
-
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dihantar",
-message:`Dokumen Sepencarian anda telah dihantar. Tracking No: ${document.getElementById("sepencarianTrackingNo").value}`,
-module:"sepencarian",
-status:"SENT",
-type:"workflow",
-trackingNo:document.getElementById("sepencarianTrackingNo").value,
-read:false,
-createdAt:serverTimestamp()
-});
-
-// ===============================
-// NOTIFY CONSULTANT (AQC)
-// ===============================
-
-const consultantQuery = await getDocs(
-    query(
-        collection(db,"consultants"),
-        where("consultantNo","==",user.referral)
-    )
-);
-
-for (const consultant of consultantQuery.docs){
-
-    await addDoc(
-        collection(
-            db,
-            "consultants",
-            consultant.id,
-            "notifications"
-        ),
-        {
-            title:"Dokumen Dihantar",
-            message:`Dokumen Sepencarian ${user.nama} telah dihantar dan menunggu tindakan anda.`,
-            module:"sepencarian",
-            status:"SENT",
-            customerId:userId,
-            trackingNo:document.getElementById("sepencarianTrackingNo").value,
-            read:false,
-            createdAt:serverTimestamp()
+            if(btnComplete) {
+                btnComplete.disabled = currentStatus !== "SENT";
+                btnComplete.onclick = () => {
+                    askConfirm(`Lengkapkan proses dokumen ${moduleName} ini?`, async () => {
+                        try {
+                            await updateDoc(doc(db,"users",userId,m,"maklumat"), {
+                                status:"COMPLETED", completedAt:new Date().toISOString(), completedBy:auth.currentUser.uid
+                            });
+                            await addDoc(collection(db,"users",userId,"notifications"), {
+                                title:"Urusan Selesai", message:`Urusan Dokumen ${moduleName} anda telah selesai.`, module:m, status:"COMPLETED", read:false, createdAt:serverTimestamp()
+                            });
+                            await notifyConsultant(moduleName, "COMPLETED", "Selesai");
+                            showToast("Kes berjaya diselesaikan.");
+                        } catch(e) { console.error(e); }
+                    });
+                };
+            }
         }
-    );
 
-}
-  
-alert("Dokumen berjaya dihantar.");
+        setupHandlers('Wasiat', wasiatStatus);
+        setupHandlers('Hibah', hibahStatus);
+        setupHandlers('Sepencarian', sepencarianStatus);
+        setupHandlers('Mawaris', mawarisStatus);
 
-location.reload();
-
-};
-
-}
-
-const btnCompleteSepencarian=document.getElementById("btnCompleteSepencarian");
-
-// ===== Workflow Lock =====
-
-if(btnPrintSepencarian){
-
-    btnPrintSepencarian.disabled = sepencarianStatus !== "VERIFIED";
-
-    if(btnPrintSepencarian.disabled){
-
-        btnPrintSepencarian.classList.remove("bg-blue-600","hover:bg-blue-700");
-
-        btnPrintSepencarian.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnSendSepencarian){
-
-    btnSendSepencarian.disabled = sepencarianStatus !== "PRINTED";
-
-    if(btnSendSepencarian.disabled){
-
-        btnSendSepencarian.classList.remove("bg-orange-500","hover:bg-orange-600");
-
-        btnSendSepencarian.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnCompleteSepencarian){
-
-    btnCompleteSepencarian.disabled = sepencarianStatus !== "SENT";
-
-    if(btnCompleteSepencarian.disabled){
-
-        btnCompleteSepencarian.classList.remove("bg-green-600","hover:bg-green-700");
-
-        btnCompleteSepencarian.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-  
-if(btnCompleteSepencarian){
-
-btnCompleteSepencarian.onclick=async()=>{
-
-if(!confirm("Lengkapkan proses ini?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"sepencarian","maklumat"),
-{
-status:"COMPLETED",
-completedAt:new Date().toISOString(),
-completedBy:auth.currentUser.uid
-}
-);
-
-alert("Kes selesai.");
-
-location.reload();
-
-};
-
-}
-
-//MAWARIS
-
-const btnPrintMawaris=document.getElementById("btnPrintMawaris");
-
-if(btnPrintMawaris){
-
-btnPrintMawaris.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"mawaris","maklumat"),
-{
-status:"PRINTED",
-printedAt:new Date().toISOString(),
-printedBy:auth.currentUser.uid
-}
-);
-
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dicetak",
-message:"Dokumen Mawaris anda telah dicetak.",
-module:"mawaris",
-status:"PRINTED",
-read:false,
-createdAt:serverTimestamp()
-});
-
-// ===============================
-// NOTIFY CONSULTANT (AQC)
-// ===============================
-
-const consultantQuery = await getDocs(
-    query(
-        collection(db,"consultants"),
-        where("consultantNo","==",user.referral)
-    )
-);
-
-for (const consultant of consultantQuery.docs){
-
-    await addDoc(
-        collection(
-            db,
-            "consultants",
-            consultant.id,
-            "notifications"
-        ),
-        {
-            title:"Dokumen Dicetak",
-            message:`Dokumen Mawaris ${user.nama} telah dicetak dan sedia untuk tindakan.`,
-            module:"mawaris",
-            status:"PRINTED",
-            customerId:userId,
-            read:false,
-            createdAt:serverTimestamp()
-        }
-    );
-
-}
-  
-alert("Status berjaya dikemaskini.");
-
-location.reload();
-
-};
-
-}
-
-const btnSendMawaris=document.getElementById("btnSendMawaris");
-
-if(btnSendMawaris){
-
-btnSendMawaris.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen telah dihantar?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"mawaris","maklumat"),
-{
-
-status:"SENT",
-
-sentAt:new Date().toISOString(),
-
-sentBy:auth.currentUser.uid,
-
-courier:document.getElementById("mawarisCourier").value,
-
-trackingNo:document.getElementById("mawarisTrackingNo").value,
-
-receiver:document.getElementById("mawarisReceiver").value,
-
-remarks:document.getElementById("mawarisRemarks").value
-
-}
-);
-
-await addDoc(
-collection(db,"users",userId,"notifications"),
-{
-title:"Dokumen Dihantar",
-message:`Dokumen Mawaris anda telah dihantar. Tracking No: ${document.getElementById("mawarisTrackingNo").value}`,
-module:"mawaris",
-status:"SENT",
-type:"workflow",
-trackingNo:document.getElementById("mawarisTrackingNo").value,
-read:false,
-createdAt:serverTimestamp()
-});
-
-// ===============================
-// NOTIFY CONSULTANT (AQC)
-// ===============================
-
-const consultantQuery = await getDocs(
-    query(
-        collection(db,"consultants"),
-        where("consultantNo","==",user.referral)
-    )
-);
-
-for (const consultant of consultantQuery.docs){
-
-    await addDoc(
-        collection(
-            db,
-            "consultants",
-            consultant.id,
-            "notifications"
-        ),
-        {
-            title:"Dokumen Dihantar",
-            message:`Dokumen Mawaris ${user.nama} telah dihantar dan menunggu tindakan anda.`,
-            module:"mawaris",
-            status:"SENT",
-            customerId:userId,
-            trackingNo:document.getElementById("mawarisTrackingNo").value,
-            read:false,
-            createdAt:serverTimestamp()
-        }
-    );
-
-}
-  
-alert("Dokumen berjaya dihantar.");
-
-location.reload();
-
-};
-
-}
-
-const btnCompleteMawaris=document.getElementById("btnCompleteMawaris");
-
-// ===== Workflow Lock =====
-
-if(btnPrintMawaris){
-
-    btnPrintMawaris.disabled = mawarisStatus !== "VERIFIED";
-
-    if(btnPrintMawaris.disabled){
-
-        btnPrintMawaris.classList.remove("bg-blue-600","hover:bg-blue-700");
-
-        btnPrintMawaris.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnSendMawaris){
-
-    btnSendMawaris.disabled = mawarisStatus !== "PRINTED";
-
-    if(btnSendMawaris.disabled){
-
-        btnSendMawaris.classList.remove("bg-orange-500","hover:bg-orange-600");
-
-        btnSendMawaris.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnCompleteMawaris){
-
-    btnCompleteMawaris.disabled = mawarisStatus !== "SENT";
-
-    if(btnCompleteMawaris.disabled){
-
-        btnCompleteMawaris.classList.remove("bg-green-600","hover:bg-green-700");
-
-        btnCompleteMawaris.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-  
-if(btnCompleteMawaris){
-
-btnCompleteMawaris.onclick=async()=>{
-
-if(!confirm("Lengkapkan proses ini?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"mawaris","maklumat"),
-{
-status:"COMPLETED",
-completedAt:new Date().toISOString(),
-completedBy:auth.currentUser.uid
-}
-);
-
-alert("Kes selesai.");
-
-location.reload();
-
-};
-
-}
-  
-</script>
-
+    </script>
 </body>
 </html>
