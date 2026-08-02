@@ -388,9 +388,9 @@ const workflowSteps = [
   { key:"VERIFIED", label:"Verified" },
   { key:"PRINTED", label:"Printed" },
   { key:"SENT", label:"Sent" },
-  { key:"AKAD_SCHEDULED", label:"Akad Scheduled" },
-  { key:"AKAD_COMPLETED", label:"Akad Completed" },
+  { key:"AKAD", label:"Akad" },
   { key:"STAMPING", label:"Stamping" },
+  { key:"HANDOVER", label:"Diserahkan Kepada AQM" },
   { key:"COMPLETED", label:"Completed" }
 ];
 
@@ -730,7 +730,7 @@ userId,
 akadDate,
 akadTime,
 
-status:"AKAD_SCHEDULED",
+status:"AKAD",
 
 akadUpdatedAt:serverTimestamp()
 
@@ -823,7 +823,7 @@ handoverDate:completeDate,
 
 handoverRemarks:remarks,
 
-status:"COMPLETED",
+status:"HANDOVER",
 
 handoverUpdatedAt:serverTimestamp()
 
