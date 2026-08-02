@@ -190,12 +190,12 @@ let wasiatApprovedDate = "-";
 let wasiatExpiryDate = "-";
 let wasiatBakiHari = 0;
 
+let wasiatAkadDate = "";
+let wasiatAkadTime = "";
+
 if (wasiatSnap.exists()) {
 
     const wasiatData = wasiatSnap.data();
-
-let wasiatAkadDate = "";
-let wasiatAkadTime = "";
 
 wasiatAkadDate = wasiatData.akadDate || "";
 wasiatAkadTime = wasiatData.akadTime || "";
