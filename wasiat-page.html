@@ -555,6 +555,24 @@ ${currentStatus}
 </p>
 
 ${
+wasiatData.sentAt
+?
+
+`
+
+<p class="mt-1">
+<b>Tarikh Dihantar :</b>
+${new Date(wasiatData.sentAt).toLocaleString("ms-MY")}
+</p>
+
+`
+
+:
+
+""
+
+}
+${
 wasiatData.trackingNo
 
 ?
