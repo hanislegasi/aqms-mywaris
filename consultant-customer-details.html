@@ -421,7 +421,19 @@ function renderTimeline(currentStatus){
             :"text-gray-500"
         }">
 
-        ${step.label}
+       ${step.label}
+
+${
+step.key=="AKAD_SCHEDULED" && wasiatAkadDate
+?
+
+`<div class="text-xs text-gray-500">
+${new Date(wasiatAkadDate).toLocaleDateString("ms-MY")}
+</div>`
+
+:""
+
+}
 
         </span>
 
@@ -596,12 +608,14 @@ id="stampDate"
 class="w-full border rounded-lg p-2 mt-2 mb-3">
 
 <input
+id="stampRef"
 placeholder="No Rujukan"
 class="w-full border rounded-lg p-2 mt-3">
 
 <div class="mt-auto pt-5">
 
 <button
+id="saveStamping"
 class="w-full mt-4 bg-orange-600 text-white py-2 rounded-lg">
 
 Update
@@ -611,7 +625,6 @@ Update
 </div>
 
 </div>
-
 <div class="bg-white border rounded-xl p-5 flex flex-col h-full">
 
 <h3 class="font-bold text-green-700">
@@ -626,12 +639,14 @@ id="completeDate"
 class="w-full border rounded-lg p-2 mt-2 mb-3">
 
 <textarea
+id="completeRemarks"
 class="w-full border rounded-lg p-2 mt-3 mb-3"
 placeholder="Remarks"></textarea>
 
 <div class="mt-auto pt-5">
 
 <button
+id="saveComplete"
 class="w-full mt-4 bg-green-700 text-white py-2 rounded-lg">
 
 Complete
@@ -723,32 +738,6 @@ akadUpdatedAt:serverTimestamp()
 
 );
 
-await addDoc(
-
-collection(
-db,
-"users",
-userId,
-"notifications"
-),
-
-{
-
-title:"Sesi Akad Dijadualkan",
-
-message:`Sesi akad ditetapkan pada ${akadDate} ${akadTime}.`,
-
-module:"wasiat",
-
-status:"AKAD_SCHEDULED",
-
-read:false,
-
-createdAt:serverTimestamp()
-
-}
-
-);
 
 alert("Tarikh akad berjaya disimpan.");
 
@@ -756,9 +745,100 @@ location.reload();
 
 };
   
+document.getElementById("saveStamping").onclick = async()=>{
+
+const stampDate =
+document.getElementById("stampDate").value;
+
+const stampRef =
+document.getElementById("stampRef").value;
+
+if(!stampDate){
+
+alert("Sila pilih tarikh stamping.");
+
+return;
+
 }
 
+await updateDoc(
 
+doc(
+db,
+"users",
+userId,
+"wasiat",
+"maklumat"
+),
+
+{
+
+stampingDate:stampDate,
+
+stampingRef:stampRef,
+
+status:"STAMPING",
+
+stampingUpdatedAt:serverTimestamp()
+
+}
+
+);
+
+alert("Stamping berjaya dikemaskini.");
+
+location.reload();
+
+};
+
+document.getElementById("saveComplete").onclick = async()=>{
+
+const completeDate =
+document.getElementById("completeDate").value;
+
+const remarks =
+document.getElementById("completeRemarks").value;
+
+if(!completeDate){
+
+alert("Sila pilih tarikh.");
+
+return;
+
+}
+
+await updateDoc(
+
+doc(
+db,
+"users",
+userId,
+"wasiat",
+"maklumat"
+),
+
+{
+
+handoverDate:completeDate,
+
+handoverRemarks:remarks,
+
+status:"COMPLETED",
+
+handoverUpdatedAt:serverTimestamp()
+
+}
+
+);
+
+alert("Dokumen telah diserahkan kepada AQM.");
+
+location.reload();
+
+};
+  
+} 
+  
 </script>
 
 </body>
