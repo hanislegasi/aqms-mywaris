@@ -76,7 +76,10 @@ import {
 getFirestore,
 doc,
 getDoc,
-updateDoc
+updateDoc,
+serverTimestamp,
+addDoc,
+collection
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -191,6 +194,12 @@ if (wasiatSnap.exists()) {
 
     const wasiatData = wasiatSnap.data();
 
+let wasiatAkadDate = "";
+let wasiatAkadTime = "";
+
+wasiatAkadDate = wasiatData.akadDate || "";
+wasiatAkadTime = wasiatData.akadTime || "";
+  
     wasiatStatus = wasiatData.status || "DRAFT";
     wasiatDocRef = wasiatData.docRef || "-";
 
@@ -548,6 +557,7 @@ Akad
 <input
 type="date"
 id="akadDate"
+value="${wasiatAkadDate}"
 class="w-full border rounded-lg p-2 mt-2 mb-3">
 
 <label class="mt-3 block">Masa</label>
@@ -555,6 +565,7 @@ class="w-full border rounded-lg p-2 mt-2 mb-3">
 <input
 type="time"
 id="akadTime"
+value="${wasiatAkadTime}"
 class="w-full border rounded-lg p-2 mt-1">
 
 <div class="mt-auto pt-5">
@@ -672,6 +683,78 @@ user.mawarisPaymentStatus === "paid"
 : "PROSPEK";
 
 renderTimeline(currentStatus);
+
+document.getElementById("saveAkad").onclick = async()=>{
+
+const akadDate =
+document.getElementById("akadDate").value;
+
+const akadTime =
+document.getElementById("akadTime").value;
+
+if(!akadDate || !akadTime){
+
+alert("Sila pilih tarikh dan masa.");
+
+return;
+
+}
+
+await updateDoc(
+
+doc(
+db,
+"users",
+userId,
+"wasiat",
+"maklumat"
+),
+
+{
+
+akadDate,
+akadTime,
+
+status:"AKAD_SCHEDULED",
+
+akadUpdatedAt:serverTimestamp()
+
+}
+
+);
+
+await addDoc(
+
+collection(
+db,
+"users",
+userId,
+"notifications"
+),
+
+{
+
+title:"Sesi Akad Dijadualkan",
+
+message:`Sesi akad ditetapkan pada ${akadDate} ${akadTime}.`,
+
+module:"wasiat",
+
+status:"AKAD_SCHEDULED",
+
+read:false,
+
+createdAt:serverTimestamp()
+
+}
+
+);
+
+alert("Tarikh akad berjaya disimpan.");
+
+location.reload();
+
+};
   
 }
 
