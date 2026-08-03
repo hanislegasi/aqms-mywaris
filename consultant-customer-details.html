@@ -201,7 +201,7 @@ let wasiatHandoverRemarks = "";
   
 if (wasiatSnap.exists()) {
 
-    const wasiatData = wasiatSnap.data();
+    wasiatData = wasiatSnap.data();
 
 wasiatAkadDate = wasiatData.akadDate || "";
 wasiatAkadTime = wasiatData.akadTime || "";
@@ -413,6 +413,18 @@ function renderTimeline(currentStatus){
         s => s.key === currentStatus
     );
 
+const timelineDates = {
+    UNDER_REVIEW: user.memberSince,
+    APPROVED: wasiatApprovedDate,
+    VERIFIED: wasiatData?.verifiedAt || "",
+    PRINTED: wasiatData?.printedAt || "",
+    SENT: wasiatData?.sentAt || "",
+    AKAD: wasiatAkadDate,
+    STAMPING: wasiatStampDate,
+    HANDOVER: wasiatHandoverDate,
+    COMPLETED: wasiatData?.receivedDate || ""
+};
+  
     document.getElementById("timelineContainer").innerHTML =
     workflowSteps.map((step,index)=>`
 
@@ -427,27 +439,29 @@ function renderTimeline(currentStatus){
 
         </div>
 
-        <span class="${
-            index<=currentIndex
-            ?"font-semibold text-green-700"
-            :"text-gray-500"
-        }">
+        <div>
 
-       ${step.label}
+<span class="${
+    index<=currentIndex
+    ?"font-semibold text-green-700"
+    :"text-gray-500"
+}">
+${step.label}
+</span>
+
+<p class="text-xs text-gray-400 mt-1">
 
 ${
-step.key=="AKAD_SCHEDULED" && wasiatAkadDate
-?
-
-`<div class="text-xs text-gray-500">
-${new Date(wasiatAkadDate).toLocaleDateString("ms-MY")}
-</div>`
-
-:""
-
+timelineDates[step.key]
+? new Date(timelineDates[step.key]).toLocaleDateString("ms-MY")
+: "-"
 }
 
-        </span>
+</p>
+
+</div>
+
+</span>
 
     </div>
 
