@@ -740,51 +740,6 @@ Lihat Dokumen
 
 `;
 
-const receiveBtn =
-document.getElementById("confirmReceived");
-
-if(receiveBtn){
-
-receiveBtn.onclick = async()=>{
-
-const receivedDate =
-document.getElementById("receivedDate").value;
-
-if(!receivedDate){
-
-alert("Sila pilih tarikh.");
-
-return;
-
-}
-
-await updateDoc(
-
-doc(
-db,
-"users",
-user.uid,
-"wasiat",
-"maklumat"
-),
-
-{
-
-receivedDate,
-status:"RECEIVED",
-receivedUpdatedAt:serverTimestamp()
-
-}
-
-);
-
-alert("Dokumen berjaya disahkan diterima.");
-
-location.reload();
-
-};
-
-}
 
   
 // PAYMENT STATUS
