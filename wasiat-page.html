@@ -1,763 +1,354 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wasiat</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wasiat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body class="bg-gray-100 min-h-screen" style="font-family: 'Inter', sans-serif;">
+<body class="bg-gray-50 min-h-screen text-gray-800" style="font-family: 'Inter', sans-serif;">
 
-<div class="bg-[#153638] text-white px-5 py-6 shadow">
-
-<div class="flex justify-between items-center">
-
-<div>
-
-<h1 class="text-2xl font-bold">
-my-Wasiat
-</h1>
-
-<p id="namaUser">
-Memuatkan...
-</p>
-
-</div>
-
-
-</div>
-
-</div>
-
-<div class="p-5">
-
-<a
-href="dashboard.html"
-class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
-
-← Kembali ke Dashboard
-
-</a>
-  
- 
-
-<h2 class="font-bold text-xl mb-4">
-Wasiat
-</h2>
-
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-
-    <div
-    id="profileCard">
-    Loading...
+    <div class="bg-[#153638] text-white px-5 py-6 shadow-md">
+        <div class="flex justify-between items-center max-w-7xl mx-auto">
+            <div>
+                <h1 class="text-2xl font-bold">my-Wasiat</h1>
+                <p id="namaUser" class="text-sm mt-1 opacity-90">Memuatkan...</p>
+            </div>
+        </div>
     </div>
 
-    <div
-    id="wasiatTimeline">
+    <div class="p-5 max-w-7xl mx-auto">
+        <a href="dashboard.html" class="inline-flex items-center gap-2 bg-white border border-gray-200 px-5 py-2.5 rounded-xl mb-6 shadow-sm hover:bg-gray-50 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            Kembali ke Dashboard
+        </a>
+
+        <h2 class="font-bold text-2xl mb-6">Wasiat Dashboard</h2>
+
+        <!-- ROW 1: Profile (Left) and Timeline (Right) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <!-- Left: Profile Card Container -->
+            <div class="flex flex-col h-full">
+                <div id="renewalAlertContainer"></div>
+                <div id="profileCard" class="h-full">
+                    <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 flex items-center justify-center min-h-[200px]">
+                        <p class="text-gray-500 animate-pulse">Memuatkan Profil...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Timeline Container -->
+            <div id="wasiatTimeline" class="h-full">
+                <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 flex items-center justify-center min-h-[200px]">
+                    <p class="text-gray-500 animate-pulse">Memuatkan Timeline...</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ROW 2: Wasiat Card (Left) and Document Card (Right) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Left: Wasiat Actions -->
+            <a id="wasiatButton" href="payment-wasiat.html" class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition border border-gray-100 flex items-center min-h-[120px] group">
+                <div class="flex items-center gap-5 w-full">
+                    <div class="bg-[#153638]/10 p-4 rounded-xl text-[#153638] group-hover:scale-105 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-lg font-bold text-gray-800">Urus Wasiat</p>
+                        <p id="wasiatStatus" class="text-sm text-gray-500 mt-1">Memuatkan status...</p>
+                    </div>
+                    <div class="text-gray-400 group-hover:text-[#153638]">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Right: View Document Card -->
+            <div id="documentViewCard" class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 flex flex-col justify-center min-h-[120px]">
+                <p class="text-gray-500 text-center animate-pulse">Memuatkan Maklumat Dokumen...</p>
+            </div>
+        </div>
+
+        <hr class="my-8 border-gray-200">
+
+        <div class="flex flex-wrap justify-end gap-3">
+            <a href="payment-aqm-receipts.html" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 flex-shrink-0">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6M7 4h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/>
+                </svg>
+                <span>Resit Saya</span>
+            </a>
+            <button id="logoutBtn" class="bg-red-50 hover:bg-red-100 text-red-600 px-6 py-3 rounded-xl font-semibold transition">
+                Logout
+            </button>
+        </div>
     </div>
 
-</div>
- 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-
-<a
-id="wasiatButton"
-href="payment-wasiat.html"
-class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-gray-100 min-h-[120px]">
-<div class="flex items-center gap-4">
-
-  <!-- ICON -->
-  <div class="bg-[#153638]/10 p-3 rounded-xl">
-
-    <svg xmlns="http://www.w3.org/2000/svg"
-class="w-8 h-8"
-fill="none"
-viewBox="0 0 24 24"
-stroke="currentColor">
-
-<path
-stroke-linecap="round"
-stroke-linejoin="round"
-stroke-width="2"
-d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-1.042-.133-2.052-.382-3.016z"/>
-
-</svg>
-
-  </div>
-
-  <div>
-
-    <p class="text-base md:text-lg font-semibold">
-      Wasiat
-    </p>
-
-    <p
-      id="wasiatStatus"
-      class="text-xs md:text-sm text-gray-500 mt-1">
-
-      Memuatkan status...
-
-    </p>
-
-  </div>
-
-</div>
-
-</a>
-
- 
-</div>
-
-<hr class="my-8">
-
-<div class="flex justify-end gap-3">
-
-<a
-href="payment-aqm-receipts.html"
-class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold">
-
-<svg
-xmlns="http://www.w3.org/2000/svg"
-fill="none"
-viewBox="0 0 24 24"
-stroke-width="1.5"
-stroke="currentColor"
-class="w-5 h-5 flex-shrink-0">
-
-<path
-stroke-linecap="round"
-stroke-linejoin="round"
-d="M9 12h6m-6 4h6M7 4h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/>
-
-</svg>
-
-<span>Resit Saya</span>
-
-</a>
-
-<button
-id="logoutBtn"
-class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold">
-
-Logout
-
-</button>
-
-</div>
-
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getAuth,
-onAuthStateChanged,
-signOut
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-getFirestore,
-doc,
-getDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";  
-
-const firebaseConfig = {
-
-apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-authDomain: "alqawthar-mywaris.firebaseapp.com",
-projectId: "alqawthar-mywaris",
-storageBucket: "alqawthar-mywaris.firebasestorage.app",
-messagingSenderId: "3498810778",
-appId: "1:3498810778:web:ee36e0fe42f76698046e23"
-
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const auth =
-getAuth(app);
-
-const db =
-getFirestore(app);
-
-  
-onAuthStateChanged(auth, async(user)=>{
-
-if(!user){
-window.location.href="login.html";
-return;
-}
-
-const docSnap =
-await getDoc(
-doc(db,"users",user.uid)
-);
-
-if(docSnap.exists()){
-
-const userData =
-docSnap.data();
-  
-document.getElementById(
-"namaUser"
-).innerHTML =
-"Selamat datang, "
-+ userData.nama;
-
-const wasiatSnap =
-await getDoc(
-   doc(
-      db,
-      "users",
-      user.uid,
-      "wasiat",
-      "maklumat"
-   )
-);
-
-const wasiatData =
-wasiatSnap.exists()
-? wasiatSnap.data()
-: {};
-
-let bakiHari = "-";
-
-if(wasiatData.expiryDate){
-
-const today =
-new Date();
-
-const expiry =
-new Date(
-wasiatData.expiryDate
-);
-
-bakiHari =
-Math.ceil(
-(expiry - today)
-/ (1000 * 60 * 60 * 24)
-);
-
-}
-
-let renewalAlert = "";
-
-if(
-bakiHari !== "-" &&
-bakiHari <= 30 &&
-bakiHari > 0
-){
-
-renewalAlert = `
-
-<div
-class="bg-orange-50 border border-orange-300 rounded-xl p-4 mb-6">
-
-<h3 class="font-bold text-orange-700">
-⚠ Keahlian Akan Tamat
-</h3>
-
-<p class="mt-1">
-Keahlian anda akan tamat dalam
-<strong>${bakiHari} hari</strong>.
-</p>
-
-<a
-href="renewal.html"
-class="inline-block mt-3 bg-orange-500 text-white px-4 py-2 rounded-lg">
-
-Perbaharui Sekarang
-
-</a>
-
-</div>
-
-`;
-
-}
-  
-if(wasiatData.docRef){
-
-document.getElementById(
-"wasiatStatus"
-).innerHTML =
-wasiatData.docRef;
-
-}else{
-
-document.getElementById(
-"wasiatStatus"
-).innerHTML =
-"DRAFT";
-
-}
-
-  
-document.getElementById(
-"profileCard"
-).innerHTML =
-
-renewalAlert +
-
-`
-
-<div
-class="bg-gradient-to-r from-[#153638] to-[#24575a]
-text-white rounded-2xl p-6 mb-6 shadow">
-<div class="flex justify-between items-center">
-
-<div>
-
-<p class="text-sm opacity-80">
-Profil Pewasiat
-</p>
-
-<h2 class="text-2xl font-bold mt-1">
-${userData.nama || "-"}
-</h2>
-
-<p class="opacity-90 mt-1">
-${userData.ic || "-"}
-</p>
-
-<p class="opacity-90">
-${userData.telefon || "-"}
-</p>
-
-<p class="opacity-80 text-sm">
-No Ahli: ${userData.memberNo || "Belum Aktif"}
-</p>
-
-<p class="opacity-80 text-sm">
-Tamat Keahlian:
-${
-wasiatData.expiryDate
-? new Date(wasiatData.expiryDate)
-.toLocaleDateString("ms-MY")
-: "-"
-}
-</p>
-
-<p class="opacity-80 text-sm">
-Baki:
-${bakiHari} Hari
-</p>
-
-<span class="
-inline-block
-mt-2
-px-3
-py-1
-rounded-full
-bg-white/20
-text-sm">
-
-${
-bakiHari <= 0
-? "KEAHLIAN TAMAT"
-: userData.wasiatPaymentStatus === "paid"
-? "AHLI AKTIF"
-: "PROSPEK"
-}
-
-</span>
-
-</div>
-
-<div
-class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold">
-
-${(userData.nama || "U")[0]}
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-
-
-const currentStatus = wasiatData.status || "DRAFT";
-
-const done = (status)=>{
-
-const order=[
-"APPROVED",
-"PRINTED",
-"SENT",
-"AKAD",
-"STAMPING",
-"HANDOVER",
-"COMPLETED",
-"RECEIVED"
-];
-
-return order.indexOf(currentStatus)>=order.indexOf(status);
-
-};
-
-function timelineItem(done,title,date,extra=""){
-
-return`
-
-<div class="flex gap-4 mb-6">
-
-<div class="flex flex-col items-center">
-
-<div class="${
-done
-? "bg-green-600 text-white"
-: "bg-gray-200 text-gray-500"
-} w-10 h-10 rounded-full flex items-center justify-center font-bold">
-
-✓
-
-</div>
-
-<div class="w-1 flex-1 ${
-done
-? "bg-green-500"
-: "bg-gray-300"
-} mt-1"></div>
-
-</div>
-
-<div class="flex-1">
-
-<h4 class="font-semibold ${
-done
-? "text-green-700"
-: "text-gray-500"
-}">
-
-${title}
-
-</h4>
-
-<p class="text-sm text-gray-500">
-
-${date}
-
-</p>
-
-<div class="text-sm text-gray-600 mt-1">
-
-${extra}
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-document.getElementById("wasiatTimeline").innerHTML += `
-
-<div class="bg-white rounded-2xl shadow p-6 mt-5">
-
-<p>
-<b>No Dokumen :</b>
-${wasiatData.docRef || "-"}
-</p>
-
-<p class="mt-2">
-<b>Status :</b>
-${currentStatus}
-</p>
-
-<div class="mt-5">
-
-${
-bakiHari <= 0
-?
-
-`
-<a
-href="renewal.html"
-class="inline-block bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-semibold">
-
-Perbaharui Keahlian
-
-</a>
-`
-
-:
-
-`
-<a
-href="preview-wasiat.html"
-class="inline-block bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-semibold">
-
-Lihat Dokumen
-
-</a>
-`
-
-}
-
-</div>
-
-</div>
-
-`;
-  
-document.getElementById("wasiatTimeline").innerHTML=`
-
-<div class="bg-white rounded-2xl shadow p-6">
-
-<h3 class="font-bold text-lg mb-5">
-Status Timeline
-</h3>
-
-${timelineItem(
-done("APPROVED"),
-"Approved",
-wasiatData.approvedAt
-? new Date(wasiatData.approvedAt).toLocaleDateString("ms-MY")
-: "-"
-)}
-
-${timelineItem(
-done("PRINTED"),
-"Printed",
-wasiatData.printedAt
-? new Date(wasiatData.printedAt).toLocaleDateString("ms-MY")
-: "-"
-)}
-
-${timelineItem(
-done("SENT"),
-"Sent",
-wasiatData.sentAt
-? new Date(wasiatData.sentAt).toLocaleDateString("ms-MY")
-: "-",
-`Courier : ${wasiatData.courier || "-"}<br>
-Tracking : ${wasiatData.trackingNo || "-"}`
-)}
-
-${timelineItem(
-done("AKAD"),
-"Akad",
-wasiatData.akadDate || "-",
-wasiatData.akadTime || ""
-)}
-
-${timelineItem(
-done("STAMPING"),
-"Stamping",
-wasiatData.stampingDate || "-",
-wasiatData.stampingRef || ""
-)}
-
-${timelineItem(
-done("HANDOVER"),
-"Diserahkan Kepada AQM",
-wasiatData.handoverDate || "-",
-wasiatData.handoverRemarks || ""
-)}
-
-${timelineItem(
-done("RECEIVED"),
-"AQM Terima Dokumen",
-wasiatData.receivedDate || "-",
-!wasiatData.receivedDate
-? `
-<input
-type="date"
-id="receivedDate"
-class="border rounded-lg p-2 mt-2 w-full">
-
-<button
-id="confirmReceived"
-class="bg-green-600 hover:bg-green-700 text-white rounded-lg mt-2 w-full py-2">
-
-Sah Terima
-
-</button>
-`
-: ""
-)}
-
-</div>
-
-`;
-
-  
-// PAYMENT STATUS
-
-
-if(userData.wasiatPaymentStatus === "paid"){
-
-  if(bakiHari <= 0){
-
-    document.getElementById(
-      "wasiatButton"
-    ).href = "renewal.html";
-
-    document.getElementById(
-"wasiatStatus"
-).innerHTML = `
-
-<svg
-xmlns="http://www.w3.org/2000/svg"
-class="w-5 h-5 inline text-amber-600"
-fill="none"
-viewBox="0 0 24 24"
-stroke="currentColor">
-
-<path
-stroke-linecap="round"
-stroke-linejoin="round"
-stroke-width="2"
-d="M12 11c1.657 0 3-1.343 3-3V7a3 3 0 10-6 0v1c0 1.657 1.343 3 3 3zm-6 0h12a1 1 0 011 1v7a2 2 0 01-2 2H7a2 2 0 01-2-2v-7a1 1 0 011-1z"/>
-
-</svg>
-
-Keahlian Tamat
-
-`;
-
-  }
-
-  else{
-
-    document.getElementById(
-    "wasiatButton"
-).href = "wasiat.html";
-
-document.getElementById(
-    "wasiatStatus"
-    ).innerHTML += `
-    <br>
-    <span class="text-blue-600 text-xs font-semibold">
-        <svg xmlns="http://www.w3.org/2000/svg"
-     fill="none"
-     viewBox="0 0 24 24"
-     stroke-width="2"
-     stroke="currentColor"
-     class="w-5 h-5">
-  <path stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M16.862 4.487a2.25 2.25 0 113.182 3.182L8.25 19.463 4.5 20.25l.787-3.75L16.862 4.487z"/>
-</svg> 
-    </span>
-    `;
-    
-  }
-
-}
-
-else{
-
-  document.getElementById(
-    "wasiatButton"
-  ).href = "payment-wasiat.html";
-
-  document.getElementById(
-    "wasiatStatus"
-  ).innerHTML =
-
-  "Bayar RM350";
-
-}
-
-const receiveBtn =
-document.getElementById("confirmReceived");
-
-if(receiveBtn){
-
-receiveBtn.onclick = async()=>{
-
-const receivedDate =
-document.getElementById("receivedDate").value;
-
-if(!receivedDate){
-
-alert("Sila pilih tarikh.");
-
-return;
-
-}
-
-await updateDoc(
-
-doc(
-db,
-"users",
-user.uid,
-"wasiat",
-"maklumat"
-),
-
-{
-
-receivedDate,
-
-status:"RECEIVED",
-
-receivedUpdatedAt:serverTimestamp()
-
-}
-
-);
-
-alert("Dokumen berjaya disahkan diterima.");
-
-location.reload();
-
-};
-
-}
-  
-document
-.getElementById("logoutBtn")
-.addEventListener("click", async()=>{
-
-  try{
-
-    await signOut(auth);
-
-    localStorage.clear();
-
-    sessionStorage.clear();
-
-    window.location.replace(
-      "index.html"
-    );
-
-  }
-
-  catch(error){
-
-    console.log(error);
-
-  }
-
-});
-
-
-
-
-
-
-
-} // PENUTUP if(docSnap.exists()){ YANG TERCICIR
-}); // PENUTUP onAuthStateChanged YANG TERCICIR
-  
-</script>
-  
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        // ADDED updateDoc and serverTimestamp which were missing in the original code
+        import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";  
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+            authDomain: "alqawthar-mywaris.firebaseapp.com",
+            projectId: "alqawthar-mywaris",
+            storageBucket: "alqawthar-mywaris.firebasestorage.app",
+            messagingSenderId: "3498810778",
+            appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            try {
+                const docSnap = await getDoc(doc(db, "users", user.uid));
+
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
+                    document.getElementById("namaUser").innerHTML = "Selamat datang, " + userData.nama;
+
+                    const wasiatSnap = await getDoc(doc(db, "users", user.uid, "wasiat", "maklumat"));
+                    const wasiatData = wasiatSnap.exists() ? wasiatSnap.data() : {};
+
+                    // Calculate remaining days
+                    let bakiHari = "-";
+                    if (wasiatData.expiryDate) {
+                        const today = new Date();
+                        const expiry = new Date(wasiatData.expiryDate);
+                        bakiHari = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
+                    }
+
+                    let renewalAlert = "";
+                    if (bakiHari !== "-" && bakiHari <= 30 && bakiHari > 0) {
+                        renewalAlert = `
+                            <div class="bg-orange-50 border border-orange-300 rounded-xl p-4 mb-4 flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-bold text-orange-700">⚠ Keahlian Akan Tamat</h3>
+                                    <p class="text-sm text-orange-800 mt-1">Keahlian anda tamat dalam <strong>${bakiHari} hari</strong>.</p>
+                                </div>
+                                <a href="renewal.html" class="whitespace-nowrap bg-orange-500 hover:bg-orange-600 transition text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm">
+                                    Perbaharui
+                                </a>
+                            </div>
+                        `;
+                        document.getElementById("renewalAlertContainer").innerHTML = renewalAlert;
+                    }
+
+                    document.getElementById("profileCard").innerHTML = `
+                        <div class="bg-gradient-to-br from-[#153638] to-[#2a686b] text-white rounded-2xl p-6 shadow-md h-full flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-xs uppercase tracking-wider opacity-70 font-semibold mb-1">Profil Pewasiat</p>
+                                    <h2 class="text-2xl font-bold leading-tight">${userData.nama || "-"}</h2>
+                                    <p class="opacity-90 mt-2 font-light text-sm">${userData.ic || "-"}</p>
+                                    <p class="opacity-90 font-light text-sm">${userData.telefon || "-"}</p>
+                                </div>
+                                <div class="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold shadow-inner">
+                                    ${(userData.nama || "U")[0]}
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 pt-4 border-t border-white/20 grid grid-cols-2 gap-2">
+                                <div>
+                                    <p class="opacity-70 text-xs">No Ahli</p>
+                                    <p class="font-medium">${userData.memberNo || "Belum Aktif"}</p>
+                                </div>
+                                <div>
+                                    <p class="opacity-70 text-xs">Tamat Keahlian</p>
+                                    <p class="font-medium">
+                                        ${wasiatData.expiryDate ? new Date(wasiatData.expiryDate).toLocaleDateString("ms-MY") : "-"}
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 flex items-center justify-between bg-white/10 p-3 rounded-xl">
+                                <span class="text-sm font-medium">Baki: ${bakiHari} Hari</span>
+                                <span class="px-3 py-1 rounded-full bg-white text-[#153638] text-xs font-bold">
+                                    ${bakiHari <= 0 ? "Keahlian Tamat" : userData.wasiatPaymentStatus === "paid" ? "Ahli Aktif" : "Prospek"}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+
+                    const currentStatus = wasiatData.status || "DRAFT";
+                    
+                    document.getElementById("documentViewCard").innerHTML = `
+                        <div class="flex flex-col h-full justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                    </svg>
+                                    Maklumat Dokumen
+                                </h3>
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div class="bg-gray-50 p-3 rounded-lg">
+                                        <p class="text-xs text-gray-500 font-semibold uppercase">No Dokumen</p>
+                                        <p class="font-bold text-gray-800 mt-1">${wasiatData.docRef || "-"}</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg">
+                                        <p class="text-xs text-gray-500 font-semibold uppercase">Status Semasa</p>
+                                        <p class="font-bold text-[#153638] mt-1">${currentStatus}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                ${bakiHari <= 0
+                                    ? `<a href="renewal.html" class="flex justify-center items-center gap-2 w-full bg-red-600 hover:bg-red-700 text-white px-5 py-3 rounded-xl font-semibold transition">
+                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+                                         Perbaharui Keahlian
+                                       </a>`
+                                    : `<a href="preview-wasiat.html" class="flex justify-center items-center gap-2 w-full bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-xl font-semibold transition shadow-sm border border-transparent">
+                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+                                         Lihat Dokumen
+                                       </a>`
+                                }
+                            </div>
+                        </div>
+                    `;
+
+                    const done = (status) => {
+                        const order = ["APPROVED", "PRINTED", "SENT", "AKAD", "STAMPING", "HANDOVER", "COMPLETED", "RECEIVED"];
+                        return order.indexOf(currentStatus) >= order.indexOf(status);
+                    };
+
+                    function timelineItem(done, title, date, extra = "") {
+                        return `
+                        <div class="flex gap-4 mb-4 relative">
+                            <div class="flex flex-col items-center">
+                                <div class="${done ? "bg-green-500 text-white" : "bg-gray-100 text-gray-300 border-2 border-gray-200"} w-8 h-8 rounded-full flex items-center justify-center font-bold z-10">
+                                    ${done ? `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" /></svg>` : ''}
+                                </div>
+                                <div class="w-0.5 flex-1 ${done ? "bg-green-500" : "bg-gray-200"} mt-2"></div>
+                            </div>
+                            <div class="flex-1 pb-4">
+                                <h4 class="font-semibold text-sm md:text-base ${done ? "text-gray-800" : "text-gray-400"}">${title}</h4>
+                                <p class="text-xs ${done ? "text-gray-500" : "text-gray-400"}">${date}</p>
+                                ${extra ? `<div class="text-xs ${done ? "text-gray-600 bg-gray-50 border" : "text-gray-400"} mt-2 p-2 rounded-md">${extra}</div>` : ''}
+                            </div>
+                        </div>
+                        `;
+                    }
+
+                    document.getElementById("wasiatTimeline").innerHTML = `
+                        <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 h-full overflow-y-auto max-h-[500px]">
+                            <h3 class="font-bold text-lg text-gray-800 mb-6 sticky top-0 bg-white z-20 pb-2 border-b">Status Timeline</h3>
+                            <div class="pt-2">
+                                ${timelineItem(done("APPROVED"), "Approved", wasiatData.approvedAt ? new Date(wasiatData.approvedAt).toLocaleDateString("ms-MY") : "-")}
+                                ${timelineItem(done("PRINTED"), "Printed", wasiatData.printedAt ? new Date(wasiatData.printedAt).toLocaleDateString("ms-MY") : "-")}
+                                ${timelineItem(done("SENT"), "Sent", wasiatData.sentAt ? new Date(wasiatData.sentAt).toLocaleDateString("ms-MY") : "-", wasiatData.courier ? `Courier: <b>${wasiatData.courier}</b><br>Tracking: <b>${wasiatData.trackingNo || "-"}</b>` : "")}
+                                ${timelineItem(done("AKAD"), "Akad", wasiatData.akadDate || "-", wasiatData.akadTime || "")}
+                                ${timelineItem(done("STAMPING"), "Stamping", wasiatData.stampingDate || "-", wasiatData.stampingRef || "")}
+                                ${timelineItem(done("HANDOVER"), "Diserahkan Kepada AQM", wasiatData.handoverDate || "-", wasiatData.handoverRemarks || "")}
+                                ${timelineItem(done("RECEIVED"), "AQM Terima Dokumen", wasiatData.receivedDate || "-", 
+                                    (!wasiatData.receivedDate && done("HANDOVER")) ? `
+                                        <div class="mt-2 flex flex-col gap-2">
+                                            <input type="date" id="receivedDate" class="border border-gray-300 rounded-lg p-2 w-full text-sm">
+                                            <button id="confirmReceived" class="bg-[#153638] hover:bg-[#1a4346] text-white rounded-lg px-4 py-2 text-sm font-semibold transition">Sah Terima</button>
+                                        </div>` : ""
+                                )}
+                            </div>
+                        </div>
+                    `;
+
+                    const wStatusEl = document.getElementById("wasiatStatus");
+                    const wBtnEl = document.getElementById("wasiatButton");
+                    
+                    // Reset styling classes for safety
+                    wBtnEl.className = "bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition border border-gray-100 flex items-center min-h-[120px] group";
+
+                    if (userData.wasiatPaymentStatus === "paid") {
+                        if (bakiHari <= 0) {
+                            wBtnEl.href = "renewal.html";
+                            wBtnEl.classList.add("ring-2", "ring-orange-400");
+                            wStatusEl.innerHTML = `
+                                <div class="flex items-center gap-1 text-orange-600 font-medium mt-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                    Keahlian Tamat
+                                </div>`;
+                        } else {
+                            wBtnEl.href = "wasiat.html";
+                            wStatusEl.innerHTML = `
+                                <div class="text-green-600 font-medium flex items-center gap-1 mt-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                                    Telah Dibayar
+                                </div>
+                                <div class="text-xs text-gray-400 mt-1">No Dokumen: ${wasiatData.docRef || "DRAFT"}</div>
+                            `;
+                        }
+                    } else {
+                        wBtnEl.href = "payment-wasiat.html";
+                        wStatusEl.innerHTML = `
+                            <span class="inline-block mt-1 px-2 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded-md">
+                                Perlu Bayar: RM350
+                            </span>`;
+                    }
+
+                    const receiveBtn = document.getElementById("confirmReceived");
+                    if (receiveBtn) {
+                        receiveBtn.onclick = async () => {
+                            const receivedDate = document.getElementById("receivedDate").value;
+                            if (!receivedDate) {
+                                alert("Sila pilih tarikh terima dokumen.");
+                                return;
+                            }
+                            
+                            receiveBtn.innerText = "Memproses...";
+                            receiveBtn.disabled = true;
+
+                            try {
+                                await updateDoc(doc(db, "users", user.uid, "wasiat", "maklumat"), {
+                                    receivedDate,
+                                    status: "RECEIVED",
+                                    receivedUpdatedAt: serverTimestamp()
+                                });
+                                alert("Dokumen berjaya disahkan diterima.");
+                                location.reload();
+                            } catch (e) {
+                                console.error("Error updating document: ", e);
+                                alert("Ralat semasa menyimpan tarikh.");
+                                receiveBtn.innerText = "Sah Terima";
+                                receiveBtn.disabled = false;
+                            }
+                        };
+                    }
+
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+
+        document.getElementById("logoutBtn").addEventListener("click", async () => {
+            try {
+                await signOut(auth);
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.replace("index.html");
+            } catch (error) {
+                console.log(error);
+            }
+        });
+
+    </script>
 </body>
 </html>
