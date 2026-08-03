@@ -439,11 +439,11 @@ d="M9 12.75L11.25 15 15 9.75M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.
 
 </div>
 
-<p class="mt-2 text-sm font-medium">
+<p class="mt-2 text-md font-medium">
 Approved
 </p>
 
-<p class="text-xs text-gray-500 mt-1">
+<p class="text-md text-gray-500 mt-1">
 ${
 wasiatData.approvedAt
 ? new Date(wasiatData.approvedAt).toLocaleDateString("ms-MY")
@@ -475,11 +475,11 @@ d="M6 9V4h12v5M6 18h12v2H6v-2zm-2-7h16a2 2 0 012 2v3H2v-3a2 2 0 012-2z"/>
 
 </div>
 
-<p class="mt-2 text-sm font-medium">
+<p class="mt-2 text-md font-medium">
 Printed
 </p>
 
-<p class="text-xs text-gray-500 mt-1">
+<p class="text-md text-gray-500 mt-1">
 ${
 wasiatData.printedAt
 ? new Date(wasiatData.printedAt).toLocaleDateString("ms-MY")
@@ -511,8 +511,8 @@ d="M3 7.5L12 3l9 4.5M3 7.5V16.5L12 21m-9-13.5L12 12m9-4.5V16.5L12 21m0-9V21"/>
 
 </div>
 
-<p class="mt-2 text-sm font-medium">
-Printed
+<p class="mt-2 text-sm">
+Sent
 </p>
 
 <p class="text-xs text-gray-500 mt-1">
@@ -521,7 +521,13 @@ wasiatData.sentAt
 ? new Date(wasiatData.sentAt).toLocaleDateString("ms-MY")
 : "-"
 }
-<b>Tracking :</b>
+</p>
+
+<p class="text-xs text-gray-600">
+${wasiatData.courier || "-"}
+</p>
+
+<p class="text-xs font-medium text-[#153638]">
 ${wasiatData.trackingNo || "-"}
 </p>
 
@@ -572,36 +578,6 @@ wasiatData.receivedDate
 <p class="mt-1">
 <b>Status :</b> ${currentStatus}
 </p>
-
-<hr class="my-4">
-
-<p>
-<b>Approved :</b>
-${wasiatData.approvedAt
-? new Date(wasiatData.approvedAt).toLocaleDateString("ms-MY")
-: "-"}
-</p>
-
-<p class="mt-1">
-<b>Printed :</b>
-${wasiatData.printedAt
-? new Date(wasiatData.printedAt).toLocaleString("ms-MY")
-: "-"}
-</p>
-
-<p class="mt-1">
-<b>Sent :</b>
-${wasiatData.sentAt
-? new Date(wasiatData.sentAt).toLocaleString("ms-MY")
-: "-"}
-</p>
-
-<p class="mt-1">
-<b>Tracking :</b>
-${wasiatData.trackingNo || "-"}
-</p>
-
-<hr class="my-4">
 
 ${
 currentStatus=="COMPLETED"
