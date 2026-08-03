@@ -769,13 +769,7 @@ AQM Terima Dokumen
 ${receivedDate || "-"}
 </p>
 
-        <p class="font-semibold mb-6">
-            ${wasiatCompletedAt
-                ? new Date(wasiatCompletedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
-
-        <button
+            <button
             id="btnCompleteWasiat"
             class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
             ✔ Lengkapkan
