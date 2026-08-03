@@ -345,11 +345,15 @@ d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618
 
 <div>
 
+<div class="flex items-center gap-2">
+
 <p class="font-bold">
-
 Wasiat
-
 </p>
+
+<span id="editIcon"></span>
+
+</div>
 
 <p class="text-sm text-white/80">
 
@@ -646,23 +650,24 @@ Keahlian Tamat
     "wasiatButton"
 ).href = "wasiat.html";
 
-document.getElementById(
-    "wasiatStatus"
-    ).innerHTML += `
-    <br>
-    <span class="text-blue-600 text-xs font-semibold">
-        <svg xmlns="http://www.w3.org/2000/svg"
-     fill="none"
-     viewBox="0 0 24 24"
-     stroke-width="2"
-     stroke="currentColor"
-     class="w-5 h-5">
-  <path stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M16.862 4.487a2.25 2.25 0 113.182 3.182L8.25 19.463 4.5 20.25l.787-3.75L16.862 4.487z"/>
-</svg> 
-    </span>
-    `;
+document.getElementById("editIcon").innerHTML = `
+
+<svg
+xmlns="http://www.w3.org/2000/svg"
+class="w-4 h-4 text-blue-300"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M16.862 4.487a2.25 2.25 0 113.182 3.182L8.25 19.463 4.5 20.25l.787-3.75L16.862 4.487z"/>
+
+</svg>
+
+`;
     
   }
 
