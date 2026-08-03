@@ -387,7 +387,62 @@ ${(userData.nama || "U")[0]}
 
 `;
 
+<div class="mt-8 border-t border-white/20 pt-5">
 
+<p>
+
+<b>No Dokumen :</b>
+
+${wasiatData.docRef || "-"}
+
+</p>
+
+<p class="mt-1">
+
+<b>Status :</b>
+
+${currentStatus}
+
+</p>
+
+<div class="mt-5">
+
+${
+bakiHari <= 0
+
+?
+
+`
+
+<a
+href="renewal.html"
+class="inline-block bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-semibold">
+
+Perbaharui Keahlian
+
+</a>
+
+`
+
+:
+
+`
+
+<a
+href="preview-wasiat.html"
+class="inline-block bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-semibold">
+
+👁️ Lihat Dokumen
+
+</a>
+
+`
+
+}
+
+</div>
+
+</div>
 
 const currentStatus = wasiatData.status || "DRAFT";
 
