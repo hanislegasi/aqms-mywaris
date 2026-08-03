@@ -434,20 +434,6 @@ Memuatkan status...
 
 </a>
  
-<div class="mt-4">
-
-<p class="text-white">
-<b>No Dokumen :</b>
-${wasiatData.docRef || "-"}
-</p>
-
-<p class="text-white mt-1">
-<b>Status :</b>
-${currentStatus}
-</p>
-
-<div class="mt-4">
-
 ${
 bakiHari <= 0
 
@@ -457,7 +443,7 @@ bakiHari <= 0
 
 <a
 href="renewal.html"
-class="inline-block bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-semibold">
+class="bg-red-600 hover:bg-red-700 text-white rounded-2xl p-5 flex items-center justify-center font-semibold">
 
 Perbaharui Keahlian
 
@@ -483,7 +469,8 @@ fill="none"
 viewBox="0 0 24 24"
 stroke="currentColor">
 
-<path stroke-linecap="round"
+<path
+stroke-linecap="round"
 stroke-linejoin="round"
 stroke-width="2"
 d="M15 12H9m12 0A9 9 0 113 12a9 9 0 0118 0z"/>
@@ -495,15 +482,15 @@ d="M15 12H9m12 0A9 9 0 113 12a9 9 0 0118 0z"/>
 <div>
 
 <p class="font-bold text-white">
-
 Lihat Dokumen
-
 </p>
 
 <p class="text-sm text-white/80">
+${wasiatData.docRef || "-"}
+</p>
 
-Pratonton Dokumen Wasiat
-
+<p class="text-xs text-white/70">
+Status : ${currentStatus}
 </p>
 
 </div>
@@ -512,20 +499,11 @@ Pratonton Dokumen Wasiat
 
 </a>
 
-</div>
-
 `
 
 }
 
 </div>
-
-</div>
-
-</div>
-
-`;
-
 
 
 const done = (status)=>{
