@@ -419,9 +419,9 @@ Status Dokumen Wasiat
 
 <div class="flex items-center justify-between">
 
-<div class="text-center flex-1">
+<div class="text-center flex-1 flex flex-col items-center">
 
-<div class="${done("APPROVED")?"bg-green-600 text-white":"bg-gray-200"} w-12 h-12 rounded-full flex items-center justify-center mx-auto">
+<div class="${done("APPROVED")?"bg-green-600 text-white":"bg-gray-200"} w-12 h-12 rounded-full flex items-center justify-center">
 
 <svg xmlns="http://www.w3.org/2000/svg"
 class="w-6 h-6"
@@ -453,11 +453,13 @@ wasiatData.approvedAt
 
 </div>
 
+<div class="mt-2 text-xs text-gray-600 leading-5 min-h-[40px]">
+
 <div class="h-1 flex-1 ${done("PRINTED")?"bg-green-600":"bg-gray-300"}"></div>
 
-<div class="text-center flex-1">
+<div class="text-center flex-1 flex flex-col items-center">
 
-<div class="${done("PRINTED")?"bg-green-600 text-white":"bg-gray-200"} w-12 h-12 rounded-full flex items-center justify-center mx-auto">
+<div class="${done("PRINTED")?"bg-green-600 text-white":"bg-gray-200"} w-12 h-12 rounded-full flex items-center justify-center">
 
 <svg xmlns="http://www.w3.org/2000/svg"
 class="w-6 h-6"
@@ -489,11 +491,13 @@ wasiatData.printedAt
 
 </div>
 
+<div class="mt-2 text-xs text-gray-600 leading-5 min-h-[40px]">
+
 <div class="h-1 flex-1 ${done("SENT")?"bg-green-600":"bg-gray-300"}"></div>
 
-<div class="text-center flex-1">
+<div class="text-center flex-1 flex flex-col items-center">
 
-<div class="${done("SENT")?"bg-green-600 text-white":"bg-gray-200"} w-12 h-12 rounded-full flex items-center justify-center mx-auto">
+<div class="${done("SENT")?"bg-green-600 text-white":"bg-gray-200"} w-12 h-12 rounded-full flex items-center justify-center">
 
 <svg xmlns="http://www.w3.org/2000/svg"
 class="w-6 h-6"
@@ -523,6 +527,8 @@ wasiatData.sentAt
 }
 </p>
 
+<div class="mt-2 text-xs text-gray-600 leading-5 min-h-[40px]">
+
 <p class="text-md text-gray-600">
 Courier: ${wasiatData.courier || "-"}
 </p>
@@ -535,9 +541,9 @@ No.: ${wasiatData.trackingNo || "-"}
 
 <div class="h-1 flex-1 ${done("COMPLETED")?"bg-green-600":"bg-gray-300"}"></div>
 
-<div class="text-center flex-1">
+<div class="text-center flex-1 flex flex-col items-center">
 
-<div class="${done("COMPLETED")?"bg-green-600 text-white":"bg-gray-200"} w-12 h-12 rounded-full flex items-center justify-center mx-auto">
+<div class="${done("COMPLETED")?"bg-green-600 text-white":"bg-gray-200"} w-12 h-12 rounded-full flex items-center justify-center">
 
 <svg xmlns="http://www.w3.org/2000/svg"
 class="w-6 h-6"
@@ -568,6 +574,8 @@ wasiatData.receivedDate
 </p>
 
 </div>
+
+<div class="mt-2 text-xs text-gray-600 leading-5 min-h-[40px]">
 
 </div>
 
