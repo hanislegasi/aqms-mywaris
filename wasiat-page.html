@@ -511,11 +511,11 @@ d="M3 7.5L12 3l9 4.5M3 7.5V16.5L12 21m-9-13.5L12 12m9-4.5V16.5L12 21m0-9V21"/>
 
 </div>
 
-<p class="mt-2 text-sm">
+<p class="mt-2 text-md font-medium">
 Sent
 </p>
 
-<p class="text-xs text-gray-500 mt-1">
+<p class="text-md text-gray-500 mt-1">
 ${
 wasiatData.sentAt
 ? new Date(wasiatData.sentAt).toLocaleDateString("ms-MY")
@@ -523,11 +523,11 @@ wasiatData.sentAt
 }
 </p>
 
-<p class="text-xs text-gray-600">
+<p class="text-md text-gray-600">
 ${wasiatData.courier || "-"}
 </p>
 
-<p class="text-xs font-medium text-[#153638]">
+<p class="text-md font-medium text-[#153638]">
 ${wasiatData.trackingNo || "-"}
 </p>
 
