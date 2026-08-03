@@ -64,55 +64,6 @@ Wasiat
 
 </div>
  
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-
-<a
-id="wasiatButton"
-href="payment-wasiat.html"
-class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-gray-100 min-h-[120px]">
-<div class="flex items-center gap-4">
-
-  <!-- ICON -->
-  <div class="bg-[#153638]/10 p-3 rounded-xl">
-
-    <svg xmlns="http://www.w3.org/2000/svg"
-class="w-8 h-8"
-fill="none"
-viewBox="0 0 24 24"
-stroke="currentColor">
-
-<path
-stroke-linecap="round"
-stroke-linejoin="round"
-stroke-width="2"
-d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-1.042-.133-2.052-.382-3.016z"/>
-
-</svg>
-
-  </div>
-
-  <div>
-
-    <p class="text-base md:text-lg font-semibold">
-      Wasiat
-    </p>
-
-    <p
-      id="wasiatStatus"
-      class="text-xs md:text-sm text-gray-500 mt-1">
-
-      Memuatkan status...
-
-    </p>
-
-  </div>
-
-</div>
-
-</a>
-
- 
-</div>
 
 <hr class="my-8">
 
@@ -286,21 +237,6 @@ Perbaharui Sekarang
 
 }
   
-if(wasiatData.docRef){
-
-document.getElementById(
-"wasiatStatus"
-).innerHTML =
-wasiatData.docRef;
-
-}else{
-
-document.getElementById(
-"wasiatStatus"
-).innerHTML =
-"DRAFT";
-
-}
 
 const currentStatus = wasiatData.status || "DRAFT";
   
