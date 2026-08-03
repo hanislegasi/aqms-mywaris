@@ -225,6 +225,18 @@ const printedAt = wasiatData.printedAt || "";
   
 wasiatPrintedAt = wasiatData.printedAt || null;
 wasiatSentAt = wasiatData.sentAt || null;
+
+const wasiatAkadDate = wasiatData.akadDate || "";
+const wasiatAkadTime = wasiatData.akadTime || "";
+
+const wasiatStampDate = wasiatData.stampingDate || "";
+const wasiatStampRef = wasiatData.stampingRef || "";
+
+const wasiatHandoverDate = wasiatData.handoverDate || "";
+const wasiatHandoverRemarks = wasiatData.handoverRemarks || "";
+
+const receivedDate = wasiatData.receivedDate || "";
+  
 wasiatCompletedAt = wasiatData.completedAt || null;
 
 wasiatDeliveryMethod = wasiatData.deliveryMethod || "";
@@ -700,8 +712,51 @@ class="w-full border rounded-lg p-2 mb-2">
         </h3>
 
         <p class="text-sm text-gray-500">
-            Tarikh Lengkap
-        </p>
+Tarikh Akad
+</p>
+
+<p class="font-semibold">
+${wasiatAkadDate || "-"}
+${wasiatAkadTime || ""}
+</p>
+
+<hr class="my-3">
+
+<p class="text-sm text-gray-500">
+Stamping
+</p>
+
+<p class="font-semibold">
+${wasiatStampDate || "-"}
+</p>
+
+<p class="text-sm">
+${wasiatStampRef || ""}
+</p>
+
+<hr class="my-3">
+
+<p class="text-sm text-gray-500">
+Diserahkan Kepada AQM
+</p>
+
+<p class="font-semibold">
+${wasiatHandoverDate || "-"}
+</p>
+
+<p class="text-sm">
+${wasiatHandoverRemarks || ""}
+</p>
+
+<hr class="my-3">
+
+<p class="text-sm text-gray-500">
+AQM Terima Dokumen
+</p>
+
+<p class="font-semibold text-green-700">
+${receivedDate || "-"}
+</p>
 
         <p class="font-semibold mb-6">
             ${wasiatCompletedAt
