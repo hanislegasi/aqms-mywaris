@@ -384,8 +384,6 @@ ${(userData.nama || "U")[0]}
 
 </div>
 
-</div>
-
 <div class="mt-8 border-t border-white/20 pt-5">
 
 <a
@@ -568,55 +566,6 @@ ${extra}
 
 }
 
-document.getElementById("wasiatTimeline").innerHTML += `
-
-<div class="bg-white rounded-2xl shadow p-6 mt-5">
-
-<p>
-<b>No Dokumen :</b>
-${wasiatData.docRef || "-"}
-</p>
-
-<p class="mt-2">
-<b>Status :</b>
-${currentStatus}
-</p>
-
-<div class="mt-5">
-
-${
-bakiHari <= 0
-?
-
-`
-<a
-href="renewal.html"
-class="inline-block bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-semibold">
-
-Perbaharui Keahlian
-
-</a>
-`
-
-:
-
-`
-<a
-href="preview-wasiat.html"
-class="inline-block bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-semibold">
-
-Lihat Dokumen
-
-</a>
-`
-
-}
-
-</div>
-
-</div>
-
-`;
   
 document.getElementById("wasiatTimeline").innerHTML=`
 
