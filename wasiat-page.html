@@ -304,18 +304,15 @@ document.getElementById(
 
 const currentStatus = wasiatData.status || "DRAFT";
   
-document.getElementById(
-"profileCard"
-).innerHTML =
+document.getElementById("profileCard").innerHTML =
 
 renewalAlert +
 
 `
 
-<div
-class="bg-gradient-to-r from-[#153638] to-[#24575a]
-text-white rounded-2xl p-6 shadow h-full">
-<div class="flex justify-between items-center">
+<div class="bg-gradient-to-r from-[#153638] to-[#24575a] text-white rounded-2xl p-6 shadow h-full flex flex-col">
+
+<div class="flex justify-between items-start">
 
 <div>
 
@@ -336,47 +333,44 @@ ${userData.telefon || "-"}
 </p>
 
 <p class="opacity-80 text-sm">
-No Ahli: ${userData.memberNo || "Belum Aktif"}
+No Ahli : ${userData.memberNo || "-"}
 </p>
 
 <p class="opacity-80 text-sm">
-Tamat Keahlian:
+Tamat Keahlian :
 ${
 wasiatData.expiryDate
-? new Date(wasiatData.expiryDate)
-.toLocaleDateString("ms-MY")
-: "-"
+?
+new Date(wasiatData.expiryDate).toLocaleDateString("ms-MY")
+:
+"-"
 }
 </p>
 
 <p class="opacity-80 text-sm">
-Baki:
+Baki :
 ${bakiHari} Hari
 </p>
 
-<span class="
-inline-block
-mt-2
-px-3
-py-1
-rounded-full
-bg-white/20
-text-sm">
+<span class="inline-block mt-3 px-3 py-1 rounded-full bg-white/20 text-sm">
 
 ${
-bakiHari <= 0
-? "KEAHLIAN TAMAT"
-: userData.wasiatPaymentStatus === "paid"
-? "AHLI AKTIF"
-: "PROSPEK"
+bakiHari<=0
+?
+"KEAHLIAN TAMAT"
+:
+userData.wasiatPaymentStatus==="paid"
+?
+"AHLI AKTIF"
+:
+"PROSPEK"
 }
 
 </span>
 
 </div>
 
-<div
-class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold">
+<div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold">
 
 ${(userData.nama || "U")[0]}
 
@@ -384,20 +378,52 @@ ${(userData.nama || "U")[0]}
 
 </div>
 
+<div class="flex-1"></div>
+
+<div class="grid grid-cols-2 gap-4 mt-8">
+
+<a
+id="wasiatButton"
+href="payment-wasiat.html"
+class="bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl p-5 transition">
+
+<div class="flex items-center gap-4">
+
+<div class="bg-white/20 p-3 rounded-xl">
+
+<svg xmlns="http://www.w3.org/2000/svg"
+class="w-8 h-8"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-1.042-.133-2.052-.382-3.016z"/>
+
+</svg>
+
+</div>
 
 <div>
 
-<p class="font-bold text-white">
+<p class="font-bold">
+
 Wasiat
+
 </p>
 
 <p class="text-sm text-white/80">
+
 ${wasiatData.docRef || "-"}
+
 </p>
 
 <p
 id="wasiatStatus"
-class="text-xs text-white/70 mt-1">
+class="text-xs text-white/70">
 
 </p>
 
@@ -406,9 +432,9 @@ class="text-xs text-white/70 mt-1">
 </div>
 
 </a>
- 
+
 ${
-bakiHari <= 0
+bakiHari<=0
 
 ?
 
@@ -416,7 +442,7 @@ bakiHari <= 0
 
 <a
 href="renewal.html"
-class="bg-red-600 hover:bg-red-700 text-white rounded-2xl p-5 flex items-center justify-center font-semibold">
+class="bg-red-600 hover:bg-red-700 rounded-2xl p-5 flex items-center justify-center font-semibold">
 
 Perbaharui Keahlian
 
@@ -454,16 +480,22 @@ d="M15 12H9m12 0A9 9 0 113 12a9 9 0 0118 0z"/>
 
 <div>
 
-<p class="font-bold text-white">
+<p class="font-bold">
+
 Lihat Dokumen
+
 </p>
 
 <p class="text-sm text-white/80">
+
 ${wasiatData.docRef || "-"}
+
 </p>
 
 <p class="text-xs text-white/70">
+
 Status : ${currentStatus}
+
 </p>
 
 </div>
@@ -477,6 +509,7 @@ Status : ${currentStatus}
 }
 
 </div>
+
 </div>
 
 `;
