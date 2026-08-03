@@ -384,12 +384,12 @@ ${(userData.nama || "U")[0]}
 
 </div>
 
-<div class="mt-8 border-t border-white/20 pt-5">
+<div class="grid grid-cols-2 gap-4 mt-5">
 
 <a
 id="wasiatButton"
 href="payment-wasiat.html"
-class="block bg-white/10 hover:bg-white/20 transition rounded-xl p-4">
+class="bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl p-5 transition">
 
 <div class="flex items-center gap-4">
 
@@ -401,8 +401,7 @@ fill="none"
 viewBox="0 0 24 24"
 stroke="currentColor">
 
-<path
-stroke-linecap="round"
+<path stroke-linecap="round"
 stroke-linejoin="round"
 stroke-width="2"
 d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-1.042-.133-2.052-.382-3.016z"/>
@@ -413,15 +412,17 @@ d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618
 
 <div>
 
-<p class="font-semibold">
-
+<p class="font-bold text-white">
 Wasiat
+</p>
 
+<p class="text-sm text-white/80">
+${wasiatData.docRef || "-"}
 </p>
 
 <p
 id="wasiatStatus"
-class="text-sm text-white/80">
+class="text-xs text-white/70 mt-1">
 
 Memuatkan status...
 
@@ -432,7 +433,6 @@ Memuatkan status...
 </div>
 
 </a>
-
  
 <div class="mt-4">
 
