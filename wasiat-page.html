@@ -394,10 +394,13 @@ const currentStatus = wasiatData.status || "DRAFT";
 const done = (status)=>{
 
 const order=[
+
 "APPROVED",
 "PRINTED",
 "SENT",
-"COMPLETED"
+"COMPLETED",
+"RECEIVED"
+
 ];
 
 return order.indexOf(currentStatus)>=order.indexOf(status);
@@ -538,54 +541,82 @@ Completed
 
 <div class="mt-8 border-t pt-5">
 
+<p><b>No Dokumen :</b> ${wasiatData.docRef||"-"}</p>
+
+<p class="mt-1">
+<b>Status :</b> ${currentStatus}
+</p>
+
+<hr class="my-4">
+
 <p>
-
-<b>No Dokumen :</b>
-
-${wasiatData.docRef||"-"}
-
+<b>Approved :</b>
+${wasiatData.approvedAt
+? new Date(wasiatData.approvedAt).toLocaleDateString("ms-MY")
+: "-"}
 </p>
 
 <p class="mt-1">
-
-<b>Status :</b>
-
-${currentStatus}
-
+<b>Printed :</b>
+${wasiatData.printedAt
+? new Date(wasiatData.printedAt).toLocaleString("ms-MY")
+: "-"}
 </p>
 
-${
-wasiatData.sentAt
-?
-
-`
-
 <p class="mt-1">
-<b>Tarikh Dihantar :</b>
-${new Date(wasiatData.sentAt).toLocaleString("ms-MY")}
+<b>Sent :</b>
+${wasiatData.sentAt
+? new Date(wasiatData.sentAt).toLocaleString("ms-MY")
+: "-"}
 </p>
 
-`
-
-:
-
-""
-
-}
-${
-wasiatData.trackingNo
-
-?
-
-`
-
 <p class="mt-1">
-
 <b>Tracking :</b>
+${wasiatData.trackingNo || "-"}
+</p>
 
-${wasiatData.trackingNo}
+<hr class="my-4">
+
+${
+currentStatus=="COMPLETED"
+
+?
+
+`
+
+<div class="bg-blue-50 border rounded-xl p-4 mt-4">
+
+<h3 class="font-bold text-blue-700">
+
+Pengesahan Penerimaan Dokumen
+
+</h3>
+
+<p class="text-sm text-gray-600 mt-2">
+
+Sila sahkan tarikh anda menerima dokumen asal.
 
 </p>
+
+<input
+type="date"
+id="receivedDate"
+value="${wasiatData.receivedDate || ""}"
+class="border rounded-lg p-2 mt-4 w-full"
+
+${wasiatData.receivedDate ? "disabled":""}>
+
+<button
+id="confirmReceived"
+class="bg-blue-600 text-white px-5 py-2 rounded-lg mt-4 w-full"
+
+${wasiatData.receivedDate ? "disabled":""}>
+
+Sahkan Penerimaan
+
+</button>
+
+</div>
 
 `
 
@@ -697,7 +728,54 @@ else{
 
 }
 
+const receiveBtn =
+document.getElementById("confirmReceived");
 
+if(receiveBtn){
+
+receiveBtn.onclick = async()=>{
+
+const receivedDate =
+document.getElementById("receivedDate").value;
+
+if(!receivedDate){
+
+alert("Sila pilih tarikh.");
+
+return;
+
+}
+
+await updateDoc(
+
+doc(
+db,
+"users",
+user.uid,
+"wasiat",
+"maklumat"
+),
+
+{
+
+receivedDate,
+
+status:"RECEIVED",
+
+receivedUpdatedAt:serverTimestamp()
+
+}
+
+);
+
+alert("Dokumen berjaya disahkan diterima.");
+
+location.reload();
+
+};
+
+}
+  
 document
 .getElementById("logoutBtn")
 .addEventListener("click", async()=>{
