@@ -193,12 +193,24 @@ let wasiatBakiHari = 0;
 let wasiatAkadDate = "";
 let wasiatAkadTime = "";
 
+let wasiatStampDate = "";
+let wasiatStampRef = "";
+
+let wasiatHandoverDate = "";
+let wasiatHandoverRemarks = "";
+  
 if (wasiatSnap.exists()) {
 
     const wasiatData = wasiatSnap.data();
 
 wasiatAkadDate = wasiatData.akadDate || "";
 wasiatAkadTime = wasiatData.akadTime || "";
+
+wasiatStampDate = wasiatData.stampingDate || "";
+wasiatStampRef = wasiatData.stampingRef || "";
+
+wasiatHandoverDate = wasiatData.handoverDate || "";
+wasiatHandoverRemarks = wasiatData.handoverRemarks || "";
   
     wasiatStatus = wasiatData.status || "DRAFT";
     wasiatDocRef = wasiatData.docRef || "-";
@@ -584,7 +596,8 @@ class="w-full border rounded-lg p-2 mt-1">
 
 <button
 id="saveAkad"
-class="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg">
+${wasiatAkadDate ? "disabled" : ""}
+class="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg disabled:bg-gray-400">
 
 Simpan
 
@@ -605,10 +618,12 @@ Stamping
 <input
 type="date"
 id="stampDate"
+value="${wasiatStampDate}"
 class="w-full border rounded-lg p-2 mt-2 mb-3">
 
 <input
 id="stampRef"
+value="${wasiatStampRef}"
 placeholder="No Rujukan"
 class="w-full border rounded-lg p-2 mt-3">
 
@@ -616,7 +631,8 @@ class="w-full border rounded-lg p-2 mt-3">
 
 <button
 id="saveStamping"
-class="w-full mt-4 bg-orange-600 text-white py-2 rounded-lg">
+${wasiatStampDate ? "disabled" : ""}
+class="w-full mt-4 bg-orange-600 text-white py-2 rounded-lg disabled:bg-gray-400">
 
 Update
 
@@ -636,18 +652,20 @@ Complete
 <input
 type="date"
 id="completeDate"
+value="${wasiatHandoverDate}"
 class="w-full border rounded-lg p-2 mt-2 mb-3">
 
 <textarea
 id="completeRemarks"
 class="w-full border rounded-lg p-2 mt-3 mb-3"
-placeholder="Remarks"></textarea>
+placeholder="Remarks">${wasiatHandoverRemarks}</textarea>
 
 <div class="mt-auto pt-5">
 
 <button
 id="saveComplete"
-class="w-full mt-4 bg-green-700 text-white py-2 rounded-lg">
+${wasiatHandoverDate ? "disabled" : ""}
+class="w-full mt-4 bg-green-700 text-white py-2 rounded-lg disabled:bg-gray-400">
 
 Complete
 
