@@ -393,13 +393,15 @@ const currentStatus = wasiatData.status || "DRAFT";
 
 const done = (status)=>{
 
-const order = [
+const order=[
 "APPROVED",
 "PRINTED",
 "SENT",
 "AKAD",
 "STAMPING",
-"COMPLETED"
+"HANDOVER",
+"COMPLETED",
+"RECEIVED"
 ];
 
 return order.indexOf(currentStatus)>=order.indexOf(status);
@@ -596,7 +598,9 @@ wasiatData.receivedDate
 ${
 currentStatus=="AKAD" ||
 currentStatus=="STAMPING" ||
-currentStatus=="COMPLETED"
+currentStatus=="HANDOVER" ||
+currentStatus=="COMPLETED" ||
+currentStatus=="RECEIVED"
 
 ?
 
