@@ -215,6 +215,21 @@ let wasiatCourier = "";
 let wasiatTrackingNo = "";
 let wasiatReceiver = "";
 let wasiatRemarks = "";
+
+let wasiatPrintedAt = null;
+let wasiatSentAt = null;
+let wasiatCompletedAt = null;
+  
+let wasiatAkadDate = "";
+let wasiatAkadTime = "";
+
+let wasiatStampDate = "";
+let wasiatStampRef = "";
+
+let wasiatHandoverDate = "";
+let wasiatHandoverRemarks = "";
+
+let receivedDate = "";
   
 if(wasiatSnap.exists()){
 
@@ -226,16 +241,16 @@ const printedAt = wasiatData.printedAt || "";
 wasiatPrintedAt = wasiatData.printedAt || null;
 wasiatSentAt = wasiatData.sentAt || null;
 
-const wasiatAkadDate = wasiatData.akadDate || "";
-const wasiatAkadTime = wasiatData.akadTime || "";
+wasiatAkadDate = wasiatData.akadDate || "";
+wasiatAkadTime = wasiatData.akadTime || "";
 
-const wasiatStampDate = wasiatData.stampingDate || "";
-const wasiatStampRef = wasiatData.stampingRef || "";
+wasiatStampDate = wasiatData.stampingDate || "";
+wasiatStampRef = wasiatData.stampingRef || "";
 
-const wasiatHandoverDate = wasiatData.handoverDate || "";
-const wasiatHandoverRemarks = wasiatData.handoverRemarks || "";
+wasiatHandoverDate = wasiatData.handoverDate || "";
+wasiatHandoverRemarks = wasiatData.handoverRemarks || "";
 
-const receivedDate = wasiatData.receivedDate || "";
+receivedDate = wasiatData.receivedDate || "";
   
 wasiatCompletedAt = wasiatData.completedAt || null;
 
