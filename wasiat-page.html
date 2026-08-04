@@ -158,6 +158,14 @@ if(docSnap.exists()){
 
 const userData =
 docSnap.data();
+
+const consultantSnap = await getDoc(
+    doc(db, "consultants", userData.referral)
+);
+
+const consultantData = consultantSnap.exists()
+    ? consultantSnap.data()
+    : {};
   
 document.getElementById(
 "namaUser"
@@ -367,6 +375,28 @@ userData.wasiatPaymentStatus==="paid"
 
 </span>
 
+</div>
+
+</div>
+
+</div>
+
+<div class="mt-6">
+
+<p class="text-sm font-bold uppercase text-white/50 mb-2">
+Pegawai Perunding
+</p>
+
+<div class="space-y-2 text-sm">
+
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-white/70">Nama</span>
+<b>${consultantData.nama || "-"}</b>
+</div>
+
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-white/70">Telefon</span>
+<b>${consultantData.telefon || "-"}</b>
 </div>
 
 </div>
