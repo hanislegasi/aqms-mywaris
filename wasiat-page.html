@@ -158,18 +158,19 @@ if(docSnap.exists()){
 
 const userData =
 docSnap.data();
-console.log("Referral:", userData.referral);
-const consultantSnap = await getDoc(
-    doc(db, "consultants", userData.referral)
-);
-console.log("Consultant exists:", consultantSnap.exists());
 
-if (consultantSnap.exists()) {
-    console.log(consultantSnap.data());
+const consultantQuery = query(
+    collection(db, "consultants"),
+    where("consultantNo", "==", userData.referral)
+);
+
+const consultantSnap = await getDocs(consultantQuery);
+
+let consultantData = {};
+
+if (!consultantSnap.empty) {
+    consultantData = consultantSnap.docs[0].data();
 }
-const consultantData = consultantSnap.exists()
-    ? consultantSnap.data()
-    : {};
   
 document.getElementById(
 "namaUser"
