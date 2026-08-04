@@ -2893,6 +2893,21 @@ document.getElementById(
 )?.value || ""
 
 }; 
+
+const alamat1 =
+document.getElementById("alamat1").value.trim();
+
+const alamat2 =
+document.getElementById("alamat2").value.trim();
+
+const poskod =
+document.getElementById("poskod").value.trim();
+
+const bandar =
+document.getElementById("bandar").value.trim();
+
+const negeri =
+document.getElementById("negeri").value.trim();
           
           await setDoc(
 
@@ -2911,9 +2926,19 @@ document.getElementById(
   ic:
   document.getElementById("ic").value,
 
-  alamat:
-  document.getElementById("alamat").value,
+alamat1: alamat1,
+alamat2: alamat2,
+poskod: poskod,
+bandar: bandar,
+negeri: negeri,
 
+alamat: [
+alamat1,
+alamat2,
+`${poskod} ${bandar}`.trim(),
+negeri
+].filter(Boolean).join(", "),
+              
   telefon:
   document.getElementById("telefon").value,
 
