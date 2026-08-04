@@ -225,7 +225,7 @@ let wasiatStampRef = "";
 let wasiatHandoverDate = "";
 let wasiatHandoverRemarks = "";
 
-let receivedDate = "";
+let wasiatReceivedDate = "";
   
 if(wasiatSnap.exists()){
 
@@ -246,7 +246,7 @@ wasiatStampRef = wasiatData.stampingRef || "";
 wasiatHandoverDate = wasiatData.handoverDate || "";
 wasiatHandoverRemarks = wasiatData.handoverRemarks || "";
 
-receivedDate = wasiatData.receivedDate || "";
+wasiatReceivedDate = wasiatData.receivedDate || "";
   
 wasiatCompletedAt = wasiatData.completedAt || null;
 
@@ -330,7 +330,7 @@ let hibahStampRef = "";
 let hibahHandoverDate = "";
 let hibahHandoverRemarks = "";
 
-let receivedDate = "";
+let hibahReceivedDate = "";
   
 if(hibahSnap.exists()){
 
@@ -351,7 +351,7 @@ hibahStampRef = hibahData.stampingRef || "";
 hibahHandoverDate = hibahData.handoverDate || "";
 hibahHandoverRemarks = hibahData.handoverRemarks || "";
 
-receivedDate = hibahData.receivedDate || "";  
+hibahReceivedDate = hibahData.receivedDate || "";  
 
 hibahCompletedAt = hibahData.completedAt || null;
 
@@ -435,7 +435,7 @@ let sepencarianStampRef = "";
 let sepencarianHandoverDate = "";
 let sepencarianHandoverRemarks = "";
 
-let receivedDate = "";
+let sepencarianReceivedDate = "";
   
 if(sepencarianSnap.exists()){
 
@@ -456,7 +456,7 @@ sepencarianStampRef = sepencarianData.stampingRef || "";
 sepencarianHandoverDate = sepencarianData.handoverDate || "";
 sepencarianHandoverRemarks = sepencarianData.handoverRemarks || "";
 
-receivedDate = sepencarianData.receivedDate || "";
+sepencarianReceivedDate = sepencarianData.receivedDate || "";
   
 sepencarianCompletedAt = sepencarianData.completedAt || null;
 
@@ -540,7 +540,7 @@ let mawarisStampRef = "";
 let mawarisHandoverDate = "";
 let mawarisHandoverRemarks = "";
 
-let receivedDate = "";
+let mawarisReceivedDate = "";
   
 if(mawarisSnap.exists()){
 
@@ -561,7 +561,7 @@ mawarisStampRef = mawarisData.stampingRef || "";
 mawarisHandoverDate = mawarisData.handoverDate || "";
 mawarisHandoverRemarks = mawarisData.handoverRemarks || "";
 
-receivedDate = mawarisData.receivedDate || "";
+mawarisReceivedDate = mawarisData.receivedDate || "";
   
 mawarisCompletedAt = mawarisData.completedAt || null;
 
@@ -835,7 +835,7 @@ AQM Terima Dokumen
 </p>
 
 <p class="font-semibold text-green-700">
-${receivedDate || "-"}
+${wasiatReceivedDate || "-"}
 </p>
 
 <hr class="my-3">
@@ -1015,7 +1015,7 @@ AQM Terima Dokumen
 </p>
 
 <p class="font-semibold text-green-700">
-${receivedDate || "-"}
+${hibahReceivedDate || "-"}
 </p>
 
 <hr class="my-3">
@@ -1195,7 +1195,7 @@ AQM Terima Dokumen
 </p>
 
 <p class="font-semibold text-green-700">
-${receivedDate || "-"}
+${sepencarianReceivedDate || "-"}
 </p>
 
 <hr class="my-3">
@@ -1376,7 +1376,7 @@ AQM Terima Dokumen
 </p>
 
 <p class="font-semibold text-green-700">
-${receivedDate || "-"}
+${mawarisReceivedDate || "-"}
 </p>
 
 <hr class="my-3">
