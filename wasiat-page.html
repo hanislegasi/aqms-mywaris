@@ -302,7 +302,14 @@ Maklumat Peribadi
 <span class="text-white/70">Alamat</span>
 
 <b class="text-right max-w-[60%]">
-${wasiatData.alamat || "-"}
+${
+[
+wasiatData.alamat1,
+wasiatData.alamat2,
+`${wasiatData.poskod || ""} ${wasiatData.bandar || ""}`.trim(),
+wasiatData.negeri
+].filter(Boolean).join(", ") || "-"
+}
 </b>
 
 </div>
