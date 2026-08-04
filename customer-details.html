@@ -972,15 +972,53 @@ class="w-full border rounded-lg p-2 mb-2">
         </h3>
 
         <p class="text-sm text-gray-500">
-            Tarikh Lengkap
-        </p>
+Tarikh Akad
+</p>
 
-        <p class="font-semibold mb-6">
-            ${hibahCompletedAt
-                ? new Date(hibahCompletedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
+<p class="font-semibold">
+${hibahAkadDate || "-"}
+${hibahAkadTime || ""}
+</p>
 
+<hr class="my-3">
+
+<p class="text-sm text-gray-500">
+Stamping
+</p>
+
+<p class="font-semibold">
+${hibahStampDate || "-"}
+</p>
+
+<p class="text-sm">
+${hibahStampRef || ""}
+</p>
+
+<hr class="my-3">
+
+<p class="text-sm text-gray-500">
+Diserahkan Kepada AQM
+</p>
+
+<p class="font-semibold">
+${hibahHandoverDate || "-"}
+</p>
+
+<p class="text-sm">
+${hibahHandoverRemarks || ""}
+</p>
+
+<hr class="my-3">
+
+<p class="text-sm text-gray-500">
+AQM Terima Dokumen
+</p>
+
+<p class="font-semibold text-green-700">
+${receivedDate || "-"}
+</p>
+
+<hr class="my-3">
         <button
             id="btnCompleteHibah"
             class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
@@ -1114,14 +1152,53 @@ class="w-full border rounded-lg p-2 mb-2">
         </h3>
 
         <p class="text-sm text-gray-500">
-            Tarikh Lengkap
-        </p>
+Tarikh Akad
+</p>
 
-        <p class="font-semibold mb-6">
-            ${sepencarianCompletedAt
-                ? new Date(sepencarianCompletedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
+<p class="font-semibold">
+${sepencarianAkadDate || "-"}
+${sepencarianAkadTime || ""}
+</p>
+
+<hr class="my-3">
+
+<p class="text-sm text-gray-500">
+Stamping
+</p>
+
+<p class="font-semibold">
+${sepencarianStampDate || "-"}
+</p>
+
+<p class="text-sm">
+${sepencarianStampRef || ""}
+</p>
+
+<hr class="my-3">
+
+<p class="text-sm text-gray-500">
+Diserahkan Kepada AQM
+</p>
+
+<p class="font-semibold">
+${sepencarianHandoverDate || "-"}
+</p>
+
+<p class="text-sm">
+${sepencarianHandoverRemarks || ""}
+</p>
+
+<hr class="my-3">
+
+<p class="text-sm text-gray-500">
+AQM Terima Dokumen
+</p>
+
+<p class="font-semibold text-green-700">
+${receivedDate || "-"}
+</p>
+
+<hr class="my-3">
 
         <button
             id="btnCompleteSepencarian"
@@ -1256,14 +1333,53 @@ class="w-full border rounded-lg p-2 mb-2">
         </h3>
 
         <p class="text-sm text-gray-500">
-            Tarikh Lengkap
-        </p>
+Tarikh Akad
+</p>
 
-        <p class="font-semibold mb-6">
-            ${mawarisCompletedAt
-                ? new Date(mawarisCompletedAt).toLocaleDateString("ms-MY")
-                : "-"}
-        </p>
+<p class="font-semibold">
+${mawarisAkadDate || "-"}
+${mawarisAkadTime || ""}
+</p>
+
+<hr class="my-3">
+
+<p class="text-sm text-gray-500">
+Stamping
+</p>
+
+<p class="font-semibold">
+${mawarisStampDate || "-"}
+</p>
+
+<p class="text-sm">
+${mawarisStampRef || ""}
+</p>
+
+<hr class="my-3">
+
+<p class="text-sm text-gray-500">
+Diserahkan Kepada AQM
+</p>
+
+<p class="font-semibold">
+${mawarisHandoverDate || "-"}
+</p>
+
+<p class="text-sm">
+${mawarisHandoverRemarks || ""}
+</p>
+
+<hr class="my-3">
+
+<p class="text-sm text-gray-500">
+AQM Terima Dokumen
+</p>
+
+<p class="font-semibold text-green-700">
+${receivedDate || "-"}
+</p>
+
+<hr class="my-3">
 
         <button
             id="btnCompleteMawaris"
