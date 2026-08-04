@@ -346,10 +346,6 @@ userData.wasiatPaymentStatus==="paid"
 
 </div>
 
-</div>
-
-</div>
-
 <div class="mt-6">
 
 <p class="text-xs uppercase text-white/50 mb-2">
@@ -376,9 +372,12 @@ Status Dokumen
 <b>
 ${currentStatus}
 </b>
-</div>
 
-</div>
+</div> <!-- space-y -->
+
+</div> <!-- Maklumat Dokumen -->
+
+</div> <!-- flex-1 -->
 
 <div class="ml-8">
 
@@ -388,7 +387,9 @@ ${(userData.nama || "U")[0]}
 
 </div>
 
-</div>
+</div> <!-- avatar -->
+
+</div> <!-- flex justify-between -->
 
 <hr class="border-white/20 my-6">
 
@@ -510,10 +511,9 @@ Lihat Dokumen
 
 }
 
-</div>
+</div> <!-- grid -->
 
-</div>
-
+</div> <!-- card -->
 `;
 
 const done = (status)=>{
