@@ -308,10 +308,30 @@ let sepencarianApprovedDate = "-";
 let sepencarianExpiryDate = "-";
 let sepencarianBakiHari = 0;
 
+let sepencarianAkadDate = "";
+let sepencarianAkadTime = "";
+
+let sepencarianData = {};
+  
+let sepencarianStampDate = "";
+let sepencarianStampRef = "";
+
+let sepencarianHandoverDate = "";
+let sepencarianHandoverRemarks = "";
+  
 if (sepencarianSnap.exists()) {
 
     const sepencarianData = sepencarianSnap.data();
 
+sepencarianAkadDate = sepencarianData.akadDate || "";
+sepencarianAkadTime = sepencarianData.akadTime || "";
+
+sepencarianStampDate = sepencarianData.stampingDate || "";
+sepencarianStampRef = sepencarianData.stampingRef || "";
+
+sepencarianHandoverDate = sepencarianData.handoverDate || "";
+sepencarianHandoverRemarks = sepencarianData.handoverRemarks || "";
+  
     sepencarianStatus = sepencarianData.status || "DRAFT";
     sepencarianDocRef = sepencarianData.docRef || "-";
 
@@ -347,10 +367,30 @@ let mawarisApprovedDate = "-";
 let mawarisExpiryDate = "-";
 let mawarisBakiHari = 0;
 
+let mawarisAkadDate = "";
+let mawarisAkadTime = "";
+
+let mawarisData = {};
+  
+let mawarisStampDate = "";
+let mawarisStampRef = "";
+
+let mawarisHandoverDate = "";
+let mawarisHandoverRemarks = "";
+  
 if (mawarisSnap.exists()) {
 
     const mawarisData = mawarisSnap.data();
 
+mawarisAkadDate = mawarisData.akadDate || "";
+mawarisAkadTime = mawarisData.akadTime || "";
+
+mawarisStampDate = mawarisData.stampingDate || "";
+mawarisStampRef = mawarisData.stampingRef || "";
+
+mawarisHandoverDate = mawarisData.handoverDate || "";
+mawarisHandoverRemarks = mawarisData.handoverRemarks || "";
+  
     mawarisStatus = mawarisData.status || "DRAFT";
     mawarisDocRef = mawarisData.docRef || "-";
 
