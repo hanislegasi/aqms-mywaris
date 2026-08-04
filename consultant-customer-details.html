@@ -249,10 +249,30 @@ let hibahApprovedDate = "-";
 let hibahExpiryDate = "-";
 let hibahBakiHari = 0;
 
+let hibahAkadDate = "";
+let hibahAkadTime = "";
+
+let hibahData = {};
+  
+let hibahStampDate = "";
+let hibahStampRef = "";
+
+let hibahHandoverDate = "";
+let hibahHandoverRemarks = "";
+  
 if (hibahSnap.exists()) {
 
     const hibahData = hibahSnap.data();
 
+hibahAkadDate = hibahData.akadDate || "";
+hibahAkadTime = hibahData.akadTime || "";
+
+hibahStampDate = hibahData.stampingDate || "";
+hibahStampRef = hibahData.stampingRef || "";
+
+hibahHandoverDate = hibahData.handoverDate || "";
+hibahHandoverRemarks = hibahData.handoverRemarks || "";
+  
     hibahStatus = hibahData.status || "DRAFT";
     hibahDocRef = hibahData.docRef || "-";
 
