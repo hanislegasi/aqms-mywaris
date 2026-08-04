@@ -320,6 +320,17 @@ let hibahCourier = "";
 let hibahTrackingNo = "";
 let hibahReceiver = "";
 let hibahRemarks = "";
+
+let hibahAkadDate = "";
+let hibahAkadTime = "";
+
+let hibahStampDate = "";
+let hibahStampRef = "";
+
+let hibahHandoverDate = "";
+let hibahHandoverRemarks = "";
+
+let receivedDate = "";
   
 if(hibahSnap.exists()){
 
@@ -330,6 +341,18 @@ const printedAt = hibahData.printedAt || "";
   
 hibahPrintedAt = hibahData.printedAt || null;
 hibahSentAt = hibahData.sentAt || null;
+
+hibahAkadDate = hibahData.akadDate || "";
+hibahAkadTime = hibahData.akadTime || "";
+
+hibahStampDate = hibahData.stampingDate || "";
+hibahStampRef = hibahData.stampingRef || "";
+
+hibahHandoverDate = hibahData.handoverDate || "";
+hibahHandoverRemarks = hibahData.handoverRemarks || "";
+
+receivedDate = hibahData.receivedDate || "";  
+
 hibahCompletedAt = hibahData.completedAt || null;
 
 hibahDeliveryMethod = hibahData.deliveryMethod || "";
@@ -402,6 +425,17 @@ let sepencarianCourier = "";
 let sepencarianTrackingNo = "";
 let sepencarianReceiver = "";
 let sepencarianRemarks = "";
+
+let sepencarianAkadDate = "";
+let sepencarianAkadTime = "";
+
+let sepencarianStampDate = "";
+let sepencarianStampRef = "";
+
+let sepencarianHandoverDate = "";
+let sepencarianHandoverRemarks = "";
+
+let receivedDate = "";
   
 if(sepencarianSnap.exists()){
 
@@ -412,6 +446,18 @@ const printedAt = sepencarianData.printedAt || "";
   
 sepencarianPrintedAt = sepencarianData.printedAt || null;
 sepencarianSentAt = sepencarianData.sentAt || null;
+
+sepencarianAkadDate = sepencarianData.akadDate || "";
+sepencarianAkadTime = sepencarianData.akadTime || "";
+
+sepencarianStampDate = sepencarianData.stampingDate || "";
+sepencarianStampRef = sepencarianData.stampingRef || "";
+
+sepencarianHandoverDate = sepencarianData.handoverDate || "";
+sepencarianHandoverRemarks = sepencarianData.handoverRemarks || "";
+
+receivedDate = sepencarianData.receivedDate || "";
+  
 sepencarianCompletedAt = sepencarianData.completedAt || null;
 
 sepencarianDeliveryMethod = sepencarianData.deliveryMethod || "";
@@ -484,6 +530,17 @@ let mawarisCourier = "";
 let mawarisTrackingNo = "";
 let mawarisReceiver = "";
 let mawarisRemarks = "";
+
+let mawarisAkadDate = "";
+let mawarisAkadTime = "";
+
+let mawarisStampDate = "";
+let mawarisStampRef = "";
+
+let mawarisHandoverDate = "";
+let mawarisHandoverRemarks = "";
+
+let receivedDate = "";
   
 if(mawarisSnap.exists()){
 
@@ -494,6 +551,18 @@ const printedAt = mawarisData.printedAt || "";
   
 mawarisPrintedAt = mawarisData.printedAt || null;
 mawarisSentAt = mawarisData.sentAt || null;
+
+mawarisAkadDate = mawarisData.akadDate || "";
+mawarisAkadTime = mawarisData.akadTime || "";
+
+mawarisStampDate = mawarisData.stampingDate || "";
+mawarisStampRef = mawarisData.stampingRef || "";
+
+mawarisHandoverDate = mawarisData.handoverDate || "";
+mawarisHandoverRemarks = mawarisData.handoverRemarks || "";
+
+receivedDate = mawarisData.receivedDate || "";
+  
 mawarisCompletedAt = mawarisData.completedAt || null;
 
 mawarisDeliveryMethod = mawarisData.deliveryMethod || "";
