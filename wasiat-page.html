@@ -250,11 +250,9 @@ renewalAlert +
 
 <div class="flex justify-between items-start">
 
-
-
 <div class="flex-1">
 
-<p class="text-xs uppercase tracking-widest text-white/60">
+<p class="text-sm font-bold uppercase tracking-widest text-white/60">
 Profil Pewasiat
 </p>
 
@@ -262,11 +260,23 @@ Profil Pewasiat
 ${userData.nama || "-"}
 </h2>
 
+</div>
+
+<div class="ml-8">
+
+<div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold">
+
+${(userData.nama || "U")[0]}
+
+</div> <!-- avatar -->
+
+</div>
+
 <div class="mt-5 space-y-3">
 
 <div>
 
-<p class="text-xs uppercase text-white/50 mb-2">
+<p class="text-xs font-bold uppercase text-white/50 mb-2">
 Maklumat Peribadi
 </p>
 
@@ -289,7 +299,7 @@ Maklumat Peribadi
 
 <div class="mt-6">
 
-<p class="text-xs uppercase text-white/50 mb-2">
+<p class="text-sm font-bold uppercase text-white/50 mb-2">
 Maklumat Keahlian
 </p>
 
@@ -348,7 +358,7 @@ userData.wasiatPaymentStatus==="paid"
 
 <div class="mt-6">
 
-<p class="text-xs uppercase text-white/50 mb-2">
+<p class="text-sm font-bold uppercase text-white/50 mb-2">
 Maklumat Dokumen
 </p>
 
@@ -379,15 +389,6 @@ ${currentStatus}
 
 </div> <!-- flex-1 -->
 
-<div class="ml-8">
-
-<div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold">
-
-${(userData.nama || "U")[0]}
-
-</div>
-
-</div> <!-- avatar -->
 
 </div> <!-- flex justify-between -->
 
@@ -493,13 +494,9 @@ d="M9 3v6h6"/>
 
 <div>
 
-<div>
-
 <p class="font-bold text-lg">
 Lihat Dokumen
 </p>
-
-</div>
 
 </div>
 
