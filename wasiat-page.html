@@ -288,10 +288,22 @@ Maklumat Peribadi
 <b>${userData.ic || "-"}</b>
 </div>
 
-<div class="flex justify-between border-b border-white/10 pb-3">
+<div class="flex justify-between border-b border-white/10 pb-2">
 <span class="text-white/70">Telefon</span>
 <b>${userData.telefon || "-"}</b>
 </div>
+
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-white/70">Emel</span>
+<b>${userData.email || "-"}</b>
+</div>
+
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-white/70">Alamat</span>
+
+<b class="text-right max-w-[60%]">
+${userData.alamat || "-"}
+</b>
 
 </div>
 
