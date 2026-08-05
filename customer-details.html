@@ -168,6 +168,23 @@ window.location.search
 const userId =
 params.get("id");
 
+let consultantData = {};
+
+if(user.referral){
+
+    const consultantQuery = query(
+        collection(db,"consultants"),
+        where("consultantNo","==",user.referral)
+    );
+
+    const consultantSnap = await getDocs(consultantQuery);
+
+    if(!consultantSnap.empty){
+        consultantData = consultantSnap.docs[0].data();
+    }
+
+}
+  
 // ===== Workflow Status =====
 let wasiatStatus = "BELUM DIISI";
 let hibahStatus = "BELUM DIISI";
@@ -631,46 +648,41 @@ Maklumat Keahlian
 <div class="grid grid-cols-2 gap-4">
 
 <div>
-<p class="text-gray-500 text-sm">
-No Ahli
-</p>
+<p class="text-gray-500 text-sm">No Ahli</p>
 <p id="memberNo"></p>
 </div>
 
 <div>
-<p class="text-gray-500 text-sm">
-Tarikh Daftar
-</p>
+<p class="text-gray-500 text-sm">Tarikh Daftar</p>
 <p id="memberSince"></p>
 </div>
 
 <div>
-<p class="text-gray-500 text-sm">
-Referral
-</p>
-<p id="referral"></p>
+<p class="text-gray-500 text-sm">Alamat</p>
+<p id="alamatRingkas"></p>
 </div>
 
 <div>
-    <p class="text-gray-500 text-sm">
-        Telefon
-    </p>
-    <p id="telefon"></p>
+<p class="text-gray-500 text-sm">Telefon</p>
+<p id="telefon"></p>
 </div>
 
 <div>
-<p class="text-gray-500 text-sm">
-Status
-</p>
+<p class="text-gray-500 text-sm">Referral</p>
+<p id="consultantName"></p>
+</div>
+
+<div>
+<p class="text-gray-500 text-sm">Telefon Perunding</p>
+<p id="consultantPhone"></p>
+</div>
+
+<div>
+<p class="text-gray-500 text-sm">Status</p>
 <p id="memberStatus"></p>
 </div>
 
 </div>
-
-</div>
-
-</div>
-
 
 ${wasiatSnap.exists() ? `
 
@@ -1416,6 +1428,18 @@ user.referral || "-";
 
 document.getElementById("telefon").innerHTML =
 user.telefon || "-";
+
+document.getElementById("alamatRingkas").innerHTML =
+[
+    currentData.bandar,
+    currentData.negeri
+].filter(Boolean).join(", ") || "-";
+
+document.getElementById("consultantName").innerHTML =
+consultantData.nama || "-";
+
+document.getElementById("consultantPhone").innerHTML =
+consultantData.telefon || "-";
   
 document.getElementById("memberStatus").innerHTML =
 (
