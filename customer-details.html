@@ -168,23 +168,7 @@ window.location.search
 const userId =
 params.get("id");
 
-let consultantData = {};
-
-if(user.referral){
-
-    const consultantQuery = query(
-        collection(db,"consultants"),
-        where("consultantNo","==",user.referral)
-    );
-
-    const consultantSnap = await getDocs(consultantQuery);
-
-    if(!consultantSnap.empty){
-        consultantData = consultantSnap.docs[0].data();
-    }
-
-}
-  
+ 
 // ===== Workflow Status =====
 let wasiatStatus = "BELUM DIISI";
 let hibahStatus = "BELUM DIISI";
@@ -203,6 +187,23 @@ if(docSnap.exists()){
 const user =
 docSnap.data();
 
+let consultantData = {};
+
+if(user.referral){
+
+    const consultantQuery = query(
+        collection(db,"consultants"),
+        where("consultantNo","==",user.referral)
+    );
+
+    const consultantSnap = await getDocs(consultantQuery);
+
+    if(!consultantSnap.empty){
+        consultantData = consultantSnap.docs[0].data();
+    }
+
+}
+  
 // WASIAT STATUS
 const wasiatSnap =
 await getDoc(
