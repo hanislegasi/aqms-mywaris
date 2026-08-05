@@ -77,6 +77,61 @@ placeholder="Alamat"
 class="w-full border rounded-lg p-3"></textarea>
 
 <input
+id="alamat1"
+type="text"
+placeholder="Alamat Baris 1 (No. Rumah, Nama Jalan)"
+class="w-full border rounded-lg p-3">
+
+<input
+id="alamat2"
+type="text"
+placeholder="Alamat Baris 2 (Taman, Kampung, Apartment)"
+class="w-full border rounded-lg p-3 mt-4">
+
+<div class="grid grid-cols-3 gap-4 mt-4">
+
+<input
+id="poskod"
+type="text"
+placeholder="Poskod"
+class="w-full border rounded-lg p-3">
+
+<input
+id="bandar"
+type="text"
+placeholder="Bandar"
+class="w-full border rounded-lg p-3">
+
+<select
+id="negeri"
+class="w-full border rounded-lg p-3">
+
+<option value="" selected disabled>
+Negeri
+</option>
+
+<option>Johor</option>
+<option>Kedah</option>
+<option>Kelantan</option>
+<option>Melaka</option>
+<option>Negeri Sembilan</option>
+<option>Pahang</option>
+<option>Perak</option>
+<option>Perlis</option>
+<option>Pulau Pinang</option>
+<option>Sabah</option>
+<option>Sarawak</option>
+<option>Selangor</option>
+<option>Terengganu</option>
+<option>WP Kuala Lumpur</option>
+<option>WP Labuan</option>
+<option>WP Putrajaya</option>
+
+</select>
+
+</div>
+  
+<input
 type="text"
 id="telefon"
 placeholder="No Telefon"
@@ -1029,8 +1084,7 @@ Nama Lampiran
 type="text"
 id="namaLampiran"
 class="w-full border rounded-lg p-2 mb-3"
-placeholder="Contoh: Salinan Geran Rumah"
-required>
+placeholder="Contoh: Salinan Geran Rumah">
 
 </div>
   
@@ -1190,12 +1244,24 @@ if(docSnap.exists()){
   document.getElementById("ic").value =
     data.ic || "";
 
-  document.getElementById("telefon").value =
+    document.getElementById("alamat1").value =
+data.alamat1 || "";
+
+document.getElementById("alamat2").value =
+data.alamat2 || "";
+
+document.getElementById("poskod").value =
+data.poskod || "";
+
+document.getElementById("bandar").value =
+data.bandar || "";
+
+document.getElementById("negeri").value =
+data.negeri || "";
+
+    document.getElementById("telefon").value =
     data.telefon || "";
-
-  document.getElementById("alamat").value =
-data.alamat || "";
-
+  
 document.getElementById("namaWasi1").value =
 data.namaWasi1 || "";
 
@@ -3215,6 +3281,21 @@ document.getElementById(
 )?.value || ""
 
 }; 
+
+const alamat1 =
+document.getElementById("alamat1").value.trim();
+
+const alamat2 =
+document.getElementById("alamat2").value.trim();
+
+const poskod =
+document.getElementById("poskod").value.trim();
+
+const bandar =
+document.getElementById("bandar").value.trim();
+
+const negeri =
+document.getElementById("negeri").value.trim();
           
           await setDoc(
 
@@ -3233,8 +3314,18 @@ document.getElementById(
   ic:
   document.getElementById("ic").value,
 
-  alamat:
-  document.getElementById("alamat").value,
+alamat1: alamat1,
+alamat2: alamat2,
+poskod: poskod,
+bandar: bandar,
+negeri: negeri,
+
+alamat: [
+alamat1,
+alamat2,
+`${poskod} ${bandar}`.trim(),
+negeri
+].filter(Boolean).join(", "),
 
   telefon:
   document.getElementById("telefon").value,
