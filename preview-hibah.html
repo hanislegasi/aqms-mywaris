@@ -588,6 +588,15 @@ verifyBtn.addEventListener("click", async () => {
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
+const alamatPenuh = [
+        data.alamat1,
+        data.alamat2,
+        `${data.poskod || ""} ${data.bandar || ""}`.trim(),
+        data.negeri
+    ]
+    .filter(Boolean)
+    .join(", ");
+                        
 if (data.status === "VERIFIED") {
 
     document.getElementById("verificationSection").innerHTML = `
@@ -608,8 +617,17 @@ if (data.status === "VERIFIED") {
 window.wasiatData = data;
 
 if (
-    data.status !== "APPROVED" &&
-    data.status !== "VERIFIED"
+    ![
+        "APPROVED",
+        "VERIFIED",
+        "PRINTED",
+        "SENT",
+        "AKAD",
+        "STAMPING",
+        "HANDOVER",
+        "RECEIVED",
+        "COMPLETED"
+    ].includes(data.status)
 ) {
 
    document.body.innerHTML = `
@@ -821,7 +839,7 @@ approvedDate
                         document.getElementById("namaTable").innerHTML = data.nama || "-";
                         document.getElementById("icTable").innerHTML = data.ic || "-";
                         document.getElementById("telefonTable").innerHTML = data.telefon || "-";
-                        document.getElementById("alamatTable").innerHTML = data.alamat || "-";
+                        document.getElementById("alamatTable").innerHTML = alamatPenuh || "-";
                         document.getElementById("kodTable").innerHTML = userData?.referral || "-";
                         document.getElementById("approvedTable").innerHTML =
 approvedDate
@@ -1514,7 +1532,7 @@ data.ic || "-"
 
 .replaceAll(
 "{{ALAMAT_PEWASIAT}}",
-data.alamat || "-"
+alamatPenuh || "-"
 )
                             
 .replaceAll(
@@ -1800,7 +1818,7 @@ generatePemegangAmanah(item)
         
 .replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
 .replaceAll("{{IC_PEMBERI}}", data.ic || "-")
-.replaceAll("{{ALAMAT_PEMBERI}}", data.alamat || "-")
+.replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-")
 .replaceAll("{{TELEFON_PEMBERI}}", data.telefon || "-")
 
 .replaceAll("{{IC_PENERIMA}}", pihak.ic || "-")
