@@ -436,6 +436,15 @@ if(!response.ok){
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
+const alamatPenuh = [
+        data.alamat1,
+        data.alamat2,
+        `${data.poskod || ""} ${data.bandar || ""}`.trim(),
+        data.negeri
+    ]
+    .filter(Boolean)
+    .join(", ");
+                        
 const userDoc = await getDoc(
     doc(db, "users", userId)
 );
@@ -694,7 +703,7 @@ approvedDate
                         document.getElementById("namaTable").innerHTML = data.nama || "-";
                         document.getElementById("icTable").innerHTML = data.ic || "-";
                         document.getElementById("telefonTable").innerHTML = data.telefon || "-";
-                        document.getElementById("alamatTable").innerHTML = data.alamat || "-";
+                        document.getElementById("alamatTable").innerHTML = alamatPenuh || "-";
                         document.getElementById("kodTable").innerHTML = userData?.referral || "-";
                         document.getElementById("approvedTable").innerHTML =
 approvedDate
@@ -1387,7 +1396,7 @@ data.ic || "-"
 
 .replaceAll(
 "{{ALAMAT_PEWASIAT}}",
-data.alamat || "-"
+alamatPenuh || "-"
 )
                             
 .replaceAll(
@@ -1674,7 +1683,7 @@ generatePemegangAmanah(item)
         
 .replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
 .replaceAll("{{IC_PEMBERI}}", data.ic || "-")
-.replaceAll("{{ALAMAT_PEMBERI}}", data.alamat || "-")
+.replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-")
 .replaceAll("{{TELEFON_PEMBERI}}", data.telefon || "-")
 
 .replaceAll("{{IC_PENERIMA}}", pihak.ic || "-")
@@ -1750,7 +1759,7 @@ data.ic || "-"
 
 .replaceAll(
 "{{ALAMAT_PEMILIK}}",
-data.alamat || "-"
+alamatPenuh || "-"
 )
 
 .replaceAll(
