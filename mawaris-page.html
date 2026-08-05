@@ -28,6 +28,7 @@ Memuatkan...
 
 </div>
 
+
 </div>
 
 </div>
@@ -42,86 +43,27 @@ class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
 
 </a>
   
-<div
-id="notifPanel"
-class="hidden absolute top-20 right-5 w-96 bg-white shadow-2xl rounded-2xl p-4 z-50">
-
-<h3 class="font-bold mb-3">
-Notifikasi
-</h3>
-
-<div id="notifList"></div>
-
-</div>
-  
+ 
 
 <h2 class="font-bold text-xl mb-4">
 Mawaris
 </h2>
 
-<div
-id="profileCard"
-class="bg-white rounded-2xl shadow p-5 mb-6">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
 
-Loading...
+    <div
+    id="profileCard"
+    class="h-full">
+    Loading...
+    </div>
 
-</div>
-  
-
-<div
-id="mawarisTimeline"
-class="mb-6">
-</div>
-  
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-
-<a
-id="mawarisButton"
-href="payment-mawaris.html"
-class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-gray-100 min-h-[120px]">
-<div class="flex items-center gap-4">
-
-  <!-- ICON -->
-  <div class="bg-[#153638]/10 p-3 rounded-xl">
-
-    <svg xmlns="http://www.w3.org/2000/svg"
-class="w-8 h-8"
-fill="none"
-viewBox="0 0 24 24"
-stroke="currentColor">
-
-<path
-stroke-linecap="round"
-stroke-linejoin="round"
-stroke-width="2"
-d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-1.042-.133-2.052-.382-3.016z"/>
-
-</svg>
-
-  </div>
-
-  <div>
-
-    <p class="text-base md:text-lg font-semibold">
-      Mawaris
-    </p>
-
-    <p
-      id="mawarisStatus"
-      class="text-xs md:text-sm text-gray-500 mt-1">
-
-      Memuatkan status...
-
-    </p>
-
-  </div>
+    <div
+    id="mawarisTimeline"
+    class="h-full">
+    </div>
 
 </div>
-
-</a>
-
  
-</div>
 
 <hr class="my-8">
 
@@ -176,12 +118,14 @@ import {
 getFirestore,
 doc,
 getDoc,
-getDocs,
-collection,
 updateDoc,
-query  
+serverTimestamp,
+collection,
+getDocs,
+query,
+where
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";  
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
 
 const firebaseConfig = {
 
@@ -203,16 +147,13 @@ getAuth(app);
 const db =
 getFirestore(app);
 
-let currentUser = null;  
-
+  
 onAuthStateChanged(auth, async(user)=>{
 
 if(!user){
 window.location.href="login.html";
 return;
 }
-
-currentUser = user;
 
 const docSnap =
 await getDoc(
@@ -223,6 +164,19 @@ if(docSnap.exists()){
 
 const userData =
 docSnap.data();
+
+const consultantQuery = query(
+    collection(db, "consultants"),
+    where("consultantNo", "==", userData.referral)
+);
+
+const consultantSnap = await getDocs(consultantQuery);
+
+let consultantData = {};
+
+if (!consultantSnap.empty) {
+    consultantData = consultantSnap.docs[0].data();
+}
   
 document.getElementById(
 "namaUser"
@@ -302,96 +256,34 @@ Perbaharui Sekarang
 
 }
   
-if(mawarisData.docRef){
 
-document.getElementById(
-"mawarisStatus"
-).innerHTML =
-mawarisData.docRef;
-
-}else{
-
-document.getElementById(
-"mawarisStatus"
-).innerHTML =
-"DRAFT";
-
-}
-
+const currentStatus = mawarisData.status || "DRAFT";
   
-document.getElementById(
-"profileCard"
-).innerHTML =
+document.getElementById("profileCard").innerHTML =
 
 renewalAlert +
 
 `
 
-<div
-class="bg-gradient-to-r from-[#153638] to-[#24575a]
-text-white rounded-2xl p-6 mb-6 shadow">
-<div class="flex justify-between items-center">
+<div class="bg-gradient-to-r from-[#153638] to-[#24575a] text-white rounded-2xl p-6 shadow h-full">
 
-<div>
+<div class="flex justify-between items-start">
 
-<p class="text-sm opacity-80">
-Profil Pemawaris
+<div class="flex-1">
+
+<p class="text-sm font-bold uppercase tracking-widest text-white/60">
+Profil Pewasiat
 </p>
 
-<h2 class="text-2xl font-bold mt-1">
+<h2 class="text-2xl font-bold mt-2">
 ${userData.nama || "-"}
 </h2>
 
-<p class="opacity-90 mt-1">
-${userData.ic || "-"}
-</p>
-
-<p class="opacity-90">
-${userData.telefon || "-"}
-</p>
-
-<p class="opacity-80 text-sm">
-No Ahli: ${userData.memberNo || "Belum Aktif"}
-</p>
-
-<p class="opacity-80 text-sm">
-Tamat Keahlian:
-${
-mawarisData.expiryDate
-? new Date(mawarisData.expiryDate)
-.toLocaleDateString("ms-MY")
-: "-"
-}
-</p>
-
-<p class="opacity-80 text-sm">
-Baki:
-${bakiHari} Hari
-</p>
-
-<span class="
-inline-block
-mt-2
-px-3
-py-1
-rounded-full
-bg-white/20
-text-sm">
-
-${
-bakiHari <= 0
-? "KEAHLIAN TAMAT"
-: userData.mawarisPaymentStatus === "paid"
-? "AHLI AKTIF"
-: "PROSPEK"
-}
-
-</span>
-
 </div>
 
-<div
-class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold">
+<div class="ml-8">
+
+<div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold">
 
 ${(userData.nama || "U")[0]}
 
@@ -401,10 +293,275 @@ ${(userData.nama || "U")[0]}
 
 </div>
 
-`;
+<div class="mt-5 space-y-3">
+<div>
 
-  
-const currentStatus = mawarisData.status || "DRAFT";
+<p class="text-sm font-bold uppercase text-white/50 mb-2">
+Maklumat Peribadi
+</p>
+
+<div class="space-y-3 text-sm">
+
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-white/70">Telefon</span>
+<b>${userData.telefon || "-"}</b>
+</div>
+
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-white/70">Emel</span>
+<b>${userData.email || "-"}</b>
+</div>
+
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-white/70">Alamat</span>
+
+<b class="text-right max-w-[60%]">
+${
+[
+mawarisData.alamat1,
+mawarisData.alamat2,
+`${mawarisData.poskod || ""} ${mawarisData.bandar || ""}`.trim(),
+mawarisData.negeri
+].filter(Boolean).join(", ") || "-"
+}
+</b>
+
+</div>
+
+</div>
+
+
+<div class="mt-6">
+
+<p class="text-sm font-bold uppercase text-white/50 mb-2">
+Maklumat Keahlian
+</p>
+
+<div class="space-y-2 text-sm">
+
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-white/70">No. Ahli</span>
+<b>${userData.memberNo || "-"}</b>
+</div>
+
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-white/70">Tamat Keahlian</span>
+<b>
+${
+mawarisData.expiryDate
+?
+new Date(mawarisData.expiryDate).toLocaleDateString("ms-MY")
+:
+"-"
+}
+</b>
+</div>
+
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-white/70">Baki</span>
+<b>${bakiHari} Hari</b>
+</div>
+
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-white/70">Status</span>
+
+<span class="inline-block px-3 py-1 rounded-full bg-white/20 text-xs">
+
+${
+bakiHari<=0
+?
+"KEAHLIAN TAMAT"
+:
+userData.mawarisPaymentStatus==="paid"
+?
+"AHLI AKTIF"
+:
+"PROSPEK"
+}
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mt-6">
+
+<p class="text-sm font-bold uppercase text-white/50 mb-2">
+Pegawai Perunding
+</p>
+
+<div class="space-y-2 text-sm">
+
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-white/70">Nama</span>
+<b>${consultantData.nama || "-"}</b>
+</div>
+
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-white/70">Telefon</span>
+<b>${consultantData.telefon || "-"}</b>
+</div>
+
+</div>
+
+</div>
+
+<div class="mt-6">
+
+<p class="text-sm font-bold uppercase text-white/50 mb-2">
+Maklumat Dokumen
+</p>
+
+<div class="space-y-3 text-sm">
+
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-white/70">
+No. Dokumen
+</span>
+
+<b>
+${mawarisData.docRef || "-"}
+</b>
+</div>
+
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-white/70">
+Status Dokumen
+</span>
+
+<b>
+${currentStatus}
+</b>
+
+</div> <!-- space-y -->
+
+</div> <!-- Maklumat Dokumen -->
+
+</div> <!-- flex-1 -->
+
+
+</div> <!-- flex justify-between -->
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5">
+
+<a
+id="mawarisButton"
+href="payment-mawaris.html"
+class="bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl px-3 py-2.5 flex items-center gap-4 transition">
+
+<div class="flex items-center gap-4">
+
+<div class="bg-white/20 p-2.5 rounded-xl">
+
+<svg xmlns="http://www.w3.org/2000/svg"
+class="w-7 h-7"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-1.042-.133-2.052-.382-3.016z"/>
+
+</svg>
+
+</div>
+
+<div>
+
+<div class="flex items-center gap-2">
+
+<p class="font-semibold text-base">
+Mawaris
+</p>
+
+<span id="editIcon"></span>
+
+</div>
+
+<p
+id="mawarisStatus"
+class="hidden">
+</p>
+
+</div>
+
+</div>
+
+</a>
+
+${
+bakiHari<=0
+
+?
+
+`
+
+<a
+href="renewal.html"
+class="bg-red-600 hover:bg-red-700 rounded-2xl p-5 flex items-center justify-center font-semibold">
+
+Perbaharui Keahlian
+
+</a>
+
+`
+
+:
+
+`
+
+<a
+href="preview-mawaris.html"
+class="bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl px-3 py-2.5 flex items-center gap-4 transition">
+
+<div class="flex items-center gap-4">
+
+<div class="bg-green-600 p-2.5 rounded-xl">
+
+<svg xmlns="http://www.w3.org/2000/svg"
+fill="none"
+viewBox="0 0 24 24"
+stroke-width="1.8"
+stroke="currentColor"
+class="w-6 h-6 text-white">
+
+<path stroke-linecap="round"
+stroke-linejoin="round"
+d="M19.5 21h-15A2.25 2.25 0 012.25 18.75v-13.5A2.25 2.25 0 014.5 3h9l6 6v9.75A2.25 2.25 0 0119.5 21z"/>
+
+<path stroke-linecap="round"
+stroke-linejoin="round"
+d="M9 3v6h6"/>
+
+</svg>
+
+</div>   <!-- <<< NI YANG TERTINGGAL -->
+<div>
+
+<p class="font-semibold text-base">
+Lihat Dokumen
+</p>
+
+</div>
+
+</div>
+
+</a>
+
+`
+
+}
+
+</div> <!-- grid -->
+
+</div> <!-- card -->
+`;
 
 const done = (status)=>{
 
@@ -412,212 +569,148 @@ const order=[
 "APPROVED",
 "PRINTED",
 "SENT",
-"COMPLETED"
+"AKAD",
+"STAMPING",
+"HANDOVER",
+"COMPLETED",
+"RECEIVED"
 ];
 
 return order.indexOf(currentStatus)>=order.indexOf(status);
 
 };
 
+function timelineItem(done,title,date,extra=""){
+
+return`
+
+<div class="flex gap-4 mb-6">
+
+<div class="flex flex-col items-center">
+
+<div class="${
+done
+? "bg-green-600 text-white"
+: "bg-gray-200 text-gray-500"
+} w-10 h-10 rounded-full flex items-center justify-center font-bold">
+
+✓
+
+</div>
+
+
+
+</div>
+
+<div class="flex-1">
+
+<h4 class="font-semibold ${
+done
+? "text-green-700"
+: "text-gray-500"
+}">
+
+${title}
+
+</h4>
+
+<p class="text-sm text-gray-500">
+
+${date}
+
+</p>
+
+<div class="text-sm text-gray-600 mt-1">
+
+${extra}
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+  
 document.getElementById("mawarisTimeline").innerHTML=`
 
 <div class="bg-white rounded-2xl shadow p-6">
 
-<h3 class="font-bold text-lg mb-6">
-
-Status Dokumen Mawaris
-
+<h3 class="font-bold text-lg mb-5">
+Status Timeline
 </h3>
 
-<div class="flex items-center justify-between">
+${timelineItem(
+done("APPROVED"),
+"Approved",
+mawarisData.approvedAt
+? new Date(mawarisData.approvedAt).toLocaleDateString("ms-MY")
+: "-"
+)}
 
-<div class="text-center flex-1">
+${timelineItem(
+done("PRINTED"),
+"Printed",
+mawarisData.printedAt
+? new Date(mawarisData.printedAt).toLocaleDateString("ms-MY")
+: "-"
+)}
 
-<div class="${done("APPROVED")?"bg-green-600 text-white":"bg-gray-200"} w-12 h-12 rounded-full flex items-center justify-center mx-auto">
+${timelineItem(
+done("SENT"),
+"Sent",
+mawarisData.sentAt
+? new Date(mawarisData.sentAt).toLocaleDateString("ms-MY")
+: "-",
+`Courier : ${mawarisData.courier || "-"}<br>
+Tracking : ${mawarisData.trackingNo || "-"}`
+)}
 
-<svg xmlns="http://www.w3.org/2000/svg"
-class="w-6 h-6"
-fill="none"
-viewBox="0 0 24 24"
-stroke="currentColor">
+${timelineItem(
+done("AKAD"),
+"Akad",
+mawarisData.akadDate || "-",
+mawarisData.akadTime || ""
+)}
 
-<path
-stroke-linecap="round"
-stroke-linejoin="round"
-stroke-width="2"
-d="M9 12.75L11.25 15 15 9.75M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/>
+${timelineItem(
+done("STAMPING"),
+"Stamping",
+mawarisData.stampingDate || "-",
+mawarisData.stampingRef || ""
+)}
 
-</svg>
+${timelineItem(
+done("HANDOVER"),
+"Diserahkan Kepada AQM",
+mawarisData.handoverDate || "-",
+mawarisData.handoverRemarks || ""
+)}
 
-</div>
+${timelineItem(
+done("RECEIVED"),
+"AQM Terima Dokumen",
+mawarisData.receivedDate || "-",
+!mawarisData.receivedDate
+? `
+<input
+type="date"
+id="receivedDate"
+class="border rounded-lg p-2 mt-2 w-full">
 
-<p class="mt-2 text-sm font-medium">
+<button
+id="confirmReceived"
+class="bg-green-600 hover:bg-green-700 text-white rounded-lg mt-2 w-full py-2">
 
-Approved
+Sah Terima
 
-</p>
-
-</div>
-
-<div class="h-1 flex-1 ${done("PRINTED")?"bg-green-600":"bg-gray-300"}"></div>
-
-<div class="text-center flex-1">
-
-<div class="${done("PRINTED")?"bg-green-600 text-white":"bg-gray-200"} w-12 h-12 rounded-full flex items-center justify-center mx-auto">
-
-<svg xmlns="http://www.w3.org/2000/svg"
-class="w-6 h-6"
-fill="none"
-viewBox="0 0 24 24"
-stroke="currentColor">
-
-<path
-stroke-linecap="round"
-stroke-linejoin="round"
-stroke-width="2"
-d="M6 9V4h12v5M6 18h12v2H6v-2zm-2-7h16a2 2 0 012 2v3H2v-3a2 2 0 012-2z"/>
-
-</svg>
-
-</div>
-
-<p class="mt-2 text-sm">
-
-Printed
-
-</p>
-
-</div>
-
-<div class="h-1 flex-1 ${done("SENT")?"bg-green-600":"bg-gray-300"}"></div>
-
-<div class="text-center flex-1">
-
-<div class="${done("SENT")?"bg-green-600 text-white":"bg-gray-200"} w-12 h-12 rounded-full flex items-center justify-center mx-auto">
-
-<svg xmlns="http://www.w3.org/2000/svg"
-class="w-6 h-6"
-fill="none"
-viewBox="0 0 24 24"
-stroke="currentColor">
-
-<path
-stroke-linecap="round"
-stroke-linejoin="round"
-stroke-width="2"
-d="M3 7.5L12 3l9 4.5M3 7.5V16.5L12 21m-9-13.5L12 12m9-4.5V16.5L12 21m0-9V21"/>
-
-</svg>
-
-</div>
-
-<p class="mt-2 text-sm">
-
-Sent
-
-</p>
-
-</div>
-
-<div class="h-1 flex-1 ${done("COMPLETED")?"bg-green-600":"bg-gray-300"}"></div>
-
-<div class="text-center flex-1">
-
-<div class="${done("COMPLETED")?"bg-green-600 text-white":"bg-gray-200"} w-12 h-12 rounded-full flex items-center justify-center mx-auto">
-
-<svg xmlns="http://www.w3.org/2000/svg"
-class="w-6 h-6"
-fill="none"
-viewBox="0 0 24 24"
-stroke="currentColor">
-
-<path
-stroke-linecap="round"
-stroke-linejoin="round"
-stroke-width="2"
-d="M5 3v18M5 4h10l-2 4 2 4H5"/>
-
-</svg>
-
-</div>
-
-<p class="mt-2 text-sm">
-
-Completed
-
-</p>
-
-</div>
-
-</div>
-
-<div class="mt-8 border-t pt-5">
-
-<p>
-
-<b>No Dokumen :</b>
-
-${mawarisData.docRef||"-"}
-
-</p>
-
-<p class="mt-1">
-
-<b>Status :</b>
-
-${currentStatus}
-
-</p>
-
-${
-mawarisData.trackingNo
-
-?
-
+</button>
 `
-
-<p class="mt-1">
-
-<b>Tracking :</b>
-
-${mawarisData.trackingNo}
-
-</p>
-
-`
-
-:
-
-""
-
-}
-
-<div class="mt-5">
-
-${
-bakiHari <= 0
-
-?
-
-`<a
-href="renewal.html"
-class="inline-block mt-3 bg-red-600 text-white px-4 py-2 rounded-lg">
-
-Perbaharui Keahlian
-
-</a>`
-
-:
-
-`<a
-href="preview-mawaris.html"
-class="inline-block mt-3 bg-green-600 text-white px-4 py-2 rounded-lg">
-
-Lihat Dokumen
-
-</a>`
-
-}
+: ""
+)}
 
 </div>
 
@@ -666,6 +759,25 @@ Keahlian Tamat
     "mawarisButton"
 ).href = "mawaris.html";
 
+document.getElementById("editIcon").innerHTML = `
+
+<svg
+xmlns="http://www.w3.org/2000/svg"
+class="w-4 h-4 text-blue-300"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M16.862 4.487a2.25 2.25 0 113.182 3.182L8.25 19.463 4.5 20.25l.787-3.75L16.862 4.487z"/>
+
+</svg>
+
+`;
+    
   }
 
 }
@@ -684,7 +796,54 @@ else{
 
 }
 
+const receiveBtn =
+document.getElementById("confirmReceived");
 
+if(receiveBtn){
+
+receiveBtn.onclick = async()=>{
+
+const receivedDate =
+document.getElementById("receivedDate").value;
+
+if(!receivedDate){
+
+alert("Sila pilih tarikh.");
+
+return;
+
+}
+
+await updateDoc(
+
+doc(
+db,
+"users",
+user.uid,
+"mawaris",
+"maklumat"
+),
+
+{
+
+receivedDate,
+
+status:"RECEIVED",
+
+receivedUpdatedAt:serverTimestamp()
+
+}
+
+);
+
+alert("Dokumen berjaya disahkan diterima.");
+
+location.reload();
+
+};
+
+}
+  
 document
 .getElementById("logoutBtn")
 .addEventListener("click", async()=>{
@@ -710,6 +869,11 @@ document
   }
 
 });
+
+
+
+
+
 
 
 } // PENUTUP if(docSnap.exists()){ YANG TERCICIR
