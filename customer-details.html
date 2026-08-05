@@ -247,7 +247,7 @@ let wasiatReceivedDate = "";
   
 if(wasiatSnap.exists()){
 
-const wasiatData =
+wasiatData =
 wasiatSnap.data();
 
 const printedAt = wasiatData.printedAt || "";
@@ -352,7 +352,7 @@ let hibahReceivedDate = "";
   
 if(hibahSnap.exists()){
 
-const hibahData =
+hibahData =
 hibahSnap.data();
 
 const printedAt = hibahData.printedAt || "";
@@ -457,7 +457,7 @@ let sepencarianReceivedDate = "";
   
 if(sepencarianSnap.exists()){
 
-const sepencarianData =
+sepencarianData =
 sepencarianSnap.data();
 
 const printedAt = sepencarianData.printedAt || "";
@@ -562,7 +562,7 @@ let mawarisReceivedDate = "";
   
 if(mawarisSnap.exists()){
 
-const mawarisData =
+mawarisData =
 mawarisSnap.data();
 
 const printedAt = mawarisData.printedAt || "";
@@ -1430,10 +1430,23 @@ user.memberSince
 document.getElementById("telefon").innerHTML =
 user.telefon || "-";
 
+const alamatData =
+activeProduct
+? (
+currentCollection === "wasiat"
+? wasiatData
+: currentCollection === "hibah"
+? hibahData
+: currentCollection === "sepencarian"
+? sepencarianData
+: mawarisData
+)
+: {};
+
 document.getElementById("alamatRingkas").innerHTML =
 [
-    currentData.bandar,
-    currentData.negeri
+alamatData.bandar,
+alamatData.negeri
 ].filter(Boolean).join(", ") || "-";
 
 document.getElementById("referral").innerHTML =
