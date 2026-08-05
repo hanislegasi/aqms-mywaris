@@ -565,15 +565,15 @@ Lihat Dokumen
 
 const done = (status)=>{
 
-const order=[
-"APPROVED",
-"PRINTED",
-"SENT",
-"AKAD",
-"STAMPING",
-"HANDOVER",
-"COMPLETED",
-"RECEIVED"
+const order = [
+    "APPROVED",
+    "VERIFIED",
+    "PRINTED",
+    "SENT",
+    "AKAD",
+    "STAMPING",
+    "HANDOVER",
+    "RECEIVED"
 ];
 
 return order.indexOf(currentStatus)>=order.indexOf(status);
