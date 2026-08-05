@@ -430,6 +430,15 @@ if(loginData?.role === "admin"){
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
+const alamatPenuh = [
+        data.alamat1,
+        data.alamat2,
+        `${data.poskod || ""} ${data.bandar || ""}`.trim(),
+        data.negeri
+    ]
+    .filter(Boolean)
+    .join(", ");
+                        
 const userDoc = await getDoc(
     doc(db, "users", userId)
 );
@@ -1294,7 +1303,7 @@ data.ic || "-"
 
 .replaceAll(
 "{{ALAMAT_PEWASIAT}}",
-data.alamat || "-"
+alamatPenuh || "-"
 )
                             
 .replaceAll(
@@ -1544,7 +1553,7 @@ data.ic || "-"
 
 .replaceAll(
 "{{ALAMAT_PEMILIK}}",
-data.alamat || "-"
+alamatPenuh || "-"
 )
 
 .replaceAll(
