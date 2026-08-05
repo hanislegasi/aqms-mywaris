@@ -623,6 +623,72 @@ new Date(mawarisData.expiryDate)
 : 0;
   
 }
+
+const products = [
+
+{
+name:"Wasiat",
+snap:wasiatSnap,
+status:wasiatStatus,
+docRef:wasiatDocRef,
+preview:"preview-wasiat.html"
+},
+
+{
+name:"Hibah",
+snap:hibahSnap,
+status:hibahStatus,
+docRef:hibahDocRef,
+preview:"preview-hibah.html"
+},
+
+{
+name:"Harta Sepencarian",
+snap:sepencarianSnap,
+status:sepencarianStatus,
+docRef:sepencarianDocRef,
+preview:"preview-sepencarian.html"
+},
+
+{
+name:"Mawaris",
+snap:mawarisSnap,
+status:mawarisStatus,
+docRef:mawarisDocRef,
+preview:"preview-mawaris.html"
+}
+
+];
+
+const activeProduct =
+products.find(product => product.snap.exists());
+
+const currentCollection =
+activeProduct
+? (
+activeProduct.name === "Wasiat"
+? "wasiat"
+: activeProduct.name === "Hibah"
+? "hibah"
+: activeProduct.name === "Harta Sepencarian"
+? "sepencarian"
+: "mawaris"
+)
+: "wasiat";
+
+const currentData =
+currentCollection === "wasiat"
+? wasiatData
+: currentCollection === "hibah"
+? hibahData
+: currentCollection === "sepencarian"
+? sepencarianData
+: mawarisData;
+
+const currentStatus =
+activeProduct
+? activeProduct.status
+: "UNDER_REVIEW";
   
 document.getElementById(
 "customerInfo"
