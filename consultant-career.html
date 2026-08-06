@@ -153,8 +153,7 @@ Al-Qawthar Consultant – Assistant Supervisor (AQC-AS)
 Komisen
 </p>
 
-<p class="text-3xl font-bold text-[#153638]">
-38%
+<p class="text-3xl font-bold text-[#153638]" id="commissionAQCAS">
 </p>
 
 </div>
@@ -165,8 +164,7 @@ Komisen
 Overriding
 </p>
 
-<p class="text-3xl font-bold text-[#153638]">
-3%
+<p class="text-3xl font-bold text-[#153638]" id="overrideAQCAS">
 </p>
 
 </div>
@@ -246,8 +244,7 @@ Al-Qawthar Consultant – Unit Manager (AQC-UM)
 Komisen
 </p>
 
-<p class="text-3xl font-bold text-[#153638]">
-40%
+<p class="text-3xl font-bold text-[#153638]" id="commissionAQCUM">
 </p>
 
 </div>
@@ -258,8 +255,7 @@ Komisen
 Overriding
 </p>
 
-<p class="text-3xl font-bold text-[#153638]">
-7%
+<p class="text-3xl font-bold text-[#153638]" id="overrideAQCUM">
 </p>
 
 </div>
@@ -340,8 +336,7 @@ Mawaris Group Agency Manager (MGAM)
 Komisen
 </p>
 
-<p class="text-3xl font-bold text-[#153638]">
-45%
+<p class="text-3xl font-bold text-[#153638]" id="commissionMGAM">
 </p>
 
 </div>
@@ -352,8 +347,7 @@ Komisen
 Overriding
 </p>
 
-<p class="text-3xl font-bold text-[#153638]">
-12%
+<p class="text-3xl font-bold text-[#153638]" id="overrideMGAM">
 </p>
 
 </div>
@@ -460,17 +454,31 @@ if(compensationSnap.exists()){
 const compensation =
 compensationSnap.data();
 
-
-
 document.getElementById("commissionAQC").innerHTML =
 (compensation.commissionAQC ?? 0) + "%";
-
 
 document.getElementById("overrideAQC").innerHTML =
 (compensation.overrideAQC ?? 0) + "%";
 
+document.getElementById("commissionAQCAS").innerHTML =
+(compensation.commissionAQC ?? 0) + "%";
 
+document.getElementById("overrideAQCAS").innerHTML =
+(compensation.overrideAQC ?? 0) + "%";
+  
+document.getElementById("commissionAQCUM").innerHTML =
+(compensation.commissionAQC ?? 0) + "%";
 
+document.getElementById("overrideAQCUM").innerHTML =
+(compensation.overrideAQC ?? 0) + "%";
+
+document.getElementById("commissionMGAM").innerHTML =
+(compensation.commissionAQC ?? 0) + "%";
+
+document.getElementById("overrideMGAM").innerHTML =
+(compensation.overrideAQC ?? 0) + "%";
+
+  
 }
 
 </script>
