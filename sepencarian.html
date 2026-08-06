@@ -533,10 +533,6 @@ class="w-full border rounded-lg p-3 kategoriAlih">
 Faraid
 </option>
 
-<option value="hibah">
-Hibah
-</option>
-
 <option value="sepencarian">
 Harta Sepencarian
 </option>
@@ -658,10 +654,6 @@ class="w-full border rounded-lg p-3 kategoriTakAlih">
   
 <option value="faraid">
 Faraid
-</option>
-
-<option value="hibah">
-Hibah
 </option>
 
 <option value="sepencarian">
@@ -1594,12 +1586,6 @@ Faraid
 </option>
 
 <option
-value="hibah"
-${item.kategori==="hibah"?"selected":""}>
-Hibah
-</option>
-
-<option
 value="sepencarian"
 ${item.kategori==="sepencarian"?"selected":""}>
 Harta Sepencarian
@@ -1672,7 +1658,7 @@ populatePasanganDropdown();
 document
 .querySelectorAll(".kategoriAlih")
 .forEach((select,index)=>{
-
+/*
 if(select.value==="hibah"){
 
 document
@@ -1686,7 +1672,7 @@ document
 ".hibahSection"
 )[index]
 .classList.remove("hidden");
-
+*/
 }
 
 if(select.value==="sepencarian"){
@@ -1872,12 +1858,6 @@ Faraid
 </option>
 
 <option
-value="hibah"
-${item.kategori==="hibah"?"selected":""}>
-Hibah
-</option>
-
-<option
 value="sepencarian"
 ${item.kategori==="sepencarian"?"selected":""}>
 Harta Sepencarian
@@ -1951,7 +1931,7 @@ populatePasanganDropdownTakAlih();
 document
 .querySelectorAll(".kategoriTakAlih")
 .forEach((select,index)=>{
-
+/*
 if(select.value==="hibah"){
 
 document
@@ -1965,7 +1945,7 @@ document
 ".hibahSectionTakAlih"
 )[index]
 .classList.remove("hidden");
-
+*/
 }
 
 if(select.value==="sepencarian"){
