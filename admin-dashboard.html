@@ -43,6 +43,11 @@
             <button id="auditBtn" class="h-12 w-full md:w-32 bg-[#153638] hover:bg-[#1d4a4d] shadow transition text-white py-3 rounded-xl font-semibold">
                 Audit
             </button>
+        <button id="settingBtn"
+        class="h-12 w-full md:w-32 bg-[#153638] hover:bg-[#1d4a4d] shadow transition text-white py-3 rounded-xl font-semibold">
+        Settings
+        </button>
+            
         </div>
 
         <!-- KPI CARDS - USERS -->
@@ -567,6 +572,11 @@ document.getElementById("waitingSign").innerHTML = waitingSign;
         document.getElementById("auditBtn").addEventListener("click", () => {
             window.location.href = "audit-dashboard.html";
         });
+
+document.getElementById("settingBtn").addEventListener("click", () => {
+    window.location.href = "admin-setting.html";
+});
+        
 
 document.getElementById("waitingVerifyCard")
 .addEventListener("click",()=>{
