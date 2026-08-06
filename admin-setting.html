@@ -37,7 +37,7 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
 
 ← Dashboard
 
-
+</a>
 <div class="max-w-6xl mx-auto p-6">
 
     
@@ -394,16 +394,262 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
 
     <div class="text-right">
 
-        <button
+        <button id="saveSettings">
+    💾 Simpan Settings
+</button>
 
-            id="saveSettings"
-
-            class="bg-[#153638] hover:bg-[#0f292b] text-white px-8 py-3 rounded-xl font-semibold">
-
-            Simpan Settings
-
-        </button>
+<button id="resetSettings">
+    Reset
+</button>
 
     </div>
 
 </div>
+
+<script type="module">
+
+import { initializeApp } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import { 
+getFirestore,
+doc,
+setDoc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+// ================= FIREBASE CONFIG =================
+
+const firebaseConfig = {
+
+apiKey: "YOUR_API_KEY",
+authDomain: "YOUR_PROJECT.firebaseapp.com",
+projectId: "YOUR_PROJECT_ID",
+storageBucket: "YOUR_PROJECT.appspot.com",
+messagingSenderId: "YOUR_ID",
+appId: "YOUR_APP_ID"
+
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+
+
+// ================= DEFAULT SETTINGS =================
+
+const defaultSettings = {
+
+
+companyName:"Hans Legasi Resources Sdn Bhd",
+
+companyPhone:"",
+
+companyEmail:"",
+
+companyAddress:"",
+
+
+
+wasiatPrice:200,
+
+hibahPrice:2500,
+
+sepencarianPrice:2000,
+
+mawarisPrice:0,
+
+
+
+wasiatRenewal:100,
+
+hibahRenewal:500,
+
+sepencarianRenewal:500,
+
+mawarisRenewal:0,
+
+
+
+commissionAQC:40,
+
+commissionAQCAS:35,
+
+commissionAQCUM:20,
+
+commissionMGAM:5,
+
+
+
+overrideAQC:2,
+
+overrideAQCAS:2,
+
+overrideAQCUM:2,
+
+overrideMGAM:1,
+
+
+
+memberValidity:365,
+
+consultantRegistrationFee:200,
+
+consultantRenewalFee:50
+
+
+};
+
+
+
+// ================= INPUT LIST =================
+
+const fields = Object.keys(defaultSettings);
+
+
+
+// ================= LOAD SETTINGS =================
+
+
+async function loadSettings(){
+
+
+const ref = doc(db,"settings","system");
+
+
+const snap = await getDoc(ref);
+
+
+
+let data;
+
+
+
+if(snap.exists()){
+
+data=snap.data();
+
+}
+
+else{
+
+data=defaultSettings;
+
+await setDoc(ref,data);
+
+}
+
+
+
+
+fields.forEach(field=>{
+
+
+let input=document.getElementById(field);
+
+
+if(input){
+
+input.value=data[field] ?? "";
+
+}
+
+
+});
+
+
+}
+
+
+
+
+// ================= SAVE SETTINGS =================
+
+
+document
+.getElementById("saveSettings")
+.addEventListener("click",async()=>{
+
+
+let data={};
+
+
+fields.forEach(field=>{
+
+
+let input=document.getElementById(field);
+
+
+if(input){
+
+data[field]=
+input.type==="number"
+?
+Number(input.value)
+:
+input.value;
+
+
+}
+
+
+});
+
+
+
+await setDoc(
+doc(db,"settings","system"),
+data
+);
+
+
+
+alert("Settings berjaya disimpan");
+
+
+});
+
+
+
+
+
+// ================= RESET =================
+
+
+document
+.getElementById("resetSettings")
+.addEventListener("click",()=>{
+
+
+fields.forEach(field=>{
+
+
+let input=document.getElementById(field);
+
+
+if(input){
+
+input.value=defaultSettings[field];
+
+}
+
+
+});
+
+
+});
+
+
+
+
+// INIT
+
+loadSettings();
+
+
+</script>
+  
