@@ -761,7 +761,7 @@ ${total}%
 if(
 company != Number(companyPool.value)
 ||
-total > 100
+total > 95
 ){
 
 revenueCheck.className=
@@ -795,37 +795,6 @@ royalty
 x.oninput=checkRevenue;
 
 });
-
-revenueDistribution:{
-
-companyPool:
-Number(companyPool.value),
-
-
-commissionPool:
-Number(commissionPool.value),
-
-
-overridePool:
-Number(overridePool.value),
-
-
-companyBreakdown:{
-
-
-adminOperation:
-Number(adminOperation.value),
-
-
-allowance:
-Number(allowance.value),
-
-
-royalty:
-Number(royalty.value)
-
-
-}
 
 }
 
@@ -922,9 +891,6 @@ input.value=defaultSettings[field];
 
 });
 
-
-});
-
 companyPool.value =
 defaultSettings.revenueDistribution.companyPool;
 
@@ -949,6 +915,7 @@ defaultSettings.revenueDistribution.companyBreakdown.royalty;
 
 checkRevenue();
 
+});
 
 // INIT
 
