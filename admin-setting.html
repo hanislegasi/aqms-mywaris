@@ -38,7 +38,7 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
 ← Dashboard
 
 </a>
-<div class="max-w-6xl mx-auto p-6">
+<div class="p-5">
 
     
     <!-- ================= COMPANY ================= -->
@@ -565,79 +565,45 @@ const db = getFirestore(app);
 
 // ================= DEFAULT SETTINGS =================
 
-const defaultSettings = {
+const defaultCompanySettings = {
 
-
-companyName:"",
-
+companyName:"AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.",
 companyPhone:"",
-
 companyEmail:"",
+companyAddress:""
 
-companyAddress:"",
+};
 
 
+const defaultCompensationSettings = {
 
 wasiatPrice:350,
-
 hibahPrice:2500,
-
 sepencarianPrice:800,
-
 mawarisPrice:3000,
 
-
-
 wasiatRenewal:50,
-
 hibahRenewal:50,
-
 sepencarianRenewal:50,
-
 mawarisRenewal:80,
 
-
-
 commissionAQC:35,
-
 commissionAQCAS:38,
-
 commissionAQCUM:40,
-
 commissionMGAM:45,
 
-
-
 overrideAQC:0,
-
 overrideAQCAS:3,
-
 overrideAQCUM:4,
-
 overrideMGAM:5,
 
-
-revenueDistribution:{
-
 companyPool:48,
-
 commissionPool:35,
-
 overridePool:12,
 
-
-companyBreakdown:{
-
 adminOperation:30,
-
 allowance:10,
-
-royalty:8
-
-}
-
-},
-  
+royalty:8,
 
 memberValidity:365,
 
@@ -645,17 +611,46 @@ consultantRegistrationFee:200,
 
 consultantRenewalFee:50
 
-
 };
-
 
 
 // ================= INPUT LIST =================
 
-const fields = Object.keys(defaultSettings)
-.filter(x=>x!="revenueDistribution");
+const companyFields = [
+"companyName",
+"companyPhone",
+"companyEmail",
+"companyAddress"
+];
 
 
+const compensationFields = [
+
+"wasiatPrice",
+"hibahPrice",
+"sepencarianPrice",
+"mawarisPrice",
+
+"wasiatRenewal",
+"hibahRenewal",
+"sepencarianRenewal",
+"mawarisRenewal",
+
+"commissionAQC",
+"commissionAQCAS",
+"commissionAQCUM",
+"commissionMGAM",
+
+"overrideAQC",
+"overrideAQCAS",
+"overrideAQCUM",
+"overrideMGAM",
+
+"memberValidity",
+"consultantRegistrationFee",
+"consultantRenewalFee"
+
+];
 
 // ================= LOAD SETTINGS =================
 
@@ -664,7 +659,6 @@ async function loadSettings(){
 
 const companyRef = doc(db,"settings","company");
 const compensationRef = doc(db,"settings","compensation");
-
 
 const companySnap = await getDoc(companyRef);
 const compensationSnap = await getDoc(compensationRef);
@@ -798,7 +792,7 @@ ${total}%
 if(
 company != Number(companyPool.value)
 ||
-total > 95
+total != 95
 ){
 
 revenueCheck.className=
@@ -924,13 +918,15 @@ consultantRenewalFee:Number(consultantRenewalFee.value)
 
 await setDoc(
 doc(db,"settings","company"),
-companyData
-);
+companyData,
+{merge:true}
+);;
 
 
 await setDoc(
 doc(db,"settings","compensation"),
-compensationData
+compensationData,
+{merge:true}
 );
 
 
