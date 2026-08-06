@@ -340,6 +340,128 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
     </div>
 
 
+<!-- ================= REVENUE DISTRIBUTION ================= -->
+
+<div class="bg-white rounded-2xl shadow p-6 mb-6">
+
+<h2 class="text-xl font-bold mb-5">
+Revenue Allocation (%)
+</h2>
+
+
+<div class="grid md:grid-cols-3 gap-4">
+
+
+<div>
+
+<label>
+Company Pool
+</label>
+
+<input
+id="companyPool"
+type="number"
+class="w-full border rounded-xl p-3 mt-1">
+
+</div>
+
+
+<div>
+
+<label>
+Commission Pool
+</label>
+
+<input
+id="commissionPool"
+type="number"
+class="w-full border rounded-xl p-3 mt-1">
+
+</div>
+
+
+<div>
+
+<label>
+Override Pool
+</label>
+
+<input
+id="overridePool"
+type="number"
+class="w-full border rounded-xl p-3 mt-1">
+
+</div>
+
+
+</div>
+
+
+<div class="mt-5 bg-gray-100 p-4 rounded-xl">
+
+<h3 class="font-bold mb-3">
+Company Pool Breakdown
+</h3>
+
+
+<div class="grid md:grid-cols-3 gap-4">
+
+
+<div>
+
+<label>
+Admin Operation
+</label>
+
+<input
+id="adminOperation"
+type="number"
+class="w-full border rounded-xl p-3 mt-1">
+
+</div>
+
+
+<div>
+
+<label>
+Allowance
+</label>
+
+<input
+id="allowance"
+type="number"
+class="w-full border rounded-xl p-3 mt-1">
+
+</div>
+
+
+<div>
+
+<label>
+Royalty
+</label>
+
+<input
+id="royalty"
+type="number"
+class="w-full border rounded-xl p-3 mt-1">
+
+</div>
+
+
+</div>
+
+
+<p id="revenueCheck"
+class="mt-4 font-bold">
+</p>
+
+
+</div>
+
+
+</div>
+  
 
     <!-- ================= MEMBERSHIP ================= -->
 
@@ -394,12 +516,15 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
 
     <div class="text-right">
 
-        <button id="saveSettings">
-    💾 Simpan Settings
+        <button id="saveSettings"
+class="bg-[#153638] text-white px-6 py-3 rounded-xl">
+💾 Simpan Settings
 </button>
 
-<button id="resetSettings">
-    Reset
+
+<button id="resetSettings"
+class="bg-gray-300 px-6 py-3 rounded-xl">
+Reset
 </button>
 
     </div>
@@ -494,6 +619,27 @@ overrideAQCUM:2,
 overrideMGAM:1,
 
 
+revenueDistribution:{
+
+companyPool:48,
+
+commissionPool:35,
+
+overridePool:12,
+
+
+companyBreakdown:{
+
+adminOperation:30,
+
+allowance:10,
+
+royalty:8
+
+}
+
+},
+  
 
 memberValidity:365,
 
@@ -508,7 +654,8 @@ consultantRenewalFee:50
 
 // ================= INPUT LIST =================
 
-const fields = Object.keys(defaultSettings);
+const fields = Object.keys(defaultSettings)
+.filter(x=>x!="revenueDistribution");
 
 
 
@@ -517,17 +664,11 @@ const fields = Object.keys(defaultSettings);
 
 async function loadSettings(){
 
-
 const ref = doc(db,"settings","system");
-
 
 const snap = await getDoc(ref);
 
-
-
 let data;
-
-
 
 if(snap.exists()){
 
@@ -544,13 +685,11 @@ await setDoc(ref,data);
 }
 
 
-
+// biasa fields
 
 fields.forEach(field=>{
 
-
 let input=document.getElementById(field);
-
 
 if(input){
 
@@ -558,15 +697,139 @@ input.value=data[field] ?? "";
 
 }
 
-
 });
 
+
+// Revenue Distribution
+
+companyPool.value =
+data.revenueDistribution?.companyPool ?? 0;
+
+
+commissionPool.value =
+data.revenueDistribution?.commissionPool ?? 0;
+
+
+overridePool.value =
+data.revenueDistribution?.overridePool ?? 0;
+
+
+adminOperation.value =
+data.revenueDistribution?.companyBreakdown?.adminOperation ?? 0;
+
+
+allowance.value =
+data.revenueDistribution?.companyBreakdown?.allowance ?? 0;
+
+
+royalty.value =
+data.revenueDistribution?.companyBreakdown?.royalty ?? 0;
+
+
+checkRevenue();
 
 }
 
 
+function checkRevenue(){
+
+let company =
+Number(adminOperation.value)+
+Number(allowance.value)+
+Number(royalty.value);
 
 
+let total =
+Number(companyPool.value)+
+Number(commissionPool.value)+
+Number(overridePool.value);
+
+
+revenueCheck.innerHTML =
+`
+Company Breakdown:
+${company}% / ${companyPool.value}%
+
+<br>
+
+Total Allocation:
+${total}%
+
+`;
+    
+
+if(
+company != Number(companyPool.value)
+||
+total > 100
+){
+
+revenueCheck.className=
+"text-red-600";
+
+saveSettings.disabled=true;
+
+}else{
+
+
+revenueCheck.className=
+"text-green-600";
+
+saveSettings.disabled=false;
+
+}
+
+
+}
+
+[
+companyPool,
+commissionPool,
+overridePool,
+adminOperation,
+allowance,
+royalty
+
+].forEach(x=>{
+
+x.oninput=checkRevenue;
+
+});
+
+revenueDistribution:{
+
+companyPool:
+Number(companyPool.value),
+
+
+commissionPool:
+Number(commissionPool.value),
+
+
+overridePool:
+Number(overridePool.value),
+
+
+companyBreakdown:{
+
+
+adminOperation:
+Number(adminOperation.value),
+
+
+allowance:
+Number(allowance.value),
+
+
+royalty:
+Number(royalty.value)
+
+
+}
+
+}
+
+  
 // ================= SAVE SETTINGS =================
 
 
@@ -599,7 +862,26 @@ input.value;
 
 });
 
+data.revenueDistribution={
 
+companyPool:Number(companyPool.value),
+
+commissionPool:Number(commissionPool.value),
+
+overridePool:Number(overridePool.value),
+
+
+companyBreakdown:{
+
+adminOperation:Number(adminOperation.value),
+
+allowance:Number(allowance.value),
+
+royalty:Number(royalty.value)
+
+}
+
+};
 
 await setDoc(
 doc(db,"settings","system"),
@@ -643,7 +925,29 @@ input.value=defaultSettings[field];
 
 });
 
+companyPool.value =
+defaultSettings.revenueDistribution.companyPool;
 
+commissionPool.value =
+defaultSettings.revenueDistribution.commissionPool;
+
+overridePool.value =
+defaultSettings.revenueDistribution.overridePool;
+
+
+adminOperation.value =
+defaultSettings.revenueDistribution.companyBreakdown.adminOperation;
+
+
+allowance.value =
+defaultSettings.revenueDistribution.companyBreakdown.allowance;
+
+
+royalty.value =
+defaultSettings.revenueDistribution.companyBreakdown.royalty;
+
+
+checkRevenue();
 
 
 // INIT
