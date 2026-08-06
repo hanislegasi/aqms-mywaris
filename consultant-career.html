@@ -63,8 +63,7 @@ Al-Qawthar Consultant (AQC)
 Komisen
 </p>
 
-<p class="text-3xl font-bold text-[#153638]">
-35%
+<p class="text-3xl font-bold text-[#153638]" id="commissionAQC">
 </p>
 
 </div>
@@ -75,8 +74,7 @@ Komisen
 Overriding
 </p>
 
-<p class="text-3xl font-bold text-[#153638]">
-0%
+<p class="text-3xl font-bold text-[#153638]" id="overrideAQC">
 </p>
 
 </div>
@@ -419,6 +417,65 @@ RM500
 </div>
 </div>
 
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+// FIREBASE CONFIG
+const firebaseConfig = {
+apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain: "alqawthar-mywaris.firebaseapp.com",
+projectId: "alqawthar-mywaris",
+storageBucket: "alqawthar-mywaris.firebasestorage.app",
+messagingSenderId: "3498810778",
+appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+
+// LOAD COMPENSATION
+
+const compensationSnap =
+await getDoc(
+doc(db,"settings","compensation")
+);
+
+
+if(compensationSnap.exists()){
+
+
+const compensation =
+compensationSnap.data();
+
+
+
+document.getElementById("commissionAQC").innerHTML =
+(compensation.commissionAQC ?? 0) + "%";
+
+
+document.getElementById("overrideAQC").innerHTML =
+(compensation.overrideAQC ?? 0) + "%";
+
+
+
+}
+
+</script>
+
+  
 </body>
 
 </html>
