@@ -764,69 +764,75 @@ checkRevenue();
 
 function checkRevenue(){
 
-let company =
+const company =
 Number(adminOperation.value)+
 Number(allowance.value)+
 Number(royalty.value);
 
 
-let total =
+const total =
 Number(companyPool.value)+
 Number(commissionPool.value)+
 Number(overridePool.value);
 
 
-revenueCheck.innerHTML =
-`
+
+if(
+company !== Number(companyPool.value)
+||
+total !== 95
+){
+
+revenueCheck.innerHTML = `
+
+<div class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700">
+
+<div class="font-bold">
+⚠️ Allocation Tidak Sah
+</div>
+
+<div class="text-sm mt-2">
+
 Company Breakdown:
 ${company}% / ${companyPool.value}%
+
 
 <br>
 
 Total Allocation:
 ${total}%
 
+
+<br><br>
+
+Pastikan:
+
+<br>
+• Company Breakdown = Company Pool
+<br>
+• Total Allocation = 95%
+
+</div>
+
+</div>
+
 `;
-    
-
-if(
-company != Number(companyPool.value)
-||
-total != 95
-){
-
-revenueCheck.className=
-"text-red-600";
 
 saveSettings.disabled=true;
+
 
 }else{
 
 
-revenueCheck.className=
-"text-green-600";
+revenueCheck.innerHTML="";
 
 saveSettings.disabled=false;
 
-}
-
 
 }
 
-[
-companyPool,
-commissionPool,
-overridePool,
-adminOperation,
-allowance,
-royalty
 
-].forEach(x=>{
-
-x.oninput=checkRevenue;
-
-});
-
+}
   
 // ================= SAVE SETTINGS =================
 
