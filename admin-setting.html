@@ -664,66 +664,103 @@ async function loadSettings(){
 
 const companyRef = doc(db,"settings","company");
 const compensationRef = doc(db,"settings","compensation");
-  
+
+
 const companySnap = await getDoc(companyRef);
 const compensationSnap = await getDoc(compensationRef);
 
-let data;
 
-if(snap.exists()){
+let companyData;
+let compensationData;
 
-data=snap.data();
+
+// COMPANY
+
+if(companySnap.exists()){
+
+companyData = companySnap.data();
+
+}else{
+
+companyData = defaultCompanySettings;
+
+await setDoc(companyRef, companyData);
 
 }
 
-else{
 
-data=defaultSettings;
+// COMPENSATION
 
-await setDoc(ref,data);
+if(compensationSnap.exists()){
+
+compensationData = compensationSnap.data();
+
+}else{
+
+compensationData = defaultCompensationSettings;
+
+await setDoc(compensationRef, compensationData);
 
 }
 
 
-// biasa fields
 
-fields.forEach(field=>{
+// Load Company
+
+companyFields.forEach(field=>{
 
 let input=document.getElementById(field);
 
 if(input){
 
-input.value=data[field] ?? "";
+input.value=companyData[field] ?? "";
 
 }
 
 });
 
 
-// Revenue Distribution
+
+// Load Compensation
+
+compensationFields.forEach(field=>{
+
+let input=document.getElementById(field);
+
+if(input){
+
+input.value=compensationData[field] ?? "";
+
+}
+
+});
+
+
+
+// Revenue
 
 companyPool.value =
-data.revenueDistribution?.companyPool ?? 0;
+compensationData.companyPool ?? 0;
 
 
 commissionPool.value =
-data.revenueDistribution?.commissionPool ?? 0;
+compensationData.commissionPool ?? 0;
 
 
 overridePool.value =
-data.revenueDistribution?.overridePool ?? 0;
+compensationData.overridePool ?? 0;
 
 
 adminOperation.value =
-data.revenueDistribution?.companyBreakdown?.adminOperation ?? 0;
+compensationData.adminOperation ?? 0;
 
 
 allowance.value =
-data.revenueDistribution?.companyBreakdown?.allowance ?? 0;
+compensationData.allowance ?? 0;
 
 
 royalty.value =
-data.revenueDistribution?.companyBreakdown?.royalty ?? 0;
+compensationData.royalty ?? 0;
 
 
 checkRevenue();
