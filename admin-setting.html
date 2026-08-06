@@ -842,31 +842,57 @@ document
 .addEventListener("click",async()=>{
 
 
-let data={};
+let companyData = {};
+
+let compensationData = {};
 
 
-fields.forEach(field=>{
+// ================= COMPANY DATA =================
+
+companyData = {
+
+companyName: companyName.value,
+
+companyPhone: companyPhone.value,
+
+companyEmail: companyEmail.value,
+
+companyAddress: companyAddress.value
+
+};
 
 
-let input=document.getElementById(field);
+
+// ================= COMPENSATION DATA =================
+
+compensationData = {
+
+wasiatPrice:Number(wasiatPrice.value),
+hibahPrice:Number(hibahPrice.value),
+sepencarianPrice:Number(sepencarianPrice.value),
+mawarisPrice:Number(mawarisPrice.value),
 
 
-if(input){
-
-data[field]=
-input.type==="number"
-?
-Number(input.value)
-:
-input.value;
+wasiatRenewal:Number(wasiatRenewal.value),
+hibahRenewal:Number(hibahRenewal.value),
+sepencarianRenewal:Number(sepencarianRenewal.value),
+mawarisRenewal:Number(mawarisRenewal.value),
 
 
-}
+
+commissionAQC:Number(commissionAQC.value),
+commissionAQCAS:Number(commissionAQCAS.value),
+commissionAQCUM:Number(commissionAQCUM.value),
+commissionMGAM:Number(commissionMGAM.value),
 
 
-});
 
-data.revenueDistribution={
+overrideAQC:Number(overrideAQC.value),
+overrideAQCAS:Number(overrideAQCAS.value),
+overrideAQCUM:Number(overrideAQCUM.value),
+overrideMGAM:Number(overrideMGAM.value),
+
+
 
 companyPool:Number(companyPool.value),
 
@@ -875,20 +901,37 @@ commissionPool:Number(commissionPool.value),
 overridePool:Number(overridePool.value),
 
 
-companyBreakdown:{
 
 adminOperation:Number(adminOperation.value),
 
 allowance:Number(allowance.value),
 
-royalty:Number(royalty.value)
+royalty:Number(royalty.value),
 
-}
+
+
+memberValidity:Number(memberValidity.value),
+
+consultantRegistrationFee:Number(consultantRegistrationFee.value),
+
+consultantRenewalFee:Number(consultantRenewalFee.value)
 
 };
 
-await setDoc(companyRef, companyData);
-await setDoc(compensationRef, compensationData);
+
+
+// SAVE FIRESTORE
+
+await setDoc(
+doc(db,"settings","company"),
+companyData
+);
+
+
+await setDoc(
+doc(db,"settings","compensation"),
+compensationData
+);
 
 
 
