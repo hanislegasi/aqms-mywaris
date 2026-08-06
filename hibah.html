@@ -533,10 +533,6 @@ Faraid
 Hibah
 </option>
 
-<option value="sepencarian">
-Harta Sepencarian
-</option>
-
 </select>
 <div class="detailKategoriAlih hidden mt-3">
 
@@ -658,10 +654,6 @@ Faraid
 
 <option value="hibah">
 Hibah
-</option>
-
-<option value="sepencarian">
-Harta Sepencarian
 </option>
 
 </select>
@@ -1594,12 +1586,6 @@ ${item.kategori==="hibah"?"selected":""}>
 Hibah
 </option>
 
-<option
-value="sepencarian"
-${item.kategori==="sepencarian"?"selected":""}>
-Harta Sepencarian
-</option>
-
 </select>
 
 <div class="detailKategoriAlih hidden mt-3">
@@ -1675,7 +1661,7 @@ document
 .classList.remove("hidden");
 
 }
-
+/*
 if(select.value==="sepencarian"){
 
 document
@@ -1691,7 +1677,7 @@ document
 .classList.remove("hidden");
 
 }
-
+*/
 });
 
 data.hartaAlih.forEach((item,index)=>{
@@ -1852,12 +1838,6 @@ ${item.kategori==="hibah"?"selected":""}>
 Hibah
 </option>
 
-<option
-value="sepencarian"
-${item.kategori==="sepencarian"?"selected":""}>
-Harta Sepencarian
-</option>
-
 </select>
 
 <div class="detailKategoriTakAlih hidden mt-3">
@@ -1934,7 +1914,7 @@ document
 .classList.remove("hidden");
 
 }
-
+/*
 if(select.value==="sepencarian"){
 
 document
@@ -1951,7 +1931,7 @@ document
 
 
 }
-
+*/
 });
 
 data.hartaTakAlih.forEach((item,index)=>{
