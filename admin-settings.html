@@ -64,7 +64,7 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
                 <label class="font-medium">Telefon</label>
 
                 <input
-                    id="companyPhone"
+                    id="registrationNo"
                     type="text"
                     class="w-full border rounded-xl p-3 mt-1">
             </div>
@@ -568,7 +568,7 @@ const db = getFirestore(app);
 const defaultCompanySettings = {
 
 companyName:"AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.",
-companyPhone:"",
+registrationNo:"",
 companyEmail:"",
 companyAddress:""
 
@@ -618,7 +618,7 @@ consultantRenewalFee:50
 
 const companyFields = [
 "companyName",
-"companyPhone",
+"registrationNo",
 "companyEmail",
 "companyAddress"
 ];
@@ -853,7 +853,7 @@ companyData = {
 
 companyName: companyName.value,
 
-companyPhone: companyPhone.value,
+registrationNo: registrationNo.value,
 
 companyEmail: companyEmail.value,
 
