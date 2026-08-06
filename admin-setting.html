@@ -662,9 +662,11 @@ const fields = Object.keys(defaultSettings)
 
 async function loadSettings(){
 
-const ref = doc(db,"settings","system");
-
-const snap = await getDoc(ref);
+const companyRef = doc(db,"settings","company");
+const compensationRef = doc(db,"settings","compensation");
+  
+const companySnap = await getDoc(companyRef);
+const compensationSnap = await getDoc(compensationRef);
 
 let data;
 
@@ -848,10 +850,8 @@ royalty:Number(royalty.value)
 
 };
 
-await setDoc(
-doc(db,"settings","system"),
-data
-);
+await setDoc(companyRef, companyData);
+await setDoc(compensationRef, compensationData);
 
 
 
