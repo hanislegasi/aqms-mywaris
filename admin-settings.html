@@ -1177,9 +1177,6 @@ document.getElementById("simProfit").innerHTML =
 document.getElementById("simMargin").innerHTML =
 margin.toFixed(1)+"%";
 
-
-}
-
 // warna margin
 
 if(margin < 20){
@@ -1203,9 +1200,8 @@ marginCard.className =
 
 }
 
-
-
-
+ 
+}
 
 
 // LIVE UPDATE
@@ -1247,6 +1243,14 @@ document
 "input",
 calculateSimulation
 );
+
+});
+
+// ================= START =================
+
+loadSettings().then(()=>{
+
+    calculateSimulation();
 
 });
   
