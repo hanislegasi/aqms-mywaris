@@ -1049,78 +1049,85 @@ saveSettings.disabled=false;
 function calculateSimulation(){
 
 
-let sales =
+const sales =
 
-(Number(simWasiat.value) *
- Number(document.getElementById("wasiatPrice").value))
-
-+
-
-(Number(simHibah.value) *
- Number(document.getElementById("hibahPrice").value))
+(
+Number(document.getElementById("simWasiat").value || 0) *
+Number(document.getElementById("wasiatPrice").value || 0)
+)
 
 +
 
-(Number(simSepencarian.value) *
- Number(document.getElementById("sepencarianPrice").value))
+(
+Number(document.getElementById("simHibah").value || 0) *
+Number(document.getElementById("hibahPrice").value || 0)
+)
 
 +
 
-(Number(simMawaris.value) *
- Number(document.getElementById("mawarisPrice").value));
+(
+Number(document.getElementById("simSepencarian").value || 0) *
+Number(document.getElementById("sepencarianPrice").value || 0)
+)
+
++
+
+(
+Number(document.getElementById("simMawaris").value || 0) *
+Number(document.getElementById("mawarisPrice").value || 0)
+);
 
 
 
-let commission =
-
-sales *
-Number(commissionPool.value)
-/100;
-
-
-
-let override =
-
-sales *
-Number(overridePool.value)
-/100;
-
-
-
-let companyPoolAmount =
+const commission =
 
 sales *
-Number(companyPool.value)
+Number(document.getElementById("commissionPool").value || 0)
 /100;
 
 
 
+const override =
 
-let adminAmount =
+sales *
+Number(document.getElementById("overridePool").value || 0)
+/100;
+
+
+
+const companyPoolAmount =
+
+sales *
+Number(document.getElementById("companyPool").value || 0)
+/100;
+
+
+
+const adminAmount =
 
 companyPoolAmount *
-Number(adminOperation.value)
+Number(document.getElementById("adminOperation").value || 0)
 /100;
 
 
 
-let allowanceAmount =
+const allowanceAmount =
 
 companyPoolAmount *
-Number(allowance.value)
+Number(document.getElementById("allowance").value || 0)
 /100;
 
 
 
-let royaltyAmount =
+const royaltyAmount =
 
 companyPoolAmount *
-Number(royalty.value)
+Number(document.getElementById("royalty").value || 0)
 /100;
 
 
 
-let profit =
+const profit =
 
 companyPoolAmount
 -
@@ -1132,7 +1139,7 @@ royaltyAmount;
 
 
 
-let margin = sales > 0
+const margin = sales > 0
 
 ?
 (profit / sales) * 100
@@ -1142,29 +1149,36 @@ let margin = sales > 0
 
 
 
-simSales.innerHTML =
-"RM" + sales.toLocaleString();
+document.getElementById("simSales").innerHTML =
+"RM " + sales.toLocaleString();
 
 
-simCommission.innerHTML =
-"RM" + commission.toLocaleString();
+
+document.getElementById("simCommission").innerHTML =
+"RM " + commission.toLocaleString();
 
 
-simOverride.innerHTML =
-"RM" + override.toLocaleString();
+
+document.getElementById("simOverride").innerHTML =
+"RM " + override.toLocaleString();
 
 
-simCompanyPool.innerHTML =
-"RM" + companyPoolAmount.toLocaleString();
+
+document.getElementById("simCompanyPool").innerHTML =
+"RM " + companyPoolAmount.toLocaleString();
 
 
-simProfit.innerHTML =
-"RM" + profit.toLocaleString();
+
+document.getElementById("simProfit").innerHTML =
+"RM " + profit.toLocaleString();
 
 
-simMargin.innerHTML =
+
+document.getElementById("simMargin").innerHTML =
 margin.toFixed(1)+"%";
 
+
+}
 
 // warna margin
 
@@ -1197,19 +1211,44 @@ marginCard.className =
 // LIVE UPDATE
 
 [
-simWasiat,
-simHibah,
-simSepencarian,
-simMawaris
+"simWasiat",
+"simHibah",
+"simSepencarian",
+"simMawaris"
 
-].forEach(x=>{
+].forEach(id=>{
 
-x.oninput =
-calculateSimulation;
+document
+.getElementById(id)
+.addEventListener(
+"input",
+calculateSimulation
+);
 
 });
 
+[
+"wasiatPrice",
+"hibahPrice",
+"sepencarianPrice",
+"mawarisPrice",
+"companyPool",
+"commissionPool",
+"overridePool",
+"adminOperation",
+"allowance",
+"royalty"
 
+].forEach(id=>{
+
+document
+.getElementById(id)
+.addEventListener(
+"input",
+calculateSimulation
+);
+
+});
   
 // ================= SAVE SETTINGS =================
 
