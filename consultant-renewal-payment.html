@@ -86,6 +86,9 @@ getAuth(app);
 const db =
 getFirestore(app);
 
+// FIX 1: Tambah helper formatRM supaya tidak ReferenceError
+    const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+  
 onAuthStateChanged(auth, async(user)=>{
 
 if(!user){
