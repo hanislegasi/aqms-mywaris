@@ -31,11 +31,14 @@ Al-Qawthar Consultant
 </h1>
 
 <p
+id="registrationFeeText"
 class="text-gray-500 mb-6">
 
-Pendaftaran Konsultan (RM200)
+Loading...
 
-</p><form id="consultantForm" class="space-y-4">
+</p>
+  
+<form id="consultantForm" class="space-y-4">
 
 <input
 id="nama"
@@ -145,10 +148,11 @@ placeholder="Kod Upline (AQC001)"
 class="w-full border p-3 rounded-xl">
 
 <button
+id="registerButton"
 type="submit"
 class="w-full bg-[#153638] text-white p-4 rounded-xl font-bold">
 
-Daftar Konsultan (RM200)
+Loading...
 
 </button>
 
@@ -198,6 +202,24 @@ getAuth(app);
 const db =
 getFirestore(app);
 
+// FIX 1: Tambah fungsi formatRM supaya tidak ReferenceError
+      const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+
+      // Ambil compensation dari Firestore
+      const compensationSnap = await getDoc(
+        doc(db, "settings", "compensation")
+      );
+
+      // FIX 2 & 3: Semak kewujudan dokumen & gunakan nama field yang betul (consultantRegistrationFee)
+      const compensation = compensationSnap.exists() ? compensationSnap.data() : {};
+      const registrationFee = compensation.consultantRegistrationFee || compensation.consultantRegistration || 0;
+
+      document.getElementById("registrationFeeText").innerHTML =
+        `Pendaftaran Konsultan (RM${formatRM(registrationFee)})`;
+
+      document.getElementById("registerButton").innerHTML =
+        `Daftar Konsultan (RM${formatRM(registrationFee)})`;
+  
 // CHECK LOGIN
 onAuthStateChanged(auth,(user)=>{
 
