@@ -102,27 +102,43 @@ await getDoc(
 doc(db,"consultants",user.uid)
 );
 
-const data =
-consultantSnap.data();
+const data = consultantSnap.data();
 
 
-let renewalFee = 100;
+// Ambil compensation dari Firestore
+const compensationSnap = await getDoc(
+    doc(db, "settings", "compensation")
+);
 
-if(data.consultantLevel === "AQC-AS"){
-renewalFee = 150;
+const compensation = compensationSnap.data();
+
+
+let renewalFee = 0;
+
+
+if (data.consultantLevel === "AQC") {
+    renewalFee = compensation.renewalAQC;
 }
 
-if(data.consultantLevel === "AQC-UM"){
-renewalFee = 250;
+if (data.consultantLevel === "AQC-AS") {
+    renewalFee = compensation.renewalAQCAS;
 }
 
-if(data.consultantLevel === "MGAM"){
-renewalFee = 500;
+if (data.consultantLevel === "AQC-UM") {
+    renewalFee = compensation.renewalAQCUM;
 }
 
-document.getElementById(
-"paymentCard"
-).innerHTML = `
+if (data.consultantLevel === "MGAM") {
+    renewalFee = compensation.renewalMGAM;
+}
+  
+document.getElementById("paymentCard").innerHTML = `
+
+<div class="font-bold">
+RM${formatRM(renewalFee)}
+</div>
+
+`;
 
 <h2 class="text-2xl font-bold text-[#153638] mb-5">
 
