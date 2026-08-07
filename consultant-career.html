@@ -453,7 +453,15 @@ if(compensationSnap.exists()){
 
 const compensation =
 compensationSnap.data();
-
+  
+console.log(compensation);
+console.log(
+compensation.commissionAQC,
+compensation.commissionAQCAS,
+compensation.commissionAQCUM,
+compensation.commissionMGAM
+);
+  
 document.getElementById("commissionAQC").innerHTML =
 (compensation.commissionAQC ?? 0) + "%";
 
