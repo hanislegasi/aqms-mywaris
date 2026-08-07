@@ -565,6 +565,175 @@ Reset
 
 </div>
 
+<!-- ================= SALES SIMULATION ================= -->
+
+<div class="bg-white rounded-2xl shadow p-6 mb-8">
+
+<h2 class="text-xl font-bold mb-5">
+Simulasi Sales & Profit
+</h2>
+
+
+<div class="grid md:grid-cols-4 gap-4">
+
+
+<div>
+<label>Wasiat Unit</label>
+
+<input
+id="simWasiat"
+type="number"
+value="0"
+class="w-full border rounded-xl p-3 mt-1">
+
+</div>
+
+
+<div>
+<label>Hibah Unit</label>
+
+<input
+id="simHibah"
+type="number"
+value="0"
+class="w-full border rounded-xl p-3 mt-1">
+
+</div>
+
+
+<div>
+<label>Sepencarian Unit</label>
+
+<input
+id="simSepencarian"
+type="number"
+value="0"
+class="w-full border rounded-xl p-3 mt-1">
+
+</div>
+
+
+<div>
+<label>Mawaris Unit</label>
+
+<input
+id="simMawaris"
+type="number"
+value="0"
+class="w-full border rounded-xl p-3 mt-1">
+
+</div>
+
+
+</div>
+
+
+
+<div class="grid md:grid-cols-3 gap-4 mt-6">
+
+
+<div class="bg-gray-50 rounded-xl p-4">
+
+<p class="text-sm text-gray-500">
+Total Sales
+</p>
+
+<p id="simSales"
+class="text-2xl font-bold text-[#153638]">
+RM0
+</p>
+
+</div>
+
+
+
+<div class="bg-gray-50 rounded-xl p-4">
+
+<p class="text-sm text-gray-500">
+Commission
+</p>
+
+<p id="simCommission"
+class="text-2xl font-bold">
+RM0
+</p>
+
+</div>
+
+
+
+<div class="bg-gray-50 rounded-xl p-4">
+
+<p class="text-sm text-gray-500">
+Override
+</p>
+
+<p id="simOverride"
+class="text-2xl font-bold">
+RM0
+</p>
+
+</div>
+
+
+</div>
+
+
+
+
+<div class="grid md:grid-cols-3 gap-4 mt-4">
+
+
+<div class="bg-gray-50 rounded-xl p-4">
+
+<p class="text-sm text-gray-500">
+Company Pool
+</p>
+
+<p id="simCompanyPool"
+class="text-2xl font-bold">
+RM0
+</p>
+
+</div>
+
+
+
+<div class="bg-gray-50 rounded-xl p-4">
+
+<p class="text-sm text-gray-500">
+Gross Profit
+</p>
+
+<p id="simProfit"
+class="text-2xl font-bold">
+RM0
+</p>
+
+</div>
+
+
+
+<div id="marginCard"
+class="bg-gray-50 rounded-xl p-4">
+
+<p class="text-sm text-gray-500">
+Profit Margin
+</p>
+
+<p id="simMargin"
+class="text-2xl font-bold">
+0%
+</p>
+
+</div>
+
+
+</div>
+
+
+</div>
+  
 <script type="module">
 
 import { initializeApp } 
@@ -873,6 +1042,170 @@ saveSettings.disabled=false;
 
 
 }
+
+// ================= SALES SIMULATION =================
+
+
+function calculateSimulation(){
+
+
+let sales =
+
+(Number(simWasiat.value) * Number(wasiatPrice.value))
+
++
+
+(Number(simHibah.value) * Number(hibahPrice.value))
+
++
+
+(Number(simSepencarian.value) * Number(sepencarianPrice.value))
+
++
+
+(Number(simMawaris.value) * Number(mawarisPrice.value));
+
+
+
+let commission =
+
+sales *
+Number(commissionPool.value)
+/100;
+
+
+
+let override =
+
+sales *
+Number(overridePool.value)
+/100;
+
+
+
+let companyPoolAmount =
+
+sales *
+Number(companyPool.value)
+/100;
+
+
+
+
+let adminAmount =
+
+companyPoolAmount *
+Number(adminOperation.value)
+/100;
+
+
+
+let allowanceAmount =
+
+companyPoolAmount *
+Number(allowance.value)
+/100;
+
+
+
+let royaltyAmount =
+
+companyPoolAmount *
+Number(royalty.value)
+/100;
+
+
+
+let profit =
+
+companyPoolAmount
+-
+adminAmount
+-
+allowanceAmount
+-
+royaltyAmount;
+
+
+
+let margin = sales > 0
+
+?
+(profit / sales) * 100
+
+:
+0;
+
+
+
+simSales.innerHTML =
+"RM" + sales.toLocaleString();
+
+
+simCommission.innerHTML =
+"RM" + commission.toLocaleString();
+
+
+simOverride.innerHTML =
+"RM" + override.toLocaleString();
+
+
+simCompanyPool.innerHTML =
+"RM" + companyPoolAmount.toLocaleString();
+
+
+simProfit.innerHTML =
+"RM" + profit.toLocaleString();
+
+
+simMargin.innerHTML =
+margin.toFixed(1)+"%";
+
+
+// warna margin
+
+if(margin < 20){
+
+marginCard.className =
+"bg-red-100 rounded-xl p-4";
+
+}
+
+else if(margin < 30){
+
+marginCard.className =
+"bg-yellow-100 rounded-xl p-4";
+
+}
+
+else{
+
+marginCard.className =
+"bg-green-100 rounded-xl p-4";
+
+}
+
+
+}
+
+
+
+// LIVE UPDATE
+
+[
+simWasiat,
+simHibah,
+simSepencarian,
+simMawaris
+
+].forEach(x=>{
+
+x.oninput =
+calculateSimulation;
+
+});
+
+
   
 // ================= SAVE SETTINGS =================
 
