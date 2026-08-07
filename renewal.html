@@ -1,291 +1,326 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pembaharuan Keahlian - AQM</title>
 
-<title>Pembaharuan Keahlian</title>
+  <!-- Google Font: Inter[cite: 1] -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-<script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: { primary: '#153638' }
+        }
+      }
+    }
+  </script>
 </head>
 
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-5">
-
-<div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl">
-
-<h1 class="text-3xl font-bold text-[#153638] mb-2">
-Pembaharuan Keahlian
-</h1>
-
-<p class="text-gray-500 mb-8">
-Lanjutkan keahlian selama 1 tahun
-</p>
-
-<div class="bg-gray-100 rounded-2xl p-5 mb-8">
-
-<div class="flex justify-between mb-3">
-
-<span>
-Produk
-</span>
-
-<span class="font-semibold">
-Renewal Membership
-</span>
-
-</div>
-
-<div class="flex justify-between">
-
-<span>
-Jumlah
-</span>
-
-<span class="text-2xl font-bold text-[#153638]">
-RM50
-</span>
-
-</div>
-
-</div>
-
-<button
-id="payBtn"
-class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-4 rounded-2xl font-semibold">
-
-Bayar Sekarang
-
-</button>
-
-</div>
-
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getAuth,
-onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-getFirestore,
-doc,
-updateDoc,
-getDoc,
-addDoc,
-collection  
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const firebaseConfig = {
-
-apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-authDomain: "alqawthar-mywaris.firebaseapp.com",
-projectId: "alqawthar-mywaris",
-storageBucket: "alqawthar-mywaris.firebasestorage.app",
-messagingSenderId: "3498810778",
-appId: "1:3498810778:web:ee36e0fe42f76698046e23"
-
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const auth =
-getAuth(app);
-
-const db =
-getFirestore(app);
-
-const renewalFee = 50;
-  
-let currentUser = null;
-
-onAuthStateChanged(auth,(user)=>{
-
-if(!user){
-
-window.location.href =
-"login.html";
-
-return;
-
-}
-
-currentUser = user;
-
-});
-
-document
-.getElementById("payBtn")
-.addEventListener("click", async()=>{
-
-try{
-
-const wasiatRef =
-doc(
-db,
-"users",
-currentUser.uid,
-"wasiat",
-"maklumat"
-);
-
-const wasiatSnap =
-await getDoc(
-wasiatRef
-);
-
-if(!wasiatSnap.exists()){
-
-alert(
-"Maklumat wasiat tidak dijumpai"
-);
-
-return;
-
-}
-
-const wasiatData =
-wasiatSnap.data();
-
-const userSnap =
-await getDoc(
-doc(db,"users",currentUser.uid)
-);
-
-const data =
-userSnap.data();  
-
-let expiryDate =
-new Date();
-
-expiryDate.setFullYear(
-expiryDate.getFullYear() + 1
-);
-
-  
-
-// update user
-await updateDoc(
-wasiatRef,
-{
-expiryDate:
-expiryDate.toISOString(),
-
-renewedAt:
-new Date().toISOString()
-  
-}
-);
-
-
-await addDoc(collection(db,"ledger"),{
-
-date:new Date(),
-
-accountCode:"4300",
-
-account:"AQM - Wasiat Renewal Fee",
-
-category:"income",
-
-description:
-"Wasiat Membership Renewal",
-
-debit:0,
-
-credit:renewalFee,
-
-paymentType:"CUSTOMER",
-
-sourceAccount:"4300",
-
-transactionGroup:currentUser.uid
-
-});
-
-
-await addDoc(collection(db,"ledger"),{
-
-date:new Date(),
-
-accountCode:"1000",
-
-account:"Bank",
-
-category:"asset",
-
-description:
-"Wasiat Membership Renewal",
-
-debit:renewalFee,
-
-credit:0,
-
-paymentType:"CUSTOMER",
-
-sourceAccount:"4300",
-
-transactionGroup:currentUser.uid
-
-});
-
-
-await addDoc(
-collection(db,"receipts"),
-{
-
-receiptNo:
-"WAS-REN-"+Date.now(),
-
-uid:currentUser.uid,
-
-payerName:data.nama || "-",
-
-customerPhone:data.telefon || "",
-
-serviceCode:"WASIAT_RENEWAL",
-
-serviceName:"Wasiat Membership Renewal",
-
-amount:renewalFee,
-
-paymentMethod:"ToyyibPay",
-
-status:"PAID",
-
-paymentDate:new Date()
-
-}
-);  
-  
-  
-alert(
-"Keahlian berjaya diperbaharui sehingga "
-+
-expiryDate.toLocaleDateString("ms-MY")
-);
-
-window.location.href =
-"dashboard.html";
-
-}
-
-catch(error){
-
-console.log(error);
-
-}
-
-});
-
-
-
-  
-</script>
-
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-5 font-sans">
+
+  <!-- Kad Utama: rounded-2xl[cite: 1] -->
+  <div class="bg-white w-full max-w-md p-8 rounded-2xl shadow-xl">
+    <h1 class="text-3xl font-bold text-primary mb-2">
+      Pembaharuan Keahlian
+    </h1>
+    <p class="text-gray-500 mb-6">
+      Lanjutkan keahlian produk anda selama 1 tahun
+    </p>
+
+    <!-- Status Loading -->
+    <div id="loadingBox" class="text-center py-8 text-gray-500 font-semibold">
+      Menyemak maklumat & harga terkini...
+    </div>
+
+    <!-- Konten Utama (Dembunyikan waktu loading) -->
+    <div id="mainContent" class="hidden">
+      <!-- Dropdown (Hanya muncul jika customer miliki > 1 produk) -->
+      <div id="multiProductBox" class="mb-6 hidden">
+        <label for="productSelect" class="block text-sm font-semibold text-gray-700 mb-2">
+          Pilih Produk Untuk Diperbaharui
+        </label>
+        <select 
+          id="productSelect" 
+          class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-xl font-semibold text-primary focus:outline-none focus:ring-2 focus:ring-primary transition">
+        </select>
+      </div>
+
+      <!-- Ringkasan Bayaran -->
+      <div class="bg-gray-100 rounded-2xl p-5 mb-8">
+        <div class="flex justify-between mb-3">
+          <span class="text-gray-600">Produk</span>
+          <span id="displayProductName" class="font-semibold text-primary">
+            -
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-gray-600">Jumlah</span>
+          <span id="displayProductFee" class="text-2xl font-bold text-primary">
+            RM0
+          </span>
+        </div>
+      </div>
+
+      <!-- Butang: rounded-xl[cite: 1] -->
+      <button
+        id="payBtn"
+        class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-4 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
+        Bayar Sekarang
+      </button>
+    </div>
+
+    <!-- Mesej Jika Tiada Produk -->
+    <div id="noProductBox" class="hidden text-center py-6 text-red-600 font-semibold">
+      Anda tiada produk aktif untuk diperbaharui.
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, updateDoc, getDoc, addDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+      authDomain: "alqawthar-mywaris.firebaseapp.com",
+      projectId: "alqawthar-mywaris",
+      storageBucket: "alqawthar-mywaris.firebasestorage.app",
+      messagingSenderId: "3498810778",
+      appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUser = null;
+    let ownedProducts = [];
+    let compSettings = {}; // Menyimpan data dari settings/compensation
+
+    // Konfigurasi 4 Produk dengan nama field Firestore (tiada hardcode harga)
+    const productConfig = {
+      wasiat: {
+        name: "Wasiat",
+        code: "WASIAT_RENEWAL",
+        prefix: "WAS",
+        feeField: "wasiatRenewal",
+        ledgerAccount: "AQM - Wasiat Renewal Fee"
+      },
+      hibah: {
+        name: "Hibah",
+        code: "HIBAH_RENEWAL",
+        prefix: "HIB",
+        feeField: "hibahRenewal",
+        ledgerAccount: "AQM - Hibah Renewal Fee"
+      },
+      sepencarian: {
+        name: "Harta Sepencarian",
+        code: "SEPENCARIAN_RENEWAL",
+        prefix: "SEP",
+        feeField: "sepencarianRenewal",
+        ledgerAccount: "AQM - Harta Sepencarian Renewal Fee"
+      },
+      mawaris: {
+        name: "Mawaris (Full Package)",
+        code: "MAWARIS_RENEWAL",
+        prefix: "MAW",
+        feeField: "mawarisRenewal",
+        ledgerAccount: "AQM - Mawaris Renewal Fee"
+      }
+    };
+
+    const loadingBox = document.getElementById("loadingBox");
+    const mainContent = document.getElementById("mainContent");
+    const noProductBox = document.getElementById("noProductBox");
+    const multiProductBox = document.getElementById("multiProductBox");
+    const productSelect = document.getElementById("productSelect");
+    const displayProductName = document.getElementById("displayProductName");
+    const displayProductFee = document.getElementById("displayProductFee");
+    const payBtn = document.getElementById("payBtn");
+
+    // Dapatkan nilai harga dari compSettings mengikut field Firestore
+    function getProductFee(key) {
+      const fieldName = productConfig[key].feeField;
+      return compSettings[fieldName] || 0; // Fallback 0 jika field tidak dijumpai
+    }
+
+    // Fungsi update UI mengikut produk terpilih
+    function updateDisplay(key) {
+      const selected = productConfig[key];
+      const fee = getProductFee(key);
+      displayProductName.textContent = `${selected.name} Renewal`;
+      displayProductFee.textContent = `RM${fee}`;
+    }
+
+    productSelect.addEventListener("change", (e) => {
+      updateDisplay(e.target.value);
+    });
+
+    // 1. Check Sesi, Tarik Settings, & Auto-Detect Produk
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+      currentUser = user;
+      await initPageData();
+    });
+
+    // 2. Tarik data settings/compensation & semak produk pelanggan
+    async function initPageData() {
+      try {
+        // Ambil tetapan harga renewal dari settings/compensation
+        const compSnap = await getDoc(doc(db, "settings", "compensation"));
+        if (compSnap.exists()) {
+          compSettings = compSnap.data();
+        } else {
+          console.warn("Dokumen settings/compensation tidak dijumpai!");
+        }
+
+        const keys = Object.keys(productConfig);
+        
+        // Semak 4 subcollection produk serentak menggunakan Promise.all
+        const checks = await Promise.all(
+          keys.map(key => getDoc(doc(db, "users", currentUser.uid, key, "maklumat")))
+        );
+
+        ownedProducts = [];
+        checks.forEach((snap, idx) => {
+          if (snap.exists()) {
+            ownedProducts.push(keys[idx]);
+          }
+        });
+
+        loadingBox.classList.add("hidden");
+
+        if (ownedProducts.length === 0) {
+          noProductBox.classList.remove("hidden");
+          return;
+        }
+
+        mainContent.classList.remove("hidden");
+
+        // Semak Parameter URL (cth: ?product=hibah)
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlParamProduct = urlParams.get("product");
+        let defaultKey = ownedProducts[0];
+
+        if (urlParamProduct && ownedProducts.includes(urlParamProduct)) {
+          defaultKey = urlParamProduct;
+        }
+
+        if (ownedProducts.length === 1) {
+          // Kes 1 Produk: Sembunyikan dropdown, tunjuk auto-detected produk terus
+          multiProductBox.classList.add("hidden");
+          updateDisplay(defaultKey);
+          productSelect.innerHTML = `<option value="${defaultKey}" selected>${productConfig[defaultKey].name}</option>`;
+        } else {
+          // Kes >1 Produk: Munculkan dropdown dengan produk yang dilanggan sahaja
+          multiProductBox.classList.remove("hidden");
+          productSelect.innerHTML = ownedProducts.map(key => 
+            `<option value="${key}" ${key === defaultKey ? 'selected' : ''}>${productConfig[key].name}</option>`
+          ).join("");
+          updateDisplay(defaultKey);
+        }
+      } catch (error) {
+        console.error("Ralat memuatkan data:", error);
+        loadingBox.innerText = "Gagal memuatkan data. Sila refresh halaman.";
+      }
+    }
+
+    // 3. Proses Pembaharuan
+    payBtn.addEventListener("click", async () => {
+      if (!currentUser) return;
+
+      const selectedKey = productSelect.value;
+      const config = productConfig[selectedKey];
+      const renewalFee = getProductFee(selectedKey); // Nilai tepat dari Firestore
+
+      if (renewalFee <= 0) {
+        alert("Ralat pada nilai pembaharuan. Sila hubungi pihak admin.");
+        return;
+      }
+
+      try {
+        payBtn.disabled = true;
+        payBtn.textContent = "Memproses...";
+
+        const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+        const userData = userSnap.exists() ? userSnap.data() : {};
+
+        const productDocRef = doc(db, "users", currentUser.uid, selectedKey, "maklumat");
+
+        // Kira tarikh luput baharu mengikut memberValidity (default: 365 hari)
+        const validityDays = compSettings.memberValidity || 365;
+        let expiryDate = new Date();
+        expiryDate.setDate(expiryDate.getDate() + validityDays);
+
+        // Update tarikh luput subcollection produk[cite: 1]
+        await updateDoc(productDocRef, {
+          expiryDate: expiryDate.toISOString(),
+          renewedAt: new Date().toISOString()
+        });
+
+        // Rekod Ledger (Kredit - Income)[cite: 1]
+        await addDoc(collection(db, "ledger"), {
+          date: new Date(),
+          accountCode: "4300",
+          account: config.ledgerAccount,
+          category: "income",
+          description: `${config.name} Membership Renewal`,
+          debit: 0,
+          credit: renewalFee,
+          paymentType: "CUSTOMER",
+          sourceAccount: "4300",
+          transactionGroup: currentUser.uid
+        });
+
+        // Rekod Ledger (Debit - Bank)[cite: 1]
+        await addDoc(collection(db, "ledger"), {
+          date: new Date(),
+          accountCode: "1000",
+          account: "Bank",
+          category: "asset",
+          description: `${config.name} Membership Renewal`,
+          debit: renewalFee,
+          credit: 0,
+          paymentType: "CUSTOMER",
+          sourceAccount: "4300",
+          transactionGroup: currentUser.uid
+        });
+
+        // Rekod Resit[cite: 1]
+        await addDoc(collection(db, "receipts"), {
+          receiptNo: `${config.prefix}-REN-${Date.now()}`,
+          uid: currentUser.uid,
+          payerName: userData.nama || "-",
+          customerPhone: userData.telefon || "",
+          serviceCode: config.code,
+          serviceName: `${config.name} Membership Renewal`,
+          amount: renewalFee,
+          paymentMethod: "ToyyibPay",
+          status: "PAID",
+          paymentDate: new Date()
+        });
+
+        alert(`Keahlian ${config.name} berjaya diperbaharui sehingga ${expiryDate.toLocaleDateString("ms-MY")}`);
+        window.location.href = "dashboard.html";
+
+      } catch (error) {
+        console.error("Ralat pembaharuan:", error);
+        alert("Berlaku ralat semasa memproses data. Sila cuba lagi.");
+      } finally {
+        payBtn.disabled = false;
+        payBtn.textContent = "Bayar Sekarang";
+      }
+    });
+  </script>
 </body>
 </html>
