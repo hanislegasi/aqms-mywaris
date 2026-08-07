@@ -1,374 +1,231 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Pendaftaran Konsultan</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pendaftaran Konsultan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body
-class="bg-gray-100 min-h-screen flex items-center justify-center p-5"
-style="font-family: Inter, sans-serif;">
-
-<div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl">
-
-<h1 class="text-3xl font-bold text-[#153638] mb-2">
-Al-Qawthar Consultant
-</h1>
-
-<p class="text-gray-500 mb-8">
-Bayaran Pendaftaran
-</p>
-
-<div class="bg-gray-100 rounded-2xl p-5 mb-8">
-
-<div class="flex justify-between mb-3">
-
-<span>
-Jawatan
-</span>
-
-<span class="font-semibold">
-Al-Qawthar Consultant
-</span>
-
-</div>
-
-<div class="flex justify-between">
-
-<span>
-Jumlah
-</span>
-
-<span class="text-2xl font-bold text-[#153638]">
-RM200
-</span>
-
-</div>
-
-</div>
-
-<button
-id="payBtn"
-class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-4 rounded-2xl font-semibold">
-
-Bayar Sekarang
-
-</button>
-
-</div>
-
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getAuth,
-onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-getFirestore,
-doc,
-updateDoc,
-getDoc,
-increment,
-addDoc,
-collection
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const firebaseConfig = {
-
-apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-authDomain: "alqawthar-mywaris.firebaseapp.com",
-projectId: "alqawthar-mywaris",
-storageBucket: "alqawthar-mywaris.firebasestorage.app",
-messagingSenderId: "3498810778",
-appId: "1:3498810778:web:ee36e0fe42f76698046e23"
-
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const auth =
-getAuth(app);
-
-const db =
-getFirestore(app);
-
-let currentUser = null;
-
-onAuthStateChanged(auth,(user)=>{
-
-if(!user){
-
-window.location.href =
-"login.html";
-
-return;
-
-}
-
-currentUser = user;
-
-});
-
-document
-.getElementById("payBtn")
-.addEventListener("click", async()=>{
-
-document.getElementById(
-"payBtn"
-).disabled = true;
-
-
-try{
-
-const counterRef =
-doc(
-db,
-"system",
-"counter"
-);
-
-const counterSnap =
-await getDoc(counterRef);
-
-const currentNo =
-counterSnap.data().consultantCounter || 0;
-
-const newNo =
-currentNo + 1;
-
-
-
-// generate consultant no
-const consultantNo =
-"AQC" +
-String(newNo).padStart(4,"0");
-
-// renewal date
-const renewalDate =
-new Date();
-
-renewalDate.setFullYear(
-renewalDate.getFullYear() + 1
-);
-
-// update user
-await updateDoc(
-
-doc(
-db,
-"consultants",
-currentUser.uid
-),
-
-{
-
-consultantNo,
-
-consultantLevel:"AQC",
-
-consultantPaymentStatus:"paid",
-
-joinDate:new Date(),
-
-renewalDate,
-
-downlineCount:0,
-
-activeClients:0,
-
-careerSales:0,
-
-totalSales:0,
-
-totalCommission:0,
-
-totalUSB:0,
-
-totalOverriding:0,
-
-lifetimeCommission:0,
-
-lifetimeUSB:0,
-
-lifetimeOverride:0
-
-}
-
-);
-
-const consultantSnap =
-await getDoc(
-doc(db,"consultants",currentUser.uid)
-);
-
-const consultant =
-consultantSnap.data();
-
-if(consultant.consultantPaymentStatus === "paid"){
-
-alert("Yuran pendaftaran telah dijelaskan.");
-
-window.location.href =
-"consultant-dashboard.html";
-
-return;
-
-}
-    
-    
-await updateDoc(
-
-doc(
-db,
-"users",
-currentUser.uid
-),
-
-{
-
-role:"consultant"
-
-}
-
-);
-
-    
-// ===============================
-// ACCOUNTING ENTRY
-// Dr Bank
-// Cr Consultant Registration Fee
-// ===============================
-
-await addDoc(collection(db,"ledger"),{
-
-date:new Date(),
-
-accountCode:"4120",
-account:"Registration AQC",
-
-category:"income",
-
-description:
-consultantNo + " Registration",
-
-debit:0,
-credit:200,
-
-paymentType:"CUSTOMER",
-
-sourceAccount:"4120",
-
-transactionGroup:consultantNo
-
-});
-
-
-await addDoc(collection(db,"ledger"),{
-
-date:new Date(),
-
-accountCode:"1000",
-account:"Bank",
-
-category:"asset",
-
-description:
-consultantNo + " Registration",
-
-debit:200,
-credit:0,
-
-paymentType:"CUSTOMER",
-
-sourceAccount:"4120",
-
-transactionGroup:consultantNo
-
-});
-
-
-// ===============================
-// CREATE PAYMENT RECEIPT
-// ===============================
-
-await addDoc(
-
-collection(db,"receipts"),
-
-{
-
-receiptNo:
-"REG-" + Date.now(),
-
-uid:currentUser.uid,
-
-consultantNo,
-
-serviceCode:"REGISTRATION",
-
-serviceName:"Consultant Registration Fee",
-
-payerName:consultant.nama,
-
-amount:200,
-
-paymentMethod:"ToyyibPay",
-
-status:"PAID",
-
-paymentDate:new Date()
-
-}
-
-);
-
-// update counter
-await updateDoc(
-counterRef,
-{
-consultantCounter:
-increment(1)
-}
-);
-    
-    
-alert(
-"Pendaftaran Konsultan Berjaya. No Konsultan: " +
-consultantNo
-);
-
-window.location.href =
-"consultant-dashboard.html";
-
-}
-
-catch(error){
-
-document.getElementById(
-"payBtn"
-).disabled = false;
-    
-console.log(error);
-
-alert(
-"Ralat: " +
-error.message
-);
-
-}
-});
-
-</script>
-
+  class="bg-gray-100 min-h-screen flex items-center justify-center p-5"
+  style="font-family: Inter, sans-serif;">
+
+  <div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl">
+    <h1 class="text-3xl font-bold text-[#153638] mb-2">
+      Al-Qawthar Consultant
+    </h1>
+
+    <p class="text-gray-500 mb-8">
+      Bayaran Pendaftaran
+    </p>
+
+    <div class="bg-gray-100 rounded-2xl p-5 mb-8">
+      <div class="flex justify-between mb-3">
+        <span>
+          Jawatan
+        </span>
+        <span class="font-semibold">
+          Al-Qawthar Consultant
+        </span>
+      </div>
+
+      <div class="flex justify-between">
+        <span>
+          Jumlah
+        </span>
+        <!-- FIX 1: ID untuk update harga dinamik dari Firestore -->
+        <span id="displayFee" class="text-2xl font-bold text-[#153638]">
+          Loading...
+        </span>
+      </div>
+    </div>
+
+    <button
+      id="payBtn"
+      class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-4 rounded-2xl font-semibold">
+      Bayar Sekarang
+    </button>
+  </div>
+
+  <script type="module">
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      updateDoc,
+      getDoc,
+      increment,
+      addDoc,
+      collection
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+      authDomain: "alqawthar-mywaris.firebaseapp.com",
+      projectId: "alqawthar-mywaris",
+      storageBucket: "alqawthar-mywaris.firebasestorage.app",
+      messagingSenderId: "3498810778",
+      appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+
+    let currentUser = null;
+    let registrationFee = 0;
+
+    // CHECK AUTH & TARIK HARGA DARI FIRESTORE
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+      currentUser = user;
+
+      try {
+        // Tarik yuran pendaftaran dari settings/compensation
+        const compSnap = await getDoc(doc(db, "settings", "compensation"));
+        const compensation = compSnap.exists() ? compSnap.data() : {};
+        
+        // Sokong nama field consultantRegistrationFee atau consultantRegistration
+        registrationFee = compensation.consultantRegistrationFee || compensation.consultantRegistration || 200;
+
+        document.getElementById("displayFee").textContent = `RM${formatRM(registrationFee)}`;
+      } catch (err) {
+        console.error("Ralat memuatkan tetapan compensation:", err);
+        document.getElementById("displayFee").textContent = "RM200.00";
+        registrationFee = 200;
+      }
+    });
+
+    document
+      .getElementById("payBtn")
+      .addEventListener("click", async () => {
+        const payBtn = document.getElementById("payBtn");
+        payBtn.disabled = true;
+
+        try {
+          // FIX 2: Semak status bayaran SEBELUM buat sebarang update!
+          const consultantRef = doc(db, "consultants", currentUser.uid);
+          const consultantSnap = await getDoc(consultantRef);
+          const consultant = consultantSnap.exists() ? consultantSnap.data() : {};
+
+          if (consultant.consultantPaymentStatus === "paid") {
+            alert("Yuran pendaftaran telah dijelaskan.");
+            window.location.href = "consultant-dashboard.html";
+            return;
+          }
+
+          const counterRef = doc(db, "system", "counter");
+          const counterSnap = await getDoc(counterRef);
+          const currentNo = counterSnap.exists() ? (counterSnap.data().consultantCounter || 0) : 0;
+          const newNo = currentNo + 1;
+
+          // generate consultant no
+          const consultantNo = "AQC" + String(newNo).padStart(4, "0");
+
+          // renewal date
+          const renewalDate = new Date();
+          renewalDate.setFullYear(renewalDate.getFullYear() + 1);
+
+          // update user di collection consultants
+          await updateDoc(consultantRef, {
+            consultantNo,
+            consultantLevel: "AQC",
+            consultantPaymentStatus: "paid",
+            joinDate: new Date(),
+            renewalDate,
+            downlineCount: 0,
+            activeClients: 0,
+            careerSales: 0,
+            totalSales: 0,
+            totalCommission: 0,
+            totalUSB: 0,
+            totalOverriding: 0,
+            lifetimeCommission: 0,
+            lifetimeUSB: 0,
+            lifetimeOverride: 0
+          });
+
+          // update role di collection users
+          await updateDoc(doc(db, "users", currentUser.uid), {
+            role: "consultant"
+          });
+
+          // ===============================
+          // ACCOUNTING ENTRY
+          // Dr Bank
+          // Cr Consultant Registration Fee
+          // ===============================
+          await addDoc(collection(db, "ledger"), {
+            date: new Date(),
+            accountCode: "4120",
+            account: "Registration AQC",
+            category: "income",
+            description: consultantNo + " Registration",
+            debit: 0,
+            credit: registrationFee,
+            paymentType: "CUSTOMER",
+            sourceAccount: "4120",
+            transactionGroup: consultantNo
+          });
+
+          await addDoc(collection(db, "ledger"), {
+            date: new Date(),
+            accountCode: "1000",
+            account: "Bank",
+            category: "asset",
+            description: consultantNo + " Registration",
+            debit: registrationFee,
+            credit: 0,
+            paymentType: "CUSTOMER",
+            sourceAccount: "4120",
+            transactionGroup: consultantNo
+          });
+
+          // ===============================
+          // CREATE PAYMENT RECEIPT
+          // ===============================
+          await addDoc(collection(db, "receipts"), {
+            receiptNo: "REG-" + Date.now(),
+            uid: currentUser.uid,
+            consultantNo,
+            serviceCode: "REGISTRATION",
+            serviceName: "Consultant Registration Fee",
+            payerName: consultant.nama || "-",
+            amount: registrationFee,
+            paymentMethod: "ToyyibPay",
+            status: "PAID",
+            paymentDate: new Date()
+          });
+
+          // update counter
+          await updateDoc(counterRef, {
+            consultantCounter: increment(1)
+          });
+
+          alert("Pendaftaran Konsultan Berjaya. No Konsultan: " + consultantNo);
+          window.location.href = "consultant-dashboard.html";
+
+        } catch (error) {
+          payBtn.disabled = false;
+          console.error(error);
+          alert("Ralat: " + error.message);
+        }
+      });
+  </script>
 </body>
 </html>
