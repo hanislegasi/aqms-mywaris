@@ -1,756 +1,292 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-<title>Settings</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-body{
-font-family: Inter, sans-serif;
-}
-</style>  
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Admin Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>  
 </head>
+<body class="bg-gray-100 pb-10">
 
-<body class="bg-gray-100">
-
-<div class="bg-[#153638] text-white p-5">
-
-<h1 class="text-2xl font-bold">
-
-Admin Settings
-
-</h1>
-
-</div>
-
-<div class="p-5">
-
-<a
-href="admin-dashboard.html"
-class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
-
-← Dashboard
-
-</a>
-<div class="p-5">
-
-    
-    <!-- ================= COMPANY ================= -->
-
-    <div class="bg-white rounded-2xl shadow p-6 mb-6">
-
-        <h2 class="text-xl font-bold mb-5">
-            Maklumat Syarikat
-        </h2>
-
-        <div class="grid md:grid-cols-2 gap-4">
-
-            <div>
-                <label class="font-medium">Nama Syarikat</label>
-
-                <input
-                    id="companyName"
-                    type="text"
-                    class="w-full border rounded-xl p-3 mt-1">
-            </div>
-
-            <div>
-                <label class="font-medium">No. Syarikat</label>
-
-                <input
-                    id="registrationNo"
-                    type="text"
-                    class="w-full border rounded-xl p-3 mt-1">
-            </div>
-
-            <div>
-                <label class="font-medium">Email</label>
-
-                <input
-                    id="companyEmail"
-                    type="email"
-                    class="w-full border rounded-xl p-3 mt-1">
-            </div>
-
-            <div>
-                <label class="font-medium">Alamat</label>
-
-                <input
-                    id="companyAddress"
-                    type="text"
-                    class="w-full border rounded-xl p-3 mt-1">
-            </div>
-
+    <div class="bg-[#153638] text-white p-5 shadow-md">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <h1 class="text-2xl font-bold">Admin Settings</h1>
         </div>
-
     </div>
 
+    <div class="max-w-6xl mx-auto p-5">
+        <a href="admin-dashboard.html" class="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-5 py-2.5 rounded-xl inline-block mb-6 font-medium transition-colors shadow-sm">
+            ← Dashboard
+        </a>
 
-
-    <!-- ================= PRODUCT ================= -->
-
-    <div class="bg-white rounded-2xl shadow p-6 mb-6">
-
-        <h2 class="text-xl font-bold mb-5">
-
-            Harga Produk
-
-        </h2>
-
-        <div class="grid md:grid-cols-2 gap-4">
-
-            <div>
-
-                <label>Wasiat (RM)</label>
-
-                <input
-                    id="wasiatPrice"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
+        <!-- ================= COMPANY ================= -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Maklumat Syarikat</h2>
+            <div class="grid md:grid-cols-2 gap-5">
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Nama Syarikat</label>
+                    <input id="companyName" type="text" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] focus:border-transparent outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">No. Syarikat</label>
+                    <input id="registrationNo" type="text" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] focus:border-transparent outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Email</label>
+                    <input id="companyEmail" type="email" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] focus:border-transparent outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Alamat</label>
+                    <input id="companyAddress" type="text" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] focus:border-transparent outline-none transition-all">
+                </div>
             </div>
-
-            <div>
-
-                <label>Hibah (RM)</label>
-
-                <input
-                    id="hibahPrice"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
-            </div>
-
-            <div>
-
-                <label>Sepencarian (RM)</label>
-
-                <input
-                    id="sepencarianPrice"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
-            </div>
-
-            <div>
-
-                <label>Mawaris (RM)</label>
-
-                <input
-                    id="mawarisPrice"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
-            </div>
-
         </div>
 
-    </div>
-
-
-
-    <!-- ================= RENEWAL ================= -->
-
-    <div class="bg-white rounded-2xl shadow p-6 mb-6">
-
-        <h2 class="text-xl font-bold mb-5">
-
-            Renewal Produk
-
-        </h2>
-
-        <div class="grid md:grid-cols-2 gap-4">
-
-            <div>
-
-                <label>Renewal Wasiat</label>
-
-                <input
-                    id="wasiatRenewal"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
+        <!-- ================= PRODUCT ================= -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Harga Produk</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Wasiat (RM)</label>
+                    <input id="wasiatPrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Hibah (RM)</label>
+                    <input id="hibahPrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Sepencarian (RM)</label>
+                    <input id="sepencarianPrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Mawaris (RM)</label>
+                    <input id="mawarisPrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
             </div>
-
-            <div>
-
-                <label>Renewal Hibah</label>
-
-                <input
-                    id="hibahRenewal"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
-            </div>
-
-            <div>
-
-                <label>Renewal Sepencarian</label>
-
-                <input
-                    id="sepencarianRenewal"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
-            </div>
-
-            <div>
-
-                <label>Renewal Mawaris</label>
-
-                <input
-                    id="mawarisRenewal"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
-            </div>
-
         </div>
 
-    </div>
-
-
-
-    <!-- ================= COMMISSION ================= -->
-
-    <div class="bg-white rounded-2xl shadow p-6 mb-6">
-
-        <h2 class="text-xl font-bold mb-5">
-
-            Commission (%)
-
-        </h2>
-
-        <div class="grid md:grid-cols-4 gap-4">
-
-            <div>
-
-                <label>AQC</label>
-
-                <input
-                    id="commissionAQC"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
+        <!-- ================= RENEWAL ================= -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Renewal Produk</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Renewal Wasiat</label>
+                    <input id="wasiatRenewal" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Renewal Hibah</label>
+                    <input id="hibahRenewal" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Renewal Sepencarian</label>
+                    <input id="sepencarianRenewal" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Renewal Mawaris</label>
+                    <input id="mawarisRenewal" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
             </div>
-
-            <div>
-
-                <label>AQC-AS</label>
-
-                <input
-                    id="commissionAQCAS"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
-            </div>
-
-            <div>
-
-                <label>AQC-UM</label>
-
-                <input
-                    id="commissionAQCUM"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
-            </div>
-
-            <div>
-
-                <label>MGAM</label>
-
-                <input
-                    id="commissionMGAM"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
-            </div>
-
         </div>
 
-    </div>
-
-
-
-    <!-- ================= OVERRIDE ================= -->
-
-    <div class="bg-white rounded-2xl shadow p-6 mb-6">
-
-        <h2 class="text-xl font-bold mb-5">
-
-            Override (%)
-
-        </h2>
-
-        <div class="grid md:grid-cols-4 gap-4">
-
-            <div>
-
-                <label>AQC</label>
-
-                <input
-                    id="overrideAQC"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
+        <!-- ================= COMMISSION & OVERRIDE ================= -->
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Commission (%)</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-medium text-sm text-gray-600 block mb-1">AQC</label>
+                        <input id="commissionAQC" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="font-medium text-sm text-gray-600 block mb-1">AQC-AS</label>
+                        <input id="commissionAQCAS" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="font-medium text-sm text-gray-600 block mb-1">AQC-UM</label>
+                        <input id="commissionAQCUM" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="font-medium text-sm text-gray-600 block mb-1">MGAM</label>
+                        <input id="commissionMGAM" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                    </div>
+                </div>
             </div>
 
-            <div>
-
-                <label>AQC-AS</label>
-
-                <input
-                    id="overrideAQCAS"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Override (%)</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-medium text-sm text-gray-600 block mb-1">AQC</label>
+                        <input id="overrideAQC" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="font-medium text-sm text-gray-600 block mb-1">AQC-AS</label>
+                        <input id="overrideAQCAS" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="font-medium text-sm text-gray-600 block mb-1">AQC-UM</label>
+                        <input id="overrideAQCUM" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="font-medium text-sm text-gray-600 block mb-1">MGAM</label>
+                        <input id="overrideMGAM" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                    </div>
+                </div>
             </div>
-
-            <div>
-
-                <label>AQC-UM</label>
-
-                <input
-                    id="overrideAQCUM"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
-            </div>
-
-            <div>
-
-                <label>MGAM</label>
-
-                <input
-                    id="overrideMGAM"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
-            </div>
-
         </div>
 
-    </div>
+        <!-- ================= REVENUE DISTRIBUTION ================= -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Revenue Allocation (%)</h2>
+            <div class="grid md:grid-cols-3 gap-5">
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Company Pool</label>
+                    <input id="companyPool" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Commission Pool</label>
+                    <input id="commissionPool" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Override Pool</label>
+                    <input id="overridePool" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+            </div>
 
-
-<!-- ================= REVENUE DISTRIBUTION ================= -->
-
-<div class="bg-white rounded-2xl shadow p-6 mb-6">
-
-<h2 class="text-xl font-bold mb-5">
-Revenue Allocation (%)
-</h2>
-
-
-<div class="grid md:grid-cols-3 gap-4">
-
-
-<div>
-
-<label>
-Company Pool
-</label>
-
-<input
-id="companyPool"
-type="number"
-class="w-full border rounded-xl p-3 mt-1">
-
-</div>
-
-
-<div>
-
-<label>
-Commission Pool
-</label>
-
-<input
-id="commissionPool"
-type="number"
-class="w-full border rounded-xl p-3 mt-1">
-
-</div>
-
-
-<div>
-
-<label>
-Override Pool
-</label>
-
-<input
-id="overridePool"
-type="number"
-class="w-full border rounded-xl p-3 mt-1">
-
-</div>
-
-
-</div>
-
-
-<div class="mt-5 bg-gray-100 p-4 rounded-xl">
-
-<h3 class="font-bold mb-3">
-Company Pool Breakdown
-</h3>
-
-
-<div class="grid md:grid-cols-3 gap-4">
-
-
-<div>
-
-<label>
-Admin Operation
-</label>
-
-<input
-id="adminOperation"
-type="number"
-class="w-full border rounded-xl p-3 mt-1">
-
-</div>
-
-
-<div>
-
-<label>
-Allowance
-</label>
-
-<input
-id="allowance"
-type="number"
-class="w-full border rounded-xl p-3 mt-1">
-
-</div>
-
-
-<div>
-
-<label>
-Royalty
-</label>
-
-<input
-id="royalty"
-type="number"
-class="w-full border rounded-xl p-3 mt-1">
-
-</div>
-
-
-</div>
-
-
-<p id="revenueCheck"
-class="mt-4 font-bold">
-</p>
-
-
-</div>
-
-
-</div>
+            <div class="mt-6 border border-blue-100 bg-blue-50/50 p-5 rounded-xl">
+                <h3 class="font-bold mb-4 text-[#153638]">Company Pool Breakdown</h3>
+                <div class="grid md:grid-cols-3 gap-5">
+                    <div>
+                        <label class="font-medium text-sm text-gray-600 block mb-1">Admin Operation</label>
+                        <input id="adminOperation" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="font-medium text-sm text-gray-600 block mb-1">Allowance</label>
+                        <input id="allowance" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="font-medium text-sm text-gray-600 block mb-1">Royalty</label>
+                        <input id="royalty" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                    </div>
+                </div>
+                <div id="revenueCheck" class="mt-4 transition-all"></div>
+            </div>
+        </div>
   
+        <!-- ================= MEMBERSHIP ================= -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
+            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Membership</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Tempoh Keahlian (Hari)</label>
+                    <input id="memberValidity" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Yuran Daftar Consultant</label>
+                    <input id="consultantRegistrationFee" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+            </div>
 
-    <!-- ================= MEMBERSHIP ================= -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Renewal AQC (RM)</label>
+                    <input id="renewalAQC" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Renewal AQC-AS (RM)</label>
+                    <input id="renewalAQCAS" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Renewal AQC-UM (RM)</label>
+                    <input id="renewalAQCUM" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Renewal MGAM (RM)</label>
+                    <input id="renewalMGAM" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+            </div>
+        </div>
 
- <div class="bg-white rounded-2xl shadow p-6 mb-8">
-  
-   <h2 class="text-xl font-bold mb-5">
-Membership
-</h2>
+        <div class="flex justify-end gap-3 mb-10">
+            <button id="resetSettings" class="bg-white border border-gray-300 text-gray-700 font-medium px-6 py-3 rounded-xl hover:bg-gray-50 transition-all shadow-sm">
+                Reset Defaults
+            </button>
+            <button id="saveSettings" class="bg-[#153638] text-white font-medium px-8 py-3 rounded-xl hover:bg-[#1f4a4d] transition-all shadow-sm">
+                💾 Simpan Settings
+            </button>
+        </div>
 
-<div class="grid md:grid-cols-3 gap-4">
+        <!-- ================= SALES SIMULATION ================= -->
+        <div class="bg-gradient-to-br from-gray-900 to-[#153638] rounded-2xl shadow-lg p-6 lg:p-8 text-white mb-8">
+            <h2 class="text-xl font-bold mb-6 border-b border-gray-600 pb-3">Simulasi Sales & Profit</h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div>
+                    <label class="font-medium text-sm text-gray-300 block mb-1">Wasiat (Unit)</label>
+                    <input id="simWasiat" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-300 block mb-1">Hibah (Unit)</label>
+                    <input id="simHibah" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-300 block mb-1">Sepencarian (Unit)</label>
+                    <input id="simSepencarian" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-300 block mb-1">Mawaris (Unit)</label>
+                    <input id="simMawaris" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
+                </div>
+            </div>
 
-    <div>
+            <div class="grid md:grid-cols-3 gap-5 mt-8">
+                <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5">
+                    <p class="text-sm text-gray-300 mb-1">Total Sales</p>
+                    <p id="simSales" class="text-3xl font-bold text-[#45d9d7]">RM 0</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5">
+                    <p class="text-sm text-gray-300 mb-1">Total Commission Pool</p>
+                    <p id="simCommission" class="text-2xl font-bold">RM 0</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5">
+                    <p class="text-sm text-gray-300 mb-1">Total Override Pool</p>
+                    <p id="simOverride" class="text-2xl font-bold">RM 0</p>
+                </div>
+            </div>
 
-        <label>Tempoh Keahlian (Hari)</label>
-
-        <input
-        id="memberValidity"
-        type="number"
-        class="w-full border rounded-xl p-3 mt-1">
-
+            <div class="grid md:grid-cols-3 gap-5 mt-5">
+                <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5">
+                    <p class="text-sm text-gray-300 mb-1">Company Pool</p>
+                    <p id="simCompanyPool" class="text-2xl font-bold">RM 0</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5">
+                    <p class="text-sm text-gray-300 mb-1">Gross Profit</p>
+                    <p id="simProfit" class="text-2xl font-bold text-green-400">RM 0</p>
+                </div>
+                <div id="marginCard" class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5 transition-colors">
+                    <p class="text-sm text-gray-300 mb-1">Profit Margin</p>
+                    <p id="simMargin" class="text-2xl font-bold">0%</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div>
-
-        <label>Yuran Pendaftaran Consultant</label>
-
-        <input
-        id="consultantRegistrationFee"
-        type="number"
-        class="w-full border rounded-xl p-3 mt-1">
-
-    </div>
-
-</div>
-
-<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
-
-    <div>
-
-        <label>Renewal AQC (RM)</label>
-
-        <input
-        id="renewalAQC"
-        type="number"
-        class="w-full border rounded-xl p-3 mt-1">
-
-    </div>
-
-    <div>
-
-        <label>Renewal AQC-AS (RM)</label>
-
-        <input
-        id="renewalAQCAS"
-        type="number"
-        class="w-full border rounded-xl p-3 mt-1">
-
-    </div>
-
-    <div>
-
-        <label>Renewal AQC-UM (RM)</label>
-
-        <input
-        id="renewalAQCUM"
-        type="number"
-        class="w-full border rounded-xl p-3 mt-1">
-
-    </div>
-
-    <div>
-
-        <label>Renewal MGAM (RM)</label>
-
-        <input
-        id="renewalMGAM"
-        type="number"
-        class="w-full border rounded-xl p-3 mt-1">
-
-    </div>
-
-</div>
-
-</div> <!-- Tutup card Membership -->
-
-
-    <div class="text-right">
-
-        <button id="saveSettings"
-class="bg-[#153638] text-white px-6 py-3 rounded-xl">
-💾 Simpan Settings
-</button>
-
-
-<button id="resetSettings"
-class="bg-gray-300 px-6 py-3 rounded-xl">
-Reset
-</button>
-
-    </div>
-
-</div>
-
-<!-- ================= SALES SIMULATION ================= -->
-
-<div class="bg-white rounded-2xl shadow p-6 mb-8">
-
-<h2 class="text-xl font-bold mb-5">
-Simulasi Sales & Profit
-</h2>
-
-
-<div class="grid md:grid-cols-4 gap-4">
-
-
-<div>
-<label>Wasiat Unit</label>
-
-<input
-id="simWasiat"
-type="number"
-value="0"
-class="w-full border rounded-xl p-3 mt-1">
-
-</div>
-
-
-<div>
-<label>Hibah Unit</label>
-
-<input
-id="simHibah"
-type="number"
-value="0"
-class="w-full border rounded-xl p-3 mt-1">
-
-</div>
-
-
-<div>
-<label>Sepencarian Unit</label>
-
-<input
-id="simSepencarian"
-type="number"
-value="0"
-class="w-full border rounded-xl p-3 mt-1">
-
-</div>
-
-
-<div>
-<label>Mawaris Unit</label>
-
-<input
-id="simMawaris"
-type="number"
-value="0"
-class="w-full border rounded-xl p-3 mt-1">
-
-</div>
-
-
-</div>
-
-
-
-<div class="grid md:grid-cols-3 gap-4 mt-6">
-
-
-<div class="bg-gray-50 rounded-xl p-4">
-
-<p class="text-sm text-gray-500">
-Total Sales
-</p>
-
-<p id="simSales"
-class="text-2xl font-bold text-[#153638]">
-RM0
-</p>
-
-</div>
-
-
-
-<div class="bg-gray-50 rounded-xl p-4">
-
-<p class="text-sm text-gray-500">
-Commission
-</p>
-
-<p id="simCommission"
-class="text-2xl font-bold">
-RM0
-</p>
-
-</div>
-
-
-
-<div class="bg-gray-50 rounded-xl p-4">
-
-<p class="text-sm text-gray-500">
-Override
-</p>
-
-<p id="simOverride"
-class="text-2xl font-bold">
-RM0
-</p>
-
-</div>
-
-
-</div>
-
-
-
-
-<div class="grid md:grid-cols-3 gap-4 mt-4">
-
-
-<div class="bg-gray-50 rounded-xl p-4">
-
-<p class="text-sm text-gray-500">
-Company Pool
-</p>
-
-<p id="simCompanyPool"
-class="text-2xl font-bold">
-RM0
-</p>
-
-</div>
-
-
-
-<div class="bg-gray-50 rounded-xl p-4">
-
-<p class="text-sm text-gray-500">
-Gross Profit
-</p>
-
-<p id="simProfit"
-class="text-2xl font-bold">
-RM0
-</p>
-
-</div>
-
-
-
-<div id="marginCard"
-class="bg-gray-50 rounded-xl p-4">
-
-<p class="text-sm text-gray-500">
-Profit Margin
-</p>
-
-<p id="simMargin"
-class="text-2xl font-bold">
-0%
-</p>
-
-</div>
-
-
-</div>
-
-
-</div>
-  
-<script type="module">
-
-import { initializeApp } 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import { 
-getFirestore,
-doc,
-setDoc,
-getDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-
-// ================= FIREBASE CONFIG =================
-
-const firebaseConfig = {
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // ================= HELPER FUNCTIONS =================
+        const el = (id) => document.getElementById(id);
+        const getVal = (id) => Number(el(id).value) || 0;
+
+        // ================= FIREBASE CONFIG =================
+        const firebaseConfig = {
             apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
             authDomain: "alqawthar-mywaris.firebaseapp.com",
             projectId: "alqawthar-mywaris",
@@ -758,652 +294,236 @@ const firebaseConfig = {
             messagingSenderId: "3498810778",
             appId: "1:3498810778:web:ee36e0fe42f76698046e23"
         };
-
-
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
-
-
-
-// ================= DEFAULT SETTINGS =================
-
-const defaultCompanySettings = {
-
-companyName:"AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.",
-registrationNo:"",
-companyEmail:"",
-companyAddress:""
-
-};
-
-
-const defaultCompensationSettings = {
-
-wasiatPrice:350,
-hibahPrice:2500,
-sepencarianPrice:800,
-mawarisPrice:3000,
-
-wasiatRenewal:50,
-hibahRenewal:50,
-sepencarianRenewal:50,
-mawarisRenewal:80,
-
-commissionAQC:35,
-commissionAQCAS:38,
-commissionAQCUM:40,
-commissionMGAM:45,
-
-overrideAQC:0,
-overrideAQCAS:3,
-overrideAQCUM:4,
-overrideMGAM:5,
-
-companyPool:48,
-commissionPool:35,
-overridePool:12,
-
-adminOperation:30,
-allowance:10,
-royalty:8,
-
-memberValidity:365,
-
-consultantRegistrationFee:200,
-
-renewalAQC:100,
-renewalAQCAS:150,
-renewalAQCUM:250,
-renewalMGAM:500,
-
-};
-
-
-// ================= INPUT LIST =================
-
-const companyFields = [
-"companyName",
-"registrationNo",
-"companyEmail",
-"companyAddress"
-];
-
-
-const compensationFields = [
-
-"wasiatPrice",
-"hibahPrice",
-"sepencarianPrice",
-"mawarisPrice",
-
-"wasiatRenewal",
-"hibahRenewal",
-"sepencarianRenewal",
-"mawarisRenewal",
-
-"commissionAQC",
-"commissionAQCAS",
-"commissionAQCUM",
-"commissionMGAM",
-
-"overrideAQC",
-"overrideAQCAS",
-"overrideAQCUM",
-"overrideMGAM",
-
-"memberValidity",
-"consultantRegistrationFee",
-"renewalAQC",
-"renewalAQCAS",
-"renewalAQCUM",
-"renewalMGAM",
-
-];
-
-// ================= LOAD SETTINGS =================
-
-
-async function loadSettings(){
-
-const companyRef = doc(db,"settings","company");
-const compensationRef = doc(db,"settings","compensation");
-
-const companySnap = await getDoc(companyRef);
-const compensationSnap = await getDoc(compensationRef);
-
-
-let companyData;
-let compensationData;
-
-
-// COMPANY
-
-if(companySnap.exists()){
-
-companyData = companySnap.data();
-
-}else{
-
-companyData = defaultCompanySettings;
-
-await setDoc(companyRef, companyData);
-
-}
-
-
-// COMPENSATION
-
-if(compensationSnap.exists()){
-
-compensationData = compensationSnap.data();
-
-}else{
-
-compensationData = defaultCompensationSettings;
-
-await setDoc(compensationRef, compensationData);
-
-}
-
-
-
-// Load Company
-
-companyFields.forEach(field=>{
-
-let input=document.getElementById(field);
-
-if(input){
-
-input.value=companyData[field] ?? "";
-
-}
-
-});
-
-
-
-// Load Compensation
-
-compensationFields.forEach(field=>{
-
-let input=document.getElementById(field);
-
-if(input){
-
-input.value=compensationData[field] ?? "";
-
-}
-
-});
-
-
-
-// Revenue
-
-companyPool.value =
-compensationData.companyPool ?? 0;
-
-
-commissionPool.value =
-compensationData.commissionPool ?? 0;
-
-
-overridePool.value =
-compensationData.overridePool ?? 0;
-
-
-adminOperation.value =
-compensationData.adminOperation ?? 0;
-
-
-allowance.value =
-compensationData.allowance ?? 0;
-
-
-royalty.value =
-compensationData.royalty ?? 0;
-
-
-checkRevenue();
-
-}
-
-
-function checkRevenue(){
-
-const company =
-Number(adminOperation.value)+
-Number(allowance.value)+
-Number(royalty.value);
-
-
-const total =
-Number(companyPool.value)+
-Number(commissionPool.value)+
-Number(overridePool.value);
-
-
-
-if(
-company !== Number(companyPool.value)
-||
-total !== 95
-){
-
-revenueCheck.innerHTML = `
-
-<div class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700">
-
-<div class="font-bold">
-⚠️ Allocation Tidak Sah
-</div>
-
-<div class="text-sm mt-2">
-
-Company Breakdown:
-${company}% / ${companyPool.value}%
-
-
-<br>
-
-Total Allocation:
-${total}%
-
-
-<br><br>
-
-Pastikan:
-
-<br>
-• Company Breakdown = Company Pool
-<br>
-• Total Allocation = 95%
-
-</div>
-
-</div>
-
-`;
-
-saveSettings.disabled=true;
-
-
-}else{
-
-
-revenueCheck.innerHTML="";
-
-saveSettings.disabled=false;
-
-
-}
-
-
-}
-
-// ================= SALES SIMULATION =================
-
-
-function calculateSimulation(){
-
-
-const sales =
-(Number(document.getElementById("simWasiat").value || 0) *
- Number(document.getElementById("wasiatPrice").value || 0))
-+
-(Number(document.getElementById("simHibah").value || 0) *
- Number(document.getElementById("hibahPrice").value || 0))
-+
-(Number(document.getElementById("simSepencarian").value || 0) *
- Number(document.getElementById("sepencarianPrice").value || 0))
-+
-(Number(document.getElementById("simMawaris").value || 0) *
- Number(document.getElementById("mawarisPrice").value || 0));
-
-
-
-const commission =
-
-sales *
-Number(document.getElementById("commissionPool").value || 0)
-/100;
-
-
-
-const override =
-
-sales *
-Number(document.getElementById("overridePool").value || 0)
-/100;
-
-
-
-const companyPoolAmount =
-
-sales *
-Number(document.getElementById("companyPool").value || 0)
-/100;
-
-
-
-const adminAmount =
-
-companyPoolAmount *
-Number(document.getElementById("adminOperation").value || 0)
-/100;
-
-
-
-const allowanceAmount =
-
-companyPoolAmount *
-Number(document.getElementById("allowance").value || 0)
-/100;
-
-
-
-const royaltyAmount =
-
-companyPoolAmount *
-Number(document.getElementById("royalty").value || 0)
-/100;
-
-
-
-const profit =
-companyPoolAmount
-- adminAmount
-- allowanceAmount
-- royaltyAmount;
-
-
-
-const margin = sales > 0
-
-?
-(profit / sales) * 100
-
-:
-0;
-
-
-
-document.getElementById("simSales").innerHTML =
-"RM " + sales.toLocaleString();
-
-
-
-document.getElementById("simCommission").innerHTML =
-"RM " + commission.toLocaleString();
-
-
-
-document.getElementById("simOverride").innerHTML =
-"RM " + override.toLocaleString();
-
-
-
-document.getElementById("simCompanyPool").innerHTML =
-"RM " + companyPoolAmount.toLocaleString();
-
-
-
-document.getElementById("simProfit").innerHTML =
-"RM " + profit.toLocaleString();
-
-
-
-document.getElementById("simMargin").innerHTML =
-margin.toFixed(1)+"%";
-
-// warna margin
-
-if(margin < 20){
-
-marginCard.className =
-"bg-red-100 rounded-xl p-4";
-
-}
-
-else if(margin < 30){
-
-marginCard.className =
-"bg-yellow-100 rounded-xl p-4";
-
-}
-
-else{
-
-marginCard.className =
-"bg-green-100 rounded-xl p-4";
-
-}
-
- 
-}
-
-
-// LIVE UPDATE
-
-[
-"simWasiat",
-"simHibah",
-"simSepencarian",
-"simMawaris"
-
-].forEach(id=>{
-
-document
-.getElementById(id)
-.addEventListener(
-"input",
-calculateSimulation
-);
-
-});
-
-[
-"wasiatPrice",
-"hibahPrice",
-"sepencarianPrice",
-"mawarisPrice",
-"companyPool",
-"commissionPool",
-"overridePool",
-"adminOperation",
-"allowance",
-"royalty"
-
-].forEach(id=>{
-
-document
-.getElementById(id)
-.addEventListener(
-"input",
-calculateSimulation
-);
-
-});
-
-// ================= START =================
-
-loadSettings().then(()=>{
-
-    calculateSimulation();
-
-});
-  
-// ================= SAVE SETTINGS =================
-
-
-document
-.getElementById("saveSettings")
-.addEventListener("click",async()=>{
-
-
-let companyData = {};
-
-let compensationData = {};
-
-
-// ================= COMPANY DATA =================
-
-companyData = {
-
-companyName: companyName.value,
-
-registrationNo: registrationNo.value,
-
-companyEmail: companyEmail.value,
-
-companyAddress: companyAddress.value
-
-};
-
-
-
-// ================= COMPENSATION DATA =================
-
-compensationData = {
-
-wasiatPrice:Number(wasiatPrice.value),
-hibahPrice:Number(hibahPrice.value),
-sepencarianPrice:Number(sepencarianPrice.value),
-mawarisPrice:Number(mawarisPrice.value),
-
-
-wasiatRenewal:Number(wasiatRenewal.value),
-hibahRenewal:Number(hibahRenewal.value),
-sepencarianRenewal:Number(sepencarianRenewal.value),
-mawarisRenewal:Number(mawarisRenewal.value),
-
-
-
-commissionAQC:Number(commissionAQC.value),
-commissionAQCAS:Number(commissionAQCAS.value),
-commissionAQCUM:Number(commissionAQCUM.value),
-commissionMGAM:Number(commissionMGAM.value),
-
-
-
-overrideAQC:Number(overrideAQC.value),
-overrideAQCAS:Number(overrideAQCAS.value),
-overrideAQCUM:Number(overrideAQCUM.value),
-overrideMGAM:Number(overrideMGAM.value),
-
-
-
-companyPool:Number(companyPool.value),
-
-commissionPool:Number(commissionPool.value),
-
-overridePool:Number(overridePool.value),
-
-
-
-adminOperation:Number(adminOperation.value),
-
-allowance:Number(allowance.value),
-
-royalty:Number(royalty.value),
-
-
-
-memberValidity:Number(memberValidity.value),
-
-consultantRegistrationFee:Number(consultantRegistrationFee.value),
-
-renewalAQC:Number(renewalAQC.value),
-renewalAQCAS:Number(renewalAQCAS.value),
-renewalAQCUM:Number(renewalAQCUM.value),
-renewalMGAM:Number(renewalMGAM.value),
-};
-
-
-
-// SAVE FIRESTORE
-
-await setDoc(
-doc(db,"settings","company"),
-companyData,
-{merge:true}
-);;
-
-
-await setDoc(
-doc(db,"settings","compensation"),
-compensationData,
-{merge:true}
-);
-
-
-
-alert("Settings berjaya disimpan");
-
-
-});
-
-
-
-
-
-// ================= RESET =================
-
-
-document
-.getElementById("resetSettings")
-.addEventListener("click",()=>{
-
-
-fields.forEach(field=>{
-
-
-let input=document.getElementById(field);
-
-
-if(input){
-
-input.value=defaultSettings[field];
-
-}
-
-
-});
-
-companyPool.value =
-defaultSettings.revenueDistribution.companyPool;
-
-commissionPool.value =
-defaultSettings.revenueDistribution.commissionPool;
-
-overridePool.value =
-defaultSettings.revenueDistribution.overridePool;
-
-
-adminOperation.value =
-defaultSettings.revenueDistribution.companyBreakdown.adminOperation;
-
-
-allowance.value =
-defaultSettings.revenueDistribution.companyBreakdown.allowance;
-
-
-royalty.value =
-defaultSettings.revenueDistribution.companyBreakdown.royalty;
-
-
-checkRevenue();
-
-});
-
-// INIT
-
-loadSettings();
-
-
-</script>
-  
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // ================= DEFAULT SETTINGS =================
+        const defaultCompanySettings = {
+            companyName: "AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.",
+            registrationNo: "",
+            companyEmail: "",
+            companyAddress: ""
+        };
+
+        const defaultCompensationSettings = {
+            wasiatPrice: 350, hibahPrice: 2500, sepencarianPrice: 800, mawarisPrice: 3000,
+            wasiatRenewal: 50, hibahRenewal: 50, sepencarianRenewal: 50, mawarisRenewal: 80,
+            commissionAQC: 35, commissionAQCAS: 38, commissionAQCUM: 40, commissionMGAM: 45,
+            overrideAQC: 0, overrideAQCAS: 3, overrideAQCUM: 4, overrideMGAM: 5,
+            companyPool: 48, commissionPool: 35, overridePool: 12,
+            adminOperation: 30, allowance: 10, royalty: 8,
+            memberValidity: 365, consultantRegistrationFee: 200,
+            renewalAQC: 100, renewalAQCAS: 150, renewalAQCUM: 250, renewalMGAM: 500,
+        };
+
+        const companyFields = ["companyName", "registrationNo", "companyEmail", "companyAddress"];
+        const compensationFields = [
+            "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice",
+            "wasiatRenewal", "hibahRenewal", "sepencarianRenewal", "mawarisRenewal",
+            "commissionAQC", "commissionAQCAS", "commissionAQCUM", "commissionMGAM",
+            "overrideAQC", "overrideAQCAS", "overrideAQCUM", "overrideMGAM",
+            "memberValidity", "consultantRegistrationFee", 
+            "renewalAQC", "renewalAQCAS", "renewalAQCUM", "renewalMGAM",
+            "companyPool", "commissionPool", "overridePool",
+            "adminOperation", "allowance", "royalty"
+        ];
+
+        // ================= LOAD SETTINGS =================
+        async function loadSettings() {
+            const companyRef = doc(db, "settings", "company");
+            const compensationRef = doc(db, "settings", "compensation");
+
+            const companySnap = await getDoc(companyRef);
+            const compensationSnap = await getDoc(compensationRef);
+
+            let companyData = companySnap.exists() ? companySnap.data() : defaultCompanySettings;
+            let compensationData = compensationSnap.exists() ? compensationSnap.data() : defaultCompensationSettings;
+
+            // Load Company Defaults if missing
+            if (!companySnap.exists()) await setDoc(companyRef, companyData);
+            if (!compensationSnap.exists()) await setDoc(compensationRef, compensationData);
+
+            // Populate UI
+            companyFields.forEach(field => {
+                if (el(field)) el(field).value = companyData[field] ?? "";
+            });
+            compensationFields.forEach(field => {
+                if (el(field)) el(field).value = compensationData[field] ?? "";
+            });
+
+            checkRevenue();
+            calculateSimulation();
+        }
+
+        function checkRevenue() {
+            const admin = getVal("adminOperation");
+            const allow = getVal("allowance");
+            const royal = getVal("royalty");
+            const companyBreakdownTotal = admin + allow + royal;
+
+            const comPool = getVal("companyPool");
+            const commPool = getVal("commissionPool");
+            const overPool = getVal("overridePool");
+            const totalAllocation = comPool + commPool + overPool;
+
+            const saveBtn = el("saveSettings");
+            const revCheck = el("revenueCheck");
+
+            if (companyBreakdownTotal !== comPool || totalAllocation > 100) {
+                revCheck.innerHTML = `
+                    <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700">
+                        <div class="font-bold flex items-center gap-2">⚠️ Allocation Tidak Sah</div>
+                        <div class="text-sm mt-2 leading-relaxed">
+                            Company Breakdown (Admin+Allow+Royalty): <strong>${companyBreakdownTotal}%</strong> / Target: <strong>${comPool}%</strong><br>
+                            Total Global Allocation: <strong>${totalAllocation}%</strong> (Max 100%)<br><br>
+                            Pastikan:
+                            <ul class="list-disc pl-5 mt-1">
+                                <li>Company Breakdown mesti sama dengan Company Pool.</li>
+                                <li>Total Global Allocation tidak melebihi 100%.</li>
+                            </ul>
+                        </div>
+                    </div>`;
+                saveBtn.disabled = true;
+                saveBtn.classList.add("opacity-50", "cursor-not-allowed");
+            } else {
+                revCheck.innerHTML = `
+                    <div class="bg-green-50 border border-green-200 rounded-xl p-4 text-green-700">
+                        <div class="font-bold flex items-center gap-2">✅ Allocation Sempurna</div>
+                        <div class="text-sm mt-1">Company Breakdown (${companyBreakdownTotal}%) tally dengan Company Pool. Total agihan: ${totalAllocation}%. Profit bersih: ${100 - totalAllocation}%.</div>
+                    </div>
+                `;
+                saveBtn.disabled = false;
+                saveBtn.classList.remove("opacity-50", "cursor-not-allowed");
+            }
+        }
+
+        // ================= SALES SIMULATION =================
+        function calculateSimulation() {
+            const sales = 
+                (getVal("simWasiat") * getVal("wasiatPrice")) +
+                (getVal("simHibah") * getVal("hibahPrice")) +
+                (getVal("simSepencarian") * getVal("sepencarianPrice")) +
+                (getVal("simMawaris") * getVal("mawarisPrice"));
+
+            // Calculate Pools based on % of Total Sales
+            const commissionAmount = sales * (getVal("commissionPool") / 100);
+            const overrideAmount = sales * (getVal("overridePool") / 100);
+            const companyPoolAmount = sales * (getVal("companyPool") / 100);
+
+            // Calculate Deductions from Total Sales (as defined by their Breakdown %)
+            const adminAmount = sales * (getVal("adminOperation") / 100);
+            const allowanceAmount = sales * (getVal("allowance") / 100);
+            const royaltyAmount = sales * (getVal("royalty") / 100);
+
+            // Profit is what remains after all explicit allocations are paid out
+            const totalExpenses = commissionAmount + overrideAmount + adminAmount + allowanceAmount + royaltyAmount;
+            const profit = sales - totalExpenses;
+            
+            const margin = sales > 0 ? (profit / sales) * 100 : 0;
+
+            // Update UI
+            el("simSales").innerText = "RM " + sales.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            el("simCommission").innerText = "RM " + commissionAmount.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            el("simOverride").innerText = "RM " + overrideAmount.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            el("simCompanyPool").innerText = "RM " + companyPoolAmount.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            
+            // Format Profit with color depending on negative or positive
+            const profitEl = el("simProfit");
+            profitEl.innerText = "RM " + profit.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            if(profit < 0) profitEl.className = "text-2xl font-bold text-red-400";
+            else profitEl.className = "text-2xl font-bold text-green-400";
+
+            el("simMargin").innerText = margin.toFixed(1) + "%";
+
+            // Margin Card Styling
+            const marginCard = el("marginCard");
+            marginCard.className = "rounded-xl p-5 transition-colors border " + 
+                (margin < 10 ? "bg-red-900/30 border-red-500/50 text-red-100" : 
+                (margin < 25 ? "bg-yellow-900/30 border-yellow-500/50 text-yellow-100" : 
+                "bg-green-900/30 border-green-500/50 text-green-100"));
+        }
+
+        // ================= EVENT LISTENERS =================
+        // Input Triggers for Simulation
+        const simTriggers = [
+            "simWasiat", "simHibah", "simSepencarian", "simMawaris",
+            "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice"
+        ];
+        simTriggers.forEach(id => {
+            if(el(id)) el(id).addEventListener("input", calculateSimulation);
+        });
+
+        // Input Triggers for Revenue Check & Simulation
+        const poolTriggers = [
+            "companyPool", "commissionPool", "overridePool",
+            "adminOperation", "allowance", "royalty"
+        ];
+        poolTriggers.forEach(id => {
+            if(el(id)) el(id).addEventListener("input", () => {
+                checkRevenue();
+                calculateSimulation();
+            });
+        });
+
+        // ================= SAVE SETTINGS =================
+        el("saveSettings").addEventListener("click", async () => {
+            const btn = el("saveSettings");
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "⏳ Menyimpan...";
+            btn.disabled = true;
+
+            try {
+                let companyData = {};
+                companyFields.forEach(field => { companyData[field] = el(field).value; });
+
+                let compensationData = {};
+                compensationFields.forEach(field => { compensationData[field] = getVal(field); });
+
+                await setDoc(doc(db, "settings", "company"), companyData, { merge: true });
+                await setDoc(doc(db, "settings", "compensation"), compensationData, { merge: true });
+
+                // Success UI Feedback (Replaces alert)
+                btn.innerHTML = "✅ Berjaya Disimpan!";
+                btn.classList.replace("bg-[#153638]", "bg-green-600");
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.replace("bg-green-600", "bg-[#153638]");
+                    btn.disabled = false;
+                }, 2500);
+
+            } catch (error) {
+                console.error("Error saving settings:", error);
+                btn.innerHTML = "❌ Gagal Disimpan";
+                btn.classList.replace("bg-[#153638]", "bg-red-600");
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.replace("bg-red-600", "bg-[#153638]");
+                    btn.disabled = false;
+                }, 2500);
+            }
+        });
+
+        // ================= RESET SETTINGS =================
+        el("resetSettings").addEventListener("click", () => {
+            if(!confirm("Anda pasti mahu kembalikan semua setting ke default asal?")) return;
+
+            companyFields.forEach(field => {
+                if (el(field)) el(field).value = defaultCompanySettings[field];
+            });
+
+            compensationFields.forEach(field => {
+                if (el(field)) el(field).value = defaultCompensationSettings[field];
+            });
+
+            checkRevenue();
+            calculateSimulation();
+        });
+
+        // INIT
+        document.addEventListener("DOMContentLoaded", () => {
+            loadSettings();
+        });
+    </script>
 </body>
 </html>
