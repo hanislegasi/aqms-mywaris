@@ -1050,32 +1050,17 @@ function calculateSimulation(){
 
 
 const sales =
-
-(
-Number(document.getElementById("simWasiat").value || 0) *
-Number(document.getElementById("wasiatPrice").value || 0)
-)
-
+(Number(document.getElementById("simWasiat").value || 0) *
+ Number(document.getElementById("wasiatPrice").value || 0))
 +
-
-(
-Number(document.getElementById("simHibah").value || 0) *
-Number(document.getElementById("hibahPrice").value || 0)
-)
-
+(Number(document.getElementById("simHibah").value || 0) *
+ Number(document.getElementById("hibahPrice").value || 0))
 +
-
-(
-Number(document.getElementById("simSepencarian").value || 0) *
-Number(document.getElementById("sepencarianPrice").value || 0)
-)
-
+(Number(document.getElementById("simSepencarian").value || 0) *
+ Number(document.getElementById("sepencarianPrice").value || 0))
 +
-
-(
-Number(document.getElementById("simMawaris").value || 0) *
-Number(document.getElementById("mawarisPrice").value || 0)
-);
+(Number(document.getElementById("simMawaris").value || 0) *
+ Number(document.getElementById("mawarisPrice").value || 0));
 
 
 
@@ -1128,14 +1113,10 @@ Number(document.getElementById("royalty").value || 0)
 
 
 const profit =
-
 companyPoolAmount
--
-adminAmount
--
-allowanceAmount
--
-royaltyAmount;
+- adminAmount
+- allowanceAmount
+- royaltyAmount;
 
 
 
