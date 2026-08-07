@@ -465,52 +465,83 @@ class="mt-4 font-bold">
 
     <!-- ================= MEMBERSHIP ================= -->
 
-    <div class="bg-white rounded-2xl shadow p-6 mb-8">
+   <h2 class="text-xl font-bold mb-5">
+Membership
+</h2>
 
-        <h2 class="text-xl font-bold mb-5">
+<div class="grid md:grid-cols-3 gap-4">
 
-            Membership
+    <div>
 
-        </h2>
+        <label>Tempoh Keahlian (Hari)</label>
 
-        <div class="grid md:grid-cols-3 gap-4">
-
-            <div>
-
-                <label>Tempoh (Hari)</label>
-
-                <input
-                    id="memberValidity"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
-            </div>
-
-            <div>
-
-                <label>Yuran Daftar Consultant</label>
-
-                <input
-                    id="consultantRegistrationFee"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
-            </div>
-
-            <div>
-
-                <label>Yuran Renewal Consultant</label>
-
-                <input
-                    id="consultantRenewalFee"
-                    type="number"
-                    class="w-full border rounded-xl p-3 mt-1">
-
-            </div>
-
-        </div>
+        <input
+        id="memberValidity"
+        type="number"
+        class="w-full border rounded-xl p-3 mt-1">
 
     </div>
+
+    <div>
+
+        <label>Yuran Pendaftaran Consultant</label>
+
+        <input
+        id="consultantRegistrationFee"
+        type="number"
+        class="w-full border rounded-xl p-3 mt-1">
+
+    </div>
+
+</div>
+
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
+
+    <div>
+
+        <label>Renewal AQC (RM)</label>
+
+        <input
+        id="renewalAQC"
+        type="number"
+        class="w-full border rounded-xl p-3 mt-1">
+
+    </div>
+
+    <div>
+
+        <label>Renewal AQC-AS (RM)</label>
+
+        <input
+        id="renewalAQCAS"
+        type="number"
+        class="w-full border rounded-xl p-3 mt-1">
+
+    </div>
+
+    <div>
+
+        <label>Renewal AQC-UM (RM)</label>
+
+        <input
+        id="renewalAQCUM"
+        type="number"
+        class="w-full border rounded-xl p-3 mt-1">
+
+    </div>
+
+    <div>
+
+        <label>Renewal MGAM (RM)</label>
+
+        <input
+        id="renewalMGAM"
+        type="number"
+        class="w-full border rounded-xl p-3 mt-1">
+
+    </div>
+
+</div>
 
 
 
@@ -609,7 +640,10 @@ memberValidity:365,
 
 consultantRegistrationFee:200,
 
-consultantRenewalFee:50
+renewalAQC:100,
+renewalAQCAS:150,
+renewalAQCUM:250,
+renewalMGAM:500,
 
 };
 
@@ -648,7 +682,10 @@ const compensationFields = [
 
 "memberValidity",
 "consultantRegistrationFee",
-"consultantRenewalFee"
+"renewalAQC",
+"renewalAQCAS",
+"renewalAQCUM",
+"renewalMGAM",
 
 ];
 
@@ -914,8 +951,10 @@ memberValidity:Number(memberValidity.value),
 
 consultantRegistrationFee:Number(consultantRegistrationFee.value),
 
-consultantRenewalFee:Number(consultantRenewalFee.value)
-
+renewalAQC:Number(renewalAQC.value),
+renewalAQCAS:Number(renewalAQCAS.value),
+renewalAQCUM:Number(renewalAQCUM.value),
+renewalMGAM:Number(renewalMGAM.value),
 };
 
 
