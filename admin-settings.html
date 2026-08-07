@@ -1051,19 +1051,23 @@ function calculateSimulation(){
 
 let sales =
 
-(Number(simWasiat.value) * Number(wasiatPrice.value))
+(Number(simWasiat.value) *
+ Number(document.getElementById("wasiatPrice").value))
 
 +
 
-(Number(simHibah.value) * Number(hibahPrice.value))
+(Number(simHibah.value) *
+ Number(document.getElementById("hibahPrice").value))
 
 +
 
-(Number(simSepencarian.value) * Number(sepencarianPrice.value))
+(Number(simSepencarian.value) *
+ Number(document.getElementById("sepencarianPrice").value))
 
 +
 
-(Number(simMawaris.value) * Number(mawarisPrice.value));
+(Number(simMawaris.value) *
+ Number(document.getElementById("mawarisPrice").value));
 
 
 
