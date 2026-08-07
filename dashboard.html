@@ -108,10 +108,9 @@ class="bg-[#153638]/10 p-3 rounded-xl">
         </div>
 
         <h3
-id="wasiatTitle"
+<h3 id="wasiatTitle"
 class="text-lg font-bold text-[#153638]">
-            Wasiat <span class="text-orange-600">RM350</span>
-        </h3>
+</h3>
 
     </div>
 
@@ -190,11 +189,9 @@ class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-
 
         </div>
 
-        <h3 
-          id="sepencarianTitle"
-          class="text-lg font-bold text-[#153638]">
-            Harta Sepencarian <span class="text-orange-600">RM800</span>
-        </h3>
+        <<h3 id="sepencarianTitle"
+class="text-lg font-bold text-[#153638]">
+</h3>
 
     </div>
 
@@ -271,11 +268,9 @@ class="w-6 h-6">
 
         </div>
 
-        <h3 
-          id="hibahTitle"
-          class="text-lg font-bold text-[#153638]">
-            Hibah <span class="text-orange-600">RM2,500</span>
-        </h3>
+        <h3 id="hibahTitle"
+class="text-lg font-bold text-[#153638]">
+</h3>
 
     </div>
 
@@ -354,11 +349,9 @@ class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition border border-
 
         </div>
 
-        <h3 
-          id="mawarisTitle"
-          class="text-lg font-bold text-[#153638]">
-            Mawaris <span class="text-orange-600">RM3,000</span>
-        </h3>
+        <h3 id="mawarisTitle"
+class="text-lg font-bold text-[#153638]">
+</h3>
 
     </div>
 
@@ -465,6 +458,52 @@ getAuth(app);
 const db =
 getFirestore(app);
 
+const compensationSnap =
+await getDoc(
+doc(db,"settings","compensation")
+);
+
+function formatRM(value) {
+    return Number(value || 0).toLocaleString('en-MY');
+}
+
+  
+if(compensationSnap.exists()){
+
+    const compensation = compensationSnap.data();
+
+// Wasiat
+document.getElementById("wasiatTitle").innerHTML =
+`Wasiat <span class="text-orange-600">RM${formatRM(compensation.wasiatPrice)}</span>`;
+
+document.getElementById("wasiatRenewalText").innerHTML =
+`• Yuran penyelenggaraan RM${formatRM(compensation.wasiatRenewal)} setahun`;
+
+// Sepencarian
+document.getElementById("sepencarianTitle").innerHTML =
+`Harta Sepencarian <span class="text-orange-600">RM${formatRM(compensation.sepencarianPrice)}</span>`;
+
+document.getElementById("sepencarianRenewalText").innerHTML =
+`• Yuran penyelenggaraan RM${formatRM(compensation.sepencarianRenewal)} setahun`;
+  
+// Hibah
+document.getElementById("hibahTitle").innerHTML =
+`Hibah <span class="text-orange-600">RM${formatRM(compensation.hibahPrice)}</span>`;
+
+document.getElementById("hibahRenewalText").innerHTML =
+`• Yuran penyelenggaraan RM${formatRM(compensation.hibahRenewal)} setahun`;
+
+// Mawaris
+document.getElementById("mawarisTitle").innerHTML =
+`Mawaris <span class="text-orange-600">RM${formatRM(compensation.mawarisPrice)}</span>`;
+
+document.getElementById("mawarisRenewalText").innerHTML =
+`• Yuran penyelenggaraan RM${formatRM(compensation.mawarisRenewal)} setahun`
+  
+}
+
+
+  
 function updateProductCard(
 status,
 cardId,
