@@ -129,7 +129,7 @@ Kriteria Naik ke AQC-AS
 Yuran Renewal
 </p>
 
-<p class="text-1xl font-bold text-[#153638] id=consultantRenewalFee">
+<p class="text-1xl font-bold text-[#153638] id=renewalAQC">
 </p>
 
 </div>
@@ -219,8 +219,7 @@ Kriteria Naik ke AQC-UM
 Yuran Renewal
 </p>
 
-<p class="text-1xl font-bold text-[#153638]">
-RM150
+<p class="text-1xl font-bold text-[#153638] id=renewalAQCAS">
 </p>
 
 </div>
@@ -311,8 +310,7 @@ Kriteria Naik ke MGAM
 Yuran Renewal
 </p>
 
-<p class="text-1xl font-bold text-[#153638]">
-RM250
+<p class="text-1xl font-bold text-[#153638] id=renewalAQCUM">
 </p>
 
 </div>
@@ -399,8 +397,7 @@ Level Tertinggi Agensi
 Yuran Renewal
 </p>
 
-<p class="text-1xl font-bold text-[#153638]">
-RM500
+<p class="text-1xl font-bold text-[#153638] id=renewalMGAM">
 </p>
 
 </div>
@@ -485,6 +482,17 @@ document.getElementById("commissionMGAM").innerHTML =
 document.getElementById("overrideMGAM").innerHTML =
 (compensation.overrideMGAM ?? 0) + "%";
 
+document.getElementById("renewalAQC").innerHTML =
+(compensation.renewalAQC ?? 0) + "%";
+
+document.getElementById("renewalAQCAS").innerHTML =
+(compensation.renewalAQCAS ?? 0) + "%";
+
+document.getElementById("renewalAQCUM").innerHTML =
+(compensation.renewalAQCUM ?? 0) + "%";
+  
+document.getElementById("renewalMGAM").innerHTML =
+(compensation.renewalMGAM ?? 0) + "%";
   
 }
 
