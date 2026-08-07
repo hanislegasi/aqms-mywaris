@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pembaharuan Keahlian - AQM</title>
 
-  <!-- Google Font: Inter[cite: 1] -->
+  <!-- Google Font: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -39,7 +39,7 @@
       Menyemak maklumat & harga terkini...
     </div>
 
-    <!-- Konten Utama (Dembunyikan waktu loading) -->
+    <!-- Konten Utama -->
     <div id="mainContent" class="hidden">
       <!-- Dropdown (Hanya muncul jika customer miliki > 1 produk) -->
       <div id="multiProductBox" class="mb-6 hidden">
@@ -102,37 +102,37 @@
 
     let currentUser = null;
     let ownedProducts = [];
-    let compSettings = {}; // Menyimpan data dari settings/compensation
+    let compSettings = {};
 
-    // Konfigurasi 4 Produk dengan nama field Firestore (tiada hardcode harga)
+    // Konfigurasi 4 Produk AQMS dipadankan dengan Code COA & Field Settings
     const productConfig = {
       wasiat: {
         name: "Wasiat",
         code: "WASIAT_RENEWAL",
         prefix: "WAS",
         feeField: "wasiatRenewal",
-        ledgerAccount: "AQM - Wasiat Renewal Fee"
+        accountCode: "4210" // Selaras dengan doc 4210 dalam chartOfAccounts
       },
       hibah: {
         name: "Hibah",
         code: "HIBAH_RENEWAL",
         prefix: "HIB",
         feeField: "hibahRenewal",
-        ledgerAccount: "AQM - Hibah Renewal Fee"
+        accountCode: "4220"
       },
       sepencarian: {
         name: "Harta Sepencarian",
         code: "SEPENCARIAN_RENEWAL",
         prefix: "SEP",
         feeField: "sepencarianRenewal",
-        ledgerAccount: "AQM - Harta Sepencarian Renewal Fee"
+        accountCode: "4230"
       },
       mawaris: {
         name: "Mawaris (Full Package)",
         code: "MAWARIS_RENEWAL",
         prefix: "MAW",
         feeField: "mawarisRenewal",
-        ledgerAccount: "AQM - Mawaris Renewal Fee"
+        accountCode: "4240"
       }
     };
 
@@ -145,13 +145,11 @@
     const displayProductFee = document.getElementById("displayProductFee");
     const payBtn = document.getElementById("payBtn");
 
-    // Dapatkan nilai harga dari compSettings mengikut field Firestore
     function getProductFee(key) {
       const fieldName = productConfig[key].feeField;
-      return compSettings[fieldName] || 0; // Fallback 0 jika field tidak dijumpai
+      return compSettings[fieldName] || 0;
     }
 
-    // Fungsi update UI mengikut produk terpilih
     function updateDisplay(key) {
       const selected = productConfig[key];
       const fee = getProductFee(key);
@@ -163,7 +161,6 @@
       updateDisplay(e.target.value);
     });
 
-    // 1. Check Sesi, Tarik Settings, & Auto-Detect Produk
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "login.html";
@@ -173,20 +170,14 @@
       await initPageData();
     });
 
-    // 2. Tarik data settings/compensation & semak produk pelanggan
     async function initPageData() {
       try {
-        // Ambil tetapan harga renewal dari settings/compensation
         const compSnap = await getDoc(doc(db, "settings", "compensation"));
         if (compSnap.exists()) {
           compSettings = compSnap.data();
-        } else {
-          console.warn("Dokumen settings/compensation tidak dijumpai!");
         }
 
         const keys = Object.keys(productConfig);
-        
-        // Semak 4 subcollection produk serentak menggunakan Promise.all
         const checks = await Promise.all(
           keys.map(key => getDoc(doc(db, "users", currentUser.uid, key, "maklumat")))
         );
@@ -207,7 +198,6 @@
 
         mainContent.classList.remove("hidden");
 
-        // Semak Parameter URL (cth: ?product=hibah)
         const urlParams = new URLSearchParams(window.location.search);
         const urlParamProduct = urlParams.get("product");
         let defaultKey = ownedProducts[0];
@@ -217,12 +207,10 @@
         }
 
         if (ownedProducts.length === 1) {
-          // Kes 1 Produk: Sembunyikan dropdown, tunjuk auto-detected produk terus
           multiProductBox.classList.add("hidden");
           updateDisplay(defaultKey);
           productSelect.innerHTML = `<option value="${defaultKey}" selected>${productConfig[defaultKey].name}</option>`;
         } else {
-          // Kes >1 Produk: Munculkan dropdown dengan produk yang dilanggan sahaja
           multiProductBox.classList.remove("hidden");
           productSelect.innerHTML = ownedProducts.map(key => 
             `<option value="${key}" ${key === defaultKey ? 'selected' : ''}>${productConfig[key].name}</option>`
@@ -235,13 +223,13 @@
       }
     }
 
-    // 3. Proses Pembaharuan
+    // 3. Proses Pembaharuan & Rekod Ledger Mengikut COA Firestore
     payBtn.addEventListener("click", async () => {
       if (!currentUser) return;
 
       const selectedKey = productSelect.value;
       const config = productConfig[selectedKey];
-      const renewalFee = getProductFee(selectedKey); // Nilai tepat dari Firestore
+      const renewalFee = getProductFee(selectedKey);
 
       if (renewalFee <= 0) {
         alert("Ralat pada nilai pembaharuan. Sila hubungi pihak admin.");
@@ -252,51 +240,69 @@
         payBtn.disabled = true;
         payBtn.textContent = "Memproses...";
 
+        // 1. Tarik maklumat Pengguna
         const userSnap = await getDoc(doc(db, "users", currentUser.uid));
         const userData = userSnap.exists() ? userSnap.data() : {};
 
+        // 2. Tarik spesifikasi COA untuk Akaun Income (contoh: 4210) & Bank (1000)
+        const [incomeCoaSnap, bankCoaSnap] = await Promise.all([
+          getDoc(doc(db, "chartOfAccounts", config.accountCode)),
+          getDoc(doc(db, "chartOfAccounts", "1000"))
+        ]);
+
+        const incomeCoa = incomeCoaSnap.exists() ? incomeCoaSnap.data() : {
+          name: `${config.name} Renewal`,
+          category: "Service Revenue",
+          type: "Income"
+        };
+
+        const bankCoa = bankCoaSnap.exists() ? bankCoaSnap.data() : {
+          name: "Bank",
+          category: "Current Asset",
+          type: "Asset"
+        };
+
         const productDocRef = doc(db, "users", currentUser.uid, selectedKey, "maklumat");
 
-        // Kira tarikh luput baharu mengikut memberValidity (default: 365 hari)
         const validityDays = compSettings.memberValidity || 365;
         let expiryDate = new Date();
         expiryDate.setDate(expiryDate.getDate() + validityDays);
 
-        // Update tarikh luput subcollection produk[cite: 1]
+        // 3. Update tarikh luput pada subcollection produk[cite: 1]
         await updateDoc(productDocRef, {
           expiryDate: expiryDate.toISOString(),
           renewedAt: new Date().toISOString()
         });
 
-        // Rekod Ledger (Kredit - Income)[cite: 1]
+        // 4. Rekod Ledger: Kredit (Income selaras dengan COA)
         await addDoc(collection(db, "ledger"), {
           date: new Date(),
-          accountCode: "4300",
-          account: config.ledgerAccount,
-          category: "income",
+          accountCode: config.accountCode, // 4210 / 4220 / 4230 / 4240
+          account: incomeCoa.name,         // Contoh: "Renewal Wasiat" dari Firestore
+          category: incomeCoa.category,    // Contoh: "Service Revenue" dari Firestore
           description: `${config.name} Membership Renewal`,
           debit: 0,
           credit: renewalFee,
           paymentType: "CUSTOMER",
-          sourceAccount: "4300",
+          sourceAccount: config.accountCode,
           transactionGroup: currentUser.uid
         });
 
-        // Rekod Ledger (Debit - Bank)[cite: 1]
+        // 5. Rekod Ledger: Debit (Bank selaras dengan COA)
         await addDoc(collection(db, "ledger"), {
           date: new Date(),
           accountCode: "1000",
-          account: "Bank",
-          category: "asset",
+          account: bankCoa.name,           // "Bank" dari Firestore
+          category: bankCoa.category,      // Kategori tepat dari Firestore
           description: `${config.name} Membership Renewal`,
           debit: renewalFee,
           credit: 0,
           paymentType: "CUSTOMER",
-          sourceAccount: "4300",
+          sourceAccount: config.accountCode,
           transactionGroup: currentUser.uid
         });
 
-        // Rekod Resit[cite: 1]
+        // 6. Rekod Resit[cite: 1]
         await addDoc(collection(db, "receipts"), {
           receiptNo: `${config.prefix}-REN-${Date.now()}`,
           uid: currentUser.uid,
