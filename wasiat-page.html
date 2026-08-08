@@ -481,13 +481,10 @@ d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618
 <div>
 
 <div class="flex items-center gap-2">
-
-<p class="font-semibold text-base">
-Wasiat
-</p>
-
-<span id="editIcon"></span>
-
+  <p id="wasiatTitle" class="font-semibold text-base">
+  Wasiat
+  </p>
+  <span id="editIcon"></span>
 </div>
 
 <p
@@ -724,79 +721,53 @@ Sah Terima
 
   
 // PAYMENT STATUS
-
-
 if(userData.wasiatPaymentStatus === "paid"){
 
   if(bakiHari <= 0){
-
-    document.getElementById(
-      "wasiatButton"
-    ).href = "renewal.html";
-
-    document.getElementById(
-"wasiatStatus"
-).innerHTML = `
-
-<svg
-xmlns="http://www.w3.org/2000/svg"
-class="w-5 h-5 inline text-amber-600"
-fill="none"
-viewBox="0 0 24 24"
-stroke="currentColor">
-
-<path
-stroke-linecap="round"
-stroke-linejoin="round"
-stroke-width="2"
-d="M12 11c1.657 0 3-1.343 3-3V7a3 3 0 10-6 0v1c0 1.657 1.343 3 3 3zm-6 0h12a1 1 0 011 1v7a2 2 0 01-2 2H7a2 2 0 01-2-2v-7a1 1 0 011-1z"/>
-
-</svg>
-
-Keahlian Tamat
-
-`;
-
-  }
-
-  else{
-
-    document.getElementById(
-    "wasiatButton"
-).href = "wasiat.html";
-
-document.getElementById("editIcon").innerHTML = `
-
-<svg
-xmlns="http://www.w3.org/2000/svg"
-class="w-4 h-4 text-blue-300"
-fill="none"
-viewBox="0 0 24 24"
-stroke="currentColor">
-
-<path
-stroke-linecap="round"
-stroke-linejoin="round"
-stroke-width="2"
-d="M16.862 4.487a2.25 2.25 0 113.182 3.182L8.25 19.463 4.5 20.25l.787-3.75L16.862 4.487z"/>
-
-</svg>
-
-`;
+    // JIKA KEAHLIAN TAMAT
+    document.getElementById("wasiatButton").href = "renewal.html";
+    document.getElementById("wasiatTitle").innerText = "Wasiat";
     
+    const statusEl = document.getElementById("wasiatStatus");
+    statusEl.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 inline text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3-1.343 3-3V7a3 3 0 10-6 0v1c0 1.657 1.343 3 3 3zm-6 0h12a1 1 0 011 1v7a2 2 0 01-2 2H7a2 2 0 01-2-2v-7a1 1 0 011-1z"/>
+      </svg> Keahlian Tamat
+    `;
+    statusEl.classList.remove("hidden");
+    statusEl.classList.add("text-sm", "text-amber-600", "mt-1");
+  }
+  else{
+    // JIKA SUDAH BAYAR DAN AKTIF
+    document.getElementById("wasiatButton").href = "wasiat.html";
+    
+    // Ubah teks kepada my-Wasiat
+    document.getElementById("wasiatTitle").innerText = "my-Wasiat"; 
+    
+    // Letakkan Ikon Pen
+    document.getElementById("editIcon").innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.862 4.487a2.25 2.25 0 113.182 3.182L8.25 19.463 4.5 20.25l.787-3.75L16.862 4.487z"/>
+      </svg>
+    `;
+    // Status 'Bayar' kekal hidden kerana dia dah bayar
   }
 
 }
-
-else {
-  document.getElementById(
-    "wasiatButton"
-  ).href = "payment-wasiat.html";
-
-  // Gunakan template literal untuk memanggil nilai dinamik
-  document.getElementById(
-    "wasiatStatus"
-  ).innerHTML = `Bayar RM${wasiatPrice}`; 
+else{
+  // JIKA BELUM BAYAR (PROSPEK)
+  document.getElementById("wasiatButton").href = "payment-wasiat.html";
+  
+  // Teks kekal Wasiat
+  document.getElementById("wasiatTitle").innerText = "Wasiat"; 
+  
+  // Tunjukkan harga dengan nilai dinamik
+  const statusEl = document.getElementById("wasiatStatus");
+  statusEl.innerHTML = `Bayar RM${wasiatPrice}`; 
+  
+  // Buang kelas 'hidden' supaya harga RM350 muncul
+  statusEl.classList.remove("hidden"); 
+  statusEl.classList.add("text-sm", "text-white/70", "mt-1");
 }
 
 const receiveBtn =
