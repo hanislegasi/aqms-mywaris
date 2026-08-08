@@ -303,15 +303,10 @@ createdAt:new Date()
 
 
   
-await updateDoc(
-doc(
-db,
-"users",
-auth.currentUser.uid
-),
-{
-role:"consultant"
-});
+// update role di collection users (Guna setDoc dengan merge: true)
+await setDoc(doc(db, "users", currentUser.uid), {
+  role: "consultant"
+}, { merge: true });
   
 
   
