@@ -138,28 +138,43 @@ appId: "1:3498810778:web:ee36e0fe42f76698046e23"
 
 };
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-const auth =
-getAuth(app);
+onAuthStateChanged(auth, async(user) => {
 
-const db =
-getFirestore(app);
+ // 1. Semak dahulu sama ada pengguna wujud / log masuk
+  if(!user){
+    window.location.href="login.html";
+    return; // Berhenti di sini
+  }
 
-  
-onAuthStateChanged(auth, async(user)=>{
+  // 2. Ambil harga dari Firestore (Hanya ADA SATU let wasiatPrice di sini)
+  let mawarisPrice = 3000; // Nilai lalai
 
-if(!user){
-window.location.href="login.html";
-return;
-}
+  try {
+    const compensationSnap = await getDoc(doc(db, "settings", "compensation"));
+    
+    if (compensationSnap.exists()) {
+      const compensationData = compensationSnap.data();
+      console.log("BERJAYA BACA FIRESTORE:", compensationData); // <--- Semak di console
+      
+      if (compensationData.mawarisPrice !== undefined) {
+        mawarisPrice = compensationData.mawarisPrice;
+        console.log("HARGA DIKEMAS KINI KEPADA:", mawarisPrice);
+      } else {
+        console.log("FIELD mawarisPrice TIDAK WUJUD DALAM DOCUMENT INI!");
+      }
+    } else {
+      console.log("DOCUMENT Compensation TIDAK WUJUD!");
+    }
+  } catch (error) {
+    console.error("RALAT FIRESTORE:", error.message);
+  }
 
-const docSnap =
-await getDoc(
-doc(db,"users",user.uid)
-);
-
+  // 3. Teruskan mengambil data user seperti biasa
+  const docSnap = await getDoc(doc(db,"users",user.uid));
 if(docSnap.exists()){
 
 const userData =
@@ -475,13 +490,10 @@ d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618
 <div>
 
 <div class="flex items-center gap-2">
-
-<p class="font-semibold text-base">
-Mawaris
-</p>
-
-<span id="editIcon"></span>
-
+  <p id="mawarisTitle" class="font-semibold text-base">
+  Mawaris
+  </p>
+  <span id="editIcon"></span>
 </div>
 
 <p
@@ -718,82 +730,53 @@ Sah Terima
 
   
 // PAYMENT STATUS
-
-
 if(userData.mawarisPaymentStatus === "paid"){
 
   if(bakiHari <= 0){
-
-    document.getElementById(
-      "mawarisButton"
-    ).href = "renewal.html";
-
-    document.getElementById(
-"mawarisStatus"
-).innerHTML = `
-
-<svg
-xmlns="http://www.w3.org/2000/svg"
-class="w-5 h-5 inline text-amber-600"
-fill="none"
-viewBox="0 0 24 24"
-stroke="currentColor">
-
-<path
-stroke-linecap="round"
-stroke-linejoin="round"
-stroke-width="2"
-d="M12 11c1.657 0 3-1.343 3-3V7a3 3 0 10-6 0v1c0 1.657 1.343 3 3 3zm-6 0h12a1 1 0 011 1v7a2 2 0 01-2 2H7a2 2 0 01-2-2v-7a1 1 0 011-1z"/>
-
-</svg>
-
-Keahlian Tamat
-
-`;
-
-  }
-
-  else{
-
-    document.getElementById(
-    "mawarisButton"
-).href = "mawaris.html";
-
-document.getElementById("editIcon").innerHTML = `
-
-<svg
-xmlns="http://www.w3.org/2000/svg"
-class="w-4 h-4 text-blue-300"
-fill="none"
-viewBox="0 0 24 24"
-stroke="currentColor">
-
-<path
-stroke-linecap="round"
-stroke-linejoin="round"
-stroke-width="2"
-d="M16.862 4.487a2.25 2.25 0 113.182 3.182L8.25 19.463 4.5 20.25l.787-3.75L16.862 4.487z"/>
-
-</svg>
-
-`;
+    // JIKA KEAHLIAN TAMAT
+    document.getElementById("mawarisButton").href = "renewal.html";
+    document.getElementById("mawarisTitle").innerText = "Mawaris";
     
+    const statusEl = document.getElementById("mawarisStatus");
+    statusEl.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 inline text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3-1.343 3-3V7a3 3 0 10-6 0v1c0 1.657 1.343 3 3 3zm-6 0h12a1 1 0 011 1v7a2 2 0 01-2 2H7a2 2 0 01-2-2v-7a1 1 0 011-1z"/>
+      </svg> Keahlian Tamat
+    `;
+    statusEl.classList.remove("hidden");
+    statusEl.classList.add("text-sm", "text-amber-600", "mt-1");
+  }
+  else{
+    // JIKA SUDAH BAYAR DAN AKTIF
+    document.getElementById("mawarisButton").href = "mawaris.html";
+    
+    // Ubah teks kepada Mawaris
+    document.getElementById("wasiatTitle").innerText = "Mawaris"; 
+    
+    // Letakkan Ikon Pen
+    document.getElementById("editIcon").innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.862 4.487a2.25 2.25 0 113.182 3.182L8.25 19.463 4.5 20.25l.787-3.75L16.862 4.487z"/>
+      </svg>
+    `;
+    // Status 'Bayar' kekal hidden kerana dia dah bayar
   }
 
 }
-
 else{
-
-  document.getElementById(
-    "mawarisButton"
-  ).href = "payment-mawaris.html";
-
-  document.getElementById(
-    "mawarisStatus"
-  ).innerHTML =
-
-  "Bayar RM3,000";
-
+  // JIKA BELUM BAYAR (PROSPEK)
+  document.getElementById("mawarisButton").href = "payment-mawaris.html";
+  
+  // Teks kekal mawaris
+  document.getElementById("mawaristTitle").innerText = "Mawaris"; 
+  
+  // Tunjukkan harga dengan nilai dinamik
+  const statusEl = document.getElementById("mawarisStatus");
+  statusEl.innerHTML = `Bayar RM${mawarisPrice}`; 
+  
+  // Buang kelas 'hidden' supaya harga RM3000 muncul
+  statusEl.classList.remove("hidden"); 
+  statusEl.classList.add("text-sm", "text-white/70", "mt-1");
 }
 
 const receiveBtn =
