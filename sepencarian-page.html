@@ -150,7 +150,7 @@ onAuthStateChanged(auth, async(user) => {
     return; // Berhenti di sini
   }
 
-  // 2. Ambil harga dari Firestore (Hanya ADA SATU let wasiatPrice di sini)
+  // 2. Ambil harga dari Firestore (Hanya ADA SATU let sepencarianPrice di sini)
   let sepencarianPrice = 800; // Nilai lalai
 
   try {
@@ -161,7 +161,7 @@ onAuthStateChanged(auth, async(user) => {
       console.log("BERJAYA BACA FIRESTORE:", compensationData); // <--- Semak di console
       
       if (compensationData.sepencarianPrice !== undefined) {
-        wasiatPrice = compensationData.sepencarianPrice;
+        sepencarianPrice = compensationData.sepencarianPrice;
         console.log("HARGA DIKEMAS KINI KEPADA:", sepencarianPrice);
       } else {
         console.log("FIELD sepencarianPrice TIDAK WUJUD DALAM DOCUMENT INI!");
