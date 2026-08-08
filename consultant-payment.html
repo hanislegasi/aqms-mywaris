@@ -57,14 +57,19 @@
     }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+    // FIX: Semua import disatukan kat atas
     import {
       getFirestore,
       doc,
       updateDoc,
+      setDoc,
       getDoc,
+      getDocs,
       increment,
       addDoc,
-      collection
+      collection,
+      query,
+      where
     }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -83,7 +88,6 @@
 
     const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2 });
 
-    let currentUser = null;
     let registrationFee = 0;
 
     // CHECK AUTH & TARIK HARGA DARI FIRESTORE
@@ -92,7 +96,6 @@
         window.location.href = "login.html";
         return;
       }
-      currentUser = user;
 
       try {
         const compSnap = await getDoc(doc(db, "settings", "compensation"));
@@ -115,7 +118,7 @@
         payBtn.disabled = true;
 
         try {
-          const consultantRef = doc(db, "consultants", currentUser.uid);
+          const consultantRef = doc(db, "consultants", auth.currentUser.uid);
           const consultantSnap = await getDoc(consultantRef);
           const consultant = consultantSnap.exists() ? consultantSnap.data() : {};
 
@@ -156,16 +159,16 @@
             lifetimeOverride: 0
           });
 
-          // update role di collection users
-          await updateDoc(doc(db, "users", currentUser.uid), {
+          // update role di collection users (Guna setDoc dengan merge: true)
+          await setDoc(doc(db, "users", auth.currentUser.uid), {
             role: "consultant"
-          });
+          }, { merge: true });
 
           // ===============================
           // ACCOUNTING ENTRY (NEW SPLIT: 200 / 150 / 50)
           // ===============================
           const usbAmount = 50;
-          const companyRevenue = registrationFee - usbAmount; // 200 - 50 = 150
+          const companyRevenue = registrationFee - usbAmount;
 
           // 1. Dr Bank (RM200) - Asset
           await addDoc(collection(db, "ledger"), {
@@ -214,7 +217,7 @@
           // ===============================
           await addDoc(collection(db, "receipts"), {
             receiptNo: "REG-" + Date.now(),
-            uid: currentUser.uid,
+            uid: auth.currentUser.uid,
             consultantNo,
             serviceCode: "REGISTRATION",
             serviceName: "Consultant Registration Fee",
@@ -229,8 +232,7 @@
           // AGIHAN USB KEPADA UPLINE
           // ===============================
           if (consultant.upline && consultant.upline.trim() !== "") {
-            import { query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-            
+            // FIX: Tidak perlu import di sini lagi, dah letak kat atas
             const uplineQuery = query(
               collection(db, "consultants"), 
               where("consultantNo", "==", consultant.upline.trim())
@@ -238,26 +240,26 @@
             const uplineSnap = await getDocs(uplineQuery);
 
             if (!uplineSnap.empty) {
-              const uplineDoc = uplineSnap.docs[0]; // Ambil profil upline
+              const uplineDoc = uplineSnap.docs[0];
               const uplineRef = uplineDoc.ref;
 
               // 1. Tambah RM50 ke dalam e-wallet / statistik upline
               await updateDoc(uplineRef, {
                 totalUSB: increment(usbAmount),
                 lifetimeUSB: increment(usbAmount),
-                downlineCount: increment(1) // Alang-alang tambah bilangan downline dia
+                downlineCount: increment(1)
               });
 
               // 2. Rekod dalam overrideHistory supaya muncul di Consultant Portal
               await addDoc(collection(db, "overrideHistory"), {
                 uplineId: uplineDoc.id,
                 uplineNo: uplineDoc.data().consultantNo,
-                downlineId: currentUser.uid,
+                downlineId: auth.currentUser.uid,
                 downlineNo: consultantNo,
                 downlineName: consultant.nama || "-",
                 type: "USB_REGISTRATION",
                 amount: usbAmount,
-                status: "PENDING", // Status pending sebelum HQ bayar (clearance)
+                status: "PENDING", 
                 date: new Date()
               });
             }
@@ -267,6 +269,7 @@
           await updateDoc(counterRef, {
             consultantCounter: increment(1)
           });
+
           alert("Pendaftaran Konsultan Berjaya. No Konsultan: " + consultantNo);
           window.location.href = "consultant-dashboard.html";
 
