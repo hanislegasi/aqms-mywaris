@@ -138,22 +138,28 @@ appId: "1:3498810778:web:ee36e0fe42f76698046e23"
 
 };
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-const auth =
-getAuth(app);
+onAuthStateChanged(auth, async(user) => {
 
-const db =
-getFirestore(app);
+  // 1. Semak dahulu sama ada pengguna wujud / log masuk
+  if(!user){
+    window.location.href="login.html";
+    return; // Berhenti di sini, jangan jalankan kod di bawah
+  }
 
-  
-onAuthStateChanged(auth, async(user)=>{
+  // 2. Jika sah pengguna log masuk, barulah ambil tetapan harga dari Compesation
+  const compesationSnap = await getDoc(doc(db, "settings", "Compesation"));
+  let wasiatPrice = 350; // Nilai lalai (default) sekiranya gagal dimuatkan
 
-if(!user){
-window.location.href="login.html";
-return;
-}
+  if (compesationSnap.exists()) {
+    const compesationData = compesationSnap.data();
+    if (compesationData.wasiatPrice) {
+      wasiatPrice = compesationData.wasiatPrice;
+    }
+  }
 
 const docSnap =
 await getDoc(
@@ -782,18 +788,15 @@ d="M16.862 4.487a2.25 2.25 0 113.182 3.182L8.25 19.463 4.5 20.25l.787-3.75L16.86
 
 }
 
-else{
-
+else {
   document.getElementById(
     "wasiatButton"
   ).href = "payment-wasiat.html";
 
+  // Gunakan template literal untuk memanggil nilai dinamik
   document.getElementById(
     "wasiatStatus"
-  ).innerHTML =
-
-  "Bayar RM350";
-
+  ).innerHTML = `Bayar RM${wasiatPrice}`; 
 }
 
 const receiveBtn =
