@@ -345,7 +345,7 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
             wasiatRenewal: 50, hibahRenewal: 50, sepencarianRenewal: 50, mawarisRenewal: 80,
             commissionAQC: 35, commissionAQCAS: 38, commissionAQCUM: 40, commissionMGAM: 45,
             overrideAQC: 0, overrideAQCAS: 3, overrideAQCUM: 4, overrideMGAM: 5,
-            uplineBenefit: 5,
+            usb: 5,
             bonusTarget1: 50000, bonusReward1: 1000,
             companyPool: 48, commissionPool: 35, overridePool: 12,
             adminOperation: 30, allowance: 10, royalty: 8,
@@ -360,7 +360,7 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
             "wasiatRenewal", "hibahRenewal", "sepencarianRenewal", "mawarisRenewal",
             "commissionAQC", "commissionAQCAS", "commissionAQCUM", "commissionMGAM",
             "overrideAQC", "overrideAQCAS", "overrideAQCUM", "overrideMGAM",
-            "uplineBenefit", "bonusTarget1", "bonusReward1",
+            "usb", "bonusTarget1", "bonusReward1",
             "memberValidity", "consultantRegistrationFee", 
             "renewalAQC", "renewalAQCAS", "renewalAQCUM", "renewalMGAM",
             "companyPool", "commissionPool", "overridePool",
@@ -519,7 +519,7 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
                 compensationFields.forEach(field => { compensationData[field] = getVal(field); });
 
                 await setDoc(doc(db, "settings", "company"), companyData, { merge: true });
-                await setDoc(doc(db, "settings", "compensation"), compensationData, { merge: true });
+               await setDoc(doc(db, "settings", "compensation"), compensationData, { merge: true });
 
                 // Success UI Feedback (Replaces alert)
                 btn.innerHTML = "✅ Berjaya Disimpan!";
