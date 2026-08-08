@@ -154,20 +154,20 @@ onAuthStateChanged(auth, async(user) => {
   let wasiatPrice = 350; // Nilai lalai
 
   try {
-    const compesationSnap = await getDoc(doc(db, "settings", "Compesation"));
+    const compensationSnap = await getDoc(doc(db, "settings", "compensation"));
     
-    if (compesationSnap.exists()) {
-      const compesationData = compesationSnap.data();
-      console.log("BERJAYA BACA FIRESTORE:", compesationData); // <--- Semak di console
+    if (compensationSnap.exists()) {
+      const compensationData = compensationSnap.data();
+      console.log("BERJAYA BACA FIRESTORE:", compensationData); // <--- Semak di console
       
-      if (compesationData.wasiatPrice !== undefined) {
-        wasiatPrice = compesationData.wasiatPrice;
+      if (compensationData.wasiatPrice !== undefined) {
+        wasiatPrice = compensationData.wasiatPrice;
         console.log("HARGA DIKEMAS KINI KEPADA:", wasiatPrice);
       } else {
         console.log("FIELD wasiatPrice TIDAK WUJUD DALAM DOCUMENT INI!");
       }
     } else {
-      console.log("DOCUMENT Compesation TIDAK WUJUD!");
+      console.log("DOCUMENT Compensation TIDAK WUJUD!");
     }
   } catch (error) {
     console.error("RALAT FIRESTORE:", error.message);
