@@ -1,175 +1,135 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login Akaun</title>
-<script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Akaun</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="min-h-screen bg-[#f5f7f9] flex items-center justify-center p-5">
 
-<div class="bg-white w-full max-w-sm p-8 rounded-3xl shadow-2xl border border-gray-100">
-  
-<h2 class="text-3xl font-bold mb-2 text-center text-[#153638]">
-Login Akaun
-</h2>
+  <div class="bg-white w-full max-w-sm p-8 rounded-3xl shadow-2xl border border-gray-100">
+    <h2 class="text-3xl font-bold mb-2 text-center text-[#153638]">
+      Login Akaun
+    </h2>
 
-<form id="loginForm" class="space-y-4">
+    <form id="loginForm" class="space-y-4">
+      <input
+        id="email"
+        type="email"
+        placeholder="Email"
+        class="w-full border border-gray-200 bg-gray-50 p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#153638]"
+        required>
 
-<input
-id="email"
-type="email"
-placeholder="Email"
-class="w-full border border-gray-200 bg-gray-50 p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#153638]"
-required>
+      <input
+        id="password"
+        type="password"
+        placeholder="Password"
+        class="w-full border border-gray-200 bg-gray-50 p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#153638]"
+        required>
 
-<input
-id="password"
-type="password"
-placeholder="Password"
-class="w-full border border-gray-200 bg-gray-50 p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#153638]"
-required>
+      <button
+        type="submit"
+        class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-4 rounded-xl font-semibold shadow-lg">
+        Login
+      </button>
+    </form>
 
-<button
-type="submit"
-class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-4 rounded-xl font-semibold shadow-lg">
-Login
-</button>
+    <div class="text-center mt-4">
+      <a href="register.html" class="text-blue-600">
+        Belum ada akaun?
+      </a>
+    </div>
+  </div>
 
-</form>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+      authDomain: "alqawthar-mywaris.firebaseapp.com",
+      projectId: "alqawthar-mywaris",
+      storageBucket: "alqawthar-mywaris.firebasestorage.app",
+      messagingSenderId: "3498810778",
+      appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+    };
 
-<div class="text-center mt-4">
-<a href="register.html" class="text-blue-600">
-Belum ada akaun?
-</a>
-</div>
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-</div>
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-<script type="module">
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("Login berjaya");
 
-import {
-getAuth,
-signInWithEmailAndPassword
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        const uid = auth.currentUser.uid;
+        const userRef = doc(db, "users", uid);
+        const userDoc = await getDoc(userRef);
 
-import {
-getFirestore,
-doc,
-getDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-  
-const firebaseConfig = {
-  apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-  authDomain: "alqawthar-mywaris.firebaseapp.com",
-  projectId: "alqawthar-mywaris",
-  storageBucket: "alqawthar-mywaris.firebasestorage.app",
-  messagingSenderId: "3498810778",
-  appId: "1:3498810778:web:ee36e0fe42f76698046e23"
-};
+        let role = "customer";
+        let consultantNo = "";
+        let nama = "";
 
-const app =
-initializeApp(firebaseConfig);
+        // 1. Check jika dokumen users wujud
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          role = userData.role || "customer";
+          consultantNo = userData.consultantNo || "";
+          nama = userData.nama || "";
+        } else {
+          // 2. AUTO-HEAL: Jika users tak wujud, cari dalam consultants
+          const consultantRef = doc(db, "consultants", uid);
+          const consultantDoc = await getDoc(consultantRef);
 
-const auth =
-getAuth(app);
+          if (consultantDoc.exists()) {
+            const consultantData = consultantDoc.data();
+            role = "consultant";
+            consultantNo = consultantData.consultantNo || "";
+            nama = consultantData.nama || "";
 
-document
-.getElementById("loginForm")
-.addEventListener("submit", async(e)=>{
+            // Cipta semula dokumen yang terpadam di 'users'
+            await setDoc(userRef, {
+              role: "consultant",
+              consultantNo: consultantNo,
+              nama: nama
+            }, { merge: true });
+          } else {
+            // Jika tak wujud di mana-mana, jadikan customer biasa
+            await setDoc(userRef, {
+              role: "customer",
+              email: email
+            }, { merge: true });
+          }
+        }
 
-e.preventDefault();
+        // 3. Halakan pengguna mengikut role yang sah
+        if (role === "admin") {
+          window.location.href = "admin-dashboard.html";
+        } 
+        else if (role === "consultant") {
+          sessionStorage.setItem("consultantNo", consultantNo);
+          sessionStorage.setItem("consultantName", nama);
+          sessionStorage.setItem("userUid", uid);
+          window.location.href = "consultant-dashboard.html";
+        } 
+        else {
+          window.location.href = "dashboard.html";
+        }
 
-const email =
-document.getElementById("email").value.trim();
-
-const password =
-document.getElementById("password").value;
-
-console.log("EMAIL:", email);
-console.log("PASSWORD:", password);
-
-try{
-
-await signInWithEmailAndPassword(
-auth,
-email,
-password
-);
-
-alert("Login berjaya");
-
-const db =
-getFirestore(app);
-
-const userDoc =
-await getDoc(
-  doc(
-    db,
-    "users",
-    auth.currentUser.uid
-  )
-);
-
-const userData =
-userDoc.data();
-
-if(userData.role === "admin"){
-
-window.location.href =
-"admin-dashboard.html";
-
-}
-else if(
-userData.role === "consultant"
-){
-
-sessionStorage.setItem(
-"consultantNo",
-userData.consultantNo
-);
-
-sessionStorage.setItem(
-"consultantName",
-userData.nama
-);
-
-sessionStorage.setItem(
-"userUid",
-auth.currentUser.uid
-);
-  
-window.location.href =
-"consultant-dashboard.html";
-
-}
-else{
-
-window.location.href =
-"dashboard.html";
-
-}
-}
-catch(error){
-
-console.error(error);
-
-alert(
-"Code: " + error.code +
-"\nMessage: " + error.message
-);
-
-}
-
-});
-
-</script>
-
+      } catch (error) {
+        console.error(error);
+        alert("Code: " + error.code + "\nMessage: " + error.message);
+      }
+    });
+  </script>
 </body>
 </html>
