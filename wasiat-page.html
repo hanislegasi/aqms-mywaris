@@ -144,15 +144,13 @@ const db = getFirestore(app);
 
 onAuthStateChanged(auth, async(user) => {
 
-  // 1. Semak dahulu sama ada pengguna wujud / log masuk
+ // 1. Semak dahulu sama ada pengguna wujud / log masuk
   if(!user){
     window.location.href="login.html";
-    return; // Berhenti di sini, jangan jalankan kod di bawah
+    return; // Berhenti di sini
   }
 
-// =======================================================
-  // 2. LETAK KOD CONSOLE.LOG DI SINI
-  // =======================================================
+  // 2. Ambil harga dari Firestore (Hanya ADA SATU let wasiatPrice di sini)
   let wasiatPrice = 350; // Nilai lalai
 
   try {
@@ -174,24 +172,9 @@ onAuthStateChanged(auth, async(user) => {
   } catch (error) {
     console.error("RALAT FIRESTORE:", error.message);
   }
-  // =======================================================
-  
-  // 2. Jika sah pengguna log masuk, barulah ambil tetapan harga dari Compesation
-  const compesationSnap = await getDoc(doc(db, "settings", "Compesation"));
-  let wasiatPrice = 350; // Nilai lalai (default) sekiranya gagal dimuatkan
 
-  if (compesationSnap.exists()) {
-    const compesationData = compesationSnap.data();
-    if (compesationData.wasiatPrice) {
-      wasiatPrice = compesationData.wasiatPrice;
-    }
-  }
-
-const docSnap =
-await getDoc(
-doc(db,"users",user.uid)
-);
-
+  // 3. Teruskan mengambil data user seperti biasa
+  const docSnap = await getDoc(doc(db,"users",user.uid));
 if(docSnap.exists()){
 
 const userData =
