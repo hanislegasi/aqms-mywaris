@@ -304,7 +304,7 @@ createdAt:new Date()
 
   
 // update role di collection users (Guna setDoc dengan merge: true)
-await setDoc(doc(db, "users", currentUser.uid), {
+await setDoc(doc(db, "users", auth.currentUser.uid), {
   role: "consultant"
 }, { merge: true });
   
