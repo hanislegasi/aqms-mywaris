@@ -225,11 +225,48 @@
             paymentDate: new Date()
           });
 
+          // ===============================
+          // AGIHAN USB KEPADA UPLINE
+          // ===============================
+          if (consultant.upline && consultant.upline.trim() !== "") {
+            import { query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+            
+            const uplineQuery = query(
+              collection(db, "consultants"), 
+              where("consultantNo", "==", consultant.upline.trim())
+            );
+            const uplineSnap = await getDocs(uplineQuery);
+
+            if (!uplineSnap.empty) {
+              const uplineDoc = uplineSnap.docs[0]; // Ambil profil upline
+              const uplineRef = uplineDoc.ref;
+
+              // 1. Tambah RM50 ke dalam e-wallet / statistik upline
+              await updateDoc(uplineRef, {
+                totalUSB: increment(usbAmount),
+                lifetimeUSB: increment(usbAmount),
+                downlineCount: increment(1) // Alang-alang tambah bilangan downline dia
+              });
+
+              // 2. Rekod dalam overrideHistory supaya muncul di Consultant Portal
+              await addDoc(collection(db, "overrideHistory"), {
+                uplineId: uplineDoc.id,
+                uplineNo: uplineDoc.data().consultantNo,
+                downlineId: currentUser.uid,
+                downlineNo: consultantNo,
+                downlineName: consultant.nama || "-",
+                type: "USB_REGISTRATION",
+                amount: usbAmount,
+                status: "PENDING", // Status pending sebelum HQ bayar (clearance)
+                date: new Date()
+              });
+            }
+          }
+
           // update counter
           await updateDoc(counterRef, {
             consultantCounter: increment(1)
           });
-
           alert("Pendaftaran Konsultan Berjaya. No Konsultan: " + consultantNo);
           window.location.href = "consultant-dashboard.html";
 
