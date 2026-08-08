@@ -150,6 +150,32 @@ onAuthStateChanged(auth, async(user) => {
     return; // Berhenti di sini, jangan jalankan kod di bawah
   }
 
+// =======================================================
+  // 2. LETAK KOD CONSOLE.LOG DI SINI
+  // =======================================================
+  let wasiatPrice = 350; // Nilai lalai
+
+  try {
+    const compesationSnap = await getDoc(doc(db, "settings", "Compesation"));
+    
+    if (compesationSnap.exists()) {
+      const compesationData = compesationSnap.data();
+      console.log("BERJAYA BACA FIRESTORE:", compesationData); // <--- Semak di console
+      
+      if (compesationData.wasiatPrice !== undefined) {
+        wasiatPrice = compesationData.wasiatPrice;
+        console.log("HARGA DIKEMAS KINI KEPADA:", wasiatPrice);
+      } else {
+        console.log("FIELD wasiatPrice TIDAK WUJUD DALAM DOCUMENT INI!");
+      }
+    } else {
+      console.log("DOCUMENT Compesation TIDAK WUJUD!");
+    }
+  } catch (error) {
+    console.error("RALAT FIRESTORE:", error.message);
+  }
+  // =======================================================
+  
   // 2. Jika sah pengguna log masuk, barulah ambil tetapan harga dari Compesation
   const compesationSnap = await getDoc(doc(db, "settings", "Compesation"));
   let wasiatPrice = 350; // Nilai lalai (default) sekiranya gagal dimuatkan
