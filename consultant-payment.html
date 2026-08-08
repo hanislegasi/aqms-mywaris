@@ -47,6 +47,33 @@
     </button>
   </div>
 
+<!-- =============================== -->
+  <!-- MODAL TERMA & SYARAT (T&C)      -->
+  <!-- =============================== -->
+  <div id="tncModal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-5 z-50">
+    <div class="bg-white w-full max-w-lg rounded-2xl p-6 shadow-2xl transform transition-all">
+      <h2 class="text-2xl font-bold text-[#153638] mb-4">Terma & Syarat</h2>
+      
+      <!-- Kotak scroll untuk teks T&C -->
+      <div class="max-h-60 overflow-y-auto text-sm text-gray-600 mb-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
+        <p class="mb-3 font-semibold text-gray-800">Sila baca dan fahami terma berikut sebelum meneruskan:</p>
+        <p class="mb-2">1. Saya bersetuju dengan segala polisi, terma, dan syarat sebagai Al-Qawthar Consultant (AQC).</p>
+        <p class="mb-2">2. Yuran pendaftaran sebanyak RM200 ini adalah muktamad dan <b>tidak akan dikembalikan</b> (non-refundable) sekiranya saya membatalkan pendaftaran.</p>
+        <p class="mb-2">3. Saya berjanji akan menjalankan tugas dengan penuh amanah, mematuhi syariah, dan menjaga nama baik syarikat.</p>
+        <p class="mb-2">4. Segala maklumat yang saya berikan adalah benar dan tepat.</p>
+      </div>
+
+      <div class="flex gap-3">
+        <button id="cancelBtn" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-300 transition">
+          Batal
+        </button>
+        <button id="agreeBtn" class="flex-1 bg-[#153638] text-white py-3 rounded-xl font-semibold hover:bg-[#1d4a4d] transition">
+          Setuju & Bayar
+        </button>
+      </div>
+    </div>
+  </div>
+  
   <script type="module">
     import { initializeApp }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -87,83 +114,78 @@
     const db = getFirestore(app);
 
     const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2 });
-
     let registrationFee = 0;
 
-    // CHECK AUTH & TARIK HARGA DARI FIRESTORE
+    // CHECK AUTH & TARIK HARGA
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "login.html";
         return;
       }
-
       try {
         const compSnap = await getDoc(doc(db, "settings", "compensation"));
         const compensation = compSnap.exists() ? compSnap.data() : {};
-        
         registrationFee = compensation.consultantRegistrationFee || compensation.consultantRegistration || 200;
-
         document.getElementById("displayFee").textContent = `RM${formatRM(registrationFee)}`;
       } catch (err) {
-        console.error("Ralat memuatkan tetapan compensation:", err);
+        console.error("Ralat memuatkan tetapan:", err);
         document.getElementById("displayFee").textContent = "RM200.00";
         registrationFee = 200;
       }
     });
 
-    document
-      .getElementById("payBtn")
-      .addEventListener("click", async () => {
-        const payBtn = document.getElementById("payBtn");
-        payBtn.disabled = true;
+    // ELEMEN BUTANG & MODAL
+    const payBtn = document.getElementById("payBtn");
+    const tncModal = document.getElementById("tncModal");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const agreeBtn = document.getElementById("agreeBtn");
 
-        try {
-          const consultantRef = doc(db, "consultants", auth.currentUser.uid);
-          const consultantSnap = await getDoc(consultantRef);
-          const consultant = consultantSnap.exists() ? consultantSnap.data() : {};
+    // 1. Klik Bayar -> Buka Modal
+    payBtn.addEventListener("click", () => {
+      tncModal.classList.remove("hidden");
+    });
 
-          if (consultant.consultantPaymentStatus === "paid") {
-            alert("Yuran pendaftaran telah dijelaskan.");
-            window.location.href = "consultant-dashboard.html";
-            return;
-          }
+    // 2. Klik Batal -> Tutup Modal
+    cancelBtn.addEventListener("click", () => {
+      tncModal.classList.add("hidden");
+    });
 
-          const counterRef = doc(db, "system", "counter");
-          const counterSnap = await getDoc(counterRef);
-          const currentNo = counterSnap.exists() ? (counterSnap.data().consultantCounter || 0) : 0;
-          const newNo = currentNo + 1;
+    // 3. Klik Setuju -> Proses Firebase
+    agreeBtn.addEventListener("click", async () => {
+      tncModal.classList.add("hidden"); // Tutup pop-up
+      payBtn.disabled = true;           // Kunci butang utama
+      payBtn.textContent = "Memproses...";
 
-          // generate consultant no
-          const consultantNo = "AQC" + String(newNo).padStart(4, "0");
+      try {
+        const consultantRef = doc(db, "consultants", auth.currentUser.uid);
+        const consultantSnap = await getDoc(consultantRef);
+        const consultant = consultantSnap.exists() ? consultantSnap.data() : {};
 
-          // renewal date
-          const renewalDate = new Date();
-          renewalDate.setFullYear(renewalDate.getFullYear() + 1);
+        if (consultant.consultantPaymentStatus === "paid") {
+          alert("Yuran pendaftaran telah dijelaskan.");
+          window.location.href = "consultant-dashboard.html";
+          return;
+        }
 
-          // update user di collection consultants
-          await updateDoc(consultantRef, {
-            consultantNo,
-            consultantLevel: "AQC",
-            consultantPaymentStatus: "paid",
-            joinDate: new Date(),
-            renewalDate,
-            downlineCount: 0,
-            activeClients: 0,
-            careerSales: 0,
-            totalSales: 0,
-            totalCommission: 0,
-            totalUSB: 0,
-            totalOverriding: 0,
-            lifetimeCommission: 0,
-            lifetimeUSB: 0,
-            lifetimeOverride: 0
-          });
+        const counterRef = doc(db, "system", "counter");
+        const counterSnap = await getDoc(counterRef);
+        const currentNo = counterSnap.exists() ? (counterSnap.data().consultantCounter || 0) : 0;
+        const newNo = currentNo + 1;
 
-          // update role di collection users (Guna setDoc dengan merge: true)
-          await setDoc(doc(db, "users", auth.currentUser.uid), {
-            role: "consultant"
-          }, { merge: true });
+        const consultantNo = "AQC" + String(newNo).padStart(4, "0");
 
+        const renewalDate = new Date();
+        renewalDate.setFullYear(renewalDate.getFullYear() + 1);
+
+        // Update profil consultant
+        await updateDoc(consultantRef, {
+          consultantNo, consultantLevel: "AQC", consultantPaymentStatus: "paid", joinDate: new Date(), renewalDate,
+          downlineCount: 0, activeClients: 0, careerSales: 0, totalSales: 0, totalCommission: 0, totalUSB: 0,
+          totalOverriding: 0, lifetimeCommission: 0, lifetimeUSB: 0, lifetimeOverride: 0
+        });
+
+        await setDoc(doc(db, "users", auth.currentUser.uid), { role: "consultant" }, { merge: true });
+        
           // ===============================
           // ACCOUNTING ENTRY (NEW SPLIT: 200 / 150 / 50)
           // ===============================
@@ -274,10 +296,11 @@
           window.location.href = "consultant-dashboard.html";
 
         } catch (error) {
-          payBtn.disabled = false;
-          console.error(error);
-          alert("Ralat: " + error.message);
-        }
+        payBtn.disabled = false;
+        payBtn.textContent = "Bayar Sekarang";
+        console.error(error);
+        alert("Ralat: " + error.message);
+      }
       });
   </script>
 </body>
