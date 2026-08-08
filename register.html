@@ -265,66 +265,58 @@ return;
 const accountType =
 document.getElementById("accountType").value;
   
-try{
-
-const userCredential =
-await createUserWithEmailAndPassword(
-auth,
-email,
-password
-);
-
-const uid =
-userCredential.user.uid;
-
+try {
+  const userCredential = await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
   
-await setDoc(
-doc(db,"users",uid),
-{
-nama,
-ic,
-email,
-telefon,
-referral,
-accountType,
+  const uid = userCredential.user.uid;
 
+  // Semak jenis akaun untuk menentukan collection dan role
+  if (accountType === "consultant") {
+    
+    // Simpan ke collection 'consultants'[cite: 1]
+    await setDoc(doc(db, "consultants", uid), {
+      nama,
+      ic,
+      email,
+      telefon,
+      referral,
+      accountType,
+      role: "consultant", // Ubah role kepada consultant
+      leadStatus: "REGISTERED",
+      paymentStatus: "unpaid",
+      consultantNo: null, // Boleh dikemas kini nanti dalam proses seterusnya
+      createdAt: new Date()
+    });
 
+    window.location.href = "consultant-registration.html";
 
-  
-role:"customer",
+  } else {
+    
+    // Simpan ke collection 'users' untuk pelanggan AQM[cite: 1]
+    await setDoc(doc(db, "users", uid), {
+      nama,
+      ic,
+      email,
+      telefon,
+      referral,
+      accountType,
+      role: "customer", // Kekalkan role customer
+      leadStatus: "REGISTERED",
+      paymentStatus: "unpaid",
+      memberNo: null,
+      createdAt: new Date()
+    });
 
-leadStatus:"REGISTERED",
+    window.location.href = "login.html";
+    
+  }
 
-paymentStatus:"unpaid",
-
-memberNo:null,
-
-createdAt:new Date()
-}
-);
-
-
-  
-if(
-accountType === "consultant"
-){
-
-window.location.href =
-"consultant-registration.html";
-
-}
-else{
-
-window.location.href =
-"login.html";
-
-}
-
-}
-catch(error){
-
-alert(error.message);
-
+} catch (error) {
+  alert(error.message);
 }
 
 }); 
