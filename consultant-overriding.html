@@ -1,269 +1,193 @@
 <!DOCTYPE html>
 <html lang="ms">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>
-My Overriding
-</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-body{
-font-family:Inter,sans-serif;
-}
-</style>
-  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Overriding</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: Inter, sans-serif; }
+  </style>
 </head>
 
 <body class="bg-gray-100">
-
-<div class="bg-[#153638] text-white p-5">
-
-<h1 class="text-2xl font-bold">
-My Team
-</h1>
-
-<p>
-Overriding Performance
-</p>
-
-</div>
-
-<div class="p-5">
-
-<a
-href="consultant-dashboard.html"
-class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
-
-← Dashboard
-
-</a>
-
-
-<div
-id="summaryCard"
-class="grid md:grid-cols-2 gap-5 mb-5">
-
-</div>
-
-<div class="bg-white rounded-2xl shadow overflow-x-auto">
-
-<table class="w-full">
-
-<thead class="bg-[#153638] text-white">
-
-<tr>
-<th class="p-3 text-left">Tarikh</th>
-<th class="p-3 text-left">Dari AQC</th>
-<th class="p-3 text-left">Nama</th>
-<th class="p-3 text-left">Level Saya</th>
-<th class="p-3 text-left">Sales</th>
-<th class="p-3 text-left">Rate</th>
-<th class="p-3 text-left">Override</th>
-</tr>
-
-</thead>
-
-<tbody id="overrideTable">
-
-</tbody>
-
-</table>
-
-</div></div>
-
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getAuth,
-onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-getFirestore,
-doc,
-getDoc,
-getDocs,
-collection,
-query,
-where,
-orderBy
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-
-apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-authDomain:"alqawthar-mywaris.firebaseapp.com",
-projectId:"alqawthar-mywaris",
-storageBucket:"alqawthar-mywaris.firebasestorage.app",
-messagingSenderId:"3498810778",
-appId:"1:3498810778:web:ee36e0fe42f76698046e23"
-
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const auth =
-getAuth(app);
-
-const db =
-getFirestore(app);
-
-
-
-onAuthStateChanged(auth, async(user)=>{
-
-try{
-  
-if(!user){
-
-window.location.href =
-"login.html";
-
-return;
-
-}
-
-const userSnap =
-await getDoc(
-doc(db,"consultants",user.uid)
-);
-
-const data =
-userSnap.data();
-
-console.log(data.consultantNo);
-  
-const historySnap =
-await getDocs(
-query(
-collection(db,"overrideHistory"),
-where("receiver","==",data.consultantNo),
-orderBy("createdAt","desc")
-)
-);
-
-let html = "";
-let lifetimeTotal = 0;
-let totalSales = 0;
-
-historySnap.forEach((d)=>{
-
-const h = d.data();
-
-lifetimeTotal +=
-Number(h.override || 0);
-
-totalSales +=
-Number(h.sales || 0);
-
-  
-
-
-html += `
-
-<tr class="border-b">
-
-<td class="p-4">
-${
-h.createdAt?.toDate
-?
-h.createdAt.toDate().toLocaleDateString("ms-MY")
-:
-"-"
-}
-</td>
-
-<td class="p-4">
-${h.fromConsultant}
-</td>
-
-<td class="p-4">
-${h.fromName}
-</td>
-
-<td class="p-4">
-${h.receiverLevel}
-</td>
-
-<td class="p-4">
-RM${Number(h.sales || 0).toLocaleString()}
-</td>
-
-<td class="p-4">
-${h.diffRate}%
-</td>
-
-<td class="p-4 font-bold text-green-600">
-RM${Number(h.override || 0).toFixed(2)}
-</td>
-
-</tr>
-
-`;
-
-});
-  
-
-document.getElementById(
-"overrideTable"
-).innerHTML =
-html;
-
-document.getElementById(
-"summaryCard"
-).innerHTML = `
-
-<div class="bg-white rounded-2xl p-6 shadow">
-
-<h2 class="text-lg font-semibold text-gray-500">
-Total Team Sales
-</h2>
-
-<p class="text-4xl font-bold text-[#153638] mt-2">
-
-RM${totalSales.toLocaleString()}
-
-</p>
-
-</div>
-
-<div class="bg-white rounded-2xl p-6 shadow">
-
-<h2 class="text-lg font-semibold text-gray-500">
-Lifetime Override
-</h2>
-
-<p class="text-4xl font-bold text-green-600 mt-2">
-
-RM${lifetimeTotal.toFixed(2)}
-
-</p>
-
-</div>
-
-`;
-
-}catch(err){
-
-console.error(err);
-
-}  
-  
-});
-
-</script>
-
+  <div class="bg-[#153638] text-white p-5">
+    <h1 class="text-2xl font-bold">My Team</h1>
+    <p>Overriding Performance</p>
+  </div>
+
+  <div class="p-5">
+    <a href="consultant-dashboard.html" class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5 hover:bg-gray-300 transition">
+      ← Dashboard
+    </a>
+
+    <!-- Ringkasan Total -->
+    <div id="summaryCard" class="grid md:grid-cols-2 gap-5 mb-5">
+      <div class="bg-white rounded-2xl p-6 shadow">
+        <h2 class="text-lg font-semibold text-gray-500">Total Team Sales</h2>
+        <p id="topTotalSales" class="text-4xl font-bold text-[#153638] mt-2">RM0.00</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow">
+        <h2 class="text-lg font-semibold text-gray-500">Lifetime Override</h2>
+        <p id="topTotalOverride" class="text-4xl font-bold text-green-600 mt-2">RM0.00</p>
+      </div>
+    </div>
+
+    <!-- Jadual Prestasi Team -->
+    <div class="bg-white rounded-2xl shadow overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-[#153638] text-white">
+          <tr>
+            <th class="p-4 text-left font-semibold">Dari AQC</th>
+            <th class="p-4 text-left font-semibold">Nama</th>
+            <th class="p-4 text-left font-semibold">Level AQC</th>
+            <th class="p-4 text-right font-semibold">Total Sales</th>
+            <th class="p-4 text-right font-semibold">Total Override</th>
+            <th class="p-4 text-right font-semibold">% Bonus</th>
+          </tr>
+        </thead>
+        <tbody id="overrideTable">
+          <tr>
+            <td colspan="6" class="p-4 text-center text-gray-500">Memuatkan data...</td>
+          </tr>
+        </tbody>
+        <!-- Ruangan Total Bawah (Standby untuk Bonus) -->
+        <tfoot class="bg-gray-100 border-t-2 border-gray-300">
+          <tr>
+            <td colspan="3" class="p-4 text-right font-bold text-gray-700">JUMLAH KESELURUHAN:</td>
+            <td id="bottomTotalSales" class="p-4 text-right font-bold text-[#153638]">RM0.00</td>
+            <td id="bottomTotalOverride" class="p-4 text-right font-bold text-green-600">RM0.00</td>
+            <td class="p-4 text-right font-bold text-blue-600">100.00%</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc, getDocs, collection, query, where } 
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+      authDomain: "alqawthar-mywaris.firebaseapp.com",
+      projectId: "alqawthar-mywaris",
+      storageBucket: "alqawthar-mywaris.firebasestorage.app",
+      messagingSenderId: "3498810778",
+      appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      try {
+        const userSnap = await getDoc(doc(db, "consultants", user.uid));
+        const data = userSnap.data();
+        const myConsultantNo = data.consultantNo;
+
+        let teamData = {};
+        
+        // 1. Dapatkan senarai DIRECT DOWNLINE dahulu
+        const downlineQ = query(collection(db, "consultants"), where("upline", "==", myConsultantNo));
+        const downlineSnap = await getDocs(downlineQ);
+        
+        downlineSnap.forEach(d => {
+          const dl = d.data();
+          teamData[dl.consultantNo] = {
+            nama: dl.nama || "-",
+            level: dl.consultantLevel || "-",
+            sales: 0,
+            override: 0
+          };
+        });
+
+        // 2. Dapatkan sejarah transaksi komisen (Override History)
+        const historyQ = query(collection(db, "overrideHistory"), where("receiver", "==", myConsultantNo));
+        const historySnap = await getDocs(historyQ);
+
+        historySnap.forEach(d => {
+          const h = d.data();
+          const aqcNo = h.fromConsultant;
+          const amtSales = Number(h.sales || 0);
+          const amtOverride = Number(h.override || 0);
+
+          if (!teamData[aqcNo]) {
+            teamData[aqcNo] = {
+              nama: h.fromName || "-",
+              level: h.receiverLevel || "-",
+              sales: 0,
+              override: 0
+            };
+          }
+
+          teamData[aqcNo].sales += amtSales;
+          teamData[aqcNo].override += amtOverride;
+        });
+
+        // 3. KIRA GRAND TOTAL DULU (Penting untuk kira peratusan nanti)
+        let grandTotalSales = 0;
+        let grandTotalOverride = 0;
+        
+        for (const aqcNo in teamData) {
+          grandTotalSales += teamData[aqcNo].sales;
+          grandTotalOverride += teamData[aqcNo].override;
+        }
+
+        // 4. HASILKAN PAPARAN HTML & KIRA % BONUS MASING-MASING
+        let html = "";
+        
+        for (const aqcNo in teamData) {
+          const m = teamData[aqcNo];
+          
+          // Pengiraan Bonus %
+          let bonusPercent = 0;
+          if (grandTotalSales > 0) {
+            bonusPercent = (m.sales / grandTotalSales) * 100;
+          }
+
+          html += `
+            <tr class="border-b hover:bg-gray-50">
+              <td class="p-4 text-gray-800">${aqcNo}</td>
+              <td class="p-4 text-gray-800">${m.nama}</td>
+              <td class="p-4 text-gray-800">${m.level}</td>
+              <td class="p-4 text-right text-gray-800">RM${formatRM(m.sales)}</td>
+              <td class="p-4 text-right font-bold text-green-600">RM${formatRM(m.override)}</td>
+              <td class="p-4 text-right font-bold text-blue-600">${bonusPercent.toFixed(2)}%</td>
+            </tr>
+          `;
+        }
+
+        if (Object.keys(teamData).length === 0) {
+          html = `<tr><td colspan="6" class="p-4 text-center text-gray-500">Belum ada rangkaian downline.</td></tr>`;
+        }
+
+        // Kemaskini Jadual
+        document.getElementById("overrideTable").innerHTML = html;
+
+        // Kemaskini Grand Total di Summary Card Atas
+        document.getElementById("topTotalSales").textContent = `RM${formatRM(grandTotalSales)}`;
+        document.getElementById("topTotalOverride").textContent = `RM${formatRM(grandTotalOverride)}`;
+
+        // Kemaskini Grand Total di Footer (Bawah Jadual)
+        document.getElementById("bottomTotalSales").textContent = `RM${formatRM(grandTotalSales)}`;
+        document.getElementById("bottomTotalOverride").textContent = `RM${formatRM(grandTotalOverride)}`;
+
+      } catch (err) {
+        console.error("Ralat memuatkan data pasukan:", err);
+        document.getElementById("overrideTable").innerHTML = `<tr><td colspan="6" class="p-4 text-center text-red-500">Ralat memuatkan data.</td></tr>`;
+      }
+    });
+  </script>
 </body>
 </html>
