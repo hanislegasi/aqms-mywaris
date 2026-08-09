@@ -148,10 +148,10 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 let currentUser = null;
-let saleAmount = 350; // Harga default
-let compData = null; // Simpan data compensation utk guna masa bayar
+let saleAmount = 350; // Fallback jika DB tiada
+let compData = null; // Simpan data compensation daripada Firestore
 
-// 1. TUNGGU USER LOG IN DAN AMBIL HARGA
+// 1. TUNGGU USER LOG IN DAN AMBIL HARGA SEBENAR DARI FIREBASE
 onAuthStateChanged(auth, async (user) => {
     if(!user){
         window.location.href = "login.html";
@@ -160,24 +160,21 @@ onAuthStateChanged(auth, async (user) => {
     currentUser = user;
 
     try {
-        // PERHATIAN: Pastikan ejaan 'compensation' atau 'Compesation' di sini SAMA TEPAT dgn database anda
         const compensationSnap = await getDoc(doc(db, "settings", "compensation"));
         
         if (compensationSnap.exists()) {
-            compData = compensationSnap.data(); // Simpan untuk guna waktu klik 'Saya Setuju' nanti
+            compData = compensationSnap.data();
             
-            // Semak jika wasiatPrice wujud, kita update nilai saleAmount
             if (compData.wasiatPrice !== undefined) {
                 saleAmount = compData.wasiatPrice;
             }
         }
         
-        // Paparkan harga yang diambil pada skrin
         document.getElementById("displayAmount").innerText = "RM" + saleAmount;
         
     } catch (error) {
         console.error("Gagal ambil harga:", error);
-        document.getElementById("displayAmount").innerText = "RM" + saleAmount; // fallback
+        document.getElementById("displayAmount").innerText = "RM" + saleAmount;
     }
 });
 
@@ -187,21 +184,18 @@ const tncModal = document.getElementById("tncModal");
 const cancelTncBtn = document.getElementById("cancelTncBtn");
 const agreeBtn = document.getElementById("agreeBtn");
 
-// Bila klik 'Bayar Sekarang', buka pop-up
 payBtn.addEventListener("click", () => {
     tncModal.classList.remove("hidden");
     tncModal.classList.add("flex");
 });
 
-// Bila klik 'Batal', tutup pop-up
 cancelTncBtn.addEventListener("click", () => {
     tncModal.classList.add("hidden");
     tncModal.classList.remove("flex");
 });
 
-// 3. LOGIK PEMBAYARAN SEBENAR (Bila klik Saya Setuju)
+// 3. LOGIK PEMBAYARAN SEBENAR (DINAMIK BERSAMPUND UNTUK SETTINGS FIREBASE)
 agreeBtn.addEventListener("click", async () => {
-    // Kunci butang dan ubah teks supaya user tak double-click
     agreeBtn.disabled = true;
     agreeBtn.innerHTML = "Memproses...";
     cancelTncBtn.disabled = true;
@@ -216,7 +210,6 @@ agreeBtn.addEventListener("click", async () => {
             return;
         }
 
-        // Ambil counter
         const counterRef = doc(db, "system", "counter");
         const counterSnap = await getDoc(counterRef);
         const txnDate = new Date();
@@ -229,7 +222,6 @@ agreeBtn.addEventListener("click", async () => {
             await updateDoc(counterRef, { memberCounter: increment(1) });
         }
 
-        // Update data user
         const updateData = {
             wasiatPaymentStatus: "paid",
             memberSince: txnDate.toISOString(),
@@ -277,19 +269,14 @@ agreeBtn.addEventListener("click", async () => {
             transactionGroup: memberNo
         });
         
-        // Guna data compData yang kita dah fetch masa page loading (sebagai fallback kalau null)
-        const comp = compData || { 
-            commissionPool: 0, overridePool: 0, companyPool: 0, 
-            allowance: 0, adminOperation: 0, royalty: 0, usb: 0 
-        };
+        // Ambil tetapan terus dari compData Firestore
+        const comp = compData || {};
 
-        const commissionPool = saleAmount * (comp.commissionPool / 100);
-        const overridePool = saleAmount * (comp.overridePool / 100);
-        const company = saleAmount * (comp.companyPool / 100);
-        const allowance = saleAmount * (comp.allowance / 100);
-        const adminOperation = saleAmount * (comp.adminOperation / 100);
-        const royalty = saleAmount * (comp.royalty / 100);
-        const usbAmount = saleAmount * (comp.usb / 100);
+        const company = saleAmount * ((comp.companyPool || 0) / 100);
+        const allowance = saleAmount * ((comp.allowance || 0) / 100);
+        const adminOperation = saleAmount * ((comp.adminOperation || 0) / 100);
+        const royalty = saleAmount * ((comp.royalty || 0) / 100);
+        const usbAmount = saleAmount * ((comp.usb || 0) / 100);
 
         // Company Allocation
         await addDoc(collection(db, "companyAllocation"), {
@@ -310,20 +297,24 @@ agreeBtn.addEventListener("click", async () => {
             allConsultants.push({ id: d.id, ...d.data() });
         });
         
-        function getOverrideRate(level) {
-            if(level === "AQC") return 0;
-            if(level === "AQC-AS") return 3;
-            if(level === "AQC-UM") return 7;
-            if(level === "MGAM") return 12;
-            return 0;
+        // ==========================================
+        // FUNGSI RATE DINAMIK DARI FIREBASE SETTINGS
+        // ==========================================
+        function getCleanLevelKey(level) {
+            // Tukar contoh: "AQC-AS" -> "AQCAS", "AQC-UM" -> "AQCUM"
+            return (level || "AQC").replace(/[^a-zA-Z0-9]/g, "");
         }
 
         function getCommissionRate(level) {
-            if(level === "AQC") return 35;
-            if(level === "AQC-AS") return 38;
-            if(level === "AQC-UM") return 40;
-            if(level === "MGAM") return 45;
-            return 35;
+            const key = "commission" + getCleanLevelKey(level);
+            // Mengambil field cth: comp.commissionAQC, comp.commissionAQCAS, dll.
+            return comp[key] !== undefined ? comp[key] : 35; 
+        }
+
+        function getOverrideRate(level) {
+            const key = "override" + getCleanLevelKey(level);
+            // Mengambil field cth: comp.overrideAQC, comp.overrideAQCAS, comp.overrideAQCUM, comp.overrideMGAM
+            return comp[key] !== undefined ? comp[key] : 0;
         }
         
         function findConsultant(no) {
@@ -333,9 +324,7 @@ agreeBtn.addEventListener("click", async () => {
         const directConsultant = findConsultant(customer.referral);
         let currentConsultant = findConsultant(customer.referral);
 
-        // =====================
         // UPLINE SPONSOR BENEFIT
-        // =====================
         const sponsor = directConsultant ? findConsultant(directConsultant.upline) : null;
 
         if (sponsor) {
@@ -372,9 +361,7 @@ agreeBtn.addEventListener("click", async () => {
             });
         }
 
-        // =====================
-        // DIRECT COMMISSION
-        // =====================
+        // DIRECT COMMISSION (DINAMIK DARI DB)
         if (directConsultant) {
             const commissionRate = getCommissionRate(directConsultant.consultantLevel);
             const commissionAmount = saleAmount * commissionRate / 100;
@@ -429,9 +416,7 @@ agreeBtn.addEventListener("click", async () => {
             category: "liability", description: "Royalty Allocation", debit: 0, credit: royalty
         });
 
-        // =====================
-        // OVERRIDING LOGIC
-        // =====================
+        // OVERRIDING LOGIC (DINAMIK DARI DB)
         while (currentConsultant) {
             const upline = findConsultant(currentConsultant.upline);
             if (!upline) break;
@@ -491,9 +476,7 @@ agreeBtn.addEventListener("click", async () => {
             currentConsultant = upline;
         }
 
-        // =====================
         // CREATE PAYMENT RECEIPT
-        // =====================
         await addDoc(collection(db, "receipts"), {
             receiptNo: "WST-" + Date.now(),
             uid: currentUser.uid,
@@ -511,9 +494,8 @@ agreeBtn.addEventListener("click", async () => {
         window.location.href = "wasiat-page.html";
 
     } catch (error) {
-        // Kalau error, lepaskan balik lock pada butang
         agreeBtn.disabled = false;
-        agreeBtn.innerHTML = "Saya Setuju";
+        agreeBtn.innerHTML = "Saya Faham & Bersetuju dengan Akad";
         cancelTncBtn.disabled = false;
         console.error(error);
         alert("Ralat: " + error.message);
