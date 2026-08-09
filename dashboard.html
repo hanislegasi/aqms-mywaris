@@ -9,25 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<main
-class="relative flex items-center justify-center overflow-hidden
-h-[calc(100vh-160px)]
-sm:h-[calc(100vh-192px)]">
-    
-    <!-- Background Image (Gambar dari Lain-lain Servis) -->
-    <div class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" 
-         style="background-image: url('https://i.postimg.cc/L6ML9HRR/Chat-GPT-Image-May-20-2026-12-45-46-PM.png');">
-    </div>
-    
-    <!-- Dark overlay untuk memastikan logo lebih menyerlah (Optional tapi direkomendasikan) -->
-    <div class="absolute inset-0 z-0 bg-black/40"></div>
 
-    <!-- Logo di Tengah (Middle) -->
-    <div class="relative z-10 px-4 transform hover:scale-105 transition-transform duration-700">
-      <img src="https://i.postimg.cc/HxNP7q6R/Copy-of-A-6-removebg-preview.png" alt="AQMS Logo Tengah" class="w-64 sm:w-80 md:w-[400px] drop-shadow-[0_10px_35px_rgba(0,0,0,0.5)]">
-    </div>
-
-  </main>
 <body class="bg-gray-100 min-h-screen" style="font-family: 'Inter', sans-serif;">
 
 <div class="bg-[#153638] text-white px-5 py-6 shadow">
@@ -47,7 +29,22 @@ Memuatkan...
 </div>
 </div>
 </div>
-  
+<!-- 2. SECTION HERO / BACKGROUND IMAGE (MAIN) -->
+  <main class="relative flex items-center justify-center overflow-hidden h-[300px] sm:h-[400px]">
+    <!-- Background Image -->
+    <div class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" 
+         style="background-image: url('https://i.postimg.cc/L6ML9HRR/Chat-GPT-Image-May-20-2026-12-45-46-PM.png');">
+    </div>
+    
+    <!-- Dark Overlay -->
+    <div class="absolute inset-0 z-0 bg-black/40"></div>
+
+    <!-- Logo di Tengah -->
+    <div class="relative z-10 px-4 transform hover:scale-105 transition-transform duration-700">
+      <img src="https://i.postimg.cc/HxNP7q6R/Copy-of-A-6-removebg-preview.png" alt="AQMS Logo Tengah" class="w-48 sm:w-64 md:w-[320px] drop-shadow-[0_10px_35px_rgba(0,0,0,0.5)]">
+    </div>
+  </main>
+    
 <div class="p-5">
 
 <div class="rounded-2xl p-6 mb-6 border border-orange-200
