@@ -729,6 +729,9 @@ Sah Terima
 `;
 
   
+// Dapatkan rujukan butang Lihat Dokumen (pastikan ID ini sama seperti dalam HTML anda)
+const lihatDokumenBtn = document.getElementById("btnLihatDokumen"); // Ubah 'btnLihatDokumen' mengikut ID HTML anda jika berbeza
+
 // PAYMENT STATUS
 if(userData.wasiatPaymentStatus === "paid"){
 
@@ -745,8 +748,11 @@ if(userData.wasiatPaymentStatus === "paid"){
     `;
     statusEl.classList.remove("hidden");
     statusEl.classList.add("text-sm", "text-amber-600", "mt-1");
+
+    // Sembunyikan 'Lihat Dokumen' jika keahlian tamat
+    if (lihatDokumenBtn) lihatDokumenBtn.classList.add("hidden");
   }
-  else{
+  else {
     // JIKA SUDAH BAYAR DAN AKTIF
     document.getElementById("wasiatButton").href = "wasiat.html";
     
@@ -759,26 +765,38 @@ if(userData.wasiatPaymentStatus === "paid"){
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.862 4.487a2.25 2.25 0 113.182 3.182L8.25 19.463 4.5 20.25l.787-3.75L16.862 4.487z"/>
       </svg>
     `;
-    // Status 'Bayar' kekal hidden kerana dia dah bayar
+
+    // -------------------------------------------------------------
+    // SEMAK STATUS APPROVED UNTUK BUTANG 'LIHAT DOKUMEN'
+    // -------------------------------------------------------------
+    // Pastikan 'userData.status' atau 'userData.documentStatus' sepadan dengan field di Firestore anda
+    const docStatus = (userData.status || userData.documentStatus || "").toLowerCase();
+
+    if (docStatus === "approved") {
+      // Tunjukkan butang Lihat Dokumen jika HANYA apabila sudah 'approved'
+      if (lihatDokumenBtn) lihatDokumenBtn.classList.remove("hidden");
+    } else {
+      // Sembunyikan jika status masih Draft / Pending / Submitted dll.
+      if (lihatDokumenBtn) lihatDokumenBtn.classList.add("hidden");
+    }
   }
 
 }
-else{
+else {
   // JIKA BELUM BAYAR (PROSPEK)
   document.getElementById("wasiatButton").href = "payment-wasiat.html";
   
-  // Teks kekal Wasiat
-  document.getElementById("wasiatTitle").innerText = "Wasiat"; 
+  // Teks utama terus jadi "Bayar RM350" menggantikan "Wasiat"
+  document.getElementById("wasiatTitle").innerText = `Bayar RM${wasiatPrice}`; 
   
-  // Tunjukkan harga dengan nilai dinamik
+  // Sembunyikan elemen sub-status bawah jika tidak digunakan lagi
   const statusEl = document.getElementById("wasiatStatus");
-  statusEl.innerHTML = `Bayar RM${wasiatPrice}`; 
-  
-  // Buang kelas 'hidden' supaya harga RM350 muncul
-  statusEl.classList.remove("hidden"); 
-  statusEl.classList.add("text-sm", "text-white/70", "mt-1");
-}
+  statusEl.innerText = "";
+  statusEl.classList.add("hidden"); 
 
+  // Sembunyikan butang Lihat Dokumen jika belum dibayar
+  if (lihatDokumenBtn) lihatDokumenBtn.classList.add("hidden");
+}
 const receiveBtn =
 document.getElementById("confirmReceived");
 
