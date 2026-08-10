@@ -302,27 +302,28 @@ teamData[aqcNo].usb += Number(h.usb || 0); // <-- TAMBAH PENGIRAAN USB
 
         // 8. Update Jadual (Hanya Ahli BUKAN MGAM)
         let html = "";
-        for (const aqcNo in teamData) {
-          const m = teamData[aqcNo];
-          let bonusPercent = 0;
-          if (grandTotalSales > 0) bonusPercent = (m.sales / grandTotalSales) * 100;
+       for (const aqcNo in teamData) {
+            const data = teamData[aqcNo];
+            
+            // KOD BARU: Kira peratusan sumbangan (Bonus %)
+            // Kalau grandTotalSales ada nilai, baru bahagi. Kalau tak, letak 0%
+            const bonusPct = grandTotalSales > 0 ? (data.sales / grandTotalSales) * 100 : 0;
 
-         html += `
-    <tr class="border-b hover:bg-gray-50">
-        <td class="p-4">${aqcNo}</td>
-        <td class="p-4">${data.nama}</td>
-        <td class="p-4">${data.level}</td>
-        
-        <!-- Tambah (data.sales || 0) untuk pastikan ia sentiasa ada nombor -->
-        <td class="p-4 text-center">RM${(data.sales || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-        <td class="p-4 text-center font-bold text-green-600">RM${(data.override || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-        
-        <!-- Sama juga untuk USB -->
-        <td class="p-4 text-center font-bold text-blue-600">RM${(data.usb || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-        
-        <td class="p-4 text-center text-blue-600">${bonusPct.toFixed(2)}%</td>
-    </tr>
-    `;
+            html += `
+            <tr class="border-b hover:bg-gray-50">
+                <td class="p-4">${aqcNo}</td>
+                <td class="p-4">${data.nama}</td>
+                <td class="p-4">${data.level}</td>
+                
+                <td class="p-4 text-center">RM${(data.sales || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                <td class="p-4 text-center font-bold text-green-600">RM${(data.override || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                
+                <!-- Kolum USB -->
+                <td class="p-4 text-center font-bold text-blue-600">RM${(data.usb || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                
+                <td class="p-4 text-center text-blue-600">${bonusPct.toFixed(2)}%</td>
+            </tr>
+            `;
         }
 
         if (Object.keys(teamData).length === 0) html = `<tr><td colspan="6" class="p-4 text-center text-gray-500">Tiada rekod jualan dalam tempoh ini (MGAM dikecualikan).</td></tr>`;
