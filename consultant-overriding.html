@@ -143,27 +143,34 @@
 
         document.getElementById("kpiRateText").textContent = `Reward: ${rewardBonusRate}% daripada RM${formatRM(targetSalesBonus)}`;
 
-        // 3. Tentukan Tarikh Mengikut Setting Tempoh (Quarter/Half/Yearly)
+        // 3. Tentukan Tarikh Mengikut Setting Tempoh (Bulan)
+        const kpiPeriodMonths = Number(compData.kpiPeriod || 12); // Default 12 bulan
+        
         const now = new Date();
         const y = now.getFullYear();
         const m = now.getMonth();
         let startDate, endDate, periodName;
 
-        if (kpiPeriodType === "quarter") {
+        if (kpiPeriodMonths === 3) {
+            // Logik Suku Tahun (3 Bulan)
             const q = Math.floor(m / 3) + 1;
             startDate = new Date(y, (q - 1) * 3, 1);
             endDate = new Date(y, q * 3, 0, 23, 59, 59);
             periodName = `${y}-Q${q}`;
-        } else if (kpiPeriodType === "half") {
+        } else if (kpiPeriodMonths === 6) {
+            // Logik 6 Bulan
             const h = m < 6 ? 1 : 2;
             startDate = new Date(y, h === 1 ? 0 : 6, 1);
             endDate = new Date(y, h === 1 ? 6 : 12, 0, 23, 59, 59);
             periodName = `${y}-H${h}`;
         } else {
+            // Logik Tahunan (12 Bulan)
             startDate = new Date(y, 0, 1);
             endDate = new Date(y, 11, 31, 23, 59, 59);
             periodName = `${y}-TAHUNAN`;
         }
+        
+        document.getElementById("kpiPeriodText").textContent = `Tempoh Semasa: ${periodName}`;
         
         document.getElementById("kpiPeriodText").textContent = `Tempoh Semasa: ${periodName}`;
 
