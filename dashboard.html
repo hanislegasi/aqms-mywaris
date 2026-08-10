@@ -434,16 +434,16 @@ Logout
     function prosesPembelian() {
       // 1. Tukar gaya rupa kad ke gaya "Berjaya"
       const hookCard = document.getElementById('hookCard');
-      hookCard.className = "mb-6 rounded-2xl p-6 border border-emerald-300/60 bg-emerald-50/90 backdrop-blur-md shadow-xl text-center transition-all duration-500 scale-[1.01]";
+      hookCard.className="mb-6 rounded-2xl p-6 border border-amber-300/50 bg-amber-50/80 backdrop-blur-md shadow-xl text-center transition-all duration-500 scale-[1.01]";
 
       // 2. Kemaskini teks di dalam kad
       const container = document.getElementById('hookTextContainer');
       container.innerHTML = `
         <h3 class="text-lg sm:text-xl font-bold text-emerald-900 flex items-center justify-center gap-2">
-          <span>✨</span> Terima kasih kerana bijak memilih untuk ketenangan abadi. <span>✨</span>
+          Terima kasih kerana bijak memilih untuk ketenangan abadi. 
         </h3>
         <p class="text-xs sm:text-sm text-emerald-700 mt-1">
-          Permohonan anda sedang diproses oleh pihak Al-Qawthar Mawaris Synergy.
+          Setiap orang mempunyai hak dan tanggungjawab masing-masing di dunia mahupun di akhirat.
         </p>
       `;
 
