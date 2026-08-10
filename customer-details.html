@@ -2,1870 +2,889 @@
 <html lang="ms">
 
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-Customer Details
-</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap"
-rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Details</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body
-class="bg-gray-100 min-h-screen"
-style="font-family: Inter, sans-serif;">
+<body class="bg-gray-100 min-h-screen" style="font-family: Inter, sans-serif;">
 
-<!-- HEADER -->
-<div class="bg-[#153638] text-white p-5 shadow">
+  <!-- HEADER -->
+  <div class="bg-[#153638] text-white p-5 shadow">
+    <h1 class="text-2xl font-bold">Customer Details</h1>
+    <p class="text-gray-200">Admin Review Center</p>
+  </div>
 
-<h1 class="text-2xl font-bold">
-Customer Details
-</h1>
+  <!-- CONTENT -->
+  <div class="p-5">
+    <a href="admin-aqm.html" class="inline-block mb-5 bg-gray-200 hover:bg-gray-300 transition text-gray-700 px-5 py-3 rounded-xl font-semibold">
+      ← Kembali ke Admin Dashboard
+    </a>
+      
+    <div id="customerInfo" class="bg-white rounded-2xl shadow p-6">
+      <p class="text-gray-500">Memuatkan data...</p>
+    </div>
+  </div>
 
-<p class="text-gray-200">
-Admin Review Center
-</p>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      updateDoc,
+      serverTimestamp,
+      collection,
+      getDocs,
+      query,
+      where
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-</div>
+    import {
+      getAuth,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-<!-- CONTENT -->
-<div class="p-5">
+    const firebaseConfig = {
+      apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+      authDomain: "alqawthar-mywaris.firebaseapp.com",
+      projectId: "alqawthar-mywaris",
+      storageBucket: "alqawthar-mywaris.firebasestorage.app",
+      messagingSenderId: "3498810778",
+      appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+    };
 
-<a
-href="admin-aqm.html"
-class="inline-block mb-5 bg-gray-200 hover:bg-gray-300 transition text-gray-700 px-5 py-3 rounded-xl font-semibold">
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
 
-← Kembali ke Admin Dashboard
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
 
-</a>
-  
-<div
-id="customerInfo"
-class="bg-white rounded-2xl shadow p-6">
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const userData = userDoc.data();
 
-<p class="text-gray-500">
-Memuatkan data...
-</p>
+      if (userData?.role !== "admin") {
+        alert("Akses ditolak");
+        window.location.href = "index.html";
+      }
+    });
 
-</div>
+    // GET ID
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get("id");
 
-</div>
+    if (userId) {
+      // ===== Workflow Status =====
+      let wasiatStatus = "BELUM DIISI";
+      let hibahStatus = "BELUM DIISI";
+      let sepencarianStatus = "BELUM DIISI";
+      let mawarisStatus = "BELUM DIISI";
 
-<script type="module">
+      // LOAD USER
+      const docSnap = await getDoc(doc(db, "users", userId));
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      if (docSnap.exists()) {
+        const user = docSnap.data();
+        let consultantData = {};
 
-import {
-getFirestore,
-doc,
-getDoc,
-updateDoc,
-serverTimestamp,
-collection,
-addDoc,
-getDocs,
-query,
-where
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        if (user.referral) {
+          const consultantQuery = query(
+            collection(db, "consultants"),
+            where("consultantNo", "==", user.referral)
+          );
+          const consultantSnap = await getDocs(consultantQuery);
+          if (!consultantSnap.empty) {
+            consultantData = consultantSnap.docs[0].data();
+          }
+        }
+        
+        // WASIAT STATUS
+        const wasiatSnap = await getDoc(doc(db, "users", userId, "wasiat", "maklumat"));
+        let wasiatData = {};
+        let wasiatDocRef = "-";
+        let wasiatApprovedDate = "-";
+        let wasiatExpiryDate = "-";
+        let wasiatBakiHari = 0;
+        let wasiatPrintedAt = null;
+        let wasiatSentAt = null;
+        let wasiatCompletedAt = null;
+        let wasiatDeliveryMethod = "";
+        let wasiatCourier = "";
+        let wasiatTrackingNo = "";
+        let wasiatReceiver = "";
+        let wasiatRemarks = "";
+        let wasiatAkadDate = "";
+        let wasiatAkadTime = "";
+        let wasiatStampDate = "";
+        let wasiatStampRef = "";
+        let wasiatHandoverDate = "";
+        let wasiatHandoverRemarks = "";
+        let wasiatReceivedDate = "";
+          
+        if (wasiatSnap.exists()) {
+          wasiatData = wasiatSnap.data();
+          wasiatPrintedAt = wasiatData.printedAt || null;
+          wasiatSentAt = wasiatData.sentAt || null;
+          wasiatAkadDate = wasiatData.akadDate || "";
+          wasiatAkadTime = wasiatData.akadTime || "";
+          wasiatStampDate = wasiatData.stampingDate || "";
+          wasiatStampRef = wasiatData.stampingRef || "";
+          wasiatHandoverDate = wasiatData.handoverDate || "";
+          wasiatHandoverRemarks = wasiatData.handoverRemarks || "";
+          wasiatReceivedDate = wasiatData.receivedDate || "";
+          wasiatCompletedAt = wasiatData.completedAt || null;
+          wasiatDeliveryMethod = wasiatData.deliveryMethod || "";
+          wasiatCourier = wasiatData.courier || "";
+          wasiatTrackingNo = wasiatData.trackingNo || "";
+          wasiatReceiver = wasiatData.receiver || "";
+          wasiatRemarks = wasiatData.remarks || "";
+          wasiatStatus = wasiatData.status || "DRAFT";
+          wasiatDocRef = wasiatData.docRef || "-";
+          wasiatApprovedDate = wasiatData.approvedAt ? new Date(wasiatData.approvedAt).toLocaleDateString("ms-MY") : "-";
+          wasiatExpiryDate = wasiatData.expiryDate ? new Date(wasiatData.expiryDate).toLocaleDateString("ms-MY") : "-";
+          wasiatBakiHari = wasiatExpiryDate !== "-" ? Math.ceil((new Date(wasiatData.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)) : 0;
+        }
 
-import {
-getAuth,
-onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        // HIBAH STATUS
+        const hibahSnap = await getDoc(doc(db, "users", userId, "hibah", "maklumat"));
+        let hibahData = {};
+        let hibahDocRef = "-";
+        let hibahApprovedDate = "-";
+        let hibahExpiryDate = "-";
+        let hibahBakiHari = 0;
+        let hibahPrintedAt = null;
+        let hibahSentAt = null;
+        let hibahCompletedAt = null;
+        let hibahDeliveryMethod = "";
+        let hibahCourier = "";
+        let hibahTrackingNo = "";
+        let hibahReceiver = "";
+        let hibahRemarks = "";
+        let hibahAkadDate = "";
+        let hibahAkadTime = "";
+        let hibahStampDate = "";
+        let hibahStampRef = "";
+        let hibahHandoverDate = "";
+        let hibahHandoverRemarks = "";
+        let hibahReceivedDate = "";
+          
+        if (hibahSnap.exists()) {
+          hibahData = hibahSnap.data();
+          hibahPrintedAt = hibahData.printedAt || null;
+          hibahSentAt = hibahData.sentAt || null;
+          hibahAkadDate = hibahData.akadDate || "";
+          hibahAkadTime = hibahData.akadTime || "";
+          hibahStampDate = hibahData.stampingDate || "";
+          hibahStampRef = hibahData.stampingRef || "";
+          hibahHandoverDate = hibahData.handoverDate || "";
+          hibahHandoverRemarks = hibahData.handoverRemarks || "";
+          hibahReceivedDate = hibahData.receivedDate || "";  
+          hibahCompletedAt = hibahData.completedAt || null;
+          hibahDeliveryMethod = hibahData.deliveryMethod || "";
+          hibahCourier = hibahData.courier || "";
+          hibahTrackingNo = hibahData.trackingNo || "";
+          hibahReceiver = hibahData.receiver || "";
+          hibahRemarks = hibahData.remarks || "";  
+          hibahStatus = hibahData.status || "DRAFT";
+          hibahDocRef = hibahData.docRef || "-";
+          hibahApprovedDate = hibahData.approvedAt ? new Date(hibahData.approvedAt).toLocaleDateString("ms-MY") : "-";
+          hibahExpiryDate = hibahData.expiryDate ? new Date(hibahData.expiryDate).toLocaleDateString("ms-MY") : "-";
+          hibahBakiHari = hibahExpiryDate !== "-" ? Math.ceil((new Date(hibahData.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)) : 0;
+        }
 
-const firebaseConfig = {
+        // SEPENCARIAN STATUS
+        const sepencarianSnap = await getDoc(doc(db, "users", userId, "sepencarian", "maklumat"));
+        let sepencarianData = {};
+        let sepencarianDocRef = "-";
+        let sepencarianApprovedDate = "-";
+        let sepencarianExpiryDate = "-";
+        let sepencarianBakiHari = 0;
+        let sepencarianPrintedAt = null;
+        let sepencarianSentAt = null;
+        let sepencarianCompletedAt = null;
+        let sepencarianDeliveryMethod = "";
+        let sepencarianCourier = "";
+        let sepencarianTrackingNo = "";
+        let sepencarianReceiver = "";
+        let sepencarianRemarks = "";
+        let sepencarianAkadDate = "";
+        let sepencarianAkadTime = "";
+        let sepencarianStampDate = "";
+        let sepencarianStampRef = "";
+        let sepencarianHandoverDate = "";
+        let sepencarianHandoverRemarks = "";
+        let sepencarianReceivedDate = "";
+          
+        if (sepencarianSnap.exists()) {
+          sepencarianData = sepencarianSnap.data();
+          sepencarianPrintedAt = sepencarianData.printedAt || null;
+          sepencarianSentAt = sepencarianData.sentAt || null;
+          sepencarianAkadDate = sepencarianData.akadDate || "";
+          sepencarianAkadTime = sepencarianData.akadTime || "";
+          sepencarianStampDate = sepencarianData.stampingDate || "";
+          sepencarianStampRef = sepencarianData.stampingRef || "";
+          sepencarianHandoverDate = sepencarianData.handoverDate || "";
+          sepencarianHandoverRemarks = sepencarianData.handoverRemarks || "";
+          sepencarianReceivedDate = sepencarianData.receivedDate || "";
+          sepencarianCompletedAt = sepencarianData.completedAt || null;
+          sepencarianDeliveryMethod = sepencarianData.deliveryMethod || "";
+          sepencarianCourier = sepencarianData.courier || "";
+          sepencarianTrackingNo = sepencarianData.trackingNo || "";
+          sepencarianReceiver = sepencarianData.receiver || "";
+          sepencarianRemarks = sepencarianData.remarks || "";
+          sepencarianStatus = sepencarianData.status || "DRAFT";
+          sepencarianDocRef = sepencarianData.docRef || "-";
+          sepencarianApprovedDate = sepencarianData.approvedAt ? new Date(sepencarianData.approvedAt).toLocaleDateString("ms-MY") : "-";
+          sepencarianExpiryDate = sepencarianData.expiryDate ? new Date(sepencarianData.expiryDate).toLocaleDateString("ms-MY") : "-";
+          sepencarianBakiHari = sepencarianExpiryDate !== "-" ? Math.ceil((new Date(sepencarianData.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)) : 0;
+        }
 
-apiKey:
-"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+        // MAWARIS STATUS
+        const mawarisSnap = await getDoc(doc(db, "users", userId, "mawaris", "maklumat"));
+        let mawarisData = {};
+        let mawarisDocRef = "-";
+        let mawarisApprovedDate = "-";
+        let mawarisExpiryDate = "-";
+        let mawarisBakiHari = 0;
+        let mawarisPrintedAt = null;
+        let mawarisSentAt = null;
+        let mawarisCompletedAt = null;
+        let mawarisDeliveryMethod = "";
+        let mawarisCourier = "";
+        let mawarisTrackingNo = "";
+        let mawarisReceiver = "";
+        let mawarisRemarks = "";
+        let mawarisAkadDate = "";
+        let mawarisAkadTime = "";
+        let mawarisStampDate = "";
+        let mawarisStampRef = "";
+        let mawarisHandoverDate = "";
+        let mawarisHandoverRemarks = "";
+        let mawarisReceivedDate = "";
+          
+        if (mawarisSnap.exists()) {
+          mawarisData = mawarisSnap.data();
+          mawarisPrintedAt = mawarisData.printedAt || null;
+          mawarisSentAt = mawarisData.sentAt || null;
+          mawarisAkadDate = mawarisData.akadDate || "";
+          mawarisAkadTime = mawarisData.akadTime || "";
+          mawarisStampDate = mawarisData.stampingDate || "";
+          mawarisStampRef = mawarisData.stampingRef || "";
+          mawarisHandoverDate = mawarisData.handoverDate || "";
+          mawarisHandoverRemarks = mawarisData.handoverRemarks || "";
+          mawarisReceivedDate = mawarisData.receivedDate || "";
+          mawarisCompletedAt = mawarisData.completedAt || null;
+          mawarisDeliveryMethod = mawarisData.deliveryMethod || "";
+          mawarisCourier = mawarisData.courier || "";
+          mawarisTrackingNo = mawarisData.trackingNo || "";
+          mawarisReceiver = mawarisData.receiver || "";
+          mawarisRemarks = mawarisData.remarks || "";
+          mawarisStatus = mawarisData.status || "DRAFT";
+          mawarisDocRef = mawarisData.docRef || "-";
+          mawarisApprovedDate = mawarisData.approvedAt ? new Date(mawarisData.approvedAt).toLocaleDateString("ms-MY") : "-";
+          mawarisExpiryDate = mawarisData.expiryDate ? new Date(mawarisData.expiryDate).toLocaleDateString("ms-MY") : "-";
+          mawarisBakiHari = mawarisExpiryDate !== "-" ? Math.ceil((new Date(mawarisData.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)) : 0;
+        }
 
-authDomain:
-"alqawthar-mywaris.firebaseapp.com",
+        const products = [
+          { name: "Wasiat", snap: wasiatSnap, status: wasiatStatus, docRef: wasiatDocRef, preview: "preview-wasiat.html" },
+          { name: "Hibah", snap: hibahSnap, status: hibahStatus, docRef: hibahDocRef, preview: "preview-hibah.html" },
+          { name: "Harta Sepencarian", snap: sepencarianSnap, status: sepencarianStatus, docRef: sepencarianDocRef, preview: "preview-sepencarian.html" },
+          { name: "Mawaris", snap: mawarisSnap, status: mawarisStatus, docRef: mawarisDocRef, preview: "preview-mawaris.html" }
+        ];
 
-projectId:
-"alqawthar-mywaris",
+        const activeProduct = products.find(product => product.snap.exists());
 
-storageBucket:
-"alqawthar-mywaris.firebasestorage.app",
+        const currentCollection = activeProduct
+          ? (activeProduct.name === "Wasiat" ? "wasiat" : activeProduct.name === "Hibah" ? "hibah" : activeProduct.name === "Harta Sepencarian" ? "sepencarian" : "mawaris")
+          : "wasiat";
 
-messagingSenderId:
-"3498810778",
+        document.getElementById("customerInfo").innerHTML = `
+          <div class="space-y-6">
+            <div>
+              <h2 class="text-3xl font-bold text-[#153638]">${user.nama || "-"}</h2>
+              <p class="text-gray-500">${user.email || "-"}</p>
 
-appId:
-"1:3498810778:web:ee36e0fe42f76698046e23"
+              <div class="bg-gray-50 rounded-xl p-5 mt-5">
+                <h3 class="font-bold mb-3">Maklumat Keahlian</h3>
+                <div class="grid grid-cols-2 gap-4">
+                  <div><p class="text-gray-500 text-sm">No Ahli</p><p id="memberNo"></p></div>
+                  <div><p class="text-gray-500 text-sm">Tarikh Daftar</p><p id="memberSince"></p></div>
+                  <div><p class="text-gray-500 text-sm">Alamat</p><p id="alamatRingkas"></p></div>
+                  <div><p class="text-gray-500 text-sm">Telefon</p><p id="telefon"></p></div>
+                  <div><p class="text-gray-500 text-sm">Kod Referral</p><p id="referral"></p></div>
+                  <div><p class="text-gray-500 text-sm">Referral</p><p id="consultantName"></p></div>
+                  <div><p class="text-gray-500 text-sm">Telefon Perunding</p><p id="consultantPhone"></p></div>
+                  <div><p class="text-gray-500 text-sm">Status</p><p id="memberStatus"></p></div>
+                </div>
 
-};
+                ${wasiatSnap.exists() ? `
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
+                  <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">Wasiat</h3>
+                    <p class="text-sm text-gray-500">No Dokumen</p>
+                    <p class="font-semibold mb-3">${wasiatDocRef}</p>
+                    <p class="text-sm text-gray-500">Status</p>
+                    <p class="font-semibold mb-6">${wasiatStatus}</p>
+                    <a href="admin-preview-wasiat.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
+                  </div>
 
-const app =
-initializeApp(firebaseConfig);
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
+                    <input type="datetime-local" id="wasiatPrintedAt" value="${wasiatPrintedAt ? wasiatPrintedAt.substring(0, 16) : ""}" ${wasiatStatus === "PRINTED" || wasiatStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
+                    <button id="btnPrintWasiat" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
+                  </div>
 
-const db =
-getFirestore(app);
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
+                    <input type="datetime-local" id="wasiatSentAt" value="${wasiatSentAt ? wasiatSentAt.substring(0, 16) : ""}" ${wasiatStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
+                    <input id="wasiatCourier" class="w-full border rounded-lg p-2 mb-2" placeholder="Courier" value="${wasiatCourier}">
+                    <input id="wasiatTrackingNo" class="w-full border rounded-lg p-2 mb-2" placeholder="Tracking No" value="${wasiatTrackingNo}">
+                    <input id="wasiatReceiver" class="w-full border rounded-lg p-2 mb-2" placeholder="Receiver" value="${wasiatReceiver}">
+                    <textarea id="wasiatRemarks" class="w-full border rounded-lg p-2 mb-3" rows="3" placeholder="Remarks">${wasiatRemarks}</textarea>
+                    <button id="btnSendWasiat" class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">✔ Tandakan Dihantar</button>
+                  </div>
 
-const auth =
-getAuth(app);
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
+                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <p class="font-semibold">${wasiatAkadDate || "-"} ${wasiatAkadTime || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Stamping</p>
+                    <p class="font-semibold">${wasiatStampDate || "-"}</p>
+                    <p class="text-sm">${wasiatStampRef || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="font-semibold">${wasiatHandoverDate || "-"}</p>
+                    <p class="text-sm">${wasiatHandoverRemarks || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="font-semibold text-green-700">${wasiatReceivedDate || "-"}</p>
+                    <hr class="my-3">
+                    <button id="btnCompleteWasiat" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
+                  </div>
+                </div>
+                ` : ""}
 
-onAuthStateChanged(auth, async(user)=>{
+                ${hibahSnap.exists() ? `
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
+                  <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">Hibah</h3>
+                    <p class="text-sm text-gray-500">No Dokumen</p>
+                    <p class="font-semibold mb-3">${hibahDocRef}</p>
+                    <p class="text-sm text-gray-500">Status</p>
+                    <p class="font-semibold mb-6">${hibahStatus}</p>
+                    <a href="admin-preview-hibah.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
+                  </div>
 
-  if(!user){
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
+                    <input type="datetime-local" id="hibahPrintedAt" value="${hibahPrintedAt ? hibahPrintedAt.substring(0, 16) : ""}" ${hibahStatus === "PRINTED" || hibahStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
+                    <button id="btnPrintHibah" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
+                  </div>
 
-    window.location.href =
-    "login.html";
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
+                    <input type="datetime-local" id="hibahSentAt" value="${hibahSentAt ? hibahSentAt.substring(0, 16) : ""}" ${hibahStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
+                    <input id="hibahCourier" class="w-full border rounded-lg p-2 mb-2" placeholder="Courier" value="${hibahCourier}">
+                    <input id="hibahTrackingNo" class="w-full border rounded-lg p-2 mb-2" placeholder="Tracking No" value="${hibahTrackingNo}">
+                    <input id="hibahReceiver" class="w-full border rounded-lg p-2 mb-2" placeholder="Receiver" value="${hibahReceiver}">
+                    <textarea id="hibahRemarks" class="w-full border rounded-lg p-2 mb-3" rows="3" placeholder="Remarks">${hibahRemarks}</textarea>
+                    <button id="btnSendHibah" class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">✔ Tandakan Dihantar</button>
+                  </div>
 
-    return;
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
+                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <p class="font-semibold">${hibahAkadDate || "-"} ${hibahAkadTime || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Stamping</p>
+                    <p class="font-semibold">${hibahStampDate || "-"}</p>
+                    <p class="text-sm">${hibahStampRef || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="font-semibold">${hibahHandoverDate || "-"}</p>
+                    <p class="text-sm">${hibahHandoverRemarks || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="font-semibold text-green-700">${hibahReceivedDate || "-"}</p>
+                    <hr class="my-3">
+                    <button id="btnCompleteHibah" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
+                  </div>
+                </div>
+                ` : ""}
 
-  }
+                ${sepencarianSnap.exists() ? `
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
+                  <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">Harta Sepencarian</h3>
+                    <p class="text-sm text-gray-500">No Dokumen</p>
+                    <p class="font-semibold mb-3">${sepencarianDocRef}</p>
+                    <p class="text-sm text-gray-500">Status</p>
+                    <p class="font-semibold mb-6">${sepencarianStatus}</p>
+                    <a href="admin-preview-sepencarian.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
+                  </div>
 
-  const userDoc =
-  await getDoc(
-    doc(
-      db,
-      "users",
-      user.uid
-    )
-  );
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
+                    <input type="datetime-local" id="sepencarianPrintedAt" value="${sepencarianPrintedAt ? sepencarianPrintedAt.substring(0, 16) : ""}" ${sepencarianStatus === "PRINTED" || sepencarianStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
+                    <button id="btnPrintSepencarian" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
+                  </div>
 
-  const userData =
-  userDoc.data();
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
+                    <input type="datetime-local" id="sepencarianSentAt" value="${sepencarianSentAt ? sepencarianSentAt.substring(0, 16) : ""}" ${sepencarianStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
+                    <input id="sepencarianCourier" class="w-full border rounded-lg p-2 mb-2" placeholder="Courier" value="${sepencarianCourier}">
+                    <input id="sepencarianTrackingNo" class="w-full border rounded-lg p-2 mb-2" placeholder="Tracking No" value="${sepencarianTrackingNo}">
+                    <input id="sepencarianReceiver" class="w-full border rounded-lg p-2 mb-2" placeholder="Receiver" value="${sepencarianReceiver}">
+                    <textarea id="sepencarianRemarks" class="w-full border rounded-lg p-2 mb-3" rows="3" placeholder="Remarks">${sepencarianRemarks}</textarea>
+                    <button id="btnSendSepencarian" class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">✔ Tandakan Dihantar</button>
+                  </div>
 
-  if(userData.role !== "admin"){
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
+                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <p class="font-semibold">${sepencarianAkadDate || "-"} ${sepencarianAkadTime || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Stamping</p>
+                    <p class="font-semibold">${sepencarianStampDate || "-"}</p>
+                    <p class="text-sm">${sepencarianStampRef || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="font-semibold">${sepencarianHandoverDate || "-"}</p>
+                    <p class="text-sm">${sepencarianHandoverRemarks || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="font-semibold text-green-700">${sepencarianReceivedDate || "-"}</p>
+                    <hr class="my-3">
+                    <button id="btnCompleteSepencarian" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
+                  </div>
+                </div>
+                ` : ""}
 
-    alert(
-      "Akses ditolak"
-    );
+                ${mawarisSnap.exists() ? `
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
+                  <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">Mawaris</h3>
+                    <p class="text-sm text-gray-500">No Dokumen</p>
+                    <p class="font-semibold mb-3">${mawarisDocRef}</p>
+                    <p class="text-sm text-gray-500">Status</p>
+                    <p class="font-semibold mb-6">${mawarisStatus}</p>
+                    <a href="admin-preview-mawaris.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
+                  </div>
 
-    window.location.href =
-    "index.html";
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
+                    <input type="datetime-local" id="mawarisPrintedAt" value="${mawarisPrintedAt ? mawarisPrintedAt.substring(0, 16) : ""}" ${mawarisStatus === "PRINTED" || mawarisStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
+                    <button id="btnPrintMawaris" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
+                  </div>
 
-  }
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
+                    <input type="datetime-local" id="mawarisSentAt" value="${mawarisSentAt ? mawarisSentAt.substring(0, 16) : ""}" ${mawarisStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
+                    <input id="mawarisCourier" class="w-full border rounded-lg p-2 mb-2" placeholder="Courier" value="${mawarisCourier}">
+                    <input id="mawarisTrackingNo" class="w-full border rounded-lg p-2 mb-2" placeholder="Tracking No" value="${mawarisTrackingNo}">
+                    <input id="mawarisReceiver" class="w-full border rounded-lg p-2 mb-2" placeholder="Receiver" value="${mawarisReceiver}">
+                    <textarea id="mawarisRemarks" class="w-full border rounded-lg p-2 mb-3" rows="3" placeholder="Remarks">${mawarisRemarks}</textarea>
+                    <button id="btnSendMawaris" class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">✔ Tandakan Dihantar</button>
+                  </div>
 
-});
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
+                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <p class="font-semibold">${mawarisAkadDate || "-"} ${mawarisAkadTime || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Stamping</p>
+                    <p class="font-semibold">${mawarisStampDate || "-"}</p>
+                    <p class="text-sm">${mawarisStampRef || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="font-semibold">${mawarisHandoverDate || "-"}</p>
+                    <p class="text-sm">${mawarisHandoverRemarks || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="font-semibold text-green-700">${mawarisReceivedDate || "-"}</p>
+                    <hr class="my-3">
+                    <button id="btnCompleteMawaris" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
+                  </div>
+                </div>
+                ` : ""}
+              </div>
+            </div>
+          </div>
+        `;
 
-// GET ID
-const params =
-new URLSearchParams(
-window.location.search
-);
+        document.getElementById("memberNo").innerHTML = user.memberNo || "-";
+        document.getElementById("memberSince").innerHTML = user.memberSince ? new Date(user.memberSince).toLocaleDateString("ms-MY") : "-";
+        document.getElementById("telefon").innerHTML = user.telefon || "-";
 
-const userId =
-params.get("id");
+        const alamatData = activeProduct
+          ? (currentCollection === "wasiat" ? wasiatData : currentCollection === "hibah" ? hibahData : currentCollection === "sepencarian" ? sepencarianData : mawarisData)
+          : {};
 
- 
-// ===== Workflow Status =====
-let wasiatStatus = "BELUM DIISI";
-let hibahStatus = "BELUM DIISI";
-let sepencarianStatus = "BELUM DIISI";
-let mawarisStatus = "BELUM DIISI";
+        document.getElementById("alamatRingkas").innerHTML = [alamatData.bandar, alamatData.negeri].filter(Boolean).join(", ") || "-";
+        document.getElementById("referral").innerHTML = user.referral || "-";
+        document.getElementById("consultantName").innerHTML = consultantData.nama || "-";
+        document.getElementById("consultantPhone").innerHTML = consultantData.telefon || "-";
+        document.getElementById("memberStatus").innerHTML = (
+          user.paymentStatus === "paid" ||
+          user.wasiatPaymentStatus === "paid" ||
+          user.hibahPaymentStatus === "paid" ||
+          user.sepencarianPaymentStatus === "paid" ||
+          user.mawarisPaymentStatus === "paid"
+        ) ? "AHLI AKTIF" : "PROSPEK";
 
-  
-// LOAD USER
-const docSnap =
-await getDoc(
-doc(db,"users",userId)
-);
+        // ==================== EVENT LISTENERS (DI DALAM SKOP DOC SNAP) ====================
 
-if(docSnap.exists()){
+        // 1. WASIAT
+        const btnPrintWasiat = document.getElementById("btnPrintWasiat");
+        const btnSendWasiat = document.getElementById("btnSendWasiat");
+        const btnCompleteWasiat = document.getElementById("btnCompleteWasiat");
 
-const user =
-docSnap.data();
+        if (btnPrintWasiat) {
+          if (wasiatStatus === "VERIFIED") {
+            btnPrintWasiat.disabled = false;
+            btnPrintWasiat.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnPrintWasiat.classList.add("bg-blue-600", "hover:bg-blue-700");
+            btnPrintWasiat.onclick = async () => {
+              const val = document.getElementById("wasiatPrintedAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
+              if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
+              await updateDoc(doc(db, "users", userId, "wasiat", "maklumat"), {
+                status: "PRINTED",
+                printedAt: val,
+                printedUpdatedAt: serverTimestamp(),
+                printedBy: auth.currentUser.uid
+              });
+              alert("Status berjaya dikemaskini.");
+              location.reload();
+            };
+          } else {
+            btnPrintWasiat.disabled = true;
+            btnPrintWasiat.classList.remove("bg-blue-600", "hover:bg-blue-700");
+            btnPrintWasiat.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
 
-let consultantData = {};
+        if (btnSendWasiat) {
+          if (wasiatStatus === "PRINTED") {
+            btnSendWasiat.disabled = false;
+            btnSendWasiat.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnSendWasiat.classList.add("bg-orange-500", "hover:bg-orange-600");
+            btnSendWasiat.onclick = async () => {
+              const val = document.getElementById("wasiatSentAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
+              if (!confirm("Tandakan dokumen telah dihantar?")) return;
+              await updateDoc(doc(db, "users", userId, "wasiat", "maklumat"), {
+                status: "SENT",
+                sentAt: val,
+                sentUpdatedAt: serverTimestamp(),
+                sentBy: auth.currentUser.uid,
+                courier: document.getElementById("wasiatCourier")?.value || "",
+                trackingNo: document.getElementById("wasiatTrackingNo")?.value || "",
+                receiver: document.getElementById("wasiatReceiver")?.value || "",
+                remarks: document.getElementById("wasiatRemarks")?.value || ""
+              });
+              alert("Dokumen berjaya dihantar.");
+              location.reload();
+            };
+          } else {
+            btnSendWasiat.disabled = true;
+            btnSendWasiat.classList.remove("bg-orange-500", "hover:bg-orange-600");
+            btnSendWasiat.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
 
-if(user.referral){
+        if (btnCompleteWasiat) {
+          if (wasiatStatus === "SENT") {
+            btnCompleteWasiat.disabled = false;
+            btnCompleteWasiat.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnCompleteWasiat.classList.add("bg-green-600", "hover:bg-green-700");
+            btnCompleteWasiat.onclick = async () => {
+              if (!confirm("Lengkapkan proses ini?")) return;
+              await updateDoc(doc(db, "users", userId, "wasiat", "maklumat"), {
+                status: "COMPLETED",
+                completedAt: new Date().toISOString(),
+                completedBy: auth.currentUser.uid
+              });
+              alert("Kes selesai.");
+              location.reload();
+            };
+          } else {
+            btnCompleteWasiat.disabled = true;
+            btnCompleteWasiat.classList.remove("bg-green-600", "hover:bg-green-700");
+            btnCompleteWasiat.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
 
-    const consultantQuery = query(
-        collection(db,"consultants"),
-        where("consultantNo","==",user.referral)
-    );
+        // 2. HIBAH
+        const btnPrintHibah = document.getElementById("btnPrintHibah");
+        const btnSendHibah = document.getElementById("btnSendHibah");
+        const btnCompleteHibah = document.getElementById("btnCompleteHibah");
 
-    const consultantSnap = await getDocs(consultantQuery);
+        if (btnPrintHibah) {
+          if (hibahStatus === "VERIFIED") {
+            btnPrintHibah.disabled = false;
+            btnPrintHibah.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnPrintHibah.classList.add("bg-blue-600", "hover:bg-blue-700");
+            btnPrintHibah.onclick = async () => {
+              const val = document.getElementById("hibahPrintedAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
+              if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
+              await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
+                status: "PRINTED",
+                printedAt: val,
+                printedUpdatedAt: serverTimestamp(),
+                printedBy: auth.currentUser.uid
+              });
+              alert("Status berjaya dikemaskini.");
+              location.reload();
+            };
+          } else {
+            btnPrintHibah.disabled = true;
+            btnPrintHibah.classList.remove("bg-blue-600", "hover:bg-blue-700");
+            btnPrintHibah.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
 
-    if(!consultantSnap.empty){
-        consultantData = consultantSnap.docs[0].data();
+        if (btnSendHibah) {
+          if (hibahStatus === "PRINTED") {
+            btnSendHibah.disabled = false;
+            btnSendHibah.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnSendHibah.classList.add("bg-orange-500", "hover:bg-orange-600");
+            btnSendHibah.onclick = async () => {
+              const val = document.getElementById("hibahSentAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
+              if (!confirm("Tandakan dokumen telah dihantar?")) return;
+              await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
+                status: "SENT",
+                sentAt: val,
+                sentUpdatedAt: serverTimestamp(),
+                sentBy: auth.currentUser.uid,
+                courier: document.getElementById("hibahCourier")?.value || "",
+                trackingNo: document.getElementById("hibahTrackingNo")?.value || "",
+                receiver: document.getElementById("hibahReceiver")?.value || "",
+                remarks: document.getElementById("hibahRemarks")?.value || ""
+              });
+              alert("Dokumen berjaya dihantar.");
+              location.reload();
+            };
+          } else {
+            btnSendHibah.disabled = true;
+            btnSendHibah.classList.remove("bg-orange-500", "hover:bg-orange-600");
+            btnSendHibah.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        if (btnCompleteHibah) {
+          if (hibahStatus === "SENT") {
+            btnCompleteHibah.disabled = false;
+            btnCompleteHibah.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnCompleteHibah.classList.add("bg-green-600", "hover:bg-green-700");
+            btnCompleteHibah.onclick = async () => {
+              if (!confirm("Lengkapkan proses ini?")) return;
+              await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
+                status: "COMPLETED",
+                completedAt: new Date().toISOString(),
+                completedBy: auth.currentUser.uid
+              });
+              alert("Kes selesai.");
+              location.reload();
+            };
+          } else {
+            btnCompleteHibah.disabled = true;
+            btnCompleteHibah.classList.remove("bg-green-600", "hover:bg-green-700");
+            btnCompleteHibah.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        // 3. SEPENCARIAN
+        const btnPrintSepencarian = document.getElementById("btnPrintSepencarian");
+        const btnSendSepencarian = document.getElementById("btnSendSepencarian");
+        const btnCompleteSepencarian = document.getElementById("btnCompleteSepencarian");
+
+        if (btnPrintSepencarian) {
+          if (sepencarianStatus === "VERIFIED") {
+            btnPrintSepencarian.disabled = false;
+            btnPrintSepencarian.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnPrintSepencarian.classList.add("bg-blue-600", "hover:bg-blue-700");
+            btnPrintSepencarian.onclick = async () => {
+              const val = document.getElementById("sepencarianPrintedAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
+              if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
+              await updateDoc(doc(db, "users", userId, "sepencarian", "maklumat"), {
+                status: "PRINTED",
+                printedAt: val,
+                printedUpdatedAt: serverTimestamp(),
+                printedBy: auth.currentUser.uid
+              });
+              alert("Status berjaya dikemaskini.");
+              location.reload();
+            };
+          } else {
+            btnPrintSepencarian.disabled = true;
+            btnPrintSepencarian.classList.remove("bg-blue-600", "hover:bg-blue-700");
+            btnPrintSepencarian.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        if (btnSendSepencarian) {
+          if (sepencarianStatus === "PRINTED") {
+            btnSendSepencarian.disabled = false;
+            btnSendSepencarian.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnSendSepencarian.classList.add("bg-orange-500", "hover:bg-orange-600");
+            btnSendSepencarian.onclick = async () => {
+              const val = document.getElementById("sepencarianSentAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
+              if (!confirm("Tandakan dokumen telah dihantar?")) return;
+              await updateDoc(doc(db, "users", userId, "sepencarian", "maklumat"), {
+                status: "SENT",
+                sentAt: val,
+                sentUpdatedAt: serverTimestamp(),
+                sentBy: auth.currentUser.uid,
+                courier: document.getElementById("sepencarianCourier")?.value || "",
+                trackingNo: document.getElementById("sepencarianTrackingNo")?.value || "",
+                receiver: document.getElementById("sepencarianReceiver")?.value || "",
+                remarks: document.getElementById("sepencarianRemarks")?.value || ""
+              });
+              alert("Dokumen berjaya dihantar.");
+              location.reload();
+            };
+          } else {
+            btnSendSepencarian.disabled = true;
+            btnSendSepencarian.classList.remove("bg-orange-500", "hover:bg-orange-600");
+            btnSendSepencarian.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        if (btnCompleteSepencarian) {
+          if (sepencarianStatus === "SENT") {
+            btnCompleteSepencarian.disabled = false;
+            btnCompleteSepencarian.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnCompleteSepencarian.classList.add("bg-green-600", "hover:bg-green-700");
+            btnCompleteSepencarian.onclick = async () => {
+              if (!confirm("Lengkapkan proses ini?")) return;
+              await updateDoc(doc(db, "users", userId, "sepencarian", "maklumat"), {
+                status: "COMPLETED",
+                completedAt: new Date().toISOString(),
+                completedBy: auth.currentUser.uid
+              });
+              alert("Kes selesai.");
+              location.reload();
+            };
+          } else {
+            btnCompleteSepencarian.disabled = true;
+            btnCompleteSepencarian.classList.remove("bg-green-600", "hover:bg-green-700");
+            btnCompleteSepencarian.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        // 4. MAWARIS
+        const btnPrintMawaris = document.getElementById("btnPrintMawaris");
+        const btnSendMawaris = document.getElementById("btnSendMawaris");
+        const btnCompleteMawaris = document.getElementById("btnCompleteMawaris");
+
+        if (btnPrintMawaris) {
+          if (mawarisStatus === "VERIFIED") {
+            btnPrintMawaris.disabled = false;
+            btnPrintMawaris.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnPrintMawaris.classList.add("bg-blue-600", "hover:bg-blue-700");
+            btnPrintMawaris.onclick = async () => {
+              const val = document.getElementById("mawarisPrintedAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
+              if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
+              await updateDoc(doc(db, "users", userId, "mawaris", "maklumat"), {
+                status: "PRINTED",
+                printedAt: val,
+                printedUpdatedAt: serverTimestamp(),
+                printedBy: auth.currentUser.uid
+              });
+              alert("Status berjaya dikemaskini.");
+              location.reload();
+            };
+          } else {
+            btnPrintMawaris.disabled = true;
+            btnPrintMawaris.classList.remove("bg-blue-600", "hover:bg-blue-700");
+            btnPrintMawaris.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        if (btnSendMawaris) {
+          if (mawarisStatus === "PRINTED") {
+            btnSendMawaris.disabled = false;
+            btnSendMawaris.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnSendMawaris.classList.add("bg-orange-500", "hover:bg-orange-600");
+            btnSendMawaris.onclick = async () => {
+              const val = document.getElementById("mawarisSentAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
+              if (!confirm("Tandakan dokumen telah dihantar?")) return;
+              await updateDoc(doc(db, "users", userId, "mawaris", "maklumat"), {
+                status: "SENT",
+                sentAt: val,
+                sentUpdatedAt: serverTimestamp(),
+                sentBy: auth.currentUser.uid,
+                courier: document.getElementById("mawarisCourier")?.value || "",
+                trackingNo: document.getElementById("mawarisTrackingNo")?.value || "",
+                receiver: document.getElementById("mawarisReceiver")?.value || "",
+                remarks: document.getElementById("mawarisRemarks")?.value || ""
+              });
+              alert("Dokumen berjaya dihantar.");
+              location.reload();
+            };
+          } else {
+            btnSendMawaris.disabled = true;
+            btnSendMawaris.classList.remove("bg-orange-500", "hover:bg-orange-600");
+            btnSendMawaris.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        if (btnCompleteMawaris) {
+          if (mawarisStatus === "SENT") {
+            btnCompleteMawaris.disabled = false;
+            btnCompleteMawaris.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnCompleteMawaris.classList.add("bg-green-600", "hover:bg-green-700");
+            btnCompleteMawaris.onclick = async () => {
+              if (!confirm("Lengkapkan proses ini?")) return;
+              await updateDoc(doc(db, "users", userId, "mawaris", "maklumat"), {
+                status: "COMPLETED",
+                completedAt: new Date().toISOString(),
+                completedBy: auth.currentUser.uid
+              });
+              alert("Kes selesai.");
+              location.reload();
+            };
+          } else {
+            btnCompleteMawaris.disabled = true;
+            btnCompleteMawaris.classList.remove("bg-green-600", "hover:bg-green-700");
+            btnCompleteMawaris.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+      } else {
+        document.getElementById("customerInfo").innerHTML = `<p class="text-red-500 font-bold">Pengguna tidak dijumpai.</p>`;
+      }
+    } else {
+      document.getElementById("customerInfo").innerHTML = `<p class="text-red-500 font-bold">ID Pengguna tidak sah.</p>`;
     }
-
-}
-  
-// WASIAT STATUS
-const wasiatSnap =
-await getDoc(
-doc(
-db,
-"users",
-userId,
-"wasiat",
-"maklumat"
-)
-);
-
-let wasiatData = {};
-let wasiatStatus = "BELUM DIISI";
-
-let wasiatDocRef = "-";
-let wasiatApprovedDate = "-";
-let wasiatExpiryDate = "-";
-let wasiatBakiHari = 0;
-  
-let wasiatPrintedAt = null;
-let wasiatSentAt = null;
-let wasiatCompletedAt = null;
-
-let wasiatDeliveryMethod = "";
-let wasiatCourier = "";
-let wasiatTrackingNo = "";
-let wasiatReceiver = "";
-let wasiatRemarks = "";
- 
-let wasiatAkadDate = "";
-let wasiatAkadTime = "";
-
-let wasiatStampDate = "";
-let wasiatStampRef = "";
-
-let wasiatHandoverDate = "";
-let wasiatHandoverRemarks = "";
-
-let wasiatReceivedDate = "";
-  
-if(wasiatSnap.exists()){
-
-wasiatData =
-wasiatSnap.data();
-
-const printedAt = wasiatData.printedAt || "";
-  
-wasiatPrintedAt = wasiatData.printedAt || null;
-wasiatSentAt = wasiatData.sentAt || null;
-
-wasiatAkadDate = wasiatData.akadDate || "";
-wasiatAkadTime = wasiatData.akadTime || "";
-
-wasiatStampDate = wasiatData.stampingDate || "";
-wasiatStampRef = wasiatData.stampingRef || "";
-
-wasiatHandoverDate = wasiatData.handoverDate || "";
-wasiatHandoverRemarks = wasiatData.handoverRemarks || "";
-
-wasiatReceivedDate = wasiatData.receivedDate || "";
-  
-wasiatCompletedAt = wasiatData.completedAt || null;
-
-wasiatDeliveryMethod = wasiatData.deliveryMethod || "";
-wasiatCourier = wasiatData.courier || "";
-wasiatTrackingNo = wasiatData.trackingNo || "";
-wasiatReceiver = wasiatData.receiver || "";
-wasiatRemarks = wasiatData.remarks || "";
-  
-wasiatStatus =
-wasiatData.status ||
-"DRAFT";
-
-wasiatDocRef =
-wasiatData.docRef || "-";
-
-wasiatApprovedDate =
-wasiatData.approvedAt
-? new Date(
-wasiatData.approvedAt
-).toLocaleDateString("ms-MY")
-: "-";
-
-wasiatExpiryDate =
-wasiatData.expiryDate
-? new Date(
-wasiatData.expiryDate
-).toLocaleDateString("ms-MY")
-: "-";
-
-wasiatBakiHari =
-wasiatExpiryDate !== "-"
-? Math.ceil(
-(
-new Date(wasiatData.expiryDate)
-- new Date()
-)
-/
-(1000*60*60*24)
-)
-: 0;
-  
-}
-
-// HIBAH STATUS
-const hibahSnap =
-await getDoc(
-doc(
-db,
-"users",
-userId,
-"hibah",
-"maklumat"
-)
-);
-
-let hibahData = {};
-let hibahStatus = "BELUM DIISI";
-
-let hibahDocRef = "-";
-let hibahApprovedDate = "-";
-let hibahExpiryDate = "-";
-let hibahBakiHari = 0;
-
-let hibahPrintedAt = null;
-let hibahSentAt = null;
-let hibahCompletedAt = null;
-
-let hibahDeliveryMethod = "";
-let hibahCourier = "";
-let hibahTrackingNo = "";
-let hibahReceiver = "";
-let hibahRemarks = "";
-
-let hibahAkadDate = "";
-let hibahAkadTime = "";
-
-let hibahStampDate = "";
-let hibahStampRef = "";
-
-let hibahHandoverDate = "";
-let hibahHandoverRemarks = "";
-
-let hibahReceivedDate = "";
-  
-if(hibahSnap.exists()){
-
-hibahData =
-hibahSnap.data();
-
-const printedAt = hibahData.printedAt || "";
-  
-hibahPrintedAt = hibahData.printedAt || null;
-hibahSentAt = hibahData.sentAt || null;
-
-hibahAkadDate = hibahData.akadDate || "";
-hibahAkadTime = hibahData.akadTime || "";
-
-hibahStampDate = hibahData.stampingDate || "";
-hibahStampRef = hibahData.stampingRef || "";
-
-hibahHandoverDate = hibahData.handoverDate || "";
-hibahHandoverRemarks = hibahData.handoverRemarks || "";
-
-hibahReceivedDate = hibahData.receivedDate || "";  
-
-hibahCompletedAt = hibahData.completedAt || null;
-
-hibahDeliveryMethod = hibahData.deliveryMethod || "";
-hibahCourier = hibahData.courier || "";
-hibahTrackingNo = hibahData.trackingNo || "";
-hibahReceiver = hibahData.receiver || "";
-hibahRemarks = hibahData.remarks || "";  
-  
-hibahStatus =
-hibahData.status ||
-"DRAFT";
-
-hibahDocRef =
-hibahData.docRef || "-";
-
-hibahApprovedDate =
-hibahData.approvedAt
-? new Date(
-hibahData.approvedAt
-).toLocaleDateString("ms-MY")
-: "-";
-
-hibahExpiryDate =
-hibahData.expiryDate
-? new Date(
-hibahData.expiryDate
-).toLocaleDateString("ms-MY")
-: "-";
-
-hibahBakiHari =
-hibahExpiryDate !== "-"
-? Math.ceil(
-(
-new Date(hibahData.expiryDate)
-- new Date()
-)
-/
-(1000*60*60*24)
-)
-: 0;
-  
-}
-
-// SEPENCARIAN STATUS
-const sepencarianSnap =
-await getDoc(
-doc(
-db,
-"users",
-userId,
-"sepencarian",
-"maklumat"
-)
-);
-
-let sepencarianData = {};
-let sepencarianStatus = "BELUM DIISI";
-
-let sepencarianDocRef = "-";
-let sepencarianApprovedDate = "-";
-let sepencarianExpiryDate = "-";
-let sepencarianBakiHari = 0;
-  
-let sepencarianPrintedAt = null;
-let sepencarianSentAt = null;
-let sepencarianCompletedAt = null;
-
-let sepencarianDeliveryMethod = "";
-let sepencarianCourier = "";
-let sepencarianTrackingNo = "";
-let sepencarianReceiver = "";
-let sepencarianRemarks = "";
-
-let sepencarianAkadDate = "";
-let sepencarianAkadTime = "";
-
-let sepencarianStampDate = "";
-let sepencarianStampRef = "";
-
-let sepencarianHandoverDate = "";
-let sepencarianHandoverRemarks = "";
-
-let sepencarianReceivedDate = "";
-  
-if(sepencarianSnap.exists()){
-
-sepencarianData =
-sepencarianSnap.data();
-
-const printedAt = sepencarianData.printedAt || "";
-  
-sepencarianPrintedAt = sepencarianData.printedAt || null;
-sepencarianSentAt = sepencarianData.sentAt || null;
-
-sepencarianAkadDate = sepencarianData.akadDate || "";
-sepencarianAkadTime = sepencarianData.akadTime || "";
-
-sepencarianStampDate = sepencarianData.stampingDate || "";
-sepencarianStampRef = sepencarianData.stampingRef || "";
-
-sepencarianHandoverDate = sepencarianData.handoverDate || "";
-sepencarianHandoverRemarks = sepencarianData.handoverRemarks || "";
-
-sepencarianReceivedDate = sepencarianData.receivedDate || "";
-  
-sepencarianCompletedAt = sepencarianData.completedAt || null;
-
-sepencarianDeliveryMethod = sepencarianData.deliveryMethod || "";
-sepencarianCourier = sepencarianData.courier || "";
-sepencarianTrackingNo = sepencarianData.trackingNo || "";
-sepencarianReceiver = sepencarianData.receiver || "";
-sepencarianRemarks = sepencarianData.remarks || "";
-  
-sepencarianStatus =
-sepencarianData.status ||
-"DRAFT";
-
-sepencarianDocRef =
-sepencarianData.docRef || "-";
-
-sepencarianApprovedDate =
-sepencarianData.approvedAt
-? new Date(
-sepencarianData.approvedAt
-).toLocaleDateString("ms-MY")
-: "-";
-
-sepencarianExpiryDate =
-sepencarianData.expiryDate
-? new Date(
-sepencarianData.expiryDate
-).toLocaleDateString("ms-MY")
-: "-";
-
-sepencarianBakiHari =
-sepencarianExpiryDate !== "-"
-? Math.ceil(
-(
-new Date(sepencarianData.expiryDate)
-- new Date()
-)
-/
-(1000*60*60*24)
-)
-: 0;
-  
-}
-
-// MAWARIS STATUS
-const mawarisSnap =
-await getDoc(
-doc(
-db,
-"users",
-userId,
-"mawaris",
-"maklumat"
-)
-);
-
-let mawarisData = {};
-let mawarisStatus = "BELUM DIISI";
-
-let mawarisDocRef = "-";
-let mawarisApprovedDate = "-";
-let mawarisExpiryDate = "-";
-let mawarisBakiHari = 0;
-
-let mawarisPrintedAt = null;
-let mawarisSentAt = null;
-let mawarisCompletedAt = null;
-
-let mawarisDeliveryMethod = "";
-let mawarisCourier = "";
-let mawarisTrackingNo = "";
-let mawarisReceiver = "";
-let mawarisRemarks = "";
-
-let mawarisAkadDate = "";
-let mawarisAkadTime = "";
-
-let mawarisStampDate = "";
-let mawarisStampRef = "";
-
-let mawarisHandoverDate = "";
-let mawarisHandoverRemarks = "";
-
-let mawarisReceivedDate = "";
-  
-if(mawarisSnap.exists()){
-
-mawarisData =
-mawarisSnap.data();
-
-const printedAt = mawarisData.printedAt || "";
-  
-mawarisPrintedAt = mawarisData.printedAt || null;
-mawarisSentAt = mawarisData.sentAt || null;
-
-mawarisAkadDate = mawarisData.akadDate || "";
-mawarisAkadTime = mawarisData.akadTime || "";
-
-mawarisStampDate = mawarisData.stampingDate || "";
-mawarisStampRef = mawarisData.stampingRef || "";
-
-mawarisHandoverDate = mawarisData.handoverDate || "";
-mawarisHandoverRemarks = mawarisData.handoverRemarks || "";
-
-mawarisReceivedDate = mawarisData.receivedDate || "";
-  
-mawarisCompletedAt = mawarisData.completedAt || null;
-
-mawarisDeliveryMethod = mawarisData.deliveryMethod || "";
-mawarisCourier = mawarisData.courier || "";
-mawarisTrackingNo = mawarisData.trackingNo || "";
-mawarisReceiver = mawarisData.receiver || "";
-mawarisRemarks = mawarisData.remarks || "";
-  
-mawarisStatus =
-mawarisData.status ||
-"DRAFT";
-
-mawarisDocRef =
-mawarisData.docRef || "-";
-
-mawarisApprovedDate =
-mawarisData.approvedAt
-? new Date(
-mawarisData.approvedAt
-).toLocaleDateString("ms-MY")
-: "-";
-
-mawarisExpiryDate =
-mawarisData.expiryDate
-? new Date(
-mawarisData.expiryDate
-).toLocaleDateString("ms-MY")
-: "-";
-
-mawarisBakiHari =
-mawarisExpiryDate !== "-"
-? Math.ceil(
-(
-new Date(mawarisData.expiryDate)
-- new Date()
-)
-/
-(1000*60*60*24)
-)
-: 0;
-  
-}
-
-const products = [
-
-{
-name:"Wasiat",
-snap:wasiatSnap,
-status:wasiatStatus,
-docRef:wasiatDocRef,
-preview:"preview-wasiat.html"
-},
-
-{
-name:"Hibah",
-snap:hibahSnap,
-status:hibahStatus,
-docRef:hibahDocRef,
-preview:"preview-hibah.html"
-},
-
-{
-name:"Harta Sepencarian",
-snap:sepencarianSnap,
-status:sepencarianStatus,
-docRef:sepencarianDocRef,
-preview:"preview-sepencarian.html"
-},
-
-{
-name:"Mawaris",
-snap:mawarisSnap,
-status:mawarisStatus,
-docRef:mawarisDocRef,
-preview:"preview-mawaris.html"
-}
-
-];
-
-const activeProduct =
-products.find(product => product.snap.exists());
-
-const currentCollection =
-activeProduct
-? (
-activeProduct.name === "Wasiat"
-? "wasiat"
-: activeProduct.name === "Hibah"
-? "hibah"
-: activeProduct.name === "Harta Sepencarian"
-? "sepencarian"
-: "mawaris"
-)
-: "wasiat";
-
-const currentData =
-currentCollection === "wasiat"
-? wasiatData
-: currentCollection === "hibah"
-? hibahData
-: currentCollection === "sepencarian"
-? sepencarianData
-: mawarisData;
-
-const currentStatus =
-activeProduct
-? activeProduct.status
-: "UNDER_REVIEW";
-  
-document.getElementById(
-"customerInfo"
-).innerHTML = `
-
-<div class="space-y-6">
-
-<div>
-
-<h2 class="text-3xl font-bold text-[#153638]">
-${user.nama || "-"}
-</h2>
-
-<p class="text-gray-500">
-${user.email || "-"}
-</p>
-
-<div class="bg-gray-50 rounded-xl p-5 mt-5">
-
-<h3 class="font-bold mb-3">
-Maklumat Keahlian
-</h3>
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-<p class="text-gray-500 text-sm">No Ahli</p>
-<p id="memberNo"></p>
-</div>
-
-<div>
-<p class="text-gray-500 text-sm">Tarikh Daftar</p>
-<p id="memberSince"></p>
-</div>
-
-<div>
-<p class="text-gray-500 text-sm">Alamat</p>
-<p id="alamatRingkas"></p>
-</div>
-
-<div>
-<p class="text-gray-500 text-sm">Telefon</p>
-<p id="telefon"></p>
-</div>
-
-<div>
-    <p class="text-gray-500 text-sm">Kod Referral</p>
-    <p id="referral"></p>
-</div>
-
-<div>
-<p class="text-gray-500 text-sm">Referral</p>
-<p id="consultantName"></p>
-</div>
-
-<div>
-<p class="text-gray-500 text-sm">Telefon Perunding</p>
-<p id="consultantPhone"></p>
-</div>
-
-<div>
-<p class="text-gray-500 text-sm">Status</p>
-<p id="memberStatus"></p>
-</div>
-
-</div>
-
-${wasiatSnap.exists() ? `
-
-<div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
-
-    <!-- CARD WASIAT -->
-    <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            Wasiat
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            No Dokumen
-        </p>
-
-        <p class="font-semibold mb-3">
-            ${wasiatDocRef}
-        </p>
-
-        <p class="text-sm text-gray-500">
-            Status
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${wasiatStatus}
-        </p>
-
-        <a
-            href="admin-preview-wasiat.html?id=${userId}"
-            target="_blank"
-            class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">
-            👁 View Dokumen
-        </a>
-
-    </div>
-
-    <!-- CARD PRINT -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-blue-700 mb-4">
-            PRINT
-        </h3>
-
-<label class="block text-sm mb-2">
-Tarikh & Masa Cetak
-</label>
-
-<input
-type="datetime-local"
-id="wasiatPrintedAt"
-value="${wasiatPrintedAt ? wasiatPrintedAt.substring(0,16) : ""}"
-${wasiatStatus==="PRINTED" || wasiatStatus==="SENT" ? "disabled" : ""}
-class="w-full border rounded-lg p-2">
-
-               <button
-            id="btnPrintWasiat"
-            class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
-            ✔ Tandakan Dicetak
-        </button>
-
-    </div>
-
-    <!-- CARD SEND -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-orange-600 mb-4">
-            SEND
-        </h3>
-
-<label class="block text-sm mb-2">
-Tarikh & Masa Hantar
-</label>
-
-<input
-type="datetime-local"
-id="wasiatSentAt"
-value="${wasiatSentAt ? wasiatSentAt.substring(0,16) : ""}"
-${wasiatStatus==="SENT" ? "disabled" : ""}
-class="w-full border rounded-lg p-2 mb-2">
-
-        <input
-            id="wasiatCourier"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Courier"
-            value="${wasiatCourier}">
-
-        <input
-            id="wasiatTrackingNo"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Tracking No"
-            value="${wasiatTrackingNo}">
-
-        <input
-            id="wasiatReceiver"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Receiver"
-            value="${wasiatReceiver}">
-
-        <textarea
-            id="wasiatRemarks"
-            class="w-full border rounded-lg p-2 mb-3"
-            rows="3"
-            placeholder="Remarks">${wasiatRemarks}</textarea>
-
-        <button
-            id="btnSendWasiat"
-            class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
-            ✔ Tandakan Dihantar
-        </button>
-
-    </div>
-
-    <!-- CARD COMPLETE -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            COMPLETE
-        </h3>
-
-        <p class="text-sm text-gray-500">
-Tarikh Akad
-</p>
-
-<p class="font-semibold">
-${wasiatAkadDate || "-"}
-${wasiatAkadTime || ""}
-</p>
-
-<hr class="my-3">
-
-<p class="text-sm text-gray-500">
-Stamping
-</p>
-
-<p class="font-semibold">
-${wasiatStampDate || "-"}
-</p>
-
-<p class="text-sm">
-${wasiatStampRef || ""}
-</p>
-
-<hr class="my-3">
-
-<p class="text-sm text-gray-500">
-Diserahkan Kepada AQM
-</p>
-
-<p class="font-semibold">
-${wasiatHandoverDate || "-"}
-</p>
-
-<p class="text-sm">
-${wasiatHandoverRemarks || ""}
-</p>
-
-<hr class="my-3">
-
-<p class="text-sm text-gray-500">
-AQM Terima Dokumen
-</p>
-
-<p class="font-semibold text-green-700">
-${wasiatReceivedDate || "-"}
-</p>
-
-<hr class="my-3">
-
-            <button
-            id="btnCompleteWasiat"
-            class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
-            ✔ Lengkapkan
-        </button>
-
-    </div>
-
-</div>
-
-` : ""}
-
-${hibahSnap.exists() ? `
-
-<div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
-
-    <!-- CARD HIBAH -->
-    <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            Hibah
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            No Dokumen
-        </p>
-
-        <p class="font-semibold mb-3">
-            ${hibahDocRef}
-        </p>
-
-        <p class="text-sm text-gray-500">
-            Status
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${hibahStatus}
-        </p>
-
-        <a
-            href="admin-preview-hibah.html?id=${userId}"
-            target="_blank"
-            class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">
-            👁 View Dokumen
-        </a>
-
-    </div>
-
-    <!-- CARD PRINT -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-blue-700 mb-4">
-            PRINT
-        </h3>
-
-        <label class="block text-sm mb-2">
-Tarikh & Masa Cetak
-</label>
-
-<input
-type="datetime-local"
-id="hibahPrintedAt"
-value="${hibahPrintedAt ? hibahPrintedAt.substring(0,16) : ""}"
-${hibahStatus==="PRINTED" || hibahStatus==="SENT" ? "disabled" : ""}
-class="w-full border rounded-lg p-2">
-
-        <button
-            id="btnPrintHibah"
-            class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
-            ✔ Tandakan Dicetak
-        </button>
-
-    </div>
-
-    <!-- CARD SEND -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-orange-600 mb-4">
-            SEND
-        </h3>
-
-<label class="block text-sm mb-2">
-Tarikh & Masa Hantar
-</label>
-
-<input
-type="datetime-local"
-id="hibahSentAt"
-value="${hibahSentAt ? hibahSentAt.substring(0,16) : ""}"
-${hibahStatus==="SENT" ? "disabled" : ""}
-class="w-full border rounded-lg p-2 mb-2">
-
-        <input
-            id="hibahCourier"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Courier"
-            value="${hibahCourier}">
-
-        <input
-            id="hibahTrackingNo"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Tracking No"
-            value="${hibahTrackingNo}">
-
-        <input
-            id="hibahReceiver"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Receiver"
-            value="${hibahReceiver}">
-
-        <textarea
-            id="hibahRemarks"
-            class="w-full border rounded-lg p-2 mb-3"
-            rows="3"
-            placeholder="Remarks">${hibahRemarks}</textarea>
-
-        <button
-            id="btnSendHibah"
-            class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
-            ✔ Tandakan Dihantar
-        </button>
-
-    </div>
-
-    <!-- CARD COMPLETE -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            COMPLETE
-        </h3>
-
-        <p class="text-sm text-gray-500">
-Tarikh Akad
-</p>
-
-<p class="font-semibold">
-${hibahAkadDate || "-"}
-${hibahAkadTime || ""}
-</p>
-
-<hr class="my-3">
-
-<p class="text-sm text-gray-500">
-Stamping
-</p>
-
-<p class="font-semibold">
-${hibahStampDate || "-"}
-</p>
-
-<p class="text-sm">
-${hibahStampRef || ""}
-</p>
-
-<hr class="my-3">
-
-<p class="text-sm text-gray-500">
-Diserahkan Kepada AQM
-</p>
-
-<p class="font-semibold">
-${hibahHandoverDate || "-"}
-</p>
-
-<p class="text-sm">
-${hibahHandoverRemarks || ""}
-</p>
-
-<hr class="my-3">
-
-<p class="text-sm text-gray-500">
-AQM Terima Dokumen
-</p>
-
-<p class="font-semibold text-green-700">
-${hibahReceivedDate || "-"}
-</p>
-
-<hr class="my-3">
-        <button
-            id="btnCompleteHibah"
-            class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
-            ✔ Lengkapkan
-        </button>
-
-    </div>
-
-</div>
-
-` : ""}
-
-${sepencarianSnap.exists() ? `
-
-<div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
-
-    <!-- CARD SEPENCARIAN -->
-    <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            Harta Sepencarian
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            No Dokumen
-        </p>
-
-        <p class="font-semibold mb-3">
-            ${sepencarianDocRef}
-        </p>
-
-        <p class="text-sm text-gray-500">
-            Status
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${sepencarianStatus}
-        </p>
-
-        <a
-            href="admin-preview-sepencarian.html?id=${userId}"
-            target="_blank"
-            class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">
-            👁 View Dokumen
-        </a>
-
-    </div>
-
-    <!-- CARD PRINT -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-blue-700 mb-4">
-            PRINT
-        </h3>
-
-        <label class="block text-sm mb-2">
-Tarikh & Masa Cetak
-</label>
-
-<input
-type="datetime-local"
-id="sepencarianPrintedAt"
-value="${sepencarianPrintedAt ? sepencarianPrintedAt.substring(0,16) : ""}"
-${sepencarianStatus==="PRINTED" || sepencarianStatus==="SENT" ? "disabled" : ""}
-class="w-full border rounded-lg p-2">
-
-
-        <button
-            id="btnPrintSepencarian"
-            class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
-            ✔ Tandakan Dicetak
-        </button>
-
-    </div>
-
-    <!-- CARD SEND -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-orange-600 mb-4">
-            SEND
-        </h3>
-
-<label class="block text-sm mb-2">
-Tarikh & Masa Hantar
-</label>
-
-<input
-type="datetime-local"
-id="sepencarianSentAt"
-value="${sepencarianSentAt ? sepencarianSentAt.substring(0,16) : ""}"
-${sepencarianStatus==="SENT" ? "disabled" : ""}
-class="w-full border rounded-lg p-2 mb-2">
-
-        <input
-            id="sepencarianCourier"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Courier"
-            value="${sepencarianCourier}">
-
-        <input
-            id="sepencarianTrackingNo"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Tracking No"
-            value="${sepencarianTrackingNo}">
-
-        <input
-            id="sepencarianReceiver"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Receiver"
-            value="${sepencarianReceiver}">
-
-        <textarea
-            id="sepencarianRemarks"
-            class="w-full border rounded-lg p-2 mb-3"
-            rows="3"
-            placeholder="Remarks">${sepencarianRemarks}</textarea>
-
-        <button
-            id="btnSendSepencarian"
-            class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
-            ✔ Tandakan Dihantar
-        </button>
-
-    </div>
-
-    <!-- CARD COMPLETE -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            COMPLETE
-        </h3>
-
-        <p class="text-sm text-gray-500">
-Tarikh Akad
-</p>
-
-<p class="font-semibold">
-${sepencarianAkadDate || "-"}
-${sepencarianAkadTime || ""}
-</p>
-
-<hr class="my-3">
-
-<p class="text-sm text-gray-500">
-Stamping
-</p>
-
-<p class="font-semibold">
-${sepencarianStampDate || "-"}
-</p>
-
-<p class="text-sm">
-${sepencarianStampRef || ""}
-</p>
-
-<hr class="my-3">
-
-<p class="text-sm text-gray-500">
-Diserahkan Kepada AQM
-</p>
-
-<p class="font-semibold">
-${sepencarianHandoverDate || "-"}
-</p>
-
-<p class="text-sm">
-${sepencarianHandoverRemarks || ""}
-</p>
-
-<hr class="my-3">
-
-<p class="text-sm text-gray-500">
-AQM Terima Dokumen
-</p>
-
-<p class="font-semibold text-green-700">
-${sepencarianReceivedDate || "-"}
-</p>
-
-<hr class="my-3">
-
-        <button
-            id="btnCompleteSepencarian"
-            class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
-            ✔ Lengkapkan
-        </button>
-
-    </div>
-
-</div>
-
-` : ""}
-
-${mawarisSnap.exists() ? `
-
-<div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
-
-    <!-- CARD MAWARIS -->
-    <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            Mawaris
-        </h3>
-
-        <p class="text-sm text-gray-500">
-            No Dokumen
-        </p>
-
-        <p class="font-semibold mb-3">
-            ${mawarisDocRef}
-        </p>
-
-        <p class="text-sm text-gray-500">
-            Status
-        </p>
-
-        <p class="font-semibold mb-6">
-            ${mawarisStatus}
-        </p>
-
-        <a
-            href="admin-preview-mawaris.html?id=${userId}"
-            target="_blank"
-            class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">
-            👁 View Dokumen
-        </a>
-
-    </div>
-
-    <!-- CARD PRINT -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-blue-700 mb-4">
-            PRINT
-        </h3>
-
-        <label class="block text-sm mb-2">
-Tarikh & Masa Cetak
-</label>
-
-<input
-type="datetime-local"
-id="mawarisPrintedAt"
-value="${mawarisPrintedAt ? mawarisPrintedAt.substring(0,16) : ""}"
-${mawarisStatus==="PRINTED" || mawarisStatus==="SENT" ? "disabled" : ""}
-class="w-full border rounded-lg p-2">
-
-
-        <button
-            id="btnPrintMawaris"
-            class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">
-            ✔ Tandakan Dicetak
-        </button>
-
-    </div>
-
-    <!-- CARD SEND -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-orange-600 mb-4">
-            SEND
-        </h3>
-
-<label class="block text-sm mb-2">
-Tarikh & Masa Hantar
-</label>
-
-<input
-type="datetime-local"
-id="mawarisSentAt"
-value="${mawarisSentAt ? mawarisSentAt.substring(0,16) : ""}"
-${mawarisStatus==="SENT" ? "disabled" : ""}
-class="w-full border rounded-lg p-2 mb-2">
-
-        <input
-            id="mawarisCourier"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Courier"
-            value="${mawarisCourier}">
-
-        <input
-            id="mawarisTrackingNo"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Tracking No"
-            value="${mawarisTrackingNo}">
-
-        <input
-            id="mawarisReceiver"
-            class="w-full border rounded-lg p-2 mb-2"
-            placeholder="Receiver"
-            value="${mawarisReceiver}">
-
-        <textarea
-            id="mawarisRemarks"
-            class="w-full border rounded-lg p-2 mb-3"
-            rows="3"
-            placeholder="Remarks">${mawarisRemarks}</textarea>
-
-        <button
-            id="btnSendMawaris"
-            class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">
-            ✔ Tandakan Dihantar
-        </button>
-
-    </div>
-
-    <!-- CARD COMPLETE -->
-    <div class="bg-white border rounded-xl p-5 flex flex-col">
-
-        <h3 class="text-xl font-bold text-green-700 mb-4">
-            COMPLETE
-        </h3>
-
-        <p class="text-sm text-gray-500">
-Tarikh Akad
-</p>
-
-<p class="font-semibold">
-${mawarisAkadDate || "-"}
-${mawarisAkadTime || ""}
-</p>
-
-<hr class="my-3">
-
-<p class="text-sm text-gray-500">
-Stamping
-</p>
-
-<p class="font-semibold">
-${mawarisStampDate || "-"}
-</p>
-
-<p class="text-sm">
-${mawarisStampRef || ""}
-</p>
-
-<hr class="my-3">
-
-<p class="text-sm text-gray-500">
-Diserahkan Kepada AQM
-</p>
-
-<p class="font-semibold">
-${mawarisHandoverDate || "-"}
-</p>
-
-<p class="text-sm">
-${mawarisHandoverRemarks || ""}
-</p>
-
-<hr class="my-3">
-
-<p class="text-sm text-gray-500">
-AQM Terima Dokumen
-</p>
-
-<p class="font-semibold text-green-700">
-${mawarisReceivedDate || "-"}
-</p>
-
-<hr class="my-3">
-
-        <button
-            id="btnCompleteMawaris"
-            class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">
-            ✔ Lengkapkan
-        </button>
-
-    </div>
-
-</div>
-
-` : ""}
-
-`;
-
-document.getElementById(
-"memberNo"
-).innerHTML =
-user.memberNo || "-";
-
-document.getElementById(
-"memberSince"
-).innerHTML =
-user.memberSince
-? new Date(
-user.memberSince
-).toLocaleDateString("ms-MY")
-: "-";
-
-document.getElementById("telefon").innerHTML =
-user.telefon || "-";
-
-const alamatData =
-activeProduct
-? (
-currentCollection === "wasiat"
-? wasiatData
-: currentCollection === "hibah"
-? hibahData
-: currentCollection === "sepencarian"
-? sepencarianData
-: mawarisData
-)
-: {};
-
-document.getElementById("alamatRingkas").innerHTML =
-[
-alamatData.bandar,
-alamatData.negeri
-].filter(Boolean).join(", ") || "-";
-
-document.getElementById("referral").innerHTML =
-user.referral || "-";
-  
-document.getElementById("consultantName").innerHTML =
-consultantData.nama || "-";
-
-document.getElementById("consultantPhone").innerHTML =
-consultantData.telefon || "-";
-  
-document.getElementById("memberStatus").innerHTML =
-(
-user.paymentStatus === "paid" ||
-user.wasiatPaymentStatus === "paid" ||
-user.hibahPaymentStatus === "paid" ||
-user.sepencarianPaymentStatus === "paid" ||
-user.mawarisPaymentStatus === "paid"
-)
-? "AHLI AKTIF"
-: "PROSPEK";
-}
-
-// ==================== 1. WASIAT ====================
-const btnPrintWasiat = document.getElementById("btnPrintWasiat");
-const btnSendWasiat = document.getElementById("btnSendWasiat");
-const btnCompleteWasiat = document.getElementById("btnCompleteWasiat");
-
-if (btnPrintWasiat) {
-  if (wasiatStatus === "VERIFIED") {
-    btnPrintWasiat.disabled = false;
-    btnPrintWasiat.classList.remove("bg-gray-300", "cursor-not-allowed");
-    btnPrintWasiat.classList.add("bg-blue-600", "hover:bg-blue-700");
-    btnPrintWasiat.onclick = async () => {
-      const val = document.getElementById("wasiatPrintedAt")?.value;
-      if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
-      if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
-      await updateDoc(doc(db, "users", userId, "wasiat", "maklumat"), {
-        status: "PRINTED",
-        printedAt: val,
-        printedUpdatedAt: serverTimestamp(),
-        printedBy: auth.currentUser.uid
-      });
-      alert("Status berjaya dikemaskini.");
-      location.reload();
-    };
-  } else {
-    btnPrintWasiat.disabled = true;
-    btnPrintWasiat.classList.remove("bg-blue-600", "hover:bg-blue-700");
-    btnPrintWasiat.classList.add("bg-gray-300", "cursor-not-allowed");
-  }
-}
-
-if (btnSendWasiat) {
-  if (wasiatStatus === "PRINTED") {
-    btnSendWasiat.disabled = false;
-    btnSendWasiat.classList.remove("bg-gray-300", "cursor-not-allowed");
-    btnSendWasiat.classList.add("bg-orange-500", "hover:bg-orange-600");
-    btnSendWasiat.onclick = async () => {
-      const val = document.getElementById("wasiatSentAt")?.value;
-      if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
-      if (!confirm("Tandakan dokumen telah dihantar?")) return;
-      await updateDoc(doc(db, "users", userId, "wasiat", "maklumat"), {
-        status: "SENT",
-        sentAt: val,
-        sentUpdatedAt: serverTimestamp(),
-        sentBy: auth.currentUser.uid,
-        courier: document.getElementById("wasiatCourier")?.value || "",
-        trackingNo: document.getElementById("wasiatTrackingNo")?.value || "",
-        receiver: document.getElementById("wasiatReceiver")?.value || "",
-        remarks: document.getElementById("wasiatRemarks")?.value || ""
-      });
-      alert("Dokumen berjaya dihantar.");
-      location.reload();
-    };
-  } else {
-    btnSendWasiat.disabled = true;
-    btnSendWasiat.classList.remove("bg-orange-500", "hover:bg-orange-600");
-    btnSendWasiat.classList.add("bg-gray-300", "cursor-not-allowed");
-  }
-}
-
-if (btnCompleteWasiat) {
-  if (wasiatStatus === "SENT") {
-    btnCompleteWasiat.disabled = false;
-    btnCompleteWasiat.classList.remove("bg-gray-300", "cursor-not-allowed");
-    btnCompleteWasiat.classList.add("bg-green-600", "hover:bg-green-700");
-    btnCompleteWasiat.onclick = async () => {
-      if (!confirm("Lengkapkan proses ini?")) return;
-      await updateDoc(doc(db, "users", userId, "wasiat", "maklumat"), {
-        status: "COMPLETED",
-        completedAt: new Date().toISOString(),
-        completedBy: auth.currentUser.uid
-      });
-      alert("Kes selesai.");
-      location.reload();
-    };
-  } else {
-    btnCompleteWasiat.disabled = true;
-    btnCompleteWasiat.classList.remove("bg-green-600", "hover:bg-green-700");
-    btnCompleteWasiat.classList.add("bg-gray-300", "cursor-not-allowed");
-  }
-}
-
-
-// ==================== 2. HIBAH ====================
-const btnPrintHibah = document.getElementById("btnPrintHibah");
-const btnSendHibah = document.getElementById("btnSendHibah");
-const btnCompleteHibah = document.getElementById("btnCompleteHibah");
-
-if (btnPrintHibah) {
-  if (hibahStatus === "VERIFIED") {
-    btnPrintHibah.disabled = false;
-    btnPrintHibah.classList.remove("bg-gray-300", "cursor-not-allowed");
-    btnPrintHibah.classList.add("bg-blue-600", "hover:bg-blue-700");
-    btnPrintHibah.onclick = async () => {
-      const val = document.getElementById("hibahPrintedAt")?.value;
-      if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
-      if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
-      await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
-        status: "PRINTED",
-        printedAt: val,
-        printedUpdatedAt: serverTimestamp(),
-        printedBy: auth.currentUser.uid
-      });
-      alert("Status berjaya dikemaskini.");
-      location.reload();
-    };
-  } else {
-    btnPrintHibah.disabled = true;
-    btnPrintHibah.classList.remove("bg-blue-600", "hover:bg-blue-700");
-    btnPrintHibah.classList.add("bg-gray-300", "cursor-not-allowed");
-  }
-}
-
-if (btnSendHibah) {
-  if (hibahStatus === "PRINTED") {
-    btnSendHibah.disabled = false;
-    btnSendHibah.classList.remove("bg-gray-300", "cursor-not-allowed");
-    btnSendHibah.classList.add("bg-orange-500", "hover:bg-orange-600");
-    btnSendHibah.onclick = async () => {
-      const val = document.getElementById("hibahSentAt")?.value;
-      if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
-      if (!confirm("Tandakan dokumen telah dihantar?")) return;
-      await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
-        status: "SENT",
-        sentAt: val,
-        sentUpdatedAt: serverTimestamp(),
-        sentBy: auth.currentUser.uid,
-        courier: document.getElementById("hibahCourier")?.value || "",
-        trackingNo: document.getElementById("hibahTrackingNo")?.value || "",
-        receiver: document.getElementById("hibahReceiver")?.value || "",
-        remarks: document.getElementById("hibahRemarks")?.value || ""
-      });
-      alert("Dokumen berjaya dihantar.");
-      location.reload();
-    };
-  } else {
-    btnSendHibah.disabled = true;
-    btnSendHibah.classList.remove("bg-orange-500", "hover:bg-orange-600");
-    btnSendHibah.classList.add("bg-gray-300", "cursor-not-allowed");
-  }
-}
-
-if (btnCompleteHibah) {
-  if (hibahStatus === "SENT") {
-    btnCompleteHibah.disabled = false;
-    btnCompleteHibah.classList.remove("bg-gray-300", "cursor-not-allowed");
-    btnCompleteHibah.classList.add("bg-green-600", "hover:bg-green-700");
-    btnCompleteHibah.onclick = async () => {
-      if (!confirm("Lengkapkan proses ini?")) return;
-      await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
-        status: "COMPLETED",
-        completedAt: new Date().toISOString(),
-        completedBy: auth.currentUser.uid
-      });
-      alert("Kes selesai.");
-      location.reload();
-    };
-  } else {
-    btnCompleteHibah.disabled = true;
-    btnCompleteHibah.classList.remove("bg-green-600", "hover:bg-green-700");
-    btnCompleteHibah.classList.add("bg-gray-300", "cursor-not-allowed");
-  }
-}
-
-
-// ==================== 3. SEPENCARIAN ====================
-const btnPrintSepencarian = document.getElementById("btnPrintSepencarian");
-const btnSendSepencarian = document.getElementById("btnSendSepencarian");
-const btnCompleteSepencarian = document.getElementById("btnCompleteSepencarian");
-
-if (btnPrintSepencarian) {
-  if (sepencarianStatus === "VERIFIED") {
-    btnPrintSepencarian.disabled = false;
-    btnPrintSepencarian.classList.remove("bg-gray-300", "cursor-not-allowed");
-    btnPrintSepencarian.classList.add("bg-blue-600", "hover:bg-blue-700");
-    btnPrintSepencarian.onclick = async () => {
-      const val = document.getElementById("sepencarianPrintedAt")?.value;
-      if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
-      if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
-      await updateDoc(doc(db, "users", userId, "sepencarian", "maklumat"), {
-        status: "PRINTED",
-        printedAt: val,
-        printedUpdatedAt: serverTimestamp(),
-        printedBy: auth.currentUser.uid
-      });
-      alert("Status berjaya dikemaskini.");
-      location.reload();
-    };
-  } else {
-    btnPrintSepencarian.disabled = true;
-    btnPrintSepencarian.classList.remove("bg-blue-600", "hover:bg-blue-700");
-    btnPrintSepencarian.classList.add("bg-gray-300", "cursor-not-allowed");
-  }
-}
-
-if (btnSendSepencarian) {
-  if (sepencarianStatus === "PRINTED") {
-    btnSendSepencarian.disabled = false;
-    btnSendSepencarian.classList.remove("bg-gray-300", "cursor-not-allowed");
-    btnSendSepencarian.classList.add("bg-orange-500", "hover:bg-orange-600");
-    btnSendSepencarian.onclick = async () => {
-      const val = document.getElementById("sepencarianSentAt")?.value;
-      if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
-      if (!confirm("Tandakan dokumen telah dihantar?")) return;
-      await updateDoc(doc(db, "users", userId, "sepencarian", "maklumat"), {
-        status: "SENT",
-        sentAt: val,
-        sentUpdatedAt: serverTimestamp(),
-        sentBy: auth.currentUser.uid,
-        courier: document.getElementById("sepencarianCourier")?.value || "",
-        trackingNo: document.getElementById("sepencarianTrackingNo")?.value || "",
-        receiver: document.getElementById("sepencarianReceiver")?.value || "",
-        remarks: document.getElementById("sepencarianRemarks")?.value || ""
-      });
-      alert("Dokumen berjaya dihantar.");
-      location.reload();
-    };
-  } else {
-    btnSendSepencarian.disabled = true;
-    btnSendSepencarian.classList.remove("bg-orange-500", "hover:bg-orange-600");
-    btnSendSepencarian.classList.add("bg-gray-300", "cursor-not-allowed");
-  }
-}
-
-if (btnCompleteSepencarian) {
-  if (sepencarianStatus === "SENT") {
-    btnCompleteSepencarian.disabled = false;
-    btnCompleteSepencarian.classList.remove("bg-gray-300", "cursor-not-allowed");
-    btnCompleteSepencarian.classList.add("bg-green-600", "hover:bg-green-700");
-    btnCompleteSepencarian.onclick = async () => {
-      if (!confirm("Lengkapkan proses ini?")) return;
-      await updateDoc(doc(db, "users", userId, "sepencarian", "maklumat"), {
-        status: "COMPLETED",
-        completedAt: new Date().toISOString(),
-        completedBy: auth.currentUser.uid
-      });
-      alert("Kes selesai.");
-      location.reload();
-    };
-  } else {
-    btnCompleteSepencarian.disabled = true;
-    btnCompleteSepencarian.classList.remove("bg-green-600", "hover:bg-green-700");
-    btnCompleteSepencarian.classList.add("bg-gray-300", "cursor-not-allowed");
-  }
-}
-
-
-// ==================== 4. MAWARIS ====================
-const btnPrintMawaris = document.getElementById("btnPrintMawaris");
-const btnSendMawaris = document.getElementById("btnSendMawaris");
-const btnCompleteMawaris = document.getElementById("btnCompleteMawaris");
-
-if (btnPrintMawaris) {
-  if (mawarisStatus === "VERIFIED") {
-    btnPrintMawaris.disabled = false;
-    btnPrintMawaris.classList.remove("bg-gray-300", "cursor-not-allowed");
-    btnPrintMawaris.classList.add("bg-blue-600", "hover:bg-blue-700");
-    btnPrintMawaris.onclick = async () => {
-      const val = document.getElementById("mawarisPrintedAt")?.value;
-      if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
-      if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
-      await updateDoc(doc(db, "users", userId, "mawaris", "maklumat"), {
-        status: "PRINTED",
-        printedAt: val,
-        printedUpdatedAt: serverTimestamp(),
-        printedBy: auth.currentUser.uid
-      });
-      alert("Status berjaya dikemaskini.");
-      location.reload();
-    };
-  } else {
-    btnPrintMawaris.disabled = true;
-    btnPrintMawaris.classList.remove("bg-blue-600", "hover:bg-blue-700");
-    btnPrintMawaris.classList.add("bg-gray-300", "cursor-not-allowed");
-  }
-}
-
-if (btnSendMawaris) {
-  if (mawarisStatus === "PRINTED") {
-    btnSendMawaris.disabled = false;
-    btnSendMawaris.classList.remove("bg-gray-300", "cursor-not-allowed");
-    btnSendMawaris.classList.add("bg-orange-500", "hover:bg-orange-600");
-    btnSendMawaris.onclick = async () => {
-      const val = document.getElementById("mawarisSentAt")?.value;
-      if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
-      if (!confirm("Tandakan dokumen telah dihantar?")) return;
-      await updateDoc(doc(db, "users", userId, "mawaris", "maklumat"), {
-        status: "SENT",
-        sentAt: val,
-        sentUpdatedAt: serverTimestamp(),
-        sentBy: auth.currentUser.uid,
-        courier: document.getElementById("mawarisCourier")?.value || "",
-        trackingNo: document.getElementById("mawarisTrackingNo")?.value || "",
-        receiver: document.getElementById("mawarisReceiver")?.value || "",
-        remarks: document.getElementById("mawarisRemarks")?.value || ""
-      });
-      alert("Dokumen berjaya dihantar.");
-      location.reload();
-    };
-  } else {
-    btnSendMawaris.disabled = true;
-    btnSendMawaris.classList.remove("bg-orange-500", "hover:bg-orange-600");
-    btnSendMawaris.classList.add("bg-gray-300", "cursor-not-allowed");
-  }
-}
-
-if (btnCompleteMawaris) {
-  if (mawarisStatus === "SENT") {
-    btnCompleteMawaris.disabled = false;
-    btnCompleteMawaris.classList.remove("bg-gray-300", "cursor-not-allowed");
-    btnCompleteMawaris.classList.add("bg-green-600", "hover:bg-green-700");
-    btnCompleteMawaris.onclick = async () => {
-      if (!confirm("Lengkapkan proses ini?")) return;
-      await updateDoc(doc(db, "users", userId, "mawaris", "maklumat"), {
-        status: "COMPLETED",
-        completedAt: new Date().toISOString(),
-        completedBy: auth.currentUser.uid
-      });
-      alert("Kes selesai.");
-      location.reload();
-    };
-  } else {
-    btnCompleteMawaris.disabled = true;
-    btnCompleteMawaris.classList.remove("bg-green-600", "hover:bg-green-700");
-    btnCompleteMawaris.classList.add("bg-gray-300", "cursor-not-allowed");
-  }
-}
-  
-</script>
-
+  </script>
 </body>
+
 </html>
 
 
