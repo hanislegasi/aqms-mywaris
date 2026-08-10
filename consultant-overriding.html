@@ -205,12 +205,10 @@
             return false; // Selamat, tiada benteng MGAM di antaranya
         }
 
-        let teamData = {};
-        let grandTotalSales = 0;
-        let grandTotalOverride = 0;
-
-           
+                          
         // 5A. TARIK SEMUA DIRECT DOWNLINE DAHULU (Walaupun sales RM0, nama tetap keluar)
+        let teamData = {};
+        
         const downlineQ = query(collection(db, "consultants"), where("upline", "==", myConsultantNo));
         const downlineSnap = await getDocs(downlineQ);
         
