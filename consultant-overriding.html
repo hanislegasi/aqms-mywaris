@@ -204,16 +204,16 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             return false;
         }
 
-    // 1. Sediakan bekas data
+   // 1. Sediakan bekas data
         let teamData = {};
         let grandTotalSales = 0;
         let grandTotalOverride = 0;
         let grandTotalUsb = 0; 
 
-        // KEMBALI KEPADA KOD ASAL YANG SAH (Guna data dari Firestore)
-        const myAqcNo = consultantData.consultantNo; 
+        // Guna 'data' yang sah dari onAuthStateChanged
+        const myAqcNo = data.consultantNo; 
 
-        // --- LANGKAH 5A: Tarik Direct Downline dulu supaya yang 0 sales pun keluar ---
+        // --- LANGKAH 5A: Tarik Direct Downline ---
         const downlineQ = query(collection(db, "consultants"), where("upline", "==", myAqcNo));
         const downlineSnap = await getDocs(downlineQ);
         downlineSnap.forEach(d => {
@@ -227,12 +227,17 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             }
         });
 
-        // --- LANGKAH 5B: Kumpul jualan dari overrideHistory ---
+        // --- LANGKAH 5B: Kumpul jualan & override dari overrideHistory ---
         const historyQ = query(
             collection(db, "overrideHistory"),
             where("receiver", "==", myAqcNo)
         );
         const historySnap = await getDocs(historyQ);
+
+        // Tarik rate USB dari Settings
+        const compSnap = await getDoc(doc(db, "settings", "compensation"));
+        const compData = compSnap.exists() ? compSnap.data() : {};
+        const usbRate = Number(compData.uplineSupportingBenefit || compData.usbRate || 0.5);
 
         historySnap.forEach(d => {
             const h = d.data();
@@ -248,44 +253,17 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
                 };
             }
             teamData[aqcNo].sales += Number(h.sales || 0);
+            teamData[aqcNo].override += Number(h.override || 0);
         });
 
-        // --- LANGKAH 5C: TARIK OVERRIDE DAN USB 100% DARI LEJER ---
-        const ledgerQ = query(
-            collection(db, "ledger"),
-            where("consultantNo", "==", myAqcNo)
-        );
-        const ledgerSnap = await getDocs(ledgerQ);
-
-        ledgerSnap.forEach(d => {
-            const row = d.data();
-            
-            if (row.accountCode === "2100" || row.accountCode === "2150") {
-                // Pastikan nama field dalam lejer ko menepati ini
-                const downlineNo = row.fromAqc || row.downlineNo || row.source; 
-
-                if (!downlineNo) return;
-
-                if (!teamData[downlineNo]) {
-                    teamData[downlineNo] = {
-                        nama: "-", level: "AQC", sales: 0, override: 0, usb: 0
-                    };
-                }
-
-                if (row.accountCode === "2100" && row.credit > 0) {
-                    teamData[downlineNo].override += Number(row.credit);
-                }
-                
-                if (row.accountCode === "2150" && row.credit > 0) {
-                    teamData[downlineNo].usb += Number(row.credit);
-                }
-            }
-        });
-
-        // --- 6. Kira grand total selepas gabung semua ---
+        // --- 6. Kira grand total & USB on-the-fly ---
         for (const aqcNo in teamData) {
             grandTotalSales += teamData[aqcNo].sales;
             grandTotalOverride += teamData[aqcNo].override;
+            
+            // KIRA USB SECARA DINAMIK (0.5% dari jualan individu)
+            teamData[aqcNo].usb = teamData[aqcNo].sales * (usbRate / 100);
+            
             grandTotalUsb += teamData[aqcNo].usb; 
         }
 
