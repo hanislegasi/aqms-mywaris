@@ -211,7 +211,7 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
         let grandTotalUsb = 0; 
 
         // KEMBALI KEPADA KOD ASAL YANG SAH (Guna data dari Firestore)
-        const myAqcNo = data.consultantNo; 
+        const myAqcNo = consultantData.consultantNo; 
 
         // --- LANGKAH 5A: Tarik Direct Downline dulu supaya yang 0 sales pun keluar ---
         const downlineQ = query(collection(db, "consultants"), where("upline", "==", myAqcNo));
