@@ -16,18 +16,48 @@
     <p>Overriding Performance</p>
   </div>
 
-  <div class="p-5">
-    <a href="consultant-dashboard.html" class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5 hover:bg-gray-300 transition">
+  <div class="p-5 max-w-7xl mx-auto">
+    <a href="consultant-dashboard.html" class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5 hover:bg-gray-300 transition text-gray-800">
       ← Dashboard
     </a>
 
+    <!-- BARU: KPI BONUS PROGRESS TRACKER -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm mb-5 border border-gray-100">
+        <div class="flex justify-between items-center mb-3">
+            <div>
+                <h2 class="text-lg font-bold text-[#153638]">KPI Bonus Pasukan</h2>
+                <p class="text-sm text-gray-500" id="kpiRateText">Reward: 0%</p>
+            </div>
+            <span id="kpiStatus" class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-bold">
+                In Progress
+            </span>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="w-full bg-gray-100 rounded-full h-5 mb-2 overflow-hidden shadow-inner">
+            <div id="kpiBar" class="bg-green-500 h-5 rounded-full transition-all duration-1000 ease-out flex items-center justify-end pr-2 text-xs text-white font-bold" style="width: 0%"></div>
+        </div>
+        
+        <div class="flex justify-between text-sm font-semibold">
+            <span id="kpiCurrent" class="text-[#153638]">RM0.00</span>
+            <span id="kpiTargetTxt" class="text-gray-500">Target: RM0.00</span>
+        </div>
+
+        <!-- Butang Tuntutan Bonus (Asalnya Disembunyikan) -->
+        <div id="claimBonusContainer" class="mt-5 hidden">
+            <button id="claimBonusBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition shadow-lg">
+              Capai KPI! Hantar Tuntutan Bonus Ke HQ
+            </button>
+        </div>
+    </div>
+
     <!-- Ringkasan Total -->
     <div id="summaryCard" class="grid md:grid-cols-2 gap-5 mb-5">
-      <div class="bg-white rounded-2xl p-6 shadow">
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <h2 class="text-lg font-semibold text-gray-500">Total Team Sales</h2>
         <p id="topTotalSales" class="text-4xl font-bold text-[#153638] mt-2">RM0.00</p>
       </div>
-      <div class="bg-white rounded-2xl p-6 shadow">
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <h2 class="text-lg font-semibold text-gray-500">Lifetime Override</h2>
         <p id="topTotalOverride" class="text-4xl font-bold text-green-600 mt-2">RM0.00</p>
       </div>
@@ -51,7 +81,6 @@
             <td colspan="6" class="p-4 text-center text-gray-500">Memuatkan data...</td>
           </tr>
         </tbody>
-        <!-- Ruangan Total Bawah (Standby untuk Bonus) -->
         <tfoot class="bg-gray-100 border-t-2 border-gray-300">
           <tr>
             <td colspan="3" class="p-4 text-right font-bold text-gray-700">JUMLAH KESELURUHAN:</td>
@@ -67,7 +96,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, doc, getDoc, getDocs, collection, query, where } 
+    import { getFirestore, doc, getDoc, getDocs, collection, query, where, addDoc } 
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -92,69 +121,77 @@
       }
 
       try {
+        // 1. Tarik Data Diri Consultant
         const userSnap = await getDoc(doc(db, "consultants", user.uid));
         const data = userSnap.data();
         const myConsultantNo = data.consultantNo;
 
+        // 2. Tarik Tetapan KPI & Bonus Dari Firebase
+        const compSnap = await getDoc(doc(db, "settings", "compensation"));
+        const compData = compSnap.exists() ? compSnap.data() : {};
+        
+        // Sila pastikan nama field ini sama dengan apa yang ko simpan dari form setting HQ
+        const targetSalesBonus = Number(compData.targetSalesBonus || compData.kpiSalesTarget || 240000); 
+        const rewardBonusRate = Number(compData.rewardBonus || compData.kpiBonusRate || 5);
+
+        document.getElementById("kpiRateText").textContent = `Reward: ${rewardBonusRate}% daripada RM${formatRM(targetSalesBonus)}`;
+
         let teamData = {};
-        
-        // 1. Dapatkan senarai DIRECT DOWNLINE dahulu
-        const downlineQ = query(collection(db, "consultants"), where("upline", "==", myConsultantNo));
-        const downlineSnap = await getDocs(downlineQ);
-        
-        downlineSnap.forEach(d => {
-          const dl = d.data();
-          teamData[dl.consultantNo] = {
-            nama: dl.nama || "-",
-            level: dl.consultantLevel || "-",
-            sales: 0,
-            override: 0
-          };
-        });
-
-        // 2. Dapatkan sejarah transaksi komisen (Override History)
-        const historyQ = query(collection(db, "overrideHistory"), where("receiver", "==", myConsultantNo));
-        const historySnap = await getDocs(historyQ);
-
-        historySnap.forEach(d => {
-          const h = d.data();
-          const aqcNo = h.fromConsultant;
-          const amtSales = Number(h.sales || 0);
-          const amtOverride = Number(h.override || 0);
-
-          if (!teamData[aqcNo]) {
-            teamData[aqcNo] = {
-              nama: h.fromName || "-",
-              level: h.receiverLevel || "-",
-              sales: 0,
-              override: 0
-            };
-          }
-
-          teamData[aqcNo].sales += amtSales;
-          teamData[aqcNo].override += amtOverride;
-        });
-
-        // 3. KIRA GRAND TOTAL DULU (Penting untuk kira peratusan nanti)
         let grandTotalSales = 0;
         let grandTotalOverride = 0;
         
+        // 3. Kumpul Data Downline & Sales (Macam Biasa)
+        const downlineQ = query(collection(db, "consultants"), where("upline", "==", myConsultantNo));
+        const downlineSnap = await getDocs(downlineQ);
+        downlineSnap.forEach(d => {
+          const dl = d.data();
+          teamData[dl.consultantNo] = { nama: dl.nama || "-", level: dl.consultantLevel || "-", sales: 0, override: 0 };
+        });
+
+        const historyQ = query(collection(db, "overrideHistory"), where("receiver", "==", myConsultantNo));
+        const historySnap = await getDocs(historyQ);
+        historySnap.forEach(d => {
+          const h = d.data();
+          const aqcNo = h.fromConsultant;
+          if (!teamData[aqcNo]) teamData[aqcNo] = { nama: h.fromName || "-", level: h.receiverLevel || "-", sales: 0, override: 0 };
+          teamData[aqcNo].sales += Number(h.sales || 0);
+          teamData[aqcNo].override += Number(h.override || 0);
+        });
+
         for (const aqcNo in teamData) {
           grandTotalSales += teamData[aqcNo].sales;
           grandTotalOverride += teamData[aqcNo].override;
         }
 
-        // 4. HASILKAN PAPARAN HTML & KIRA % BONUS MASING-MASING
-        let html = "";
+        // 4. Update UI: KPI Progress Bar
+        document.getElementById("kpiCurrent").textContent = `RM${formatRM(grandTotalSales)}`;
+        document.getElementById("kpiTargetTxt").textContent = `Target: RM${formatRM(targetSalesBonus)}`;
         
+        let percentProgress = 0;
+        if (targetSalesBonus > 0) {
+            percentProgress = (grandTotalSales / targetSalesBonus) * 100;
+        }
+        
+        const kpiBar = document.getElementById("kpiBar");
+        if (percentProgress >= 100) {
+            percentProgress = 100;
+            kpiBar.textContent = "100%";
+            document.getElementById("kpiStatus").textContent = "TERCAPAI!";
+            document.getElementById("kpiStatus").className = "px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-bold";
+            document.getElementById("claimBonusContainer").classList.remove("hidden"); // Tunjuk butang hantar
+        } else {
+            kpiBar.textContent = percentProgress > 10 ? `${percentProgress.toFixed(1)}%` : "";
+        }
+        
+        // Bagi masa sikit untuk animasi bar bergerak lepas loading
+        setTimeout(() => { kpiBar.style.width = `${percentProgress}%`; }, 300);
+
+        // 5. Update Jadual Bawah
+        let html = "";
         for (const aqcNo in teamData) {
           const m = teamData[aqcNo];
-          
-          // Pengiraan Bonus %
           let bonusPercent = 0;
-          if (grandTotalSales > 0) {
-            bonusPercent = (m.sales / grandTotalSales) * 100;
-          }
+          if (grandTotalSales > 0) bonusPercent = (m.sales / grandTotalSales) * 100;
 
           html += `
             <tr class="border-b hover:bg-gray-50">
@@ -168,24 +205,97 @@
           `;
         }
 
-        if (Object.keys(teamData).length === 0) {
-          html = `<tr><td colspan="6" class="p-4 text-center text-gray-500">Belum ada rangkaian downline.</td></tr>`;
-        }
+        if (Object.keys(teamData).length === 0) html = `<tr><td colspan="6" class="p-4 text-center text-gray-500">Belum ada rangkaian downline.</td></tr>`;
 
-        // Kemaskini Jadual
         document.getElementById("overrideTable").innerHTML = html;
-
-        // Kemaskini Grand Total di Summary Card Atas
         document.getElementById("topTotalSales").textContent = `RM${formatRM(grandTotalSales)}`;
         document.getElementById("topTotalOverride").textContent = `RM${formatRM(grandTotalOverride)}`;
-
-        // Kemaskini Grand Total di Footer (Bawah Jadual)
         document.getElementById("bottomTotalSales").textContent = `RM${formatRM(grandTotalSales)}`;
         document.getElementById("bottomTotalOverride").textContent = `RM${formatRM(grandTotalOverride)}`;
 
+        // ============================================
+        // LOGIK BUTANG KLIK HANTAR TUNTUTAN BONUS KPI
+        // ============================================
+        document.getElementById("claimBonusBtn").onclick = async function() {
+            if (!confirm(`Hantar tuntutan KPI Bonus Pasukan ke HQ sekarang?`)) return;
+
+            this.disabled = true;
+            this.textContent = "Memproses hantaran...";
+            
+            try {
+                // Check dulu kot dah pernah hantar
+                const checkQ = query(collection(db, "bonusPayable"), where("team", "==", myConsultantNo));
+                const checkSnap = await getDocs(checkQ);
+                if (!checkSnap.empty) {
+                    alert("Tuntutan KPI untuk pasukan ini telah pun dihantar dan sedang diproses.");
+                    this.textContent = "Telah Dituntut";
+                    this.classList.replace("bg-green-600", "bg-gray-500");
+                    return;
+                }
+
+                // Pengiraan 5% daripada RM240k (Ikut nilai Setting)
+                const bonusPool = targetSalesBonus * (rewardBonusRate / 100); 
+
+                // 1. Catat dalam Ledger
+                await addDoc(collection(db, "ledger"), {
+                    date: new Date(),
+                    accountCode: "5160", // Kod Belanja KPI Bonus (Admin boleh selaraskan di COA)
+                    account: "Bonus Expense",
+                    category: "expense",
+                    description: "Tuntutan KPI Bonus Pasukan " + myConsultantNo,
+                    debit: bonusPool,
+                    credit: 0,
+                    paymentType: "CONSULTANT",
+                    transactionGroup: "KPI-" + myConsultantNo
+                });
+
+                await addDoc(collection(db, "ledger"), {
+                    date: new Date(),
+                    accountCode: "2160", // Kod Liabiliti Bonus
+                    account: "Bonus Payable",
+                    category: "liability",
+                    description: "Tuntutan KPI Bonus Pasukan " + myConsultantNo,
+                    debit: 0,
+                    credit: bonusPool,
+                    paymentType: "CONSULTANT",
+                    transactionGroup: "KPI-" + myConsultantNo
+                });
+
+                // 2. Simpan pecahan % downline dalam bonusPayable untuk Admin bayar
+                for (const aqcNo in teamData) {
+                    const aqc = teamData[aqcNo];
+                    if (aqc.sales > 0) {
+                        const percentContribution = aqc.sales / grandTotalSales;
+                        const individualBonus = bonusPool * percentContribution;
+
+                        await addDoc(collection(db, "bonusPayable"), {
+                            aqcNo: aqcNo,
+                            nama: aqc.nama,
+                            team: myConsultantNo,
+                            totalSales: aqc.sales,
+                            bonusPercent: percentContribution * 100,
+                            bonusAmount: individualBonus,
+                            status: "PENDING_PAYMENT",
+                            createdAt: new Date()
+                        });
+                    }
+                }
+                
+                alert("Berjaya! Tuntutan Bonus KPI telah masuk ke Lejer HQ.");
+                this.textContent = "Telah Dituntut & Menunggu Bayaran";
+                this.classList.replace("bg-green-600", "bg-gray-500");
+                this.classList.replace("hover:bg-green-700", "hover:bg-gray-500");
+
+            } catch (err) {
+                console.error(err);
+                alert("Ralat sistem: " + err.message);
+                this.disabled = false;
+                this.textContent = "Cuba Semula";
+            }
+        };
+
       } catch (err) {
-        console.error("Ralat memuatkan data pasukan:", err);
-        document.getElementById("overrideTable").innerHTML = `<tr><td colspan="6" class="p-4 text-center text-red-500">Ralat memuatkan data.</td></tr>`;
+        console.error("Ralat memuatkan data:", err);
       }
     });
   </script>
