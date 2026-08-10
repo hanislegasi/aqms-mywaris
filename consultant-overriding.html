@@ -220,7 +220,8 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
                     nama: nameMap[dlNo] || "-",
                     level: levelMap[dlNo],
                     sales: 0,
-                    override: 0
+                    override: 0,
+                    usb: 0 // <--- TAMBAH YANG NI KAT SINI
                 };
             }
         });
@@ -306,16 +307,18 @@ teamData[aqcNo].usb += Number(h.usb || 0); // <-- TAMBAH PENGIRAAN USB
           let bonusPercent = 0;
           if (grandTotalSales > 0) bonusPercent = (m.sales / grandTotalSales) * 100;
 
-          html += `
+         html += `
     <tr class="border-b hover:bg-gray-50">
         <td class="p-4">${aqcNo}</td>
         <td class="p-4">${data.nama}</td>
         <td class="p-4">${data.level}</td>
-        <td class="p-4 text-center">RM${data.sales.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-        <td class="p-4 text-center font-bold text-green-600">RM${data.override.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
         
-        <!-- TAMBAH KOLUM USB DI SINI -->
-        <td class="p-4 text-center font-bold text-blue-600">RM${data.usb.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+        <!-- Tambah (data.sales || 0) untuk pastikan ia sentiasa ada nombor -->
+        <td class="p-4 text-center">RM${(data.sales || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+        <td class="p-4 text-center font-bold text-green-600">RM${(data.override || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+        
+        <!-- Sama juga untuk USB -->
+        <td class="p-4 text-center font-bold text-blue-600">RM${(data.usb || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
         
         <td class="p-4 text-center text-blue-600">${bonusPct.toFixed(2)}%</td>
     </tr>
