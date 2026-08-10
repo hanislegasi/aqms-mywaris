@@ -212,6 +212,7 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
         let teamData = {};
         let grandTotalSales = 0;
         let grandTotalOverride = 0;
+        let grandTotalUsb = 0; // KOD BARU: Sediakan bekas untuk kira jumlah USB
 
         // 5A. Masukkan Semua Direct Downline Dahulu (Walaupun 0 Sales)
         directDownlines.forEach(dlNo => {
@@ -264,6 +265,7 @@ teamData[aqcNo].usb += Number(h.usb || 0); // <-- TAMBAH PENGIRAAN USB
         for (const aqcNo in teamData) {
             grandTotalSales += teamData[aqcNo].sales;
             grandTotalOverride += teamData[aqcNo].override;
+            grandTotalUsb += teamData[aqcNo].usb; // KOD BARU: Campurkan semua USB
         }
 
         // 6. Semak Berapa Kali Dah Claim Dalam Tempoh Ini (Untuk Reset Counter)
@@ -326,6 +328,16 @@ teamData[aqcNo].usb += Number(h.usb || 0); // <-- TAMBAH PENGIRAAN USB
             `;
         }
 
+html += `
+        <tr class="bg-gray-50 font-bold border-t-2">
+            <td colspan="3" class="p-4 text-right">JUMLAH KESELURUHAN:</td>
+            <td class="p-4 text-center">RM${(grandTotalSales || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+            <td class="p-4 text-center text-green-600">RM${(grandTotalOverride || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+            <td class="p-4 text-center text-blue-600">RM${(grandTotalUsb || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+            <td class="p-4 text-center text-blue-600">100.00%</td>
+        </tr>
+        `;
+        
         if (Object.keys(teamData).length === 0) html = `<tr><td colspan="6" class="p-4 text-center text-gray-500">Tiada rekod jualan dalam tempoh ini (MGAM dikecualikan).</td></tr>`;
 
         document.getElementById("overrideTable").innerHTML = html;
