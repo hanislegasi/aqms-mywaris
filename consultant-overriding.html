@@ -84,12 +84,7 @@
           </tr>
         </tbody>
         <tfoot class="bg-gray-100 border-t-2 border-gray-300">
-          <tr>
-            <td colspan="3" class="p-4 text-right font-bold text-gray-700">JUMLAH KESELURUHAN:</td>
-            <td id="bottomTotalSales" class="p-4 text-right font-bold text-[#153638]">RM0.00</td>
-            <td id="bottomTotalOverride" class="p-4 text-right font-bold text-green-600">RM0.00</td>
-            <td class="p-4 text-right font-bold text-blue-600">100.00%</td>
-          </tr>
+          
         </tfoot>
       </table>
     </div>
@@ -343,8 +338,7 @@ html += `
         document.getElementById("overrideTable").innerHTML = html;
         document.getElementById("topTotalSales").textContent = `RM${formatRM(grandTotalSales)}`;
         document.getElementById("topTotalOverride").textContent = `RM${formatRM(grandTotalOverride)}`;
-        document.getElementById("bottomTotalSales").textContent = `RM${formatRM(grandTotalSales)}`;
-        document.getElementById("bottomTotalOverride").textContent = `RM${formatRM(grandTotalOverride)}`;
+       
 
         // ============================================
         // LOGIK KLIK HANTAR TUNTUTAN BONUS KPI
