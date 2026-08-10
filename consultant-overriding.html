@@ -16,17 +16,18 @@
     <p>Overriding Performance</p>
   </div>
 
-  <div class="p-5">
+  <div class="p-5 max-w-7xl mx-auto">
     <a href="consultant-dashboard.html" class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5 hover:bg-gray-300 transition text-gray-800">
       ← Dashboard
     </a>
 
-    <!-- BARU: KPI BONUS PROGRESS TRACKER -->
-    <div class="bg-white rounded-2xl p-6 shadow-sm mb-5 border border-gray-100">
-        <div class="flex justify-between items-center mb-3">
+    <!-- KAD KPI BONUS (Asalnya disembunyikan. Hanya MGAM boleh nampak) -->
+    <div id="kpiCardContainer" class="bg-white rounded-2xl p-6 shadow-sm mb-5 border border-gray-100 hidden">
+        <div class="flex justify-between items-start mb-3">
             <div>
-                <h2 class="text-lg font-bold text-[#153638]">KPI Bonus Pasukan</h2>
+                <h2 class="text-lg font-bold text-[#153638]">KPI Bonus Pasukan (MGAM)</h2>
                 <p class="text-sm text-gray-500" id="kpiRateText">Reward: 0%</p>
+                <p class="text-xs font-bold text-blue-600 mt-1" id="kpiPeriodText">Tempoh: -</p>
             </div>
             <span id="kpiStatus" class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-bold">
                 In Progress
@@ -39,14 +40,14 @@
         </div>
         
         <div class="flex justify-between text-sm font-semibold">
-            <span id="kpiCurrent" class="text-[#153638]">RM0.00</span>
+            <span id="kpiCurrent" class="text-[#153638]">Kumpulan Terkini: RM0.00</span>
             <span id="kpiTargetTxt" class="text-gray-500">Target: RM0.00</span>
         </div>
 
-        <!-- Butang Tuntutan Bonus (Asalnya Disembunyikan) -->
+        <!-- Butang Tuntutan Bonus -->
         <div id="claimBonusContainer" class="mt-5 hidden">
             <button id="claimBonusBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition shadow-lg">
-              Capai KPI! Hantar Tuntutan Bonus Ke HQ
+                🎉 KPI Tercapai! Hantar Tuntutan Bonus
             </button>
         </div>
     </div>
@@ -121,55 +122,141 @@
       }
 
       try {
-        // 1. Tarik Data Diri Consultant
+        // 1. Dapatkan info Diri
         const userSnap = await getDoc(doc(db, "consultants", user.uid));
         const data = userSnap.data();
         const myConsultantNo = data.consultantNo;
+        const myLevel = data.consultantLevel;
 
-        // 2. Tarik Tetapan KPI & Bonus Dari Firebase
+        // Buka kad KPI HANYA untuk MGAM
+        if (myLevel === "MGAM") {
+            document.getElementById("kpiCardContainer").classList.remove("hidden");
+        }
+
+        // 2. Tarik Setting KPI
         const compSnap = await getDoc(doc(db, "settings", "compensation"));
         const compData = compSnap.exists() ? compSnap.data() : {};
         
-        // Sila pastikan nama field ini sama dengan apa yang ko simpan dari form setting HQ
-        const targetSalesBonus = Number(compData.targetSalesBonus || compData.kpiSalesTarget || 240000); 
-        const rewardBonusRate = Number(compData.rewardBonus || compData.kpiBonusRate || 5);
+        const targetSalesBonus = Number(compData.kpiSalesTarget || 240000); 
+        const rewardBonusRate = Number(compData.kpiBonusRate || 5);
+        const kpiPeriodType = compData.kpiPeriod || "yearly"; // 'quarter', 'half', 'yearly'
 
         document.getElementById("kpiRateText").textContent = `Reward: ${rewardBonusRate}% daripada RM${formatRM(targetSalesBonus)}`;
+
+        // 3. Tentukan Tarikh Mengikut Setting Tempoh (Quarter/Half/Yearly)
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = now.getMonth();
+        let startDate, endDate, periodName;
+
+        if (kpiPeriodType === "quarter") {
+            const q = Math.floor(m / 3) + 1;
+            startDate = new Date(y, (q - 1) * 3, 1);
+            endDate = new Date(y, q * 3, 0, 23, 59, 59);
+            periodName = `${y}-Q${q}`;
+        } else if (kpiPeriodType === "half") {
+            const h = m < 6 ? 1 : 2;
+            startDate = new Date(y, h === 1 ? 0 : 6, 1);
+            endDate = new Date(y, h === 1 ? 6 : 12, 0, 23, 59, 59);
+            periodName = `${y}-H${h}`;
+        } else {
+            startDate = new Date(y, 0, 1);
+            endDate = new Date(y, 11, 31, 23, 59, 59);
+            periodName = `${y}-TAHUNAN`;
+        }
+        
+        document.getElementById("kpiPeriodText").textContent = `Tempoh Semasa: ${periodName}`;
+
+       // 4. Tarik Salasilah (Upline & Level) Semua Consultant Untuk Logik Breakaway
+        const allConsultantsSnap = await getDocs(collection(db, "consultants"));
+        const uplineMap = {};
+        const levelMap = {};
+        const nameMap = {};
+        
+        allConsultantsSnap.forEach(doc => { 
+            const d = doc.data();
+            uplineMap[d.consultantNo] = d.upline; 
+            levelMap[d.consultantNo] = d.consultantLevel; 
+            nameMap[d.consultantNo] = d.nama;
+        });
+
+        // FUNGSI PENAPIS BREAKAWAY MGAM
+        // Ia akan trace dari downline naik ke atas. Kalau terjumpa MGAM di tengah jalan, ia reject (true)
+        function isBreakawayNetwork(downlineNo, topLeaderNo) {
+            let currentNo = downlineNo;
+            
+            while (currentNo && currentNo !== topLeaderNo) {
+                // Jika individu ini adalah MGAM (termasuk downline tu sendiri), bermakna dia dah pecah kumpulan!
+                if (levelMap[currentNo] === "MGAM") {
+                    return true; 
+                }
+                currentNo = uplineMap[currentNo]; // Panjat ke upline seterusnya
+                
+                // Safety net: elak infinite loop kalau data tak lengkap
+                if (!currentNo || currentNo === "") break; 
+            }
+            return false; // Selamat, tiada benteng MGAM di antaranya
+        }
 
         let teamData = {};
         let grandTotalSales = 0;
         let grandTotalOverride = 0;
-        
-        // 3. Kumpul Data Downline & Sales (Macam Biasa)
-        const downlineQ = query(collection(db, "consultants"), where("upline", "==", myConsultantNo));
-        const downlineSnap = await getDocs(downlineQ);
-        downlineSnap.forEach(d => {
-          const dl = d.data();
-          teamData[dl.consultantNo] = { nama: dl.nama || "-", level: dl.consultantLevel || "-", sales: 0, override: 0 };
-        });
 
+        // 5. Tarik Sales dari overrideHistory, TAPI filter Tarikh & Filter Network Breakaway
         const historyQ = query(collection(db, "overrideHistory"), where("receiver", "==", myConsultantNo));
         const historySnap = await getDocs(historyQ);
+        
         historySnap.forEach(d => {
-          const h = d.data();
-          const aqcNo = h.fromConsultant;
-          if (!teamData[aqcNo]) teamData[aqcNo] = { nama: h.fromName || "-", level: h.receiverLevel || "-", sales: 0, override: 0 };
-          teamData[aqcNo].sales += Number(h.sales || 0);
-          teamData[aqcNo].override += Number(h.override || 0);
+            const h = d.data();
+            const txDate = h.createdAt?.toDate ? h.createdAt.toDate() : new Date(h.date || h.createdAt);
+            
+            // Semak adakah jualan ini berlaku dalam tempoh aktif
+            if (txDate >= startDate && txDate <= endDate) {
+                const aqcNo = h.fromConsultant;
+                
+                // SEMAKAN BREAKAWAY: Adakah AQC ini dari rangkaian yang dah pecah (MGAM baru)?
+                if (!isBreakawayNetwork(aqcNo, myConsultantNo)) {
+                    
+                    const currentLevelOfDownline = levelMap[aqcNo] || "AQC";
+
+                    if (!teamData[aqcNo]) {
+                        teamData[aqcNo] = { 
+                            nama: nameMap[aqcNo] || h.fromName || "-", 
+                            level: currentLevelOfDownline, 
+                            sales: 0, 
+                            override: 0 
+                        };
+                    }
+                    teamData[aqcNo].sales += Number(h.sales || 0);
+                    teamData[aqcNo].override += Number(h.override || 0);
+                }
+            }
         });
 
         for (const aqcNo in teamData) {
-          grandTotalSales += teamData[aqcNo].sales;
-          grandTotalOverride += teamData[aqcNo].override;
+            grandTotalSales += teamData[aqcNo].sales;
+            grandTotalOverride += teamData[aqcNo].override;
         }
 
-        // 4. Update UI: KPI Progress Bar
-        document.getElementById("kpiCurrent").textContent = `RM${formatRM(grandTotalSales)}`;
-        document.getElementById("kpiTargetTxt").textContent = `Target: RM${formatRM(targetSalesBonus)}`;
+        // 6. Semak Berapa Kali Dah Claim Dalam Tempoh Ini (Untuk Reset Counter)
+        const claimsQ = query(
+            collection(db, "bonusPayable"), 
+            where("team", "==", myConsultantNo),
+            where("period", "==", periodName)
+        );
+        const claimsSnap = await getDocs(claimsQ);
+        const claimedCount = claimsSnap.size; // Berapa kali dia dah klik butang claim
+
+        // LOGIK RESET PROGRESS BAR: Tolak 240k untuk setiap claim yang dah dibuat
+        const applicableSales = grandTotalSales - (claimedCount * targetSalesBonus);
+
+        // 7. Update UI KPI Bar
+        document.getElementById("kpiCurrent").textContent = `Kumpulan Terkini: RM${formatRM(applicableSales)}`;
+        document.getElementById("kpiTargetTxt").textContent = `Sasar: RM${formatRM(targetSalesBonus)}`;
         
         let percentProgress = 0;
         if (targetSalesBonus > 0) {
-            percentProgress = (grandTotalSales / targetSalesBonus) * 100;
+            percentProgress = (applicableSales / targetSalesBonus) * 100;
         }
         
         const kpiBar = document.getElementById("kpiBar");
@@ -178,15 +265,14 @@
             kpiBar.textContent = "100%";
             document.getElementById("kpiStatus").textContent = "TERCAPAI!";
             document.getElementById("kpiStatus").className = "px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-bold";
-            document.getElementById("claimBonusContainer").classList.remove("hidden"); // Tunjuk butang hantar
+            document.getElementById("claimBonusContainer").classList.remove("hidden"); // Tunjuk butang
         } else {
             kpiBar.textContent = percentProgress > 10 ? `${percentProgress.toFixed(1)}%` : "";
         }
         
-        // Bagi masa sikit untuk animasi bar bergerak lepas loading
         setTimeout(() => { kpiBar.style.width = `${percentProgress}%`; }, 300);
 
-        // 5. Update Jadual Bawah
+        // 8. Update Jadual (Hanya Ahli BUKAN MGAM)
         let html = "";
         for (const aqcNo in teamData) {
           const m = teamData[aqcNo];
@@ -205,7 +291,7 @@
           `;
         }
 
-        if (Object.keys(teamData).length === 0) html = `<tr><td colspan="6" class="p-4 text-center text-gray-500">Belum ada rangkaian downline.</td></tr>`;
+        if (Object.keys(teamData).length === 0) html = `<tr><td colspan="6" class="p-4 text-center text-gray-500">Tiada rekod jualan dalam tempoh ini (MGAM dikecualikan).</td></tr>`;
 
         document.getElementById("overrideTable").innerHTML = html;
         document.getElementById("topTotalSales").textContent = `RM${formatRM(grandTotalSales)}`;
@@ -214,35 +300,24 @@
         document.getElementById("bottomTotalOverride").textContent = `RM${formatRM(grandTotalOverride)}`;
 
         // ============================================
-        // LOGIK BUTANG KLIK HANTAR TUNTUTAN BONUS KPI
+        // LOGIK KLIK HANTAR TUNTUTAN BONUS KPI
         // ============================================
         document.getElementById("claimBonusBtn").onclick = async function() {
-            if (!confirm(`Hantar tuntutan KPI Bonus Pasukan ke HQ sekarang?`)) return;
+            if (!confirm(`Sah hantar tuntutan KPI Bonus Pasukan ke HQ? \n\n*Progress bar akan kembali kepada RM0 selepas tuntutan ini berjaya.`)) return;
 
             this.disabled = true;
-            this.textContent = "Memproses hantaran...";
+            this.textContent = "Sedang Memproses...";
             
             try {
-                // Check dulu kot dah pernah hantar
-                const checkQ = query(collection(db, "bonusPayable"), where("team", "==", myConsultantNo));
-                const checkSnap = await getDocs(checkQ);
-                if (!checkSnap.empty) {
-                    alert("Tuntutan KPI untuk pasukan ini telah pun dihantar dan sedang diproses.");
-                    this.textContent = "Telah Dituntut";
-                    this.classList.replace("bg-green-600", "bg-gray-500");
-                    return;
-                }
-
-                // Pengiraan 5% daripada RM240k (Ikut nilai Setting)
                 const bonusPool = targetSalesBonus * (rewardBonusRate / 100); 
 
-                // 1. Catat dalam Ledger
+                // 1. Rekod Lejer
                 await addDoc(collection(db, "ledger"), {
                     date: new Date(),
-                    accountCode: "5160", // Kod Belanja KPI Bonus (Admin boleh selaraskan di COA)
-                    account: "Bonus Expense",
+                    accountCode: "6100", 
+                    account: "KPI Bonus Expense",
                     category: "expense",
-                    description: "Tuntutan KPI Bonus Pasukan " + myConsultantNo,
+                    description: `Bonus KPI Pasukan ${myConsultantNo} (${periodName})`,
                     debit: bonusPool,
                     credit: 0,
                     paymentType: "CONSULTANT",
@@ -251,40 +326,38 @@
 
                 await addDoc(collection(db, "ledger"), {
                     date: new Date(),
-                    accountCode: "2160", // Kod Liabiliti Bonus
-                    account: "Bonus Payable",
+                    accountCode: "2160",
+                    account: "KPI Bonus Payable",
                     category: "liability",
-                    description: "Tuntutan KPI Bonus Pasukan " + myConsultantNo,
+                    description: `Bonus KPI Pasukan ${myConsultantNo} (${periodName})`,
                     debit: 0,
                     credit: bonusPool,
                     paymentType: "CONSULTANT",
                     transactionGroup: "KPI-" + myConsultantNo
                 });
 
-                // 2. Simpan pecahan % downline dalam bonusPayable untuk Admin bayar
-                for (const aqcNo in teamData) {
-                    const aqc = teamData[aqcNo];
-                    if (aqc.sales > 0) {
-                        const percentContribution = aqc.sales / grandTotalSales;
-                        const individualBonus = bonusPool * percentContribution;
-
-                        await addDoc(collection(db, "bonusPayable"), {
-                            aqcNo: aqcNo,
-                            nama: aqc.nama,
-                            team: myConsultantNo,
-                            totalSales: aqc.sales,
-                            bonusPercent: percentContribution * 100,
-                            bonusAmount: individualBonus,
-                            status: "PENDING_PAYMENT",
-                            createdAt: new Date()
-                        });
-                    }
-                }
+                // 2. Simpan pecahan tuntutan untuk dibayar oleh Admin
+                // Kami HANYA cipta 1 rekod per tuntutan untuk mewakili 1 kali klik. 
+                // Ahli pasukan disertakan bersama dokumen.
+                await addDoc(collection(db, "bonusPayable"), {
+                    team: myConsultantNo,
+                    period: periodName,       // PENTING: Untuk elak kpi bar salah baca
+                    targetAchieved: targetSalesBonus,
+                    bonusPercent: rewardBonusRate,
+                    bonusAmount: bonusPool,   // Total Bonus Pool
+                    status: "PENDING_PAYMENT",
+                    createdAt: new Date(),
+                    members: Object.keys(teamData).map(aqcNo => ({
+                        aqcNo: aqcNo,
+                        nama: teamData[aqcNo].nama,
+                        totalSales: teamData[aqcNo].sales,
+                        bonusPercent: (teamData[aqcNo].sales / grandTotalSales) * 100,
+                        bonusAmount: bonusPool * (teamData[aqcNo].sales / grandTotalSales)
+                    }))
+                });
                 
-                alert("Berjaya! Tuntutan Bonus KPI telah masuk ke Lejer HQ.");
-                this.textContent = "Telah Dituntut & Menunggu Bayaran";
-                this.classList.replace("bg-green-600", "bg-gray-500");
-                this.classList.replace("hover:bg-green-700", "hover:bg-gray-500");
+                alert("Berjaya! Tuntutan Bonus KPI telah masuk ke Lejer HQ. Progress bar anda akan di-reset.");
+                window.location.reload(); // Refresh untuk reset kaunter kepada 0
 
             } catch (err) {
                 console.error(err);
