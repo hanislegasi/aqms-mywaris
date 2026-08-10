@@ -1536,593 +1536,331 @@ user.mawarisPaymentStatus === "paid"
 : "PROSPEK";
 }
 
-const btnPrintWasiat=document.getElementById("btnPrintWasiat");
+// ==================== 1. WASIAT ====================
+const btnPrintWasiat = document.getElementById("btnPrintWasiat");
+const btnSendWasiat = document.getElementById("btnSendWasiat");
+const btnCompleteWasiat = document.getElementById("btnCompleteWasiat");
 
-if(btnPrintWasiat){
-
-btnPrintWasiat.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"wasiat","maklumat"),
-{
-status:"PRINTED",
-
-printedAt:
-document.getElementById("wasiatPrintedAt").value,
-
-printedUpdatedAt:
-serverTimestamp(),
-
-printedBy:
-auth.currentUser.uid
-}
-);
-
-  
-alert("Status berjaya dikemaskini.");
-
-location.reload();
-
-};
-
+if (btnPrintWasiat) {
+  if (wasiatStatus === "VERIFIED") {
+    btnPrintWasiat.disabled = false;
+    btnPrintWasiat.classList.remove("bg-gray-300", "cursor-not-allowed");
+    btnPrintWasiat.classList.add("bg-blue-600", "hover:bg-blue-700");
+    btnPrintWasiat.onclick = async () => {
+      const val = document.getElementById("wasiatPrintedAt")?.value;
+      if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
+      if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
+      await updateDoc(doc(db, "users", userId, "wasiat", "maklumat"), {
+        status: "PRINTED",
+        printedAt: val,
+        printedUpdatedAt: serverTimestamp(),
+        printedBy: auth.currentUser.uid
+      });
+      alert("Status berjaya dikemaskini.");
+      location.reload();
+    };
+  } else {
+    btnPrintWasiat.disabled = true;
+    btnPrintWasiat.classList.remove("bg-blue-600", "hover:bg-blue-700");
+    btnPrintWasiat.classList.add("bg-gray-300", "cursor-not-allowed");
+  }
 }
 
-const btnSendWasiat=document.getElementById("btnSendWasiat");
-
-if(btnSendWasiat){
-
-btnSendWasiat.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen telah dihantar?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"wasiat","maklumat"),
-{
-
-status:"SENT",
-
-sentAt:
-document.getElementById("wasiatSentAt").value,
-
-sentUpdatedAt:
-serverTimestamp(),
-
-sentBy:
-auth.currentUser.uid,
-
-courier:
-document.getElementById("wasiatCourier").value,
-
-trackingNo:
-document.getElementById("wasiatTrackingNo").value,
-
-receiver:
-document.getElementById("wasiatReceiver").value,
-
-remarks:
-document.getElementById("wasiatRemarks").value
-
-}
-);
-
-  
-alert("Dokumen berjaya dihantar.");
-
-location.reload();
-
-};
-
+if (btnSendWasiat) {
+  if (wasiatStatus === "PRINTED") {
+    btnSendWasiat.disabled = false;
+    btnSendWasiat.classList.remove("bg-gray-300", "cursor-not-allowed");
+    btnSendWasiat.classList.add("bg-orange-500", "hover:bg-orange-600");
+    btnSendWasiat.onclick = async () => {
+      const val = document.getElementById("wasiatSentAt")?.value;
+      if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
+      if (!confirm("Tandakan dokumen telah dihantar?")) return;
+      await updateDoc(doc(db, "users", userId, "wasiat", "maklumat"), {
+        status: "SENT",
+        sentAt: val,
+        sentUpdatedAt: serverTimestamp(),
+        sentBy: auth.currentUser.uid,
+        courier: document.getElementById("wasiatCourier")?.value || "",
+        trackingNo: document.getElementById("wasiatTrackingNo")?.value || "",
+        receiver: document.getElementById("wasiatReceiver")?.value || "",
+        remarks: document.getElementById("wasiatRemarks")?.value || ""
+      });
+      alert("Dokumen berjaya dihantar.");
+      location.reload();
+    };
+  } else {
+    btnSendWasiat.disabled = true;
+    btnSendWasiat.classList.remove("bg-orange-500", "hover:bg-orange-600");
+    btnSendWasiat.classList.add("bg-gray-300", "cursor-not-allowed");
+  }
 }
 
-const btnCompleteWasiat=document.getElementById("btnCompleteWasiat");
-
-// ===== Workflow Lock =====
-
-if(btnPrintWasiat){
-
-    btnPrintWasiat.disabled = wasiatStatus !== "VERIFIED";
-
-    if(btnPrintWasiat.disabled){
-
-        btnPrintWasiat.classList.remove("bg-blue-600","hover:bg-blue-700");
-
-        btnPrintWasiat.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnSendWasiat){
-
-    btnSendWasiat.disabled = wasiatStatus !== "PRINTED";
-
-    if(btnSendWasiat.disabled){
-
-        btnSendWasiat.classList.remove("bg-orange-500","hover:bg-orange-600");
-
-        btnSendWasiat.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnCompleteWasiat){
-
-    btnCompleteWasiat.disabled = wasiatStatus !== "SENT";
-
-    if(btnCompleteWasiat.disabled){
-
-        btnCompleteWasiat.classList.remove("bg-green-600","hover:bg-green-700");
-
-        btnCompleteWasiat.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-  
-if(btnCompleteWasiat){
-
-btnCompleteWasiat.onclick=async()=>{
-
-if(!confirm("Lengkapkan proses ini?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"wasiat","maklumat"),
-{
-status:"COMPLETED",
-completedAt:new Date().toISOString(),
-completedBy:auth.currentUser.uid
-}
-);
-
-  
-alert("Kes selesai.");
-
-location.reload();
-
-};
-
-}
-
-//HIBAH
-  
-const btnPrintHibah=document.getElementById("btnPrintHibah");
-
-if(btnPrintHibah){
-
-btnPrintHibah.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"hibah","maklumat"),
-{
-status:"PRINTED",
-
-printedAt:
-document.getElementById("hibahPrintedAt").value,
-
-printedUpdatedAt:
-serverTimestamp(),
-
-printedBy:
-auth.currentUser.uid
-}
-);
-  
-alert("Status berjaya dikemaskini.");
-
-location.reload();
-
-};
-
-}
-
-const btnSendHibah=document.getElementById("btnSendHibah");
-
-if(btnSendHibah){
-
-btnSendHibah.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen telah dihantar?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"hibah","maklumat"),
-{
-
-status:"SENT",
-
-sentAt:
-document.getElementById("hibahSentAt").value,
-
-sentUpdatedAt:
-serverTimestamp(),
-
-sentBy:
-auth.currentUser.uid,
-
-courier:document.getElementById("hibahCourier").value,
-
-trackingNo:document.getElementById("hibahTrackingNo").value,
-
-receiver:document.getElementById("hibahReceiver").value,
-
-remarks:document.getElementById("hibahRemarks").value
-
-}
-);
-
-  
-alert("Dokumen berjaya dihantar.");
-
-location.reload();
-
-};
-
-}
-
-const btnCompleteHibah=document.getElementById("btnCompleteHibah");
-
-// ===== Workflow Lock =====
-
-if(btnPrintHibah){
-
-    btnPrintHibah.disabled = hibahStatus !== "VERIFIED";
-
-    if(btnPrintHibah.disabled){
-
-        btnPrintHibah.classList.remove("bg-blue-600","hover:bg-blue-700");
-
-        btnPrintHibah.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnSendHibah){
-
-    btnSendHibah.disabled = hibahStatus !== "PRINTED";
-
-    if(btnSendHibah.disabled){
-
-        btnSendHibah.classList.remove("bg-orange-500","hover:bg-orange-600");
-
-        btnSendHibah.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-
-if(btnCompleteHibah){
-
-    btnCompleteHibah.disabled = hibahStatus !== "SENT";
-
-    if(btnCompleteHibah.disabled){
-
-        btnCompleteHibah.classList.remove("bg-green-600","hover:bg-green-700");
-
-        btnCompleteHibah.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-  
-if(btnCompleteHibah){
-
-btnCompleteHibah.onclick=async()=>{
-
-if(!confirm("Lengkapkan proses ini?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"hibah","maklumat"),
-{
-status:"COMPLETED",
-completedAt:new Date().toISOString(),
-completedBy:auth.currentUser.uid
-}
-);
-
-alert("Kes selesai.");
-
-location.reload();
-
-};
-
-}
-
-//SEPENCARIAN
-
-const btnPrintSepencarian=document.getElementById("btnPrintSepencarian");
-
-if(btnPrintSepencarian){
-
-btnPrintSepencarian.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"sepencarian","maklumat"),
-{
-status:"PRINTED",
-  
-printedAt:
-document.getElementById("sepencarianPrintedAt").value,
-
-printedUpdatedAt:
-serverTimestamp(),
-
-printedBy:
-auth.currentUser.uid
-}
-);
- 
-alert("Status berjaya dikemaskini.");
-
-location.reload();
-
-};
-
-}
-
-const btnSendSepencarian=document.getElementById("btnSendSepencarian");
-
-if(btnSendSepencarian){
-
-btnSendSepencarian.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen telah dihantar?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"sepencarian","maklumat"),
-{
-
-status:"SENT",
-
-sentAt:
-document.getElementById("sepencarianSentAt").value,
-
-sentUpdatedAt:
-serverTimestamp(),
-
-sentBy:
-auth.currentUser.uid,
-
-courier:document.getElementById("sepencarianCourier").value,
-
-trackingNo:document.getElementById("sepencarianTrackingNo").value,
-
-receiver:document.getElementById("sepencarianReceiver").value,
-
-remarks:document.getElementById("sepencarianRemarks").value
-
-}
-);
-  
-alert("Dokumen berjaya dihantar.");
-
-location.reload();
-
-};
-
+if (btnCompleteWasiat) {
+  if (wasiatStatus === "SENT") {
+    btnCompleteWasiat.disabled = false;
+    btnCompleteWasiat.classList.remove("bg-gray-300", "cursor-not-allowed");
+    btnCompleteWasiat.classList.add("bg-green-600", "hover:bg-green-700");
+    btnCompleteWasiat.onclick = async () => {
+      if (!confirm("Lengkapkan proses ini?")) return;
+      await updateDoc(doc(db, "users", userId, "wasiat", "maklumat"), {
+        status: "COMPLETED",
+        completedAt: new Date().toISOString(),
+        completedBy: auth.currentUser.uid
+      });
+      alert("Kes selesai.");
+      location.reload();
+    };
+  } else {
+    btnCompleteWasiat.disabled = true;
+    btnCompleteWasiat.classList.remove("bg-green-600", "hover:bg-green-700");
+    btnCompleteWasiat.classList.add("bg-gray-300", "cursor-not-allowed");
+  }
 }
 
 
-const btnCompleteSepencarian=document.getElementById("btnCompleteSepencarian");
+// ==================== 2. HIBAH ====================
+const btnPrintHibah = document.getElementById("btnPrintHibah");
+const btnSendHibah = document.getElementById("btnSendHibah");
+const btnCompleteHibah = document.getElementById("btnCompleteHibah");
 
-// ===== Workflow Lock =====
-
-if(btnPrintSepencarian){
-
-    btnPrintSepencarian.disabled = sepencarianStatus !== "VERIFIED";
-
-    if(btnPrintSepencarian.disabled){
-
-        btnPrintSepencarian.classList.remove("bg-blue-600","hover:bg-blue-700");
-
-        btnPrintSepencarian.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
+if (btnPrintHibah) {
+  if (hibahStatus === "VERIFIED") {
+    btnPrintHibah.disabled = false;
+    btnPrintHibah.classList.remove("bg-gray-300", "cursor-not-allowed");
+    btnPrintHibah.classList.add("bg-blue-600", "hover:bg-blue-700");
+    btnPrintHibah.onclick = async () => {
+      const val = document.getElementById("hibahPrintedAt")?.value;
+      if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
+      if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
+      await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
+        status: "PRINTED",
+        printedAt: val,
+        printedUpdatedAt: serverTimestamp(),
+        printedBy: auth.currentUser.uid
+      });
+      alert("Status berjaya dikemaskini.");
+      location.reload();
+    };
+  } else {
+    btnPrintHibah.disabled = true;
+    btnPrintHibah.classList.remove("bg-blue-600", "hover:bg-blue-700");
+    btnPrintHibah.classList.add("bg-gray-300", "cursor-not-allowed");
+  }
 }
 
-if(btnSendSepencarian){
-
-    btnSendSepencarian.disabled = sepencarianStatus !== "PRINTED";
-
-    if(btnSendSepencarian.disabled){
-
-        btnSendSepencarian.classList.remove("bg-orange-500","hover:bg-orange-600");
-
-        btnSendSepencarian.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
+if (btnSendHibah) {
+  if (hibahStatus === "PRINTED") {
+    btnSendHibah.disabled = false;
+    btnSendHibah.classList.remove("bg-gray-300", "cursor-not-allowed");
+    btnSendHibah.classList.add("bg-orange-500", "hover:bg-orange-600");
+    btnSendHibah.onclick = async () => {
+      const val = document.getElementById("hibahSentAt")?.value;
+      if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
+      if (!confirm("Tandakan dokumen telah dihantar?")) return;
+      await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
+        status: "SENT",
+        sentAt: val,
+        sentUpdatedAt: serverTimestamp(),
+        sentBy: auth.currentUser.uid,
+        courier: document.getElementById("hibahCourier")?.value || "",
+        trackingNo: document.getElementById("hibahTrackingNo")?.value || "",
+        receiver: document.getElementById("hibahReceiver")?.value || "",
+        remarks: document.getElementById("hibahRemarks")?.value || ""
+      });
+      alert("Dokumen berjaya dihantar.");
+      location.reload();
+    };
+  } else {
+    btnSendHibah.disabled = true;
+    btnSendHibah.classList.remove("bg-orange-500", "hover:bg-orange-600");
+    btnSendHibah.classList.add("bg-gray-300", "cursor-not-allowed");
+  }
 }
 
-if(btnCompleteSepencarian){
-
-    btnCompleteSepencarian.disabled = sepencarianStatus !== "SENT";
-
-    if(btnCompleteSepencarian.disabled){
-
-        btnCompleteSepencarian.classList.remove("bg-green-600","hover:bg-green-700");
-
-        btnCompleteSepencarian.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
-}
-  
-if(btnCompleteSepencarian){
-
-btnCompleteSepencarian.onclick=async()=>{
-
-if(!confirm("Lengkapkan proses ini?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"sepencarian","maklumat"),
-{
-status:"COMPLETED",
-completedAt:new Date().toISOString(),
-completedBy:auth.currentUser.uid
-}
-);
-
-alert("Kes selesai.");
-
-location.reload();
-
-};
-
+if (btnCompleteHibah) {
+  if (hibahStatus === "SENT") {
+    btnCompleteHibah.disabled = false;
+    btnCompleteHibah.classList.remove("bg-gray-300", "cursor-not-allowed");
+    btnCompleteHibah.classList.add("bg-green-600", "hover:bg-green-700");
+    btnCompleteHibah.onclick = async () => {
+      if (!confirm("Lengkapkan proses ini?")) return;
+      await updateDoc(doc(db, "users", userId, "hibah", "maklumat"), {
+        status: "COMPLETED",
+        completedAt: new Date().toISOString(),
+        completedBy: auth.currentUser.uid
+      });
+      alert("Kes selesai.");
+      location.reload();
+    };
+  } else {
+    btnCompleteHibah.disabled = true;
+    btnCompleteHibah.classList.remove("bg-green-600", "hover:bg-green-700");
+    btnCompleteHibah.classList.add("bg-gray-300", "cursor-not-allowed");
+  }
 }
 
-//MAWARIS
 
-const btnPrintMawaris=document.getElementById("btnPrintMawaris");
+// ==================== 3. SEPENCARIAN ====================
+const btnPrintSepencarian = document.getElementById("btnPrintSepencarian");
+const btnSendSepencarian = document.getElementById("btnSendSepencarian");
+const btnCompleteSepencarian = document.getElementById("btnCompleteSepencarian");
 
-if(btnPrintMawaris){
-
-btnPrintMawaris.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen ini telah dicetak?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"mawaris","maklumat"),
-{
-status:"PRINTED",
-  
-printedAt:
-document.getElementById("mawarisPrintedAt").value,
-
-printedUpdatedAt:
-serverTimestamp(),
-
-printedBy:
-auth.currentUser.uid
-}
-);
-
-  
-alert("Status berjaya dikemaskini.");
-
-location.reload();
-
-};
-
+if (btnPrintSepencarian) {
+  if (sepencarianStatus === "VERIFIED") {
+    btnPrintSepencarian.disabled = false;
+    btnPrintSepencarian.classList.remove("bg-gray-300", "cursor-not-allowed");
+    btnPrintSepencarian.classList.add("bg-blue-600", "hover:bg-blue-700");
+    btnPrintSepencarian.onclick = async () => {
+      const val = document.getElementById("sepencarianPrintedAt")?.value;
+      if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
+      if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
+      await updateDoc(doc(db, "users", userId, "sepencarian", "maklumat"), {
+        status: "PRINTED",
+        printedAt: val,
+        printedUpdatedAt: serverTimestamp(),
+        printedBy: auth.currentUser.uid
+      });
+      alert("Status berjaya dikemaskini.");
+      location.reload();
+    };
+  } else {
+    btnPrintSepencarian.disabled = true;
+    btnPrintSepencarian.classList.remove("bg-blue-600", "hover:bg-blue-700");
+    btnPrintSepencarian.classList.add("bg-gray-300", "cursor-not-allowed");
+  }
 }
 
-const btnSendMawaris=document.getElementById("btnSendMawaris");
-
-if(btnSendMawaris){
-
-btnSendMawaris.onclick=async()=>{
-
-if(!confirm("Tandakan dokumen telah dihantar?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"mawaris","maklumat"),
-{
-
-status:"SENT",
-
-sentAt:
-document.getElementById("mawarisSentAt").value,
-
-sentUpdatedAt:
-serverTimestamp(),
-
-sentBy:
-auth.currentUser.uid,
-
-courier:document.getElementById("mawarisCourier").value,
-
-trackingNo:document.getElementById("mawarisTrackingNo").value,
-
-receiver:document.getElementById("mawarisReceiver").value,
-
-remarks:document.getElementById("mawarisRemarks").value
-
-}
-);
-
- 
-alert("Dokumen berjaya dihantar.");
-
-location.reload();
-
-};
-
+if (btnSendSepencarian) {
+  if (sepencarianStatus === "PRINTED") {
+    btnSendSepencarian.disabled = false;
+    btnSendSepencarian.classList.remove("bg-gray-300", "cursor-not-allowed");
+    btnSendSepencarian.classList.add("bg-orange-500", "hover:bg-orange-600");
+    btnSendSepencarian.onclick = async () => {
+      const val = document.getElementById("sepencarianSentAt")?.value;
+      if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
+      if (!confirm("Tandakan dokumen telah dihantar?")) return;
+      await updateDoc(doc(db, "users", userId, "sepencarian", "maklumat"), {
+        status: "SENT",
+        sentAt: val,
+        sentUpdatedAt: serverTimestamp(),
+        sentBy: auth.currentUser.uid,
+        courier: document.getElementById("sepencarianCourier")?.value || "",
+        trackingNo: document.getElementById("sepencarianTrackingNo")?.value || "",
+        receiver: document.getElementById("sepencarianReceiver")?.value || "",
+        remarks: document.getElementById("sepencarianRemarks")?.value || ""
+      });
+      alert("Dokumen berjaya dihantar.");
+      location.reload();
+    };
+  } else {
+    btnSendSepencarian.disabled = true;
+    btnSendSepencarian.classList.remove("bg-orange-500", "hover:bg-orange-600");
+    btnSendSepencarian.classList.add("bg-gray-300", "cursor-not-allowed");
+  }
 }
 
-const btnCompleteMawaris=document.getElementById("btnCompleteMawaris");
-
-// ===== Workflow Lock =====
-
-if(btnPrintMawaris){
-
-    btnPrintMawaris.disabled = mawarisStatus !== "VERIFIED";
-
-    if(btnPrintMawaris.disabled){
-
-        btnPrintMawaris.classList.remove("bg-blue-600","hover:bg-blue-700");
-
-        btnPrintMawaris.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
+if (btnCompleteSepencarian) {
+  if (sepencarianStatus === "SENT") {
+    btnCompleteSepencarian.disabled = false;
+    btnCompleteSepencarian.classList.remove("bg-gray-300", "cursor-not-allowed");
+    btnCompleteSepencarian.classList.add("bg-green-600", "hover:bg-green-700");
+    btnCompleteSepencarian.onclick = async () => {
+      if (!confirm("Lengkapkan proses ini?")) return;
+      await updateDoc(doc(db, "users", userId, "sepencarian", "maklumat"), {
+        status: "COMPLETED",
+        completedAt: new Date().toISOString(),
+        completedBy: auth.currentUser.uid
+      });
+      alert("Kes selesai.");
+      location.reload();
+    };
+  } else {
+    btnCompleteSepencarian.disabled = true;
+    btnCompleteSepencarian.classList.remove("bg-green-600", "hover:bg-green-700");
+    btnCompleteSepencarian.classList.add("bg-gray-300", "cursor-not-allowed");
+  }
 }
 
-if(btnSendMawaris){
 
-    btnSendMawaris.disabled = mawarisStatus !== "PRINTED";
+// ==================== 4. MAWARIS ====================
+const btnPrintMawaris = document.getElementById("btnPrintMawaris");
+const btnSendMawaris = document.getElementById("btnSendMawaris");
+const btnCompleteMawaris = document.getElementById("btnCompleteMawaris");
 
-    if(btnSendMawaris.disabled){
-
-        btnSendMawaris.classList.remove("bg-orange-500","hover:bg-orange-600");
-
-        btnSendMawaris.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
+if (btnPrintMawaris) {
+  if (mawarisStatus === "VERIFIED") {
+    btnPrintMawaris.disabled = false;
+    btnPrintMawaris.classList.remove("bg-gray-300", "cursor-not-allowed");
+    btnPrintMawaris.classList.add("bg-blue-600", "hover:bg-blue-700");
+    btnPrintMawaris.onclick = async () => {
+      const val = document.getElementById("mawarisPrintedAt")?.value;
+      if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
+      if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
+      await updateDoc(doc(db, "users", userId, "mawaris", "maklumat"), {
+        status: "PRINTED",
+        printedAt: val,
+        printedUpdatedAt: serverTimestamp(),
+        printedBy: auth.currentUser.uid
+      });
+      alert("Status berjaya dikemaskini.");
+      location.reload();
+    };
+  } else {
+    btnPrintMawaris.disabled = true;
+    btnPrintMawaris.classList.remove("bg-blue-600", "hover:bg-blue-700");
+    btnPrintMawaris.classList.add("bg-gray-300", "cursor-not-allowed");
+  }
 }
 
-if(btnCompleteMawaris){
-
-    btnCompleteMawaris.disabled = mawarisStatus !== "SENT";
-
-    if(btnCompleteMawaris.disabled){
-
-        btnCompleteMawaris.classList.remove("bg-green-600","hover:bg-green-700");
-
-        btnCompleteMawaris.classList.add("bg-gray-300","cursor-not-allowed");
-
-    }
-
+if (btnSendMawaris) {
+  if (mawarisStatus === "PRINTED") {
+    btnSendMawaris.disabled = false;
+    btnSendMawaris.classList.remove("bg-gray-300", "cursor-not-allowed");
+    btnSendMawaris.classList.add("bg-orange-500", "hover:bg-orange-600");
+    btnSendMawaris.onclick = async () => {
+      const val = document.getElementById("mawarisSentAt")?.value;
+      if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
+      if (!confirm("Tandakan dokumen telah dihantar?")) return;
+      await updateDoc(doc(db, "users", userId, "mawaris", "maklumat"), {
+        status: "SENT",
+        sentAt: val,
+        sentUpdatedAt: serverTimestamp(),
+        sentBy: auth.currentUser.uid,
+        courier: document.getElementById("mawarisCourier")?.value || "",
+        trackingNo: document.getElementById("mawarisTrackingNo")?.value || "",
+        receiver: document.getElementById("mawarisReceiver")?.value || "",
+        remarks: document.getElementById("mawarisRemarks")?.value || ""
+      });
+      alert("Dokumen berjaya dihantar.");
+      location.reload();
+    };
+  } else {
+    btnSendMawaris.disabled = true;
+    btnSendMawaris.classList.remove("bg-orange-500", "hover:bg-orange-600");
+    btnSendMawaris.classList.add("bg-gray-300", "cursor-not-allowed");
+  }
 }
-  
-if(btnCompleteMawaris){
 
-btnCompleteMawaris.onclick=async()=>{
-
-if(!confirm("Lengkapkan proses ini?")) return;
-
-await updateDoc(
-doc(db,"users",userId,"mawaris","maklumat"),
-{
-status:"COMPLETED",
-completedAt:new Date().toISOString(),
-completedBy:auth.currentUser.uid
-}
-);
-
-alert("Kes selesai.");
-
-location.reload();
-
-};
-
+if (btnCompleteMawaris) {
+  if (mawarisStatus === "SENT") {
+    btnCompleteMawaris.disabled = false;
+    btnCompleteMawaris.classList.remove("bg-gray-300", "cursor-not-allowed");
+    btnCompleteMawaris.classList.add("bg-green-600", "hover:bg-green-700");
+    btnCompleteMawaris.onclick = async () => {
+      if (!confirm("Lengkapkan proses ini?")) return;
+      await updateDoc(doc(db, "users", userId, "mawaris", "maklumat"), {
+        status: "COMPLETED",
+        completedAt: new Date().toISOString(),
+        completedBy: auth.currentUser.uid
+      });
+      alert("Kes selesai.");
+      location.reload();
+    };
+  } else {
+    btnCompleteMawaris.disabled = true;
+    btnCompleteMawaris.classList.remove("bg-green-600", "hover:bg-green-700");
+    btnCompleteMawaris.classList.add("bg-gray-300", "cursor-not-allowed");
+  }
 }
   
 </script>
