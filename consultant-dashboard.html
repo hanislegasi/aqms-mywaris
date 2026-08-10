@@ -469,12 +469,21 @@ user.uid
 );
  
 consultantData = data;
+
+// --- KOD BARU: Tarik Data Compensation ---
+const compSnap = await getDoc(doc(db, "settings", "compensation"));
+const comp = compSnap.exists() ? compSnap.data() : {};
+
+const priceWasiat = Number(comp.wasiatPrice || 350);
+const priceHibah = Number(comp.hibahPrice || 2500);
+const priceSepencarian = Number(comp.sepencarianPrice || 800);
+const priceMawaris = Number(comp.mawarisPrice || 3000);
+// ----------------------------------------
  
 const referralLink =
 window.location.origin +
 "/register.html?ref=" +
 consultantData.consultantNo;
-
 
 let sales = 0;
 
@@ -616,81 +625,33 @@ u.role==="customer" &&
     activeClients++;
  
 if(u.wasiatPaymentStatus === "paid"){
-    wasiatSales++;
+    totalSales += priceWasiat;
+    const m = u.joinDate?.toDate()?.getMonth() + 1;
+    if(m) { monthlySales[m] += priceWasiat; }
 }
 
 if(u.hibahPaymentStatus === "paid"){
-    hibahSales++;
+    totalSales += priceHibah;
+    const m = u.joinDate?.toDate()?.getMonth() + 1;
+    if(m) { monthlySales[m] += priceHibah; }
 }
 
 if(u.sepencarianPaymentStatus === "paid"){
-    sepencarianSales++;
+    totalSales += priceSepencarian;
+    const m = u.joinDate?.toDate()?.getMonth() + 1;
+    if(m) { monthlySales[m] += priceSepencarian; }
 }
 
 if(u.mawarisPaymentStatus === "paid"){
-    mawarisSales++;
-}
- 
-if(u.wasiatPaymentStatus === "paid"){
-
-totalSales += 350;
-
-const m =
-u.joinDate?.toDate()
-?.getMonth() + 1;
-
-if(m){
-monthlySales[m] += 350;
-}
-
-}
-
-if(u.hibahPaymentStatus === "paid"){
-
-totalSales += 2500;
-
-const m =
-u.joinDate?.toDate()
-?.getMonth() + 1;
-
-if(m){
-monthlySales[m] += 2500;
-}
-
-}
-
-if(u.sepencarianPaymentStatus === "paid"){
-
-totalSales += 800;
-
-const m =
-u.joinDate?.toDate()
-?.getMonth() + 1;
-
-if(m){
-monthlySales[m] += 800;
-}
-
-}
-
-if(u.mawarisPaymentStatus === "paid"){
-
-totalSales += 3000;
-
-const m =
-u.joinDate?.toDate()
-?.getMonth() + 1;
-
-if(m){
-monthlySales[m] += 3000;
-}
- 
+    totalSales += priceMawaris;
+    const m = u.joinDate?.toDate()?.getMonth() + 1;
+    if(m) { monthlySales[m] += priceMawaris; }
 }   // <-- tutup if
 
 }   // <-- tutup if role customer
-
 }); // <-- tutup usersSnap.forEach
 
+ 
 const historySnap =
 await getDocs(
 query(
@@ -844,39 +805,21 @@ let commissionRate = 0;
 let overridingRate = 0;
 
 if(data.consultantLevel === "AQC"){
-
-commissionRate = 35;
-overridingRate = 0;
-
+    commissionRate = Number(comp.commissionAQC || 35);
+    overridingRate = Number(comp.overrideAQC || 0);
 }
-
-
- 
 else if(data.consultantLevel === "AQC-AS"){
-
-commissionRate = 38;
-overridingRate = 3;
-
+    commissionRate = Number(comp.commissionAQCAS || 38);
+    overridingRate = Number(comp.overrideAQCAS || 3);
 }
-
 else if(data.consultantLevel === "AQC-UM"){
-
-commissionRate = 40;
-overridingRate = 7;
-
+    commissionRate = Number(comp.commissionAQCUM || 40);
+    overridingRate = Number(comp.overrideAQCUM || 4);
 }
-
 else if(data.consultantLevel === "MGAM"){
-
-commissionRate = 45;
-overridingRate = 12;
-
+    commissionRate = Number(comp.commissionMGAM || 45);
+    overridingRate = Number(comp.overrideMGAM || 5);
 }
-
-
-
- 
-
 
 document.getElementById("paidCard").innerHTML =
 "RM" +
