@@ -267,20 +267,34 @@ onAuthStateChanged(auth, async(user) => {
     }
 
     document.getElementById("wasiatTimeline").innerHTML = `
-      <div class="bg-white rounded-2xl shadow p-6">
-        <h3 class="font-bold text-lg mb-5">Status Timeline</h3>
-        ${timelineItem(done("APPROVED"), "Approved", wasiatData.approvedAt ? new Date(wasiatData.approvedAt).toLocaleDateString("ms-MY") : "-")}
-        ${timelineItem(done("PRINTED"), "Printed", wasiatData.printedAt ? new Date(wasiatData.printedAt).toLocaleDateString("ms-MY") : "-")}
-        ${timelineItem(done("SENT"), "Sent", wasiatData.sentAt ? new Date(wasiatData.sentAt).toLocaleDateString("ms-MY") : "-", `Courier : ${wasiatData.courier || "-"}<br>Tracking : ${wasiatData.trackingNo || "-"}`)}
-        ${timelineItem(done("AKAD"), "Akad", wasiatData.akadDate || "-", wasiatData.akadTime || "")}
-        ${timelineItem(done("STAMPING"), "Stamping", wasiatData.stampingDate || "-", wasiatData.stampingRef || "")}
-        ${timelineItem(done("HANDOVER"), "Diserahkan Kepada AQM", wasiatData.handoverDate || "-", wasiatData.handoverRemarks || "")}
-        ${timelineItem(done("RECEIVED"), "AQM Terima Dokumen", wasiatData.receivedDate || "-", !wasiatData.receivedDate ? `
-          <input type="date" id="receivedDate" class="border rounded-lg p-2 mt-2 w-full">
-          <button id="confirmReceived" class="bg-green-600 hover:bg-green-700 text-white rounded-lg mt-2 w-full py-2">Sah Terima</button>
-        ` : "")}
-      </div>
-    `;
+  <div class="relative overflow-hidden bg-white rounded-2xl shadow p-6 border border-gray-100">
+    
+    <!-- 1. GAMBAR LATAR BELAKANG -->
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none" 
+         style="background-image: url('https://i.postimg.cc/L6ML9HRR/Chat-GPT-Image-May-20-2026-12-45-46-PM.png');">
+    </div>
+
+    <!-- 2. LAPISAN PEMALAP (OVERLAY) -->
+    <!-- Tukar bg-white/90 kepada bg-white/80 jika nak gambar nampak lebih jelas, atau bg-white/95 jika nak gambar lebih samar -->
+    <div class="absolute inset-0 bg-white/90 backdrop-blur-[2px] pointer-events-none"></div>
+
+    <!-- 3. KANDUNGAN TIMELINE (Guna relative z-10 supaya teks & butang berada di atas gambar) -->
+    <div class="relative z-10">
+      <h3 class="font-bold text-lg mb-5 text-[#153638]">Status Timeline</h3>
+      ${timelineItem(done("APPROVED"), "Approved", wasiatData.approvedAt ? new Date(wasiatData.approvedAt).toLocaleDateString("ms-MY") : "-")}
+      ${timelineItem(done("PRINTED"), "Printed", wasiatData.printedAt ? new Date(wasiatData.printedAt).toLocaleDateString("ms-MY") : "-")}
+      ${timelineItem(done("SENT"), "Sent", wasiatData.sentAt ? new Date(wasiatData.sentAt).toLocaleDateString("ms-MY") : "-", `Courier : ${wasiatData.courier || "-"}<br>Tracking : ${wasiatData.trackingNo || "-"}`)}
+      ${timelineItem(done("AKAD"), "Akad", wasiatData.akadDate || "-", wasiatData.akadTime || "")}
+      ${timelineItem(done("STAMPING"), "Stamping", wasiatData.stampingDate || "-", wasiatData.stampingRef || "")}
+      ${timelineItem(done("HANDOVER"), "Diserahkan Kepada AQM", wasiatData.handoverDate || "-", wasiatData.handoverRemarks || "")}
+      ${timelineItem(done("RECEIVED"), "AQM Terima Dokumen", wasiatData.receivedDate || "-", !wasiatData.receivedDate ? `
+        <input type="date" id="receivedDate" class="border rounded-lg p-2 mt-2 w-full bg-white/80">
+        <button id="confirmReceived" class="bg-green-600 hover:bg-green-700 text-white rounded-lg mt-2 w-full py-2 font-medium transition">Sah Terima</button>
+      ` : "")}
+    </div>
+
+  </div>
+`;
 
     // LOGIK PEMBAYARAN & SEMAKAN BUTTON LIHAT DOKUMEN
     const lihatDokumenBtn = document.getElementById("btnLihatDokumen");
