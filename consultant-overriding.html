@@ -210,6 +210,14 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
         let grandTotalOverride = 0;
         let grandTotalUsb = 0; 
 
+// KOD BARU YANG TERTINGGAL: Panggil data overrideHistory dari Firestore dulu
+        const historyQ = query(
+            collection(db, "overrideHistory"),
+            where("receiver", "==", data.consultantNo)
+        );
+        const historySnap = await getDocs(historyQ);
+
+        
         // 2. Kumpul jualan dari overrideHistory
         historySnap.forEach(d => {
             const h = d.data();
