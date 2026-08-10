@@ -67,16 +67,17 @@
     <!-- Jadual Prestasi Team -->
     <div class="bg-white rounded-2xl shadow overflow-x-auto">
       <table class="w-full">
-        <thead class="bg-[#153638] text-white">
-          <tr>
-            <th class="p-4 text-left font-semibold">Dari AQC</th>
-            <th class="p-4 text-left font-semibold">Nama</th>
-            <th class="p-4 text-left font-semibold">Level AQC</th>
-            <th class="p-4 text-right font-semibold">Total Sales</th>
-            <th class="p-4 text-right font-semibold">Total Override</th>
-            <th class="p-4 text-right font-semibold">% Bonus</th>
-          </tr>
-        </thead>
+        <thead class="bg-[#153638] text-white text-sm">
+    <tr>
+        <th class="p-4 text-left">Dari AQC</th>
+        <th class="p-4 text-left">Nama</th>
+        <th class="p-4 text-left">Level AQC</th>
+        <th class="p-4 text-center">Total Sales</th>
+        <th class="p-4 text-center">Total Override</th>
+        <th class="p-4 text-center">Total USB</th> <!-- TAMBAH INI -->
+        <th class="p-4 text-center">% Bonus</th>
+    </tr>
+</thead>
         <tbody id="overrideTable">
           <tr>
             <td colspan="6" class="p-4 text-center text-gray-500">Memuatkan data...</td>
@@ -240,18 +241,20 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
                 if (!isBreakawayNetwork(aqcNo, myConsultantNo)) {
                     
                     // Kalau indirect downline belum ada dalam senarai, kita wujudkan
-                    if (!teamData[aqcNo]) {
-                        teamData[aqcNo] = { 
-                            nama: nameMap[aqcNo] || h.fromName || "-", 
-                            level: levelMap[aqcNo] || "AQC", 
-                            sales: 0, 
-                            override: 0 
-                        };
-                    }
-                    
-                    // Campurkan jualan
-                    teamData[aqcNo].sales += Number(h.sales || 0);
-                    teamData[aqcNo].override += Number(h.override || 0);
+if (!teamData[aqcNo]) {
+    teamData[aqcNo] = { 
+        nama: nameMap[aqcNo] || h.fromName || "-", 
+        level: levelMap[aqcNo] || "AQC", 
+        sales: 0, 
+        override: 0,
+        usb: 0 // <-- TAMBAH VARIABLE USB
+    };
+}
+
+// Campurkan jualan, override dan usb
+teamData[aqcNo].sales += Number(h.sales || 0);
+teamData[aqcNo].override += Number(h.override || 0);
+teamData[aqcNo].usb += Number(h.usb || 0); // <-- TAMBAH PENGIRAAN USB
                 }
             }
         });
@@ -304,15 +307,19 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
           if (grandTotalSales > 0) bonusPercent = (m.sales / grandTotalSales) * 100;
 
           html += `
-            <tr class="border-b hover:bg-gray-50">
-              <td class="p-4 text-gray-800">${aqcNo}</td>
-              <td class="p-4 text-gray-800">${m.nama}</td>
-              <td class="p-4 text-gray-800">${m.level}</td>
-              <td class="p-4 text-right text-gray-800">RM${formatRM(m.sales)}</td>
-              <td class="p-4 text-right font-bold text-green-600">RM${formatRM(m.override)}</td>
-              <td class="p-4 text-right font-bold text-blue-600">${bonusPercent.toFixed(2)}%</td>
-            </tr>
-          `;
+    <tr class="border-b hover:bg-gray-50">
+        <td class="p-4">${aqcNo}</td>
+        <td class="p-4">${data.nama}</td>
+        <td class="p-4">${data.level}</td>
+        <td class="p-4 text-center">RM${data.sales.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+        <td class="p-4 text-center font-bold text-green-600">RM${data.override.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+        
+        <!-- TAMBAH KOLUM USB DI SINI -->
+        <td class="p-4 text-center font-bold text-blue-600">RM${data.usb.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+        
+        <td class="p-4 text-center text-blue-600">${bonusPct.toFixed(2)}%</td>
+    </tr>
+    `;
         }
 
         if (Object.keys(teamData).length === 0) html = `<tr><td colspan="6" class="p-4 text-center text-gray-500">Tiada rekod jualan dalam tempoh ini (MGAM dikecualikan).</td></tr>`;
