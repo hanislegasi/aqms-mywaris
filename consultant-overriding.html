@@ -174,64 +174,55 @@
         
         document.getElementById("kpiPeriodText").textContent = `Tempoh Semasa: ${periodName}`;
 
-       // 4. Tarik Salasilah (Upline & Level) Semua Consultant Untuk Logik Breakaway
+      // 4. Tarik Salasilah Semua Consultant & Kumpul Direct Downline
         const allConsultantsSnap = await getDocs(collection(db, "consultants"));
         const uplineMap = {};
         const levelMap = {};
         const nameMap = {};
+        const directDownlines = [];
         
         allConsultantsSnap.forEach(doc => { 
             const d = doc.data();
-            uplineMap[d.consultantNo] = d.upline; 
-            levelMap[d.consultantNo] = d.consultantLevel; 
-            nameMap[d.consultantNo] = d.nama;
+            const cNo = d.consultantNo;
+            if(!cNo) return; // Abaikan data yang tiada consultantNo
+            
+            uplineMap[cNo] = d.upline; 
+            levelMap[cNo] = d.consultantLevel || "AQC"; 
+            nameMap[cNo] = d.nama;
+
+            // Kumpul siapa yang direct downline kepada AQC yang sedang login
+            if (d.upline === myConsultantNo) {
+                directDownlines.push(cNo);
+            }
         });
 
         // FUNGSI PENAPIS BREAKAWAY MGAM
-        // Ia akan trace dari downline naik ke atas. Kalau terjumpa MGAM di tengah jalan, ia reject (true)
         function isBreakawayNetwork(downlineNo, topLeaderNo) {
             let currentNo = downlineNo;
-            
             while (currentNo && currentNo !== topLeaderNo) {
-                // Jika individu ini adalah MGAM (termasuk downline tu sendiri), bermakna dia dah pecah kumpulan!
-                if (levelMap[currentNo] === "MGAM") {
-                    return true; 
-                }
-                currentNo = uplineMap[currentNo]; // Panjat ke upline seterusnya
-                
-                // Safety net: elak infinite loop kalau data tak lengkap
-                if (!currentNo || currentNo === "") break; 
+                if (levelMap[currentNo] === "MGAM") return true;
+                currentNo = uplineMap[currentNo];
             }
-            return false; // Selamat, tiada benteng MGAM di antaranya
+            return false;
         }
 
-                          
-        // 5A. TARIK SEMUA DIRECT DOWNLINE DAHULU (Walaupun sales RM0, nama tetap keluar)
         let teamData = {};
-        
-        const downlineQ = query(collection(db, "consultants"), where("upline", "==", myConsultantNo));
-        const downlineSnap = await getDocs(downlineQ);
-        
-        downlineSnap.forEach(d => {
-            const dl = d.data();
-            const dlNo = dl.consultantNo;
-            const currentLevel = dl.consultantLevel || "AQC";
+        let grandTotalSales = 0;
+        let grandTotalOverride = 0;
 
-            // Masukkan dalam senarai selagi bukan MGAM yang pecah kumpulan
-            if (currentLevel !== "MGAM") {
+        // 5A. Masukkan Semua Direct Downline Dahulu (Walaupun 0 Sales)
+        directDownlines.forEach(dlNo => {
+            if (levelMap[dlNo] !== "MGAM") {
                 teamData[dlNo] = {
-                    nama: dl.nama || "-",
-                    level: currentLevel,
+                    nama: nameMap[dlNo] || "-",
+                    level: levelMap[dlNo],
                     sales: 0,
                     override: 0
                 };
             }
         });
 
-        // 5B. TARIK SEJARAH JUALAN DAN MASUKKAN KEDALAM SENARAI
-        let grandTotalSales = 0;
-        let grandTotalOverride = 0;
-
+        // 5B. Tarik Sejarah Jualan & Tambah Indirect Downlines (Yang Ada Sales Sahaja)
         const historyQ = query(collection(db, "overrideHistory"), where("receiver", "==", myConsultantNo));
         const historySnap = await getDocs(historyQ);
         
@@ -239,19 +230,31 @@
             const h = d.data();
             const txDate = h.createdAt?.toDate ? h.createdAt.toDate() : new Date(h.date || h.createdAt);
             
-            // Semak tempoh masa aktif
+            // Semak jika dalam tempoh aktif KPI
             if (txDate >= startDate && txDate <= endDate) {
                 const aqcNo = h.fromConsultant;
                 
-                // Jika downline itu wujud dalam team kita (dan bukan breakaway MGAM)
-                if (teamData[aqcNo]) {
+                // Semak kalau BUKAN dari rangkaian Breakaway MGAM
+                if (!isBreakawayNetwork(aqcNo, myConsultantNo)) {
+                    
+                    // Kalau indirect downline belum ada dalam senarai, kita wujudkan
+                    if (!teamData[aqcNo]) {
+                        teamData[aqcNo] = { 
+                            nama: nameMap[aqcNo] || h.fromName || "-", 
+                            level: levelMap[aqcNo] || "AQC", 
+                            sales: 0, 
+                            override: 0 
+                        };
+                    }
+                    
+                    // Campurkan jualan
                     teamData[aqcNo].sales += Number(h.sales || 0);
                     teamData[aqcNo].override += Number(h.override || 0);
                 }
             }
         });
 
-        // Kira grand total selepas data dicantumkan
+        // Kira grand total selepas semua digabungkan
         for (const aqcNo in teamData) {
             grandTotalSales += teamData[aqcNo].sales;
             grandTotalOverride += teamData[aqcNo].override;
