@@ -139,10 +139,12 @@ getFirestore,
 collection,
 getDocs,
 doc,
-getDoc
+getDoc,
+query,
+where
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+  
 import {
 getAuth,
 onAuthStateChanged
@@ -196,46 +198,41 @@ console.log(consultantSnap.exists());
 console.log(consultantSnap.data());
 console.log(consultantData);
   
-const consultantNo =
-consultantData.consultantNo;
+const consultantNo = consultantData.consultantNo;
 
-const snap =
-await getDocs(
-collection(db,"users")
-);
+// --- 1. TARIK DATA SETTINGS & LEJER (KOD BARU) ---
+const compSnap = await getDoc(doc(db, "settings", "compensation"));
+const comp = compSnap.exists() ? compSnap.data() : {};
+
+const priceWasiat = Number(comp.wasiatPrice || 350);
+const priceHibah = Number(comp.hibahPrice || 2500);
+const priceSepencarian = Number(comp.sepencarianPrice || 800);
+const priceMawaris = Number(comp.mawarisPrice || 3000);
 
 let commissionRate = 0;
+const lvl = consultantData.consultantLevel;
+if(lvl === "AQC") commissionRate = Number(comp.commissionAQC || 35);
+else if(lvl === "AQC-AS") commissionRate = Number(comp.commissionAQCAS || 38);
+else if(lvl === "AQC-UM") commissionRate = Number(comp.commissionAQCUM || 40);
+else if(lvl === "MGAM") commissionRate = Number(comp.commissionMGAM || 45);
 
-switch(consultantData.consultantLevel){
+// Tarik komisen keseluruhan yang tepat dari Lejer
+let exactTotalCommission = 0;
+const ledgerQ = query(collection(db, "ledger"), where("consultantNo", "==", consultantNo), where("accountCode", "==", "2000"));
+const ledgerSnap = await getDocs(ledgerQ);
+ledgerSnap.forEach(d => {
+    exactTotalCommission += Number(d.data().credit || 0);
+});
+// -------------------------------------------------
 
-
-    case "AQC":
-        commissionRate = 35;
-        break;
-
-    case "AQC-AS":
-        commissionRate = 38;
-        break;
-
-    case "AQC-UM":
-        commissionRate = 40;
-        break;
-
-    case "MGAM":
-        commissionRate = 45;
-        break;
-
-    default:
-        commissionRate = 0;
-}
-  
+const snap = await getDocs(collection(db,"users"));
 let html = "";
 let bil = 1;
 
 let totalClients = 0;
 let totalClientSales = 0;
-let totalCommission = 0;
 
+  
 for (const docSnap of snap.docs){
 
 const client =
@@ -249,61 +246,40 @@ referral: client.referral,
 consultantNo: consultantNo
 });
   
+// SYARAT BARU: Benarkan klien yang belum ada memberNo (Prospek) masuk senarai
 if(
-client.role !== "customer" ||
-!client.memberNo ||
-client.referral !== consultantNo
+    client.role !== "customer" ||
+    (client.referral || "").trim() !== consultantNo
 ){
-continue;
+    continue;
 }
-
-console.log(
-"MASUK",
-client.nama
-);
 
 let clientSales = 0;
 let commission = 0;
 
+// GUNA HARGA DARI SETTINGS
 if(client.wasiatPaymentStatus === "paid"){
-
-    const sales = 350;
-
-    clientSales += sales;
-    commission += sales * (commissionRate / 100);
-
+    clientSales += priceWasiat;
 }
 
 if(client.hibahPaymentStatus === "paid"){
-
-    const sales = 2500;
-
-    clientSales += sales;
-    commission += sales * (commissionRate / 100);
-
+    clientSales += priceHibah;
 }
 
 if(client.sepencarianPaymentStatus === "paid"){
-
-    const sales = 800;
-
-    clientSales += sales;
-    commission += sales * (commissionRate / 100);
-
+    clientSales += priceSepencarian;
 }
 
 if(client.mawarisPaymentStatus === "paid"){
-
-    const sales = 3000;
-
-    clientSales += sales;
-    commission += sales * (commissionRate / 100);
-
+    clientSales += priceMawaris;
 }
-  
+
+// Komisen paparan jadual (Anggaran kasar ikut level terkini)
+commission = clientSales * (commissionRate / 100);
+
 totalClients++;
 totalClientSales += clientSales;
-totalCommission += commission;  
+// Kita tak guna 'totalCommission += commission' lagi sebab kita guna exactTotalCommission dari lejer
   
 const expiryDate =
 client.expiryDate
@@ -515,7 +491,7 @@ maximumFractionDigits:2
 
 document.getElementById("totalCommission").innerHTML =
 "RM " +
-totalCommission.toLocaleString("en-US",{
+exactTotalCommission.toLocaleString("en-US",{
 minimumFractionDigits:2,
 maximumFractionDigits:2
 });
