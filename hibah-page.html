@@ -267,20 +267,35 @@ onAuthStateChanged(auth, async(user) => {
     }
 
     document.getElementById("hibahTimeline").innerHTML = `
-      <div class="bg-white rounded-2xl shadow p-6">
-        <h3 class="font-bold text-lg mb-5">Status Timeline</h3>
-        ${timelineItem(done("APPROVED"), "Approved", hibahData.approvedAt ? new Date(hibahData.approvedAt).toLocaleDateString("ms-MY") : "-")}
-        ${timelineItem(done("PRINTED"), "Printed", hibahData.printedAt ? new Date(hibahData.printedAt).toLocaleDateString("ms-MY") : "-")}
-        ${timelineItem(done("SENT"), "Sent", hibahData.sentAt ? new Date(hibahData.sentAt).toLocaleDateString("ms-MY") : "-", `Courier : ${hibahData.courier || "-"}<br>Tracking : ${hibahData.trackingNo || "-"}`)}
-        ${timelineItem(done("AKAD"), "Akad", hibahData.akadDate || "-", hibahData.akadTime || "")}
-        ${timelineItem(done("STAMPING"), "Stamping", hibahData.stampingDate || "-", hibahData.stampingRef || "")}
-        ${timelineItem(done("HANDOVER"), "Diserahkan Kepada AQM", hibahData.handoverDate || "-", hibahData.handoverRemarks || "")}
-        ${timelineItem(done("RECEIVED"), "AQM Terima Dokumen", hibahData.receivedDate || "-", !hibahData.receivedDate ? `
-          <input type="date" id="receivedDate" class="border rounded-lg p-2 mt-2 w-full">
-          <button id="confirmReceived" class="bg-green-600 hover:bg-green-700 text-white rounded-lg mt-2 w-full py-2">Sah Terima</button>
-        ` : "")}
-      </div>
-    `;
+  <div class="relative overflow-hidden bg-white rounded-2xl shadow p-6 border border-gray-100">
+    
+    <!-- 1. GAMBAR LATAR BELAKANG -->
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none" 
+         style="background-image: url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=2000');">
+    </div>
+
+    <!-- 2. LAPISAN PEMALAP (OVERLAY) -->
+    <!-- Tukar bg-white/90 kepada bg-white/80 jika nak gambar nampak lebih jelas, atau bg-white/95 jika nak gambar lebih samar -->
+    <div class="absolute inset-0 bg-white/90 backdrop-blur-[2px] pointer-events-none"></div>
+
+    <!-- 3. KANDUNGAN TIMELINE (Guna relative z-10 supaya teks & butang berada di atas gambar) -->
+    <div class="relative z-10">
+      <h3 class="font-bold text-lg mb-5 text-[#153638]">Status Timeline</h3>
+      ${timelineItem(done("APPROVED"), "Approved", hibahData.approvedAt ? new Date(hibahData.approvedAt).toLocaleDateString("ms-MY") : "-")}
+      ${timelineItem(done("PRINTED"), "Printed", hibahData.printedAt ? new Date(hibahData.printedAt).toLocaleDateString("ms-MY") : "-")}
+      ${timelineItem(done("SENT"), "Sent", hibahData.sentAt ? new Date(hibahData.sentAt).toLocaleDateString("ms-MY") : "-", `Courier : ${hibahData.courier || "-"}<br>Tracking : ${hibahData.trackingNo || "-"}`)}
+      ${timelineItem(done("AKAD"), "Akad", hibahData.akadDate || "-", hibahData.akadTime || "")}
+      ${timelineItem(done("STAMPING"), "Stamping", hibahData.stampingDate || "-", hibahData.stampingRef || "")}
+      ${timelineItem(done("HANDOVER"), "Diserahkan Kepada AQM", hibahData.handoverDate || "-", hibahData.handoverRemarks || "")}
+      ${timelineItem(done("RECEIVED"), "AQM Terima Dokumen", hibahData.receivedDate || "-", !hibahData.receivedDate ? `
+        <input type="date" id="receivedDate" class="border rounded-lg p-2 mt-2 w-full bg-white/80">
+        <button id="confirmReceived" class="bg-green-600 hover:bg-green-700 text-white rounded-lg mt-2 w-full py-2 font-medium transition">Sah Terima</button>
+      ` : "")}
+    </div>
+
+  </div>
+`;
+
 
     // LOGIK PEMBAYARAN & SEMAKAN BUTTON LIHAT DOKUMEN
     const lihatDokumenBtn = document.getElementById("btnLihatDokumen");
