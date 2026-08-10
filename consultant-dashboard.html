@@ -1022,34 +1022,16 @@ window.location.href =
 
 });
  
-document.getElementById(
-"activeClients"
-).innerHTML =
-activeClients;
+document.getElementById("activeClients").innerHTML = activeClients;
 
-document.getElementById(
-"totalSales"
-).innerHTML =
-"RM" + totalSales.toLocaleString();
+document.getElementById("totalSales").innerHTML = "RM" + totalSales.toLocaleString(undefined, {minimumFractionDigits: 2});
 
-document.getElementById(
-"totalCommission"
-).innerHTML =
-"RM" + totalCommission.toLocaleString();
+document.getElementById("totalCommission").innerHTML = "RM" + totalCommission.toLocaleString(undefined, {minimumFractionDigits: 2});
 
-document.getElementById(
-"totalOverriding"
-).innerHTML =
-"RM" + totalOverriding.toLocaleString();
+document.getElementById("totalOverriding").innerHTML = "RM" + totalOverriding.toLocaleString(undefined, {minimumFractionDigits: 2});
 
-document.getElementById(
-"usbAmount"
-).innerHTML =
-"RM" +
-Number(
-data.totalUSB || 0
-).toLocaleString();
-
+// Kita gunakan totalUsbLedger (dari Lejer) supaya sama dengan Total Earned
+document.getElementById("usbAmount").innerHTML = "RM" + totalUsbLedger.toLocaleString(undefined, {minimumFractionDigits: 2});
  
 
 console.log("monthlySales", monthlySales);
