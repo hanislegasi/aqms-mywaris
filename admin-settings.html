@@ -160,7 +160,8 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
         <!-- ================= UPLINE BENEFIT & BONUS ================= -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
             <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Upline Supporting Benefit & Bonus</h2>
-            <div class="grid md:grid-cols-3 gap-5">
+            <!-- Tukar grid kepada 4 kolum supaya muat 4 input dengan kemas -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
                 <div>
                     <label class="font-medium text-sm text-gray-600 block mb-1">Upline Supporting Benefit (%)</label>
                     <input id="usb" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="e.g. 5">
@@ -172,6 +173,16 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
                 <div>
                     <label class="font-medium text-sm text-gray-600 block mb-1">Reward Bonus (RM / %)</label>
                     <input id="rewardBonus" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="e.g. 1000">
+                </div>
+                
+                <!-- KOTAK BARU: TEMPOH KPI -->
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Tempoh KPI</label>
+                    <select id="kpiPeriod" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all bg-white cursor-pointer">
+                        <option value="yearly">Tahunan (Yearly)</option>
+                        <option value="half">6 Bulan (Half-Yearly)</option>
+                        <option value="quarter">3 Bulan (Quarterly)</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -346,7 +357,7 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
             commissionAQC: 35, commissionAQCAS: 38, commissionAQCUM: 40, commissionMGAM: 45,
             overrideAQC: 0, overrideAQCAS: 3, overrideAQCUM: 4, overrideMGAM: 5,
             usb: 5,
-            targetSalesBonus: 50000, rewardBonus: 1000,
+            targetSalesBonus: 50000, rewardBonus: 1000, kpiPeriod: yearly,
             companyPool: 48, commissionPool: 35, overridePool: 12,
             adminOperation: 30, allowance: 10, royalty: 8,
             memberValidity: 365, consultantRegistrationFee: 200,
@@ -360,7 +371,7 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
             "wasiatRenewal", "hibahRenewal", "sepencarianRenewal", "mawarisRenewal",
             "commissionAQC", "commissionAQCAS", "commissionAQCUM", "commissionMGAM",
             "overrideAQC", "overrideAQCAS", "overrideAQCUM", "overrideMGAM",
-            "usb", "targetSalesBonus", "rewardBonus",
+            "usb", "targetSalesBonus", "rewardBonus", "kpiPeriod",
             "memberValidity", "consultantRegistrationFee", 
             "renewalAQC", "renewalAQCAS", "renewalAQCUM", "renewalMGAM",
             "companyPool", "commissionPool", "overridePool",
