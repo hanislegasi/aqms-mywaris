@@ -179,9 +179,9 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
                 <div>
                     <label class="font-medium text-sm text-gray-600 block mb-1">Tempoh KPI</label>
                     <select id="kpiPeriod" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all bg-white cursor-pointer">
-                        <option value="yearly">Tahunan (Yearly)</option>
-                        <option value="half">6 Bulan (Half-Yearly)</option>
-                        <option value="quarter">3 Bulan (Quarterly)</option>
+                        <<option value="12">Tahunan (12 Bulan)</option>
+                        <option value="6">6 Bulan (Half-Yearly)</option>
+                        <option value="3">3 Bulan (Quarterly)</option>
                     </select>
                 </div>
             </div>
@@ -378,6 +378,10 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
             "adminOperation", "allowance", "royalty"
         ];
 
+        
+        document.getElementById("kpiPeriodText").textContent = `Tempoh Semasa: ${periodName}`;
+      
+      
         // ================= LOAD SETTINGS =================
         async function loadSettings() {
             const companyRef = doc(db, "settings", "company");
