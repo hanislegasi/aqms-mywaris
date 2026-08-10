@@ -134,11 +134,12 @@
         }
 
         // 2. Tarik Setting KPI
-        const compSnap = await getDoc(doc(db, "settings", "compensation"));
-        const compData = compSnap.exists() ? compSnap.data() : {};
-        
-        const targetSalesBonus = Number(compData.kpiSalesTarget || 240000); 
-        const rewardBonusRate = Number(compData.kpiBonusRate || 5);
+const compSnap = await getDoc(doc(db, "settings", "compensation"));
+const compData = compSnap.exists() ? compSnap.data() : {};
+
+// Guna nama field yang sama dengan di Admin Settings
+const targetSalesBonus = Number(compData.targetSalesBonus || 240000); 
+const rewardBonusRate = Number(compData.rewardBonus || 5);
         const kpiPeriodType = compData.kpiPeriod || "yearly"; // 'quarter', 'half', 'yearly'
 
         document.getElementById("kpiRateText").textContent = `Reward: ${rewardBonusRate}% daripada RM${formatRM(targetSalesBonus)}`;
