@@ -178,7 +178,8 @@ getDocs,
 collection,
 updateDoc,
 setDoc,
-query
+query, 
+where
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
   
@@ -234,85 +235,82 @@ return;
 
 });
   
-document
-.getElementById("consultantForm")
-.addEventListener("submit", async(e)=>{
+document.getElementById("consultantForm").addEventListener("submit", async(e)=>{
+    e.preventDefault();
 
-e.preventDefault();
+    if(!auth.currentUser){
+        alert("Sila login dahulu");
+        return;
+    }
 
-if(!auth.currentUser){
+    // --- MULA KOD PENGESAHAN UPLINE ---
+    const uplineInput = document.getElementById("upline").value.trim();
+    let finalUpline = "";
 
-alert(
-"Sila login dahulu"
-);
+    // Semak jika pengguna ada masukkan Kod Upline
+    if (uplineInput) {
+        finalUpline = uplineInput.toUpperCase(); // Tukar semua jadi huruf besar
+        
+        // Buat carian di pangkalan data
+        const uplineQ = query(
+            collection(db, "consultants"), 
+            where("consultantNo", "==", finalUpline)
+        );
+        const uplineSnap = await getDocs(uplineQ);
 
-return;
+        // Jika data tak wujud, sekat pendaftaran!
+        if (uplineSnap.empty) {
+            alert("Kod Upline (" + finalUpline + ") tidak wujud! Sila semak semula ejaan.");
+            return; 
+        }
+    } 
+    // Jika ko nak WAJIBKAN semua orang isi kod upline, buang komen 2 baris di bawah:
+    // else { alert("Sila masukkan Kod Upline!"); return; }
+    // --- TAMAT KOD PENGESAHAN UPLINE ---
 
-}
-  
-await setDoc(
-doc(
-db,
-"consultants",
-auth.currentUser.uid
-),
-{
+    // Tukar teks butang supaya user tahu sistem tengah jalan
+    const btn = document.getElementById("registerButton");
+    const originalBtnText = btn.innerHTML;
+    btn.innerHTML = "Memproses Pendaftaran...";
+    btn.disabled = true;
 
-uid: auth.currentUser.uid,
+    try {
+        // Simpan pendaftaran ke Firestore
+        await setDoc(doc(db, "consultants", auth.currentUser.uid), {
+            uid: auth.currentUser.uid,
+            nama: document.getElementById("nama").value,
+            ic: document.getElementById("ic").value,
+            telefon: document.getElementById("telefon").value,
+            email: document.getElementById("email").value,
+            bankName: document.getElementById("bankName").value,
+            bankAccount: document.getElementById("bankAccount").value,
+            alamat: document.getElementById("alamat").value,
+            postcode: document.getElementById("postcode").value,
+            city: document.getElementById("city").value,
+            state: document.getElementById("state").value,
+            
+            // Guna kod upline yang dah disahkan dan di-huruf besarkan
+            upline: finalUpline, 
+            
+            consultantLevel: "AQC",
+            consultantPaymentStatus: "pending",
+            createdAt: new Date()
+        });
 
-nama:
-document.getElementById("nama").value,
+        // update role di collection users
+        await setDoc(doc(db, "users", auth.currentUser.uid), {
+            role: "consultant"
+        }, { merge: true });
 
-ic:
-document.getElementById("ic").value,
+        // Pergi ke halaman bayaran
+        window.location.href = "consultant-payment.html";
 
-telefon:
-document.getElementById("telefon").value,
-
-email:
-document.getElementById("email").value,
-
-bankName:
-document.getElementById("bankName").value,
-
-bankAccount:
-document.getElementById("bankAccount").value,
-
-alamat:
-document.getElementById("alamat").value,
-
-postcode:
-document.getElementById("postcode").value,
-
-city:
-document.getElementById("city").value,
-  
-state:
-document.getElementById("state").value,
-
-upline:
-document.getElementById("upline").value || "",
-
-consultantLevel:"AQC",
-
-consultantPaymentStatus:"pending",
-
-createdAt:new Date()
-
-});
-
-
-  
-// update role di collection users (Guna setDoc dengan merge: true)
-await setDoc(doc(db, "users", auth.currentUser.uid), {
-  role: "consultant"
-}, { merge: true });
-  
-
-  
-window.location.href =
-"consultant-payment.html";
-
+    } catch (error) {
+        console.error(error);
+        alert("Ralat semasa pendaftaran: " + error.message);
+        btn.innerHTML = originalBtnText;
+        btn.disabled = false;
+    }
 });
 
 </script>
