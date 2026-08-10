@@ -204,21 +204,37 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             return false;
         }
 
-      // 1. Sediakan bekas data (Sudah wujud dalam kod ko)
+     // 1. Sediakan bekas data
         let teamData = {};
         let grandTotalSales = 0;
         let grandTotalOverride = 0;
         let grandTotalUsb = 0; 
 
-// KOD BARU YANG TERTINGGAL: Panggil data overrideHistory dari Firestore dulu
+        // KOD KESELAMATAN: Ambil nombor AQC terus dari sesi login
+        const myAqcNo = sessionStorage.getItem("consultantNo");
+
+        // --- LANGKAH 5A: Tarik Direct Downline dulu supaya yang 0 sales pun keluar ---
+        const downlineQ = query(collection(db, "consultants"), where("upline", "==", myAqcNo));
+        const downlineSnap = await getDocs(downlineQ);
+        downlineSnap.forEach(d => {
+            const dl = d.data();
+            // Jangan masukkan MGAM dalam jadual AQC
+            if (dl.consultantLevel !== "MGAM") {
+                teamData[dl.consultantNo] = {
+                    nama: dl.nama || "-",
+                    level: dl.consultantLevel || "AQC",
+                    sales: 0, override: 0, usb: 0
+                };
+            }
+        });
+
+        // --- LANGKAH 5B: Kumpul jualan dari overrideHistory ---
         const historyQ = query(
             collection(db, "overrideHistory"),
-            where("receiver", "==", data.consultantNo)
+            where("receiver", "==", myAqcNo) // Guna myAqcNo yang sah
         );
         const historySnap = await getDocs(historyQ);
 
-        
-        // 2. Kumpul jualan dari overrideHistory
         historySnap.forEach(d => {
             const h = d.data();
             const aqcNo = h.fromAqc || h.downlineNo;
@@ -227,64 +243,55 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
 
             if (!teamData[aqcNo]) {
                 teamData[aqcNo] = { 
-                    nama: nameMap[aqcNo] || h.fromName || "-", 
-                    level: levelMap[aqcNo] || "AQC", 
-                    sales: 0, 
-                    override: 0,
-                    usb: 0
+                    nama: h.fromName || "-", 
+                    level: "AQC", 
+                    sales: 0, override: 0, usb: 0
                 };
             }
             teamData[aqcNo].sales += Number(h.sales || 0);
         });
 
-        // 3. TARIK OVERRIDE DAN USB 100% DARI LEJER
+        // --- LANGKAH 5C: TARIK OVERRIDE DAN USB 100% DARI LEJER ---
         const ledgerQ = query(
             collection(db, "ledger"),
-            where("consultantNo", "==", data.consultantNo)
+            where("consultantNo", "==", myAqcNo) // Guna myAqcNo yang sah
         );
         const ledgerSnap = await getDocs(ledgerQ);
 
         ledgerSnap.forEach(d => {
             const row = d.data();
             
-            // Kita cuma nak proses data Overriding (2100) dan USB (2150)
             if (row.accountCode === "2100" || row.accountCode === "2150") {
-                
-                // Pastikan ada rekod siapa downline yang beri duit ni
-                // (Semak Firebase ko, guna nama field yang betul, contoh: fromAqc)
+                // Pastikan nama field dalam lejer ko menepati ini
                 const downlineNo = row.fromAqc || row.downlineNo || row.source; 
 
-                if (!downlineNo) return; // Kalau tak tahu dari downline mana, abaikan
+                if (!downlineNo) return;
 
-                // Wujudkan rekod kalau belum ada
                 if (!teamData[downlineNo]) {
                     teamData[downlineNo] = {
-                        nama: nameMap[downlineNo] || "-",
-                        level: levelMap[downlineNo] || "AQC",
-                        sales: 0,
-                        override: 0,
-                        usb: 0
+                        nama: "-", level: "AQC", sales: 0, override: 0, usb: 0
                     };
                 }
 
-                // Masukkan Overriding
                 if (row.accountCode === "2100" && row.credit > 0) {
                     teamData[downlineNo].override += Number(row.credit);
                 }
                 
-                // Masukkan USB (Sama ada yang 0.5% ATAU yang daftar RM50)
                 if (row.accountCode === "2150" && row.credit > 0) {
                     teamData[downlineNo].usb += Number(row.credit);
                 }
             }
         });
 
-        // 4. Kira grand total selepas gabung semua
+        // --- 6. Kira grand total selepas gabung semua ---
         for (const aqcNo in teamData) {
             grandTotalSales += teamData[aqcNo].sales;
             grandTotalOverride += teamData[aqcNo].override;
             grandTotalUsb += teamData[aqcNo].usb; 
         }
+
+        // --- SELEPAS INI ADALAH KOD 'for' UNTUK MELUKIS JADUAL HTML KO ---
+        // for (const aqcNo in teamData) { ... }
 
         // 6. Semak Berapa Kali Dah Claim Dalam Tempoh Ini (Untuk Reset Counter)
         const claimsQ = query(
