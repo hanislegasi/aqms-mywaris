@@ -622,29 +622,34 @@ u.role==="customer" &&
 
     activeClients++;
  
+// Pengiraan Sales dan Kuantiti (Carta Pie)
 if(u.wasiatPaymentStatus === "paid"){
+    wasiatSales++; // <-- Ini yang tertinggal tadi!
     totalSales += priceWasiat;
     const m = u.joinDate?.toDate()?.getMonth() + 1;
     if(m) { monthlySales[m] += priceWasiat; }
 }
 
 if(u.hibahPaymentStatus === "paid"){
+    hibahSales++; 
     totalSales += priceHibah;
     const m = u.joinDate?.toDate()?.getMonth() + 1;
     if(m) { monthlySales[m] += priceHibah; }
 }
 
 if(u.sepencarianPaymentStatus === "paid"){
+    sepencarianSales++; 
     totalSales += priceSepencarian;
     const m = u.joinDate?.toDate()?.getMonth() + 1;
     if(m) { monthlySales[m] += priceSepencarian; }
 }
 
 if(u.mawarisPaymentStatus === "paid"){
+    mawarisSales++; 
     totalSales += priceMawaris;
     const m = u.joinDate?.toDate()?.getMonth() + 1;
     if(m) { monthlySales[m] += priceMawaris; }
-}   // <-- tutup if
+}
 
 }   // <-- tutup if role customer
 }); // <-- tutup usersSnap.forEach
