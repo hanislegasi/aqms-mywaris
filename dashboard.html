@@ -75,13 +75,17 @@ Semoga Allah SWT mempermudahkan urusan anda dalam merancang harta secara patuh s
 
 </div>
 
-<div
-id="profileCard"
-class="bg-white rounded-2xl shadow p-5 mb-6">
-
-Loading...
-
-</div>
+<!-- KAD HOOK DINAMIK (MENGGANTIKAN KAD PROFIL) -->
+    <div id="hookCard" class="rounded-2xl p-6 border border-amber-300/50 bg-amber-50/80 backdrop-blur-md shadow-xl text-center transition-all duration-500">
+      <div id="hookTextContainer">
+        <h3 class="text-lg sm:text-xl font-bold text-[#153638] mb-1">
+          Lindungi Masa Depan Orang Tersayang Hari Ini 
+        </h3>
+        <p class="text-sm text-gray-700 font-medium">
+          Jangan biarkan waris anda dibebani rintangan harta pusaka. Sila pilih pakej perkhidmatan di bawah untuk mulakan perancangan rasmi anda.
+        </p>
+      </div>
+    </div>
     
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
 
@@ -425,6 +429,36 @@ Logout
 
 </div>
 
+<!-- SCRIPT UNTUK PENUKARAN AYAT APABILA PENGGUNA MEMBELI -->
+  <script>
+    function prosesPembelian() {
+      // 1. Tukar gaya rupa kad ke gaya "Berjaya"
+      const hookCard = document.getElementById('hookCard');
+      hookCard.className = "rounded-2xl p-6 border border-emerald-300/60 bg-emerald-50/90 backdrop-blur-md shadow-xl text-center transition-all duration-500 scale-[1.01]";
+
+      // 2. Kemaskini teks di dalam kad
+      const container = document.getElementById('hookTextContainer');
+      container.innerHTML = `
+        <h3 class="text-lg sm:text-xl font-bold text-emerald-900 flex items-center justify-center gap-2">
+          <span>✨</span> Terima kasih kerana bijak memilih untuk ketenangan abadi. <span>✨</span>
+        </h3>
+        <p class="text-xs sm:text-sm text-emerald-700 mt-1">
+          Permohonan anda sedang diproses oleh pihak Al-Qawthar Mawaris Synergy.
+        </p>
+      `;
+
+      // Simpan status pembelian (Opsional untuk integrasi backend)
+      localStorage.setItem("hasPurchased", "true");
+    }
+
+    // Semak jika pengguna pernah membuat pembelian sebelum ini
+    window.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("hasPurchased") === "true") {
+        prosesPembelian();
+      }
+    });
+  </script>
+    
 <script type="module">
 
 import { initializeApp }
