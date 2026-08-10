@@ -76,7 +76,7 @@ Semoga Allah SWT mempermudahkan urusan anda dalam merancang harta secara patuh s
 </div>
 
 <!-- KAD HOOK DINAMIK (MENGGANTIKAN KAD PROFIL) -->
-    <div id="hookCard" class="rounded-2xl p-6 border border-amber-300/50 bg-amber-50/80 backdrop-blur-md shadow-xl text-center transition-all duration-500">
+    <div id="hookCard" class="mb-6 rounded-2xl p-6 border border-amber-300/50 bg-amber-50/80 backdrop-blur-md shadow-xl text-center transition-all duration-500">
       <div id="hookTextContainer">
         <h3 class="text-lg sm:text-xl font-bold text-[#153638] mb-1">
           Lindungi Masa Depan Orang Tersayang Hari Ini 
@@ -434,7 +434,7 @@ Logout
     function prosesPembelian() {
       // 1. Tukar gaya rupa kad ke gaya "Berjaya"
       const hookCard = document.getElementById('hookCard');
-      hookCard.className = "rounded-2xl p-6 border border-emerald-300/60 bg-emerald-50/90 backdrop-blur-md shadow-xl text-center transition-all duration-500 scale-[1.01]";
+      hookCard.className = "mb-6 rounded-2xl p-6 border border-emerald-300/60 bg-emerald-50/90 backdrop-blur-md shadow-xl text-center transition-all duration-500 scale-[1.01]";
 
       // 2. Kemaskini teks di dalam kad
       const container = document.getElementById('hookTextContainer');
@@ -656,31 +656,16 @@ document.getElementById(
 "Selamat datang, "
 + userData.nama;
 
-document.getElementById("profileCard").innerHTML = `
-<div class="grid md:grid-cols-2 gap-5">
+// ✅ Semak jika mana-mana pakej sudah dibeli (status === 'paid')
+const hasPaidProduct = 
+  userData.wasiatPaymentStatus === "paid" ||
+  userData.hibahPaymentStatus === "paid" ||
+  userData.sepencarianPaymentStatus === "paid" ||
+  userData.mawarisPaymentStatus === "paid";
 
-<div>
-<p class="text-sm text-gray-500">Nama</p>
-<p class="font-semibold">${userData.nama}</p>
-</div>
-
-<div>
-<p class="text-sm text-gray-500">No. Kad Pengenalan</p>
-<p class="font-semibold">${userData.ic || "-"}</p>
-</div>
-
-<div>
-<p class="text-sm text-gray-500">Telefon</p>
-<p class="font-semibold">${userData.telefon || "-"}</p>
-</div>
-
-<div>
-<p class="text-sm text-gray-500">Email</p>
-<p class="font-semibold">${user.email}</p>
-</div>
-
-</div>
-`;
+if (hasPaidProduct && typeof prosesPembelian === "function") {
+  prosesPembelian();
+}
 
 document
 .getElementById("logoutBtn")
