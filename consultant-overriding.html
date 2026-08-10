@@ -16,7 +16,7 @@
     <p>Overriding Performance</p>
   </div>
 
-  <div class="p-5 max-w-7xl mx-auto">
+  <div class="p-5">
     <a href="consultant-dashboard.html" class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5 hover:bg-gray-300 transition text-gray-800">
       ← Dashboard
     </a>
@@ -209,7 +209,31 @@
         let grandTotalSales = 0;
         let grandTotalOverride = 0;
 
-        // 5. Tarik Sales dari overrideHistory, TAPI filter Tarikh & Filter Network Breakaway
+           
+        // 5A. TARIK SEMUA DIRECT DOWNLINE DAHULU (Walaupun sales RM0, nama tetap keluar)
+        const downlineQ = query(collection(db, "consultants"), where("upline", "==", myConsultantNo));
+        const downlineSnap = await getDocs(downlineQ);
+        
+        downlineSnap.forEach(d => {
+            const dl = d.data();
+            const dlNo = dl.consultantNo;
+            const currentLevel = dl.consultantLevel || "AQC";
+
+            // Masukkan dalam senarai selagi bukan MGAM yang pecah kumpulan
+            if (currentLevel !== "MGAM") {
+                teamData[dlNo] = {
+                    nama: dl.nama || "-",
+                    level: currentLevel,
+                    sales: 0,
+                    override: 0
+                };
+            }
+        });
+
+        // 5B. TARIK SEJARAH JUALAN DAN MASUKKAN KEDALAM SENARAI
+        let grandTotalSales = 0;
+        let grandTotalOverride = 0;
+
         const historyQ = query(collection(db, "overrideHistory"), where("receiver", "==", myConsultantNo));
         const historySnap = await getDocs(historyQ);
         
@@ -217,29 +241,19 @@
             const h = d.data();
             const txDate = h.createdAt?.toDate ? h.createdAt.toDate() : new Date(h.date || h.createdAt);
             
-            // Semak adakah jualan ini berlaku dalam tempoh aktif
+            // Semak tempoh masa aktif
             if (txDate >= startDate && txDate <= endDate) {
                 const aqcNo = h.fromConsultant;
                 
-                // SEMAKAN BREAKAWAY: Adakah AQC ini dari rangkaian yang dah pecah (MGAM baru)?
-                if (!isBreakawayNetwork(aqcNo, myConsultantNo)) {
-                    
-                    const currentLevelOfDownline = levelMap[aqcNo] || "AQC";
-
-                    if (!teamData[aqcNo]) {
-                        teamData[aqcNo] = { 
-                            nama: nameMap[aqcNo] || h.fromName || "-", 
-                            level: currentLevelOfDownline, 
-                            sales: 0, 
-                            override: 0 
-                        };
-                    }
+                // Jika downline itu wujud dalam team kita (dan bukan breakaway MGAM)
+                if (teamData[aqcNo]) {
                     teamData[aqcNo].sales += Number(h.sales || 0);
                     teamData[aqcNo].override += Number(h.override || 0);
                 }
             }
         });
 
+        // Kira grand total selepas data dicantumkan
         for (const aqcNo in teamData) {
             grandTotalSales += teamData[aqcNo].sales;
             grandTotalOverride += teamData[aqcNo].override;
