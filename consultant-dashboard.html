@@ -518,8 +518,6 @@ targetSales = 0;
 
 }
 
-
-
  
 const renewalDate =
 data.renewalDate?.toDate
@@ -668,13 +666,10 @@ let totalCommission = 0;
 
  
 
-
- 
 const ledgerSnap =
 await getDocs(
 collection(db,"ledger")
 );
-
 
  
 const paymentSnap =
@@ -754,25 +749,19 @@ Number(row.credit);
 }); 
 let totalOverriding = 0;
 let overridingSales = 0;
+let totalUsbLedger = 0; // KOD BARU: Sediakan bekas untuk USB
 
-
- 
 ledgerSnap.forEach((d)=>{
-
     const row = d.data();
-
     if(row.consultantNo !== data.consultantNo) return;
-
-   if(
-row.accountCode === "2100" &&
-row.credit > 0
-){
-
-totalOverriding +=
-Number(row.credit);
-
-}
-
+    
+    if( row.accountCode === "2100" && row.credit > 0 ){
+        totalOverriding += Number(row.credit);
+    }
+    // KOD BARU: Tarik nilai USB dari Lejer
+    if( row.accountCode === "2150" && row.credit > 0 ){
+        totalUsbLedger += Number(row.credit);
+    }
 });
 
 
@@ -784,9 +773,9 @@ historySnap.forEach((d)=>{
 
 });
 
-const earned =
-totalCommission + totalOverriding;
-
+// Campurkan sekali nilai USB
+const earned = totalCommission + totalOverriding + totalUsbLedger;
+ 
 document.getElementById("earnedCard").innerHTML =
 "RM" + earned.toFixed(2);
  
