@@ -204,7 +204,7 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             return false;
         }
 
-   // 1. Sediakan bekas data
+  // 1. Sediakan bekas data
         let teamData = {};
         let grandTotalSales = 0;
         let grandTotalOverride = 0;
@@ -234,9 +234,7 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
         );
         const historySnap = await getDocs(historyQ);
 
-        // Tarik rate USB dari Settings
-        const compSnap = await getDoc(doc(db, "settings", "compensation"));
-        const compData = compSnap.exists() ? compSnap.data() : {};
+        // KOD DIBETULKAN: Kita tak panggil getDoc lagi. Kita terus guna compData dari Langkah 2.
         const usbRate = Number(compData.uplineSupportingBenefit || compData.usbRate || 0.5);
 
         historySnap.forEach(d => {
@@ -266,7 +264,6 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             
             grandTotalUsb += teamData[aqcNo].usb; 
         }
-
         // --- SELEPAS INI ADALAH KOD 'for' UNTUK MELUKIS JADUAL HTML KO ---
 
         // 6. Semak Berapa Kali Dah Claim Dalam Tempoh Ini (Untuk Reset Counter)
