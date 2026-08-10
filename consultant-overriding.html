@@ -204,63 +204,78 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             return false;
         }
 
+      // 1. Sediakan bekas data (Sudah wujud dalam kod ko)
         let teamData = {};
         let grandTotalSales = 0;
         let grandTotalOverride = 0;
-        let grandTotalUsb = 0; // KOD BARU: Sediakan bekas untuk kira jumlah USB
+        let grandTotalUsb = 0; 
 
-        // 5A. Masukkan Semua Direct Downline Dahulu (Walaupun 0 Sales)
-        directDownlines.forEach(dlNo => {
-            if (levelMap[dlNo] !== "MGAM") {
-                teamData[dlNo] = {
-                    nama: nameMap[dlNo] || "-",
-                    level: levelMap[dlNo],
-                    sales: 0,
-                    override: 0,
-                    usb: 0 // <--- TAMBAH YANG NI KAT SINI
-                };
-            }
-        });
-
-        // 5B. Tarik Sejarah Jualan & Tambah Indirect Downlines (Yang Ada Sales Sahaja)
-        const historyQ = query(collection(db, "overrideHistory"), where("receiver", "==", myConsultantNo));
-        const historySnap = await getDocs(historyQ);
-        
+        // 2. Kumpul jualan dari overrideHistory
         historySnap.forEach(d => {
             const h = d.data();
-            const txDate = h.createdAt?.toDate ? h.createdAt.toDate() : new Date(h.date || h.createdAt);
+            const aqcNo = h.fromAqc || h.downlineNo;
             
-            // Semak jika dalam tempoh aktif KPI
-            if (txDate >= startDate && txDate <= endDate) {
-                const aqcNo = h.fromConsultant;
-                
-                // Semak kalau BUKAN dari rangkaian Breakaway MGAM
-                if (!isBreakawayNetwork(aqcNo, myConsultantNo)) {
-                    
-                    // Kalau indirect downline belum ada dalam senarai, kita wujudkan
-if (!teamData[aqcNo]) {
-    teamData[aqcNo] = { 
-        nama: nameMap[aqcNo] || h.fromName || "-", 
-        level: levelMap[aqcNo] || "AQC", 
-        sales: 0, 
-        override: 0,
-        usb: 0 // <-- TAMBAH VARIABLE USB
-    };
-}
+            if (!aqcNo) return;
 
-// Campurkan jualan, override dan usb
-teamData[aqcNo].sales += Number(h.sales || 0);
-teamData[aqcNo].override += Number(h.override || 0);
-teamData[aqcNo].usb += Number(h.usb || 0); // <-- TAMBAH PENGIRAAN USB
+            if (!teamData[aqcNo]) {
+                teamData[aqcNo] = { 
+                    nama: nameMap[aqcNo] || h.fromName || "-", 
+                    level: levelMap[aqcNo] || "AQC", 
+                    sales: 0, 
+                    override: 0,
+                    usb: 0
+                };
+            }
+            teamData[aqcNo].sales += Number(h.sales || 0);
+        });
+
+        // 3. TARIK OVERRIDE DAN USB 100% DARI LEJER
+        const ledgerQ = query(
+            collection(db, "ledger"),
+            where("consultantNo", "==", data.consultantNo)
+        );
+        const ledgerSnap = await getDocs(ledgerQ);
+
+        ledgerSnap.forEach(d => {
+            const row = d.data();
+            
+            // Kita cuma nak proses data Overriding (2100) dan USB (2150)
+            if (row.accountCode === "2100" || row.accountCode === "2150") {
+                
+                // Pastikan ada rekod siapa downline yang beri duit ni
+                // (Semak Firebase ko, guna nama field yang betul, contoh: fromAqc)
+                const downlineNo = row.fromAqc || row.downlineNo || row.source; 
+
+                if (!downlineNo) return; // Kalau tak tahu dari downline mana, abaikan
+
+                // Wujudkan rekod kalau belum ada
+                if (!teamData[downlineNo]) {
+                    teamData[downlineNo] = {
+                        nama: nameMap[downlineNo] || "-",
+                        level: levelMap[downlineNo] || "AQC",
+                        sales: 0,
+                        override: 0,
+                        usb: 0
+                    };
+                }
+
+                // Masukkan Overriding
+                if (row.accountCode === "2100" && row.credit > 0) {
+                    teamData[downlineNo].override += Number(row.credit);
+                }
+                
+                // Masukkan USB (Sama ada yang 0.5% ATAU yang daftar RM50)
+                if (row.accountCode === "2150" && row.credit > 0) {
+                    teamData[downlineNo].usb += Number(row.credit);
                 }
             }
         });
 
-        // Kira grand total selepas semua digabungkan
+        // 4. Kira grand total selepas gabung semua
         for (const aqcNo in teamData) {
             grandTotalSales += teamData[aqcNo].sales;
             grandTotalOverride += teamData[aqcNo].override;
-            grandTotalUsb += teamData[aqcNo].usb; // KOD BARU: Campurkan semua USB
+            grandTotalUsb += teamData[aqcNo].usb; 
         }
 
         // 6. Semak Berapa Kali Dah Claim Dalam Tempoh Ini (Untuk Reset Counter)
