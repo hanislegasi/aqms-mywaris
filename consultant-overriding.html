@@ -204,21 +204,20 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             return false;
         }
 
-     // 1. Sediakan bekas data
+    // 1. Sediakan bekas data
         let teamData = {};
         let grandTotalSales = 0;
         let grandTotalOverride = 0;
         let grandTotalUsb = 0; 
 
-        // KOD KESELAMATAN: Ambil nombor AQC terus dari sesi login
-        const myAqcNo = sessionStorage.getItem("consultantNo");
+        // KEMBALI KEPADA KOD ASAL YANG SAH (Guna data dari Firestore)
+        const myAqcNo = data.consultantNo; 
 
         // --- LANGKAH 5A: Tarik Direct Downline dulu supaya yang 0 sales pun keluar ---
         const downlineQ = query(collection(db, "consultants"), where("upline", "==", myAqcNo));
         const downlineSnap = await getDocs(downlineQ);
         downlineSnap.forEach(d => {
             const dl = d.data();
-            // Jangan masukkan MGAM dalam jadual AQC
             if (dl.consultantLevel !== "MGAM") {
                 teamData[dl.consultantNo] = {
                     nama: dl.nama || "-",
@@ -231,7 +230,7 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
         // --- LANGKAH 5B: Kumpul jualan dari overrideHistory ---
         const historyQ = query(
             collection(db, "overrideHistory"),
-            where("receiver", "==", myAqcNo) // Guna myAqcNo yang sah
+            where("receiver", "==", myAqcNo)
         );
         const historySnap = await getDocs(historyQ);
 
@@ -254,7 +253,7 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
         // --- LANGKAH 5C: TARIK OVERRIDE DAN USB 100% DARI LEJER ---
         const ledgerQ = query(
             collection(db, "ledger"),
-            where("consultantNo", "==", myAqcNo) // Guna myAqcNo yang sah
+            where("consultantNo", "==", myAqcNo)
         );
         const ledgerSnap = await getDocs(ledgerQ);
 
@@ -291,7 +290,6 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
         }
 
         // --- SELEPAS INI ADALAH KOD 'for' UNTUK MELUKIS JADUAL HTML KO ---
-        // for (const aqcNo in teamData) { ... }
 
         // 6. Semak Berapa Kali Dah Claim Dalam Tempoh Ini (Untuk Reset Counter)
         const claimsQ = query(
