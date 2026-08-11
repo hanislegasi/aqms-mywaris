@@ -25,12 +25,9 @@
         </a>
         
         <div>
-            <!-- Butang Export sedia ada -->
             <button id="exportPdfBtn" class="bg-red-600 hover:bg-red-700 transition text-white px-5 py-3 rounded-xl shadow">
                 Export PDF
             </button>
-            
-            <!-- BUTANG BARU: Tambah Jurnal -->
             <button id="addJournalBtn" class="bg-blue-600 hover:bg-blue-700 transition text-white px-5 py-3 rounded-xl shadow ml-2">
                 + Tambah Jurnal
             </button>
@@ -65,7 +62,7 @@
 </div>
 
 <!-- ========================================== -->
-<!-- MODAL TAMBAH JUALAN / PELARASAN (BARU)     -->
+<!-- MODAL TAMBAH JURNAL (DENGAN COA DROPDOWN)  -->
 <!-- ========================================== -->
 <div id="journalModal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center z-50 p-4 backdrop-blur-sm">
     <div class="bg-white max-w-2xl w-full rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
@@ -95,15 +92,12 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Kod Akaun (Cth: 2150)</label>
-                    <input type="text" id="jCode" required class="w-full border rounded-xl p-3 bg-gray-50" placeholder="e.g. 2150">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nama Akaun (Cth: USB Payable)</label>
-                    <input type="text" id="jAccount" required class="w-full border rounded-xl p-3 bg-gray-50" placeholder="e.g. USB Payable">
-                </div>
+            <!-- DROPDOWN AKAUN TARIK DARI COA -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Pilih Akaun (Chart of Accounts)</label>
+                <select id="jCoaSelect" required class="w-full border rounded-xl p-3 bg-gray-50 font-medium">
+                    <option value="">Memuat turun senarai akaun...</option>
+                </select>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
@@ -162,8 +156,42 @@ function money(value){
     return Number(value || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
+// Simpan data COA sementara untuk rujukan kod & nama akaun
+let coaList = [];
+
 // ==========================================
-// FUNGSI LOAD & DISPLAY TABLE
+// 1. LOAD COA UNTUK DROPDOWN
+// ==========================================
+async function loadCoaDropdown() {
+    try {
+        const coaSnap = await getDocs(collection(db, "coa"));
+        const select = document.getElementById("jCoaSelect");
+        
+        let options = '<option value="">-- Sila Pilih Akaun --</option>';
+        coaList = [];
+
+        coaSnap.forEach((doc) => {
+            const data = doc.data();
+            coaList.push(data);
+            // Andaikan struktur data COA ada field: code & name (atau accountCode & account)
+            const code = data.code || data.accountCode || "";
+            const name = data.name || data.account || "";
+            
+            options += `<option value="${code}">${code} - ${name}</option>`;
+        });
+
+        select.innerHTML = options;
+    } catch (error) {
+        console.error("Ralat load COA: ", error);
+        document.getElementById("jCoaSelect").innerHTML = '<option value="">Gagal memuat turun senarai COA</option>';
+    }
+}
+
+// Panggil fungsi load COA masa muka surat dibuka
+loadCoaDropdown();
+
+// ==========================================
+// 2. LOAD & DISPLAY TABLE JURNAL
 // ==========================================
 async function loadTableData() {
     const snap = await getDocs(collection(db, "ledger"));
@@ -194,11 +222,10 @@ async function loadTableData() {
     document.getElementById("journalTable").innerHTML = html || '<tr><td colspan="5" class="p-5 text-center">Tiada rekod ditemui.</td></tr>';
 }
 
-// Panggil fungsi masa mula-mula buka page
 loadTableData();
 
 // ==========================================
-// FUNGSI CARIAN & FILTER
+// 3. FUNGSI CARIAN & FILTER
 // ==========================================
 function filterJournal(){
     const keyword = document.getElementById("journalSearch").value.toLowerCase();
@@ -207,7 +234,7 @@ function filterJournal(){
     const rows = document.querySelectorAll("#journalTable tr");
 
     rows.forEach((row) => {
-        if(row.children.length === 1) return; // Skip "loading/empty" row
+        if(row.children.length === 1) return;
         
         const text = row.innerText.toLowerCase();
         const rowDate = row.dataset.date;
@@ -226,26 +253,32 @@ document.getElementById("dateFrom").addEventListener("change", filterJournal);
 document.getElementById("dateTo").addEventListener("change", filterJournal);
 
 // ==========================================
-// FUNGSI MODAL & SIMPAN KE FIRESTORE (BARU)
+// 4. FUNGSI MODAL & SIMPAN KE FIRESTORE
 // ==========================================
 const modal = document.getElementById("journalModal");
 const addBtn = document.getElementById("addJournalBtn");
 const closeBtn = document.getElementById("closeModalBtn");
 const form = document.getElementById("journalForm");
 
-// Buka Modal (Set tarikh harini secara automatik)
 addBtn.addEventListener("click", () => {
     document.getElementById("jDate").value = new Date().toISOString().substring(0,10);
     modal.classList.remove("hidden");
 });
 
-// Tutup Modal
 closeBtn.addEventListener("click", () => {
     modal.classList.add("hidden");
     form.reset();
 });
 
-// Submit Form
+// Bila user pilih dropdown COA, automatik kita boleh isi kategori jika sistem COA ada simpan kategori
+document.getElementById("jCoaSelect").addEventListener("change", (e) => {
+    const selectedCode = e.target.value;
+    const found = coaList.find(c => (c.code === selectedCode || c.accountCode === selectedCode));
+    if (found && found.category) {
+        document.getElementById("jCategory").value = found.category;
+    }
+});
+
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
     
@@ -254,11 +287,15 @@ form.addEventListener("submit", async (e) => {
     submitBtn.disabled = true;
 
     try {
-        // Bina Objek Data
+        const selectedCode = document.getElementById("jCoaSelect").value;
+        const foundCoa = coaList.find(c => (c.code === selectedCode || c.accountCode === selectedCode));
+        
+        const accountName = foundCoa ? (foundCoa.name || foundCoa.account) : "Unknown Account";
+
         const journalData = {
             date: new Date(document.getElementById("jDate").value),
-            accountCode: document.getElementById("jCode").value,
-            account: document.getElementById("jAccount").value,
+            accountCode: selectedCode,
+            account: accountName,
             category: document.getElementById("jCategory").value,
             debit: Number(document.getElementById("jDebit").value) || 0,
             credit: Number(document.getElementById("jCredit").value) || 0,
@@ -266,23 +303,19 @@ form.addEventListener("submit", async (e) => {
             paymentType: "JOURNAL",
         };
 
-        // Masukkan data Konsultan (Jika ada)
         const upline = document.getElementById("jUpline").value.trim();
         const downline = document.getElementById("jDownline").value.trim();
         
         if(upline) journalData.consultantNo = upline;
         if(downline) journalData.fromConsultant = downline;
 
-        // Push ke Firestore Ledger
         await addDoc(collection(db, "ledger"), journalData);
 
         alert("Rekod Jurnal berjaya disimpan!");
         
-        // Reset & Tutup
         form.reset();
         modal.classList.add("hidden");
         
-        // Reload Table supaya data baru terus nampak
         document.getElementById("journalTable").innerHTML = '<tr><td colspan="5" class="p-5 text-center text-gray-500">Refreshing data...</td></tr>';
         await loadTableData();
 
@@ -296,7 +329,7 @@ form.addEventListener("submit", async (e) => {
 });
 
 // ==========================================
-// EXPORT PDF
+// 5. EXPORT PDF
 // ==========================================
 document.getElementById("exportPdfBtn").addEventListener("click", () => {
     html2pdf().set({
@@ -311,5 +344,3 @@ document.getElementById("exportPdfBtn").addEventListener("click", () => {
 </script>
 </body>
 </html>
-
-  
