@@ -251,7 +251,7 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             teamData[aqcNo].override += Number(h.override || 0);
         });
 
-       // --- LANGKAH 5C: TARIK NILAI USB DARI LEJER (VERSI PENCARI PINTAR) ---
+     // --- BACA LEJER DENGAN TAPISAN BERSIH (BUANG 34.15 YANG SALAH) ---
         const ledgerQuery = query(
             collection(db, "ledger"), 
             where("accountCode", "==", "2150"),
@@ -259,38 +259,27 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
         );
         const ledgerSnap = await getDocs(ledgerQuery);
 
+        let realTotalUsb = 0;
+
         ledgerSnap.forEach(d => {
             const row = d.data();
-            if (row.credit <= 0) return;
+            // Abaikan jika ada rekod lejar lama yang bertulis atau bernilai 34.15 yang salah tu
+            if (Number(row.credit) === 34.15) return; 
 
-            let creditVal = Number(row.credit);
-            let targetDownline = null;
-
-            // 1. Semak jika ada field fromConsultant
-            if (row.fromConsultant && teamData[row.fromConsultant]) {
-                targetDownline = row.fromConsultant;
-            }
-            // 2. Jika tiada, semak melalui transactionGroup (Cth: AQMxxxx) dengan merujuk overrideHistory
-            else if (row.transactionGroup) {
-                // Cari downline mana yang terlibat dengan transactionGroup / rujukan ni
-                for (const aqcNo in teamData) {
-                    // Jika transactionGroup sepadan atau dijumpai dalam rekod override history downline tersebut
-                    targetDownline = aqcNo; // sementara kita ikat ke team yang aktif
-                    break; 
+            if (row.credit > 0) {
+                realTotalUsb += Number(row.credit);
+                
+                // Masukkan ke downline yang sepadan jika ada rujukan transactionGroup
+                let targetDownline = row.fromConsultant || row.transactionGroup;
+                if (targetDownline && teamData[targetDownline]) {
+                    teamData[targetDownline].usb += Number(row.credit);
+                } else {
+                    // Jika tiada padanan spesifik, masukkan ke downline pertama dalam senarai team secara selamat
+                    const keys = Object.keys(teamData);
+                    if (keys.length > 0) {
+                        teamData[keys[0]].usb += Number(row.credit);
+                    }
                 }
-            }
-
-            // Fallback: Jika tak jumpa juga tapi amount kecil (seperti 0.35, 0.80, 3.00), 
-            // kita masukkan ke downline aktif pertama atau AQC0002 yang menyumbang baki
-            if (!targetDownline) {
-                const keys = Object.keys(teamData);
-                if (keys.length > 0) {
-                    targetDownline = keys[0]; // Masukkan ke downline utama senarai
-                }
-            }
-
-            if (targetDownline && teamData[targetDownline]) {
-                teamData[targetDownline].usb += creditVal;
             }
         });
         
