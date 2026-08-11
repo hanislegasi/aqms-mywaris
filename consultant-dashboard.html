@@ -761,34 +761,42 @@ Number(row.credit);
 }); 
 let totalOverriding = 0;
 let overridingSales = 0;
-let totalUsbLive = 0; // Bekas baru untuk kiraan USB tepat
 
-// =======================================================
-// 1. KIRA DARI LEJER (Untuk Overriding & USB Pendaftaran RM50)
-// =======================================================
+// A. KIRA OVERRIDING (Kod Akaun 2100) & KIRA SALES DARI HISTORY
 ledgerSnap.forEach((d)=>{
     const row = d.data();
-
-    // A. KIRA OVERRIDING (Kod Akaun 2100)
     if(row.consultantNo === data.consultantNo && row.accountCode === "2100" && row.credit > 0){
         totalOverriding += Number(row.credit);
     }
+});
 
-    // B. KIRA USB PENDAFTARAN RM50 (Kod Akaun 2150) guna "Laluan Tikus"
-    if(row.accountCode === "2150" && Number(row.credit) === 50) {
-        let dlNo = row.fromConsultant || row.transactionGroup;
-        if (!dlNo && row.description) {
-            const match = row.description.match(/(AQC\d{4,5})/);
-            if (match) dlNo = match[0];
-        }
-        
-        // Asalkan terjumpa ID Downline dan ia BUKAN ID upline sendiri
-        if (dlNo && dlNo !== data.consultantNo) {
-            totalUsbLive += 50;
-        }
+historySnap.forEach((d)=>{
+    const h = d.data();
+    const aqcNo = h.fromConsultant; 
+    if (!aqcNo || aqcNo === data.consultantNo) return;
+    overridingSales += Number(h.sales || 0);
+});
+
+// B. TARIK BAKI USB RASMI TERUS DARI LEJER (KOD AKUN 2150) ATAS NAMA KONSULTAN INI
+let totalMyUsb = 0;
+ledgerSnap.forEach((d) => {
+    const r = d.data();
+    if (r.accountCode === "2150" && r.consultantNo === data.consultantNo) {
+        totalMyUsb += Number(r.credit || 0) - Number(r.debit || 0);
     }
 });
 
+// C. JUMLAH KESELURUHAN (EARNED)
+const earned = totalCommission + totalOverriding + totalMyUsb;
+
+document.getElementById("earnedCard").innerHTML = "RM" + earned.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+
+const outstanding = earned - paid;
+
+// Paparkan nilai USB rasmi ke kotak id="usbAmount"
+document.getElementById("usbAmount").innerHTML = "RM" + totalMyUsb.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+
+ 
 // =======================================================
 // 2. KIRA DARI HISTORY (Untuk Total Sales & USB Jualan)
 // =======================================================
