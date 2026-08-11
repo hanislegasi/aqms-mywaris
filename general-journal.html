@@ -160,11 +160,12 @@ function money(value){
 let coaList = [];
 
 // ==========================================
-// 1. LOAD COA UNTUK DROPDOWN
+// 1. LOAD COA UNTUK DROPDOWN (BETUL NAMA KOLEKSI)
 // ==========================================
 async function loadCoaDropdown() {
     try {
-        const coaSnap = await getDocs(collection(db, "coa"));
+        // TUKAR 'coa' KEPADA 'chartOfAccounts' MENGIKUT DATABASE KO
+        const coaSnap = await getDocs(collection(db, "chartOfAccounts"));
         const select = document.getElementById("jCoaSelect");
         
         let options = '<option value="">-- Sila Pilih Akaun --</option>';
@@ -173,9 +174,10 @@ async function loadCoaDropdown() {
         coaSnap.forEach((doc) => {
             const data = doc.data();
             coaList.push(data);
-            // Andaikan struktur data COA ada field: code & name (atau accountCode & account)
-            const code = data.code || data.accountCode || "";
-            const name = data.name || data.account || "";
+            
+            // Ambil field code & name dari struktur database ko
+            const code = data.code || doc.id; // Kalau field code takde, ambil ID dokumen (cth: 1000)
+            const name = data.name || "";
             
             options += `<option value="${code}">${code} - ${name}</option>`;
         });
@@ -273,9 +275,11 @@ closeBtn.addEventListener("click", () => {
 // Bila user pilih dropdown COA, automatik kita boleh isi kategori jika sistem COA ada simpan kategori
 document.getElementById("jCoaSelect").addEventListener("change", (e) => {
     const selectedCode = e.target.value;
-    const found = coaList.find(c => (c.code === selectedCode || c.accountCode === selectedCode));
-    if (found && found.category) {
-        document.getElementById("jCategory").value = found.category;
+    const found = coaList.find(c => c.code === selectedCode || c.code === String(selectedCode));
+    if (found) {
+        // Sokong field 'category' atau 'type' dari database ko
+        const cat = found.category || found.type || "";
+        document.getElementById("jCategory").value = cat.toLowerCase(); // Tukar jadi huruf kecil (asset/liability/expense)
     }
 });
 
