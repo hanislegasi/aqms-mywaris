@@ -233,8 +233,8 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             where("receiver", "==", myAqcNo)
         );
         const historySnap = await getDocs(historyQ);
-
-        const compData = compSnap.exists() ? compSnap.data() : {};
+        const compSnap = await getDoc(doc(db, "settings", "compensation"));
+        
         const usbRate = Number(compData.uplineSupportingBenefit || compData.usbRate || 0.5);
 
         historySnap.forEach(d => {
