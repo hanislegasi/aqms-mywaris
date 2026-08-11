@@ -227,20 +227,17 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             }
         });
 
-     // --- LANGKAH 5B: Kumpul TOTAL SALES & OVERRIDE dari overrideHistory ---
+    // --- LANGKAH 5B: Kumpul TOTAL SALES & OVERRIDE dari overrideHistory ---
         const historyQ = query(
             collection(db, "overrideHistory"),
             where("receiver", "==", myAqcNo)
         );
         const historySnap = await getDocs(historyQ);
-             
-        const usbRate = Number(compData.uplineSupportingBenefit || compData.usbRate || 0.5);
 
         historySnap.forEach(d => {
             const h = d.data();
-            const aqcNo = h.fromConsultant; // ID Downline (AQC0002, AQC0003 dll)
+            const aqcNo = h.fromConsultant; 
             
-            // Pagar: Jangan proses kalau ID kosong atau ID diri sendiri
             if (!aqcNo || aqcNo === myAqcNo) return; 
 
             if (!teamData[aqcNo]) {
@@ -252,30 +249,29 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             }
             teamData[aqcNo].sales += Number(h.sales || 0);
             teamData[aqcNo].override += Number(h.override || 0);
-            
-            // 1. Kira USB dari Jualan (0.5%) secara automatik (Sebab lejer berselerak)
-            teamData[aqcNo].usb += Number(h.sales || 0) * (usbRate / 100);
         });
 
-        // --- LANGKAH 5C: KAUT USB RM50 (PENDAFTARAN) DARI LEJER ---
-        // Memandangkan Lejer RM50 tiada field 'consultantNo', kita pancing guna 'transactionGroup'
-        for (const aqcNo in teamData) {
-            const regQ = query(
-                collection(db, "ledger"),
-                where("transactionGroup", "==", aqcNo), // Pancing nama downline kat sini
-                where("accountCode", "==", "2150")
-            );
-            const regSnap = await getDocs(regQ);
-            
-            regSnap.forEach(d => {
-                const row = d.data();
-                // Kalau terjumpa RM50, terus tambahkan ke kotak USB downline tersebut
-                if (Number(row.credit) === 50) {
-                    teamData[aqcNo].usb += 50;
-                }
-            });
-        }
+        // --- LANGKAH 5C: TARIK NILAI USB TERUS DARI BUKU LEJER (KOD 2150) ---
+        // Ini memastikan nilai USB dalam jadual selaras 100% dengan Jurnal & Lejer HQ
+        const ledgerQuery = query(
+            collection(db, "ledger"), 
+            where("accountCode", "==", "2150"),
+            where("consultantNo", "==", myAqcNo) 
+        );
+        const ledgerSnap = await getDocs(ledgerQuery);
 
+        ledgerSnap.forEach(d => {
+            const row = d.data();
+            // Semak siapa downline yang menyumbang USB ni melalui 'fromConsultant'
+            const downlineId = row.fromConsultant;
+            
+            if (downlineId && teamData[downlineId]) {
+                if (row.credit > 0) {
+                    teamData[downlineId].usb += Number(row.credit);
+                }
+            }
+        });
+        
         // --- 6. KIRA JUMLAH KESELURUHAN (GRAND TOTAL) ---
         for (const aqcNo in teamData) {
             grandTotalSales += teamData[aqcNo].sales;
