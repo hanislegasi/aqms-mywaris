@@ -327,41 +327,43 @@
             let cntTerimaAQM = 0;
 
             const processDocStatus = (statusStr, type) => {
-                if (!statusStr) return;
-                const s = statusStr.trim().toUpperCase();
+    if (!statusStr) return;
+    const s = statusStr.trim().toUpperCase();
 
-                // 1. Approved (Semua yang sekurang-kurangnya Approved/Verified dan fasa seterusnya)
-                if (["APPROVED", "VERIFIED", "PRINTED", "SENT", "AKAD", "STAMPING", "DISERAHKAN_AQM", "RECEIVED", "COMPLETED"].includes(s)) {
-                    cntApproved++;
-                }
+    // 1. Approved
+    if (["APPROVED", "VERIFIED", "PRINTED", "SENT", "DELIVERED", "AKAD", "STAMPING", "DISERAHKAN_AQM", "RECEIVED", "COMPLETED"].includes(s)) {
+        cntApproved++;
+    }
 
-                // 2. Printed & 3. Sent (Laluan Cetak & Kurier sahaja)
-                if (s === "PRINTED") {
-                    cntPrinted++;
-                } else if (s === "SENT") {
-                    cntPrinted++;
-                    cntSent++;
-                }
+    // 2. Printed
+    if (["PRINTED", "SENT", "DELIVERED", "DIHANTAR KURIER", "KURIER"].includes(s)) {
+        cntPrinted++;
+    }
 
-                // 4. Akad -> 7. Terima AQM (Laluan Fizikal / Serah AQM)
-                if (s === "AKAD") {
-                    cntAkad++;
-                } else if (s === "STAMPING") {
-                    cntAkad++; cntStamping++;
-                } else if (s === "DISERAHKAN_AQM" || s === "SERAH_AQM") {
-                    cntAkad++; cntStamping++; cntDiserahAQM++;
-                } else if (s === "RECEIVED" || s === "COMPLETED") {
-                    cntAkad++; cntStamping++; cntDiserahAQM++; cntTerimaAQM++;
-                }
+    // 3. Sent (Tambahkan variasi status kurier di sini)
+    if (["SENT", "DELIVERED", "DIHANTAR KURIER", "KURIER", "POST"].includes(s)) {
+        cntSent++;
+    }
 
-                // Queue
-                if (s === "UNDER_REVIEW") {
-                    if (type === 'wasiat') queueWasiat++;
-                    if (type === 'hibah') queueHibah++;
-                    if (type === 'sepencarian') queueSepencarian++;
-                    if (type === 'mawaris') queueMawaris++;
-                }
-            };
+    // 4. Akad -> 7. Terima AQM
+    if (s === "AKAD") {
+        cntAkad++;
+    } else if (s === "STAMPING") {
+        cntAkad++; cntStamping++;
+    } else if (["DISERAHKAN_AQM", "SERAH_AQM"].includes(s)) {
+        cntAkad++; cntStamping++; cntDiserahAQM++;
+    } else if (["RECEIVED", "COMPLETED"].includes(s)) {
+        cntAkad++; cntStamping++; cntDiserahAQM++; cntTerimaAQM++;
+    }
+
+    // Queue
+    if (s === "UNDER_REVIEW") {
+        if (type === 'wasiat') queueWasiat++;
+        if (type === 'hibah') queueHibah++;
+        if (type === 'sepencarian') queueSepencarian++;
+        if (type === 'mawaris') queueMawaris++;
+    }
+};
 
             const processModuleData = (data, type) => {
                 if (!data) return;
