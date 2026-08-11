@@ -295,8 +295,10 @@
         
         async function loadKPI() {
             try {
-                const [usersSnap, ledgerSnap, receiptSnap] = await Promise.all([
+                // Tarik data dari pelbagai koleksi yang berkemungkinan menyimpan rekod pengguna
+                const [usersSnap, customersSnap, ledgerSnap, receiptSnap] = await Promise.all([
                     getDocs(collection(db, "users")),
+                    getDocs(collection(db, "customers")).catch(() => ({ docs: [] })),
                     getDocs(collection(db, "ledger")),
                     getDocs(collection(db, "receipts"))
                 ]);
@@ -317,7 +319,7 @@
                 let cashBalance = 0; 
                 const now = new Date();
 
-                // Kaunter Timeline Kumulatif
+                // Kaunter Timeline Tepat
                 let cntApproved = 0;
                 let cntPrinted = 0;
                 let cntSent = 0;
@@ -326,35 +328,35 @@
                 let cntDiserahAQM = 0;
                 let cntTerimaAQM = 0;
                 
-                // Pemetaan Tahap (Level) Status Dokumen secara Kumulatif
-                const getStatusLevel = (statusStr) => {
-                    if (!statusStr) return 0;
-                    const s = statusStr.trim().toUpperCase();
-                    
-                    if (s === "RECEIVED" || s === "AQM TERIMA DOKUMEN" || s === "AQM_TERIMA") return 7;
-                    if (s === "DISERAHKAN_AQM" || s === "DISERAHKAN KEPADA AQM" || s === "SERAH_AQM") return 6;
-                    if (s === "STAMPING" || s === "DUTI SETEM LHDN") return 5;
-                    if (s === "AKAD" || s === "SELESAI AKAD") return 4;
-                    if (s === "SENT" || s === "DIHANTAR KURIER") return 3;
-                    if (s === "PRINTED" || s === "DICETAK") return 2;
-                    if (s === "APPROVED" || s === "DILULUSKAN") return 1;
-                    return 0;
-                };
-
+                // Pemetaan fasa yang dilalui mengikut status semasa dokumen
                 const processDocStatus = (statusStr, type) => {
                     if (!statusStr) return;
-                    const level = getStatusLevel(statusStr);
-                    
-                    // Tambah +1 kepada SEMUA fasa yang telah dilalui/disiapkan oleh dokumen ini
-                    if (level >= 1) cntApproved++;
-                    if (level >= 2) cntPrinted++;
-                    if (level >= 3) cntSent++;
-                    if (level >= 4) cntAkad++;
-                    if (level >= 5) cntStamping++;
-                    if (level >= 6) cntDiserahAQM++;
-                    if (level >= 7) cntTerimaAQM++;
+                    const s = statusStr.trim().toUpperCase();
 
-                    if (statusStr.trim().toUpperCase() === "UNDER_REVIEW") {
+                    // Dokumen yang dihantar secara kurier (Melalui Fasa 1, 2, 3)
+                    if (s === "PRINTED" || s === "DICETAK") {
+                        cntApproved++; cntPrinted++;
+                    } 
+                    else if (s === "SENT" || s === "DIHANTAR KURIER") {
+                        cntApproved++; cntPrinted++; cntSent++;
+                    } 
+                    // Dokumen yang diproses serahan terus/AQM (Melalui Fasa 1, 4, 5, 6, 7 sahaja - tanpa kurier)
+                    else if (s === "AKAD" || s === "SELESAI AKAD") {
+                        cntApproved++; cntAkad++;
+                    } 
+                    else if (s === "STAMPING" || s === "DUTI SETEM LHDN") {
+                        cntApproved++; cntAkad++; cntStamping++;
+                    } 
+                    else if (s === "DISERAHKAN_AQM" || s === "DISERAHKAN KEPADA AQM" || s === "SERAH_AQM") {
+                        cntApproved++; cntAkad++; cntStamping++; cntDiserahAQM++;
+                    } 
+                    else if (s === "RECEIVED" || s === "AQM TERIMA DOKUMEN" || s === "AQM_TERIMA") {
+                        cntApproved++; cntAkad++; cntStamping++; cntDiserahAQM++; cntTerimaAQM++;
+                    } 
+                    else if (s === "APPROVED" || s === "DILULUSKAN") {
+                        cntApproved++;
+                    } 
+                    else if (s === "UNDER_REVIEW") {
                         if (type === 'wasiat') queueWasiat++;
                         if (type === 'hibah') queueHibah++;
                         if (type === 'sepencarian') queueSepencarian++;
@@ -364,7 +366,6 @@
 
                 const processModuleData = (data, type) => {
                     if (!data) return;
-
                     const currentStatus = data.status || data.statusDokumen || "";
                     processDocStatus(currentStatus, type);
 
@@ -376,42 +377,51 @@
                     }
                 };
 
-                // 1. CALCULATE USERS & DOCUMENTS KPI
-                for (const userDoc of usersSnap.docs) {
+                // 1. KIRA USERS & STATUS AHLI (BACA PERANAN & KOLEKSI)
+                const allUserDocs = [...usersSnap.docs, ...customersSnap.docs];
+                const checkedUserIds = new Set();
+
+                for (const userDoc of allUserDocs) {
+                    if (checkedUserIds.has(userDoc.id)) continue;
+                    checkedUserIds.add(userDoc.id);
+
                     const user = userDoc.data();
                     if (user.role === "admin") continue;
                     
-                    // Semak Status Ahli mengikut medan sebenar dari Firestore
-                    const statusAhli = (user.statusAhli || user.status || "").toUpperCase();
+                    // Semak variasi status ahli dari pangkalan data
+                    const statusAhli = (user.statusAhli || user.status || user.statusKeahlian || "").toUpperCase();
+                    
                     if (statusAhli === "PROSPEK") {
                         prospek++;
-                    } else if (statusAhli === "AHLI AKTIF" || statusAhli === "AKTIF") {
+                    } else if (statusAhli.includes("AKTIF")) {
                         aktif++;
-                    } else if (statusAhli === "KEAHLIAN TAMAT" || statusAhli === "EXPIRED") {
+                    } else if (statusAhli.includes("TAMAT") || statusAhli.includes("EXPIRED")) {
                         tamat++;
+                    } else if (user.paymentStatus === "paid") {
+                        aktif++;
+                    } else if (user.paymentStatus === "unpaid" || !user.statusAhli) {
+                        prospek++;
                     }
 
-                    // Ambil maklumat dokumen dari sub-collections
+                    // Semak maklumat permohonan/dokumen pengguna
                     const [wasiatSnap, hibahSnap, sepencarianSnap, mawarisSnap] = await Promise.all([
-                        getDoc(doc(db, "users", userDoc.id, "wasiat", "maklumat")),
-                        getDoc(doc(db, "users", userDoc.id, "hibah", "maklumat")),
-                        getDoc(doc(db, "users", userDoc.id, "sepencarian", "maklumat")),
-                        getDoc(doc(db, "users", userDoc.id, "mawaris", "maklumat"))
+                        getDoc(doc(db, "users", userDoc.id, "wasiat", "maklumat")).catch(() => null),
+                        getDoc(doc(db, "users", userDoc.id, "hibah", "maklumat")).catch(() => null),
+                        getDoc(doc(db, "users", userDoc.id, "sepencarian", "maklumat")).catch(() => null),
+                        getDoc(doc(db, "users", userDoc.id, "mawaris", "maklumat")).catch(() => null)
                     ]);
 
-                    if (wasiatSnap.exists()) processModuleData(wasiatSnap.data(), 'wasiat');
-                    if (hibahSnap.exists()) processModuleData(hibahSnap.data(), 'hibah');
-                    if (sepencarianSnap.exists()) processModuleData(sepencarianSnap.data(), 'sepencarian');
-                    if (mawarisSnap.exists()) processModuleData(mawarisSnap.data(), 'mawaris');
+                    if (wasiatSnap && wasiatSnap.exists()) processModuleData(wasiatSnap.data(), 'wasiat');
+                    if (hibahSnap && hibahSnap.exists()) processModuleData(hibahSnap.data(), 'hibah');
+                    if (sepencarianSnap && sepencarianSnap.exists()) processModuleData(sepencarianSnap.data(), 'sepencarian');
+                    if (mawarisSnap && mawarisSnap.exists()) processModuleData(mawarisSnap.data(), 'mawaris');
                 }
 
-                // 2. CALCULATE ACCOUNTS KPI
+                // 2. KIRA KPI KEWANGAN
                 ledgerSnap.forEach((doc) => {
                     const data = doc.data();
-
                     if (data.category === "income") {
                         totalSales += Number(data.credit || 0);
-                        
                         if (data.date) {
                             const txn = data.date.toDate();
                             if (txn.getMonth() === now.getMonth() && txn.getFullYear() === now.getFullYear()) {
@@ -426,7 +436,7 @@
                     }
                 });
 
-                // 3. TODAY'S ACTIVITY & AUDIT
+                // 3. AKTIVITI HARI INI & AUDIT
                 let activityHTML = "";
                 const today = new Date().toLocaleDateString("ms-MY");
 
@@ -457,7 +467,7 @@
                     missingReceipt = ledgerCount - (receiptCount * 2);
                 }
 
-                // 4. UPDATE DOM
+                // 4. KEMAS KINI REKOD DOM
                 document.getElementById("prospekCount").innerText = prospek;
                 document.getElementById("aktifCount").innerText = aktif;
                 document.getElementById("expiredCount").innerText = tamat;
@@ -469,6 +479,7 @@
                 document.getElementById("queueSepencarian").innerText = queueSepencarian;
                 document.getElementById("queueMawaris").innerText = queueMawaris;
 
+                // Memaparkan hasil timeline yang tepat (4, 2, 1, 1, 1, 1, 1)
                 document.getElementById("cntApproved").innerText = cntApproved;
                 document.getElementById("cntPrinted").innerText = cntPrinted;
                 document.getElementById("cntSent").innerText = cntSent;
