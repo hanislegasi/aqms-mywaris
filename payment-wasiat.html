@@ -324,10 +324,11 @@ agreeBtn.addEventListener("click", async () => {
         const directConsultant = findConsultant(customer.referral);
         let currentConsultant = findConsultant(customer.referral);
 
-        // UPLINE SPONSOR BENEFIT
+// UPLINE SPONSOR BENEFIT
         const sponsor = directConsultant ? findConsultant(directConsultant.upline) : null;
 
         if (sponsor) {
+            // 1. Rekod Debit (5150)
             await addDoc(collection(db, "ledger"), {
                 date: txnDate,
                 accountCode: "5150",
@@ -335,13 +336,20 @@ agreeBtn.addEventListener("click", async () => {
                 category: "expense",
                 consultantNo: sponsor.consultantNo,
                 consultantName: sponsor.nama,
-                description: sponsor.consultantNo + " USB",
+                
+                // 🔥 KEMAS KINI 1: Tukar description letak nama Downline
+                description: directConsultant.consultantNo + " USB", 
+                
                 debit: usbAmount,
                 credit: 0,
                 transactionGroup: memberNo,
-                paymentType: "USB"
+                paymentType: "USB",
+                
+                // 🔥 KEMAS KINI 2: Wajib tambah 'fromConsultant'
+                fromConsultant: directConsultant.consultantNo 
             });
 
+            // 2. Rekod Credit (2150) - INI PALING PENTING UNTUK DASHBOARD
             await addDoc(collection(db, "ledger"), {
                 date: txnDate,
                 accountCode: "2150",
@@ -349,11 +357,17 @@ agreeBtn.addEventListener("click", async () => {
                 category: "liability",
                 consultantNo: sponsor.consultantNo,
                 consultantName: sponsor.nama,
-                description: sponsor.consultantNo + " USB",
+                
+                // 🔥 KEMAS KINI 1: Tukar description letak nama Downline
+                description: directConsultant.consultantNo + " USB", 
+                
                 debit: 0,
                 credit: usbAmount,
                 transactionGroup: memberNo,
-                paymentType: "USB"
+                paymentType: "USB",
+                
+                // 🔥 KEMAS KINI 2: Wajib tambah 'fromConsultant'
+                fromConsultant: directConsultant.consultantNo 
             });
 
             await updateDoc(doc(db, "consultants", sponsor.id), {
