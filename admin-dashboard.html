@@ -99,7 +99,6 @@
                 </span>
             </div>
 
-            <!-- Grid 7 Langkah -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
                 
                 <!-- 1. Approved -->
@@ -287,7 +286,6 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // FORMAT CURRENCY
         function formatRM(value) {
             return Number(value).toLocaleString("en-MY", {
                 minimumFractionDigits: 0,
@@ -319,7 +317,7 @@
                 let cashBalance = 0; 
                 const now = new Date();
 
-                // Counters bagi 7 Status Timeline
+                // Counters Timeline
                 let cntApproved = 0;
                 let cntPrinted = 0;
                 let cntSent = 0;
@@ -328,23 +326,37 @@
                 let cntDiserahAQM = 0;
                 let cntTerimaAQM = 0;
                 
-                // Helper function memproses maklumat modul
-                const processModuleData = (data, type) => {
-                    if (!data) return;
-
-                    // Padankan dengan status dari database
-                    const status = (data.status || "").toUpperCase();
+                // Helper untuk menyemak dan mengira status dokumen
+                const processDocStatus = (statusStr, type) => {
+                    if (!statusStr) return;
+                    
+                    const status = statusStr.trim().toUpperCase();
 
                     switch (status) {
-                        case "APPROVED": cntApproved++; break;
-                        case "PRINTED": cntPrinted++; break;
-                        case "SENT": cntSent++; break;
-                        case "AKAD": cntAkad++; break;
-                        case "STAMPING": cntStamping++; break;
+                        case "APPROVED": 
+                            cntApproved++; 
+                            break;
+                        case "PRINTED": 
+                            cntPrinted++; 
+                            break;
+                        case "SENT": 
+                            cntSent++; 
+                            break;
+                        case "AKAD": 
+                            cntAkad++; 
+                            break;
+                        case "STAMPING": 
+                            cntStamping++; 
+                            break;
                         case "DISERAHKAN_AQM":
-                        case "DISERAHKAN KEPADA AQM": cntDiserahAQM++; break;
+                        case "DISERAHKAN KEPADA AQM": 
+                            cntDiserahAQM++; 
+                            break;
                         case "AQM_TERIMA":
-                        case "AQM TERIMA DOKUMEN": cntTerimaAQM++; break;
+                        case "AQM TERIMA DOKUMEN":
+                        case "RECEIVED": 
+                            cntTerimaAQM++; 
+                            break;
                         case "UNDER_REVIEW":
                             if (type === 'wasiat') queueWasiat++;
                             if (type === 'hibah') queueHibah++;
@@ -352,8 +364,29 @@
                             if (type === 'mawaris') queueMawaris++;
                             break;
                     }
+                };
 
-                    if (data.docRef) approved++;
+                const processModuleData = (data, type) => {
+                    if (!data) return;
+
+                    // 1. Semak status utama modul jika ada
+                    if (data.status) {
+                        processDocStatus(data.status, type);
+                    }
+                    
+                    // 2. Semak status dalam dokumen / statusDokumen
+                    if (data.statusDokumen) {
+                        processDocStatus(data.statusDokumen, type);
+                    }
+
+                    // 3. Semak jika terdapat senarai statusTimeline (seperti pada skrin detail pelanggan)
+                    if (data.statusTimeline && Array.isArray(data.statusTimeline)) {
+                        data.statusTimeline.forEach(t => {
+                            if (t.status) processDocStatus(t.status, type);
+                        });
+                    }
+
+                    if (data.docRef || data.docNo || data.status === "APPROVED") approved++;
                     if (data.renewedAt) renewal++;
                     if (data.expiryDate) {
                         const expiry = new Date(data.expiryDate);
@@ -373,6 +406,7 @@
                         aktif++;
                     }
 
+                    // Ambil maklumat dokumen dari sub-collections
                     const [wasiatSnap, hibahSnap, sepencarianSnap, mawarisSnap] = await Promise.all([
                         getDoc(doc(db, "users", userDoc.id, "wasiat", "maklumat")),
                         getDoc(doc(db, "users", userDoc.id, "hibah", "maklumat")),
@@ -407,7 +441,7 @@
                     }
                 });
 
-                // 3. CALCULATE TODAY'S ACTIVITY & AUDIT
+                // 3. TODAY'S ACTIVITY & AUDIT
                 let activityHTML = "";
                 const today = new Date().toLocaleDateString("ms-MY");
 
@@ -438,7 +472,7 @@
                     missingReceipt = ledgerCount - (receiptCount * 2);
                 }
 
-                // 4. UPDATE DOM ELEMENTS
+                // 4. UPDATE DOM
                 document.getElementById("prospekCount").innerText = prospek;
                 document.getElementById("aktifCount").innerText = aktif;
                 document.getElementById("expiredCount").innerText = tamat;
@@ -450,7 +484,6 @@
                 document.getElementById("queueSepencarian").innerText = queueSepencarian;
                 document.getElementById("queueMawaris").innerText = queueMawaris;
 
-                // Set nilai 7 kad workflow timeline
                 document.getElementById("cntApproved").innerText = cntApproved;
                 document.getElementById("cntPrinted").innerText = cntPrinted;
                 document.getElementById("cntSent").innerText = cntSent;
@@ -473,7 +506,7 @@
             }
         }
 
-        // AUTH STATE
+        // AUTH CHECK
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 window.location.href = "login.html";
@@ -515,14 +548,13 @@
         document.getElementById("auditBtn").addEventListener("click", () => window.location.href = "audit-dashboard.html");
         document.getElementById("settingBtn").addEventListener("click", () => window.location.href = "admin-settings.html");
 
-        // Click Event Navigasi mengikut status
         document.getElementById("cardApproved").addEventListener("click", () => location.href = "admin-aqm.html?status=APPROVED");
         document.getElementById("cardPrinted").addEventListener("click", () => location.href = "admin-aqm.html?status=PRINTED");
         document.getElementById("cardSent").addEventListener("click", () => location.href = "admin-aqm.html?status=SENT");
         document.getElementById("cardAkad").addEventListener("click", () => location.href = "admin-aqm.html?status=AKAD");
         document.getElementById("cardStamping").addEventListener("click", () => location.href = "admin-aqm.html?status=STAMPING");
         document.getElementById("cardDiserahAQM").addEventListener("click", () => location.href = "admin-aqm.html?status=DISERAHKAN_AQM");
-        document.getElementById("cardTerimaAQM").addEventListener("click", () => location.href = "admin-aqm.html?status=AQM_TERIMA");
+        document.getElementById("cardTerimaAQM").addEventListener("click", () => location.href = "admin-aqm.html?status=RECEIVED");
     </script>
 </body>
 </html>
