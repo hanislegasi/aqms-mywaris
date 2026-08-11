@@ -227,14 +227,14 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             }
         });
 
-        // --- LANGKAH 5B: Kumpul jualan & override dari overrideHistory ---
+       // --- LANGKAH 5B: Kumpul jualan & override dari overrideHistory ---
+        // TUKAR PERKATAAN "receiver" DI BAWAH INI
         const historyQ = query(
             collection(db, "overrideHistory"),
-            where("receiver", "==", myAqcNo)
+            where("consultantNo", "==", myAqcNo) // <--- Tukar kepada consultantNo
         );
         const historySnap = await getDocs(historyQ);
 
-        // KOD DIBETULKAN: Kita tak panggil getDoc lagi. Kita terus guna compData dari Langkah 2.
         const usbRate = Number(compData.uplineSupportingBenefit || compData.usbRate || 0.5);
 
         historySnap.forEach(d => {
