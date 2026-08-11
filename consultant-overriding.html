@@ -227,18 +227,23 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             }
         });
 
-      // --- LANGKAH 5B: Kumpul TOTAL SALES dari overrideHistory ---
-        // (Sebab lejer selalunya tak simpan jumlah jualan, cuma simpan komisen)
+     // --- LANGKAH 5B: Kumpul TOTAL SALES & OVERRIDE dari overrideHistory ---
         const historyQ = query(
             collection(db, "overrideHistory"),
             where("receiver", "==", myAqcNo)
         );
         const historySnap = await getDocs(historyQ);
 
+        const compSnap = await getDoc(doc(db, "settings", "compensation"));
+        const compData = compSnap.exists() ? compSnap.data() : {};
+        const usbRate = Number(compData.uplineSupportingBenefit || compData.usbRate || 0.5);
+
         historySnap.forEach(d => {
             const h = d.data();
-            const aqcNo = h.fromConsultant || h.fromAqc || h.downlineNo;
-            if (!aqcNo) return;
+            const aqcNo = h.fromConsultant; // ID Downline (AQC0002, AQC0003 dll)
+            
+            // Pagar: Jangan proses kalau ID kosong atau ID diri sendiri
+            if (!aqcNo || aqcNo === myAqcNo) return; 
 
             if (!teamData[aqcNo]) {
                 teamData[aqcNo] = { 
@@ -248,52 +253,30 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
                 };
             }
             teamData[aqcNo].sales += Number(h.sales || 0);
-        });
-
-
-        // --- LANGKAH 5C: KUMPUL OVERRIDE & USB 100% DARI BUKU LEJER ---
-        const ledgerQ = query(
-            collection(db, "ledger"),
-            where("consultantNo", "==", myAqcNo)
-        );
-        const ledgerSnap = await getDocs(ledgerQ);
-
-        ledgerSnap.forEach(d => {
-            const row = d.data();
+            teamData[aqcNo].override += Number(h.override || 0);
             
-            // Hanya ambil kira Kod 2100 (Override) & 2150 (USB)
-            if (row.accountCode === "2100" || row.accountCode === "2150") {
-                
-                // 1. Cuba cari ID downline dari field rasmi
-                let dlNo = row.fromConsultant || row.fromAqc || row.source || row.downlineNo;
-                
-                // 2. Kalau takde, kita "korek" ID tu dari description (cth: "AQC0002 USB")
-                if (!dlNo && row.description) {
-                    const match = row.description.match(/(AQC\d{4,5})/);
-                    if (match) dlNo = match[0];
-                }
-
-                if (!dlNo) return; // Kalau masih tak tahu duit ni dari siapa, abaikan
-
-                // Wujudkan rekod profil kalau dia belum wujud dalam senarai
-                if (!teamData[dlNo]) {
-                    teamData[dlNo] = { 
-                        nama: "-", level: "AQC", sales: 0, override: 0, usb: 0 
-                    };
-                }
-
-                // Masukkan Override terus dari Lejer
-                if (row.accountCode === "2100" && row.credit > 0) {
-                    teamData[dlNo].override += Number(row.credit);
-                }
-                
-                // Masukkan USB (Sama ada Pendaftaran RM50 atau Jualan 0.5%) terus dari Lejer
-                if (row.accountCode === "2150" && row.credit > 0) {
-                    teamData[dlNo].usb += Number(row.credit);
-                }
-            }
+            // 1. Kira USB dari Jualan (0.5%) secara automatik (Sebab lejer berselerak)
+            teamData[aqcNo].usb += Number(h.sales || 0) * (usbRate / 100);
         });
 
+        // --- LANGKAH 5C: KAUT USB RM50 (PENDAFTARAN) DARI LEJER ---
+        // Memandangkan Lejer RM50 tiada field 'consultantNo', kita pancing guna 'transactionGroup'
+        for (const aqcNo in teamData) {
+            const regQ = query(
+                collection(db, "ledger"),
+                where("transactionGroup", "==", aqcNo), // Pancing nama downline kat sini
+                where("accountCode", "==", "2150")
+            );
+            const regSnap = await getDocs(regQ);
+            
+            regSnap.forEach(d => {
+                const row = d.data();
+                // Kalau terjumpa RM50, terus tambahkan ke kotak USB downline tersebut
+                if (Number(row.credit) === 50) {
+                    teamData[aqcNo].usb += 50;
+                }
+            });
+        }
 
         // --- 6. KIRA JUMLAH KESELURUHAN (GRAND TOTAL) ---
         for (const aqcNo in teamData) {
@@ -301,7 +284,6 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             grandTotalOverride += teamData[aqcNo].override;
             grandTotalUsb += teamData[aqcNo].usb; 
         }
-
         // 6. Semak Berapa Kali Dah Claim Dalam Tempoh Ini (Untuk Reset Counter)
         const claimsQ = query(
             collection(db, "bonusPayable"), 
