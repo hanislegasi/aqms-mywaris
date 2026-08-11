@@ -1,353 +1,315 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>General Journal</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  
-<style>
-body{
-font-family: Inter, sans-serif;
-}
-</style>
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>General Journal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body { font-family: Inter, sans-serif; }
+    </style>
 </head>
 
 <body class="bg-gray-100">
 
 <div class="bg-[#153638] text-white p-5">
-
-<h1 class="text-2xl font-bold">
-General Journal
-</h1>
-
+    <h1 class="text-2xl font-bold">General Journal</h1>
 </div>
 
 <div class="max-w-7xl mx-auto p-5">
 
- 
-<a
-href="accounts-dashboard.html"
-class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+    <div class="flex justify-between items-center mb-5">
+        <a href="accounts-dashboard.html" class="inline-block bg-gray-200 hover:bg-gray-300 transition px-5 py-3 rounded-xl font-medium text-gray-700">
+            ← Akaun
+        </a>
+        
+        <div>
+            <!-- Butang Export sedia ada -->
+            <button id="exportPdfBtn" class="bg-red-600 hover:bg-red-700 transition text-white px-5 py-3 rounded-xl shadow">
+                Export PDF
+            </button>
+            
+            <!-- BUTANG BARU: Tambah Jurnal -->
+            <button id="addJournalBtn" class="bg-blue-600 hover:bg-blue-700 transition text-white px-5 py-3 rounded-xl shadow ml-2">
+                + Tambah Jurnal
+            </button>
+        </div>
+    </div>
 
-← Akaun
+    <!-- Filter Bar -->
+    <div class="grid md:grid-cols-4 gap-3 mb-6">
+        <input type="date" id="dateFrom" class="border rounded-xl p-3 h-12 outline-none focus:ring-2 focus:ring-[#153638]">
+        <input type="date" id="dateTo" class="border rounded-xl p-3 h-12 outline-none focus:ring-2 focus:ring-[#153638]">
+        <input type="text" id="journalSearch" placeholder="Cari account, kod atau description" class="border rounded-xl p-3 h-12 outline-none focus:ring-2 focus:ring-[#153638] col-span-2">
+    </div>
 
-</a>
-
-<button
-id="exportPdfBtn"
-class="bg-red-600 text-white px-5 py-3 rounded-xl ml-2">
-
-Export PDF
-
-</button>
-  
-<div class="grid md:grid-cols-4 gap-3 mb-6">
-
-<input
-type="date"
-id="dateFrom"
-class="border rounded-xl p-3 h-12">
-
-<input
-type="date"
-id="dateTo"
-class="border rounded-xl p-3 h-12">
-
-<input
-type="text"
-id="journalSearch"
-placeholder="Cari account, kod atau description"
-class="border rounded-xl p-3 h-12">
-
-</div>
-
-<div
-id="journalContainer"
-class="bg-white rounded-xl shadow overflow-hidden">
-
-<table class="w-full text-sm">
-
-<thead>
-
-<tr class="bg-[#153638] text-white">
-
-<th class="p-3 text-left">
-Date
-</th>
-
-<th class="p-3 text-left">
-Account
-</th>
-
-<th class="p-3 text-left">
-Description
-</th>
-
-<th class="p-3 text-right">
-Debit
-</th>
-
-<th class="p-3 text-right">
-Credit
-</th>
-
-</tr>
-
-</thead>
-
-<tbody id="journalTable">
-
-</tbody>
-
-</table>
+    <!-- Table -->
+    <div id="journalContainer" class="bg-white rounded-xl shadow overflow-hidden">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="bg-[#153638] text-white">
+                    <th class="p-3 text-left">Date</th>
+                    <th class="p-3 text-left">Account</th>
+                    <th class="p-3 text-left">Description</th>
+                    <th class="p-3 text-right">Debit</th>
+                    <th class="p-3 text-right">Credit</th>
+                </tr>
+            </thead>
+            <tbody id="journalTable">
+                <tr><td colspan="5" class="p-5 text-center text-gray-500">Loading data...</td></tr>
+            </tbody>
+        </table>
+    </div>
 
 </div>
 
+<!-- ========================================== -->
+<!-- MODAL TAMBAH JUALAN / PELARASAN (BARU)     -->
+<!-- ========================================== -->
+<div id="journalModal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+    <div class="bg-white max-w-2xl w-full rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+        
+        <div class="flex justify-between items-center border-b pb-3 mb-4">
+            <h2 class="text-xl font-bold text-[#153638]">Tambah Rekod Jurnal (Pelarasan)</h2>
+            <button id="closeModalBtn" class="text-gray-400 hover:text-red-500 text-2xl font-bold">&times;</button>
+        </div>
+
+        <form id="journalForm" class="space-y-4">
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tarikh Transaksi</label>
+                    <input type="date" id="jDate" required class="w-full border rounded-xl p-3 bg-gray-50">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Kategori Akaun</label>
+                    <select id="jCategory" required class="w-full border rounded-xl p-3 bg-gray-50">
+                        <option value="">Pilih Kategori...</option>
+                        <option value="asset">Asset</option>
+                        <option value="liability">Liability</option>
+                        <option value="equity">Equity</option>
+                        <option value="income">Income</option>
+                        <option value="expense">Expense</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Kod Akaun (Cth: 2150)</label>
+                    <input type="text" id="jCode" required class="w-full border rounded-xl p-3 bg-gray-50" placeholder="e.g. 2150">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nama Akaun (Cth: USB Payable)</label>
+                    <input type="text" id="jAccount" required class="w-full border rounded-xl p-3 bg-gray-50" placeholder="e.g. USB Payable">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Debit (RM)</label>
+                    <input type="number" id="jDebit" step="0.01" min="0" value="0" required class="w-full border rounded-xl p-3 bg-gray-50">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Kredit (RM)</label>
+                    <input type="number" id="jCredit" step="0.01" min="0" value="0" required class="w-full border rounded-xl p-3 bg-gray-50">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Penerangan (Description)</label>
+                <input type="text" id="jDescription" required class="w-full border rounded-xl p-3 bg-gray-50" placeholder="Cth: Jurnal Pelarasan - Baki USB">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                <div>
+                    <label class="block text-sm font-medium text-blue-800 mb-1">Upline ID (Penerima)</label>
+                    <input type="text" id="jUpline" class="w-full border border-blue-200 rounded-xl p-2" placeholder="Cth: AQC0001">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-blue-800 mb-1">Downline ID (Sumber)</label>
+                    <input type="text" id="jDownline" class="w-full border border-blue-200 rounded-xl p-2" placeholder="Cth: AQC0002">
+                </div>
+                <p class="col-span-2 text-xs text-blue-600 mt-1">* Isi ID Konsultan jika berkaitan dengan komisen/USB.</p>
+            </div>
+
+            <button type="submit" id="saveJournalBtn" class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-4 rounded-xl font-bold mt-2">
+                Simpan Rekod Lejer
+            </button>
+
+        </form>
+    </div>
 </div>
 
 <script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-getDocs
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-
-apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-authDomain:"alqawthar-mywaris.firebaseapp.com",
-projectId:"alqawthar-mywaris",
-storageBucket:"alqawthar-mywaris.firebasestorage.app",
-messagingSenderId:"3498810778",
-appId:"1:3498810778:web:ee36e0fe42f76698046e23"
-
+    apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+    authDomain: "alqawthar-mywaris.firebaseapp.com",
+    projectId: "alqawthar-mywaris",
+    storageBucket: "alqawthar-mywaris.firebasestorage.app",
+    messagingSenderId: "3498810778",
+    appId: "1:3498810778:web:ee36e0fe42f76698046e23"
 };
 
-const app =
-initializeApp(firebaseConfig);
-
-const db =
-getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 function money(value){
-
-    return Number(value || 0).toLocaleString(
-        "en-US",
-        {
-            minimumFractionDigits:2,
-            maximumFractionDigits:2
-        }
-    );
-
+    return Number(value || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
-  
-const snap =
-await getDocs(
-collection(db,"ledger")
-);
 
-const rows = [];
+// ==========================================
+// FUNGSI LOAD & DISPLAY TABLE
+// ==========================================
+async function loadTableData() {
+    const snap = await getDocs(collection(db, "ledger"));
+    const rows = [];
 
-snap.forEach((d)=>{
+    snap.forEach((d) => {
+        rows.push(d.data());
+    });
 
-rows.push(d.data());
+    rows.sort((a, b) => {
+        const dateA = a.date?.toDate() || new Date(a.date);
+        const dateB = b.date?.toDate() || new Date(b.date);
+        return dateA - dateB;
+    });
 
-});
+    let html = "";
+    rows.forEach((row) => {
+        html += `
+        <tr class="border-b hover:bg-gray-50" data-date="${ row.date?.toDate ? row.date.toDate().toISOString().substring(0,10) : "" }">
+            <td class="p-3">${ row.date?.toDate ? row.date.toDate().toLocaleDateString("ms-MY") : "-" }</td>
+            <td class="p-3 font-medium text-gray-700">${row.accountCode || ""} - ${row.account || ""}</td>
+            <td class="p-3 text-gray-600">${row.description || "-"}</td>
+            <td class="p-3 text-right text-emerald-600">${row.debit > 0 ? "RM" + money(row.debit) : "-"}</td>
+            <td class="p-3 text-right text-red-600">${row.credit > 0 ? "RM" + money(row.credit) : "-"}</td>
+        </tr>`;
+    });
 
-rows.sort((a,b)=>{
-
-const dateA =
-a.date?.toDate()
-|| new Date(a.date);
-
-const dateB =
-b.date?.toDate()
-|| new Date(b.date);
-
-return dateA - dateB;
-
-});
-
-let html = "";
-
-rows.forEach((row)=>{
-
-html += `
-
-<tr
-class="border-b hover:bg-gray-50"
-data-date="${
-row.date?.toDate
-? row.date.toDate().toISOString().substring(0,10)
-: ""
-}">
-
-<td class="p-3">
-${
-row.date?.toDate
-?
-row.date.toDate()
-.toLocaleDateString("ms-MY")
-:
-"-"
+    document.getElementById("journalTable").innerHTML = html || '<tr><td colspan="5" class="p-5 text-center">Tiada rekod ditemui.</td></tr>';
 }
-</td>
 
-<td class="p-3">
-${row.account}
-</td>
+// Panggil fungsi masa mula-mula buka page
+loadTableData();
 
-<td class="p-3">
-${row.description || "-"}
-</td>
-
-<td class="p-3 text-right">
-RM${money(row.debit)}
-</td>
-
-<td class="p-3 text-right">
-RM${money(row.credit)}
-</td>
-
-</tr>
-
-`;
-
-});
-
-document.getElementById(
-"journalTable"
-).innerHTML = html;
-
+// ==========================================
+// FUNGSI CARIAN & FILTER
+// ==========================================
 function filterJournal(){
+    const keyword = document.getElementById("journalSearch").value.toLowerCase();
+    const from = document.getElementById("dateFrom").value;
+    const to = document.getElementById("dateTo").value;
+    const rows = document.querySelectorAll("#journalTable tr");
 
-const keyword =
-document.getElementById("journalSearch")
-.value.toLowerCase();
+    rows.forEach((row) => {
+        if(row.children.length === 1) return; // Skip "loading/empty" row
+        
+        const text = row.innerText.toLowerCase();
+        const rowDate = row.dataset.date;
+        let show = true;
 
-const from =
-document.getElementById("dateFrom")
-.value;
+        if (keyword && !text.includes(keyword)) show = false;
+        if (from && rowDate < from) show = false;
+        if (to && rowDate > to) show = false;
 
-const to =
-document.getElementById("dateTo")
-.value;
-
-const rows =
-document.querySelectorAll(
-"#journalTable tr"
-);
-
-rows.forEach((row)=>{
-
-const text =
-row.innerText.toLowerCase();
-
-const dateText =
-row.children[0]?.innerText || "";
-
-let show = true;
-
-if(
-keyword &&
-!text.includes(keyword)
-){
-show = false;
+        row.style.display = show ? "" : "none";
+    });
 }
 
-const rowDate = row.dataset.date;
+document.getElementById("journalSearch").addEventListener("input", filterJournal);
+document.getElementById("dateFrom").addEventListener("change", filterJournal);
+document.getElementById("dateTo").addEventListener("change", filterJournal);
 
-if(from && rowDate < from){
-    show = false;
-}
+// ==========================================
+// FUNGSI MODAL & SIMPAN KE FIRESTORE (BARU)
+// ==========================================
+const modal = document.getElementById("journalModal");
+const addBtn = document.getElementById("addJournalBtn");
+const closeBtn = document.getElementById("closeModalBtn");
+const form = document.getElementById("journalForm");
 
-if(to && rowDate > to){
-    show = false;
-}
-row.style.display =
-show
-? ""
-: "none";
-
+// Buka Modal (Set tarikh harini secara automatik)
+addBtn.addEventListener("click", () => {
+    document.getElementById("jDate").value = new Date().toISOString().substring(0,10);
+    modal.classList.remove("hidden");
 });
 
-}
-
-document
-.getElementById("journalSearch")
-.addEventListener(
-"input",
-filterJournal
-);
-
-document
-.getElementById("dateFrom")
-.addEventListener(
-"change",
-filterJournal
-);
-
-document
-.getElementById("dateTo")
-.addEventListener(
-"change",
-filterJournal
-);
-
-document
-.getElementById("exportPdfBtn")
-.addEventListener(
-"click",
-()=>{
-
-html2pdf().set({
-
-margin:0.3,
-
-filename:"General-Journal.pdf",
-
-image:{
-type:"jpeg",
-quality:1
-},
-
-html2canvas:{
-scale:2
-},
-
-jsPDF:{
-unit:"in",
-format:"a4",
-orientation:"portrait"
-}
-
-})
-.from(
-document.getElementById(
-"journalContainer"
-)
-)
-.save();
-
+// Tutup Modal
+closeBtn.addEventListener("click", () => {
+    modal.classList.add("hidden");
+    form.reset();
 });
-  
+
+// Submit Form
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    
+    const submitBtn = document.getElementById("saveJournalBtn");
+    submitBtn.innerText = "Menyimpan...";
+    submitBtn.disabled = true;
+
+    try {
+        // Bina Objek Data
+        const journalData = {
+            date: new Date(document.getElementById("jDate").value),
+            accountCode: document.getElementById("jCode").value,
+            account: document.getElementById("jAccount").value,
+            category: document.getElementById("jCategory").value,
+            debit: Number(document.getElementById("jDebit").value) || 0,
+            credit: Number(document.getElementById("jCredit").value) || 0,
+            description: document.getElementById("jDescription").value,
+            paymentType: "JOURNAL",
+        };
+
+        // Masukkan data Konsultan (Jika ada)
+        const upline = document.getElementById("jUpline").value.trim();
+        const downline = document.getElementById("jDownline").value.trim();
+        
+        if(upline) journalData.consultantNo = upline;
+        if(downline) journalData.fromConsultant = downline;
+
+        // Push ke Firestore Ledger
+        await addDoc(collection(db, "ledger"), journalData);
+
+        alert("Rekod Jurnal berjaya disimpan!");
+        
+        // Reset & Tutup
+        form.reset();
+        modal.classList.add("hidden");
+        
+        // Reload Table supaya data baru terus nampak
+        document.getElementById("journalTable").innerHTML = '<tr><td colspan="5" class="p-5 text-center text-gray-500">Refreshing data...</td></tr>';
+        await loadTableData();
+
+    } catch (error) {
+        console.error("Ralat Simpan Jurnal: ", error);
+        alert("Gagal menyimpan jurnal: " + error.message);
+    } finally {
+        submitBtn.innerText = "Simpan Rekod Lejer";
+        submitBtn.disabled = false;
+    }
+});
+
+// ==========================================
+// EXPORT PDF
+// ==========================================
+document.getElementById("exportPdfBtn").addEventListener("click", () => {
+    html2pdf().set({
+        margin: 0.3,
+        filename: "General-Journal.pdf",
+        image: { type: "jpeg", quality: 1 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
+    }).from(document.getElementById("journalContainer")).save();
+});
+
 </script>
-
 </body>
 </html>
-  
-  
 
   
