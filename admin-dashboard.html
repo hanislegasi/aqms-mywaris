@@ -297,8 +297,8 @@
         try {
             const [usersSnap, ledgerSnap, receiptSnap] = await Promise.all([
                 getDocs(collection(db, "users")),
-                getDocs(collection(db, "ledger")),
-                getDocs(collection(db, "receipts"))
+                getDocs(collection(db, "ledger")).catch(() => ({ docs: [], size: 0 })),
+                getDocs(collection(db, "receipts")).catch(() => ({ docs: [], size: 0 }))
             ]);
 
             let prospek = 0;
@@ -326,58 +326,54 @@
             let cntDiserahAQM = 0;
             let cntTerimaAQM = 0;
 
-            const processDocStatus = (data, type) => {
-    if (!data) return;
-    
-    const s = (data.status || "").trim().toUpperCase();
-    
-    // Semak sama ada dokumen mempunyai rekod/tarikh penghantaran kurier
-    const hasSentRecord = data.sentAt || data.trackingNo || s === "SENT" || s === "DIHANTAR KURIER";
-    const hasPrintedRecord = data.printedAt || s === "PRINTED" || hasSentRecord;
-
-    // 1. Approved
-    if (["APPROVED", "VERIFIED", "PRINTED", "SENT", "AKAD", "STAMPING", "DISERAHKAN_AQM", "RECEIVED", "COMPLETED"].includes(s) || data.approvedAt || data.docRef) {
-        cntApproved++;
-    }
-
-    // 2. Printed (Dicetak)
-    if (hasPrintedRecord) {
-        cntPrinted++;
-    }
-
-    // 3. Sent (Dihantar Kurier) -> Mengira jika status SENT ATAU ada isi sentAt/trackingNo
-    if (hasSentRecord) {
-        cntSent++;
-    }
-
-    // 4. Akad -> 7. Terima AQM (Laluan Fizikal AQM)
-    if (s === "AKAD" || data.akadDate) {
-        cntAkad++;
-    } else if (s === "STAMPING" || data.stampingDate) {
-        cntAkad++; cntStamping++;
-    } else if (["DISERAHKAN_AQM", "SERAH_AQM"].includes(s) || data.handoverDate) {
-        cntAkad++; cntStamping++; cntDiserahAQM++;
-    } else if (["RECEIVED", "COMPLETED"].includes(s) || data.receivedDate) {
-        cntAkad++; cntStamping++; cntDiserahAQM++; cntTerimaAQM++;
-    }
-
-    // Queue (Dalam Semakan)
-    if (s === "UNDER_REVIEW") {
-        if (type === 'wasiat') queueWasiat++;
-        if (type === 'hibah') queueHibah++;
-        if (type === 'sepencarian') queueSepencarian++;
-        if (type === 'mawaris') queueMawaris++;
-    }
-};
-            const processModuleData = (data, type) => {
+            const processDocData = (data, type) => {
                 if (!data) return;
-                processDocStatus(data.status, type);
 
-                if (data.docRef || data.status === "APPROVED" || data.status === "VERIFIED") approvedCount++;
+                const s = (data.status || "").toString().trim().toUpperCase();
+
+                // Semak kewujudan tarikh / status
+                const hasSentRecord = data.sentAt || data.trackingNo || data.courier || s === "SENT" || s === "DIHANTAR KURIER";
+                const hasPrintedRecord = data.printedAt || s === "PRINTED" || hasSentRecord;
+
+                // 1. Approved
+                if (["APPROVED", "VERIFIED", "PRINTED", "SENT", "AKAD", "STAMPING", "DISERAHKAN_AQM", "RECEIVED", "COMPLETED"].includes(s) || data.approvedAt || data.docRef) {
+                    cntApproved++;
+                    approvedCount++;
+                }
+
+                // 2. Printed
+                if (hasPrintedRecord) {
+                    cntPrinted++;
+                }
+
+                // 3. Sent
+                if (hasSentRecord) {
+                    cntSent++;
+                }
+
+                // 4. Akad -> 7. Terima AQM
+                if (s === "AKAD" || data.akadDate) {
+                    cntAkad++;
+                } else if (s === "STAMPING" || data.stampingDate) {
+                    cntAkad++; cntStamping++;
+                } else if (["DISERAHKAN_AQM", "SERAH_AQM"].includes(s) || data.handoverDate) {
+                    cntAkad++; cntStamping++; cntDiserahAQM++;
+                } else if (["RECEIVED", "COMPLETED"].includes(s) || data.receivedDate) {
+                    cntAkad++; cntStamping++; cntDiserahAQM++; cntTerimaAQM++;
+                }
+
+                // Queue (Approval Queue)
+                if (s === "UNDER_REVIEW") {
+                    if (type === 'wasiat') queueWasiat++;
+                    if (type === 'hibah') queueHibah++;
+                    if (type === 'sepencarian') queueSepencarian++;
+                    if (type === 'mawaris') queueMawaris++;
+                }
+
                 if (data.renewedAt) renewal++;
             };
 
-            // Process Users (Mengikut Logik Tepat admin-aqm.html)
+            // Process Users & Subcollections
             for (const userDoc of usersSnap.docs) {
                 const user = userDoc.data();
 
@@ -386,7 +382,7 @@
                     continue;
                 }
 
-                // Semak Status Keahlian mengikut medan Payment Status
+                // Status Keahlian
                 const isActive = 
                     user.wasiatPaymentStatus === "paid" ||
                     user.hibahPaymentStatus === "paid" ||
@@ -403,65 +399,69 @@
                     prospek++;
                 }
 
-                // Semak Dokumen Sub-collection
-                const [wasiatSnap, hibahSnap, sepencarianSnap, mawarisSnap] = await Promise.all([
-                    getDoc(doc(db, "users", userDoc.id, "wasiat", "maklumat")).catch(() => null),
-                    getDoc(doc(db, "users", userDoc.id, "hibah", "maklumat")).catch(() => null),
-                    getDoc(doc(db, "users", userDoc.id, "sepencarian", "maklumat")).catch(() => null),
-                    getDoc(doc(db, "users", userDoc.id, "mawaris", "maklumat")).catch(() => null)
-                ]);
-
-                if (wasiatSnap && wasiatSnap.exists()) processModuleData(wasiatSnap.data(), 'wasiat');
-                if (hibahSnap && hibahSnap.exists()) processModuleData(hibahSnap.data(), 'hibah');
-                if (sepencarianSnap && sepencarianSnap.exists()) processModuleData(sepencarianSnap.data(), 'sepencarian');
-                if (mawarisSnap && mawarisSnap.exists()) processModuleData(mawarisSnap.data(), 'mawaris');
+                // Baca sub-collection secara selamat
+                try {
+                    const modules = ['wasiat', 'hibah', 'sepencarian', 'mawaris'];
+                    for (const mod of modules) {
+                        const snap = await getDoc(doc(db, "users", userDoc.id, mod, "maklumat"));
+                        if (snap.exists()) {
+                            processDocData(snap.data(), mod);
+                        }
+                    }
+                } catch (e) {
+                    console.log("Error reading user subcollection:", e);
+                }
             }
 
             // Financial & Ledger Calculation
-            ledgerSnap.forEach((doc) => {
-                const data = doc.data();
-                if (data.category === "income") {
-                    totalSales += Number(data.credit || 0);
-                    if (data.date) {
-                        const txn = data.date.toDate();
-                        if (txn.getMonth() === now.getMonth() && txn.getFullYear() === now.getFullYear()) {
-                            monthlySales += Number(data.credit || 0);
+            if (ledgerSnap.docs) {
+                ledgerSnap.forEach((doc) => {
+                    const data = doc.data();
+                    if (data.category === "income") {
+                        totalSales += Number(data.credit || 0);
+                        if (data.date) {
+                            const txn = data.date.toDate();
+                            if (txn.getMonth() === now.getMonth() && txn.getFullYear() === now.getFullYear()) {
+                                monthlySales += Number(data.credit || 0);
+                            }
                         }
                     }
-                }
 
-                if (data.accountCode === "1000") {
-                    cashBalance += Number(data.debit || 0);
-                    cashBalance -= Number(data.credit || 0);
-                }
-            });
+                    if (data.accountCode === "1000") {
+                        cashBalance += Number(data.debit || 0);
+                        cashBalance -= Number(data.credit || 0);
+                    }
+                });
+            }
 
             // Audit & Today Activity
             let activityHTML = "";
             const today = new Date().toLocaleDateString("ms-MY");
 
-            receiptSnap.forEach((doc) => {
-                const data = doc.data();
-                if (data.paymentDate) {
-                    const tarikh = data.paymentDate.toDate().toLocaleDateString("ms-MY");
-                    if (tarikh === today) {
-                        activityHTML += `
-                            <div class="flex justify-between border-b border-gray-100 pb-2">
-                                <span class="font-medium">${data.payerName || 'Pelanggan'}</span>
-                                <span class="font-semibold text-green-600">RM${Number(data.amount||0).toFixed(2)}</span>
-                            </div>
-                        `;
+            if (receiptSnap.docs) {
+                receiptSnap.forEach((doc) => {
+                    const data = doc.data();
+                    if (data.paymentDate) {
+                        const tarikh = data.paymentDate.toDate().toLocaleDateString("ms-MY");
+                        if (tarikh === today) {
+                            activityHTML += `
+                                <div class="flex justify-between border-b border-gray-100 pb-2">
+                                    <span class="font-medium">${data.payerName || 'Pelanggan'}</span>
+                                    <span class="font-semibold text-green-600">RM${Number(data.amount||0).toFixed(2)}</span>
+                                </div>
+                            `;
+                        }
                     }
-                }
-            });
+                });
+            }
 
             if (activityHTML === "") {
                 activityHTML = "<div class='text-gray-400 italic'>Tiada aktiviti hari ini</div>";
             }
             
             let missingReceipt = 0;
-            const ledgerCount = ledgerSnap.size;
-            const receiptCount = receiptSnap.size;
+            const ledgerCount = ledgerSnap.size || 0;
+            const receiptCount = receiptSnap.size || 0;
             if (ledgerCount > receiptCount * 2) {
                 missingReceipt = ledgerCount - (receiptCount * 2);
             }
