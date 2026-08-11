@@ -208,7 +208,7 @@
 
             </div>
         </div>
-        
+
         <!-- QUEUE & ACTIVITIES -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
             <!-- Approval Queue -->
@@ -317,7 +317,7 @@
                 let cashBalance = 0; 
                 const now = new Date();
 
-                // Counters Timeline
+                // Kaunter Timeline Kumulatif
                 let cntApproved = 0;
                 let cntPrinted = 0;
                 let cntSent = 0;
@@ -326,67 +326,49 @@
                 let cntDiserahAQM = 0;
                 let cntTerimaAQM = 0;
                 
-                // Helper untuk menyemak dan mengira status dokumen
+                // Pemetaan Tahap (Level) Status Dokumen secara Kumulatif
+                const getStatusLevel = (statusStr) => {
+                    if (!statusStr) return 0;
+                    const s = statusStr.trim().toUpperCase();
+                    
+                    if (s === "RECEIVED" || s === "AQM TERIMA DOKUMEN" || s === "AQM_TERIMA") return 7;
+                    if (s === "DISERAHKAN_AQM" || s === "DISERAHKAN KEPADA AQM" || s === "SERAH_AQM") return 6;
+                    if (s === "STAMPING" || s === "DUTI SETEM LHDN") return 5;
+                    if (s === "AKAD" || s === "SELESAI AKAD") return 4;
+                    if (s === "SENT" || s === "DIHANTAR KURIER") return 3;
+                    if (s === "PRINTED" || s === "DICETAK") return 2;
+                    if (s === "APPROVED" || s === "DILULUSKAN") return 1;
+                    return 0;
+                };
+
                 const processDocStatus = (statusStr, type) => {
                     if (!statusStr) return;
+                    const level = getStatusLevel(statusStr);
                     
-                    const status = statusStr.trim().toUpperCase();
+                    // Tambah +1 kepada SEMUA fasa yang telah dilalui/disiapkan oleh dokumen ini
+                    if (level >= 1) cntApproved++;
+                    if (level >= 2) cntPrinted++;
+                    if (level >= 3) cntSent++;
+                    if (level >= 4) cntAkad++;
+                    if (level >= 5) cntStamping++;
+                    if (level >= 6) cntDiserahAQM++;
+                    if (level >= 7) cntTerimaAQM++;
 
-                    switch (status) {
-                        case "APPROVED": 
-                            cntApproved++; 
-                            break;
-                        case "PRINTED": 
-                            cntPrinted++; 
-                            break;
-                        case "SENT": 
-                            cntSent++; 
-                            break;
-                        case "AKAD": 
-                            cntAkad++; 
-                            break;
-                        case "STAMPING": 
-                            cntStamping++; 
-                            break;
-                        case "DISERAHKAN_AQM":
-                        case "DISERAHKAN KEPADA AQM": 
-                            cntDiserahAQM++; 
-                            break;
-                        case "AQM_TERIMA":
-                        case "AQM TERIMA DOKUMEN":
-                        case "RECEIVED": 
-                            cntTerimaAQM++; 
-                            break;
-                        case "UNDER_REVIEW":
-                            if (type === 'wasiat') queueWasiat++;
-                            if (type === 'hibah') queueHibah++;
-                            if (type === 'sepencarian') queueSepencarian++;
-                            if (type === 'mawaris') queueMawaris++;
-                            break;
+                    if (statusStr.trim().toUpperCase() === "UNDER_REVIEW") {
+                        if (type === 'wasiat') queueWasiat++;
+                        if (type === 'hibah') queueHibah++;
+                        if (type === 'sepencarian') queueSepencarian++;
+                        if (type === 'mawaris') queueMawaris++;
                     }
                 };
 
                 const processModuleData = (data, type) => {
                     if (!data) return;
 
-                    // 1. Semak status utama modul jika ada
-                    if (data.status) {
-                        processDocStatus(data.status, type);
-                    }
-                    
-                    // 2. Semak status dalam dokumen / statusDokumen
-                    if (data.statusDokumen) {
-                        processDocStatus(data.statusDokumen, type);
-                    }
+                    const currentStatus = data.status || data.statusDokumen || "";
+                    processDocStatus(currentStatus, type);
 
-                    // 3. Semak jika terdapat senarai statusTimeline (seperti pada skrin detail pelanggan)
-                    if (data.statusTimeline && Array.isArray(data.statusTimeline)) {
-                        data.statusTimeline.forEach(t => {
-                            if (t.status) processDocStatus(t.status, type);
-                        });
-                    }
-
-                    if (data.docRef || data.docNo || data.status === "APPROVED") approved++;
+                    if (data.docRef || data.docNo || currentStatus.toUpperCase() === "APPROVED") approved++;
                     if (data.renewedAt) renewal++;
                     if (data.expiryDate) {
                         const expiry = new Date(data.expiryDate);
@@ -397,13 +379,16 @@
                 // 1. CALCULATE USERS & DOCUMENTS KPI
                 for (const userDoc of usersSnap.docs) {
                     const user = userDoc.data();
-                    
                     if (user.role === "admin") continue;
                     
-                    if (user.paymentStatus !== "paid") {
+                    // Semak Status Ahli mengikut medan sebenar dari Firestore
+                    const statusAhli = (user.statusAhli || user.status || "").toUpperCase();
+                    if (statusAhli === "PROSPEK") {
                         prospek++;
-                    } else {
+                    } else if (statusAhli === "AHLI AKTIF" || statusAhli === "AKTIF") {
                         aktif++;
+                    } else if (statusAhli === "KEAHLIAN TAMAT" || statusAhli === "EXPIRED") {
+                        tamat++;
                     }
 
                     // Ambil maklumat dokumen dari sub-collections
@@ -545,7 +530,7 @@
         document.getElementById("aqmBtn").addEventListener("click", () => window.location.href = "admin-aqm.html");
         document.getElementById("aqcBtn").addEventListener("click", () => window.location.href = "admin-aqc.html");
         document.getElementById("accountBtn").addEventListener("click", () => window.location.href = "accounts-dashboard.html");
-        document.getElementById("auditBtn").addEventListener("click", () => window.location.href = "audit-dashboard.html");
+        document.getElementById("auditBtn").addEventListener("click", () => window.location.href = "admin-settings.html");
         document.getElementById("settingBtn").addEventListener("click", () => window.location.href = "admin-settings.html");
 
         document.getElementById("cardApproved").addEventListener("click", () => location.href = "admin-aqm.html?status=APPROVED");
