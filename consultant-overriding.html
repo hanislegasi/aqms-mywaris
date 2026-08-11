@@ -52,7 +52,7 @@
         </div>
     </div>
 
-    <!-- Ringkasan Total -->
+    <!-- Ringkasan Total (Hanya Sales & Override) -->
     <div id="summaryCard" class="grid md:grid-cols-2 gap-5 mb-5">
       <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <h2 class="text-lg font-semibold text-gray-500">Total Team Sales</h2>
@@ -64,26 +64,25 @@
       </div>
     </div>
 
-    <!-- Jadual Prestasi Team -->
+    <!-- Jadual Prestasi Team (Tanpa Kolum USB) -->
     <div class="bg-white rounded-2xl shadow overflow-x-auto">
       <table class="w-full">
         <thead class="bg-[#153638] text-white text-sm">
-    <tr>
-        <th class="p-4 text-left">Dari AQC</th>
-        <th class="p-4 text-left">Nama</th>
-        <th class="p-4 text-left">Level AQC</th>
-        <th class="p-4 text-center">Total Sales</th>
-        <th class="p-4 text-center">Total Override</th>
-        <th class="p-4 text-center">% Bonus</th>
-    </tr>
-</thead>
+            <tr>
+                <th class="p-4 text-left">Dari AQC</th>
+                <th class="p-4 text-left">Nama</th>
+                <th class="p-4 text-left">Level AQC</th>
+                <th class="p-4 text-center">Total Sales</th>
+                <th class="p-4 text-center">Total Override</th>
+                <th class="p-4 text-center">% Bonus</th>
+            </tr>
+        </thead>
         <tbody id="overrideTable">
           <tr>
             <td colspan="6" class="p-4 text-center text-gray-500">Memuatkan data...</td>
           </tr>
         </tbody>
         <tfoot class="bg-gray-100 border-t-2 border-gray-300">
-          
         </tfoot>
       </table>
     </div>
@@ -129,13 +128,12 @@
         }
 
         // 2. Tarik Setting KPI
-const compSnap = await getDoc(doc(db, "settings", "compensation"));
-const compData = compSnap.exists() ? compSnap.data() : {};
+        const compSnap = await getDoc(doc(db, "settings", "compensation"));
+        const compData = compSnap.exists() ? compSnap.data() : {};
 
-// Guna nama field yang sama dengan di Admin Settings
-const targetSalesBonus = Number(compData.targetSalesBonus || 240000); 
-const rewardBonusRate = Number(compData.rewardBonus || 5);
-        const kpiPeriodType = compData.kpiPeriod || "yearly"; // 'quarter', 'half', 'yearly'
+        const targetSalesBonus = Number(compData.targetSalesBonus || 240000); 
+        const rewardBonusRate = Number(compData.rewardBonus || 5);
+        const kpiPeriodType = compData.kpiPeriod || "yearly";
 
         document.getElementById("kpiRateText").textContent = `Reward: ${rewardBonusRate}% daripada RM${formatRM(targetSalesBonus)}`;
 
@@ -146,7 +144,6 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
         const y = now.getFullYear();
         const m = now.getMonth();
         
-        // MESTI ADA BARIS NI (Biar di luar if-else supaya sistem kenal variable ni)
         let startDate, endDate, periodName;
 
         if (kpiPeriodMonths === 3) {
@@ -165,7 +162,6 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             periodName = `${y}-TAHUNAN`;
         }
         
-        // Sekarang periodName dah sah dikenali
         const kpiPeriodTextEl = document.getElementById("kpiPeriodText");
         if (kpiPeriodTextEl) {
             kpiPeriodTextEl.textContent = `Tempoh Semasa: ${periodName}`;
@@ -181,13 +177,12 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
         allConsultantsSnap.forEach(doc => { 
             const d = doc.data();
             const cNo = d.consultantNo;
-            if(!cNo) return; // Abaikan data yang tiada consultantNo
+            if(!cNo) return;
             
             uplineMap[cNo] = d.upline; 
             levelMap[cNo] = d.consultantLevel || "AQC"; 
             nameMap[cNo] = d.nama;
 
-            // Kumpul siapa yang direct downline kepada AQC yang sedang login
             if (d.upline === myConsultantNo) {
                 directDownlines.push(cNo);
             }
@@ -203,13 +198,11 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             return false;
         }
 
-  // 1. Sediakan bekas data
+        // 5. Sediakan bekas data (Hanya Sales & Override)
         let teamData = {};
         let grandTotalSales = 0;
         let grandTotalOverride = 0;
-        let grandTotalUsb = 0; 
 
-        // Guna 'data' yang sah dari onAuthStateChanged
         const myAqcNo = data.consultantNo; 
 
         // --- LANGKAH 5A: Tarik Direct Downline ---
@@ -221,12 +214,12 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
                 teamData[dl.consultantNo] = {
                     nama: dl.nama || "-",
                     level: dl.consultantLevel || "AQC",
-                    sales: 0, override: 0, usb: 0
+                    sales: 0, override: 0
                 };
             }
         });
 
-    // --- LANGKAH 5B: Kumpul TOTAL SALES & OVERRIDE dari overrideHistory ---
+        // --- LANGKAH 5B: Kumpul TOTAL SALES & OVERRIDE dari overrideHistory ---
         const historyQ = query(
             collection(db, "overrideHistory"),
             where("receiver", "==", myAqcNo)
@@ -243,61 +236,28 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
                 teamData[aqcNo] = { 
                     nama: h.fromName || "-", 
                     level: h.fromLevel || "AQC", 
-                    sales: 0, override: 0, usb: 0 
+                    sales: 0, override: 0 
                 };
             }
             teamData[aqcNo].sales += Number(h.sales || 0);
             teamData[aqcNo].override += Number(h.override || 0);
         });
 
-     // --- BACA LEJER DENGAN TAPISAN BERSIH (BUANG 34.15 YANG SALAH) ---
-        const ledgerQuery = query(
-            collection(db, "ledger"), 
-            where("accountCode", "==", "2150"),
-            where("consultantNo", "==", myAqcNo) 
-        );
-        const ledgerSnap = await getDocs(ledgerQuery);
-
-        let realTotalUsb = 0;
-
-        ledgerSnap.forEach(d => {
-            const row = d.data();
-            // Abaikan jika ada rekod lejar lama yang bertulis atau bernilai 34.15 yang salah tu
-            if (Number(row.credit) === 34.15) return; 
-
-            if (row.credit > 0) {
-                realTotalUsb += Number(row.credit);
-                
-                // Masukkan ke downline yang sepadan jika ada rujukan transactionGroup
-                let targetDownline = row.fromConsultant || row.transactionGroup;
-                if (targetDownline && teamData[targetDownline]) {
-                    teamData[targetDownline].usb += Number(row.credit);
-                } else {
-                    // Jika tiada padanan spesifik, masukkan ke downline pertama dalam senarai team secara selamat
-                    const keys = Object.keys(teamData);
-                    if (keys.length > 0) {
-                        teamData[keys[0]].usb += Number(row.credit);
-                    }
-                }
-            }
-        });
-        
         // --- 6. KIRA JUMLAH KESELURUHAN (GRAND TOTAL) ---
         for (const aqcNo in teamData) {
             grandTotalSales += teamData[aqcNo].sales;
             grandTotalOverride += teamData[aqcNo].override;
-            grandTotalUsb += teamData[aqcNo].usb; 
         }
-        // 6. Semak Berapa Kali Dah Claim Dalam Tempoh Ini (Untuk Reset Counter)
+
+        // Semak Tuntutan Bonus KPI
         const claimsQ = query(
             collection(db, "bonusPayable"), 
             where("team", "==", myConsultantNo),
             where("period", "==", periodName)
         );
         const claimsSnap = await getDocs(claimsQ);
-        const claimedCount = claimsSnap.size; // Berapa kali dia dah klik butang claim
+        const claimedCount = claimsSnap.size;
 
-        // LOGIK RESET PROGRESS BAR: Tolak 240k untuk setiap claim yang dah dibuat
         const applicableSales = grandTotalSales - (claimedCount * targetSalesBonus);
 
         // 7. Update UI KPI Bar
@@ -315,40 +275,36 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             kpiBar.textContent = "100%";
             document.getElementById("kpiStatus").textContent = "TERCAPAI!";
             document.getElementById("kpiStatus").className = "px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-bold";
-            document.getElementById("claimBonusContainer").classList.remove("hidden"); // Tunjuk butang
+            document.getElementById("claimBonusContainer").classList.remove("hidden");
         } else {
             kpiBar.textContent = percentProgress > 10 ? `${percentProgress.toFixed(1)}%` : "";
         }
         
         setTimeout(() => { kpiBar.style.width = `${percentProgress}%`; }, 300);
 
-        // 8. Update Jadual (Hanya Ahli BUKAN MGAM)
+        // 8. Update Jadual (Tanpa Kolum USB)
         let html = "";
-       for (const aqcNo in teamData) {
+        for (const aqcNo in teamData) {
             const data = teamData[aqcNo];
-            
-            // KOD BARU: Kira peratusan sumbangan (Bonus %)
-            // Kalau grandTotalSales ada nilai, baru bahagi. Kalau tak, letak 0%
             const bonusPct = grandTotalSales > 0 ? (data.sales / grandTotalSales) * 100 : 0;
 
-          html += `
-<tr class="border-b hover:bg-gray-50">
-    <td class="p-4">${aqcNo}</td>
-    <td class="p-4">${data.nama}</td>
-    <td class="p-4">${data.level}</td>
-    <td class="p-4 text-center">RM${(data.sales || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-    <td class="p-4 text-center font-bold text-green-600">RM${(data.override || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-    <td class="p-4 text-center text-blue-600">${bonusPct.toFixed(2)}%</td>
-</tr>
-`;
+            html += `
+            <tr class="border-b hover:bg-gray-50">
+                <td class="p-4">${aqcNo}</td>
+                <td class="p-4">${data.nama}</td>
+                <td class="p-4">${data.level}</td>
+                <td class="p-4 text-center">RM${(data.sales || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                <td class="p-4 text-center font-bold text-green-600">RM${(data.override || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                <td class="p-4 text-center text-blue-600">${bonusPct.toFixed(2)}%</td>
+            </tr>
+            `;
         }
 
-html += `
+        html += `
         <tr class="bg-gray-50 font-bold border-t-2">
             <td colspan="3" class="p-4 text-right">JUMLAH KESELURUHAN:</td>
             <td class="p-4 text-center">RM${(grandTotalSales || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
             <td class="p-4 text-center text-green-600">RM${(grandTotalOverride || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-            <td class="p-4 text-center text-blue-600">RM${(grandTotalUsb || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
             <td class="p-4 text-center text-blue-600">100.00%</td>
         </tr>
         `;
@@ -358,11 +314,8 @@ html += `
         document.getElementById("overrideTable").innerHTML = html;
         document.getElementById("topTotalSales").textContent = `RM${formatRM(grandTotalSales)}`;
         document.getElementById("topTotalOverride").textContent = `RM${formatRM(grandTotalOverride)}`;
-       
 
-        // ============================================
         // LOGIK KLIK HANTAR TUNTUTAN BONUS KPI
-        // ============================================
         document.getElementById("claimBonusBtn").onclick = async function() {
             if (!confirm(`Sah hantar tuntutan KPI Bonus Pasukan ke HQ? \n\n*Progress bar akan kembali kepada RM0 selepas tuntutan ini berjaya.`)) return;
 
@@ -372,7 +325,6 @@ html += `
             try {
                 const bonusPool = targetSalesBonus * (rewardBonusRate / 100); 
 
-                // 1. Rekod Lejer
                 await addDoc(collection(db, "ledger"), {
                     date: new Date(),
                     accountCode: "6100", 
@@ -397,15 +349,12 @@ html += `
                     transactionGroup: "KPI-" + myConsultantNo
                 });
 
-                // 2. Simpan pecahan tuntutan untuk dibayar oleh Admin
-                // Kami HANYA cipta 1 rekod per tuntutan untuk mewakili 1 kali klik. 
-                // Ahli pasukan disertakan bersama dokumen.
                 await addDoc(collection(db, "bonusPayable"), {
                     team: myConsultantNo,
-                    period: periodName,       // PENTING: Untuk elak kpi bar salah baca
+                    period: periodName, 
                     targetAchieved: targetSalesBonus,
                     bonusPercent: rewardBonusRate,
-                    bonusAmount: bonusPool,   // Total Bonus Pool
+                    bonusAmount: bonusPool, 
                     status: "PENDING_PAYMENT",
                     createdAt: new Date(),
                     members: Object.keys(teamData).map(aqcNo => ({
@@ -417,8 +366,8 @@ html += `
                     }))
                 });
                 
-                alert("Berjaya! Tuntutan Bonus KPI telah masuk ke Lejer HQ. Progress bar anda akan di-reset.");
-                window.location.reload(); // Refresh untuk reset kaunter kepada 0
+                alert("Berjaya! Tuntutan Bonus KPI telah masuk ke Lejer HQ.");
+                window.location.reload();
 
             } catch (err) {
                 console.error(err);
