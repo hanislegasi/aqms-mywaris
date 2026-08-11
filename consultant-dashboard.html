@@ -850,18 +850,11 @@ else if(data.consultantLevel === "MGAM"){
     overridingRate = Number(comp.overrideMGAM || 5);
 }
 
-document.getElementById("paidCard").innerHTML =
-"RM" +
-paid.toFixed(2);
-
-document.getElementById("outstandingCard").innerHTML =
-"RM" +
-outstanding.toFixed(2);
+document.getElementById("paidCard").innerHTML = "RM" + paid.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+document.getElementById("outstandingCard").innerHTML = "RM" + outstanding.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
 
 
 
- 
- 
 await updateDoc(
 doc(db,"consultants",user.uid),
 {
@@ -1066,7 +1059,7 @@ document.getElementById("totalCommission").innerHTML = "RM" + totalCommission.to
 document.getElementById("totalOverriding").innerHTML = "RM" + totalOverriding.toLocaleString(undefined, {minimumFractionDigits: 2});
 
 // Kita gunakan totalUsbLedger (dari Lejer) supaya sama dengan Total Earned
-document.getElementById("usbAmount").innerHTML = "RM" + totalUsbLedger.toLocaleString(undefined, {minimumFractionDigits: 2});
+document.getElementById("usbAmount").innerHTML = "RM" + totalUsbLive.toLocaleString(undefined, {minimumFractionDigits: 2});
  
 
 console.log("monthlySales", monthlySales);
