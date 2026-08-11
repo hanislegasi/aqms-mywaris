@@ -251,8 +251,7 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             teamData[aqcNo].override += Number(h.override || 0);
         });
 
-        // --- LANGKAH 5C: TARIK NILAI USB TERUS DARI BUKU LEJER (KOD 2150) ---
-        // Ini memastikan nilai USB dalam jadual selaras 100% dengan Jurnal & Lejer HQ
+        // --- LANGKAH 5C: TARIK NILAI USB TERUS DARI BUKU LEJER (KOD 2150) - VERSI LENGKAP ---
         const ledgerQuery = query(
             collection(db, "ledger"), 
             where("accountCode", "==", "2150"),
@@ -262,13 +261,24 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
 
         ledgerSnap.forEach(d => {
             const row = d.data();
-            // Semak siapa downline yang menyumbang USB ni melalui 'fromConsultant'
-            const downlineId = row.fromConsultant;
+            if (row.credit <= 0) return;
+
+            // Cari siapa downline sumber menggunakan pelbagai cara (fromConsultant atau transactionGroup)
+            let downlineId = row.fromConsultant;
             
+            if (!downlineId && row.transactionGroup) {
+                downlineId = row.transactionGroup;
+            }
+            
+            // Kalau still takde, cuba semak dalam description (cth: "AQC0007 Registration...")
+            if (!downlineId && row.description) {
+                const match = row.description.match(/(AQC\d{4,5})/);
+                if (match) downlineId = match[0];
+            }
+
+            // Jika downline wujud dalam team kita, masukkan nilainya (Sama ada RM50 atau sen-sen jualan)
             if (downlineId && teamData[downlineId]) {
-                if (row.credit > 0) {
-                    teamData[downlineId].usb += Number(row.credit);
-                }
+                teamData[downlineId].usb += Number(row.credit);
             }
         });
         
