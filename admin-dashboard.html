@@ -326,66 +326,78 @@
             let cntDiserahAQM = 0;
             let cntTerimaAQM = 0;
 
-           const processDocData = (data, type) => {
-                if (!data) return;
+const processDocData = (data, type) => {
+    if (!data) return;
 
-                const s = (data.status || "").toString().trim().toUpperCase();
+    const s = (data.status || "").toString().trim().toUpperCase();
 
-                // Semak kewujudan data/tarikh bagi setiap fasa (Kumulatif & Bebas)
-                const hasTerimaAQM = !!(data.receivedDate || data.completedAt || ["RECEIVED", "COMPLETED"].includes(s));
-                const hasDiserahAQM = !!(data.handoverDate || ["DISERAHKAN_AQM", "SERAH_AQM"].includes(s) || hasTerimaAQM);
-                const hasStamping = !!(data.stampingDate || s === "STAMPING" || hasDiserahAQM);
-                const hasAkad = !!(data.akadDate || s === "AKAD" || hasStamping);
-                const hasSentRecord = !!(data.sentAt || data.trackingNo || data.courier || s === "SENT" || s === "DIHANTAR KURIER" || hasAkad);
-                const hasPrintedRecord = !!(data.printedAt || s === "PRINTED" || hasSentRecord);
-                const hasApproved = !!(data.approvedAt || data.docRef || ["APPROVED", "VERIFIED"].includes(s) || hasPrintedRecord);
+    // 1. Semak penanda fasa secara khusus bagi setiap satu
+    const hasTerimaAQM = !!(data.receivedDate || data.completedAt || ["RECEIVED", "COMPLETED"].includes(s));
+    const hasDiserahAQM = !!(data.handoverDate || ["DISERAHKAN_AQM", "SERAH_AQM"].includes(s));
+    const hasStamping = !!(data.stampingDate || s === "STAMPING");
+    const hasAkad = !!(data.akadDate || s === "AKAD");
+    
+    // Kurier & Cetak
+    const hasSentRecord = !!(data.sentAt || data.trackingNo || data.courier || s === "SENT" || s === "DIHANTAR KURIER");
+    const hasPrintedRecord = !!(data.printedAt || s === "PRINTED");
+    const hasApproved = !!(data.approvedAt || data.docRef || ["APPROVED", "VERIFIED"].includes(s));
 
-                // 1. Approved (Diluluskan)
-                if (hasApproved) {
-                    cntApproved++;
-                    approvedCount++;
-                }
+    // 2. Rantaian Kumulatif (Jika sudah di fasa lanjut, fasa awal secara automatik telah dilalui)
+    const isTerimaAQM = hasTerimaAQM;
+    const isDiserahAQM = isTerimaAQM || hasDiserahAQM;
+    const isStamping = isDiserahAQM || hasStamping;
+    const isAkad = isStamping || hasAkad;
+    
+    // Fasa Kurier vs Direct Akad: Dokumen boleh terus ke Akad tanpa melalui kurier
+    const isSent = isAkad || hasSentRecord;
+    
+    // Fasa Cetak: Dikira jika ADA tarikh printedAt, status PRINTED, ATAU melepasi mana-mana fasa selepasnya
+    const isPrinted = hasPrintedRecord || isSent || isAkad;
+    
+    // Diluluskan: Dikira jika diluluskan atau mana-mana fasa di atas
+    const isApproved = hasApproved || isPrinted;
 
-                // 2. Printed (Dicetak)
-                if (hasPrintedRecord) {
-                    cntPrinted++;
-                }
+    // 3. Kemas kini kiraan mengikut hasil semakan tepat
+    if (isApproved) {
+        cntApproved++;
+        approvedCount++;
+    }
 
-                // 3. Sent (Dihantar Kurier)
-                if (hasSentRecord) {
-                    cntSent++;
-                }
+    if (isPrinted) {
+        cntPrinted++;
+    }
 
-                // 4. Akad (Selesai Akad)
-                if (hasAkad) {
-                    cntAkad++;
-                }
+    if (isSent) {
+        cntSent++;
+    }
 
-                // 5. Stamping (Duti Setem LHDN)
-                if (hasStamping) {
-                    cntStamping++;
-                }
+    if (isAkad) {
+        cntAkad++;
+    }
 
-                // 6. Serah AQM (Diserahkan AQM)
-                if (hasDiserahAQM) {
-                    cntDiserahAQM++;
-                }
+    if (isStamping) {
+        cntStamping++;
+    }
 
-                // 7. Terima AQM (AQM Terima)
-                if (hasTerimaAQM) {
-                    cntTerimaAQM++;
-                }
+    if (isDiserahAQM) {
+        cntDiserahAQM++;
+    }
 
-                // Queue (Approval Queue)
-                if (s === "UNDER_REVIEW") {
-                    if (type === 'wasiat') queueWasiat++;
-                    if (type === 'hibah') queueHibah++;
-                    if (type === 'sepencarian') queueSepencarian++;
-                    if (type === 'mawaris') queueMawaris++;
-                }
+    if (isTerimaAQM) {
+        cntTerimaAQM++;
+    }
 
-                if (data.renewedAt) renewal++;
-            };
+    // Queue (Approval Queue)
+    if (s === "UNDER_REVIEW") {
+        if (type === 'wasiat') queueWasiat++;
+        if (type === 'hibah') queueHibah++;
+        if (type === 'sepencarian') queueSepencarian++;
+        if (type === 'mawaris') queueMawaris++;
+    }
+
+    if (data.renewedAt) renewal++;
+};
+            
             // Process Users & Subcollections
             for (const userDoc of usersSnap.docs) {
                 const user = userDoc.data();
