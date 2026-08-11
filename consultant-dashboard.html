@@ -2,482 +2,167 @@
 <html lang="ms">
 
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-Consultant Dashboard
-</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consultant Dashboard</title>
 <script src="https://cdn.tailwindcss.com"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
- 
 </head>
 
-<body
-class="bg-gray-100 min-h-screen"
-style="font-family: Inter, sans-serif;">
+<body class="bg-gray-100 min-h-screen" style="font-family: Inter, sans-serif;">
 
 <!-- HEADER -->
-
 <div class="bg-[#153638] text-white p-5 shadow">
- 
 <div class="flex justify-between items-center">
-
 <div>
-
-<h1 class="text-2xl font-bold">
-Dashboard Al-Qawthar Consultant (AQC)
-</h1>
-
-<p id="welcomeText">
-Memuatkan...
-</p>
-
+<h1 class="text-2xl font-bold">Dashboard Al-Qawthar Consultant (AQC)</h1>
+<p id="welcomeText">Memuatkan...</p>
 </div>
-
- 
-<button
-id="logoutBtn"
-class="bg-red-500 px-4 py-2 rounded-xl">
-
-Logout
-
-</button>
-
+<button id="logoutBtn" class="bg-red-500 px-4 py-2 rounded-xl">Logout</button>
 </div>
-
 </div>
 
 <div class="p-5">
-
-<div
-id="renewalBanner"
-class="hidden mb-5">
-</div>
+<div id="renewalBanner" class="hidden mb-5"></div>
   
 <!-- PROFIL -->
-
 <div class="mb-5">
-
-<button
-id="profileBtn"
-class="bg-blue-600 text-white px-5 py-3 rounded-xl">
-
-Profile
-
-</button>
-
+<button id="profileBtn" class="bg-blue-600 text-white px-5 py-3 rounded-xl">Profile</button>
 </div>
  
-<div
-id="profileModal"
-class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-
+<div id="profileModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 <div class="bg-white rounded-2xl p-6 w-[600px]">
-
-<h2 class="text-xl font-bold mb-4">
-Consultant Profile
-</h2>
-
-<div id="profileContent">
-
-Loading...
-
+<h2 class="text-xl font-bold mb-4">Consultant Profile</h2>
+<div id="profileContent">Loading...</div>
+<button id="closeProfile" class="mt-5 bg-red-500 text-white px-4 py-2 rounded-xl">Close</button>
+</div>
 </div>
 
-<button
-id="closeProfile"
-class="mt-5 bg-red-500 text-white px-4 py-2 rounded-xl">
-
-Close
-
-</button>
-
-</div>
-
-</div>
-
- 
 <div class="grid lg:grid-cols-3 gap-5 mb-5">
-
     <!-- Career -->
-   <div
-id="promotionCard"
-class="bg-white rounded-2xl shadow p-6">
-
-Loading...
-
-</div>
+   <div id="promotionCard" class="bg-white rounded-2xl shadow p-6">Loading...</div>
 
   <!-- Sales Analytics -->
     <div class="bg-white rounded-2xl shadow p-5">
-
-    <h3 class="text-lg font-bold mb-4">
-        Sales by Product
-    </h3>
-
+    <h3 class="text-lg font-bold mb-4">Sales by Product</h3>
     <div class="flex justify-center items-center h-64">
         <canvas id="productChart"></canvas>
     </div>
-
 </div>
  
     <!-- Payment -->
     <div class="bg-white rounded-2xl shadow p-6">
-
-        <h3 class="font-bold text-lg mb-5">
-            Payment Summary
-        </h3>
-
+        <h3 class="font-bold text-lg mb-5">Payment Summary</h3>
         <div class="space-y-5">
-
             <div class="border rounded-xl p-4">
-
-<div class="text-sm text-gray-500">
-Total Earned
+<div class="text-sm text-gray-500">Total Earned</div>
+<div id="earnedCard" class="text-2xl font-bold text-green-600">RM0.00</div>
 </div>
-
-<div
-id="earnedCard"
-class="text-2xl font-bold text-green-600">
-
-RM0.00
-
-</div>
-
-</div>
-
  <div class="border rounded-xl p-4">
-         
-                <div class="text-sm text-gray-500">
-                    Paid
-                </div>
-
-                <div
-                id="paidCard"
-                class="text-2xl font-bold text-blue-600">
-
-                    RM0.00
-
-                </div>
-
+                <div class="text-sm text-gray-500">Paid</div>
+                <div id="paidCard" class="text-2xl font-bold text-blue-600">RM0.00</div>
             </div>
-
             <div class="border rounded-xl p-4">
-
-                <div class="text-sm text-gray-500">
-                    Outstanding
-                </div>
-
-                <div
-                id="outstandingCard"
-                class="text-2xl font-bold text-red-600">
-
-                    RM0.00
-
-                </div>
-
+                <div class="text-sm text-gray-500">Outstanding</div>
+                <div id="outstandingCard" class="text-2xl font-bold text-red-600">RM0.00</div>
             </div>
-
         </div>
-
     </div>
-
 </div>
  
 <!-- KPI -->
-
-<div
-class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
-
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
 <div class="bg-white p-5 rounded-xl shadow">
-
-<p class="text-gray-500">
-Client Aktif
-</p>
-
-<p
-id="activeClients"
-class="text-2xl md:text-3xl font-bold">
-
-0
-
-</p>
-
+<p class="text-gray-500">Client Aktif</p>
+<p id="activeClients" class="text-2xl md:text-3xl font-bold">0</p>
 </div>
-
 <div class="bg-white p-5 rounded-xl shadow">
-
-<p class="text-gray-500">
-Jualan Peribadi
-</p>
-
-<p
-id="totalSales"
-class="text-2xl md:text-3xl font-bold">
-
-RM0
-
-</p>
-
+<p class="text-gray-500">Jualan Peribadi</p>
+<p id="totalSales" class="text-2xl md:text-3xl font-bold">RM0</p>
 </div>
-
 <div class="bg-white p-5 rounded-xl shadow">
-
-<p class="text-gray-500">
-Komisen
-</p>
-
-<p
-id="totalCommission"
-class="text-2xl md:text-3xl font-bold">
-
-RM0
-
-</p>
-
+<p class="text-gray-500">Komisen</p>
+<p id="totalCommission" class="text-2xl md:text-3xl font-bold">RM0</p>
 </div>
-
 <div class="bg-white p-5 rounded-xl shadow">
-
-<p class="text-gray-500">
-Overriding
-</p>
-
-<p
-id="totalOverriding"
-class="text-2xl md:text-3xl font-bold">
-
-RM0
-
-</p>
-
+<p class="text-gray-500">Overriding</p>
+<p id="totalOverriding" class="text-2xl md:text-3xl font-bold">RM0</p>
 </div>
  
 <div class="bg-white p-5 rounded-xl shadow">
-
-<p class="text-gray-500">
-USB
-</p>
-
-<p
-id="usbAmount"
-class="text-3xl font-bold text-blue-600">
-
-RM0.00
-
-</p>
-
+<p class="text-gray-500">USB</p>
+<p id="usbAmount" class="text-3xl font-bold text-blue-600">RM0.00</p>
 </div>
-
 </div>
 
 <div class="bg-white p-5 rounded-2xl shadow mb-5 relative overflow-hidden">
-
-  <!-- Gambar Watermark Background Samar-Samar -->
-  <div 
-    class="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
-    style="background-image: url('https://i.postimg.cc/t4Xc6fPS/Chat-GPT-Image-Aug-11-2026-09-55-30-AM.png');">
-  </div>
-
-  <!-- Kandungan Graf (Di atas latar belakang) -->
+  <div class="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30" style="background-image: url('https://i.postimg.cc/t4Xc6fPS/Chat-GPT-Image-Aug-11-2026-09-55-30-AM.png');"></div>
   <div class="relative z-10">
-    <h3 class="text-xl font-bold mb-4">
-      Performance Summary
-    </h3>
-
+    <h3 class="text-xl font-bold mb-4">Performance Summary</h3>
     <div class="relative w-full h-64 md:h-80">
       <canvas id="salesChart"></canvas>
     </div>
   </div>
-
 </div>
  
 <!-- MENU -->
-
 <div class="grid md:grid-cols-4 gap-4">
-
-<button
-id="clientsBtn"
-class="bg-[#153638] text-white p-5 rounded-xl">
-
-myClients
-
-</button>
-
-<button
-id="overridingBtn"
-class="bg-[#153638] text-white p-5 rounded-xl">
-
-myTeam
-
-</button>
-
-<button
-id="careerBtn"
-class="bg-[#153638] text-white p-5 rounded-xl">
-
-Career Path
-
-</button>
-
-<button
-id="trainingBtn"
-class="bg-[#153638] text-white p-5 rounded-xl">
-
-Continuous Professional Development 
-
-</button>
-
-<button
-id="renewalBtn"
-class="bg-[#153638] text-white p-5 rounded-xl">
-
-Annual Consultant Renewal
-
-</button>
-  
-<button
-id="marketingBtn"
-class="bg-[#153638] text-white p-5 rounded-xl">
-
-Marketing Kit
-
-</button>
-
-<button
-onclick="window.location.href='my-statement.html'"
-class="bg-[#153638] text-white p-5 rounded-xl">
-My Statement
-
-</button>
-
- 
-<button
-id="copyReferralBtn"
-class="bg-[#153638] text-white px-5 py-2 rounded-lg">
-
-Copy Referral Link
-
-</button>
-
+<button id="clientsBtn" class="bg-[#153638] text-white p-5 rounded-xl">myClients</button>
+<button id="overridingBtn" class="bg-[#153638] text-white p-5 rounded-xl">myTeam</button>
+<button id="careerBtn" class="bg-[#153638] text-white p-5 rounded-xl">Career Path</button>
+<button id="trainingBtn" class="bg-[#153638] text-white p-5 rounded-xl">Continuous Professional Development</button>
+<button id="renewalBtn" class="bg-[#153638] text-white p-5 rounded-xl">Annual Consultant Renewal</button>  
+<button id="marketingBtn" class="bg-[#153638] text-white p-5 rounded-xl">Marketing Kit</button>
+<button onclick="window.location.href='my-statement.html'" class="bg-[#153638] text-white p-5 rounded-xl">My Statement</button>
+<button id="copyReferralBtn" class="bg-[#153638] text-white px-5 py-2 rounded-lg">Copy Referral Link</button>
 </div>
- 
 </div>
 </div>
 
 <script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getAuth,
-onAuthStateChanged,
-signOut
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-getFirestore,
-doc,
-getDoc,
-getDocs,
-collection,
-updateDoc,
-query,
-where
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, getDocs, collection, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-
-apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-
-authDomain:"alqawthar-mywaris.firebaseapp.com",
-
-projectId:"alqawthar-mywaris",
-
-storageBucket:"alqawthar-mywaris.firebasestorage.app",
-
-messagingSenderId:"3498810778",
-
-appId:"1:3498810778:web:ee36e0fe42f76698046e23"
-
+apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain: "alqawthar-mywaris.firebaseapp.com",
+projectId: "alqawthar-mywaris",
+storageBucket: "alqawthar-mywaris.firebasestorage.app",
+messagingSenderId: "3498810778",
+appId: "1:3498810778:web:ee36e0fe42f76698046e23"
 };
 
-const app =
-initializeApp(firebaseConfig);
-
-const auth =
-getAuth(app);
-
-const db =
-getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 let consultantData = null;
- 
-function getCumulativeOverride(level){
 
+function getCumulativeOverride(level){
 if(level === "AQC") return 0;
 if(level === "AQC-AS") return 3;
 if(level === "AQC-UM") return 7;
 if(level === "MGAM") return 12;
-
 return 0;
-
 }
- 
 
- 
 onAuthStateChanged(auth, async(user)=>{
-
 if(!user){
-
-window.location.href =
-"login.html";
-
+window.location.href = "login.html";
 return;
-
 }
 
-const consultantSnap =
-await getDoc(
-doc(
-db,
-"consultants",
-user.uid
-)
-);
+const consultantSnap = await getDoc(doc(db, "consultants", user.uid));
+const data = consultantSnap.data();
 
-const data =
-consultantSnap.data();
-
-sessionStorage.setItem(
-"consultantNo",
-data.consultantNo
-);
-
-sessionStorage.setItem(
-"consultantName",
-data.nama
-);
-
-sessionStorage.setItem(
-"userUid",
-user.uid
-);
+sessionStorage.setItem("consultantNo", data.consultantNo);
+sessionStorage.setItem("consultantName", data.nama);
+sessionStorage.setItem("userUid", user.uid);
  
 consultantData = data;
 
-// --- KOD BARU: Tarik Data Compensation ---
 const compSnap = await getDoc(doc(db, "settings", "compensation"));
 const comp = compSnap.exists() ? compSnap.data() : {};
 
@@ -485,283 +170,114 @@ const priceWasiat = Number(comp.wasiatPrice || 350);
 const priceHibah = Number(comp.hibahPrice || 2500);
 const priceSepencarian = Number(comp.sepencarianPrice || 800);
 const priceMawaris = Number(comp.mawarisPrice || 3000);
-// ----------------------------------------
  
-const referralLink =
-window.location.origin +
-"/register.html?ref=" +
-consultantData.consultantNo;
+const referralLink = window.location.origin + "/register.html?ref=" + consultantData.consultantNo;
 
 let sales = 0;
-
 let nextLevel = "";
 let targetSales = 0;
 
 if(data.consultantLevel === "AQC"){
-
 nextLevel = "AQC-AS";
 targetSales = 30000;
-
-}
-
-else if(data.consultantLevel === "AQC-AS"){
-
+} else if(data.consultantLevel === "AQC-AS"){
 nextLevel = "AQC-UM";
 targetSales = 60000;
-
-}
-
-else if(data.consultantLevel === "AQC-UM"){
-
+} else if(data.consultantLevel === "AQC-UM"){
 nextLevel = "MGAM";
 targetSales = 120000;
-
-}
-
-else{
-
+} else {
 nextLevel = "TOP LEVEL";
 targetSales = 0;
-
 }
 
- 
-const renewalDate =
-data.renewalDate?.toDate
-? data.renewalDate.toDate()
-: new Date(data.renewalDate);
-
-const today =
-new Date();
-
-const diffDays =
-Math.ceil(
-(renewalDate - today)
-/
-(1000 * 60 * 60 * 24)
-);
+const renewalDate = data.renewalDate?.toDate ? data.renewalDate.toDate() : new Date(data.renewalDate);
+const today = new Date();
+const diffDays = Math.ceil((renewalDate - today) / (1000 * 60 * 60 * 24));
 
 if(diffDays <= 30){
-
-document.getElementById(
-"renewalBanner"
-).classList.remove("hidden");
-
-document.getElementById(
-"renewalBanner"
-).innerHTML = `
-
+document.getElementById("renewalBanner").classList.remove("hidden");
+document.getElementById("renewalBanner").innerHTML = `
 <div class="bg-red-50 border border-red-200 rounded-2xl p-5">
-
-<h2 class="font-bold text-red-700 text-lg">
-Renewal Reminder
-</h2>
-
-<p class="mt-2">
-
-Membership anda akan tamat dalam
-<b>${diffDays} hari</b>.
-
-</p>
-
-<a
-href="consultant-renewal.html"
-class="inline-block mt-4 bg-red-500 text-white px-5 py-3 rounded-xl">
-
-Renew Now
-
-</a>
-
+<h2 class="font-bold text-red-700 text-lg">Renewal Reminder</h2>
+<p class="mt-2">Membership anda akan tamat dalam <b>${diffDays} hari</b>.</p>
+<a href="consultant-renewal.html" class="inline-block mt-4 bg-red-500 text-white px-5 py-3 rounded-xl">Renew Now</a>
 </div>
-
 `;
-
 }
 
-
-
-const monthlySales = {
-1:0,
-2:0,
-3:0,
-4:0,
-5:0,
-6:0,
-7:0,
-8:0,
-9:0,
-10:0,
-11:0,
-12:0
-};
-
-const monthlyCommission = [
-0,0,0,0,0,0,0,0,0,0,0,0
-];
-
-const monthlyOverride = [
-0,0,0,0,0,0,0,0,0,0,0,0
-];
-
+const monthlySales = { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0 };
+const monthlyCommission = [0,0,0,0,0,0,0,0,0,0,0,0];
+const monthlyOverride = [0,0,0,0,0,0,0,0,0,0,0,0];
  
 let activeClients = 0;
 let totalSales = 0;
-
 let wasiatSales = 0;
 let hibahSales = 0;
 let sepencarianSales = 0;
 let mawarisSales = 0;
 
-const usersSnap =
-await getDocs(
-collection(db,"users")
-);
-
+const usersSnap = await getDocs(collection(db,"users"));
 usersSnap.forEach((d)=>{
-
-const u =
-d.data();
-
-if(
-u.role==="customer" &&
-(u.referral || "").trim()===data.consultantNo
-){
-
+const u = d.data();
+if(u.role==="customer" && (u.referral || "").trim()===data.consultantNo){
     activeClients++;
- 
-// Pengiraan Sales dan Kuantiti (Carta Pie)
 if(u.wasiatPaymentStatus === "paid"){
-    wasiatSales++; // <-- Ini yang tertinggal tadi!
+    wasiatSales++;
     totalSales += priceWasiat;
     const m = u.joinDate?.toDate()?.getMonth() + 1;
     if(m) { monthlySales[m] += priceWasiat; }
 }
-
 if(u.hibahPaymentStatus === "paid"){
     hibahSales++; 
     totalSales += priceHibah;
     const m = u.joinDate?.toDate()?.getMonth() + 1;
     if(m) { monthlySales[m] += priceHibah; }
 }
-
 if(u.sepencarianPaymentStatus === "paid"){
     sepencarianSales++; 
     totalSales += priceSepencarian;
     const m = u.joinDate?.toDate()?.getMonth() + 1;
     if(m) { monthlySales[m] += priceSepencarian; }
 }
-
 if(u.mawarisPaymentStatus === "paid"){
     mawarisSales++; 
     totalSales += priceMawaris;
     const m = u.joinDate?.toDate()?.getMonth() + 1;
     if(m) { monthlySales[m] += priceMawaris; }
 }
-
-}   // <-- tutup if role customer
-}); // <-- tutup usersSnap.forEach
-
- 
-const historySnap =
-await getDocs(
-query(
-collection(db,"overrideHistory"),
-where(
-"receiver",
-"==",
-data.consultantNo
-)
-)
-);
-
-let totalCommission = 0;
-
- 
-
-const ledgerSnap =
-await getDocs(
-collection(db,"ledger")
-);
-
- 
-const paymentSnap =
-await getDocs(
-query(
-collection(db,"paymentVouchers"),
-where("consultantNo","==",data.consultantNo),
-where("status","==","PAID")
-)
-);
-
-let paid = 0;
-
-paymentSnap.forEach((d)=>{
-
-const pv = d.data();
-
-paid += Number(
-pv.amount || 0
-);
-
+}
 });
 
- 
- 
+const historySnap = await getDocs(query(collection(db,"overrideHistory"), where("receiver", "==", data.consultantNo)));
+let totalCommission = 0;
+const ledgerSnap = await getDocs(collection(db,"ledger"));
+const paymentSnap = await getDocs(query(collection(db,"paymentVouchers"), where("consultantNo","==",data.consultantNo), where("status","==","PAID")));
+
+let paid = 0;
+paymentSnap.forEach((d)=>{
+const pv = d.data();
+paid += Number(pv.amount || 0);
+});
+
 ledgerSnap.forEach((d)=>{
-
 const row = d.data();
-
-const trxDate =
-row.date?.toDate();
-
-if(
-trxDate &&
-row.consultantNo === data.consultantNo
-){
-
-const month =
-trxDate.getMonth();
- 
-if(row.accountCode==="2000"){
-
-monthlyCommission[month]+=Number(row.credit||0);
-
+const trxDate = row.date?.toDate();
+if(trxDate && row.consultantNo === data.consultantNo){
+const month = trxDate.getMonth();
+if(row.accountCode==="2000"){ monthlyCommission[month]+=Number(row.credit||0); }
+if(row.accountCode==="2100"){ monthlyOverride[month]+=Number(row.credit||0); }
 }
-
-if(row.accountCode==="2100"){
-
-monthlyOverride[month]+=Number(row.credit||0);
-
+if(row.consultantNo === data.consultantNo){
+if(row.accountCode === "2000" && row.credit > 0){
+totalCommission += Number(row.credit);
 }
-
 }
-
- 
-if(
-row.consultantNo === data.consultantNo
-){
-
-const trxDate =
-row.date?.toDate();
-
-
-
-if(
-row.accountCode === "2000" &&
-row.credit > 0
-){
-
-totalCommission +=
-Number(row.credit);
-
-}
-
-}
+}); 
 
 let totalOverriding = 0;
 let overridingSales = 0;
 
-// 1. Kira Overriding (Kod Akaun 2100)
 ledgerSnap.forEach((d)=>{
     const row = d.data();
     if(row.consultantNo === data.consultantNo && row.accountCode === "2100" && row.credit > 0){
@@ -769,7 +285,6 @@ ledgerSnap.forEach((d)=>{
     }
 });
 
-// 2. Kira Jumlah Jualan Pasukan (Overriding Sales) dari History
 historySnap.forEach((d)=>{
     const h = d.data();
     const aqcNo = h.fromConsultant; 
@@ -777,7 +292,6 @@ historySnap.forEach((d)=>{
     overridingSales += Number(h.sales || 0);
 });
 
-// 3. Tarik Baki USB Rasmi Terus dari Lejer (Kod Akaun 2150) atas Nama Konsultan Ini
 let totalMyUsb = 0;
 ledgerSnap.forEach((d) => {
     const r = d.data();
@@ -786,39 +300,25 @@ ledgerSnap.forEach((d) => {
     }
 });
 
-// 4. Jumlah Keseluruhan (Earned) & Outstanding
 const earned = totalCommission + totalOverriding + totalMyUsb;
 const outstanding = earned - paid;
 
-// 5. Paparkan ke Elemen HTML Dashboard
 document.getElementById("earnedCard").innerHTML = "RM" + earned.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
 document.getElementById("usbAmount").innerHTML = "RM" + totalMyUsb.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
 
-// Debugging Konsol
-console.log("Commission  :", totalCommission);
-console.log("Override    :", totalOverriding);
-console.log("USB Lejer   :", totalMyUsb); 
-console.log("Paid        :", paid);
-console.log("Earned      :", earned);
-console.log("Outstanding :", outstanding);
-
- 
 let commissionRate = 0;
 let overridingRate = 0;
 
 if(data.consultantLevel === "AQC"){
     commissionRate = Number(comp.commissionAQC || 35);
     overridingRate = Number(comp.overrideAQC || 0);
-}
-else if(data.consultantLevel === "AQC-AS"){
+} else if(data.consultantLevel === "AQC-AS"){
     commissionRate = Number(comp.commissionAQCAS || 38);
     overridingRate = Number(comp.overrideAQCAS || 3);
-}
-else if(data.consultantLevel === "AQC-UM"){
+} else if(data.consultantLevel === "AQC-UM"){
     commissionRate = Number(comp.commissionAQCUM || 40);
     overridingRate = Number(comp.overrideAQCUM || 4);
-}
-else if(data.consultantLevel === "MGAM"){
+} else if(data.consultantLevel === "MGAM"){
     commissionRate = Number(comp.commissionMGAM || 45);
     overridingRate = Number(comp.overrideMGAM || 5);
 }
@@ -826,331 +326,116 @@ else if(data.consultantLevel === "MGAM"){
 document.getElementById("paidCard").innerHTML = "RM" + paid.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
 document.getElementById("outstandingCard").innerHTML = "RM" + outstanding.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
 
-
-
-await updateDoc(
-doc(db,"consultants",user.uid),
-{
+await updateDoc(doc(db,"consultants",user.uid), {
 careerSales: totalSales,
 totalSales,
 totalCommission,
 totalOverriding
-}
-);
-
-const progress =
-targetSales > 0
-? Math.min(
-100,
-(totalSales / targetSales) * 100
-)
-: 100;
-
-const remaining =
-Math.max(
-0,
-targetSales - totalSales
-);
-
-if(
-totalSales >= targetSales &&
-nextLevel !== "TOP LEVEL" &&
-!data.promotionRequest
-){
-
-await updateDoc(
-doc(db,"consultants",user.uid),
-{
-promotionRequest:true,
-requestedLevel:nextLevel,
-promotionRequestDate:new Date()
-}
-);
-
-}
-
- 
-document.getElementById(
-"welcomeText"
-).innerHTML =
-data.nama;
-
-document.getElementById(
-"promotionCard"
-).innerHTML = `
-
-<h2 class="text-xl font-bold mb-3">
-
-Career Progression
-
-</h2>
-
-<p>
-
-Current Level:
-<b>${data.consultantLevel}</b>
-
-<p class="mt-2">
-Commission:
-<b>${commissionRate}%</b>
-</p>
-
-<p>
-Overriding:
-<b>${overridingRate}%</b>
-</p>
-
-<p>
-Team Sales:
-<b>
-RM${overridingSales.toLocaleString()}
-</b>
-</p>
-
-<p>
-Overriding Earned:
-<b class="text-green-600">
-RM${totalOverriding.toLocaleString()}
-</b>
-</p>
-
-</p>
-
-<p>
-
-${
-data.consultantLevel === "MGAM"
-?
-
-`<div class="mt-3 text-green-700 font-bold">
-You are our Elite MGAM Leader.
-Keep inspiring and growing your team.
-</div>`
-
-:
-
-`<p>
-Next Level:
-<b>${nextLevel}</b>
-</p>`
-}
-
-</p>
-
-<div class="w-full bg-gray-200 rounded-full h-4 mt-4">
-
-<div
-class="bg-green-500 h-4 rounded-full"
-style="width:${progress}%">
-
-</div>
-
-</div>
-
-<p class="mt-2">
-
-RM${totalSales.toLocaleString()}
-/
-RM${targetSales.toLocaleString()}
-
-</p>
-
-<p class="mt-2 text-red-600 font-semibold">
-
-${
-data.promotionRequest
-?
-
-`<div class="mt-3 bg-yellow-100 text-yellow-700 p-3 rounded-xl">
-
-Promotion Request Submitted
-
-Menunggu kelulusan HQ.
-
-</div>`
-
-:
-
-`<p class="mt-2 text-red-600 font-semibold">
-
-RM${remaining.toLocaleString()}
-lagi untuk naik ke ${nextLevel}
-
-</p>`
-
-}
-
-</p>
-
-`;
- 
-const joinDate =
-data.joinDate?.toDate
-? data.joinDate.toDate()
-: new Date(data.joinDate);
-
-
-document.getElementById(
-"profileContent"
-).innerHTML = `
-
-<p><b>Nama:</b> ${data.nama}</p>
-
-<p><b>No Konsultan:</b> ${data.consultantNo}</p>
-
-<p><b>Level:</b> ${data.consultantLevel}</p>
-
-<p><b>Telefon:</b> ${data.telefon}</p>
-
-<p><b>Email:</b> ${data.email || "-"}</p>
-
-<p><b>IC:</b> ${data.ic || "-"}</p>
-
-<p><b>Negeri:</b> ${data.state || "-"}</p>
-
-<p><b>Bank:</b> ${data.bankName || "-"}</p>
-
-<p><b>No Akaun:</b> ${data.bankAccount || "-"}</p>
-
-`;
-
-document
-.getElementById("editProfileBtn")
-?.addEventListener("click",()=>{
-
-window.location.href =
-"consultant-profile-edit.html";
-
 });
+
+const progress = targetSales > 0 ? Math.min(100, (totalSales / targetSales) * 100) : 100;
+const remaining = Math.max(0, targetSales - totalSales);
+
+if(totalSales >= targetSales && nextLevel !== "TOP LEVEL" && !data.promotionRequest){
+await updateDoc(doc(db,"consultants",user.uid), {
+promotionRequest: true,
+requestedLevel: nextLevel,
+promotionRequestDate: new Date()
+});
+}
  
+document.getElementById("welcomeText").innerHTML = data.nama;
+document.getElementById("promotionCard").innerHTML = `
+<h2 class="text-xl font-bold mb-3">Career Progression</h2>
+<p>Current Level: <b>${data.consultantLevel}</b></p>
+<p class="mt-2">Commission: <b>${commissionRate}%</b></p>
+<p>Overriding: <b>${overridingRate}%</b></p>
+<p>Team Sales: <b>RM${overridingSales.toLocaleString()}</b></p>
+<p>Overriding Earned: <b class="text-green-600">RM${totalOverriding.toLocaleString()}</b></p>
+<p>${data.consultantLevel === "MGAM" ? `<div class="mt-3 text-green-700 font-bold">You are our Elite MGAM Leader. Keep inspiring and growing your team.</div>` : `<p>Next Level: <b>${nextLevel}</b></p>`}</p>
+<div class="w-full bg-gray-200 rounded-full h-4 mt-4">
+<div class="bg-green-500 h-4 rounded-full" style="width:${progress}%"></div>
+</div>
+<p class="mt-2">RM${totalSales.toLocaleString()} / RM${targetSales.toLocaleString()}</p>
+<p class="mt-2 text-red-600 font-semibold">
+${data.promotionRequest ? `<div class="mt-3 bg-yellow-100 text-yellow-700 p-3 rounded-xl">Promotion Request Submitted<br>Menunggu kelulusan HQ.</div>` : `RM${remaining.toLocaleString()} lagi untuk naik ke ${nextLevel}`}
+</p>
+`;
+ 
+document.getElementById("profileContent").innerHTML = `
+<p><b>Nama:</b> ${data.nama}</p>
+<p><b>No Konsultan:</b> ${data.consultantNo}</p>
+<p><b>Level:</b> ${data.consultantLevel}</p>
+<p><b>Telefon:</b> ${data.telefon}</p>
+<p><b>Email:</b> ${data.email || "-"}</p>
+<p><b>IC:</b> ${data.ic || "-"}</p>
+<p><b>Negeri:</b> ${data.state || "-"}</p>
+<p><b>Bank:</b> ${data.bankName || "-"}</p>
+<p><b>No Akaun:</b> ${data.bankAccount || "-"}</p>
+`;
+
 document.getElementById("activeClients").innerHTML = activeClients;
-
 document.getElementById("totalSales").innerHTML = "RM" + totalSales.toLocaleString(undefined, {minimumFractionDigits: 2});
-
 document.getElementById("totalCommission").innerHTML = "RM" + totalCommission.toLocaleString(undefined, {minimumFractionDigits: 2});
-
 document.getElementById("totalOverriding").innerHTML = "RM" + totalOverriding.toLocaleString(undefined, {minimumFractionDigits: 2});
-
-// Kita gunakan totalUsbLedger (dari Lejer) supaya sama dengan Total Earned
-document.getElementById("usbAmount").innerHTML = "RM" + totalUsbLive.toLocaleString(undefined, {minimumFractionDigits: 2});
- 
-
-console.log("monthlySales", monthlySales);
-console.log("monthlyCommission", monthlyCommission);
-console.log("monthlyOverride", monthlyOverride);
 
 Chart.register(ChartDataLabels);
  
 new Chart(document.getElementById("productChart"), {
-
     type: "pie",
-
     data: {
-        labels: [
-            "Wasiat",
-            "Hibah",
-            "Sepencarian",
-            "Mawaris"
-        ],
-
+        labels: ["Wasiat", "Hibah", "Sepencarian", "Mawaris"],
         datasets: [{
-            data: [
-                wasiatSales,
-                hibahSales,
-                sepencarianSales,
-                mawarisSales
-            ],
-            backgroundColor: [
-                "#3B82F6",
-                "#F43F5E",
-                "#F59E0B",
-                "#FACC15"
-            ]
+            data: [wasiatSales, hibahSales, sepencarianSales, mawarisSales],
+            backgroundColor: ["#3B82F6", "#F43F5E", "#F59E0B", "#FACC15"]
         }]
     },
-
     options: {
     responsive: true,
     maintainAspectRatio: false,
-
     plugins: {
-
-        legend: {
-            position: "top",
-            align: "center",
-            labels: {
-                boxWidth: 12,
-                padding: 15
-            }
-        },
-
+        legend: { position: "top", align: "center", labels: { boxWidth: 12, padding: 15 } },
         datalabels: {
-
             color: "#fff",
-
-            font: {
-                weight: "bold",
-                size: 14
-            },
-
+            font: { weight: "bold", size: 14 },
             formatter: (value, context) => {
-                // KOD BARU: Kalau nilai 0, jangan tunjuk apa-apa (return string kosong)
                 if (value === 0) return ""; 
-
-                const data = context.chart.data.datasets[0].data;
-                const total = data.reduce((a,b)=>a+b,0);
-
-                return total
-                    ? ((value / total) * 100).toFixed(1) + "%"
-                    : "";
+                const dataSet = context.chart.data.datasets[0].data;
+                const total = dataSet.reduce((a,b)=>a+b,0);
+                return total ? ((value / total) * 100).toFixed(1) + "%" : "";
             }
-
         }
-
     }
-
 }
-
 });
 
-const ctx =
-document
-.getElementById("salesChart")
-.getContext("2d");
-
+const ctx = document.getElementById("salesChart").getContext("2d");
 new Chart(ctx, {
     type: "bar",
     data: {
-        labels: [
-            "Jan", "Feb", "Mac", "Apr", "Mei", "Jun", 
-            "Jul", "Ogos", "Sep", "Okt", "Nov", "Dis"
-        ],
+        labels: ["Jan", "Feb", "Mac", "Apr", "Mei", "Jun", "Jul", "Ogos", "Sep", "Okt", "Nov", "Dis"],
         datasets: [
             {
                 label: "Sales",
-                data: [
-                    monthlySales[1], monthlySales[2], monthlySales[3], monthlySales[4],
-                    monthlySales[5], monthlySales[6], monthlySales[7], monthlySales[8],
-                    monthlySales[9], monthlySales[10], monthlySales[11], monthlySales[12]
-                ],
-                backgroundColor: "rgba(59, 130, 246, 0.85)", // Tailwind blue-500 slightly transparent
-                hoverBackgroundColor: "rgba(37, 99, 235, 1)", // Tailwind blue-600 solid
-                borderRadius: 4, // Rounded corners on bars
+                data: [monthlySales[1], monthlySales[2], monthlySales[3], monthlySales[4], monthlySales[5], monthlySales[6], monthlySales[7], monthlySales[8], monthlySales[9], monthlySales[10], monthlySales[11], monthlySales[12]],
+                backgroundColor: "rgba(59, 130, 246, 0.85)",
+                hoverBackgroundColor: "rgba(37, 99, 235, 1)",
+                borderRadius: 4,
                 borderSkipped: false
             },
             {
                 label: "Commission",
                 data: monthlyCommission,
-                backgroundColor: "rgba(16, 185, 129, 0.85)", // Tailwind emerald-500
-                hoverBackgroundColor: "rgba(5, 150, 105, 1)", // Tailwind emerald-600
+                backgroundColor: "rgba(16, 185, 129, 0.85)",
+                hoverBackgroundColor: "rgba(5, 150, 105, 1)",
                 borderRadius: 4,
                 borderSkipped: false
             },
             {
                 label: "Override",
                 data: monthlyOverride,
-                backgroundColor: "rgba(245, 158, 11, 0.85)", // Tailwind amber-500
-                hoverBackgroundColor: "rgba(217, 119, 6, 1)", // Tailwind amber-600
+                backgroundColor: "rgba(245, 158, 11, 0.85)",
+                hoverBackgroundColor: "rgba(217, 119, 6, 1)",
                 borderRadius: 4,
                 borderSkipped: false
             }
@@ -1159,26 +444,14 @@ new Chart(ctx, {
     options: {
         responsive: true,
         maintainAspectRatio: false,
-        interaction: {
-            mode: 'index',
-            intersect: false, // Tooltip shows all values for the month when hovering anywhere on that column
-        },
+        interaction: { mode: 'index', intersect: false },
         plugins: {
-            legend: {
-                position: "top",
-                labels: {
-                    usePointStyle: true,
-                    padding: 20,
-                    font: {
-                        family: "'Inter', sans-serif"
-                    }
-                }
-            },
+            legend: { position: "top", labels: { usePointStyle: true, padding: 20, font: { family: "'Inter', sans-serif" } } },
             tooltip: {
                 backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                titleColor: '#1f2937', // gray-800
-                bodyColor: '#4b5563', // gray-600
-                borderColor: '#e5e7eb', // gray-200
+                titleColor: '#1f2937',
+                bodyColor: '#4b5563',
+                borderColor: '#e5e7eb',
                 borderWidth: 1,
                 padding: 12,
                 boxPadding: 4,
@@ -1186,180 +459,41 @@ new Chart(ctx, {
                 titleFont: { family: "'Inter', sans-serif", size: 14, weight: 'bold' },
                 bodyFont: { family: "'Inter', sans-serif", size: 13 }
             },
-            datalabels: {
-                display: false // Sembunyikan label nombor di dalam/atas bar supaya tak semak
-            }
+            datalabels: { display: false }
         },
         scales: {
-            x: {
-                grid: {
-                    display: false, // Hilangkan garisan menegak
-                    drawBorder: false
-                },
-                ticks: {
-                    font: { family: "'Inter', sans-serif" }
-                }
-            },
-            y: {
-                beginAtZero: true,
-                grid: {
-                    color: '#f3f4f6', // gray-100
-                    drawBorder: false,
-                    borderDash: [5, 5] // Garisan putus-putus moden
-                },
-                ticks: {
-                    font: { family: "'Inter', sans-serif" },
-                    padding: 10
-                }
-            }
+            x: { grid: { display: false, drawBorder: false }, ticks: { font: { family: "'Inter', sans-serif" } } },
+            y: { beginAtZero: true, grid: { color: '#f3f4f6', drawBorder: false, borderDash: [5, 5] }, ticks: { font: { family: "'Inter', sans-serif" }, padding: 10 } }
         }
     }
 }); 
 
+document.getElementById("clientsBtn").addEventListener("click", ()=>{ window.location.href = "consultant-clients.html"; });
+document.getElementById("careerBtn").addEventListener("click", ()=>{ window.location.href = "consultant-career.html"; });
+document.getElementById("overridingBtn").addEventListener("click",()=>{ window.location.href = "consultant-overriding.html"; });
+document.getElementById("trainingBtn").addEventListener("click", ()=>{ window.location.href = "consultant-training.html"; });
+document.getElementById("renewalBtn").addEventListener("click",()=>{ window.location.href = "consultant-renewal.html"; });  
+document.getElementById("marketingBtn").addEventListener("click",()=>{ window.location.href = "consultant-marketing.html"; });
 
-document
-.getElementById("clientsBtn")
-.addEventListener("click", ()=>{
-
-window.location.href =
-"consultant-clients.html";
-
-});
-
-document
-.getElementById("careerBtn")
-.addEventListener("click", ()=>{
-
-window.location.href =
-"consultant-career.html";
-
-});
-
-document
-.getElementById("overridingBtn")
-.addEventListener("click",()=>{
-
-window.location.href =
-"consultant-overriding.html";
-
-});
- 
-document
-.getElementById("trainingBtn")
-.addEventListener("click", ()=>{
-
-window.location.href =
-"consultant-training.html";
-
-});
-
-document
-.getElementById("renewalBtn")
-.addEventListener("click",()=>{
-
-window.location.href =
-"consultant-renewal.html";
-
-});  
-
-document
-.getElementById("marketingBtn")
-.addEventListener("click",()=>{
-
-window.location.href =
-"consultant-marketing.html";
-
-});
-
-document
-.getElementById("copyReferralBtn")
-.addEventListener(
-"click",
-async()=>{
-
+document.getElementById("copyReferralBtn").addEventListener("click", async()=>{
 try{
-
-const referralLink =
-window.location.origin +
-window.location.pathname.replace(
-"consultant-dashboard.html",
-"register.html"
-) +
-"?ref=" +
-consultantData.consultantNo;
-
-await navigator.clipboard.writeText(
-referralLink
-);
-
-const btn =
-document.getElementById(
-"copyReferralBtn"
-);
-
-btn.innerHTML =
-"✓ Copied";
-
-setTimeout(()=>{
-
-btn.innerHTML =
-"Copy Link";
-
-},2000);
-
-}
-catch(err){
-
-alert(
-"Gagal copy link"
-);
-
+const referralLink = window.location.origin + window.location.pathname.replace("consultant-dashboard.html", "register.html") + "?ref=" + consultantData.consultantNo;
+await navigator.clipboard.writeText(referralLink);
+const btn = document.getElementById("copyReferralBtn");
+btn.innerHTML = "✓ Copied";
+setTimeout(()=>{ btn.innerHTML = "Copy Link"; },2000);
+}catch(err){
+alert("Gagal copy link");
 console.log(err);
-
 }
-
 });
 
-document
-.getElementById("profileBtn")
-?.addEventListener("click",()=>{
+document.getElementById("profileBtn")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.remove("hidden"); });
+document.getElementById("closeProfile")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.add("hidden"); });
+document.getElementById("logoutBtn").addEventListener("click", async()=>{ await signOut(auth); window.location.href = "index.html"; });
 
-document
-.getElementById("profileModal")
-.classList.remove("hidden");
-
-});
-
-document
-.getElementById("closeProfile")
-?.addEventListener("click",()=>{
-
-document
-.getElementById("profileModal")
-.classList.add("hidden");
-
-});
-
-
-
-document
-.getElementById("logoutBtn")
-.addEventListener("click", async()=>{
-
-await signOut(auth);
-
-window.location.href =
-"index.html";
-
-});
-
-}); // tutup onAuthStateChanged
- 
+}); // Penutup rasmi tunggal untuk onAuthStateChanged
 </script>
 
-
-
 </body>
-
 </html>
-  
