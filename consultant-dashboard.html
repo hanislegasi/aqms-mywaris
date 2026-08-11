@@ -761,45 +761,73 @@ Number(row.credit);
 }); 
 let totalOverriding = 0;
 let overridingSales = 0;
-let totalUsbLedger = 0; // KOD BARU: Sediakan bekas untuk USB
+let totalUsbLive = 0; // Bekas baru untuk kiraan USB tepat
 
+// =======================================================
+// 1. KIRA DARI LEJER (Untuk Overriding & USB Pendaftaran RM50)
+// =======================================================
 ledgerSnap.forEach((d)=>{
     const row = d.data();
-    if(row.consultantNo !== data.consultantNo) return;
-    
-    if( row.accountCode === "2100" && row.credit > 0 ){
+
+    // A. KIRA OVERRIDING (Kod Akaun 2100)
+    if(row.consultantNo === data.consultantNo && row.accountCode === "2100" && row.credit > 0){
         totalOverriding += Number(row.credit);
     }
-    // KOD BARU: Tarik nilai USB dari Lejer
-    if( row.accountCode === "2150" && row.credit > 0 ){
-        totalUsbLedger += Number(row.credit);
+
+    // B. KIRA USB PENDAFTARAN RM50 (Kod Akaun 2150) guna "Laluan Tikus"
+    if(row.accountCode === "2150" && Number(row.credit) === 50) {
+        let dlNo = row.fromConsultant || row.transactionGroup;
+        if (!dlNo && row.description) {
+            const match = row.description.match(/(AQC\d{4,5})/);
+            if (match) dlNo = match[0];
+        }
+        
+        // Asalkan terjumpa ID Downline dan ia BUKAN ID upline sendiri
+        if (dlNo && dlNo !== data.consultantNo) {
+            totalUsbLive += 50;
+        }
     }
 });
 
+// =======================================================
+// 2. KIRA DARI HISTORY (Untuk Total Sales & USB Jualan)
+// =======================================================
+// Tarik rate USB dari 'comp' yang ko dah set sebelum ni
+const usbRate = typeof comp !== 'undefined' ? Number(comp.usb || 0.5) : 0.5;
 
 historySnap.forEach((d)=>{
-
     const h = d.data();
+    const aqcNo = h.fromConsultant; 
 
+    // Pagar keselamatan: Abaikan kalau ID kosong atau ID sendiri
+    if (!aqcNo || aqcNo === data.consultantNo) return;
+    
     overridingSales += Number(h.sales || 0);
 
+    // C. KIRA USB JUALAN SECARA DINAMIK (cth: 0.5% dari jualan downline)
+    totalUsbLive += Number(h.sales || 0) * (usbRate / 100);
 });
 
-// Campurkan sekali nilai USB
-const earned = totalCommission + totalOverriding + totalUsbLedger;
- 
-document.getElementById("earnedCard").innerHTML =
-"RM" + earned.toFixed(2);
- 
-const outstanding =
-earned - paid;
+// =======================================================
+// 3. GABUNG SEMUA UNTUK DASHBOARD KESELURUHAN
+// =======================================================
+const earned = totalCommission + totalOverriding + totalUsbLive;
+
+document.getElementById("earnedCard").innerHTML = "RM" + earned.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+
+const outstanding = earned - paid;
+
+// 🔥 JANGAN LUPA UPDATE KOTAK USB RM4.15 TU! 🔥
+// Semak dalam HTML ko apa ID untuk kotak USB tu (contoh: usbCard atau totalUSB)
+// Buang simbol komen '//' di bawah dan tukar ID kotak yang betul:
+document.getElementById("usbAmount").innerHTML = "RM" + totalUsbLive.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
 
 console.log("Commission :", totalCommission);
 console.log("Override   :", totalOverriding);
+console.log("USB Live   :", totalUsbLive); 
 console.log("Paid       :", paid);
 console.log("Earned     :", earned);
 console.log("Outstanding:", outstanding);
-
 
  
 let commissionRate = 0;
