@@ -326,40 +326,54 @@
             let cntDiserahAQM = 0;
             let cntTerimaAQM = 0;
 
-            const processDocData = (data, type) => {
+           const processDocData = (data, type) => {
                 if (!data) return;
 
                 const s = (data.status || "").toString().trim().toUpperCase();
 
-                // Semak kewujudan tarikh / status
-                const hasSentRecord = data.sentAt || data.trackingNo || data.courier || s === "SENT" || s === "DIHANTAR KURIER";
-                const hasPrintedRecord = data.printedAt || s === "PRINTED" || hasSentRecord;
+                // Semak kewujudan data/tarikh bagi setiap fasa (Kumulatif & Bebas)
+                const hasTerimaAQM = !!(data.receivedDate || data.completedAt || ["RECEIVED", "COMPLETED"].includes(s));
+                const hasDiserahAQM = !!(data.handoverDate || ["DISERAHKAN_AQM", "SERAH_AQM"].includes(s) || hasTerimaAQM);
+                const hasStamping = !!(data.stampingDate || s === "STAMPING" || hasDiserahAQM);
+                const hasAkad = !!(data.akadDate || s === "AKAD" || hasStamping);
+                const hasSentRecord = !!(data.sentAt || data.trackingNo || data.courier || s === "SENT" || s === "DIHANTAR KURIER" || hasAkad);
+                const hasPrintedRecord = !!(data.printedAt || s === "PRINTED" || hasSentRecord);
+                const hasApproved = !!(data.approvedAt || data.docRef || ["APPROVED", "VERIFIED"].includes(s) || hasPrintedRecord);
 
-                // 1. Approved
-                if (["APPROVED", "VERIFIED", "PRINTED", "SENT", "AKAD", "STAMPING", "DISERAHKAN_AQM", "RECEIVED", "COMPLETED"].includes(s) || data.approvedAt || data.docRef) {
+                // 1. Approved (Diluluskan)
+                if (hasApproved) {
                     cntApproved++;
                     approvedCount++;
                 }
 
-                // 2. Printed
+                // 2. Printed (Dicetak)
                 if (hasPrintedRecord) {
                     cntPrinted++;
                 }
 
-                // 3. Sent
+                // 3. Sent (Dihantar Kurier)
                 if (hasSentRecord) {
                     cntSent++;
                 }
 
-                // 4. Akad -> 7. Terima AQM
-                if (s === "AKAD" || data.akadDate) {
+                // 4. Akad (Selesai Akad)
+                if (hasAkad) {
                     cntAkad++;
-                } else if (s === "STAMPING" || data.stampingDate) {
-                    cntAkad++; cntStamping++;
-                } else if (["DISERAHKAN_AQM", "SERAH_AQM"].includes(s) || data.handoverDate) {
-                    cntAkad++; cntStamping++; cntDiserahAQM++;
-                } else if (["RECEIVED", "COMPLETED"].includes(s) || data.receivedDate) {
-                    cntAkad++; cntStamping++; cntDiserahAQM++; cntTerimaAQM++;
+                }
+
+                // 5. Stamping (Duti Setem LHDN)
+                if (hasStamping) {
+                    cntStamping++;
+                }
+
+                // 6. Serah AQM (Diserahkan AQM)
+                if (hasDiserahAQM) {
+                    cntDiserahAQM++;
+                }
+
+                // 7. Terima AQM (AQM Terima)
+                if (hasTerimaAQM) {
+                    cntTerimaAQM++;
                 }
 
                 // Queue (Approval Queue)
@@ -372,7 +386,6 @@
 
                 if (data.renewedAt) renewal++;
             };
-
             // Process Users & Subcollections
             for (const userDoc of usersSnap.docs) {
                 const user = userDoc.data();
