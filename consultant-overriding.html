@@ -227,46 +227,80 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             }
         });
 
-       // --- LANGKAH 5B: Kumpul jualan & override dari overrideHistory ---
+      // --- LANGKAH 5B: Kumpul TOTAL SALES dari overrideHistory ---
+        // (Sebab lejer selalunya tak simpan jumlah jualan, cuma simpan komisen)
         const historyQ = query(
             collection(db, "overrideHistory"),
-            where("receiver", "==", myAqcNo) // Guna balik 'receiver', ini dah betul
+            where("receiver", "==", myAqcNo)
         );
         const historySnap = await getDocs(historyQ);
 
-        // Tarik rate USB (Pastikan compData dah wujud dari Langkah 2)
-        const usbRate = Number(compData.uplineSupportingBenefit || compData.usbRate || 0.5);
-
         historySnap.forEach(d => {
             const h = d.data();
-            
-            // KUNCI SEBENAR: Guna h.fromConsultant mengikut database ko
-            const aqcNo = h.fromConsultant; 
-            
+            const aqcNo = h.fromConsultant || h.fromAqc || h.downlineNo;
             if (!aqcNo) return;
 
             if (!teamData[aqcNo]) {
                 teamData[aqcNo] = { 
                     nama: h.fromName || "-", 
                     level: h.fromLevel || "AQC", 
-                    sales: 0, override: 0, usb: 0
+                    sales: 0, override: 0, usb: 0 
                 };
             }
             teamData[aqcNo].sales += Number(h.sales || 0);
-            teamData[aqcNo].override += Number(h.override || 0);
         });
 
-        // --- 6. Kira grand total & USB on-the-fly ---
+
+        // --- LANGKAH 5C: KUMPUL OVERRIDE & USB 100% DARI BUKU LEJER ---
+        const ledgerQ = query(
+            collection(db, "ledger"),
+            where("consultantNo", "==", myAqcNo)
+        );
+        const ledgerSnap = await getDocs(ledgerQ);
+
+        ledgerSnap.forEach(d => {
+            const row = d.data();
+            
+            // Hanya ambil kira Kod 2100 (Override) & 2150 (USB)
+            if (row.accountCode === "2100" || row.accountCode === "2150") {
+                
+                // 1. Cuba cari ID downline dari field rasmi
+                let dlNo = row.fromConsultant || row.fromAqc || row.source || row.downlineNo;
+                
+                // 2. Kalau takde, kita "korek" ID tu dari description (cth: "AQC0002 USB")
+                if (!dlNo && row.description) {
+                    const match = row.description.match(/(AQC\d{4,5})/);
+                    if (match) dlNo = match[0];
+                }
+
+                if (!dlNo) return; // Kalau masih tak tahu duit ni dari siapa, abaikan
+
+                // Wujudkan rekod profil kalau dia belum wujud dalam senarai
+                if (!teamData[dlNo]) {
+                    teamData[dlNo] = { 
+                        nama: "-", level: "AQC", sales: 0, override: 0, usb: 0 
+                    };
+                }
+
+                // Masukkan Override terus dari Lejer
+                if (row.accountCode === "2100" && row.credit > 0) {
+                    teamData[dlNo].override += Number(row.credit);
+                }
+                
+                // Masukkan USB (Sama ada Pendaftaran RM50 atau Jualan 0.5%) terus dari Lejer
+                if (row.accountCode === "2150" && row.credit > 0) {
+                    teamData[dlNo].usb += Number(row.credit);
+                }
+            }
+        });
+
+
+        // --- 6. KIRA JUMLAH KESELURUHAN (GRAND TOTAL) ---
         for (const aqcNo in teamData) {
             grandTotalSales += teamData[aqcNo].sales;
             grandTotalOverride += teamData[aqcNo].override;
-            
-            // KIRA USB SECARA DINAMIK (0.5% dari jualan individu)
-            teamData[aqcNo].usb = teamData[aqcNo].sales * (usbRate / 100);
-            
             grandTotalUsb += teamData[aqcNo].usb; 
         }
-        // --- SELEPAS INI ADALAH KOD 'for' UNTUK MELUKIS JADUAL HTML KO ---
 
         // 6. Semak Berapa Kali Dah Claim Dalam Tempoh Ini (Untuk Reset Counter)
         const claimsQ = query(
