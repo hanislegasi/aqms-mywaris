@@ -331,33 +331,26 @@ const processDocData = (data, type) => {
 
     const s = (data.status || "").toString().trim().toUpperCase();
 
-    // 1. Semak penanda fasa secara khusus bagi setiap satu
-    const hasTerimaAQM = !!(data.receivedDate || data.completedAt || ["RECEIVED", "COMPLETED"].includes(s));
-    const hasDiserahAQM = !!(data.handoverDate || ["DISERAHKAN_AQM", "SERAH_AQM"].includes(s));
-    const hasStamping = !!(data.stampingDate || s === "STAMPING");
-    const hasAkad = !!(data.akadDate || s === "AKAD");
+    // 1. Semak penanda asas daripada Firestore
+    const isVerified = data.verified === true || !!data.verifiedAt || !!data.approvedAt || !!data.docRef;
     
-    // Kurier & Cetak
-    const hasSentRecord = !!(data.sentAt || data.trackingNo || data.courier || s === "SENT" || s === "DIHANTAR KURIER");
-    const hasPrintedRecord = !!(data.printedAt || s === "PRINTED");
-    const hasApproved = !!(data.approvedAt || data.docRef || ["APPROVED", "VERIFIED"].includes(s));
+    const hasPrinted = !!(data.printedAt || data.printedBy || s === "PRINTED");
+    const hasSent = !!(data.sentAt || data.trackingNo || data.sentBy || s === "SENT");
+    const hasAkad = !!(data.akadDate || s === "AKAD");
+    const hasStamping = !!(data.stampingDate || data.stampingRef || s === "STAMPING");
+    const hasHandover = !!(data.handoverDate || data.handoverRemarks || ["DISERAHKAN_AQM", "SERAH_AQM"].includes(s));
+    const hasReceived = !!(data.receivedDate || data.receiver || ["RECEIVED", "COMPLETED"].includes(s));
 
-    // 2. Rantaian Kumulatif (Jika sudah di fasa lanjut, fasa awal secara automatik telah dilalui)
-    const isTerimaAQM = hasTerimaAQM;
-    const isDiserahAQM = isTerimaAQM || hasDiserahAQM;
+    // 2. Logik Kumulatif (Jika sudah capai fasa lanjut, fasa sebelumnya automatik melepasi)
+    const isTerimaAQM = hasReceived;
+    const isDiserahAQM = isTerimaAQM || hasHandover;
     const isStamping = isDiserahAQM || hasStamping;
     const isAkad = isStamping || hasAkad;
-    
-    // Fasa Kurier vs Direct Akad: Dokumen boleh terus ke Akad tanpa melalui kurier
-    const isSent = isAkad || hasSentRecord;
-    
-    // Fasa Cetak: Dikira jika ADA tarikh printedAt, status PRINTED, ATAU melepasi mana-mana fasa selepasnya
-    const isPrinted = hasPrintedRecord || isSent || isAkad;
-    
-    // Diluluskan: Dikira jika diluluskan atau mana-mana fasa di atas
-    const isApproved = hasApproved || isPrinted;
+    const isSent = isAkad || hasSent;
+    const isPrinted = isSent || hasPrinted;
+    const isApproved = isPrinted || isVerified || ["APPROVED", "VERIFIED"].includes(s);
 
-    // 3. Kemas kini kiraan mengikut hasil semakan tepat
+    // 3. Tambah nilai kaunter secara tepat
     if (isApproved) {
         cntApproved++;
         approvedCount++;
