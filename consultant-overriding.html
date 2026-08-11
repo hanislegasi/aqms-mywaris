@@ -234,7 +234,6 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
         );
         const historySnap = await getDocs(historyQ);
 
-        const compSnap = await getDoc(doc(db, "settings", "compensation"));
         const compData = compSnap.exists() ? compSnap.data() : {};
         const usbRate = Number(compData.uplineSupportingBenefit || compData.usbRate || 0.5);
 
