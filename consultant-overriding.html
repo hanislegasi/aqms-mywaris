@@ -74,7 +74,6 @@
         <th class="p-4 text-left">Level AQC</th>
         <th class="p-4 text-center">Total Sales</th>
         <th class="p-4 text-center">Total Override</th>
-        <th class="p-4 text-center">Total USB</th> <!-- TAMBAH INI -->
         <th class="p-4 text-center">% Bonus</th>
     </tr>
 </thead>
@@ -332,21 +331,16 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
             // Kalau grandTotalSales ada nilai, baru bahagi. Kalau tak, letak 0%
             const bonusPct = grandTotalSales > 0 ? (data.sales / grandTotalSales) * 100 : 0;
 
-            html += `
-            <tr class="border-b hover:bg-gray-50">
-                <td class="p-4">${aqcNo}</td>
-                <td class="p-4">${data.nama}</td>
-                <td class="p-4">${data.level}</td>
-                
-                <td class="p-4 text-center">RM${(data.sales || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                <td class="p-4 text-center font-bold text-green-600">RM${(data.override || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                
-                <!-- Kolum USB -->
-                <td class="p-4 text-center font-bold text-blue-600">RM${(data.usb || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                
-                <td class="p-4 text-center text-blue-600">${bonusPct.toFixed(2)}%</td>
-            </tr>
-            `;
+          html += `
+<tr class="border-b hover:bg-gray-50">
+    <td class="p-4">${aqcNo}</td>
+    <td class="p-4">${data.nama}</td>
+    <td class="p-4">${data.level}</td>
+    <td class="p-4 text-center">RM${(data.sales || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+    <td class="p-4 text-center font-bold text-green-600">RM${(data.override || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+    <td class="p-4 text-center text-blue-600">${bonusPct.toFixed(2)}%</td>
+</tr>
+`;
         }
 
 html += `
