@@ -228,25 +228,27 @@ const rewardBonusRate = Number(compData.rewardBonus || 5);
         });
 
        // --- LANGKAH 5B: Kumpul jualan & override dari overrideHistory ---
-        // TUKAR PERKATAAN "receiver" DI BAWAH INI
         const historyQ = query(
             collection(db, "overrideHistory"),
-            where("consultantNo", "==", myAqcNo) // <--- Tukar kepada consultantNo
+            where("receiver", "==", myAqcNo) // Guna balik 'receiver', ini dah betul
         );
         const historySnap = await getDocs(historyQ);
 
+        // Tarik rate USB (Pastikan compData dah wujud dari Langkah 2)
         const usbRate = Number(compData.uplineSupportingBenefit || compData.usbRate || 0.5);
 
         historySnap.forEach(d => {
             const h = d.data();
-            const aqcNo = h.fromAqc || h.downlineNo;
+            
+            // KUNCI SEBENAR: Guna h.fromConsultant mengikut database ko
+            const aqcNo = h.fromConsultant; 
             
             if (!aqcNo) return;
 
             if (!teamData[aqcNo]) {
                 teamData[aqcNo] = { 
                     nama: h.fromName || "-", 
-                    level: "AQC", 
+                    level: h.fromLevel || "AQC", 
                     sales: 0, override: 0, usb: 0
                 };
             }
