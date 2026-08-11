@@ -326,37 +326,42 @@
             let cntDiserahAQM = 0;
             let cntTerimaAQM = 0;
 
-            const processDocStatus = (statusStr, type) => {
-    if (!statusStr) return;
-    const s = statusStr.trim().toUpperCase();
+            const processDocStatus = (data, type) => {
+    if (!data) return;
+    
+    const s = (data.status || "").trim().toUpperCase();
+    
+    // Semak sama ada dokumen mempunyai rekod/tarikh penghantaran kurier
+    const hasSentRecord = data.sentAt || data.trackingNo || s === "SENT" || s === "DIHANTAR KURIER";
+    const hasPrintedRecord = data.printedAt || s === "PRINTED" || hasSentRecord;
 
     // 1. Approved
-    if (["APPROVED", "VERIFIED", "PRINTED", "SENT", "DELIVERED", "AKAD", "STAMPING", "DISERAHKAN_AQM", "RECEIVED", "COMPLETED"].includes(s)) {
+    if (["APPROVED", "VERIFIED", "PRINTED", "SENT", "AKAD", "STAMPING", "DISERAHKAN_AQM", "RECEIVED", "COMPLETED"].includes(s) || data.approvedAt || data.docRef) {
         cntApproved++;
     }
 
-    // 2. Printed
-    if (["PRINTED", "SENT", "DELIVERED", "DIHANTAR KURIER", "KURIER"].includes(s)) {
+    // 2. Printed (Dicetak)
+    if (hasPrintedRecord) {
         cntPrinted++;
     }
 
-    // 3. Sent (Tambahkan variasi status kurier di sini)
-    if (["SENT", "DELIVERED", "DIHANTAR KURIER", "KURIER", "POST"].includes(s)) {
+    // 3. Sent (Dihantar Kurier) -> Mengira jika status SENT ATAU ada isi sentAt/trackingNo
+    if (hasSentRecord) {
         cntSent++;
     }
 
-    // 4. Akad -> 7. Terima AQM
-    if (s === "AKAD") {
+    // 4. Akad -> 7. Terima AQM (Laluan Fizikal AQM)
+    if (s === "AKAD" || data.akadDate) {
         cntAkad++;
-    } else if (s === "STAMPING") {
+    } else if (s === "STAMPING" || data.stampingDate) {
         cntAkad++; cntStamping++;
-    } else if (["DISERAHKAN_AQM", "SERAH_AQM"].includes(s)) {
+    } else if (["DISERAHKAN_AQM", "SERAH_AQM"].includes(s) || data.handoverDate) {
         cntAkad++; cntStamping++; cntDiserahAQM++;
-    } else if (["RECEIVED", "COMPLETED"].includes(s)) {
+    } else if (["RECEIVED", "COMPLETED"].includes(s) || data.receivedDate) {
         cntAkad++; cntStamping++; cntDiserahAQM++; cntTerimaAQM++;
     }
 
-    // Queue
+    // Queue (Dalam Semakan)
     if (s === "UNDER_REVIEW") {
         if (type === 'wasiat') queueWasiat++;
         if (type === 'hibah') queueHibah++;
@@ -364,7 +369,6 @@
         if (type === 'mawaris') queueMawaris++;
     }
 };
-
             const processModuleData = (data, type) => {
                 if (!data) return;
                 processDocStatus(data.status, type);
