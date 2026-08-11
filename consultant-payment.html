@@ -166,7 +166,9 @@
     const db = getFirestore(app);
 
     const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+    
     let registrationFee = 0;
+    let usbRegistrationAmount = 50; // Sediakan bekas untuk USB Pendaftaran
 
     // CHECK AUTH & TARIK HARGA
     onAuthStateChanged(auth, async (user) => {
@@ -177,12 +179,19 @@
       try {
         const compSnap = await getDoc(doc(db, "settings", "compensation"));
         const compensation = compSnap.exists() ? compSnap.data() : {};
+        
         registrationFee = compensation.consultantRegistrationFee || compensation.consultantRegistration || 200;
+        
+        // KOD BARU: Tarik nilai USB dari pangkalan data (lalai: RM50)
+        // Ko boleh guna nama field 'usbRegistrationAmount' dalam Firebase Settings nanti
+        usbRegistrationAmount = Number(compensation.usbRegistrationAmount || 50);
+
         document.getElementById("displayFee").textContent = `RM${formatRM(registrationFee)}`;
       } catch (err) {
         console.error("Ralat memuatkan tetapan:", err);
         document.getElementById("displayFee").textContent = "RM200.00";
         registrationFee = 200;
+        usbRegistrationAmount = 50;
       }
     });
 
@@ -241,7 +250,7 @@
           // ===============================
           // ACCOUNTING ENTRY (NEW SPLIT: 200 / 150 / 50)
           // ===============================
-          const usbAmount = 50;
+          const usbAmount = usbRegistrationAmount; 
           const companyRevenue = registrationFee - usbAmount;
 
           // 1. Dr Bank (RM200) - Asset
@@ -284,6 +293,10 @@
             paymentType: "CONSULTANT",
             sourceAccount: "4120",
             transactionGroup: consultantNo
+
+            // 🔥 TAMBAHAN WAJIB UNTUK SELARASKAN DENGAN DASHBOARD 🔥
+            consultantNo: uplineCode,      // Duit ni milik siapa (Upline)
+            fromConsultant: consultantNo   // Duit ni datang dari siapa (Pendaftar Baru)           
           });
 
           // ===============================
