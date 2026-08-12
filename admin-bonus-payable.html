@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KPI Bonus Payable</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- jsPDF & AutoTable untuk Penjanaan PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <style>
         body { font-family: Inter, sans-serif; }
         .custom-scrollbar::-webkit-scrollbar { height: 6px; }
@@ -23,7 +26,7 @@
         <p class="text-sm text-gray-300">Pengurusan Agihan Bonus Pasukan</p>
     </div>
 
-    <div class="max-w-7xl mx-auto p-5">
+    <div class="p-5">
 
         <a href="accounts-dashboard.html" class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5 text-gray-800 hover:bg-gray-300 transition">
             &larr; Akaun
@@ -62,7 +65,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import {
-            getFirestore, collection, getDocs, doc, addDoc, updateDoc, query, where, orderBy
+            getFirestore, collection, getDocs, doc, addDoc, updateDoc, query, where
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
         const firebaseConfig = {
@@ -79,9 +82,27 @@
 
         const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+        // Simpan data kumpulan secara global untuk kegunaan PDF
+        let globalMgamGroups = {};
+
         // Tarik data dari koleksi bonusPayable (Tanya rekod yang berstatus PENDING_PAYMENT)
         async function loadBonusData() {
             try {
+                // 1. Dapatkan data maklumat bank dari koleksi consultants
+                const consultantsSnap = await getDocs(collection(db, "consultants"));
+                const bankDetailsMap = {};
+                consultantsSnap.forEach(doc => {
+                    const data = doc.data();
+                    if (data.consultantNo) {
+                        bankDetailsMap[data.consultantNo] = {
+                            ic: data.ic || "-",
+                            bankName: data.bankName || "-",
+                            bankAccount: data.bankAccount || "-"
+                        };
+                    }
+                });
+
+                // 2. Dapatkan data bonusPayable
                 const snap = await getDocs(query(
                     collection(db, "bonusPayable"),
                     where("status", "==", "PENDING_PAYMENT")
@@ -98,22 +119,28 @@
                         mgamGroups[teamId] = {
                             teamId: teamId,
                             totalBonusPool: 0,
-                            docIds: [], // Simpan ID dokumen untuk di-update bila bayaran dibuat
+                            docIds: [],
                             members: []
                         };
                     }
+
+                    const bankInfo = bankDetailsMap[row.aqcNo] || { ic: "-", bankName: "-", bankAccount: "-" };
 
                     mgamGroups[teamId].totalBonusPool += Number(row.bonusAmount || 0);
                     mgamGroups[teamId].docIds.push(d.id);
                     mgamGroups[teamId].members.push({
                         aqcNo: row.aqcNo,
                         nama: row.nama,
+                        ic: bankInfo.ic,
+                        bankName: bankInfo.bankName,
+                        bankAccount: bankInfo.bankAccount,
                         sales: row.totalSales,
                         percent: row.bonusPercent,
                         amount: row.bonusAmount
                     });
                 });
 
+                globalMgamGroups = mgamGroups;
                 let html = "";
 
                 // Bina HTML untuk setiap Kumpulan MGAM
@@ -127,10 +154,13 @@
                             <td class="p-4 text-center text-gray-700">${group.members.length} Orang</td>
                             <td class="p-4 text-right font-bold text-green-600">RM${formatRM(group.totalBonusPool)}</td>
                             <td class="p-4 text-center space-x-2">
-                                <button onclick="toggleDetail('${group.teamId}')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow">
+                                <button onclick="toggleDetail('${group.teamId}')" class="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition shadow text-xs md:text-sm">
                                     View
                                 </button>
-                                <button onclick="generatePV('${group.teamId}', ${group.totalBonusPool}, '${docIdsString}', this)" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition shadow">
+                                <button onclick="downloadPDF('${group.teamId}')" class="bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 transition shadow text-xs md:text-sm">
+                                    PDF Bank List
+                                </button>
+                                <button onclick="generatePV('${group.teamId}', ${group.totalBonusPool}, '${docIdsString}', this)" class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition shadow text-xs md:text-sm">
                                     Generate PV
                                 </button>
                             </td>
@@ -139,29 +169,42 @@
                         <!-- Sub-Jadual (Senarai Downline & Pecahan Bonus) -->
                         <tr id="${group.teamId}" class="hidden bg-blue-50 border-b-2 border-blue-200">
                             <td colspan="4" class="p-6">
-                                <h4 class="font-bold text-gray-800 mb-3">Pecahan Bonus Pasukan ${group.teamId}</h4>
-                                <table class="w-full text-sm text-left text-gray-600 bg-white rounded-lg shadow-sm overflow-hidden">
-                                    <thead class="bg-blue-100 text-gray-700">
-                                        <tr>
-                                            <th class="px-4 py-3">No. AQC</th>
-                                            <th class="px-4 py-3">Nama</th>
-                                            <th class="px-4 py-3 text-right">Sumbangan Sales</th>
-                                            <th class="px-4 py-3 text-right">% Kelayakan</th>
-                                            <th class="px-4 py-3 text-right">Jumlah Bonus</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${group.members.map(m => `
-                                            <tr class="border-b hover:bg-gray-50">
-                                                <td class="px-4 py-3 font-semibold">${m.aqcNo}</td>
-                                                <td class="px-4 py-3">${m.nama}</td>
-                                                <td class="px-4 py-3 text-right">RM${formatRM(m.sales)}</td>
-                                                <td class="px-4 py-3 text-right font-semibold text-blue-600">${Number(m.percent).toFixed(2)}%</td>
-                                                <td class="px-4 py-3 text-right font-bold text-green-600">RM${formatRM(m.amount)}</td>
+                                <div class="flex justify-between items-center mb-3">
+                                    <h4 class="font-bold text-gray-800">Pecahan Bonus Pasukan ${group.teamId}</h4>
+                                    <button onclick="downloadPDF('${group.teamId}')" class="bg-purple-600 text-white px-3 py-1.5 rounded text-xs hover:bg-purple-700 transition">
+                                        Muat Turun PDF (Bank Listing)
+                                    </button>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm text-left text-gray-600 bg-white rounded-lg shadow-sm overflow-hidden">
+                                        <thead class="bg-blue-100 text-gray-700">
+                                            <tr>
+                                                <th class="px-4 py-3">No. AQC</th>
+                                                <th class="px-4 py-3">Nama</th>
+                                                <th class="px-4 py-3">No. IC</th>
+                                                <th class="px-4 py-3">Bank</th>
+                                                <th class="px-4 py-3">No. Akaun</th>
+                                                <th class="px-4 py-3 text-right">Sumbangan Sales</th>
+                                                <th class="px-4 py-3 text-right">% Kelayakan</th>
+                                                <th class="px-4 py-3 text-right">Jumlah Bonus</th>
                                             </tr>
-                                        `).join('')}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            ${group.members.map(m => `
+                                                <tr class="border-b hover:bg-gray-50">
+                                                    <td class="px-4 py-3 font-semibold">${m.aqcNo}</td>
+                                                    <td class="px-4 py-3">${m.nama}</td>
+                                                    <td class="px-4 py-3">${m.ic}</td>
+                                                    <td class="px-4 py-3">${m.bankName}</td>
+                                                    <td class="px-4 py-3">${m.bankAccount}</td>
+                                                    <td class="px-4 py-3 text-right">RM${formatRM(m.sales)}</td>
+                                                    <td class="px-4 py-3 text-right font-semibold text-blue-600">${Number(m.percent).toFixed(2)}%</td>
+                                                    <td class="px-4 py-3 text-right font-bold text-green-600">RM${formatRM(m.amount)}</td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </td>
                         </tr>
                     `;
@@ -181,6 +224,90 @@
         // Logik Buka/Tutup Sub-Jadual
         window.toggleDetail = function(id) {
             document.getElementById(id).classList.toggle("hidden");
+        };
+
+        // Logik Penjanaan PDF (Bank Payment Listing)
+        window.downloadPDF = function(teamId) {
+            const group = globalMgamGroups[teamId];
+            if (!group) {
+                alert("Data tidak ditemui!");
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+
+            // 1. Header Syarikat
+            doc.setFontSize(16);
+            doc.setFont("helvetica", "bold");
+            doc.text("AL QAWTHAR WEALTH MANAGEMENT SDN. BHD.", 14, 15);
+            
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "normal");
+            doc.text("No. Pendaftaran Syarikat: 202301012345 (1234567-X)", 14, 21);
+            doc.text("SENARAI BAYARAN BONUS KPI PASUKAN (UNTUK URUSAN BANK)", 14, 26);
+
+            doc.setLineWidth(0.5);
+            doc.line(14, 29, 196, 29);
+
+            // 2. Maklumat Pasukan & Tarikh
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "bold");
+            doc.text(`Kumpulan / MGAM : ${teamId}`, 14, 36);
+            doc.text(`Tarikh Cetakan     : ${new Date().toLocaleDateString('ms-MY')}`, 14, 41);
+
+            // 3. Penyediaan Data Jadual PDF
+            const tableRows = group.members.map((m, index) => [
+                index + 1,
+                m.aqcNo,
+                m.nama.toUpperCase(),
+                m.ic,
+                m.bankName,
+                m.bankAccount,
+                formatRM(m.amount)
+            ]);
+
+            // 4. Bina Jadual
+            doc.autoTable({
+                startY: 46,
+                head: [['Bil', 'No. AQC', 'Nama Penerima', 'No. IC', 'Nama Bank', 'No. Akaun', 'Bonus (RM)']],
+                body: tableRows,
+                theme: 'grid',
+                headStyles: { fillColor: [21, 54, 56], textColor: [255, 255, 255], fontStyle: 'bold' },
+                columnStyles: {
+                    0: { halign: 'center', cellWidth: 10 },
+                    1: { cellWidth: 22 },
+                    2: { cellWidth: 45 },
+                    3: { cellWidth: 30 },
+                    4: { cellWidth: 25 },
+                    5: { cellWidth: 28 },
+                    6: { halign: 'right', cellWidth: 22 }
+                },
+                styles: { fontSize: 8, cellPadding: 2 }
+            });
+
+            // 5. Total Bahagian Bawah PDF
+            const finalY = doc.lastAutoTable.finalY + 8;
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "bold");
+            doc.text(`JUMLAH KESELURUHAN: RM ${formatRM(group.totalBonusPool)}`, 196, finalY, { align: "right" });
+
+            // 6. Ruangan Pengesahan
+            const signY = finalY + 20;
+            if (signY < 260) {
+                doc.setFontSize(9);
+                doc.setFont("helvetica", "normal");
+                doc.text("Disediakan Oleh:", 14, signY);
+                doc.text("_______________________", 14, signY + 15);
+                doc.text("Bahagian Akaun & Kewangan", 14, signY + 20);
+
+                doc.text("Disahkan Oleh:", 130, signY);
+                doc.text("_______________________", 130, signY + 15);
+                doc.text("Pengarah / Kelulusan", 130, signY + 20);
+            }
+
+            // Simpan Fail PDF
+            doc.save(`Bank_Listing_KPI_Bonus_${teamId}.pdf`);
         };
 
         // Logik Hasilkan Baucar Bayaran (Payment Voucher)
@@ -206,7 +333,7 @@
                     period: currentPeriod,
                     description: "Bayaran KPI Bonus Pasukan " + teamId,
                     amount: Number(totalAmount),
-                    accountCode: "2160", // Kod untuk Bonus Payable
+                    accountCode: "2160",
                     accountName: "KPI Bonus Payable",
                     category: "Liability",
                     cashFlowType: "Operating",
@@ -216,14 +343,14 @@
                     createdAt: new Date()
                 });
 
-                // 2. Kemaskini status dokumen di bonusPayable kepada 'PV_GENERATED' (supaya tak masuk list lagi)
+                // 2. Kemaskini status dokumen di bonusPayable kepada 'PV_GENERATED'
                 for (let i = 0; i < docIds.length; i++) {
                     const docRef = doc(db, "bonusPayable", docIds[i]);
                     await updateDoc(docRef, { status: "PV_GENERATED" });
                 }
 
                 alert(`Berjaya! Payment Voucher (${pvNo}) telah dicipta untuk pasukan ${teamId}.`);
-                location.reload(); // Refresh page untuk kemaskini jadual
+                location.reload();
                 
             } catch (err) {
                 button.disabled = false;
