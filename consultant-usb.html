@@ -126,25 +126,45 @@
                     return;
                 }
 
+                // Simpan cache nama consultant untuk padanan pantas
+                const overrideSnap = await getDocs(collection(db, "overrideHistory"));
+                let groupToConsultantMap = {};
+                overrideSnap.forEach(doc => {
+                    const h = doc.data();
+                    if (h.transactionGroup && h.fromConsultant) {
+                        groupToConsultantMap[h.transactionGroup] = h.fromConsultant;
+                    }
+                });
+
+                // Di dalam gelung paparan lejer (querySnapshot.forEach):
                 querySnapshot.forEach((docSnap) => {
                     const row = docSnap.data();
                     
                     let dateStr = "-";
-                    let trxDate = null;
                     if (row.date) {
-                        trxDate = row.date.toDate ? row.date.toDate() : new Date(row.date);
-                        dateStr = trxDate.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
-                        
-                        // Cari tarikh transaksi paling awal (1st receive) untuk kira matang
-                        if (!firstReceiveDate || trxDate < firstReceiveDate) {
-                            firstReceiveDate = trxDate;
-                        }
+                        const d = row.date.toDate ? row.date.toDate() : new Date(row.date);
+                        dateStr = d.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
                     }
 
-                    let fromAqc = row.fromConsultant || row.transactionGroup || "-";
-                    if (fromAqc.startsWith("AQM")) {
-                        fromAqc = row.fromConsultant || "-";
+                    // CARIAN PINTAR SUMBER PENGIRIM:
+                    // 1. Semak field fromConsultant rasmi
+                    let fromAqc = row.fromConsultant || "";
+
+                    // 2. Jika tiada, semak transactionGroup padanan dalam overrideHistory (cth: AQM0010 -> AQC0002)
+                    if (!fromAqc && row.transactionGroup && groupToConsultantMap[row.transactionGroup]) {
+                        fromAqc = groupToConsultantMap[row.transactionGroup];
                     }
+
+                    // 3. Jika masih tiada, ekstrak dari text Keterangan
+                    if (!fromAqc && row.description) {
+                        const match = row.description.match(/(AQC\d{4,5})/);
+                        if (match) fromAqc = match[0];
+                    }
+
+                    if (!fromAqc) fromAqc = "-";
+
+                    // ... (seterusnya kod paparan jadual seperti biasa)
+                });
 
                     const desc = row.description || "USB Transaction";
                     const credit = Number(row.credit || 0);
@@ -165,6 +185,7 @@
                     `;
                 });
 
+               
                 // Kira Tarikh Matang Berdasarkan Setting Admin
                 let maturityDateText = "-";
                 let isMatured = false;
