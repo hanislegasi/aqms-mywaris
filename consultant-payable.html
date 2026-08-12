@@ -62,7 +62,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import {
-            getFirestore, collection, getDocs, doc, getDoc, addDoc, updateDoc, query, where
+            getFirestore, collection, getDocs, doc, getDoc, addDoc, updateDoc
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
         const firebaseConfig = {
@@ -100,18 +100,20 @@
             }
         }
 
-        // 2. Tarik Data Komisen & Override (Abaikan USB)
+        // 2. Tarik Data Komisen & Override (Abaikan USB secara dinamik)
         async function loadConsultantPayable() {
             try {
                 await loadCompanySettings();
 
-                // Tarik maklumat konsultan (IC & Bank)
+                // Tarik maklumat bank konsultan
                 const consultantsSnap = await getDocs(collection(db, "consultants"));
                 const bankDetailsMap = {};
                 consultantsSnap.forEach(d => {
                     const data = d.data();
-                    if (data.consultantNo) {
-                        bankDetailsMap[data.consultantNo] = {
+                    const key = data.consultantNo || data.aqcNo || d.id;
+                    if (key) {
+                        bankDetailsMap[key] = {
+                            nama: data.nama || data.name || "",
                             ic: data.ic || "-",
                             bankName: data.bankName || "-",
                             bankAccount: data.bankAccount || "-"
@@ -119,43 +121,47 @@
                     }
                 });
 
-                // Tarik data Ledger/Payable yang status PENDING
-                const snap = await getDocs(query(
-                    collection(db, "ledger"),
-                    where("status", "==", "PENDING_PAYMENT")
-                ));
-
+                // Tarik semua rekod ledger (tanpa filter tegar supaya tiada data terlepas)
+                const snap = await getDocs(collection(db, "ledger"));
                 const groupedData = {};
 
                 snap.forEach((d) => {
                     const row = d.data();
-                    const cNo = row.consultantNo;
+
+                    // Semak status jika ada (Abaikan jika sudah dibayar / PV Generated)
+                    const status = String(row.status || "").toUpperCase();
+                    if (status === "PV_GENERATED" || status === "PAID") return;
+
+                    const cNo = row.consultantNo || row.aqcNo;
                     if (!cNo) return;
 
-                    if (!groupedData[cNo]) {
-                        const bankInfo = bankDetailsMap[cNo] || { ic: "-", bankName: "-", bankAccount: "-" };
-                        groupedData[cNo] = {
-                            consultantNo: cNo,
-                            nama: row.nama || cNo,
-                            ic: bankInfo.ic,
-                            bankName: bankInfo.bankName,
-                            bankAccount: bankInfo.bankAccount,
-                            commission: 0,
-                            override: 0,
-                            totalAmount: 0,
-                            docIds: []
-                        };
-                    }
+                    const rawType = String(row.type || "").toUpperCase().trim();
 
-                    // Hanya ambil jenis COMMISSION dan OVERRIDE sahaja (Mengabaikan USB)
-                    if (row.type === "COMMISSION") {
+                    // HANYA AMBIL COMMISSION DAN OVERRIDE (USB DIBUANG)
+                    if (rawType.includes("COMMISSION") || rawType.includes("OVERRIDE")) {
+                        if (!groupedData[cNo]) {
+                            const bankInfo = bankDetailsMap[cNo] || { nama: row.nama || cNo, ic: "-", bankName: "-", bankAccount: "-" };
+                            groupedData[cNo] = {
+                                consultantNo: cNo,
+                                nama: row.nama || bankInfo.nama || cNo,
+                                ic: bankInfo.ic,
+                                bankName: bankInfo.bankName,
+                                bankAccount: bankInfo.bankAccount,
+                                commission: 0,
+                                override: 0,
+                                totalAmount: 0,
+                                docIds: []
+                            };
+                        }
+
                         const amt = Number(row.amount || 0);
-                        groupedData[cNo].commission += amt;
-                        groupedData[cNo].totalAmount += amt;
-                        groupedData[cNo].docIds.push(d.id);
-                    } else if (row.type === "OVERRIDE") {
-                        const amt = Number(row.amount || 0);
-                        groupedData[cNo].override += amt;
+
+                        if (rawType.includes("COMMISSION")) {
+                            groupedData[cNo].commission += amt;
+                        } else if (rawType.includes("OVERRIDE")) {
+                            groupedData[cNo].override += amt;
+                        }
+
                         groupedData[cNo].totalAmount += amt;
                         groupedData[cNo].docIds.push(d.id);
                     }
@@ -167,7 +173,6 @@
                 Object.keys(groupedData).forEach((cNo) => {
                     const item = groupedData[cNo];
 
-                    // Abaikan paparan jika tiada jumlah komisen/override
                     if (item.totalAmount <= 0) return;
 
                     const docIdsString = JSON.stringify(item.docIds).replace(/"/g, '&quot;');
@@ -190,7 +195,7 @@
                             </td>
                         </tr>
 
-                        <!-- Sub-Jadual (Pecahan Commission & Override Sahaja) -->
+                        <!-- Sub-Jadual (Hanya Commission & Override) -->
                         <tr id="${item.consultantNo}" class="hidden bg-blue-50 border-b-2 border-blue-200">
                             <td colspan="4" class="p-6">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-white p-4 rounded-lg shadow-sm">
@@ -222,7 +227,7 @@
             document.getElementById(id).classList.toggle("hidden");
         };
 
-        // 3. Penjanaan PDF Bank List (Komisen & Override Sahaja)
+        // 3. Penjanaan PDF Bank List
         window.downloadSinglePDF = function(cNo) {
             const item = globalConsultantData[cNo];
             if (!item) {
@@ -304,10 +309,10 @@
                 doc.text("Pengarah / Kelulusan", 130, signY + 20);
             }
 
-            doc.save(`Bank_Listing_Consultant_${item.consultantNo}.pdf`);
+            doc.save(`Bank_Listing_${item.consultantNo}.pdf`);
         };
 
-        // 4. Logik Generate Payment Voucher (PV)
+        // 4. Generate PV
         window.generatePV = async (cNo, totalAmount, docIdsJson, button) => {
             try {
                 if (!confirm(`Sahkan penjanaan PV untuk ${cNo} berjumlah RM${formatRM(totalAmount)}?`)) {
@@ -321,7 +326,6 @@
                 const currentPeriod = new Date().getFullYear() + "-" + String(new Date().getMonth() + 1).padStart(2, "0");
                 const pvNo = "PV-CONS-" + Date.now();
 
-                // Cipta PV untuk Komisen & Override
                 await addDoc(collection(db, "paymentVouchers"), {
                     pvNo: pvNo,
                     consultantNo: cNo,
@@ -340,7 +344,6 @@
                     createdAt: new Date()
                 });
 
-                // Kemaskini status rekod dalam ledger
                 for (let i = 0; i < docIds.length; i++) {
                     const docRef = doc(db, "ledger", docIds[i]);
                     await updateDoc(docRef, { status: "PV_GENERATED" });
