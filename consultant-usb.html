@@ -14,7 +14,7 @@
         <p class="text-sm opacity-90">Simpanan jangka panjang & sejarah terperinci penerimaan USB (Akaun 2150)</p>
     </div>
 
-    <div class="p-5">
+    <div class="p-5 max-w-5xl mx-auto">
         <a href="consultant-dashboard.html" class="inline-block bg-gray-200 hover:bg-gray-300 transition px-5 py-3 rounded-xl mb-5 text-sm font-semibold text-gray-700">← Dashboard</a>
         
         <!-- KAD RINGKASAN STATUS MATANG USB -->
@@ -126,17 +126,17 @@
                     return;
                 }
 
-                // Simpan cache nama consultant untuk padanan pantas
+                // Simpan cache nama consultant dari overrideHistory untuk padanan transactionGroup (cth: AQM0010 -> AQC0002)
                 const overrideSnap = await getDocs(collection(db, "overrideHistory"));
                 let groupToConsultantMap = {};
-                overrideSnap.forEach(doc => {
-                    const h = doc.data();
+                overrideSnap.forEach(docSnap => {
+                    const h = docSnap.data();
                     if (h.transactionGroup && h.fromConsultant) {
                         groupToConsultantMap[h.transactionGroup] = h.fromConsultant;
                     }
                 });
 
-                // Di dalam gelung paparan lejer (querySnapshot.forEach):
+                // 4. Gelung untuk proses data lejer
                 querySnapshot.forEach((docSnap) => {
                     const row = docSnap.data();
                     
@@ -144,27 +144,29 @@
                     if (row.date) {
                         const d = row.date.toDate ? row.date.toDate() : new Date(row.date);
                         dateStr = d.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
+                        
+                        // Cari tarikh transaksi paling awal (1st receive)
+                        if (!firstReceiveDate || d < firstReceiveDate) {
+                            firstReceiveDate = d;
+                        }
                     }
 
                     // CARIAN PINTAR SUMBER PENGIRIM:
-                    // 1. Semak field fromConsultant rasmi
+                    // A. Semak field fromConsultant rasmi
                     let fromAqc = row.fromConsultant || "";
 
-                    // 2. Jika tiada, semak transactionGroup padanan dalam overrideHistory (cth: AQM0010 -> AQC0002)
+                    // B. Jika tiada, semak transactionGroup padanan dalam overrideHistory
                     if (!fromAqc && row.transactionGroup && groupToConsultantMap[row.transactionGroup]) {
                         fromAqc = groupToConsultantMap[row.transactionGroup];
                     }
 
-                    // 3. Jika masih tiada, ekstrak dari text Keterangan
+                    // C. Jika masih tiada, ekstrak dari text Keterangan
                     if (!fromAqc && row.description) {
                         const match = row.description.match(/(AQC\d{4,5})/);
                         if (match) fromAqc = match[0];
                     }
 
                     if (!fromAqc) fromAqc = "-";
-
-                    // ... (seterusnya kod paparan jadual seperti biasa)
-                });
 
                     const desc = row.description || "USB Transaction";
                     const credit = Number(row.credit || 0);
@@ -185,8 +187,7 @@
                     `;
                 });
 
-               
-                // Kira Tarikh Matang Berdasarkan Setting Admin
+                // 5. Kira Tarikh Matang Berdasarkan Setting Admin
                 let maturityDateText = "-";
                 let isMatured = false;
 
@@ -198,7 +199,7 @@
                     isMatured = now >= maturityDate;
                 }
 
-                // Update Kad Ringkasan di Atas
+                // 6. Update Kad Ringkasan di Atas
                 document.getElementById("summaryBalance").textContent = "RM" + formatRM(totalUsbBalance);
                 document.getElementById("summaryMaturityDate").textContent = maturityDateText;
                 
