@@ -157,43 +157,55 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
             </div>
         </div>
 
-        <!-- ================= UPLINE BENEFIT & BONUS ================= -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Upline Supporting Benefit & Bonus</h2>
-            
-            <!-- Tukar ke lg:grid-cols-5 supaya 5 kotak duduk sebaris dengan cantik -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-5">
-                
-                <!-- KOTAK LAMA: USB JUALAN (%) -->
-                <div>
-                    <label class="font-medium text-sm text-gray-600 block mb-1">USB Jualan (%)</label>
-                    <input id="usb" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="e.g. 0.5">
-                </div>
-
-                <!-- KOTAK BARU: USB PENDAFTARAN (RM) -->
-                <div>
-                    <label class="font-medium text-sm text-gray-600 block mb-1">USB Pendaftaran (RM)</label>
-                    <input id="usbRegistrationAmount" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="e.g. 50">
-                </div>
-
-                <div>
-                    <label class="font-medium text-sm text-gray-600 block mb-1">Target Sales Bonus (RM)</label>
-                    <input id="targetSalesBonus" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="e.g. 50000">
-                </div>
-                <div>
-                    <label class="font-medium text-sm text-gray-600 block mb-1">Reward Bonus (RM / %)</label>
-                    <input id="rewardBonus" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="e.g. 1000">
-                </div>
-                <div>
-                    <label class="font-medium text-sm text-gray-600 block mb-1">Tempoh KPI</label>
-                    <select id="kpiPeriod" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all bg-white cursor-pointer">
-                        <option value="12">Tahunan (12 Bulan)</option>
-                        <option value="6">6 Bulan (Half-Yearly)</option>
-                        <option value="3">3 Bulan (Quarterly)</option>
-                    </select>
-                </div>
-            </div>
+       <!-- ================= UPLINE BENEFIT & BONUS ================= -->
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+    <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Upline Supporting Benefit & Bonus</h2>
+    
+    <!-- Susunan Grid: 3 di atas, 3 di bawah (Grid 3 kolum) -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        
+        <!-- Kotak 1: USB Jualan (%) -->
+        <div>
+            <label class="font-medium text-sm text-gray-600 block mb-1">USB Jualan (%)</label>
+            <input id="usb" type="number" step="0.01" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="e.g. 0.5">
         </div>
+
+        <!-- Kotak 2: USB Pendaftaran (RM) -->
+        <div>
+            <label class="font-medium text-sm text-gray-600 block mb-1">USB Pendaftaran (RM)</label>
+            <input id="usbRegistrationAmount" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="e.g. 50">
+        </div>
+
+        <!-- Kotak 3: Tempoh Lock-in USB (Tahun) -->
+        <div>
+            <label class="font-medium text-sm text-gray-600 block mb-1">Tempoh Matang USB (Tahun)</label>
+            <input id="usbLockPeriod" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="e.g. 3">
+        </div>
+
+        <!-- Kotak 4: Target Sales Bonus (RM) -->
+        <div>
+            <label class="font-medium text-sm text-gray-600 block mb-1">Target Sales Bonus (RM)</label>
+            <input id="targetSalesBonus" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="e.g. 50000">
+        </div>
+
+        <!-- Kotak 5: Reward Bonus (RM / %) -->
+        <div>
+            <label class="font-medium text-sm text-gray-600 block mb-1">Reward Bonus (RM / %)</label>
+            <input id="rewardBonus" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="e.g. 1000">
+        </div>
+
+        <!-- Kotak 6: Tempoh KPI -->
+        <div>
+            <label class="font-medium text-sm text-gray-600 block mb-1">Tempoh KPI</label>
+            <select id="kpiPeriod" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all bg-white cursor-pointer">
+                <option value="12">Tahunan (12 Bulan)</option>
+                <option value="6">6 Bulan (Half-Yearly)</option>
+                <option value="3">3 Bulan (Quarterly)</option>
+            </select>
+        </div>
+
+    </div>
+</div>
 
         <!-- ================= REVENUE DISTRIBUTION ================= -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
@@ -364,7 +376,7 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
             wasiatRenewal: 50, hibahRenewal: 50, sepencarianRenewal: 50, mawarisRenewal: 80,
             commissionAQC: 35, commissionAQCAS: 38, commissionAQCUM: 40, commissionMGAM: 45,
             overrideAQC: 0, overrideAQCAS: 3, overrideAQCUM: 4, overrideMGAM: 5,
-            usb: 5, usbRegistrationAmount: 50,
+            usb: 5, usbRegistrationAmount: 50, usbLockPeriod: 3,
             targetSalesBonus: 50000, rewardBonus: 1000, kpiPeriod: 365,
             companyPool: 48, commissionPool: 35, overridePool: 12,
             adminOperation: 30, allowance: 10, royalty: 8,
@@ -379,7 +391,7 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
             "wasiatRenewal", "hibahRenewal", "sepencarianRenewal", "mawarisRenewal",
             "commissionAQC", "commissionAQCAS", "commissionAQCUM", "commissionMGAM",
             "overrideAQC", "overrideAQCAS", "overrideAQCUM", "overrideMGAM",
-            "usb", "usbRegistrationAmount", "targetSalesBonus", "rewardBonus", "kpiPeriod",
+            "usb", "usbRegistrationAmount", "usbLockPeriod", "targetSalesBonus", "rewardBonus", "kpiPeriod",
             "memberValidity", "consultantRegistrationFee", 
             "renewalAQC", "renewalAQCAS", "renewalAQCUM", "renewalMGAM",
             "companyPool", "commissionPool", "overridePool",
