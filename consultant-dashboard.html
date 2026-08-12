@@ -71,29 +71,28 @@
     </div>
 </div>
  
-<!-- KPI -->
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
-<div class="bg-white p-5 rounded-xl shadow">
-<p class="text-gray-500">Client Aktif</p>
-<p id="activeClients" class="text-2xl md:text-3xl font-bold">0</p>
-</div>
-<div class="bg-white p-5 rounded-xl shadow">
-<p class="text-gray-500">Jualan Peribadi</p>
-<p id="totalSales" class="text-2xl md:text-3xl font-bold">RM0</p>
-</div>
-<div class="bg-white p-5 rounded-xl shadow">
-<p class="text-gray-500">Komisen</p>
-<p id="totalCommission" class="text-2xl md:text-3xl font-bold">RM0</p>
-</div>
-<div class="bg-white p-5 rounded-xl shadow">
-<p class="text-gray-500">Overriding</p>
-<p id="totalOverriding" class="text-2xl md:text-3xl font-bold">RM0</p>
-</div>
- 
-<div class="bg-white p-5 rounded-xl shadow">
-<p class="text-gray-500">USB</p>
-<p id="usbAmount" class="text-3xl font-bold text-blue-600">RM0.00</p>
-</div>
+<!-- KPI (5 Kotak Sebaris) -->
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-5">
+    <div class="bg-white p-5 rounded-xl shadow">
+        <p class="text-gray-500">Client</p>
+        <p id="activeClients" class="text-2xl md:text-3xl font-bold">0</p>
+    </div>
+    <div class="bg-white p-5 rounded-xl shadow">
+        <p class="text-gray-500">Jualan Peribadi</p>
+        <p id="totalSales" class="text-2xl md:text-3xl font-bold">RM0</p>
+    </div>
+    <div class="bg-white p-5 rounded-xl shadow">
+        <p class="text-gray-500">Komisen</p>
+        <p id="totalCommission" class="text-2xl md:text-3xl font-bold">RM0</p>
+    </div>
+    <div class="bg-white p-5 rounded-xl shadow">
+        <p class="text-gray-500">Overriding</p>
+        <p id="totalOverriding" class="text-2xl md:text-3xl font-bold">RM0</p>
+    </div>
+    <div class="bg-white p-5 rounded-xl shadow">
+        <p class="text-gray-500">USB</p>
+        <p id="usbAmount" class="text-2xl md:text-3xl font-bold text-blue-600">RM0.00</p>
+    </div>
 </div>
 
 <div class="bg-white p-5 rounded-2xl shadow mb-5 relative overflow-hidden">
@@ -108,17 +107,20 @@
  
 <!-- MENU -->
 <div class="grid md:grid-cols-4 gap-4">
-<button id="clientsBtn" class="bg-[#153638] text-white p-5 rounded-xl">myClients</button>
-<button id="overridingBtn" class="bg-[#153638] text-white p-5 rounded-xl">myTeam</button>
-<button id="usbBtn" class="bg-[#153638] text-white p-5 rounded-xl">myUSB</button>
-<button id="careerBtn" class="bg-[#153638] text-white p-5 rounded-xl">Career Path</button>
-<button id="trainingBtn" class="bg-[#153638] text-white p-5 rounded-xl">Continuous Professional Development</button>
-<button id="renewalBtn" class="bg-[#153638] text-white p-5 rounded-xl">Annual Consultant Renewal</button>  
-<button id="marketingBtn" class="bg-[#153638] text-white p-5 rounded-xl">Marketing Kit</button>
-<button onclick="window.location.href='my-statement.html'" class="bg-[#153638] text-white p-5 rounded-xl">My Statement</button>
-<button id="copyReferralBtn" class="bg-[#153638] text-white px-5 py-2 rounded-lg">Copy Referral Link</button>
-</div>
-</div>
+    <button id="clientsBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">myClients</button>
+    <button id="overridingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">myTeam</button>
+    <button onclick="window.location.href='consultant-usb.html'" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">myUSB</button>
+    <button id="careerBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">Career Path</button>
+    
+    <button id="trainingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">Continuous Professional Development</button>
+    <button id="renewalBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">Annual Consultant Renewal</button>  
+    <button id="marketingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">Marketing Kit</button>
+    <button onclick="window.location.href='my-statement.html'" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">My Statement</button>
+
+    <!-- KOTAK COPY REFERRAL LINK - LEBAR PENUH -->
+    <button id="copyReferralBtn" class="bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold col-span-full shadow">
+        Copy Referral Link
+    </button>
 </div>
 
 <script type="module">
