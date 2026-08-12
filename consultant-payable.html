@@ -116,6 +116,7 @@
             try {
                 await loadCompanySettings();
 
+                // 1. Tarik maklumat bank konsultan
                 const consultantsSnap = await getDocs(collection(db, "consultants"));
                 const bankDetailsMap = {};
                 consultantsSnap.forEach(d => {
@@ -130,10 +131,11 @@
                     }
                 });
 
-                const snap = await getDocs(collection(db, "ledger"));
                 const groupedData = {};
 
-                snap.forEach((d) => {
+                // 2. Tarik KOMISEN dari `ledger`
+                const ledgerSnap = await getDocs(collection(db, "ledger"));
+                ledgerSnap.forEach((d) => {
                     const row = d.data();
 
                     if(row.accountCode !== "2000" || !row.description || !row.description.startsWith("AQC")) return;
@@ -161,13 +163,14 @@
                             commission: 0,
                             override: 0,
                             totalAmount: 0,
-                            docIds: []
+                            docIds: [],        // ID utk ledger
+                            overrideDocIds: [] // ID utk overrideHistory
                         };
                     }
 
                     const amt = Number(row.credit || 0);
 
-                    // PENAMBAHBAIKAN: Cari OVERRIDE pada Type ATAU Description
+                    // Just in case override masih ada sisa dlm ledger, kita asingkan juga.
                     if (rawType.includes("OVERRIDE") || rawDesc.includes("OVERRIDE")) {
                         groupedData[cNo].override += amt;
                     } else {
@@ -178,6 +181,40 @@
                     groupedData[cNo].docIds.push(d.id);
                 });
 
+                // 3. Tarik OVERRIDE dari `overrideHistory`
+                const overrideSnap = await getDocs(collection(db, "overrideHistory"));
+                overrideSnap.forEach((d) => {
+                    const row = d.data();
+                    
+                    // Semak status, jika dah dibayar/generate PV, abaikan
+                    const status = String(row.status || "").toUpperCase();
+                    if (status === "PV_GENERATED" || status === "PAID") return;
+
+                    const cNo = row.receiver; // Rujuk gambar: field 'receiver' pegang AQC No.
+                    if (!cNo) return;
+
+                    if(!groupedData[cNo]){
+                        const bankInfo = bankDetailsMap[cNo] || { ic: "-", bankName: "-", bankAccount: "-" };
+                        groupedData[cNo] = {
+                            consultantNo: cNo,
+                            nama: row.receiverName || cNo,
+                            ic: bankInfo.ic,
+                            bankName: bankInfo.bankName,
+                            bankAccount: bankInfo.bankAccount,
+                            commission: 0,
+                            override: 0,
+                            totalAmount: 0,
+                            docIds: [],
+                            overrideDocIds: []
+                        };
+                    }
+
+                    const amt = Number(row.override || 0); // Rujuk gambar: field 'override' pegang nilai amount
+                    groupedData[cNo].override += amt;
+                    groupedData[cNo].totalAmount += amt;
+                    groupedData[cNo].overrideDocIds.push(d.id);
+                });
+
                 globalConsultantData = groupedData;
                 let html = "";
 
@@ -186,6 +223,7 @@
                     if (item.totalAmount <= 0) return; 
 
                     const docIdsString = JSON.stringify(item.docIds).replace(/"/g, '&quot;');
+                    const overrideDocIdsString = JSON.stringify(item.overrideDocIds).replace(/"/g, '&quot;');
 
                     html += `
                         <tr class="border-b hover:bg-gray-50 transition">
@@ -202,7 +240,7 @@
                                 <button onclick="downloadSinglePDF('${item.consultantNo}')" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg hover:bg-purple-700 transition shadow text-xs md:text-sm mb-1">
                                     PDF Single
                                 </button>
-                                <button onclick="generatePV('${item.consultantNo}', '${item.nama}', ${item.totalAmount}, '${docIdsString}', this)" class="bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 transition shadow text-xs md:text-sm mb-1">
+                                <button onclick="generatePV('${item.consultantNo}', '${item.nama}', ${item.totalAmount}, '${docIdsString}', '${overrideDocIdsString}', this)" class="bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 transition shadow text-xs md:text-sm mb-1">
                                     Generate PV
                                 </button>
                             </td>
@@ -394,7 +432,7 @@
         };
 
         // Generate PV
-        window.generatePV = async (consultantNo, consultantName, amount, docIdsJson, button) => {
+        window.generatePV = async (consultantNo, consultantName, amount, docIdsJson, overrideDocIdsJson, button) => {
             try {
                 if (!confirm(`Sahkan penjanaan PV untuk ${consultantNo} berjumlah RM${formatRM(amount)}?`)) return;
                 
@@ -402,16 +440,25 @@
                 button.innerText = "Memproses...";
 
                 const docIds = JSON.parse(docIdsJson);
+                const overrideDocIds = JSON.parse(overrideDocIdsJson);
                 const pvNo = "PV-" + Date.now();
 
+                // 1. Masukkan rekod ke Payment Vouchers
                 await addDoc(collection(db, "paymentVouchers"), {
                     pvNo, consultantNo, consultantName, amount: Number(amount),
                     status: "PENDING", createdAt: new Date(), accountCode: "2000"
                 });
 
+                // 2. Update status dalam 'ledger'
                 for (let i = 0; i < docIds.length; i++) {
                     const docRef = doc(db, "ledger", docIds[i]);
                     await updateDoc(docRef, { status: "PV_GENERATED" });
+                }
+
+                // 3. Update status dalam 'overrideHistory'
+                for (let i = 0; i < overrideDocIds.length; i++) {
+                    const overrideRef = doc(db, "overrideHistory", overrideDocIds[i]);
+                    await updateDoc(overrideRef, { status: "PV_GENERATED" });
                 }
 
                 alert(`Berjaya! Payment Voucher (${pvNo}) telah dicipta untuk ${consultantNo}.`);
