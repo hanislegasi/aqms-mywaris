@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profil - Al-Qawthar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen" style="font-family: Inter, sans-serif;">
+    
+    <!-- HEADER -->
+    <div class="bg-[#153638] text-white p-5 shadow mb-8">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold">Kemaskini Profil</h1>
+                <p class="text-sm opacity-90">Lengkapkan maklumat peribadi dan butiran bank anda</p>
+            </div>
+            <a href="consultant-dashboard.html" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl transition text-sm font-semibold">
+                ← Kembali
+            </a>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto p-5">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            
+            <form id="editProfileForm" class="space-y-6">
+                <!-- Status Memuatkan -->
+                <div id="loadingText" class="text-center text-gray-500 py-10">
+                    <svg class="animate-spin h-8 w-8 mx-auto text-[#153638] mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Memuatkan data profil...
+                </div>
+                
+                <!-- Kandungan Borang -->
+                <div id="formContent" class="hidden space-y-6">
+                    
+                    <div class="border-b pb-4 mb-4">
+                        <h2 class="text-lg font-bold text-gray-800">Maklumat Utama (Tidak boleh diubah)</h2>
+                    </div>
+
+                    <!-- Non-editable fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Penuh</label>
+                            <input type="text" id="nama" class="w-full bg-gray-100 border border-gray-300 rounded-xl p-3 text-gray-500 cursor-not-allowed" readonly>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">No. Konsultan / Tahap</label>
+                            <input type="text" id="consultantNo" class="w-full bg-gray-100 border border-gray-300 rounded-xl p-3 text-gray-500 cursor-not-allowed" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="border-b pb-4 mb-4 pt-4">
+                        <h2 class="text-lg font-bold text-gray-800">Butiran Peribadi & Hubungan</h2>
+                    </div>
+
+                    <!-- Editable fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">No. Kad Pengenalan</label>
+                            <input type="text" id="ic" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Contoh: 900101-14-5555">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Telefon bimbit</label>
+                            <input type="text" id="telefon" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Contoh: 0123456789">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Alamat E-mel</label>
+                            <input type="email" id="email" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Contoh: nama@email.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Negeri / Wilayah</label>
+                            <select id="state" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition bg-white">
+                                <option value="">Sila Pilih Negeri</option>
+                                <option value="Johor">Johor</option>
+                                <option value="Kedah">Kedah</option>
+                                <option value="Kelantan">Kelantan</option>
+                                <option value="Melaka">Melaka</option>
+                                <option value="Negeri Sembilan">Negeri Sembilan</option>
+                                <option value="Pahang">Pahang</option>
+                                <option value="Perak">Perak</option>
+                                <option value="Perlis">Perlis</option>
+                                <option value="Pulau Pinang">Pulau Pinang</option>
+                                <option value="Sabah">Sabah</option>
+                                <option value="Sarawak">Sarawak</option>
+                                <option value="Selangor">Selangor</option>
+                                <option value="Terengganu">Terengganu</option>
+                                <option value="Kuala Lumpur">W.P. Kuala Lumpur</option>
+                                <option value="Labuan">W.P. Labuan</option>
+                                <option value="Putrajaya">W.P. Putrajaya</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="border-b pb-4 mb-4 pt-4">
+                        <h2 class="text-lg font-bold text-gray-800">Maklumat Akaun Bank (Untuk Pembayaran)</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Bank</label>
+                            <input type="text" id="bankName" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Contoh: Maybank, CIMB, dll">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">No. Akaun Bank</label>
+                            <input type="text" id="bankAccount" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Pastikan nombor akaun tepat">
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4 pt-6 mt-6 border-t border-gray-200">
+                        <button type="submit" id="saveBtn" class="bg-[#153638] hover:bg-[#1e4d50] text-white px-8 py-3 rounded-xl font-bold shadow transition flex items-center justify-center min-w-[200px]">
+                            Simpan Perubahan
+                        </button>
+                        <button type="button" onclick="window.location.href='consultant-dashboard.html'" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-xl font-bold transition">
+                            Batal
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+            authDomain: "alqawthar-mywaris.firebaseapp.com",
+            projectId: "alqawthar-mywaris",
+            storageBucket: "alqawthar-mywaris.firebasestorage.app",
+            messagingSenderId: "3498810778",
+            appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUserUid = null;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+            
+            currentUserUid = user.uid;
+
+            try {
+                // Tarik data profil dari Firestore
+                const docSnap = await getDoc(doc(db, "consultants", user.uid));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    
+                    // Masukkan data ke dalam borang
+                    document.getElementById("nama").value = data.nama || "";
+                    document.getElementById("consultantNo").value = (data.consultantNo || "") + " (" + (data.consultantLevel || "AQC") + ")";
+                    document.getElementById("ic").value = data.ic || "";
+                    document.getElementById("telefon").value = data.telefon || "";
+                    document.getElementById("email").value = data.email || "";
+                    document.getElementById("state").value = data.state || "";
+                    document.getElementById("bankName").value = data.bankName || "";
+                    document.getElementById("bankAccount").value = data.bankAccount || "";
+                    
+                    // Sembunyikan simbol loading dan tunjukkan borang
+                    document.getElementById("loadingText").classList.add("hidden");
+                    document.getElementById("formContent").classList.remove("hidden");
+                }
+            } catch (error) {
+                console.error("Error fetching profile:", error);
+                alert("Gagal memuatkan data profil dari pelayan.");
+            }
+        });
+
+        // Pengawal Submit Borang (Kemaskini ke Database)
+        document.getElementById("editProfileForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            if (!currentUserUid) return;
+
+            const saveBtn = document.getElementById("saveBtn");
+            const originalText = saveBtn.innerText;
+            saveBtn.innerHTML = "Menyimpan... ⏳";
+            saveBtn.disabled = true;
+            saveBtn.classList.add("opacity-70", "cursor-not-allowed");
+
+            try {
+                // Hantar data baru ke dokumen Firestore
+                await updateDoc(doc(db, "consultants", currentUserUid), {
+                    ic: document.getElementById("ic").value.trim(),
+                    telefon: document.getElementById("telefon").value.trim(),
+                    email: document.getElementById("email").value.trim(),
+                    state: document.getElementById("state").value,
+                    bankName: document.getElementById("bankName").value.trim(),
+                    bankAccount: document.getElementById("bankAccount").value.trim(),
+                    lastUpdated: new Date()
+                });
+                
+                alert("Profil anda telah berjaya dikemaskini!");
+                window.location.href = "consultant-dashboard.html";
+
+            } catch (error) {
+                console.error("Error updating profile:", error);
+                alert("Ralat! Gagal mengemaskini profil: " + error.message);
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+                saveBtn.classList.remove("opacity-70", "cursor-not-allowed");
+            }
+        });
+    </script>
+</body>
+</html>
