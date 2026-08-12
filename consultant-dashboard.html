@@ -32,11 +32,17 @@
 </div>
  
 <div id="profileModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-<div class="bg-white rounded-2xl p-6 w-[600px]">
-<h2 class="text-xl font-bold mb-4">Consultant Profile</h2>
-<div id="profileContent">Loading...</div>
-<button id="closeProfile" class="mt-5 bg-red-500 text-white px-4 py-2 rounded-xl">Close</button>
-</div>
+    <div class="bg-white rounded-2xl p-6 w-[600px]">
+        <h2 class="text-xl font-bold mb-4">Consultant Profile</h2>
+        <div id="profileContent">Loading...</div>
+        
+        <!-- TAMBAH BUTANG EDIT DI SINI -->
+        <div class="mt-5 flex gap-3">
+            <button id="editProfileBtn" class="bg-blue-600 text-white px-5 py-2 rounded-xl hover:bg-blue-700 transition">Edit Profile</button>
+            <button id="closeProfile" class="bg-red-500 text-white px-5 py-2 rounded-xl hover:bg-red-600 transition">Close</button>
+        </div>
+        
+    </div>
 </div>
 
 <div class="grid lg:grid-cols-3 gap-5 mb-5">
@@ -471,14 +477,19 @@ new Chart(ctx, {
     }
 }); 
 
-document.getElementById("clientsBtn").addEventListener("click", ()=>{ window.location.href = "consultant-clients.html"; });
-document.getElementById("careerBtn").addEventListener("click", ()=>{ window.location.href = "consultant-career.html"; });
-document.getElementById("overridingBtn").addEventListener("click",()=>{ window.location.href = "consultant-overriding.html"; });
-document.getElementById("usbBtn").addEventListener("click",()=>{ window.location.href = "consultant-usb.html"; });
-document.getElementById("trainingBtn").addEventListener("click", ()=>{ window.location.href = "consultant-training.html"; });
-document.getElementById("renewalBtn").addEventListener("click",()=>{ window.location.href = "consultant-renewal.html"; });  
-document.getElementById("marketingBtn").addEventListener("click",()=>{ window.location.href = "consultant-marketing.html"; });
+document.getElementById("clientsBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-clients.html"; });
+document.getElementById("careerBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-career.html"; });
+document.getElementById("overridingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-overriding.html"; });
+document.getElementById("usbBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-usb.html"; });
+document.getElementById("trainingBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-training.html"; });
+document.getElementById("renewalBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-renewal.html"; });  
+document.getElementById("marketingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-marketing.html"; });
 
+// BUTANG EDIT PROFILE
+document.getElementById("editProfileBtn")?.addEventListener("click", () => {
+    window.location.href = "consultant-profile-edit.html";
+});
+  
 document.getElementById("copyReferralBtn").addEventListener("click", async()=>{
 try{
 const referralLink = window.location.origin + window.location.pathname.replace("consultant-dashboard.html", "register.html") + "?ref=" + consultantData.consultantNo;
