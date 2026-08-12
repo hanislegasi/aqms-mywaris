@@ -149,14 +149,6 @@ const db = getFirestore(app);
 
 let consultantData = null;
 
-function getCumulativeOverride(level){
-if(level === "AQC") return 0;
-if(level === "AQC-AS") return 3;
-if(level === "AQC-UM") return 7;
-if(level === "MGAM") return 12;
-return 0;
-}
-
 onAuthStateChanged(auth, async(user)=>{
 if(!user){
 window.location.href = "login.html";
@@ -186,18 +178,23 @@ let sales = 0;
 let nextLevel = "";
 let targetSales = 0;
 
+// Tarik target sales dari database (letak nilai default jika admin belum set)
+const targetAQC = Number(comp.targetSalesAQC || 30000);
+const targetAQCAS = Number(comp.targetSalesAQCAS || 60000);
+const targetAQCUM = Number(comp.targetSalesAQCUM || 120000);
+
 if(data.consultantLevel === "AQC"){
-nextLevel = "AQC-AS";
-targetSales = 30000;
+    nextLevel = "AQC-AS";
+    targetSales = targetAQC;
 } else if(data.consultantLevel === "AQC-AS"){
-nextLevel = "AQC-UM";
-targetSales = 60000;
+    nextLevel = "AQC-UM";
+    targetSales = targetAQCAS;
 } else if(data.consultantLevel === "AQC-UM"){
-nextLevel = "MGAM";
-targetSales = 120000;
+    nextLevel = "MGAM";
+    targetSales = targetAQCUM;
 } else {
-nextLevel = "TOP LEVEL";
-targetSales = 0;
+    nextLevel = "TOP LEVEL";
+    targetSales = 0;
 }
 
 const renewalDate = data.renewalDate?.toDate ? data.renewalDate.toDate() : new Date(data.renewalDate);
