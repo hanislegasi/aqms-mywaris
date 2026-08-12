@@ -65,7 +65,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import {
-            getFirestore, collection, getDocs, doc, addDoc, updateDoc, query, where
+            getFirestore, collection, getDocs, doc, getDoc, addDoc, updateDoc, query, where
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
         const firebaseConfig = {
@@ -82,12 +82,34 @@
 
         const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-        // Simpan data kumpulan secara global untuk kegunaan PDF
+        // Simpan data kumpulan dan maklumat syarikat secara global
         let globalMgamGroups = {};
+        let companyProfile = {
+            companyName: "AL QAWTHAR WEALTH MANAGEMENT SDN. BHD.",
+            companyNo: "202301012345 (1234567-X)"
+        };
+
+        // Tarik Tetapan Syarikat dari Firestore (settings/companyProfile)
+        async function loadCompanySettings() {
+            try {
+                const docRef = doc(db, "settings", "companyProfile");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    companyProfile.companyName = data.companyName || companyProfile.companyName;
+                    companyProfile.companyNo = data.companyNo || companyProfile.companyNo;
+                }
+            } catch (err) {
+                console.error("Gagal menarik tetapan syarikat, menggunakan data asas:", err);
+            }
+        }
 
         // Tarik data dari koleksi bonusPayable (Tanya rekod yang berstatus PENDING_PAYMENT)
         async function loadBonusData() {
             try {
+                // Muat turun profil syarikat dahulu
+                await loadCompanySettings();
+
                 // 1. Dapatkan data maklumat bank dari koleksi consultants
                 const consultantsSnap = await getDocs(collection(db, "consultants"));
                 const bankDetailsMap = {};
@@ -237,14 +259,14 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
 
-            // 1. Header Syarikat
-            doc.setFontSize(16);
+            // 1. Header Syarikat (Diambil secara dinamik dari Setting)
+            doc.setFontSize(14);
             doc.setFont("helvetica", "bold");
-            doc.text("AL QAWTHAR WEALTH MANAGEMENT SDN. BHD.", 14, 15);
+            doc.text(companyProfile.companyName.toUpperCase(), 14, 15);
             
             doc.setFontSize(9);
             doc.setFont("helvetica", "normal");
-            doc.text("No. Pendaftaran Syarikat: 202301012345 (1234567-X)", 14, 21);
+            doc.text(`No. Pendaftaran Syarikat: ${companyProfile.companyNo}`, 14, 21);
             doc.text("SENARAI BAYARAN BONUS KPI PASUKAN (UNTUK URUSAN BANK)", 14, 26);
 
             doc.setLineWidth(0.5);
