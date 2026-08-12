@@ -151,16 +151,20 @@
                         }
                     }
 
-                    // CARIAN PINTAR SUMBER PENGIRIM:
-                    // A. Semak field fromConsultant rasmi
-                    let fromAqc = row.fromConsultant || "";
+                    // CARIAN PINTAR SUMBER PENGIRIM (BETULKAN KEUTAMAAN):
+                    let fromAqc = "";
 
-                    // B. Jika tiada, semak transactionGroup padanan dalam overrideHistory
-                    if (!fromAqc && row.transactionGroup && groupToConsultantMap[row.transactionGroup]) {
+                    // 1. UTAMA: Semak transactionGroup padanan dalam overrideHistory dulu (supaya AQM0010 terus temui AQC0002 yang betul)
+                    if (row.transactionGroup && groupToConsultantMap[row.transactionGroup]) {
                         fromAqc = groupToConsultantMap[row.transactionGroup];
                     }
 
-                    // C. Jika masih tiada, ekstrak dari text Keterangan
+                    // 2. KEDUA: Jika tiada dalam overrideHistory, baru semak field rasmi fromConsultant
+                    if (!fromAqc && row.fromConsultant) {
+                        fromAqc = row.fromConsultant;
+                    }
+
+                    // 3. KETIGA: Jika masih tiada, baru ekstrak dari text Keterangan
                     if (!fromAqc && row.description) {
                         const match = row.description.match(/(AQC\d{4,5})/);
                         if (match) fromAqc = match[0];
