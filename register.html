@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daftar Akaun</title>
+<title>Daftar Akaun AQM</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -11,24 +11,10 @@
 
 <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
 
-<h2 class="text-2xl font-bold mb-6 text-center">
-Daftar Akaun
+<h2 class="text-2xl font-bold mb-6 text-center text-[#153638]">
+Daftar Akaun AQM
 </h2>
 
-<select
-id="accountType"
-class="w-full border p-4 rounded-xl mb-4">
-
-<option value="customer">
-Pelanggan (AQM)
-</option>
-
-<option value="consultant">
-Konsultan (AQC)
-</option>
-
-</select>
-  
 <form id="registerForm" class="space-y-4">
 
 <input
@@ -80,15 +66,15 @@ class="text-sm text-green-600">
 
 <button
 type="submit"
-class="w-full bg-[#153638] text-white py-3 rounded-lg font-bold">
+class="w-full bg-[#153638] text-white py-3 rounded-lg font-bold hover:opacity-90 transition">
 Daftar Akaun
 </button>
 
 </form>
 
 <div class="text-center mt-4">
-<a href="login.html" class="text-blue-600">
-Sudah ada akaun?
+<a href="login.html" class="text-blue-600 hover:underline">
+Sudah ada akaun? Log Masuk
 </a>
 </div>
 
@@ -109,10 +95,8 @@ import {
 getFirestore,
 doc,
 setDoc,
-getDoc,
-updateDoc,
-collection,
-getDocs
+getDocs,
+collection
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -125,203 +109,99 @@ const firebaseConfig = {
   appId: "1:3498810778:web:ee36e0fe42f76698046e23"
 };
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-const auth =
-getAuth(app);
-
-const db =
-getFirestore(app);
-
-const params =
-new URLSearchParams(
-window.location.search
-);
-
-const ref =
-params.get("ref");
+const params = new URLSearchParams(window.location.search);
+const ref = params.get("ref");
 
 if(ref){
-
-document.getElementById(
-"referral"
-).value = ref;
-
-document.getElementById(
-"referral"
-).readOnly = true;
-
+  document.getElementById("referral").value = ref;
+  document.getElementById("referral").readOnly = true;
 }
 
-document
-.getElementById("referral")
-.addEventListener("blur", async()=>{
+document.getElementById("referral").addEventListener("blur", async()=>{
+  const referral = document.getElementById("referral").value.trim();
+  if(!referral) return;
 
-const referral =
-document
-.getElementById("referral")
-.value
-.trim();
+  const usersSnap = await getDocs(collection(db,"consultants"));
+  let sponsor = null;
 
-if(!referral) return;
+  usersSnap.forEach((d)=>{
+    const u = d.data();
+    if(u.consultantNo === referral){
+      sponsor = u.nama;
+    }
+  });
 
-const usersSnap =
-await getDocs(
-collection(db,"consultants")
-);
-
-let sponsor = null;
-
-usersSnap.forEach((d)=>{
-
-const u = d.data();
-
-if(
-u.consultantNo === referral
-){
-
-sponsor = u.nama;
-
-}
-
+  document.getElementById("referralName").innerHTML = sponsor
+    ? "✓ " + sponsor
+    : "❌ No Konsultan tidak sah";
 });
 
-document
-.getElementById("referralName")
-.innerHTML =
+document.getElementById("registerForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
 
-sponsor
-? "✓ " + sponsor
-: "❌ No Konsultan tidak sah";
+  const nama = document.getElementById("nama").value;
+  const ic = document.getElementById("ic").value;
+  const email = document.getElementById("email").value;
+  const telefon = document.getElementById("telefon").value;
+  const password = document.getElementById("password").value;
+  const referral = document.getElementById("referral").value;
 
-});
-  
- document
-.getElementById("registerForm")
-.addEventListener("submit", async (e)=>{
+  if(!referral){
+    alert("Sila masukkan Kod Referral");
+    return;
+  }
 
-e.preventDefault();
+  const usersSnap = await getDocs(collection(db,"consultants"));
+  let validReferral = false;
 
-const nama =
-document.getElementById("nama").value;
+  usersSnap.forEach((d)=>{
+    const u = d.data();
+    if(u.consultantNo === referral){
+      validReferral = true;
+    }
+  });
 
-const ic =
-document.getElementById("ic").value;
+  if(!validReferral){
+    alert("Referral tidak sah");
+    return;
+  }  
 
-const email =
-document.getElementById("email").value;
-
-const telefon =
-document.getElementById("telefon").value;
-
-const password =
-document.getElementById("password").value;
-
-const referral =
-document.getElementById("referral").value;
-
-if(!referral){
-
-alert(
-"Sila masukkan Kod Referral"
-);
-
-return;
-
-}
-
-const usersSnap =
-await getDocs(
-collection(db,"consultants")
-);
-
-let validReferral = false;
-
-usersSnap.forEach((d)=>{
-
-const u = d.data();
-
-if(
-u.consultantNo === referral
-){
-
-validReferral = true;
-
-}
-
-});
-
-if(!validReferral){
-
-alert(
-"Referral tidak sah"
-);
-
-return;
-
-}  
-
-const accountType =
-document.getElementById("accountType").value;
-  
-try {
-  const userCredential = await createUserWithEmailAndPassword(
-    auth,
-    email,
-    password
-  );
-  
-  const uid = userCredential.user.uid;
-
-  // Semak jenis akaun untuk menentukan collection dan role
-  if (accountType === "consultant") {
-    
-    // Simpan ke collection 'consultants'[cite: 1]
-    await setDoc(doc(db, "consultants", uid), {
-      nama,
-      ic,
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
       email,
-      telefon,
-      referral,
-      accountType,
-      role: "consultant", // Ubah role kepada consultant
-      leadStatus: "REGISTERED",
-      paymentStatus: "unpaid",
-      consultantNo: null, // Boleh dikemas kini nanti dalam proses seterusnya
-      createdAt: new Date()
-    });
-
-    window.location.href = "consultant-registration.html";
-
-  } else {
+      password
+    );
     
-    // Simpan ke collection 'users' untuk pelanggan AQM[cite: 1]
+    const uid = userCredential.user.uid;
+
+    // Simpan terus ke collection 'users' untuk pelanggan AQM
     await setDoc(doc(db, "users", uid), {
       nama,
       ic,
       email,
       telefon,
       referral,
-      accountType,
-      role: "customer", // Kekalkan role customer
+      accountType: "customer",
+      role: "customer",
       leadStatus: "REGISTERED",
       paymentStatus: "unpaid",
       memberNo: null,
       createdAt: new Date()
     });
 
+    alert("Pendaftaran AQM berjaya!");
     window.location.href = "login.html";
-    
+
+  } catch (error) {
+    alert(error.message);
   }
-
-} catch (error) {
-  alert(error.message);
-}
-
 }); 
 
-  
 </script>
   
 </body>
