@@ -3,20 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Penyata USB</title>
+    <title>Penyata USB & Tempoh Matang</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen" style="font-family: Inter, sans-serif;">
     
-    <!-- HEADER RASMI (Ikut tema page lain) -->
+    <!-- HEADER RASMI -->
     <div class="bg-[#153638] text-white p-5 shadow mb-5">
         <h1 class="text-2xl font-bold">Penyata Upline Supporting Benefit (USB)</h1>
-        <p class="text-sm opacity-90">Sejarah terperinci penerimaan USB (Akaun 2150)</p>
+        <p class="text-sm opacity-90">Simpanan jangka panjang & sejarah terperinci penerimaan USB (Akaun 2150)</p>
     </div>
 
     <div class="p-5 max-w-5xl mx-auto">
         <a href="consultant-dashboard.html" class="inline-block bg-gray-200 hover:bg-gray-300 transition px-5 py-3 rounded-xl mb-5 text-sm font-semibold text-gray-700">← Dashboard</a>
         
+        <!-- KAD RINGKASAN STATUS MATANG USB -->
+        <div class="grid md:grid-cols-3 gap-5 mb-6">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <p class="text-sm text-gray-500 font-medium">Jumlah Baki USB</p>
+                <p id="summaryBalance" class="text-3xl font-bold text-[#153638] mt-2">RM0.00</p>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <p class="text-sm text-gray-500 font-medium">Anggaran Tarikh Matang (<span id="lockYearLabel">3</span> Tahun)</p>
+                <p id="summaryMaturityDate" class="text-xl font-bold text-blue-600 mt-2">-</p>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <p class="text-sm text-gray-500 font-medium">Status Akaun USB</p>
+                <div id="summaryStatus" class="mt-2">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600">Memuatkan...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- JADUAL SEJARAH TRANSAKSI -->
         <div class="bg-white rounded-2xl shadow overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm border-collapse">
@@ -71,6 +90,13 @@
             }
 
             try {
+                // 1. Ambil Setting Tempoh Lock-in dari Admin (Default 3 tahun)
+                const compSnap = await getDoc(doc(db, "settings", "compensation"));
+                const compData = compSnap.exists() ? compSnap.data() : {};
+                const lockYears = Number(compData.usbLockPeriod || 3);
+                document.getElementById("lockYearLabel").textContent = lockYears;
+
+                // 2. Dapatkan profil konsultan
                 const userSnap = await getDoc(doc(db, "consultants", user.uid));
                 if (!userSnap.exists()) {
                     document.getElementById("usbTableBody").innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Profil konsultan tidak dijumpai.</td></tr>`;
@@ -79,6 +105,7 @@
                 const consultantData = userSnap.data();
                 const myConsultantNo = consultantData.consultantNo;
 
+                // 3. Tarik lejer akaun 2150 khusus untuk konsultan ini
                 const q = query(
                     collection(db, "ledger"),
                     where("accountCode", "==", "2150"),
@@ -88,9 +115,14 @@
 
                 let html = "";
                 let totalUsbBalance = 0;
+                let firstReceiveDate = null;
+                const now = new Date();
 
                 if (querySnapshot.empty) {
                     document.getElementById("usbTableBody").innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-500">Tiada rekod transaksi USB dijumpai.</td></tr>`;
+                    document.getElementById("summaryBalance").textContent = "RM0.00";
+                    document.getElementById("summaryMaturityDate").textContent = "-";
+                    document.getElementById("summaryStatus").innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600">Tiada Simpanan</span>`;
                     return;
                 }
 
@@ -98,15 +130,19 @@
                     const row = docSnap.data();
                     
                     let dateStr = "-";
+                    let trxDate = null;
                     if (row.date) {
-                        const d = row.date.toDate ? row.date.toDate() : new Date(row.date);
-                        dateStr = d.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
+                        trxDate = row.date.toDate ? row.date.toDate() : new Date(row.date);
+                        dateStr = trxDate.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
+                        
+                        // Cari tarikh transaksi paling awal (1st receive) untuk kira matang
+                        if (!firstReceiveDate || trxDate < firstReceiveDate) {
+                            firstReceiveDate = trxDate;
+                        }
                     }
 
-                    // Cari ID pengirim dari field fromConsultant atau transactionGroup
                     let fromAqc = row.fromConsultant || row.transactionGroup || "-";
                     if (fromAqc.startsWith("AQM")) {
-                        // Jika rujukan transaksi pelanggan, cuba kekalkan atau paparkan sebagai rujukan
                         fromAqc = row.fromConsultant || "-";
                     }
 
@@ -128,6 +164,30 @@
                     </tr>
                     `;
                 });
+
+                // Kira Tarikh Matang Berdasarkan Setting Admin
+                let maturityDateText = "-";
+                let isMatured = false;
+
+                if (firstReceiveDate) {
+                    let maturityDate = new Date(firstReceiveDate);
+                    maturityDate.setFullYear(maturityDate.getFullYear() + lockYears);
+                    maturityDateText = maturityDate.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
+                    
+                    isMatured = now >= maturityDate;
+                }
+
+                // Update Kad Ringkasan di Atas
+                document.getElementById("summaryBalance").textContent = "RM" + formatRM(totalUsbBalance);
+                document.getElementById("summaryMaturityDate").textContent = maturityDateText;
+                
+                if (totalUsbBalance <= 0) {
+                    document.getElementById("summaryStatus").innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600">Baki Kosong</span>`;
+                } else if (isMatured) {
+                    document.getElementById("summaryStatus").innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">MATANG (LAYAK DITUNTUT)</span>`;
+                } else {
+                    document.getElementById("summaryStatus").innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700">DALAM TEMPOH SIMPANAN</span>`;
+                }
 
                 document.getElementById("usbTableBody").innerHTML = html;
                 document.getElementById("totalUsbFooter").textContent = "RM" + formatRM(totalUsbBalance);
