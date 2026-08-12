@@ -5,43 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consultant Payable</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- jsPDF & AutoTable untuk Penjanaan PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <style>
-        body {
-            font-family: Inter, sans-serif;
-        }
-        /* Custom scrollbar styling for mobile */
-        .custom-scrollbar::-webkit-scrollbar {
-            height: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
+        body { font-family: Inter, sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
 
 <body class="bg-gray-100">
 
     <div class="bg-[#153638] text-white p-5">
-        <h1 class="text-2xl font-bold">
-            Consultant Payable
-        </h1>
+        <h1 class="text-2xl font-bold">Consultant Payable</h1>
+        <p class="text-sm text-gray-300">Pengurusan Agihan Komisen & Override Konsultan</p>
     </div>
 
     <div class="max-w-7xl mx-auto p-5">
 
-        <a href="accounts-dashboard.html" class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5 text-gray-800">
+        <a href="accounts-dashboard.html" class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5 text-gray-800 hover:bg-gray-300 transition">
             &larr; Akaun
         </a>
 
-        <!-- Mobile Scroll Instruction (Only visible on small screens) -->
+        <!-- Mobile Scroll Instruction -->
         <div class="flex items-center text-sm text-gray-500 mb-2 md:hidden">
             <svg class="w-4 h-4 mr-2 text-blue-500 animate-pulse flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
@@ -51,19 +40,18 @@
 
         <div class="bg-white rounded-xl shadow overflow-hidden">
             <div class="overflow-x-auto custom-scrollbar">
-                <table class="w-full min-w-[600px]">
+                <table class="w-full min-w-[700px]">
                     <thead class="bg-[#153638] text-white">
                         <tr>
                             <th class="p-3 text-left">Consultant</th>
                             <th class="p-3 text-left">Nama</th>
-                            <th class="p-3 text-right">Amount</th>
+                            <th class="p-3 text-right">Amount (RM)</th>
                             <th class="p-3 text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody id="payableTable">
-                        <!-- Loading placeholder -->
                         <tr>
-                            <td colspan="4" class="p-5 text-center text-gray-500">Memuatkan data...</td>
+                            <td colspan="4" class="p-5 text-center text-gray-500">Memuatkan data bayaran konsultan...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -71,38 +59,11 @@
         </div>
     </div>
 
-    <!-- Custom Message Box -->
-    <div id="customAlert" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 px-4">
-        <div class="bg-white p-6 rounded-xl shadow-xl max-w-sm w-full text-center">
-            <!-- Icon Background & SVG dynamic update -->
-            <div id="alertIconBg" class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
-                <span id="alertIcon">
-                    <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                </span>
-            </div>
-            <h3 id="alertTitle" class="text-xl font-bold text-gray-800 mb-2">Berjaya!</h3>
-            <p id="alertMessage" class="text-gray-600 mb-6">Mesej di sini</p>
-            <button onclick="closeCustomAlert()" class="bg-[#153638] text-white px-6 py-2 rounded-lg w-full font-medium hover:bg-[#0f2728] transition-colors">
-                Tutup & Muat Semula
-            </button>
-        </div>
-    </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import {
-getFirestore,
-collection,
-getDocs,
-doc,
-updateDoc,
-addDoc,
-query,
-orderBy,
-limit,
-where
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+            getFirestore, collection, getDocs, doc, getDoc, addDoc, updateDoc, query, where
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
         const firebaseConfig = {
             apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
@@ -116,377 +77,286 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Fetch data
-       const snap =
-await getDocs(
-query(
-collection(
-db,
-"ledger"
-),
-orderBy(
-"date",
-"desc"
-),
-limit(500)
-)
-);
-        const payable = {};
+        const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-        snap.forEach((d) => {
-            const row = d.data();
+        let globalConsultantData = {};
+        let companyProfile = {
+            companyName: "AL-QAWTHAR MAWARIS SDN. BHD.",
+            registrationNo: "123456AQMS"
+        };
+
+        // 1. Tarik Tetapan Syarikat dari settings/company
+        async function loadCompanySettings() {
+            try {
+                const docRef = doc(db, "settings", "company");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    companyProfile.companyName = data.companyName || companyProfile.companyName;
+                    companyProfile.registrationNo = data.registrationNo || companyProfile.registrationNo;
+                }
+            } catch (err) {
+                console.error("Gagal menarik tetapan syarikat:", err);
+            }
+        }
+
+        // 2. Tarik Data Komisen & Override (Abaikan USB)
+        async function loadConsultantPayable() {
+            try {
+                await loadCompanySettings();
+
+                // Tarik maklumat konsultan (IC & Bank)
+                const consultantsSnap = await getDocs(collection(db, "consultants"));
+                const bankDetailsMap = {};
+                consultantsSnap.forEach(d => {
+                    const data = d.data();
+                    if (data.consultantNo) {
+                        bankDetailsMap[data.consultantNo] = {
+                            ic: data.ic || "-",
+                            bankName: data.bankName || "-",
+                            bankAccount: data.bankAccount || "-"
+                        };
+                    }
+                });
+
+                // Tarik data Ledger/Payable yang status PENDING
+                const snap = await getDocs(query(
+                    collection(db, "ledger"),
+                    where("status", "==", "PENDING_PAYMENT")
+                ));
+
+                const groupedData = {};
+
+                snap.forEach((d) => {
+                    const row = d.data();
+                    const cNo = row.consultantNo;
+                    if (!cNo) return;
+
+                    if (!groupedData[cNo]) {
+                        const bankInfo = bankDetailsMap[cNo] || { ic: "-", bankName: "-", bankAccount: "-" };
+                        groupedData[cNo] = {
+                            consultantNo: cNo,
+                            nama: row.nama || cNo,
+                            ic: bankInfo.ic,
+                            bankName: bankInfo.bankName,
+                            bankAccount: bankInfo.bankAccount,
+                            commission: 0,
+                            override: 0,
+                            totalAmount: 0,
+                            docIds: []
+                        };
+                    }
+
+                    // Hanya ambil jenis COMMISSION dan OVERRIDE sahaja (Mengabaikan USB)
+                    if (row.type === "COMMISSION") {
+                        const amt = Number(row.amount || 0);
+                        groupedData[cNo].commission += amt;
+                        groupedData[cNo].totalAmount += amt;
+                        groupedData[cNo].docIds.push(d.id);
+                    } else if (row.type === "OVERRIDE") {
+                        const amt = Number(row.amount || 0);
+                        groupedData[cNo].override += amt;
+                        groupedData[cNo].totalAmount += amt;
+                        groupedData[cNo].docIds.push(d.id);
+                    }
+                });
+
+                globalConsultantData = groupedData;
+                let html = "";
+
+                Object.keys(groupedData).forEach((cNo) => {
+                    const item = groupedData[cNo];
+
+                    // Abaikan paparan jika tiada jumlah komisen/override
+                    if (item.totalAmount <= 0) return;
+
+                    const docIdsString = JSON.stringify(item.docIds).replace(/"/g, '&quot;');
+
+                    html += `
+                        <tr class="border-b hover:bg-gray-50 transition">
+                            <td class="p-4 font-bold text-[#153638]">${item.consultantNo}</td>
+                            <td class="p-4 font-semibold text-gray-800">${item.nama}</td>
+                            <td class="p-4 text-right font-bold text-green-600">RM${formatRM(item.totalAmount)}</td>
+                            <td class="p-4 text-center space-x-2">
+                                <button onclick="toggleDetail('${item.consultantNo}')" class="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition shadow text-xs md:text-sm">
+                                    View
+                                </button>
+                                <button onclick="downloadSinglePDF('${item.consultantNo}')" class="bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 transition shadow text-xs md:text-sm">
+                                    PDF Bank List
+                                </button>
+                                <button onclick="generatePV('${item.consultantNo}', ${item.totalAmount}, '${docIdsString}', this)" class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition shadow text-xs md:text-sm">
+                                    Generate PV
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Sub-Jadual (Pecahan Commission & Override Sahaja) -->
+                        <tr id="${item.consultantNo}" class="hidden bg-blue-50 border-b-2 border-blue-200">
+                            <td colspan="4" class="p-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-white p-4 rounded-lg shadow-sm">
+                                    <div>
+                                        <p class="text-gray-500 font-medium">Commission</p>
+                                        <p class="text-lg font-bold text-gray-800">RM${formatRM(item.commission)}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500 font-medium">Override</p>
+                                        <p class="text-lg font-bold text-gray-800">RM${formatRM(item.override)}</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                document.getElementById("payableTable").innerHTML = html || '<tr><td colspan="4" class="p-5 text-center text-gray-500 font-medium">Tiada bayaran komisen/override yang tertunggak.</td></tr>';
+
+            } catch (err) {
+                console.error("Ralat memuatkan data:", err);
+                document.getElementById("payableTable").innerHTML = '<tr><td colspan="4" class="p-5 text-center text-red-500 font-bold">Gagal memuatkan rekod pangkalan data.</td></tr>';
+            }
+        }
+
+        loadConsultantPayable();
+
+        window.toggleDetail = function(id) {
+            document.getElementById(id).classList.toggle("hidden");
+        };
+
+        // 3. Penjanaan PDF Bank List (Komisen & Override Sahaja)
+        window.downloadSinglePDF = function(cNo) {
+            const item = globalConsultantData[cNo];
+            if (!item) {
+                alert("Data tidak ditemui!");
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+
+            // Header Syarikat
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text((companyProfile.companyName || "").toUpperCase(), 14, 15);
             
-          if(
-!["2000","2100","2150"].includes(row.accountCode)
-){
-return;
-}
-
-if(!row.consultantNo){
-return;
-}
-            const consultantNo =
-row.consultantNo;
-
-const consultantName =
-row.consultantName;
-
-const consultant =
-consultantNo + " " + consultantName;
-
-            if(!payable[consultant]){
-
-payable[consultant]={
-
-commission:0,
-override:0,
-usb:0,
-total:0
-
-};
-
-}
-
-if(row.accountCode==="2000"){
-
-payable[consultant].commission +=
-Number(row.credit||0);
-
-payable[consultant].commission -=
-Number(row.debit||0);
-
-}
-
-if(row.accountCode==="2100"){
-
-payable[consultant].override +=
-Number(row.credit||0);
-
-payable[consultant].override -=
-Number(row.debit||0);
-
-}
-
-if(row.accountCode==="2150"){
-
-payable[consultant].usb +=
-Number(row.credit||0);
-
-payable[consultant].usb -=
-Number(row.debit||0);
-
-}
-
-payable[consultant].total =
-payable[consultant].commission +
-payable[consultant].override +
-payable[consultant].usb;
-
-});
-            
-        let html = "";
-
-        Object.keys(payable).forEach((consultant)=>{
-
-    if(payable[consultant].total<=0){
-        return;
-    }
-            html += `
-                <tr class="border-b">
-                    <td class="p-3">${consultant.split(" ")[0]}</td>
-                    <td class="p-3">${consultant}</td>
-                    <td class="p-3 text-right font-semibold">RM${payable[consultant].total.toFixed(2)}</td>
-                    <td class="p-3 text-center space-x-2">
-
-<button
-onclick="toggleDetail('${consultant.split(" ")[0]}')"
-class="bg-blue-600 text-white px-4 py-2 rounded-lg">
-
-View
-
-</button>
-
-<button
-onclick="generatePV(
-'${consultant}',
-this
-)"
-
-class="bg-green-600 text-white px-4 py-2 rounded-lg">
-
-Generate PV
-
-</button>
-
-</td>
-                </tr>
-
-<tr
-id="${consultant.split(" ")[0]}"
-class="hidden bg-gray-50">
-
-<td colspan="4" class="p-5">
-
-<div class="grid grid-cols-3 gap-4">
-
-<div>
-<b>Commission</b><br>
-RM${payable[consultant].commission.toFixed(2)}
-</div>
-
-<div>
-<b>Override</b><br>
-RM${payable[consultant].override.toFixed(2)}
-</div>
-
-<div>
-<b>USB</b><br>
-RM${payable[consultant].usb.toFixed(2)}
-</div>
-
-</div>
-
-</td>
-
-</tr>
-
-`;
-        });
-
-        document.getElementById("payableTable").innerHTML = html || '<tr><td colspan="4" class="p-5 text-center text-gray-500">Tiada rekod setakat ini.</td></tr>';
-
-window.generatePV = async (
-consultant,
-button
-) => {
-
-try{
-
-button.disabled = true;
-
-const consultantNo =
-consultant.split(" ")[0];
-
-const consultantName =
-consultant.substring(
-consultantNo.length + 1
-);
-
-const item =
-payable[consultant];
-
-const amount =
-item.total;
-
-
-
-
-const currentPeriod =
-new Date().getFullYear()
-+
-"-" +
-String(
-new Date().getMonth()+1
-).padStart(2,"0");
-    
-const pvNo =
-"PV-" +
-Date.now();
-
-const existingPV =
-await getDocs(
-query(
-collection(
-db,
-"paymentVouchers"
-),
-where(
-"consultantNo",
-"==",
-consultantNo
-),
-where(
-"period",
-"==",
-currentPeriod
-)
-)
-);
-
-if(!existingPV.empty){
-
-alert(
-consultantNo +
-" telah mempunyai PV bagi bulan ini"
-);
-
-button.disabled = false;
-
-return;
-
-}
-
-const coaSnap =
-await getDocs(
-collection(db,"chartOfAccounts")
-);
-
-const coaMap = {};
-
-coaSnap.forEach((d)=>{
-
-const coa =
-d.data();
-
-coaMap[coa.code] =
-coa;
-
-});
-
-const payableAccounts = [];
-
-function addPayable(code, amount){
-
-if(amount<=0) return;
-
-const coa =
-coaMap[code];
-
-if(!coa){
-
-alert("COA "+code+" tidak dijumpai.");
-
-return;
-
-}
-    
-payableAccounts.push({
-
-accountCode: coa.code,
-accountName: coa.name,
-
-category: coa.category,
-cashFlowType: coa.cashFlowType,
-normalBalance: coa.normalBalance,
-reportGroup: coa.reportGroup,
-
-amount:Number(amount)
-
-});
-
-}
-
-
-
-addPayable(
-"2000",
-item.commission
-);
-
-addPayable(
-"2100",
-item.override
-);
-
-addPayable(
-"2150",
-item.usb
-);
-
-    
-await addDoc(
-collection(
-db,
-"paymentVouchers"
-),
-{
-pvNo,
-
-consultantNo,
-
-consultantName,
-
-type:
-"CONSULTANT",
-
-period:
-currentPeriod,
-
-description:
-"Consultant Payable " +
-currentPeriod,
-
-amount,
-
-accountCode:"MULTI",
-accountName:"Consultant Payable",
-
-category:"Liability",
-cashFlowType:"Operating",
-normalBalance:"Credit",
-reportGroup:"Balance Sheet",
-    
-accounts:
-payableAccounts,
-
-status:
-"PENDING",
-
-createdAt:
-new Date()
-}
-);
-
-alert(
-"Payment Voucher Created"
-);
-    
-location.href =
-"payment-voucher.html";
-
-}
-catch(err){
-
-button.disabled=false;
-
-console.error(err);
-
-alert(err.message);
-
-}
-
-};
-
-window.toggleDetail = function(id){
-
-document
-.getElementById(id)
-.classList
-.toggle("hidden");
-
-};
-
-</script>
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "normal");
+            doc.text(`No. Pendaftaran Syarikat: ${companyProfile.registrationNo || "-"}`, 14, 21);
+            doc.text("SENARAI BAYARAN KOMISEN & OVERRIDE KONSULTAN (UNTUK URUSAN BANK)", 14, 26);
+
+            doc.setLineWidth(0.5);
+            doc.line(14, 29, 196, 29);
+
+            // Maklumat Tarikh
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "bold");
+            doc.text(`Tarikh Cetakan : ${new Date().toLocaleDateString('ms-MY')}`, 14, 36);
+
+            const tableRows = [
+                [
+                    1,
+                    item.consultantNo,
+                    item.nama.toUpperCase(),
+                    item.ic,
+                    item.bankName,
+                    item.bankAccount,
+                    formatRM(item.commission),
+                    formatRM(item.override),
+                    formatRM(item.totalAmount)
+                ]
+            ];
+
+            doc.autoTable({
+                startY: 42,
+                head: [['Bil', 'No. AQC', 'Nama Penerima', 'No. IC', 'Nama Bank', 'No. Akaun', 'Komisen (RM)', 'Override (RM)', 'Jumlah (RM)']],
+                body: tableRows,
+                theme: 'grid',
+                headStyles: { fillColor: [21, 54, 56], textColor: [255, 255, 255], fontStyle: 'bold' },
+                columnStyles: {
+                    0: { halign: 'center', cellWidth: 8 },
+                    1: { cellWidth: 20 },
+                    2: { cellWidth: 38 },
+                    3: { cellWidth: 26 },
+                    4: { cellWidth: 22 },
+                    5: { cellWidth: 24 },
+                    6: { halign: 'right', cellWidth: 20 },
+                    7: { halign: 'right', cellWidth: 20 },
+                    8: { halign: 'right', cellWidth: 22 }
+                },
+                styles: { fontSize: 7.5, cellPadding: 2 }
+            });
+
+            const finalY = doc.lastAutoTable.finalY + 8;
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "bold");
+            doc.text(`JUMLAH KESELURUHAN: RM ${formatRM(item.totalAmount)}`, 196, finalY, { align: "right" });
+
+            // Ruang Tandatangan
+            const signY = finalY + 20;
+            if (signY < 260) {
+                doc.setFontSize(9);
+                doc.setFont("helvetica", "normal");
+                doc.text("Disediakan Oleh:", 14, signY);
+                doc.text("_______________________", 14, signY + 15);
+                doc.text("Bahagian Akaun & Kewangan", 14, signY + 20);
+
+                doc.text("Disahkan Oleh:", 130, signY);
+                doc.text("_______________________", 130, signY + 15);
+                doc.text("Pengarah / Kelulusan", 130, signY + 20);
+            }
+
+            doc.save(`Bank_Listing_Consultant_${item.consultantNo}.pdf`);
+        };
+
+        // 4. Logik Generate Payment Voucher (PV)
+        window.generatePV = async (cNo, totalAmount, docIdsJson, button) => {
+            try {
+                if (!confirm(`Sahkan penjanaan PV untuk ${cNo} berjumlah RM${formatRM(totalAmount)}?`)) {
+                    return;
+                }
+                
+                button.disabled = true;
+                button.innerText = "Memproses...";
+
+                const docIds = JSON.parse(docIdsJson);
+                const currentPeriod = new Date().getFullYear() + "-" + String(new Date().getMonth() + 1).padStart(2, "0");
+                const pvNo = "PV-CONS-" + Date.now();
+
+                // Cipta PV untuk Komisen & Override
+                await addDoc(collection(db, "paymentVouchers"), {
+                    pvNo: pvNo,
+                    consultantNo: cNo,
+                    consultantName: globalConsultantData[cNo]?.nama || cNo,
+                    type: "CONSULTANT_PAYABLE",
+                    period: currentPeriod,
+                    description: "Bayaran Komisen & Override Konsultan " + cNo,
+                    amount: Number(totalAmount),
+                    accountCode: "2150",
+                    accountName: "Consultant Commission Payable",
+                    category: "Liability",
+                    cashFlowType: "Operating",
+                    normalBalance: "Credit",
+                    reportGroup: "Balance Sheet",
+                    status: "PENDING",
+                    createdAt: new Date()
+                });
+
+                // Kemaskini status rekod dalam ledger
+                for (let i = 0; i < docIds.length; i++) {
+                    const docRef = doc(db, "ledger", docIds[i]);
+                    await updateDoc(docRef, { status: "PV_GENERATED" });
+                }
+
+                alert(`Berjaya! Payment Voucher (${pvNo}) telah dicipta untuk ${cNo}.`);
+                location.reload();
+                
+            } catch (err) {
+                button.disabled = false;
+                button.innerText = "Generate PV";
+                console.error(err);
+                alert("Ralat: " + err.message);
+            }
+        };
+    </script>
 
 </body>
 </html>
