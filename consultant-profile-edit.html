@@ -37,11 +37,11 @@
                 <!-- Kandungan Borang -->
                 <div id="formContent" class="hidden space-y-6">
                     
+                    <!-- ================= SEKSYEN 1: MAKLUMAT UTAMA ================= -->
                     <div class="border-b pb-4 mb-4">
                         <h2 class="text-lg font-bold text-gray-800">Maklumat Utama (Tidak boleh diubah)</h2>
                     </div>
 
-                    <!-- Non-editable fields -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nama Penuh</label>
@@ -53,26 +53,66 @@
                         </div>
                     </div>
                     
+                    <!-- ================= SEKSYEN 2: BUTIRAN PERIBADI ================= -->
                     <div class="border-b pb-4 mb-4 pt-4">
                         <h2 class="text-lg font-bold text-gray-800">Butiran Peribadi & Hubungan</h2>
                     </div>
 
-                    <!-- Editable fields -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">No. Kad Pengenalan</label>
-                            <input type="text" id="ic" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Contoh: 900101-14-5555">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">No. Kad Pengenalan (IC)</label>
+                            <input type="text" id="ic" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Contoh: 900101145555">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Telefon bimbit</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">No Telefon</label>
                             <input type="text" id="telefon" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Contoh: 0123456789">
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Alamat E-mel</label>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                             <input type="email" id="email" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Contoh: nama@email.com">
                         </div>
+                    </div>
+
+                    <!-- ================= SEKSYEN 3: MAKLUMAT BANK ================= -->
+                    <div class="border-b pb-4 mb-4 pt-4">
+                        <h2 class="text-lg font-bold text-gray-800">Maklumat Akaun Bank</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Negeri / Wilayah</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Bank</label>
+                            <input type="text" id="bankName" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Contoh: Maybank">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">No Akaun Bank</label>
+                            <input type="text" id="bankAccount" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Pastikan nombor akaun tepat">
+                        </div>
+                    </div>
+
+                    <!-- ================= SEKSYEN 4: ALAMAT ================= -->
+                    <div class="border-b pb-4 mb-4 pt-4">
+                        <h2 class="text-lg font-bold text-gray-800">Alamat Surat Menyurat</h2>
+                    </div>
+
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Alamat</label>
+                            <textarea id="alamat" rows="3" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition resize-none" placeholder="Masukkan alamat rumah anda"></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Poskod</label>
+                                <input type="text" id="poskod" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Poskod">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Bandar</label>
+                                <input type="text" id="bandar" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Bandar">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Pilih Negeri</label>
                             <select id="state" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition bg-white">
                                 <option value="">Sila Pilih Negeri</option>
                                 <option value="Johor">Johor</option>
@@ -92,21 +132,6 @@
                                 <option value="Labuan">W.P. Labuan</option>
                                 <option value="Putrajaya">W.P. Putrajaya</option>
                             </select>
-                        </div>
-                    </div>
-
-                    <div class="border-b pb-4 mb-4 pt-4">
-                        <h2 class="text-lg font-bold text-gray-800">Maklumat Akaun Bank (Untuk Pembayaran)</h2>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Bank</label>
-                            <input type="text" id="bankName" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Contoh: Maybank, CIMB, dll">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">No. Akaun Bank</label>
-                            <input type="text" id="bankAccount" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Pastikan nombor akaun tepat">
                         </div>
                     </div>
                     
@@ -158,15 +183,20 @@
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     
-                    // Masukkan data ke dalam borang
+                    // Masukkan data sedia ada ke dalam borang
                     document.getElementById("nama").value = data.nama || "";
                     document.getElementById("consultantNo").value = (data.consultantNo || "") + " (" + (data.consultantLevel || "AQC") + ")";
                     document.getElementById("ic").value = data.ic || "";
                     document.getElementById("telefon").value = data.telefon || "";
                     document.getElementById("email").value = data.email || "";
-                    document.getElementById("state").value = data.state || "";
                     document.getElementById("bankName").value = data.bankName || "";
                     document.getElementById("bankAccount").value = data.bankAccount || "";
+                    
+                    // Maklumat Alamat
+                    document.getElementById("alamat").value = data.alamat || "";
+                    document.getElementById("poskod").value = data.poskod || "";
+                    document.getElementById("bandar").value = data.bandar || "";
+                    document.getElementById("state").value = data.state || "";
                     
                     // Sembunyikan simbol loading dan tunjukkan borang
                     document.getElementById("loadingText").classList.add("hidden");
@@ -196,9 +226,12 @@
                     ic: document.getElementById("ic").value.trim(),
                     telefon: document.getElementById("telefon").value.trim(),
                     email: document.getElementById("email").value.trim(),
-                    state: document.getElementById("state").value,
                     bankName: document.getElementById("bankName").value.trim(),
                     bankAccount: document.getElementById("bankAccount").value.trim(),
+                    alamat: document.getElementById("alamat").value.trim(),
+                    poskod: document.getElementById("poskod").value.trim(),
+                    bandar: document.getElementById("bandar").value.trim(),
+                    state: document.getElementById("state").value,
                     lastUpdated: new Date()
                 });
                 
