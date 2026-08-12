@@ -90,7 +90,7 @@
             }
 
             try {
-                // 1. Ambil Setting Tempoh Lock-in dari Admin (Default 3 tahun)
+                // 1. Ambil Setting Tempoh Lock-in dari Admin
                 const compSnap = await getDoc(doc(db, "settings", "compensation"));
                 const compData = compSnap.exists() ? compSnap.data() : {};
                 const lockYears = Number(compData.usbLockPeriod || 3);
@@ -126,13 +126,16 @@
                     return;
                 }
 
-                // Simpan cache nama consultant dari overrideHistory untuk padanan transactionGroup (cth: AQM0010 -> AQC0002)
+                // =========================================================================
+                // KOD YANG DIBETULKAN: Guna h.customerNo untuk padankan AQM0010
+                // =========================================================================
                 const overrideSnap = await getDocs(collection(db, "overrideHistory"));
                 let groupToConsultantMap = {};
                 overrideSnap.forEach(docSnap => {
                     const h = docSnap.data();
-                    if (h.transactionGroup && h.fromConsultant) {
-                        groupToConsultantMap[h.transactionGroup] = h.fromConsultant;
+                    // Padankan customerNo dari overrideHistory kepada ejen pengirim (fromConsultant)
+                    if (h.customerNo && h.fromConsultant) {
+                        groupToConsultantMap[h.customerNo] = h.fromConsultant;
                     }
                 });
 
@@ -145,42 +148,25 @@
                         const d = row.date.toDate ? row.date.toDate() : new Date(row.date);
                         dateStr = d.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
                         
-                        // Cari tarikh transaksi paling awal (1st receive)
                         if (!firstReceiveDate || d < firstReceiveDate) {
                             firstReceiveDate = d;
                         }
                     }
 
-                    // 1. Dapatkan tarikh transaksi lejer dalam format YYYY-MM-DD
-                    const trxDate = row.date.toDate ? row.date.toDate() : new Date(row.date);
-                    const trxDateStr = trxDate.toISOString().split('T')[0];
+                    // CARIAN PINTAR SUMBER PENGIRIM
+                    let fromAqc = "";
 
-                    // 2. Semak carian:
-                    let fromAqc = row.fromConsultant || "";
-
-                    // Carian A: transactionGroup dalam overrideHistory
-                    if (!fromAqc && row.transactionGroup && groupToConsultantMap[row.transactionGroup]) {
+                    // A. Padanan Silang Utama: transactionGroup (Lejer) == customerNo (OverrideHistory)
+                    if (row.transactionGroup && groupToConsultantMap[row.transactionGroup]) {
                         fromAqc = groupToConsultantMap[row.transactionGroup];
                     }
 
-                    // Carian B: Carian Silang Tarikh (Jika masih kosong)
-                    // Cari dalam overrideHistory siapa yang buat jualan pada tarikh yang sama
-                    if (!fromAqc) {
-                        overrideSnap.forEach(hDoc => {
-                            const h = hDoc.data();
-                            if (h.date) {
-                                const hDate = h.date.toDate ? h.date.toDate() : new Date(h.date);
-                                const hDateStr = hDate.toISOString().split('T')[0];
-                                
-                                // Kalau tarikh sama dan amount override/sales relevan, kita assume tu ejennya
-                                if (hDateStr === trxDateStr && h.fromConsultant) {
-                                    fromAqc = h.fromConsultant;
-                                }
-                            }
-                        });
+                    // B. Jika tiada di atas, semak field rasmi
+                    if (!fromAqc && row.fromConsultant) {
+                        fromAqc = row.fromConsultant;
                     }
 
-                    // Carian C: Last resort - Ekstrak dari deskripsi
+                    // C. Jika masih tiada, ekstrak dari Keterangan (sebagai langkah akhir)
                     if (!fromAqc && row.description) {
                         const match = row.description.match(/(AQC\d{4,5})/);
                         if (match) fromAqc = match[0];
