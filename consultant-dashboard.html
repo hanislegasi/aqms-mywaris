@@ -179,19 +179,19 @@ let nextLevel = "";
 let targetSales = 0;
 
 // Tarik target sales dari database (letak nilai default jika admin belum set)
-const targetAQC = Number(comp.targetSalesAQC || 30000);
-const targetAQCAS = Number(comp.targetSalesAQCAS || 60000);
-const targetAQCUM = Number(comp.targetSalesAQCUM || 120000);
+const targetAQCAS = Number(comp.targetSalesAQCAS || 30000);
+const targetAQCUM = Number(comp.targetSalesAQCUM || 60000);
+const targetMGAM = Number(comp.targetSalesMGAM || 120000);
 
 if(data.consultantLevel === "AQC"){
     nextLevel = "AQC-AS";
-    targetSales = targetAQC;
+    targetSales = targetAQCAS;
 } else if(data.consultantLevel === "AQC-AS"){
     nextLevel = "AQC-UM";
-    targetSales = targetAQCAS;
+    targetSales = targetAQCUM;
 } else if(data.consultantLevel === "AQC-UM"){
     nextLevel = "MGAM";
-    targetSales = targetAQCUM;
+    targetSales = targetMGAM;
 } else {
     nextLevel = "TOP LEVEL";
     targetSales = 0;
