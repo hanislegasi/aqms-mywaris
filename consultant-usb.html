@@ -151,20 +151,36 @@
                         }
                     }
 
-                    // CARIAN PINTAR SUMBER PENGIRIM (BETULKAN KEUTAMAAN):
-                    let fromAqc = "";
+                    // 1. Dapatkan tarikh transaksi lejer dalam format YYYY-MM-DD
+                    const trxDate = row.date.toDate ? row.date.toDate() : new Date(row.date);
+                    const trxDateStr = trxDate.toISOString().split('T')[0];
 
-                    // 1. UTAMA: Semak transactionGroup padanan dalam overrideHistory dulu (supaya AQM0010 terus temui AQC0002 yang betul)
-                    if (row.transactionGroup && groupToConsultantMap[row.transactionGroup]) {
+                    // 2. Semak carian:
+                    let fromAqc = row.fromConsultant || "";
+
+                    // Carian A: transactionGroup dalam overrideHistory
+                    if (!fromAqc && row.transactionGroup && groupToConsultantMap[row.transactionGroup]) {
                         fromAqc = groupToConsultantMap[row.transactionGroup];
                     }
 
-                    // 2. KEDUA: Jika tiada dalam overrideHistory, baru semak field rasmi fromConsultant
-                    if (!fromAqc && row.fromConsultant) {
-                        fromAqc = row.fromConsultant;
+                    // Carian B: Carian Silang Tarikh (Jika masih kosong)
+                    // Cari dalam overrideHistory siapa yang buat jualan pada tarikh yang sama
+                    if (!fromAqc) {
+                        overrideSnap.forEach(hDoc => {
+                            const h = hDoc.data();
+                            if (h.date) {
+                                const hDate = h.date.toDate ? h.date.toDate() : new Date(h.date);
+                                const hDateStr = hDate.toISOString().split('T')[0];
+                                
+                                // Kalau tarikh sama dan amount override/sales relevan, kita assume tu ejennya
+                                if (hDateStr === trxDateStr && h.fromConsultant) {
+                                    fromAqc = h.fromConsultant;
+                                }
+                            }
+                        });
                     }
 
-                    // 3. KETIGA: Jika masih tiada, baru ekstrak dari text Keterangan
+                    // Carian C: Last resort - Ekstrak dari deskripsi
                     if (!fromAqc && row.description) {
                         const match = row.description.match(/(AQC\d{4,5})/);
                         if (match) fromAqc = match[0];
