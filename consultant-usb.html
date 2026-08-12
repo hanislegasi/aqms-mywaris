@@ -6,32 +6,41 @@
     <title>Penyata USB</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-5 min-h-screen" style="font-family: Inter, sans-serif;">
-    <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow p-6">
-        <h1 class="text-xl font-bold text-[#153638] mb-4">Penyata Upline Supporting Benefit (USB)</h1>
-        <a href="consultant-dashboard.html" class="inline-block bg-gray-200 hover:bg-gray-300 transition px-4 py-2 rounded-xl mb-4 text-sm font-semibold text-gray-700">← Dashboard</a>
+<body class="bg-gray-100 min-h-screen" style="font-family: Inter, sans-serif;">
+    
+    <!-- HEADER RASMI (Ikut tema page lain) -->
+    <div class="bg-[#153638] text-white p-5 shadow mb-5">
+        <h1 class="text-2xl font-bold">Penyata Upline Supporting Benefit (USB)</h1>
+        <p class="text-sm opacity-90">Sejarah terperinci penerimaan USB (Akaun 2150)</p>
+    </div>
+
+    <div class="p-5 max-w-5xl mx-auto">
+        <a href="consultant-dashboard.html" class="inline-block bg-gray-200 hover:bg-gray-300 transition px-5 py-3 rounded-xl mb-5 text-sm font-semibold text-gray-700">← Dashboard</a>
         
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm border-collapse">
-                <thead class="bg-[#153638] text-white">
-                    <tr>
-                        <th class="p-3 text-left">Tarikh</th>
-                        <th class="p-3 text-left">Keterangan</th>
-                        <th class="p-3 text-right">Jumlah (RM)</th>
-                    </tr>
-                </thead>
-                <tbody id="usbTableBody">
-                    <tr>
-                        <td colspan="3" class="p-6 text-center text-gray-500">Memuatkan penyata USB...</td>
-                    </tr>
-                </tbody>
-                <tfoot id="usbTableFoot" class="bg-gray-50 border-t-2 border-gray-200 font-bold hidden">
-                    <tr>
-                        <td colspan="2" class="p-4 text-right">JUMLAH KESELURUHAN BAKI USB:</td>
-                        <td id="totalUsbFooter" class="p-4 text-right text-blue-600">RM0.00</td>
-                    </tr>
-                </tfoot>
-            </table>
+        <div class="bg-white rounded-2xl shadow overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-[#153638] text-white">
+                        <tr>
+                            <th class="p-4 text-left">Tarikh</th>
+                            <th class="p-4 text-left">Terima Dari AQC</th>
+                            <th class="p-4 text-left">Keterangan</th>
+                            <th class="p-4 text-right">Jumlah (RM)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usbTableBody">
+                        <tr>
+                            <td colspan="4" class="p-6 text-center text-gray-500">Memuatkan penyata USB...</td>
+                        </tr>
+                    </tbody>
+                    <tfoot id="usbTableFoot" class="bg-gray-50 border-t-2 border-gray-200 font-bold hidden">
+                        <tr>
+                            <td colspan="3" class="p-4 text-right">JUMLAH KESELURUHAN BAKI USB:</td>
+                            <td id="totalUsbFooter" class="p-4 text-right text-blue-600">RM0.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -62,16 +71,14 @@
             }
 
             try {
-                // 1. Dapatkan nombor konsultan yang sedang login
                 const userSnap = await getDoc(doc(db, "consultants", user.uid));
                 if (!userSnap.exists()) {
-                    document.getElementById("usbTableBody").innerHTML = `<tr><td colspan="3" class="p-4 text-center text-red-500">Profil konsultan tidak dijumpai.</td></tr>`;
+                    document.getElementById("usbTableBody").innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Profil konsultan tidak dijumpai.</td></tr>`;
                     return;
                 }
                 const consultantData = userSnap.data();
                 const myConsultantNo = consultantData.consultantNo;
 
-                // 2. Tarik rekod lejer akaun 2150 (USB Payable) untuk konsultan ini
                 const q = query(
                     collection(db, "ledger"),
                     where("accountCode", "==", "2150"),
@@ -83,18 +90,24 @@
                 let totalUsbBalance = 0;
 
                 if (querySnapshot.empty) {
-                    document.getElementById("usbTableBody").innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-500">Tiada rekod transaksi USB dijumpai.</td></tr>`;
+                    document.getElementById("usbTableBody").innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-500">Tiada rekod transaksi USB dijumpai.</td></tr>`;
                     return;
                 }
 
                 querySnapshot.forEach((docSnap) => {
                     const row = docSnap.data();
                     
-                    // Format tarikh jika wujud
                     let dateStr = "-";
                     if (row.date) {
                         const d = row.date.toDate ? row.date.toDate() : new Date(row.date);
                         dateStr = d.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
+                    }
+
+                    // Cari ID pengirim dari field fromConsultant atau transactionGroup
+                    let fromAqc = row.fromConsultant || row.transactionGroup || "-";
+                    if (fromAqc.startsWith("AQM")) {
+                        // Jika rujukan transaksi pelanggan, cuba kekalkan atau paparkan sebagai rujukan
+                        fromAqc = row.fromConsultant || "-";
                     }
 
                     const desc = row.description || "USB Transaction";
@@ -106,9 +119,10 @@
 
                     html += `
                     <tr class="border-b hover:bg-gray-50 transition">
-                        <td class="p-3 text-gray-700">${dateStr}</td>
-                        <td class="p-3 text-gray-800 font-medium">${desc}</td>
-                        <td class="p-3 text-right font-bold ${netAmount >= 0 ? 'text-green-600' : 'text-red-600'}">
+                        <td class="p-4 text-gray-700">${dateStr}</td>
+                        <td class="p-4 font-semibold text-[#153638]">${fromAqc}</td>
+                        <td class="p-4 text-gray-800">${desc}</td>
+                        <td class="p-4 text-right font-bold ${netAmount >= 0 ? 'text-green-600' : 'text-red-600'}">
                             ${netAmount >= 0 ? '+' : ''}RM${formatRM(netAmount)}
                         </td>
                     </tr>
@@ -121,7 +135,7 @@
 
             } catch (err) {
                 console.error("Ralat memuatkan penyata USB:", err);
-                document.getElementById("usbTableBody").innerHTML = `<tr><td colspan="3" class="p-4 text-center text-red-500">Ralat memuatkan data dari pangkalan data.</td></tr>`;
+                document.getElementById("usbTableBody").innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Ralat memuatkan data dari pangkalan data.</td></tr>`;
             }
         });
     </script>
