@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consultant Payable</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- jsPDF & AutoTable untuk Penjanaan PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    
     <style>
         body { font-family: Inter, sans-serif; }
         .custom-scrollbar::-webkit-scrollbar { height: 6px; }
@@ -35,7 +37,7 @@
             <svg class="w-4 h-4 mr-2 text-blue-500 animate-pulse flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
             </svg>
-            <span>Tatal (scroll) ke kanan untuk melihat jadual penuh.</span>
+            <span>Tatal ke kanan untuk melihat jadual penuh.</span>
         </div>
 
         <div class="bg-white rounded-xl shadow overflow-hidden">
@@ -51,7 +53,7 @@
                     </thead>
                     <tbody id="payableTable">
                         <tr>
-                            <td colspan="4" class="p-5 text-center text-gray-500">Memuatkan data bayaran konsultan...</td>
+                            <td colspan="4" class="p-5 text-center text-gray-500">Memuatkan data...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -100,12 +102,12 @@
             }
         }
 
-        // 2. Tarik Data Komisen & Override (Abaikan USB secara dinamik)
-        async function loadConsultantPayable() {
+        // 2. Muatkan Data
+        async function loadData() {
             try {
                 await loadCompanySettings();
 
-                // Tarik maklumat bank konsultan
+                // Tarik maklumat bank dari koleksi consultants
                 const consultantsSnap = await getDocs(collection(db, "consultants"));
                 const bankDetailsMap = {};
                 consultantsSnap.forEach(d => {
@@ -113,7 +115,6 @@
                     const key = data.consultantNo || data.aqcNo || d.id;
                     if (key) {
                         bankDetailsMap[key] = {
-                            nama: data.nama || data.name || "",
                             ic: data.ic || "-",
                             bankName: data.bankName || "-",
                             bankAccount: data.bankAccount || "-"
@@ -121,50 +122,56 @@
                     }
                 });
 
-                // Tarik semua rekod ledger (tanpa filter tegar supaya tiada data terlepas)
+                // Tarik data ledger (MENGGUNAKAN LOGIK ASAL ANDA KEKAL 100%)
                 const snap = await getDocs(collection(db, "ledger"));
                 const groupedData = {};
 
                 snap.forEach((d) => {
                     const row = d.data();
 
-                    // Semak status jika ada (Abaikan jika sudah dibayar / PV Generated)
+                    // LOGIK ASAL ANDA:
+                    if(row.accountCode !== "2000" || !row.description || !row.description.startsWith("AQC")) return;
+
+                    // ABAIKAN jika status ledger sudah bertukar kepada PV_GENERATED atau PAID
                     const status = String(row.status || "").toUpperCase();
                     if (status === "PV_GENERATED" || status === "PAID") return;
 
-                    const cNo = row.consultantNo || row.aqcNo;
-                    if (!cNo) return;
+                    // BUANG REKOD USB (Jika "type" mengandungi nama USB)
+                    const rawType = String(row.type || "").toUpperCase();
+                    if (rawType.includes("USB")) return; 
 
-                    const rawType = String(row.type || "").toUpperCase().trim();
+                    // Pisahkan Consultant No & Nama menggunakan logik asal anda
+                    const consultantStr = row.description;
+                    const cNo = consultantStr.split(" ")[0]; // Cth: "AQC0001"
+                    const cName = consultantStr.substring(cNo.length).trim(); // Cth: "Hasnawi Bin Che Harun"
 
-                    // HANYA AMBIL COMMISSION DAN OVERRIDE (USB DIBUANG)
-                    if (rawType.includes("COMMISSION") || rawType.includes("OVERRIDE")) {
-                        if (!groupedData[cNo]) {
-                            const bankInfo = bankDetailsMap[cNo] || { nama: row.nama || cNo, ic: "-", bankName: "-", bankAccount: "-" };
-                            groupedData[cNo] = {
-                                consultantNo: cNo,
-                                nama: row.nama || bankInfo.nama || cNo,
-                                ic: bankInfo.ic,
-                                bankName: bankInfo.bankName,
-                                bankAccount: bankInfo.bankAccount,
-                                commission: 0,
-                                override: 0,
-                                totalAmount: 0,
-                                docIds: []
-                            };
-                        }
-
-                        const amt = Number(row.amount || 0);
-
-                        if (rawType.includes("COMMISSION")) {
-                            groupedData[cNo].commission += amt;
-                        } else if (rawType.includes("OVERRIDE")) {
-                            groupedData[cNo].override += amt;
-                        }
-
-                        groupedData[cNo].totalAmount += amt;
-                        groupedData[cNo].docIds.push(d.id);
+                    if(!groupedData[cNo]){
+                        const bankInfo = bankDetailsMap[cNo] || { ic: "-", bankName: "-", bankAccount: "-" };
+                        groupedData[cNo] = {
+                            consultantNo: cNo,
+                            nama: cName || consultantStr,
+                            ic: bankInfo.ic,
+                            bankName: bankInfo.bankName,
+                            bankAccount: bankInfo.bankAccount,
+                            commission: 0,
+                            override: 0,
+                            totalAmount: 0,
+                            docIds: [] // untuk kemaskini status kelak
+                        };
                     }
+
+                    const amt = Number(row.credit || 0);
+
+                    // PENGASINGAN COMMISSION & OVERRIDE 
+                    // (Jika type letak OVERRIDE masuk override, selainnya masuk commission)
+                    if (rawType.includes("OVERRIDE")) {
+                        groupedData[cNo].override += amt;
+                    } else {
+                        groupedData[cNo].commission += amt;
+                    }
+
+                    groupedData[cNo].totalAmount += amt;
+                    groupedData[cNo].docIds.push(d.id);
                 });
 
                 globalConsultantData = groupedData;
@@ -172,8 +179,8 @@
 
                 Object.keys(groupedData).forEach((cNo) => {
                     const item = groupedData[cNo];
-
-                    if (item.totalAmount <= 0) return;
+                    
+                    if (item.totalAmount <= 0) return; // Jangan papar jika jumlah kosong
 
                     const docIdsString = JSON.stringify(item.docIds).replace(/"/g, '&quot;');
 
@@ -183,13 +190,13 @@
                             <td class="p-4 font-semibold text-gray-800">${item.nama}</td>
                             <td class="p-4 text-right font-bold text-green-600">RM${formatRM(item.totalAmount)}</td>
                             <td class="p-4 text-center space-x-2">
-                                <button onclick="toggleDetail('${item.consultantNo}')" class="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition shadow text-xs md:text-sm">
+                                <button onclick="toggleDetail('${item.consultantNo}')" class="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition shadow text-xs md:text-sm mb-1">
                                     View
                                 </button>
-                                <button onclick="downloadSinglePDF('${item.consultantNo}')" class="bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 transition shadow text-xs md:text-sm">
+                                <button onclick="downloadSinglePDF('${item.consultantNo}')" class="bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 transition shadow text-xs md:text-sm mb-1">
                                     PDF Bank List
                                 </button>
-                                <button onclick="generatePV('${item.consultantNo}', ${item.totalAmount}, '${docIdsString}', this)" class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition shadow text-xs md:text-sm">
+                                <button onclick="generatePV('${item.consultantNo}', '${item.nama}', ${item.totalAmount}, '${docIdsString}', this)" class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition shadow text-xs md:text-sm mb-1">
                                     Generate PV
                                 </button>
                             </td>
@@ -213,21 +220,21 @@
                     `;
                 });
 
-                document.getElementById("payableTable").innerHTML = html || '<tr><td colspan="4" class="p-5 text-center text-gray-500 font-medium">Tiada bayaran komisen/override yang tertunggak.</td></tr>';
+                document.getElementById("payableTable").innerHTML = html || '<tr><td colspan="4" class="p-5 text-center text-gray-500 font-medium">Tiada bayaran komisen yang tertunggak.</td></tr>';
 
             } catch (err) {
-                console.error("Ralat memuatkan data:", err);
+                console.error("Ralat memuatkan rekod:", err);
                 document.getElementById("payableTable").innerHTML = '<tr><td colspan="4" class="p-5 text-center text-red-500 font-bold">Gagal memuatkan rekod pangkalan data.</td></tr>';
             }
         }
 
-        loadConsultantPayable();
+        loadData();
 
         window.toggleDetail = function(id) {
             document.getElementById(id).classList.toggle("hidden");
         };
 
-        // 3. Penjanaan PDF Bank List
+        // 3. Fungsi PDF (Sama seperti sebelum ini, untuk Commission & Override shj)
         window.downloadSinglePDF = function(cNo) {
             const item = globalConsultantData[cNo];
             if (!item) {
@@ -238,7 +245,6 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
 
-            // Header Syarikat
             doc.setFontSize(14);
             doc.setFont("helvetica", "bold");
             doc.text((companyProfile.companyName || "").toUpperCase(), 14, 15);
@@ -251,7 +257,6 @@
             doc.setLineWidth(0.5);
             doc.line(14, 29, 196, 29);
 
-            // Maklumat Tarikh
             doc.setFontSize(10);
             doc.setFont("helvetica", "bold");
             doc.text(`Tarikh Cetakan : ${new Date().toLocaleDateString('ms-MY')}`, 14, 36);
@@ -295,7 +300,6 @@
             doc.setFont("helvetica", "bold");
             doc.text(`JUMLAH KESELURUHAN: RM ${formatRM(item.totalAmount)}`, 196, finalY, { align: "right" });
 
-            // Ruang Tandatangan
             const signY = finalY + 20;
             if (signY < 260) {
                 doc.setFontSize(9);
@@ -313,9 +317,9 @@
         };
 
         // 4. Generate PV
-        window.generatePV = async (cNo, totalAmount, docIdsJson, button) => {
+        window.generatePV = async (consultantNo, consultantName, amount, docIdsJson, button) => {
             try {
-                if (!confirm(`Sahkan penjanaan PV untuk ${cNo} berjumlah RM${formatRM(totalAmount)}?`)) {
+                if (!confirm(`Sahkan penjanaan PV untuk ${consultantNo} berjumlah RM${formatRM(amount)}?`)) {
                     return;
                 }
                 
@@ -323,33 +327,26 @@
                 button.innerText = "Memproses...";
 
                 const docIds = JSON.parse(docIdsJson);
-                const currentPeriod = new Date().getFullYear() + "-" + String(new Date().getMonth() + 1).padStart(2, "0");
-                const pvNo = "PV-CONS-" + Date.now();
+                const pvNo = "PV-" + Date.now();
 
+                // Cipta dokumen PV sama macam logik asal anda
                 await addDoc(collection(db, "paymentVouchers"), {
-                    pvNo: pvNo,
-                    consultantNo: cNo,
-                    consultantName: globalConsultantData[cNo]?.nama || cNo,
-                    type: "CONSULTANT_PAYABLE",
-                    period: currentPeriod,
-                    description: "Bayaran Komisen & Override Konsultan " + cNo,
-                    amount: Number(totalAmount),
-                    accountCode: "2150",
-                    accountName: "Consultant Commission Payable",
-                    category: "Liability",
-                    cashFlowType: "Operating",
-                    normalBalance: "Credit",
-                    reportGroup: "Balance Sheet",
+                    pvNo,
+                    consultantNo,
+                    consultantName,
+                    amount: Number(amount),
                     status: "PENDING",
-                    createdAt: new Date()
+                    createdAt: new Date(),
+                    accountCode: "2000"
                 });
 
+                // Set status "PV_GENERATED" dalam ledger supaya data tak berulang
                 for (let i = 0; i < docIds.length; i++) {
                     const docRef = doc(db, "ledger", docIds[i]);
                     await updateDoc(docRef, { status: "PV_GENERATED" });
                 }
 
-                alert(`Berjaya! Payment Voucher (${pvNo}) telah dicipta untuk ${cNo}.`);
+                alert(`Berjaya! Payment Voucher (${pvNo}) telah dicipta untuk ${consultantNo}.`);
                 location.reload();
                 
             } catch (err) {
@@ -360,6 +357,5 @@
             }
         };
     </script>
-
 </body>
 </html>
