@@ -26,13 +26,20 @@
         <p class="text-sm text-gray-300">Pengurusan Agihan Komisen & Override Konsultan</p>
     </div>
 
-    <div class="max-w-7xl mx-auto p-5">
+    <div class="p-5">
 
-        <a href="accounts-dashboard.html" class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5 text-gray-800 hover:bg-gray-300 transition">
-            &larr; Akaun
-        </a>
+        <!-- Top Bar: Navigasi & Butang Batch PDF -->
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-5">
+            <a href="accounts-dashboard.html" class="inline-block bg-gray-200 px-5 py-3 rounded-xl text-gray-800 hover:bg-gray-300 transition font-medium">
+                &larr; Akaun
+            </a>
+            
+            <button onclick="generateBatchPDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-xl shadow-lg transition font-semibold flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                Cetak PDF Pilihan (Batch)
+            </button>
+        </div>
 
-        <!-- Mobile Scroll Instruction -->
         <div class="flex items-center text-sm text-gray-500 mb-2 md:hidden">
             <svg class="w-4 h-4 mr-2 text-blue-500 animate-pulse flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
@@ -42,9 +49,13 @@
 
         <div class="bg-white rounded-xl shadow overflow-hidden">
             <div class="overflow-x-auto custom-scrollbar">
-                <table class="w-full min-w-[700px]">
+                <table class="w-full min-w-[750px]">
                     <thead class="bg-[#153638] text-white">
                         <tr>
+                            <!-- Checkbox Select All -->
+                            <th class="p-3 text-center w-12">
+                                <input type="checkbox" id="selectAll" onclick="toggleAll(this)" class="w-4 h-4 cursor-pointer accent-indigo-500 rounded">
+                            </th>
                             <th class="p-3 text-left">Consultant</th>
                             <th class="p-3 text-left">Nama</th>
                             <th class="p-3 text-right">Amount (RM)</th>
@@ -53,7 +64,7 @@
                     </thead>
                     <tbody id="payableTable">
                         <tr>
-                            <td colspan="4" class="p-5 text-center text-gray-500">Memuatkan data...</td>
+                            <td colspan="5" class="p-5 text-center text-gray-500">Memuatkan data...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -87,7 +98,6 @@
             registrationNo: "123456AQMS"
         };
 
-        // 1. Tarik Tetapan Syarikat dari settings/company
         async function loadCompanySettings() {
             try {
                 const docRef = doc(db, "settings", "company");
@@ -102,12 +112,10 @@
             }
         }
 
-        // 2. Muatkan Data
         async function loadData() {
             try {
                 await loadCompanySettings();
 
-                // Tarik maklumat bank dari koleksi consultants
                 const consultantsSnap = await getDocs(collection(db, "consultants"));
                 const bankDetailsMap = {};
                 consultantsSnap.forEach(d => {
@@ -122,28 +130,25 @@
                     }
                 });
 
-                // Tarik data ledger (MENGGUNAKAN LOGIK ASAL ANDA KEKAL 100%)
                 const snap = await getDocs(collection(db, "ledger"));
                 const groupedData = {};
 
                 snap.forEach((d) => {
                     const row = d.data();
 
-                    // LOGIK ASAL ANDA:
                     if(row.accountCode !== "2000" || !row.description || !row.description.startsWith("AQC")) return;
 
-                    // ABAIKAN jika status ledger sudah bertukar kepada PV_GENERATED atau PAID
                     const status = String(row.status || "").toUpperCase();
                     if (status === "PV_GENERATED" || status === "PAID") return;
 
-                    // BUANG REKOD USB (Jika "type" mengandungi nama USB)
                     const rawType = String(row.type || "").toUpperCase();
-                    if (rawType.includes("USB")) return; 
+                    const rawDesc = String(row.description || "").toUpperCase();
+                    
+                    if (rawType.includes("USB") || rawDesc.includes("USB")) return; 
 
-                    // Pisahkan Consultant No & Nama menggunakan logik asal anda
                     const consultantStr = row.description;
-                    const cNo = consultantStr.split(" ")[0]; // Cth: "AQC0001"
-                    const cName = consultantStr.substring(cNo.length).trim(); // Cth: "Hasnawi Bin Che Harun"
+                    const cNo = consultantStr.split(" ")[0]; 
+                    const cName = consultantStr.substring(cNo.length).trim(); 
 
                     if(!groupedData[cNo]){
                         const bankInfo = bankDetailsMap[cNo] || { ic: "-", bankName: "-", bankAccount: "-" };
@@ -156,15 +161,14 @@
                             commission: 0,
                             override: 0,
                             totalAmount: 0,
-                            docIds: [] // untuk kemaskini status kelak
+                            docIds: []
                         };
                     }
 
                     const amt = Number(row.credit || 0);
 
-                    // PENGASINGAN COMMISSION & OVERRIDE 
-                    // (Jika type letak OVERRIDE masuk override, selainnya masuk commission)
-                    if (rawType.includes("OVERRIDE")) {
+                    // PENAMBAHBAIKAN: Cari OVERRIDE pada Type ATAU Description
+                    if (rawType.includes("OVERRIDE") || rawDesc.includes("OVERRIDE")) {
                         groupedData[cNo].override += amt;
                     } else {
                         groupedData[cNo].commission += amt;
@@ -179,32 +183,34 @@
 
                 Object.keys(groupedData).forEach((cNo) => {
                     const item = groupedData[cNo];
-                    
-                    if (item.totalAmount <= 0) return; // Jangan papar jika jumlah kosong
+                    if (item.totalAmount <= 0) return; 
 
                     const docIdsString = JSON.stringify(item.docIds).replace(/"/g, '&quot;');
 
                     html += `
                         <tr class="border-b hover:bg-gray-50 transition">
+                            <td class="p-4 text-center">
+                                <input type="checkbox" value="${item.consultantNo}" class="batch-checkbox w-4 h-4 cursor-pointer accent-indigo-500 rounded">
+                            </td>
                             <td class="p-4 font-bold text-[#153638]">${item.consultantNo}</td>
                             <td class="p-4 font-semibold text-gray-800">${item.nama}</td>
                             <td class="p-4 text-right font-bold text-green-600">RM${formatRM(item.totalAmount)}</td>
                             <td class="p-4 text-center space-x-2">
-                                <button onclick="toggleDetail('${item.consultantNo}')" class="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition shadow text-xs md:text-sm mb-1">
+                                <button onclick="toggleDetail('${item.consultantNo}')" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 transition shadow text-xs md:text-sm mb-1">
                                     View
                                 </button>
-                                <button onclick="downloadSinglePDF('${item.consultantNo}')" class="bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 transition shadow text-xs md:text-sm mb-1">
-                                    PDF Bank List
+                                <button onclick="downloadSinglePDF('${item.consultantNo}')" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg hover:bg-purple-700 transition shadow text-xs md:text-sm mb-1">
+                                    PDF Single
                                 </button>
-                                <button onclick="generatePV('${item.consultantNo}', '${item.nama}', ${item.totalAmount}, '${docIdsString}', this)" class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition shadow text-xs md:text-sm mb-1">
+                                <button onclick="generatePV('${item.consultantNo}', '${item.nama}', ${item.totalAmount}, '${docIdsString}', this)" class="bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 transition shadow text-xs md:text-sm mb-1">
                                     Generate PV
                                 </button>
                             </td>
                         </tr>
 
-                        <!-- Sub-Jadual (Hanya Commission & Override) -->
+                        <!-- Sub-Jadual -->
                         <tr id="${item.consultantNo}" class="hidden bg-blue-50 border-b-2 border-blue-200">
-                            <td colspan="4" class="p-6">
+                            <td colspan="5" class="p-6">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-white p-4 rounded-lg shadow-sm">
                                     <div>
                                         <p class="text-gray-500 font-medium">Commission</p>
@@ -220,11 +226,11 @@
                     `;
                 });
 
-                document.getElementById("payableTable").innerHTML = html || '<tr><td colspan="4" class="p-5 text-center text-gray-500 font-medium">Tiada bayaran komisen yang tertunggak.</td></tr>';
+                document.getElementById("payableTable").innerHTML = html || '<tr><td colspan="5" class="p-5 text-center text-gray-500 font-medium">Tiada bayaran tertunggak.</td></tr>';
 
             } catch (err) {
-                console.error("Ralat memuatkan rekod:", err);
-                document.getElementById("payableTable").innerHTML = '<tr><td colspan="4" class="p-5 text-center text-red-500 font-bold">Gagal memuatkan rekod pangkalan data.</td></tr>';
+                console.error("Ralat:", err);
+                document.getElementById("payableTable").innerHTML = '<tr><td colspan="5" class="p-5 text-center text-red-500 font-bold">Gagal memuatkan rekod pangkalan data.</td></tr>';
             }
         }
 
@@ -234,11 +240,19 @@
             document.getElementById(id).classList.toggle("hidden");
         };
 
-        // 3. Fungsi PDF (Sama seperti sebelum ini, untuk Commission & Override shj)
-        window.downloadSinglePDF = function(cNo) {
-            const item = globalConsultantData[cNo];
-            if (!item) {
-                alert("Data tidak ditemui!");
+        // Fungsi Checkbox Select All
+        window.toggleAll = function(source) {
+            const checkboxes = document.querySelectorAll('.batch-checkbox');
+            checkboxes.forEach(cb => {
+                cb.checked = source.checked;
+            });
+        };
+
+        // Fungsi Penjanaan Batch PDF (Gabung berbilang pilihan)
+        window.generateBatchPDF = function() {
+            const checkboxes = document.querySelectorAll('.batch-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert("Sila tandakan (tick) sekurang-kurangnya satu nama konsultan untuk dicetak.");
                 return;
             }
 
@@ -252,7 +266,7 @@
             doc.setFontSize(9);
             doc.setFont("helvetica", "normal");
             doc.text(`No. Pendaftaran Syarikat: ${companyProfile.registrationNo || "-"}`, 14, 21);
-            doc.text("SENARAI BAYARAN KOMISEN & OVERRIDE KONSULTAN (UNTUK URUSAN BANK)", 14, 26);
+            doc.text("SENARAI BAYARAN KOMISEN & OVERRIDE (BERKELOMPOK) UNTUK URUSAN BANK", 14, 26);
 
             doc.setLineWidth(0.5);
             doc.line(14, 29, 196, 29);
@@ -261,9 +275,17 @@
             doc.setFont("helvetica", "bold");
             doc.text(`Tarikh Cetakan : ${new Date().toLocaleDateString('ms-MY')}`, 14, 36);
 
-            const tableRows = [
-                [
-                    1,
+            let totalKeseluruhan = 0;
+            const tableRows = [];
+
+            checkboxes.forEach((cb, index) => {
+                const cNo = cb.value;
+                const item = globalConsultantData[cNo];
+                
+                totalKeseluruhan += item.totalAmount;
+                
+                tableRows.push([
+                    index + 1,
                     item.consultantNo,
                     item.nama.toUpperCase(),
                     item.ic,
@@ -272,8 +294,8 @@
                     formatRM(item.commission),
                     formatRM(item.override),
                     formatRM(item.totalAmount)
-                ]
-            ];
+                ]);
+            });
 
             doc.autoTable({
                 startY: 42,
@@ -298,7 +320,7 @@
             const finalY = doc.lastAutoTable.finalY + 8;
             doc.setFontSize(10);
             doc.setFont("helvetica", "bold");
-            doc.text(`JUMLAH KESELURUHAN: RM ${formatRM(item.totalAmount)}`, 196, finalY, { align: "right" });
+            doc.text(`JUMLAH KESELURUHAN KELOMPOK: RM ${formatRM(totalKeseluruhan)}`, 196, finalY, { align: "right" });
 
             const signY = finalY + 20;
             if (signY < 260) {
@@ -313,15 +335,68 @@
                 doc.text("Pengarah / Kelulusan", 130, signY + 20);
             }
 
+            doc.save(`Bank_Listing_Batch_${Date.now()}.pdf`);
+        };
+
+        // Fungsi Penjanaan PDF Single (Satu Persatu)
+        window.downloadSinglePDF = function(cNo) {
+            const item = globalConsultantData[cNo];
+            if (!item) return;
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text((companyProfile.companyName || "").toUpperCase(), 14, 15);
+            
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "normal");
+            doc.text(`No. Pendaftaran Syarikat: ${companyProfile.registrationNo || "-"}`, 14, 21);
+            doc.text("SENARAI BAYARAN KOMISEN & OVERRIDE KONSULTAN (UNTUK URUSAN BANK)", 14, 26);
+
+            doc.setLineWidth(0.5);
+            doc.line(14, 29, 196, 29);
+
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "bold");
+            doc.text(`Tarikh Cetakan : ${new Date().toLocaleDateString('ms-MY')}`, 14, 36);
+
+            doc.autoTable({
+                startY: 42,
+                head: [['Bil', 'No. AQC', 'Nama Penerima', 'No. IC', 'Nama Bank', 'No. Akaun', 'Komisen (RM)', 'Override (RM)', 'Jumlah (RM)']],
+                body: [[1, item.consultantNo, item.nama.toUpperCase(), item.ic, item.bankName, item.bankAccount, formatRM(item.commission), formatRM(item.override), formatRM(item.totalAmount)]],
+                theme: 'grid',
+                headStyles: { fillColor: [21, 54, 56], textColor: [255, 255, 255], fontStyle: 'bold' },
+                columnStyles: {
+                    0: { halign: 'center', cellWidth: 8 }, 1: { cellWidth: 20 }, 2: { cellWidth: 38 }, 3: { cellWidth: 26 },
+                    4: { cellWidth: 22 }, 5: { cellWidth: 24 }, 6: { halign: 'right', cellWidth: 20 }, 7: { halign: 'right', cellWidth: 20 }, 8: { halign: 'right', cellWidth: 22 }
+                },
+                styles: { fontSize: 7.5, cellPadding: 2 }
+            });
+
+            const finalY = doc.lastAutoTable.finalY + 8;
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "bold");
+            doc.text(`JUMLAH KESELURUHAN: RM ${formatRM(item.totalAmount)}`, 196, finalY, { align: "right" });
+
+            const signY = finalY + 20;
+            if (signY < 260) {
+                doc.setFontSize(9);
+                doc.setFont("helvetica", "normal");
+                doc.text("Disediakan Oleh:", 14, signY);
+                doc.text("_______________________", 14, signY + 15);
+                doc.text("Disahkan Oleh:", 130, signY);
+                doc.text("_______________________", 130, signY + 15);
+            }
+
             doc.save(`Bank_Listing_${item.consultantNo}.pdf`);
         };
 
-        // 4. Generate PV
+        // Generate PV
         window.generatePV = async (consultantNo, consultantName, amount, docIdsJson, button) => {
             try {
-                if (!confirm(`Sahkan penjanaan PV untuk ${consultantNo} berjumlah RM${formatRM(amount)}?`)) {
-                    return;
-                }
+                if (!confirm(`Sahkan penjanaan PV untuk ${consultantNo} berjumlah RM${formatRM(amount)}?`)) return;
                 
                 button.disabled = true;
                 button.innerText = "Memproses...";
@@ -329,18 +404,11 @@
                 const docIds = JSON.parse(docIdsJson);
                 const pvNo = "PV-" + Date.now();
 
-                // Cipta dokumen PV sama macam logik asal anda
                 await addDoc(collection(db, "paymentVouchers"), {
-                    pvNo,
-                    consultantNo,
-                    consultantName,
-                    amount: Number(amount),
-                    status: "PENDING",
-                    createdAt: new Date(),
-                    accountCode: "2000"
+                    pvNo, consultantNo, consultantName, amount: Number(amount),
+                    status: "PENDING", createdAt: new Date(), accountCode: "2000"
                 });
 
-                // Set status "PV_GENERATED" dalam ledger supaya data tak berulang
                 for (let i = 0; i < docIds.length; i++) {
                     const docRef = doc(db, "ledger", docIds[i]);
                     await updateDoc(docRef, { status: "PV_GENERATED" });
