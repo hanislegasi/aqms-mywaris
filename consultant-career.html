@@ -239,8 +239,8 @@ body{ font-family: Inter, sans-serif; }
         <div class="mt-5 bg-amber-100 border border-amber-200 rounded-xl p-4">
             <h3 class="font-semibold text-amber-900 mb-2">Syarat Kekal Pangkat (Maintain MGAM Tahunan)</h3>
             <ul class="list-disc ml-5 text-amber-800 text-sm space-y-1">
-                <li id="maintainSalesMGAM"></li>
-                <li id="maintainRecruitMGAM"></li>
+                <li id="maintainSalesMGAM">Jualan Kumpulan (Team Sales): RM240,000 setahun</li>
+                <li id="maintainRecruitMGAM">Rekrut Ejen: 20 AQC aktif</li>
                 <li class="mt-2 font-bold italic text-amber-700">Melepasi syarat ini melayakkan anda untuk Bonus Tahunan!</li>
             </ul>
         </div>
@@ -307,8 +307,8 @@ async function loadCompensationData() {
             const targetMGAM = compensation.targetSalesMGAM || 120000;
 
             
-            const promoteRecruitUM = comp.targetRecruitAQCUM || 10;
-            const promoteRecruitMGAM = comp.targetRecruitMGAM || 20;
+            const promoteRecruitUM = compensation.targetRecruitAQCUM || 10;
+            const promoteRecruitMGAM = compensation.targetRecruitMGAM || 20;
             
             document.getElementById("textTargetAQCAS").innerHTML = `Jualan peribadi <b>RM${formatRM(targetAQCAS)}</b>`;
             document.getElementById("textTargetAQCUM").innerHTML = `Jualan myTeam <b>RM${formatRM(targetAQCUM)}</b>`;
@@ -319,13 +319,13 @@ async function loadCompensationData() {
             document.getElementById("promoteRecruitMGAM").innerHTML = `Rekrut Ejen: <b>${promoteRecruitMGAM} AQC</b>`;
             
             // 4. SYARAT KEKAL PANGKAT (MAINTAIN)
-            const maintainSalesAS = comp.maintainSalesAQCAS || 30000;
-            const maintainSalesUM = comp.maintainSalesAQCUM || 30000;
-            const maintainSalesMGAM = comp.maintainSalesMGAM || 240000;
+            const maintainSalesAS = compensation.maintainSalesAQCAS || 30000;
+            const maintainSalesUM = compensation.maintainSalesAQCUM || 30000;
+            const maintainSalesMGAM = compensation.maintainSalesMGAM || 240000;
             
-            const maintainRecruitAS = comp.maintainRecruitAQCAS || 5;
-            const maintainRecruitUM = comp.maintainRecruitAQCUM || 10;
-            const maintainRecruitMGAM = comp.maintainRecruitMGAM || 20;
+            const maintainRecruitAS = compensation.maintainRecruitAQCAS || 5;
+            const maintainRecruitUM = compensation.maintainRecruitAQCUM || 10;
+            const maintainRecruitMGAM = compensation.maintainRecruitMGAM || 20;
 
             document.getElementById("maintainSalesAS").innerHTML = `Jualan Peribadi: <b>RM${formatRM(maintainSalesAS)} setahun</b>`;
             document.getElementById("maintainRecruitAS").innerHTML = `Rekrut Ejen: <b>${maintainRecruitAS} AQC baru</b>`;
@@ -333,9 +333,9 @@ async function loadCompensationData() {
             document.getElementById("maintainSalesUM").innerHTML = `Jualan Peribadi: <b>RM${formatRM(maintainSalesUM)} setahun</b>`;
             document.getElementById("maintainRecruitUM").innerHTML = `Rekrut Ejen: <b>${maintainRecruitUM} AQC baru</b>`;
 
-            document.getElementById("maintainSalesMGAM").innerHTML = `Jualan Kumpulan: <b>RM${formatRM(maintainSalesMGAM)} setahun</b>`;
-            document.getElementById("maintainRecruitMGAM").innerHTML = `Rekrut Ejen: <b>${maintainRecruitMGAM} AQC aktif</b>`      
-            }
+            document.getElementById("maintainSalesMGAM").innerHTML = `Jualan Kumpulan (Team Sales): <b>RM${formatRM(maintainSalesMGAM)} setahun</b>`;
+            document.getElementById("maintainRecruitMGAM").innerHTML = `Rekrut Ejen: <b>${maintainRecruitMGAM} AQC aktif</b>`;      
+        }
     } catch (error) {
         console.error("Ralat memuatkan data career path:", error);
     }
