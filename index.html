@@ -37,17 +37,35 @@
           <img src="https://i.postimg.cc/9MttwjKF/Copy-of-A-(4).png" alt="AQMS Logo" class="h-full max-h-16 sm:max-h-20 w-auto object-contain">
         </div>
 
-        <!-- Login / Register Buttons -->
+        <!-- Login / Register Dropdown Area -->
         <div class="flex items-center gap-2 sm:gap-3">
           <button onclick="window.location.href='login.html'"
             class="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base border border-[#d8ae81] text-[#d8ae81] rounded-lg hover:bg-[#d8ae81] hover:text-[#153638] transition font-medium">
             Login
           </button>
 
-          <button onclick="window.location.href='register.html'"
-            class="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-[#d8ae81] text-[#153638] font-semibold rounded-lg hover:opacity-90 transition">
-            Daftar Akaun
-          </button>
+          <!-- DROPDOWN DAFTAR AKAUN (BERMULA DI SINI) -->
+          <div class="relative group">
+            <button type="button"
+              class="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-[#d8ae81] text-[#153638] font-semibold rounded-lg hover:opacity-90 transition inline-flex items-center gap-1.5">
+              <span>Daftar Akaun</span>
+              <i data-lucide="chevron-down" class="w-4 h-4"></i>
+            </button>
+
+            <!-- Menu Dropdown -->
+            <div class="hidden group-hover:block group-focus-within:block absolute right-0 mt-1 w-52 bg-white rounded-xl shadow-xl ring-1 ring-black/5 z-50 overflow-hidden py-1">
+              <a href="register.html" class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-[#d8ae81]/20 hover:text-[#153638] transition font-medium">
+                <i data-lucide="user" class="w-4 h-4 text-[#153638]"></i>
+                Daftar <strong>AQM</strong> (Client)
+              </a>
+              <a href="consultant-registration.html" class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-[#d8ae81]/20 hover:text-[#153638] transition font-medium border-t border-gray-100">
+                <i data-lucide="briefcase" class="w-4 h-4 text-[#153638]"></i>
+                Daftar <strong>AQC</strong> (Consultant)
+              </a>
+            </div>
+          </div>
+          <!-- DROPDOWN DAFTAR AKAUN (TAMAT DI SINI) -->
+
         </div>
         
       </div>
@@ -55,20 +73,17 @@
   </header>
   
   <!-- MAIN CONTENT AREA -->
-<main
-class="relative flex items-center justify-center overflow-hidden
-h-[calc(100vh-160px)]
-sm:h-[calc(100vh-192px)]">
+  <main class="relative flex items-center justify-center overflow-hidden h-[calc(100vh-160px)] sm:h-[calc(100vh-192px)]">
     
-    <!-- Background Image (Gambar dari Lain-lain Servis) -->
+    <!-- Background Image -->
     <div class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" 
          style="background-image: url('https://i.postimg.cc/L6ML9HRR/Chat-GPT-Image-May-20-2026-12-45-46-PM.png');">
     </div>
     
-    <!-- Dark overlay untuk memastikan logo lebih menyerlah (Optional tapi direkomendasikan) -->
+    <!-- Dark overlay -->
     <div class="absolute inset-0 z-0 bg-black/40"></div>
 
-    <!-- Logo di Tengah (Middle) -->
+    <!-- Logo di Tengah -->
     <div class="relative z-10 px-4 transform hover:scale-105 transition-transform duration-700">
       <img src="https://i.postimg.cc/HxNP7q6R/Copy-of-A-6-removebg-preview.png" alt="AQMS Logo Tengah" class="w-64 sm:w-80 md:w-[400px] drop-shadow-[0_10px_35px_rgba(0,0,0,0.5)]">
     </div>
@@ -76,13 +91,13 @@ sm:h-[calc(100vh-192px)]">
   </main>
 
   <!-- FOOTER -->
- <footer class="h-24 bg-[#153638] flex items-center justify-center">
+  <footer class="h-24 bg-[#153638] flex items-center justify-center">
     <div class="flex items-center justify-center h-20 sm:h-24">
         <div class="text-center text-xs text-gray-300 font-bold uppercase tracking-widest">
             &copy; <span id="current-year"></span> Al-Qawthar Mawaris Synergy. HCH @ Hak Cipta Terpelihara.
         </div>
     </div>
-</footer>
+  </footer>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
