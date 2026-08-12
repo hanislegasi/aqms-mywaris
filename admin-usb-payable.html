@@ -71,7 +71,10 @@
                 const compSnap = await getDoc(doc(db, "settings", "compensation"));
                 const compData = compSnap.exists() ? compSnap.data() : {};
                 const lockYears = Number(compData.usbLockPeriod || 3);
-                document.getElementById("lockYearText").textContent = lockYears;
+                
+                // Kemaskini paparan teks tajuk atas
+                const lockYearsEl = document.getElementById("lockYears");
+                if (lockYearsEl) lockYearsEl.textContent = lockYears;
 
                 // 2. Tarik semua data dari lejer akaun 2150
                 const ledgerSnap = await getDocs(query(collection(db, "ledger"), where("accountCode", "==", "2150")));
@@ -114,42 +117,39 @@
                 let html = "";
                 const now = new Date();
 
-                // ... (di dalam gelung for (const cNo in consultantUsbMap)) ...
+                // Gelung untuk bina jadual konsultan
+                for (const cNo in consultantUsbMap) {
+                    const data = consultantUsbMap[cNo];
+                    if (data.balance <= 0) continue;
 
-const firstDate = data.firstDate || now;
+                    const firstDate = data.firstDate || now;
 
-// --- TAMPAL KOD PENGIRAAN MATANG DI SINI ---
-// 1. Ambil nilai tahun dari setting (dah ditarik di awal skrip)
-const lockYears = Number(compData.usbLockPeriod || 3); 
+                    // Kira tarikh matang tepat mengikut tahun (Guna lockYears yang dah ditarik di atas)
+                    let maturityDate = new Date(firstDate);
+                    maturityDate.setFullYear(maturityDate.getFullYear() + lockYears); 
 
-// 2. Kira tarikh matang tepat mengikut tahun
-let maturityDate = new Date(firstDate);
-maturityDate.setFullYear(maturityDate.getFullYear() + lockYears); 
+                    // Semak status matang
+                    const isMatured = now >= maturityDate;
 
-// 3. Semak status
-const isMatured = now >= maturityDate;
-// ------------------------------------------
+                    const formatDate = (d) => d.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
 
-const formatDate = (d) => d.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
-
-html += `
-<tr class="border-b hover:bg-gray-50">
-    <td class="p-4 font-bold text-[#153638]">${cNo}</td>
-    <td class="p-4">${nameMap[cNo] || "-"}</td>
-    <td class="p-4 text-center">${formatDate(firstDate)}</td>
-    <td class="p-4 text-center">${formatDate(maturityDate)}</td>
-    <td class="p-4 text-right font-bold text-green-600">RM${formatRM(data.balance)}</td>
-    <td class="p-4 text-center">
-        <span class="px-3 py-1 rounded-full text-xs font-bold ${isMatured ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">
-            ${isMatured ? 'MATANG (READY)' : 'DALAM TEMPOH SIMPANAN'}
-        </span>
-    </td>
-    <td class="p-4 text-center">
-        ${isMatured ? `<button onclick="generatePV('${cNo}', ${data.balance})" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">Jana PV Bayaran</button>` : `<span class="text-xs text-gray-400">Belum Matang</span>`}
-    </td>
-</tr>
-`;
-// ...
+                    html += `
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="p-4 font-bold text-[#153638]">${cNo}</td>
+                        <td class="p-4">${nameMap[cNo] || "-"}</td>
+                        <td class="p-4 text-center">${formatDate(firstDate)}</td>
+                        <td class="p-4 text-center">${formatDate(maturityDate)}</td>
+                        <td class="p-4 text-right font-bold text-green-600">RM${formatRM(data.balance)}</td>
+                        <td class="p-4 text-center">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold ${isMatured ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">
+                                ${isMatured ? 'MATANG (READY)' : 'DALAM TEMPOH SIMPANAN'}
+                            </span>
+                        </td>
+                        <td class="p-4 text-center">
+                            ${isMatured ? `<button onclick="generatePV('${cNo}', ${data.balance})" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">Jana PV Bayaran</button>` : `<span class="text-xs text-gray-400">Belum Matang</span>`}
+                        </td>
+                    </tr>
+                    `;
                 }
 
                 if (html === "") {
@@ -168,14 +168,13 @@ html += `
             if (!confirm(`Sahkan untuk menjana Payment Voucher (PV) bagi USB matang untuk ${consultantNo} sebanyak RM${formatRM(amount)}?`)) return;
 
             try {
-                // Masukkan ke paymentVouchers supaya masuk senarai bayaran HQ
                 await addDoc(collection(db, "paymentVouchers"), {
                     consultantNo: consultantNo,
                     amount: amount,
                     type: "USB_MATURITY_PAYOUT",
                     status: "PENDING",
                     createdAt: new Date(),
-                    description: `PBayaran USB Matang (Lock-in Payout)`
+                    description: `Pembayaran USB Matang (Lock-in Payout)`
                 });
 
                 alert("Payment Voucher berjaya dijana! Sila semak di modul pengurusan Payment Voucher.");
