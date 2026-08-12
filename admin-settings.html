@@ -245,30 +245,104 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
             </div>
         </div>
 
-<!-- ================= AQC PROMOTION TARGET ================= -->
+<!-- ================= AQC PROMOTION & MAINTAIN TARGET ================= -->
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-    <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Syarat Kenaikan Pangkat (Career Progression)</h2>
+    <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Syarat Kenaikan & Kekal Pangkat (KPI)</h2>
     
-    <div class="grid md:grid-cols-3 gap-5">
+    <!-- BAHAGIAN 1: SYARAT NAIK PANGKAT (PROMOTE) -->
+    <h3 class="font-bold text-gray-700 mb-4 mt-2">Syarat Naik Pangkat (Promote)</h3>
+    <div class="grid md:grid-cols-3 gap-5 mb-8">
         
         <!-- Target AQC ke AQC-AS -->
-        <div>
-            <label class="font-medium text-sm text-gray-600 block mb-1">Jualan: AQC ➔ AQC-AS (RM)</label>
-            <input id="targetSalesAQCAS" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 30000">
+        <div class="border border-gray-200 rounded-xl p-4">
+            <h4 class="font-bold text-sm text-gray-800 mb-3 border-b pb-2">Ke AQC-AS</h4>
+            <div>
+                <label class="font-medium text-xs text-gray-600 block mb-1">Jualan Peribadi (RM)</label>
+                <input id="targetSalesAQCAS" type="number" class="w-full border-gray-300 border rounded-xl p-2.5 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 30000">
+            </div>
         </div>
 
         <!-- Target AQC-AS ke AQC-UM -->
-        <div>
-            <label class="font-medium text-sm text-gray-600 block mb-1">Jualan: AQC-AS ➔ AQC-UM (RM)</label>
-            <input id="targetSalesAQCUM" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 60000">
+        <div class="border border-gray-200 rounded-xl p-4">
+            <h4 class="font-bold text-sm text-gray-800 mb-3 border-b pb-2">Ke AQC-UM</h4>
+            <div class="space-y-3">
+                <div>
+                    <label class="font-medium text-xs text-gray-600 block mb-1">Jualan Kumpulan (RM)</label>
+                    <input id="targetSalesAQCUM" type="number" class="w-full border-gray-300 border rounded-xl p-2.5 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 60000">
+                </div>
+                <div>
+                    <label class="font-medium text-xs text-gray-600 block mb-1">Target Rekrut (Ejen)</label>
+                    <input id="targetRecruitAQCUM" type="number" class="w-full border-gray-300 border rounded-xl p-2.5 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 10">
+                </div>
+            </div>
         </div>
 
         <!-- Target AQC-UM ke MGAM -->
-        <div>
-            <label class="font-medium text-sm text-gray-600 block mb-1">Jualan: AQC-UM ➔ MGAM (RM)</label>
-            <input id="targetSalesMGAM" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 120000">
+        <div class="border border-gray-200 rounded-xl p-4">
+            <h4 class="font-bold text-sm text-gray-800 mb-3 border-b pb-2">Ke MGAM</h4>
+            <div class="space-y-3">
+                <div>
+                    <label class="font-medium text-xs text-gray-600 block mb-1">Jualan Kumpulan (RM)</label>
+                    <input id="targetSalesMGAM" type="number" class="w-full border-gray-300 border rounded-xl p-2.5 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 120000">
+                </div>
+                <div>
+                    <label class="font-medium text-xs text-gray-600 block mb-1">Target Rekrut (Ejen)</label>
+                    <input id="targetRecruitMGAM" type="number" class="w-full border-gray-300 border rounded-xl p-2.5 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 20">
+                </div>
+            </div>
         </div>
 
+    </div>
+
+    <!-- BAHAGIAN 2: SYARAT KEKAL PANGKAT (MAINTAIN) -->
+    <h3 class="font-bold text-gray-700 mb-4 border-t pt-5">Syarat Kekal Pangkat (Maintain Tahunan)</h3>
+    <div class="grid md:grid-cols-3 gap-5">
+        
+        <!-- Maintain AQC-AS -->
+        <div class="border border-gray-200 rounded-xl p-4">
+            <h4 class="font-bold text-sm text-gray-800 mb-3 border-b pb-2">Maintain AQC-AS</h4>
+            <div class="space-y-3">
+                <div>
+                    <label class="font-medium text-xs text-gray-600 block mb-1">Jualan Peribadi (RM)</label>
+                    <input id="maintainSalesAQCAS" type="number" class="w-full border-gray-300 border rounded-xl p-2.5 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 30000">
+                </div>
+                <div>
+                    <label class="font-medium text-xs text-gray-600 block mb-1">Target Rekrut (Ejen)</label>
+                    <input id="maintainRecruitAQCAS" type="number" class="w-full border-gray-300 border rounded-xl p-2.5 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 5">
+                </div>
+            </div>
+        </div>
+
+        <!-- Maintain AQC-UM -->
+        <div class="border border-gray-200 rounded-xl p-4">
+            <h4 class="font-bold text-sm text-gray-800 mb-3 border-b pb-2">Maintain AQC-UM</h4>
+            <div class="space-y-3">
+                <div>
+                    <label class="font-medium text-xs text-gray-600 block mb-1">Jualan Peribadi (RM)</label>
+                    <input id="maintainSalesAQCUM" type="number" class="w-full border-gray-300 border rounded-xl p-2.5 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 30000">
+                </div>
+                <div>
+                    <label class="font-medium text-xs text-gray-600 block mb-1">Target Rekrut (Ejen)</label>
+                    <input id="maintainRecruitAQCUM" type="number" class="w-full border-gray-300 border rounded-xl p-2.5 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 10">
+                </div>
+            </div>
+        </div>
+
+        <!-- Maintain MGAM -->
+        <div class="border border-gray-200 rounded-xl p-4">
+            <h4 class="font-bold text-sm text-gray-800 mb-3 border-b pb-2">Maintain MGAM</h4>
+            <div class="space-y-3">
+                <div>
+                    <label class="font-medium text-xs text-gray-600 block mb-1">Jualan Kumpulan (RM)</label>
+                    <input id="maintainSalesMGAM" type="number" class="w-full border-gray-300 border rounded-xl p-2.5 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 240000">
+                </div>
+                <div>
+                    <label class="font-medium text-xs text-gray-600 block mb-1">Target Rekrut (Ejen)</label>
+                    <input id="maintainRecruitMGAM" type="number" class="w-full border-gray-300 border rounded-xl p-2.5 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 20">
+                </div>
+            </div>
+        </div>
+        
     </div>
 </div>
 
