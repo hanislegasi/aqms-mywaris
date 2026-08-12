@@ -84,25 +84,26 @@
 
         // Simpan data kumpulan dan maklumat syarikat secara global
         let globalMgamGroups = {};
-        let companyProfile = {
-            companyName: "AL QAWTHAR WEALTH MANAGEMENT SDN. BHD.",
-            companyNo: "202301012345 (1234567-X)"
-        };
+        // Simpan data maklumat syarikat secara global dengan nilai lalai (fallback)
+let companyProfile = {
+    companyName: "AL-QAWTHAR MAWARIS SDN. BHD.",
+    registrationNo: "123456AQMS"
+};
 
-        // Tarik Tetapan Syarikat dari Firestore (settings/companyProfile)
-        async function loadCompanySettings() {
-            try {
-                const docRef = doc(db, "settings", "companyProfile");
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    companyProfile.companyName = data.companyName || companyProfile.companyName;
-                    companyProfile.companyNo = data.companyNo || companyProfile.companyNo;
-                }
-            } catch (err) {
-                console.error("Gagal menarik tetapan syarikat, menggunakan data asas:", err);
-            }
+// Tarik Tetapan Syarikat dari Firestore (settings/company)
+async function loadCompanySettings() {
+    try {
+        const docRef = doc(db, "settings", "company"); // Betulkan ID dokumen kepada 'company'
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            companyProfile.companyName = data.companyName || companyProfile.companyName;
+            companyProfile.registrationNo = data.registrationNo || companyProfile.registrationNo; // Betulkan ke 'registrationNo'
         }
+    } catch (err) {
+        console.error("Gagal menarik tetapan syarikat:", err);
+    }
+}
 
         // Tarik data dari koleksi bonusPayable (Tanya rekod yang berstatus PENDING_PAYMENT)
         async function loadBonusData() {
@@ -259,16 +260,15 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
 
-            // 1. Header Syarikat (Diambil secara dinamik dari Setting)
-            doc.setFontSize(14);
-            doc.setFont("helvetica", "bold");
-            doc.text(companyProfile.companyName.toUpperCase(), 14, 15);
-            
-            doc.setFontSize(9);
-            doc.setFont("helvetica", "normal");
-            doc.text(`No. Pendaftaran Syarikat: ${companyProfile.companyNo}`, 14, 21);
-            doc.text("SENARAI BAYARAN BONUS KPI PASUKAN (UNTUK URUSAN BANK)", 14, 26);
+            // 1. Header Syarikat (Diambil secara dinamik dari settings/company)
+doc.setFontSize(14);
+doc.setFont("helvetica", "bold");
+doc.text((companyProfile.companyName || "").toUpperCase(), 14, 15);
 
+doc.setFontSize(9);
+doc.setFont("helvetica", "normal");
+doc.text(`No. Pendaftaran Syarikat: ${companyProfile.registrationNo || "-"}`, 14, 21);
+doc.text("SENARAI BAYARAN BONUS KPI PASUKAN (UNTUK URUSAN BANK)", 14, 26);
             doc.setLineWidth(0.5);
             doc.line(14, 29, 196, 29);
 
