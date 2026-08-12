@@ -166,6 +166,7 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
 getAuth,
 onAuthStateChanged,
+createUserWithEmailAndPassword,  
 signOut
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -222,66 +223,64 @@ getFirestore(app);
         `Daftar Konsultan (RM${formatRM(registrationFee)})`;
   
 // CHECK LOGIN
-onAuthStateChanged(auth,(user)=>{
-
-if(!user){
-
-window.location.href =
-"login.html";
-
-return;
-
-}
-
+onAuthStateChanged(auth, (user) => {
+    // Jika pengguna sudah log masuk & sudah ada pendaftaran, boleh bawa terus ke dashboard/payment
+    if (user) {
+        console.log("User sedia ada:", user.uid);
+    }
+    // Jika (!user), BIARKAN SAHAJA pengguna mengisi borang pendaftaran baharu ini.
 });
   
 document.getElementById("consultantForm").addEventListener("submit", async(e)=>{
     e.preventDefault();
 
-    if(!auth.currentUser){
-        alert("Sila login dahulu");
-        return;
-    }
+    // Buang semakan `if(!auth.currentUser)` lama yang menyekat pendaftaran
 
     // --- MULA KOD PENGESAHAN UPLINE ---
     const uplineInput = document.getElementById("upline").value.trim();
     let finalUpline = "";
 
-    // Semak jika pengguna ada masukkan Kod Upline
     if (uplineInput) {
-        finalUpline = uplineInput.toUpperCase(); // Tukar semua jadi huruf besar
+        finalUpline = uplineInput.toUpperCase();
         
-        // Buat carian di pangkalan data
         const uplineQ = query(
             collection(db, "consultants"), 
             where("consultantNo", "==", finalUpline)
         );
         const uplineSnap = await getDocs(uplineQ);
 
-        // Jika data tak wujud, sekat pendaftaran!
         if (uplineSnap.empty) {
             alert("Kod Upline (" + finalUpline + ") tidak wujud! Sila semak semula ejaan.");
             return; 
         }
     } 
-    // Jika ko nak WAJIBKAN semua orang isi kod upline, buang komen 2 baris di bawah:
-    // else { alert("Sila masukkan Kod Upline!"); return; }
     // --- TAMAT KOD PENGESAHAN UPLINE ---
 
-    // Tukar teks butang supaya user tahu sistem tengah jalan
     const btn = document.getElementById("registerButton");
     const originalBtnText = btn.innerHTML;
     btn.innerHTML = "Memproses Pendaftaran...";
     btn.disabled = true;
 
     try {
+        const email = document.getElementById("email").value.trim();
+        // Guna No IC sebagai Katalaluan Asas (Password) Pendaftaran jika tiada medan Katalaluan
+        const password = document.getElementById("ic").value.trim(); 
+
+        let user = auth.currentUser;
+
+        // Jika akaun Auth belum wujud, cipta akaun baharu secara automatik
+        if (!user) {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            user = userCredential.user;
+        }
+
         // Simpan pendaftaran ke Firestore
-        await setDoc(doc(db, "consultants", auth.currentUser.uid), {
-            uid: auth.currentUser.uid,
+        await setDoc(doc(db, "consultants", user.uid), {
+            uid: user.uid,
             nama: document.getElementById("nama").value,
             ic: document.getElementById("ic").value,
             telefon: document.getElementById("telefon").value,
-            email: document.getElementById("email").value,
+            email: email,
             bankName: document.getElementById("bankName").value,
             bankAccount: document.getElementById("bankAccount").value,
             alamat: document.getElementById("alamat").value,
@@ -289,7 +288,6 @@ document.getElementById("consultantForm").addEventListener("submit", async(e)=>{
             city: document.getElementById("city").value,
             state: document.getElementById("state").value,
             
-            // Guna kod upline yang dah disahkan dan di-huruf besarkan
             upline: finalUpline, 
             
             consultantLevel: "AQC",
@@ -297,8 +295,8 @@ document.getElementById("consultantForm").addEventListener("submit", async(e)=>{
             createdAt: new Date()
         });
 
-        // update role di collection users
-        await setDoc(doc(db, "users", auth.currentUser.uid), {
+        // Update role di collection users
+        await setDoc(doc(db, "users", user.uid), {
             role: "consultant"
         }, { merge: true });
 
