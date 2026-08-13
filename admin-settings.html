@@ -390,7 +390,7 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
             </button>
         </div>
 
-        <!-- ================= SALES SIMULATION ================= -->
+               <!-- ================= SALES SIMULATION ================= -->
         <div class="bg-gradient-to-br from-gray-900 to-[#153638] rounded-2xl shadow-lg p-6 lg:p-8 text-white mb-8">
             <h2 class="text-xl font-bold mb-6 border-b border-gray-600 pb-3">Simulasi Sales & Profit</h2>
             
@@ -428,11 +428,28 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-5 mt-5">
-                <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5">
-                    <p class="text-sm text-gray-300 mb-1">Company Pool</p>
-                    <p id="simCompanyPool" class="text-2xl font-bold">RM 0</p>
-                </div>
+            <div class="bg-gray-800 p-4 rounded-lg mt-4">
+    <div class="flex justify-between items-center mb-3">
+        <span class="text-gray-400 font-semibold">Total Company Pool</span>
+        <span id="simCompanyPool" class="font-bold text-white">RM 0.00</span>
+    </div>
+    
+    <!-- Pecahan Company Pool -->
+    <div class="border-t border-gray-700 pt-3 space-y-2 text-sm">
+        <div class="flex justify-between text-gray-400">
+            <span>↳ Admin & Operation</span>
+            <span id="simAdmin" class="text-gray-300">RM 0.00</span>
+        </div>
+        <div class="flex justify-between text-gray-400">
+            <span>↳ Allowance</span>
+            <span id="simAllowance" class="text-gray-300">RM 0.00</span>
+        </div>
+        <div class="flex justify-between text-gray-400">
+            <span>↳ Royalty</span>
+            <span id="simRoyalty" class="text-gray-300">RM 0.00</span>
+        </div>
+    </div>
+</div>
                 <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5">
                     <p class="text-sm text-gray-300 mb-1">Gross Profit</p>
                     <p id="simProfit" class="text-2xl font-bold text-green-400">RM 0</p>
@@ -444,6 +461,11 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
             </div>
         </div>
     </div>
+
+<!-- Kad Margin/Profit kekal seperti sedia ada -->
+<div id="marginCard" class="...">
+   <!-- ... -->
+</div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -580,51 +602,61 @@ class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
         }
 
         // ================= SALES SIMULATION =================
-        function calculateSimulation() {
-            const sales = 
-                (getVal("simWasiat") * getVal("wasiatPrice")) +
-                (getVal("simHibah") * getVal("hibahPrice")) +
-                (getVal("simSepencarian") * getVal("sepencarianPrice")) +
-                (getVal("simMawaris") * getVal("mawarisPrice"));
+function calculateSimulation() {
+    const sales = 
+        (getVal("simWasiat") * getVal("wasiatPrice")) +
+        (getVal("simHibah") * getVal("hibahPrice")) +
+        (getVal("simSepencarian") * getVal("sepencarianPrice")) +
+        (getVal("simMawaris") * getVal("mawarisPrice"));
 
-            // Calculate Pools based on % of Total Sales
-            const commissionAmount = sales * (getVal("commissionPool") / 100);
-            const overrideAmount = sales * (getVal("overridePool") / 100);
-            const companyPoolAmount = sales * (getVal("companyPool") / 100);
+    // 1. Pengiraan Pool Utama (Berdasarkan % Total Sales)
+    const commissionAmount = sales * (getVal("commissionPool") / 100);
+    const overrideAmount = sales * (getVal("overridePool") / 100);
+    const companyPoolAmount = sales * (getVal("companyPool") / 100);
 
-            // Calculate Deductions from Total Sales (as defined by their Breakdown %)
-            const adminAmount = sales * (getVal("adminOperation") / 100);
-            const allowanceAmount = sales * (getVal("allowance") / 100);
-            const royaltyAmount = sales * (getVal("royalty") / 100);
+    // 2. Pecahan Dalam Company Pool (Tolak dari Total Sales mengikut % Breakdown)
+    const adminAmount = sales * (getVal("adminOperation") / 100);
+    const allowanceAmount = sales * (getVal("allowance") / 100);
+    const royaltyAmount = sales * (getVal("royalty") / 100);
 
-            // Profit is what remains after all explicit allocations are paid out
-            const totalExpenses = commissionAmount + overrideAmount + adminAmount + allowanceAmount + royaltyAmount;
-            const profit = sales - totalExpenses;
-            
-            const margin = sales > 0 ? (profit / sales) * 100 : 0;
+    // 3. Pengiraan Untung Bersih (Net Profit)
+    const totalExpenses = commissionAmount + overrideAmount + adminAmount + allowanceAmount + royaltyAmount;
+    const profit = sales - totalExpenses;
+    
+    const margin = sales > 0 ? (profit / sales) * 100 : 0;
 
-            // Update UI
-            el("simSales").innerText = "RM " + sales.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            el("simCommission").innerText = "RM " + commissionAmount.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            el("simOverride").innerText = "RM " + overrideAmount.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            el("simCompanyPool").innerText = "RM " + companyPoolAmount.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            
-            // Format Profit with color depending on negative or positive
-            const profitEl = el("simProfit");
-            profitEl.innerText = "RM " + profit.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            if(profit < 0) profitEl.className = "text-2xl font-bold text-red-400";
-            else profitEl.className = "text-2xl font-bold text-green-400";
+    // Fungsi bantuan untuk format matawang (supaya kod lebih kemas)
+    const formatRM = (val) => "RM " + val.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-            el("simMargin").innerText = margin.toFixed(1) + "%";
+    // 4. Kemaskini UI (Pastikan ID ini wujud dalam HTML anda)
+    if(el("simSales")) el("simSales").innerText = formatRM(sales);
+    if(el("simCommission")) el("simCommission").innerText = formatRM(commissionAmount);
+    if(el("simOverride")) el("simOverride").innerText = formatRM(overrideAmount);
+    if(el("simCompanyPool")) el("simCompanyPool").innerText = formatRM(companyPoolAmount);
+    
+    // Kemaskini UI untuk Pecahan Company Pool
+    if(el("simAdmin")) el("simAdmin").innerText = formatRM(adminAmount);
+    if(el("simAllowance")) el("simAllowance").innerText = formatRM(allowanceAmount);
+    if(el("simRoyalty")) el("simRoyalty").innerText = formatRM(royaltyAmount);
 
-            // Margin Card Styling
-            const marginCard = el("marginCard");
-            marginCard.className = "rounded-xl p-5 transition-colors border " + 
-                (margin < 10 ? "bg-red-900/30 border-red-500/50 text-red-100" : 
-                (margin < 25 ? "bg-yellow-900/30 border-yellow-500/50 text-yellow-100" : 
-                "bg-green-900/30 border-green-500/50 text-green-100"));
-        }
+    // Format Keuntungan (Profit) dengan warna merah (rugi) atau hijau (untung)
+    const profitEl = el("simProfit");
+    if(profitEl) {
+        profitEl.innerText = formatRM(profit);
+        profitEl.className = profit < 0 ? "text-2xl font-bold text-red-400" : "text-2xl font-bold text-green-400";
+    }
 
+    if(el("simMargin")) el("simMargin").innerText = margin.toFixed(1) + "%";
+
+    // Kemaskini Gaya Kad Margin
+    const marginCard = el("marginCard");
+    if(marginCard) {
+        marginCard.className = "rounded-xl p-5 transition-colors border " + 
+            (margin < 10 ? "bg-red-900/30 border-red-500/50 text-red-100" : 
+            (margin < 25 ? "bg-yellow-900/30 border-yellow-500/50 text-yellow-100" : 
+            "bg-green-900/30 border-green-500/50 text-green-100"));
+    }
+}
         // ================= EVENT LISTENERS =================
         // Input Triggers for Simulation
         const simTriggers = [
