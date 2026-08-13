@@ -1357,24 +1357,26 @@ data.pemegangAmanah.telefon || "";
 
 }
 
-// --- SKRIP FORMAT UNTUK SEMUA RUANGAN DALAM BORANG ---
+// --- SKRIP FORMAT AUTOMATIK MENYELURUH (SEMUA SEKSYEN) ---
 
 document.addEventListener('input', function (e) {
     let target = e.target;
-    let val = target.value;
+    if (target.tagName !== 'INPUT') return; // Pastikan ia elemen input teks
 
-    // 1. FORMAT NAMA (Semua input yang ada perkataan 'nama' atau 'penama')
-    if (target.id.toLowerCase().includes('nama') || target.className.toLowerCase().includes('nama') || target.id.toLowerCase().includes('penama') || target.className.toLowerCase().includes('penama')) {
-        // Abaikan select element
-        if (target.tagName === 'INPUT') {
-            target.value = val.replace(/\w\S*/g, (txt) => {
-                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-            });
-        }
+    let val = target.value;
+    
+    // Gabungkan semua atribut supaya ia pasti 'terbaca' tak kira apa cara HTML anda tulis
+    let identifier = (target.id + " " + target.className + " " + target.name + " " + target.placeholder).toLowerCase();
+
+    // 1. FORMAT NAMA (Huruf besar setiap awal perkataan)
+    if (identifier.includes('nama') || identifier.includes('penama')) {
+        target.value = val.replace(/\w\S*/g, (txt) => {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
     }
 
-    // 2. FORMAT NO IC (Semua input yang ada perkataan 'ic')
-    if (target.id.toLowerCase().includes('ic') || target.className.toLowerCase().includes('ic')) {
+    // 2. FORMAT NO IC (000000-00-0000)
+    if (identifier.includes('ic') || identifier.includes('kad pengenalan')) {
         let cleanVal = val.replace(/\D/g, ''); // Buang selain nombor
         let formatted = '';
         
@@ -1385,8 +1387,8 @@ document.addEventListener('input', function (e) {
         target.value = formatted;
     }
 
-    // 3. FORMAT NO TELEFON (Semua input yang ada perkataan 'telefon')
-    if (target.id.toLowerCase().includes('telefon') || target.className.toLowerCase().includes('telefon')) {
+    // 3. FORMAT NO TELEFON (012-34567890)
+    if (identifier.includes('telefon') || identifier.includes('phone') || identifier.includes('tel')) {
         let cleanVal = val.replace(/\D/g, ''); // Buang selain nombor
         let formatted = '';
         
