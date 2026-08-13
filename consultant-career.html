@@ -28,36 +28,35 @@ body{ font-family: Inter, sans-serif; }
         ← Kembali ke Dashboard
     </a>
 
-    <div class="space-y-5">
+    <!-- TUKAR DI SINI: Guna Grid untuk Horizontal Layout -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 
     <!-- AQC (TEMA KORPORAT / BASIC) -->
-    <div class="bg-white border border-gray-200 border-t-4 border-t-[#153638] shadow-sm rounded-2xl p-6 transition-all hover:shadow-md">
+    <div class="bg-white border border-gray-200 border-t-4 border-t-[#153638] shadow-sm rounded-2xl p-6 transition-all hover:shadow-md flex flex-col">
         <h2 class="text-2xl font-bold text-[#153638]">Al-Qawthar Consultant (AQC)</h2>
         
         <div class="grid grid-cols-2 gap-4 mt-5">
-            <div class="bg-gray-50 rounded-xl p-4">
-                <p class="text-sm text-gray-500">Komisen</p>
-                <p class="text-3xl font-bold text-[#153638]" id="commissionAQC"></p>
+            <div class="bg-gray-50 rounded-xl p-4 flex flex-col justify-center">
+                <p class="text-xs text-gray-500">Komisen</p>
+                <p class="text-2xl font-bold text-[#153638]" id="commissionAQC"></p>
             </div>
-            <div class="bg-gray-50 rounded-xl p-4">
-                <p class="text-sm text-gray-500">Overriding</p>
-                <p class="text-3xl font-bold text-[#153638]" id="overrideAQC"></p>
+            <div class="bg-gray-50 rounded-xl p-4 flex flex-col justify-center">
+                <p class="text-xs text-gray-500">Overriding</p>
+                <p class="text-2xl font-bold text-[#153638]" id="overrideAQC"></p>
             </div>
         </div>
 
-        <div class="mt-5">
-            <h3 class="font-semibold mb-2">KPI Utama</h3>
-            <ul class="list-disc ml-5 text-gray-700">
+        <div class="mt-5 flex-grow">
+            <h3 class="font-semibold mb-2 text-sm">KPI Utama</h3>
+            <ul class="list-disc ml-5 text-gray-700 text-sm space-y-1">
                 <li>Sales</li>
                 <li>Follow-up prospect</li>
                 <li>Appointment/demo</li>
                 <li>Closing</li> 
             </ul>
-        </div>
 
-        <div class="mt-5">
-            <h3 class="font-semibold mb-2">Skop Kerja</h3>
-            <ul class="list-disc ml-5 text-gray-700">
+            <h3 class="font-semibold mb-2 mt-5 text-sm">Skop Kerja</h3>
+            <ul class="list-disc ml-5 text-gray-700 text-sm space-y-1">
                 <li>Cari lead</li>
                 <li>Hubungi prospect</li>
                 <li>Follow-up</li>
@@ -66,47 +65,45 @@ body{ font-family: Inter, sans-serif; }
         </div>
 
         <!-- SYARAT NAIK PANGKAT -->
-        <div class="mt-5">
-            <h3 class="font-semibold mb-2">Syarat Naik Pangkat (Promote ke AQC-AS)</h3>
-            <ul class="list-disc ml-5 text-gray-700">
+        <div class="mt-5 border-t pt-4">
+            <h3 class="font-semibold mb-2 text-sm">Syarat Naik Pangkat (Ke AQC-AS)</h3>
+            <ul class="list-disc ml-5 text-gray-700 text-sm">
                 <li id="textTargetAQCAS">Jualan Peribadi: RM30,000</li>
             </ul>
         </div>
 
         <div class="mt-5 bg-[#153638]/5 rounded-xl p-4">
-            <p class="text-sm text-gray-500">Yuran Renewal</p>
-            <p class="text-xl font-bold text-[#153638]" id="renewalAQC"></p>
+            <p class="text-xs text-gray-500">Yuran Renewal</p>
+            <p class="text-lg font-bold text-[#153638]" id="renewalAQC"></p>
         </div>
     </div>
 
     <!-- AQC-AS (TEMA BIRU) -->
-    <div class="bg-gradient-to-b from-blue-50 to-white border border-blue-100 border-t-4 border-t-blue-500 shadow-sm rounded-2xl p-6 transition-all hover:shadow-md">
+    <div class="bg-gradient-to-b from-blue-50 to-white border border-blue-100 border-t-4 border-t-blue-500 shadow-sm rounded-2xl p-6 transition-all hover:shadow-md flex flex-col">
         <h2 class="text-2xl font-bold text-blue-800">Al-Qawthar Consultant – Assistant Supervisor (AQC-AS)</h2>
         
         <div class="grid grid-cols-2 gap-4 mt-5">
-            <div class="bg-blue-100/50 rounded-xl p-4">
-                <p class="text-sm text-blue-600">Komisen</p>
-                <p class="text-3xl font-bold text-blue-700" id="commissionAQCAS"></p>
+            <div class="bg-blue-100/50 rounded-xl p-4 flex flex-col justify-center">
+                <p class="text-xs text-blue-600">Komisen</p>
+                <p class="text-2xl font-bold text-blue-700" id="commissionAQCAS"></p>
             </div>
-            <div class="bg-blue-100/50 rounded-xl p-4">
-                <p class="text-sm text-blue-600">Overriding</p>
-                <p class="text-3xl font-bold text-blue-700" id="overrideAQCAS"></p>
+            <div class="bg-blue-100/50 rounded-xl p-4 flex flex-col justify-center">
+                <p class="text-xs text-blue-600">Overriding</p>
+                <p class="text-2xl font-bold text-blue-700" id="overrideAQCAS"></p>
             </div>
         </div>
 
-        <div class="mt-5">
-            <h3 class="font-semibold text-blue-900 mb-2">KPI Utama</h3>
-            <ul class="list-disc ml-5 text-gray-700">
+        <div class="mt-5 flex-grow">
+            <h3 class="font-semibold text-blue-900 mb-2 text-sm">KPI Utama</h3>
+            <ul class="list-disc ml-5 text-gray-700 text-sm space-y-1">
                 <li>Prestasi team</li>
                 <li>Aktiviti agen (urus 5 AQC)</li>
                 <li>Onboarding agent baru</li> 
-                <li class="font-semibold text-blue-800">FOKUS : PASTIKAN AQC BUAT KERJA YANG BETUL</li>  
+                <li class="font-semibold text-blue-800 mt-2">FOKUS : PASTIKAN AQC BUAT KERJA YANG BETUL</li>  
             </ul>
-        </div>
 
-        <div class="mt-5">
-            <h3 class="font-semibold text-blue-900 mb-2">Skop Kerja</h3>
-            <ul class="list-disc ml-5 text-gray-700">
+            <h3 class="font-semibold text-blue-900 mb-2 mt-5 text-sm">Skop Kerja</h3>
+            <ul class="list-disc ml-5 text-gray-700 text-sm space-y-1">
                 <li>Morning briefing</li>
                 <li>Semak aktiviti agent</li>
                 <li>Role play sales</li> 
@@ -115,58 +112,56 @@ body{ font-family: Inter, sans-serif; }
         </div>
 
         <!-- SYARAT KEKAL PANGKAT (MAINTAIN) -->
-        <div class="mt-5 bg-blue-100 border border-blue-200 rounded-xl p-4">
-            <h3 class="font-semibold text-blue-900 mb-2">Syarat Kekal Pangkat (Maintain AQC-AS Tahunan)</h3>
-            <ul class="list-disc ml-5 text-blue-800">
+        <div class="mt-5 bg-blue-100 border border-blue-200 rounded-xl p-3">
+            <h3 class="font-semibold text-blue-900 mb-2 text-sm">Maintain AQC-AS (Tahunan)</h3>
+            <ul class="list-disc ml-5 text-blue-800 text-xs space-y-1">
                 <li id="maintainSalesAS">Jualan Peribadi: RM30,000 setahun</li>
                 <li id="maintainRecruitAS">Rekrut Ejen: 5 AQC baru</li>
             </ul>
         </div>
 
         <!-- SYARAT NAIK PANGKAT -->
-        <div class="mt-5">
-            <h3 class="font-semibold text-blue-900 mb-2">Syarat Naik Pangkat (Promote ke AQC-UM)</h3>
-            <ul class="list-disc ml-5 text-gray-700">
+        <div class="mt-5 border-t border-blue-200 pt-4">
+            <h3 class="font-semibold text-blue-900 mb-2 text-sm">Syarat Naik Pangkat (Ke AQC-UM)</h3>
+            <ul class="list-disc ml-5 text-gray-700 text-sm space-y-1">
                 <li id="textTargetAQCUM">Jualan Kumpulan (Team Sales): RM60,000</li>
                 <li id="promoteRecruitUM">Rekrut Ejen: 10 AQC</li>
             </ul>
         </div>
 
         <div class="mt-5 bg-blue-100/50 rounded-xl p-4">
-            <p class="text-sm text-blue-600">Yuran Renewal</p>
-            <p class="text-xl font-bold text-blue-700" id="renewalAQCAS"></p>
+            <p class="text-xs text-blue-600">Yuran Renewal</p>
+            <p class="text-lg font-bold text-blue-700" id="renewalAQCAS"></p>
         </div>
     </div>
 
     <!-- AQC-UM (TEMA UNGU / PURPLE) -->
-    <div class="bg-gradient-to-b from-purple-50 to-white border border-purple-100 border-t-4 border-t-purple-500 shadow-sm rounded-2xl p-6 transition-all hover:shadow-md">
+    <div class="bg-gradient-to-b from-purple-50 to-white border border-purple-100 border-t-4 border-t-purple-500 shadow-sm rounded-2xl p-6 transition-all hover:shadow-md flex flex-col">
         <h2 class="text-2xl font-bold text-purple-800">Al-Qawthar Consultant – Unit Manager (AQC-UM)</h2>
         
         <div class="grid grid-cols-2 gap-4 mt-5">
-            <div class="bg-purple-100/50 rounded-xl p-4">
-                <p class="text-sm text-purple-600">Komisen</p>
-                <p class="text-3xl font-bold text-purple-700" id="commissionAQCUM"></p>
+            <div class="bg-purple-100/50 rounded-xl p-4 flex flex-col justify-center">
+                <p class="text-xs text-purple-600">Komisen</p>
+                <p class="text-2xl font-bold text-purple-700" id="commissionAQCUM"></p>
             </div>
-            <div class="bg-purple-100/50 rounded-xl p-4">
-                <p class="text-sm text-purple-600">Overriding</p>
-                <p class="text-3xl font-bold text-purple-700" id="overrideAQCUM"></p>
+            <div class="bg-purple-100/50 rounded-xl p-4 flex flex-col justify-center">
+                <p class="text-xs text-purple-600">Overriding</p>
+                <p class="text-2xl font-bold text-purple-700" id="overrideAQCUM"></p>
             </div>
         </div>
 
-        <div class="mt-5">
-            <h3 class="font-semibold text-purple-900 mb-2">KPI Utama</h3>
-            <ul class="list-disc ml-5 text-gray-700">
+        <div class="mt-5 flex-grow">
+            <h3 class="font-semibold text-purple-900 mb-2 text-sm">KPI Utama</h3>
+            <ul class="list-disc ml-5 text-gray-700 text-sm space-y-1">
                 <li>Pengeluaran keseluruhan unit</li>
                 <li>Aktiviti agen (urus 10 AQC)</li>
                 <li>Recruitment</li>  
                 <li>Pembangunan leader</li> 
-                <li class="font-semibold text-purple-800">FOKUS : BANGUNKAN TEAM LEADER YANG KUAT</li>  
+                <li class="font-semibold text-purple-800 mt-2">FOKUS : BANGUNKAN TEAM LEADER YANG KUAT</li>  
             </ul>
-        </div>
 
-        <div class="mt-5">
-            <h3 class="font-semibold text-purple-900 mb-2">Skop Kerja</h3>
-            <ul class="list-disc ml-5 text-gray-700">
+            <h3 class="font-semibold text-purple-900 mb-2 mt-5 text-sm">Skop Kerja</h3>
+            <ul class="list-disc ml-5 text-gray-700 text-sm space-y-1">
                 <li>Review performance semua team</li>
                 <li>Pantau conversion rate</li>
                 <li>Bantu Team Leader selesaikan isu</li> 
@@ -175,59 +170,57 @@ body{ font-family: Inter, sans-serif; }
         </div>
 
         <!-- SYARAT KEKAL PANGKAT (MAINTAIN) -->
-        <div class="mt-5 bg-purple-100 border border-purple-200 rounded-xl p-4">
-            <h3 class="font-semibold text-purple-900 mb-2">Syarat Kekal Pangkat (Maintain AQC-UM Tahunan)</h3>
-            <ul class="list-disc ml-5 text-purple-800">
+        <div class="mt-5 bg-purple-100 border border-purple-200 rounded-xl p-3">
+            <h3 class="font-semibold text-purple-900 mb-2 text-sm">Maintain AQC-UM (Tahunan)</h3>
+            <ul class="list-disc ml-5 text-purple-800 text-xs space-y-1">
                 <li id="maintainSalesUM">Jualan Peribadi: RM30,000 setahun</li>
                 <li id="maintainRecruitUM">Rekrut Ejen: 10 AQC baru</li>
             </ul>
         </div>
 
         <!-- SYARAT NAIK PANGKAT -->
-        <div class="mt-5">
-            <h3 class="font-semibold text-purple-900 mb-2">Syarat Naik Pangkat (Promote ke MGAM)</h3>
-            <ul class="list-disc ml-5 text-gray-700">
+        <div class="mt-5 border-t border-purple-200 pt-4">
+            <h3 class="font-semibold text-purple-900 mb-2 text-sm">Syarat Naik Pangkat (Ke MGAM)</h3>
+            <ul class="list-disc ml-5 text-gray-700 text-sm space-y-1">
                 <li id="textTargetMGAM">Jualan Kumpulan (Team Sales): RM120,000</li>
                 <li id="promoteRecruitMGAM">Rekrut Ejen: 20 AQC</li>
             </ul>
         </div>
 
         <div class="mt-5 bg-purple-100/50 rounded-xl p-4">
-            <p class="text-sm text-purple-600">Yuran Renewal</p>
-            <p class="text-xl font-bold text-purple-700" id="renewalAQCUM"></p>
+            <p class="text-xs text-purple-600">Yuran Renewal</p>
+            <p class="text-lg font-bold text-purple-700" id="renewalAQCUM"></p>
         </div>
     </div>
 
     <!-- MGAM (TEMA EMAS / ELIT) -->
-    <div class="bg-gradient-to-b from-amber-50 to-white border border-amber-100 border-t-4 border-t-amber-500 shadow-sm rounded-2xl p-6 transition-all hover:shadow-md">
+    <div class="bg-gradient-to-b from-amber-50 to-white border border-amber-100 border-t-4 border-t-amber-500 shadow-sm rounded-2xl p-6 transition-all hover:shadow-md flex flex-col">
         <h2 class="text-2xl font-bold text-amber-800">Mawaris Group Agency Manager (MGAM)</h2>
         
         <div class="grid grid-cols-2 gap-4 mt-5">
-            <div class="bg-amber-100/50 rounded-xl p-4">
-                <p class="text-sm text-amber-600">Komisen</p>
-                <p class="text-3xl font-bold text-amber-700" id="commissionMGAM"></p>
+            <div class="bg-amber-100/50 rounded-xl p-4 flex flex-col justify-center">
+                <p class="text-xs text-amber-600">Komisen</p>
+                <p class="text-2xl font-bold text-amber-700" id="commissionMGAM"></p>
             </div>
-            <div class="bg-amber-100/50 rounded-xl p-4">
-                <p class="text-sm text-amber-600">Overriding</p>
-                <p class="text-3xl font-bold text-amber-700" id="overrideMGAM"></p>
+            <div class="bg-amber-100/50 rounded-xl p-4 flex flex-col justify-center">
+                <p class="text-xs text-amber-600">Overriding</p>
+                <p class="text-2xl font-bold text-amber-700" id="overrideMGAM"></p>
             </div>
         </div>
 
-        <div class="mt-5">
-            <h3 class="font-semibold text-amber-900 mb-2">KPI Utama</h3>
-            <ul class="list-disc ml-5 text-gray-700">
+        <div class="mt-5 flex-grow">
+            <h3 class="font-semibold text-amber-900 mb-2 text-sm">KPI Utama</h3>
+            <ul class="list-disc ml-5 text-gray-700 text-sm space-y-1">
                 <li>Fokus hasil jualan</li>
                 <li>Fokus keuntungan</li>
                 <li>Fokus pertumbuhan jualan dan Agensi</li>  
                 <li>Pengekalan AQC aktif</li> 
                 <li>Pembangunan agensi</li> 
-                <li class="font-semibold text-amber-800">FOKUS : BANGUNKAN AGENSI YANG MANTAP</li>    
+                <li class="font-semibold text-amber-800 mt-2">FOKUS : BANGUNKAN AGENSI YANG MANTAP</li>    
             </ul>
-        </div>
 
-        <div class="mt-5">
-            <h3 class="font-semibold text-amber-900 mb-2">Skop Kerja</h3>
-            <ul class="list-disc ml-5 text-gray-700">
+            <h3 class="font-semibold text-amber-900 mb-2 mt-5 text-sm">Skop Kerja</h3>
+            <ul class="list-disc ml-5 text-gray-700 text-sm space-y-1">
                 <li>Tetapkan target</li>
                 <li>Tentukan strategi</li>
                 <li>Bina partnership</li> 
@@ -236,21 +229,22 @@ body{ font-family: Inter, sans-serif; }
         </div>
 
         <!-- SYARAT KEKAL PANGKAT (MAINTAIN) -->
-        <div class="mt-5 bg-amber-100 border border-amber-200 rounded-xl p-4">
-            <h3 class="font-semibold text-amber-900 mb-2">Syarat Kekal Pangkat (Maintain MGAM Tahunan)</h3>
-            <ul class="list-disc ml-5 text-amber-800">
+        <div class="mt-5 bg-amber-100 border border-amber-200 rounded-xl p-3">
+            <h3 class="font-semibold text-amber-900 mb-2 text-sm">Maintain MGAM (Tahunan)</h3>
+            <ul class="list-disc ml-5 text-amber-800 text-xs space-y-1">
                 <li id="maintainSalesMGAM">Jualan Kumpulan (Team Sales): RM240,000 setahun</li>
                 <li id="maintainRecruitMGAM">Rekrut Ejen: 20 AQC aktif</li>
-                <li class="mt-2 font-bold italic text-amber-700">Melepasi syarat ini melayakkan anda untuk Bonus Tahunan!</li>
+                <li class="mt-2 font-bold italic text-amber-700">Melepasi syarat melayakkan Bonus Tahunan!</li>
             </ul>
         </div>
 
         <div class="mt-5 bg-amber-100/50 rounded-xl p-4">
-            <p class="text-sm text-amber-600">Yuran Renewal</p>
-            <p class="text-xl font-bold text-amber-700" id="renewalMGAM"></p>
+            <p class="text-xs text-amber-600">Yuran Renewal</p>
+            <p class="text-lg font-bold text-amber-700" id="renewalMGAM"></p>
         </div>
     </div>
 
+    </div>
 </div>
     
 <script type="module">
