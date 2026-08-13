@@ -87,14 +87,14 @@
             </div>
         </div>
 
-       <!-- WORKFLOW TIMELINE TASKS (7 FASA) -->
-        <div class="bg-white rounded-xl shadow p-6 mb-6">
+<!-- WORKFLOW TIMELINE TASKS (7 FASA) - LATAR BELAKANG HIJAU KORPORAT AQMS -->
+        <div class="bg-[#153638] rounded-2xl shadow-xl p-6 mb-6 border border-[#d8ae81]/30">
             <div class="flex justify-between items-center mb-6">
                 <div>
-                    <h2 class="text-xl font-bold text-[#153638]">Workflow Status Timeline</h2>
-                    <p class="text-xs text-gray-500 mt-1">Pemantauan status selesai dan baki (tertunggak) untuk tindakan selanjutnya</p>
+                    <h2 class="text-xl font-bold text-white">Workflow Status Timeline</h2>
+                    <p class="text-xs text-gray-300 mt-1">Pemantauan status selesai dan baki (tertunggak) untuk tindakan selanjutnya</p>
                 </div>
-                <span class="text-sm font-medium bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full">
+                <span class="text-sm font-medium bg-[#d8ae81] text-[#153638] px-3 py-1 rounded-full shadow-sm font-semibold">
                     Kemas Kini Semasa
                 </span>
             </div>
@@ -102,7 +102,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
                 
                 <!-- 1. Approved -->
-                <div id="cardApproved" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between">
+                <div id="cardApproved" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-md hover:shadow-lg transition cursor-pointer flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">1. Approved</span>
@@ -113,17 +113,17 @@
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-500">Selesai:</span>
-                            <span class="text-sm font-bold text-gray-800">4</span>
+                            <span id="cntApproved" class="text-sm font-bold text-gray-800">4</span>
                         </div>
-                        <div class="flex justify-between items-center bg-orange-50 px-1.5 py-0.5 rounded">
-                            <span class="text-[10px] font-semibold text-orange-600">Belum Cetak:</span>
-                            <span class="text-sm font-extrabold text-orange-600">1</span>
+                        <div class="flex justify-between items-center bg-[#d8ae81]/20 px-1.5 py-0.5 rounded border border-[#d8ae81]/40">
+                            <span class="text-[10px] font-bold text-[#153638]">Belum Cetak:</span>
+                            <span id="balApproved" class="text-sm font-extrabold text-[#153638]">1</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- 2. Printed -->
-                <div id="cardPrinted" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between">
+                <div id="cardPrinted" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-md hover:shadow-lg transition cursor-pointer flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">2. Printed</span>
@@ -134,17 +134,17 @@
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-500">Selesai:</span>
-                            <span class="text-sm font-bold text-gray-800">3</span>
+                            <span id="cntPrinted" class="text-sm font-bold text-gray-800">3</span>
                         </div>
-                        <div class="flex justify-between items-center bg-orange-50 px-1.5 py-0.5 rounded">
-                            <span class="text-[10px] font-semibold text-orange-600">Belum Hantar:</span>
-                            <span class="text-sm font-extrabold text-orange-600">2</span>
+                        <div class="flex justify-between items-center bg-[#d8ae81]/20 px-1.5 py-0.5 rounded border border-[#d8ae81]/40">
+                            <span class="text-[10px] font-bold text-[#153638]">Belum Hantar:</span>
+                            <span id="balPrinted" class="text-sm font-extrabold text-[#153638]">2</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- 3. Sent -->
-                <div id="cardSent" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between">
+                <div id="cardSent" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-md hover:shadow-lg transition cursor-pointer flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">3. Sent</span>
@@ -155,17 +155,17 @@
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-500">Selesai:</span>
-                            <span class="text-sm font-bold text-gray-800">1</span>
+                            <span id="cntSent" class="text-sm font-bold text-gray-800">1</span>
                         </div>
-                        <div class="flex justify-between items-center bg-emerald-50 px-1.5 py-0.5 rounded">
-                            <span class="text-[10px] font-semibold text-emerald-600">Menunggu Akad:</span>
-                            <span class="text-sm font-extrabold text-emerald-600">0</span>
+                        <div class="flex justify-between items-center bg-[#d8ae81]/20 px-1.5 py-0.5 rounded border border-[#d8ae81]/40">
+                            <span class="text-[10px] font-bold text-[#153638]">Menunggu Akad:</span>
+                            <span id="balSent" class="text-sm font-extrabold text-[#153638]">0</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- 4. Akad -->
-                <div id="cardAkad" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between">
+                <div id="cardAkad" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-md hover:shadow-lg transition cursor-pointer flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">4. Akad</span>
@@ -176,17 +176,17 @@
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-500">Selesai:</span>
-                            <span class="text-sm font-bold text-gray-800">1</span>
+                            <span id="cntAkad" class="text-sm font-bold text-gray-800">1</span>
                         </div>
-                        <div class="flex justify-between items-center bg-emerald-50 px-1.5 py-0.5 rounded">
-                            <span class="text-[10px] font-semibold text-emerald-600">Belum Stamping:</span>
-                            <span class="text-sm font-extrabold text-emerald-600">0</span>
+                        <div class="flex justify-between items-center bg-[#d8ae81]/20 px-1.5 py-0.5 rounded border border-[#d8ae81]/40">
+                            <span class="text-[10px] font-bold text-[#153638]">Belum Stamping:</span>
+                            <span id="balAkad" class="text-sm font-extrabold text-[#153638]">0</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- 5. Stamping -->
-                <div id="cardStamping" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between">
+                <div id="cardStamping" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-md hover:shadow-lg transition cursor-pointer flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">5. Stamping</span>
@@ -197,17 +197,17 @@
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-500">Selesai:</span>
-                            <span class="text-sm font-bold text-gray-800">1</span>
+                            <span id="cntStamping" class="text-sm font-bold text-gray-800">1</span>
                         </div>
-                        <div class="flex justify-between items-center bg-emerald-50 px-1.5 py-0.5 rounded">
-                            <span class="text-[10px] font-semibold text-emerald-600">Belum Diserah:</span>
-                            <span class="text-sm font-extrabold text-emerald-600">0</span>
+                        <div class="flex justify-between items-center bg-[#d8ae81]/20 px-1.5 py-0.5 rounded border border-[#d8ae81]/40">
+                            <span class="text-[10px] font-bold text-[#153638]">Belum Diserah:</span>
+                            <span id="balStamping" class="text-sm font-extrabold text-[#153638]">0</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- 6. Diserahkan Kepada AQM -->
-                <div id="cardDiserahAQM" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between">
+                <div id="cardDiserahAQM" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-md hover:shadow-lg transition cursor-pointer flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">6. Serah AQM</span>
@@ -218,17 +218,17 @@
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-500">Selesai:</span>
-                            <span class="text-sm font-bold text-gray-800">1</span>
+                            <span id="cntDiserahAQM" class="text-sm font-bold text-gray-800">1</span>
                         </div>
-                        <div class="flex justify-between items-center bg-emerald-50 px-1.5 py-0.5 rounded">
-                            <span class="text-[10px] font-semibold text-emerald-600">Belum Terima:</span>
-                            <span class="text-sm font-extrabold text-emerald-600">0</span>
+                        <div class="flex justify-between items-center bg-[#d8ae81]/20 px-1.5 py-0.5 rounded border border-[#d8ae81]/40">
+                            <span class="text-[10px] font-bold text-[#153638]">Belum Terima:</span>
+                            <span id="balDiserahAQM" class="text-sm font-extrabold text-[#153638]">0</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- 7. AQM Terima Dokumen -->
-                <div id="cardTerimaAQM" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between">
+                <div id="cardTerimaAQM" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-md hover:shadow-lg transition cursor-pointer flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">7. Terima AQM</span>
@@ -239,11 +239,11 @@
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-500">Sepenuhnya Selesai:</span>
-                            <span class="text-sm font-bold text-emerald-600">1</span>
+                            <span id="cntTerimaAQM" class="text-sm font-bold text-emerald-600">1</span>
                         </div>
-                        <div class="flex justify-between items-center bg-gray-50 px-1.5 py-0.5 rounded">
+                        <div class="flex justify-between items-center bg-gray-100 px-1.5 py-0.5 rounded border border-gray-200">
                             <span class="text-[10px] font-semibold text-gray-400">Baki:</span>
-                            <span class="text-sm font-extrabold text-gray-400">-</span>
+                            <span id="balTerimaAQM" class="text-sm font-extrabold text-gray-400">-</span>
                         </div>
                     </div>
                 </div>
