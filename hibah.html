@@ -4986,6 +4986,41 @@ checkPemegangAmanah();
 }
 
 });    
+
+// --- LETAK DI SINI (DI LUAR MANA-MANA BLOK SYARAT / FIRESTORE) ---
+    document.addEventListener('input', function (e) {
+        let target = e.target;
+        if (target.tagName !== 'INPUT') return;
+
+        let val = target.value;
+        let identifier = (target.id + " " + target.className + " " + target.name + " " + target.placeholder).toLowerCase();
+
+        // 1. FORMAT NAMA
+        if (identifier.includes('nama') || identifier.includes('penama')) {
+            target.value = val.replace(/\w\S*/g, (txt) => {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+        }
+
+        // 2. FORMAT NO IC
+        if (identifier.includes('ic') || identifier.includes('kad pengenalan')) {
+            let cleanVal = val.replace(/\D/g, '');
+            let formatted = '';
+            if (cleanVal.length > 0) formatted += cleanVal.substring(0, 6);
+            if (cleanVal.length > 6) formatted += '-' + cleanVal.substring(6, 8);
+            if (cleanVal.length > 8) formatted += '-' + cleanVal.substring(8, 12);
+            target.value = formatted;
+        }
+
+        // 3. FORMAT NO TELEFON
+        if (identifier.includes('telefon') || identifier.includes('phone') || identifier.includes('tel')) {
+            let cleanVal = val.replace(/\D/g, '');
+            let formatted = '';
+            if (cleanVal.length > 0) formatted += cleanVal.substring(0, 3);
+            if (cleanVal.length > 3) formatted += '-' + cleanVal.substring(3, 11);
+            target.value = formatted;
+        }
+    });
     
   </script>
 
