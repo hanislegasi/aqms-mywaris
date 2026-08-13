@@ -29,14 +29,14 @@ body{ font-family: Inter, sans-serif; }
         Kembali ke Dashboard
     </a>
 
-    <!-- Susunan Grid Horizontal -->
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+    <!-- Susunan Grid Horizontal dengan stretch height -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch">
 
         <!-- 1. AQC (KORPORAT BASIC) -->
-        <div class="bg-white border border-gray-200 border-t-4 border-t-[#153638] shadow-sm rounded-2xl p-6 transition-all hover:shadow-lg flex flex-col group">
-            <h2 class="text-xl font-bold text-[#153638]">Al-Qawthar Consultant (AQC)</h2>
+        <div class="bg-white border border-gray-200 border-t-4 border-t-[#153638] shadow-sm rounded-2xl p-6 transition-all hover:shadow-lg flex flex-col group h-full">
+            <h2 class="text-xl font-bold text-[#153638] min-h-[60px] xl:min-h-[84px]">Al-Qawthar Consultant (AQC)</h2>
             
-            <div class="grid grid-cols-2 gap-3 mt-5">
+            <div class="grid grid-cols-2 gap-3 mt-2">
                 <div class="bg-slate-50 rounded-xl p-4 flex flex-col justify-center border border-slate-100 group-hover:border-slate-200 transition">
                     <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Komisen</p>
                     <p class="text-2xl font-bold text-[#153638]" id="commissionAQC"></p>
@@ -47,7 +47,8 @@ body{ font-family: Inter, sans-serif; }
                 </div>
             </div>
 
-            <div class="mt-6 flex-grow">
+            <!-- BLOK KPI (Fixed Min Height) -->
+            <div class="mt-6 min-h-[170px]">
                 <h3 class="font-semibold mb-2 text-sm text-gray-800 border-b pb-1">KPI Utama</h3>
                 <ul class="list-disc ml-4 text-gray-600 text-sm space-y-1.5 marker:text-gray-400">
                     <li>Sales</li>
@@ -55,8 +56,11 @@ body{ font-family: Inter, sans-serif; }
                     <li>Appointment/demo</li>
                     <li>Closing</li> 
                 </ul>
+            </div>
 
-                <h3 class="font-semibold mb-2 mt-5 text-sm text-gray-800 border-b pb-1">Skop Kerja</h3>
+            <!-- BLOK SKOP KERJA (Fixed Min Height) -->
+            <div class="mt-2 min-h-[140px]">
+                <h3 class="font-semibold mb-2 text-sm text-gray-800 border-b pb-1">Skop Kerja</h3>
                 <ul class="list-disc ml-4 text-gray-600 text-sm space-y-1.5 marker:text-gray-400">
                     <li>Cari lead</li>
                     <li>Hubungi prospect</li>
@@ -65,25 +69,29 @@ body{ font-family: Inter, sans-serif; }
                 </ul>
             </div>
 
-            <!-- SYARAT NAIK PANGKAT -->
-            <div class="mt-6 pt-4 border-t border-gray-100">
+            <!-- BLOK MAINTAIN (Ruang Kosong untuk sebaris dengan lain) -->
+            <div class="mt-4 h-[110px]"></div>
+
+            <!-- BLOK SYARAT NAIK PANGKAT (Fixed Height) -->
+            <div class="mt-4 pt-4 border-t border-gray-100 h-[100px]">
                 <h3 class="font-bold text-sm text-[#153638] mb-2">Syarat Naik ke AQC-AS</h3>
                 <ul class="list-disc ml-4 text-gray-700 text-sm font-medium marker:text-[#153638]">
                     <li id="textTargetAQCAS">Jualan Peribadi: RM30,000</li>
                 </ul>
             </div>
 
-            <div class="mt-5 bg-slate-50 border border-slate-100 rounded-xl p-4 text-center">
+            <!-- YURAN RENEWAL (Ditolak rapat ke bawah) -->
+            <div class="mt-auto bg-slate-50 border border-slate-100 rounded-xl p-4 text-center">
                 <p class="text-xs text-gray-500 uppercase font-semibold tracking-wider">Yuran Renewal</p>
                 <p class="text-lg font-bold text-[#153638]" id="renewalAQC"></p>
             </div>
         </div>
 
         <!-- 2. AQC-AS (EMERALD / JUNIOR LEADER) -->
-        <div class="bg-gradient-to-b from-emerald-50 to-white border border-emerald-100 border-t-4 border-t-emerald-500 shadow-sm rounded-2xl p-6 transition-all hover:shadow-lg flex flex-col group">
-            <h2 class="text-xl font-bold text-emerald-900">Assistant Supervisor (AQC-AS)</h2>
+        <div class="bg-gradient-to-b from-emerald-50 to-white border border-emerald-100 border-t-4 border-t-emerald-500 shadow-sm rounded-2xl p-6 transition-all hover:shadow-lg flex flex-col group h-full">
+            <h2 class="text-xl font-bold text-emerald-900 min-h-[60px] xl:min-h-[84px]">Assistant Supervisor (AQC-AS)</h2>
             
-            <div class="grid grid-cols-2 gap-3 mt-5">
+            <div class="grid grid-cols-2 gap-3 mt-2">
                 <div class="bg-emerald-100/40 rounded-xl p-4 flex flex-col justify-center border border-emerald-100/50 group-hover:border-emerald-200 transition">
                     <p class="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider">Komisen</p>
                     <p class="text-2xl font-bold text-emerald-800" id="commissionAQCAS"></p>
@@ -94,7 +102,8 @@ body{ font-family: Inter, sans-serif; }
                 </div>
             </div>
 
-            <div class="mt-6 flex-grow">
+            <!-- BLOK KPI (Fixed Min Height) -->
+            <div class="mt-6 min-h-[170px]">
                 <h3 class="font-semibold mb-2 text-sm text-emerald-900 border-b border-emerald-100 pb-1">KPI Utama</h3>
                 <ul class="list-disc ml-4 text-gray-700 text-sm space-y-1.5 marker:text-emerald-500">
                     <li>Prestasi team</li>
@@ -102,8 +111,11 @@ body{ font-family: Inter, sans-serif; }
                     <li>Onboarding agent baru</li> 
                     <li class="font-bold text-emerald-700 mt-2">FOKUS : PASTIKAN AQC BUAT KERJA YANG BETUL</li>  
                 </ul>
+            </div>
 
-                <h3 class="font-semibold mb-2 mt-5 text-sm text-emerald-900 border-b border-emerald-100 pb-1">Skop Kerja</h3>
+            <!-- BLOK SKOP KERJA (Fixed Min Height) -->
+            <div class="mt-2 min-h-[140px]">
+                <h3 class="font-semibold mb-2 text-sm text-emerald-900 border-b border-emerald-100 pb-1">Skop Kerja</h3>
                 <ul class="list-disc ml-4 text-gray-700 text-sm space-y-1.5 marker:text-emerald-500">
                     <li>Morning briefing</li>
                     <li>Semak aktiviti agent</li>
@@ -112,8 +124,8 @@ body{ font-family: Inter, sans-serif; }
                 </ul>
             </div>
 
-            <!-- SYARAT KEKAL PANGKAT -->
-            <div class="mt-6 bg-emerald-100/50 border border-emerald-200 rounded-xl p-3.5">
+            <!-- BLOK MAINTAIN (Fixed Height) -->
+            <div class="mt-4 bg-emerald-100/50 border border-emerald-200 rounded-xl p-3.5 h-[110px]">
                 <h3 class="font-bold text-emerald-900 mb-2 text-xs uppercase tracking-wider">Maintain Tahunan</h3>
                 <ul class="list-disc ml-4 text-emerald-800 text-xs space-y-1 font-medium">
                     <li id="maintainSalesAS">Jualan Peribadi: RM30,000</li>
@@ -121,8 +133,8 @@ body{ font-family: Inter, sans-serif; }
                 </ul>
             </div>
 
-            <!-- SYARAT NAIK PANGKAT -->
-            <div class="mt-4 pt-4 border-t border-emerald-100">
+            <!-- BLOK SYARAT NAIK PANGKAT (Fixed Height) -->
+            <div class="mt-4 pt-4 border-t border-emerald-100 h-[100px]">
                 <h3 class="font-bold text-sm text-emerald-900 mb-2">Syarat Naik ke AQC-UM</h3>
                 <ul class="list-disc ml-4 text-gray-800 text-sm font-medium space-y-1 marker:text-emerald-600">
                     <li id="textTargetAQCUM">Jualan Team: RM60,000</li>
@@ -130,17 +142,18 @@ body{ font-family: Inter, sans-serif; }
                 </ul>
             </div>
 
-            <div class="mt-5 bg-emerald-50 border border-emerald-100 rounded-xl p-4 text-center">
+            <!-- YURAN RENEWAL (Ditolak rapat ke bawah) -->
+            <div class="mt-auto bg-emerald-50 border border-emerald-100 rounded-xl p-4 text-center">
                 <p class="text-xs text-emerald-700 uppercase font-semibold tracking-wider">Yuran Renewal</p>
                 <p class="text-lg font-bold text-emerald-900" id="renewalAQCAS"></p>
             </div>
         </div>
 
         <!-- 3. AQC-UM (TEAL / SENIOR LEADER) -->
-        <div class="bg-gradient-to-b from-teal-50 to-white border border-teal-100 border-t-4 border-t-teal-600 shadow-sm rounded-2xl p-6 transition-all hover:shadow-lg flex flex-col group">
-            <h2 class="text-xl font-bold text-teal-900">Unit Manager (AQC-UM)</h2>
+        <div class="bg-gradient-to-b from-teal-50 to-white border border-teal-100 border-t-4 border-t-teal-600 shadow-sm rounded-2xl p-6 transition-all hover:shadow-lg flex flex-col group h-full">
+            <h2 class="text-xl font-bold text-teal-900 min-h-[60px] xl:min-h-[84px]">Unit Manager (AQC-UM)</h2>
             
-            <div class="grid grid-cols-2 gap-3 mt-5">
+            <div class="grid grid-cols-2 gap-3 mt-2">
                 <div class="bg-teal-100/40 rounded-xl p-4 flex flex-col justify-center border border-teal-100/50 group-hover:border-teal-200 transition">
                     <p class="text-[11px] font-semibold text-teal-700 uppercase tracking-wider">Komisen</p>
                     <p class="text-2xl font-bold text-teal-800" id="commissionAQCUM"></p>
@@ -151,17 +164,21 @@ body{ font-family: Inter, sans-serif; }
                 </div>
             </div>
 
-            <div class="mt-6 flex-grow">
+            <!-- BLOK KPI (Fixed Min Height) -->
+            <div class="mt-6 min-h-[170px]">
                 <h3 class="font-semibold text-teal-900 mb-2 text-sm border-b border-teal-100 pb-1">KPI Utama</h3>
                 <ul class="list-disc ml-4 text-gray-700 text-sm space-y-1.5 marker:text-teal-500">
-                    <li>Pengeluaran keseluruhan unit</li>
+                    <li>Pengeluaran unit</li>
                     <li>Aktiviti agen (urus 10 AQC)</li>
                     <li>Recruitment</li>  
                     <li>Pembangunan leader</li> 
                     <li class="font-bold text-teal-700 mt-2">FOKUS : BANGUNKAN TEAM LEADER YANG KUAT</li>  
                 </ul>
+            </div>
 
-                <h3 class="font-semibold text-teal-900 mb-2 mt-5 text-sm border-b border-teal-100 pb-1">Skop Kerja</h3>
+            <!-- BLOK SKOP KERJA (Fixed Min Height) -->
+            <div class="mt-2 min-h-[140px]">
+                <h3 class="font-semibold text-teal-900 mb-2 text-sm border-b border-teal-100 pb-1">Skop Kerja</h3>
                 <ul class="list-disc ml-4 text-gray-700 text-sm space-y-1.5 marker:text-teal-500">
                     <li>Review performance semua team</li>
                     <li>Pantau conversion rate</li>
@@ -170,8 +187,8 @@ body{ font-family: Inter, sans-serif; }
                 </ul>
             </div>
 
-            <!-- SYARAT KEKAL PANGKAT -->
-            <div class="mt-6 bg-teal-100/50 border border-teal-200 rounded-xl p-3.5">
+            <!-- BLOK MAINTAIN (Fixed Height) -->
+            <div class="mt-4 bg-teal-100/50 border border-teal-200 rounded-xl p-3.5 h-[110px]">
                 <h3 class="font-bold text-teal-900 mb-2 text-xs uppercase tracking-wider">Maintain Tahunan</h3>
                 <ul class="list-disc ml-4 text-teal-800 text-xs space-y-1 font-medium">
                     <li id="maintainSalesUM">Jualan Peribadi: RM30,000</li>
@@ -179,8 +196,8 @@ body{ font-family: Inter, sans-serif; }
                 </ul>
             </div>
 
-            <!-- SYARAT NAIK PANGKAT -->
-            <div class="mt-4 pt-4 border-t border-teal-100">
+            <!-- BLOK SYARAT NAIK PANGKAT (Fixed Height) -->
+            <div class="mt-4 pt-4 border-t border-teal-100 h-[100px]">
                 <h3 class="font-bold text-sm text-teal-900 mb-2">Syarat Naik ke MGAM</h3>
                 <ul class="list-disc ml-4 text-gray-800 text-sm font-medium space-y-1 marker:text-teal-600">
                     <li id="textTargetMGAM">Jualan Team: RM120,000</li>
@@ -188,20 +205,21 @@ body{ font-family: Inter, sans-serif; }
                 </ul>
             </div>
 
-            <div class="mt-5 bg-teal-50 border border-teal-100 rounded-xl p-4 text-center">
+            <!-- YURAN RENEWAL (Ditolak rapat ke bawah) -->
+            <div class="mt-auto bg-teal-50 border border-teal-100 rounded-xl p-4 text-center">
                 <p class="text-xs text-teal-700 uppercase font-semibold tracking-wider">Yuran Renewal</p>
                 <p class="text-lg font-bold text-teal-900" id="renewalAQCUM"></p>
             </div>
         </div>
 
         <!-- 4. MGAM (ELITE DARK CORPORATE + GOLD) -->
-        <div class="bg-gradient-to-b from-[#153638] to-[#0c1f20] border border-[#1e4d50] border-t-4 border-t-amber-400 shadow-xl rounded-2xl p-6 transition-all hover:-translate-y-1 flex flex-col group relative overflow-hidden">
+        <div class="bg-gradient-to-b from-[#153638] to-[#0c1f20] border border-[#1e4d50] border-t-4 border-t-amber-400 shadow-xl rounded-2xl p-6 transition-all hover:-translate-y-1 flex flex-col group relative overflow-hidden h-full">
             <!-- Shimmer effect -->
             <div class="absolute top-0 right-0 w-32 h-32 bg-amber-400/10 rounded-full blur-3xl"></div>
             
-            <h2 class="text-xl font-bold text-amber-400 relative z-10">Mawaris Group Agency Manager (MGAM)</h2>
+            <h2 class="text-xl font-bold text-amber-400 relative z-10 min-h-[60px] xl:min-h-[84px]">Mawaris Group Agency Manager (MGAM)</h2>
             
-            <div class="grid grid-cols-2 gap-3 mt-5 relative z-10">
+            <div class="grid grid-cols-2 gap-3 mt-2 relative z-10">
                 <div class="bg-white/5 backdrop-blur-sm rounded-xl p-4 flex flex-col justify-center border border-white/10 group-hover:border-amber-400/30 transition">
                     <p class="text-[11px] font-medium text-amber-200/70 uppercase tracking-wider">Komisen</p>
                     <p class="text-2xl font-bold text-amber-400" id="commissionMGAM"></p>
@@ -212,17 +230,21 @@ body{ font-family: Inter, sans-serif; }
                 </div>
             </div>
 
-            <div class="mt-6 flex-grow relative z-10">
+            <!-- BLOK KPI (Fixed Min Height) -->
+            <div class="mt-6 min-h-[170px] relative z-10">
                 <h3 class="font-semibold text-amber-300 mb-2 text-sm border-b border-white/10 pb-1">KPI Utama</h3>
                 <ul class="list-disc ml-4 text-gray-300 text-sm space-y-1.5 marker:text-amber-500/50">
-                    <li>Fokus hasil jualan & keuntungan</li>
-                    <li>Pertumbuhan jualan dan Agensi</li>  
+                    <li>Fokus hasil jualan</li>
+                    <li>Pertumbuhan jualan & agensi</li>  
                     <li>Pengekalan AQC aktif</li> 
                     <li>Pembangunan agensi</li> 
                     <li class="font-bold text-amber-400 mt-2">FOKUS : BANGUNKAN AGENSI MANTAP</li>    
                 </ul>
+            </div>
 
-                <h3 class="font-semibold text-amber-300 mb-2 mt-5 text-sm border-b border-white/10 pb-1">Skop Kerja</h3>
+            <!-- BLOK SKOP KERJA (Fixed Min Height) -->
+            <div class="mt-2 min-h-[140px] relative z-10">
+                <h3 class="font-semibold text-amber-300 mb-2 text-sm border-b border-white/10 pb-1">Skop Kerja</h3>
                 <ul class="list-disc ml-4 text-gray-300 text-sm space-y-1.5 marker:text-amber-500/50">
                     <li>Tetapkan target & strategi</li>
                     <li>Bina partnership</li> 
@@ -230,17 +252,23 @@ body{ font-family: Inter, sans-serif; }
                 </ul>
             </div>
 
-            <!-- SYARAT KEKAL PANGKAT -->
-            <div class="mt-6 bg-amber-500/10 border border-amber-500/20 rounded-xl p-3.5 relative z-10">
+            <!-- BLOK MAINTAIN (Fixed Height) -->
+            <div class="mt-4 bg-amber-500/10 border border-amber-500/20 rounded-xl p-3.5 h-[110px] relative z-10">
                 <h3 class="font-bold text-amber-400 mb-2 text-xs uppercase tracking-wider">Maintain Tahunan</h3>
-                <ul class="list-disc ml-4 text-amber-100/90 text-xs space-y-1 font-medium">
+                <ul class="list-disc ml-4 text-amber-100/90 text-[11px] space-y-1 font-medium">
                     <li id="maintainSalesMGAM">Jualan Team: RM240,000</li>
                     <li id="maintainRecruitMGAM">Rekrut Ejen: 20 AQC aktif</li>
-                    <li class="mt-2 text-amber-400 italic border-t border-amber-500/20 pt-1.5">Melepasi syarat melayakkan Bonus Tahunan!</li>
+                    <li class="mt-1 text-amber-400 italic">Melepasi syarat melayakkan Bonus!</li>
                 </ul>
             </div>
 
-            <div class="mt-5 bg-black/20 border border-white/5 rounded-xl p-4 text-center relative z-10">
+            <!-- BLOK SYARAT NAIK PANGKAT (Ruang Kosong untuk sebaris) -->
+            <div class="mt-4 pt-4 border-t border-amber-500/20 h-[100px] relative z-10 flex items-center justify-center">
+                <p class="text-amber-500/40 text-xs font-semibold tracking-widest uppercase">Level Tertinggi</p>
+            </div>
+
+            <!-- YURAN RENEWAL (Ditolak rapat ke bawah) -->
+            <div class="mt-auto bg-black/20 border border-white/5 rounded-xl p-4 text-center relative z-10">
                 <p class="text-xs text-amber-200/60 uppercase font-semibold tracking-wider">Yuran Renewal</p>
                 <p class="text-lg font-bold text-amber-400" id="renewalMGAM"></p>
             </div>
