@@ -189,20 +189,15 @@
             }, 3000);
         }
 
-        const initAuth = async () => {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(auth, __initial_auth_token);
+       onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Jika pengguna dah login, panggil data
+                await loadConsultantsData();
             } else {
-                await signInAnonymously(auth);
+                // Jika belum login, halau ke muka surat login
+                window.location.href = "login.html"; 
             }
-        };
-
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) return;
-            await loadConsultantsData();
         });
-
-        initAuth().catch(err => console.error("Ralat pengesahan:", err));
 
         // Fungsi Memuatkan Data Utama
         async function loadConsultantsData() {
