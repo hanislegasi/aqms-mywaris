@@ -258,13 +258,15 @@ body{ font-family: Inter, sans-serif; }
                 <ul class="list-disc ml-4 text-amber-100/90 text-[11px] space-y-1 font-medium">
                     <li id="maintainSalesMGAM">Jualan Team: RM240,000</li>
                     <li id="maintainRecruitMGAM">Rekrut Ejen: 20 AQC aktif</li>
-                    <li class="mt-1 text-amber-400 italic">Melepasi syarat melayakkan Bonus!</li>
                 </ul>
             </div>
 
-            <!-- BLOK SYARAT NAIK PANGKAT (Ruang Kosong untuk sebaris) -->
-            <div class="mt-4 pt-4 border-t border-amber-500/20 h-[100px] relative z-10 flex items-center justify-center">
-                <p class="text-amber-500/40 text-xs font-semibold tracking-widest uppercase">Jualan Team RM240,000 melayakkan Bonus!</p>
+            <!-- BLOK SYARAT BONUS (Ganti tempat ruang kosong) -->
+            <div class="mt-4 pt-4 border-t border-amber-500/20 h-[100px] relative z-10">
+                <h3 class="font-bold text-sm text-amber-400 mb-2">Level Tertinggi Agensi</h3>
+                <ul class="list-disc ml-4 text-amber-100/90 text-[13px] font-medium space-y-1 marker:text-amber-500/50">
+                    <li id="textTargetBonus">Jualan Team RM240,000 melayakkan Bonus!</li>
+                </ul>
             </div>
 
             <!-- YURAN RENEWAL (Ditolak rapat ke bawah) -->
@@ -330,6 +332,9 @@ async function loadCompensationData() {
             const targetAQCUM = compensation.targetSalesAQCUM || 60000;
             const targetMGAM = compensation.targetSalesMGAM || 120000;
 
+            // Tambah ini untuk tarik target bonus dari database
+            const targetSalesBonus = compensation.targetSalesBonus || 240000;
+            
             const promoteRecruitUM = compensation.targetRecruitAQCUM || 10;
             const promoteRecruitMGAM = compensation.targetRecruitMGAM || 20;
             
@@ -337,6 +342,9 @@ async function loadCompensationData() {
             document.getElementById("textTargetAQCUM").innerHTML = `Jualan Kumpulan: <b>RM${formatRM(targetAQCUM)}</b>`;
             document.getElementById("textTargetMGAM").innerHTML = `Jualan Kumpulan: <b>RM${formatRM(targetMGAM)}</b>`;
 
+            // Tambah barisan ini untuk pancarkan ke UI
+            document.getElementById("textTargetBonus").innerHTML = `Jualan Team <b>RM${formatRM(targetSalesBonus)}</b> melayakkan Bonus!`;
+            
             document.getElementById("promoteRecruitUM").innerHTML = `Rekrut Ejen: <b>${promoteRecruitUM} AQC</b>`;
             document.getElementById("promoteRecruitMGAM").innerHTML = `Rekrut Ejen: <b>${promoteRecruitMGAM} AQC</b>`;
             
