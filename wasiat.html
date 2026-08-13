@@ -1357,44 +1357,40 @@ data.pemegangAmanah.telefon || "";
 
 }
 
-// --- SKRIP FORMAT AUTOMATIK MENYELURUH (SEMUA SEKSYEN) ---
-
+// --- SKRIP UJIAN (DEBUGGING) ---
 document.addEventListener('input', function (e) {
     let target = e.target;
-    if (target.tagName !== 'INPUT') return; // Pastikan ia elemen input teks
+    if (target.tagName !== 'INPUT') return;
+
+    // Cuba semak di Console (Tekan F12 di keyboard, tengok bahagian Console)
+    console.log("Taip pada:", target.id, target.className, target.placeholder);
 
     let val = target.value;
-    
-    // Gabungkan semua atribut supaya ia pasti 'terbaca' tak kira apa cara HTML anda tulis
     let identifier = (target.id + " " + target.className + " " + target.name + " " + target.placeholder).toLowerCase();
 
-    // 1. FORMAT NAMA (Huruf besar setiap awal perkataan)
+    // 1. FORMAT NAMA
     if (identifier.includes('nama') || identifier.includes('penama')) {
         target.value = val.replace(/\w\S*/g, (txt) => {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
     }
 
-    // 2. FORMAT NO IC (000000-00-0000)
+    // 2. FORMAT NO IC
     if (identifier.includes('ic') || identifier.includes('kad pengenalan')) {
-        let cleanVal = val.replace(/\D/g, ''); // Buang selain nombor
+        let cleanVal = val.replace(/\D/g, '');
         let formatted = '';
-        
         if (cleanVal.length > 0) formatted += cleanVal.substring(0, 6);
         if (cleanVal.length > 6) formatted += '-' + cleanVal.substring(6, 8);
         if (cleanVal.length > 8) formatted += '-' + cleanVal.substring(8, 12);
-        
         target.value = formatted;
     }
 
-    // 3. FORMAT NO TELEFON (012-34567890)
+    // 3. FORMAT NO TELEFON
     if (identifier.includes('telefon') || identifier.includes('phone') || identifier.includes('tel')) {
-        let cleanVal = val.replace(/\D/g, ''); // Buang selain nombor
+        let cleanVal = val.replace(/\D/g, '');
         let formatted = '';
-        
         if (cleanVal.length > 0) formatted += cleanVal.substring(0, 3);
         if (cleanVal.length > 3) formatted += '-' + cleanVal.substring(3, 11);
-        
         target.value = formatted;
     }
 });
