@@ -146,39 +146,35 @@
         <span id="toastMessage" class="font-medium text-sm">Berjaya</span>
     </div>
 
-    <!-- Firebase Scripts -->
-    <script type="module">  
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { 
-            getFirestore, 
-            collection, 
-            getDocs, 
-            doc, 
-            updateDoc 
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { 
-            getAuth, 
-            signInAnonymously, 
-            signInWithCustomToken, 
-            onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+ <!-- Firebase Scripts -->
+<script type="module">  
+    // 1. Tarik alat yang diperlukan sahaja (tak perlu getFirestore, getAuth atau initializeApp lagi)
+    import { 
+        collection, 
+        getDocs, 
+        doc, 
+        updateDoc 
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    
+    import { 
+        signInAnonymously, 
+        signInWithCustomToken, 
+        onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-        let firebaseConfig = {
-            apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-            authDomain: "alqawthar-mywaris.firebaseapp.com",
-            projectId: "alqawthar-mywaris",
-            storageBucket: "alqawthar-mywaris.firebasestorage.app",
-            messagingSenderId: "3498810778",
-            appId: "1:3498810778:web:ee36e0fe42f76698046e23"
-        };
+    // 2. Tarik 'db' dan 'auth' yang dah siap dipasang dari fail firebase.js awak
+    import { db, auth } from './firebase.js';
 
-        if (typeof __firebase_config !== 'undefined') {
-            try { firebaseConfig = JSON.parse(__firebase_config); } catch (e) { }
-        }
+    // (Pilihan) Kalau ada kod lain yang nak pakai __firebase_config, letak sini
+    // Tapi selalunya dah tak perlu kalau dah guna import { db, auth } dari fail berpusat
+    if (typeof __firebase_config !== 'undefined') {
+        try { let firebaseConfig = JSON.parse(__firebase_config); } catch (e) { }
+    }
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
+    // 3. TERUS MULA BUAT FUNGSI AWAK (Contoh)
+    // Awak dah boleh panggil auth.currentUser atau getDocs(collection(db, "nama-collection"))
+    
+
 
         // Toast Notification
         window.showToast = function(message) {
