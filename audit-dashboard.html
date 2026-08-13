@@ -1,300 +1,289 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-<title>Audit Centre</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-body{
-font-family: Inter, sans-serif;
-}
-</style>  
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Audit Centre</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: Inter, sans-serif; }
+        
+        /* Custom timeline line style */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            bottom: -24px;
+            left: 7px;
+            width: 2px;
+            background-color: #e5e7eb;
+            z-index: 0;
+        }
+        .timeline-group:last-child .timeline-line::before {
+            bottom: 0;
+        }
+    </style>  
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-50 pb-20">
 
-<div class="bg-[#153638] text-white p-5">
+    <!-- HEADER -->
+    <div class="bg-[#153638] text-white p-5 shadow-md">
+        <div class="max-w-6xl mx-auto flex items-center gap-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <h1 class="text-2xl font-bold tracking-wide">Audit Centre</h1>
+        </div>
+    </div>
 
-<h1 class="text-2xl font-bold">
+    <div class="p-5">
+        
+        <a href="admin-dashboard.html" class="inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition px-5 py-2.5 rounded-xl font-medium mb-6 shadow-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+            Kembali ke Dashboard
+        </a>
 
-Audit Centre
+        <!-- FINANCIAL AUDIT CARDS -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                <h2 class="font-bold text-gray-500 uppercase text-xs tracking-wider">Trial Balance</h2>
+                <p id="tbStatus" class="mt-2 text-xl font-bold text-gray-800">Checking...</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                <h2 class="font-bold text-gray-500 uppercase text-xs tracking-wider">Profit & Loss</h2>
+                <p id="plStatus" class="mt-2 text-xl font-bold text-gray-800">Checking...</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                <h2 class="font-bold text-gray-500 uppercase text-xs tracking-wider">Balance Sheet</h2>
+                <p id="bsStatus" class="mt-2 text-xl font-bold text-gray-800">Checking...</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                <h2 class="font-bold text-gray-500 uppercase text-xs tracking-wider">Payment Voucher</h2>
+                <p id="pvStatus" class="mt-2 text-xl font-bold text-gray-800">Checking...</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 bg-gradient-to-br from-green-50 to-white">
+                <h2 class="font-bold text-green-700 uppercase text-xs tracking-wider">Audit Score</h2>
+                <p id="auditScore" class="mt-2 text-4xl font-bold text-green-600">100%</p>
+            </div>
+            <div class="flex items-center justify-center">
+                <button id="runAudit" class="w-full bg-[#153638] hover:bg-[#1e4d50] text-white font-bold px-6 py-4 rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    Jalankan Audit Penuh
+                </button>
+            </div>
+        </div>
 
-</h1>
+        <!-- ============================================ -->
+        <!-- GITHUB-STYLE HISTORY LOG TIMELINE            -->
+        <!-- ============================================ -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 mt-10">
+            <!-- Header Log -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-6 border-b border-gray-200 gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800">History Log</h2>
+                    <p class="text-sm text-gray-500 mt-1">
+                        History for <span class="text-blue-600 font-medium">aqms-mywaris</span> / <span class="font-mono text-xs bg-gray-100 px-1 py-0.5 rounded">system-logs</span>
+                    </p>
+                </div>
+                <div class="flex gap-2">
+                    <select class="bg-white border border-gray-300 text-gray-700 rounded-lg px-3 py-1.5 text-sm outline-none hover:bg-gray-50 font-medium cursor-pointer">
+                        <option>🧑‍🤝‍🧑 All users</option>
+                        <option>Admin HQ</option>
+                        <option>Consultants</option>
+                    </select>
+                    <select class="bg-white border border-gray-300 text-gray-700 rounded-lg px-3 py-1.5 text-sm outline-none hover:bg-gray-50 font-medium cursor-pointer">
+                        <option>📅 All time</option>
+                        <option>This week</option>
+                        <option>This month</option>
+                    </select>
+                </div>
+            </div>
 
-</div>
+            <!-- Content Log Timeline -->
+            <div id="logContainer" class="p-6">
+                <div class="text-center py-10">
+                    <div class="w-8 h-8 border-4 border-t-transparent border-[#153638] rounded-full animate-spin mx-auto mb-3"></div>
+                    <p class="text-gray-500">Memuatkan rekod aktiviti...</p>
+                </div>
+            </div>
+        </div>
 
-<div class="max-w-6xl mx-auto p-5">
-
-<a
-href="admin-dashboard.html"
-class="bg-gray-200 px-5 py-3 rounded-xl inline-block mb-5">
-
-← Dashboard
-
-</a>
-
-<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-
-<div class="bg-white rounded-xl shadow p-5">
-
-<h2 class="font-bold text-lg">
-
-Trial Balance
-
-</h2>
-
-<p id="tbStatus"
-class="mt-3 text-xl font-bold">
-
-Checking...
-
-</p>
-
-</div>
-
-<div class="bg-white rounded-xl shadow p-5">
-
-<h2 class="font-bold text-lg">
-
-Profit & Loss
-
-</h2>
-
-<p id="plStatus"
-class="mt-3 text-xl font-bold">
-
-Checking...
-
-</p>
-
-</div>
-
-<div class="bg-white rounded-xl shadow p-5">
-
-<h2 class="font-bold text-lg">
-
-Balance Sheet
-
-</h2>
-
-<p id="bsStatus"
-class="mt-3 text-xl font-bold">
-
-Checking...
-
-</p>
-
-</div>
-
-<div class="bg-white rounded-xl shadow p-5">
-
-<h2 class="font-bold text-lg">
-
-Payment Voucher
-
-</h2>
-
-<p id="pvStatus"
-class="mt-3 text-xl font-bold">
-
-Checking...
-
-</p>
-
-</div>
-
-<div class="bg-white rounded-xl shadow p-5">
-
-<h2 class="font-bold text-lg">
-
-Audit Score
-
-</h2>
-
-<p id="auditScore"
-class="mt-3 text-3xl font-bold text-green-600">
-
-100%
-
-</p>
-
-</div>
-
-</div>
-
-<button
-id="runAudit"
-class="mt-8 bg-[#153638] text-white px-6 py-3 rounded-xl">
-
-Run Audit
-
-</button>
-
-</div>
+    </div>
 
 <script type="module">  
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import{
-getFirestore,
-collection,
-getDocs
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   
 const firebaseConfig = {
-
-apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-
-authDomain:"alqawthar-mywaris.firebaseapp.com",
-
-projectId:"alqawthar-mywaris",
-
-storageBucket:"alqawthar-mywaris.firebasestorage.app",
-
-messagingSenderId:"3498810778",
-
-appId:"1:3498810778:web:ee36e0fe42f76698046e23"
-
+    apiKey:"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+    authDomain:"alqawthar-mywaris.firebaseapp.com",
+    projectId:"alqawthar-mywaris",
+    storageBucket:"alqawthar-mywaris.firebasestorage.app",
+    messagingSenderId:"3498810778",
+    appId:"1:3498810778:web:ee36e0fe42f76698046e23"
 };
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);  
 
-import {
-getAuth,
-onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  
-const db =
-getFirestore(app);
-
-const auth =
-getAuth(app);  
-
+// 1. FUNGSI SEMAKAN KEWANGAN (Sedia ada)
 async function runAudit(){
+    const snap = await getDocs(collection(db,"ledger"));
+    let debit=0;
+    let credit=0;
 
-const snap =
-await getDocs(
-collection(db,"ledger")
-);
+    snap.forEach(d=>{
+        const row=d.data();
+        debit+=Number(row.debit||0);
+        credit+=Number(row.credit||0);
+    });
 
-let debit=0;
-let credit=0;
+    document.getElementById("tbStatus").innerHTML = Math.abs(debit-credit)<0.01 ? "✅ Balanced" : "❌ Not Balanced";
 
-snap.forEach(d=>{
+    const pv = await getDocs(collection(db,"paymentVouchers"));
+    let pending=0;
 
-const row=d.data();
+    pv.forEach(d=>{
+        if(d.data().status=="PENDING") pending++;
+    });
 
-debit+=Number(row.debit||0);
-credit+=Number(row.credit||0);
+    document.getElementById("pvStatus").innerHTML = pending==0 ? "✅ No Pending" : pending+" Pending";
+    document.getElementById("plStatus").innerHTML = "✅ Verified";
+    document.getElementById("bsStatus").innerHTML = "✅ Verified";
 
+    let score=100;
+    if(Math.abs(debit-credit)>0.01) score-=40;
+    if(pending>0) score-=10;
+
+    document.getElementById("auditScore").innerHTML= score+"%";
+}
+
+// 2. FUNGSI TARIK TIMELINE LOG (Baru - GitHub Style)
+async function fetchActivityLogs() {
+    const logContainer = document.getElementById("logContainer");
+    
+    try {
+        // Anggap koleksi log anda bernama "auditLogs"
+        const q = query(collection(db, "auditLogs"), orderBy("timestamp", "desc"), limit(50));
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+            logContainer.innerHTML = `
+                <div class="text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+                    <svg class="w-10 h-10 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    <p class="text-gray-500 font-medium">Tiada rekod log aktiviti dijumpai setakat ini.</p>
+                </div>`;
+            return;
+        }
+
+        // Kumpulkan log mengikut Tarikh (Grouping by Date)
+        const groupedLogs = {};
+        snap.forEach(doc => {
+            const data = doc.data();
+            // Semak format timestamp firebase
+            const dateObj = data.timestamp?.toDate ? data.timestamp.toDate() : new Date();
+            
+            // Format contoh: "Aug 13, 2026"
+            const dateStr = dateObj.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
+
+            if(!groupedLogs[dateStr]) groupedLogs[dateStr] = [];
+            groupedLogs[dateStr].push({...data, id: doc.id, dateObj});
+        });
+
+        let html = "";
+        
+        // Loop setiap tarikh (Timeline Group)
+        for (const [date, logs] of Object.entries(groupedLogs)) {
+            html += `
+            <div class="timeline-group relative mb-8">
+                <!-- Titik dan Tarikh -->
+                <div class="flex items-center gap-3 mb-3 relative z-10">
+                    <div class="w-4 h-4 rounded-full bg-gray-200 border-2 border-white shadow-sm flex-shrink-0"></div>
+                    <h3 class="text-xs font-semibold text-gray-500">Commits on ${date}</h3>
+                </div>
+                
+                <!-- Garisan Timeline Menegak -->
+                <div class="timeline-line relative ml-2 pl-6 space-y-3">
+            `;
+
+            // Loop setiap log dalam tarikh tersebut
+            logs.forEach(log => {
+                const action = log.action || "Sistem dikemaskini";
+                const user = log.userName || log.userEmail || "System Admin";
+                const details = log.details || "Modul sistem berjaya diakses dan direkodkan.";
+                const timeStr = log.dateObj.toLocaleTimeString("en-US", { hour: 'numeric', minute:'2-digit', hour12: true });
+                // Buat mock Hash (Commit ID) guna ID dokumen Firebase
+                const shortHash = log.id.substring(0, 7);
+
+                html += `
+                    <!-- Kad Log Action -->
+                    <div class="bg-white border border-gray-200 rounded-lg p-3.5 shadow-sm hover:bg-gray-50 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4 group">
+                        
+                        <!-- Ikon Commit Kecil -->
+                        <svg class="absolute -left-[17px] mt-1 w-4 h-4 text-gray-400 bg-white" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M10.5 7.75a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0zm1.43.75a4.002 4.002 0 01-7.86 0H.75a.75.75 0 110-1.5h3.32a4.001 4.001 0 017.86 0h3.32a.75.75 0 110 1.5h-3.32z"></path></svg>
+                        
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-800 text-sm mb-1 group-hover:text-blue-600 transition-colors cursor-pointer">${action}</h4>
+                            <div class="flex flex-wrap items-center gap-1.5 text-xs text-gray-500">
+                                <span class="w-4 h-4 bg-orange-100 text-orange-700 rounded-full flex items-center justify-center font-bold text-[9px]">${user.charAt(0).toUpperCase()}</span>
+                                <span class="font-medium text-gray-700">${user}</span>
+                                <span>authored at ${timeStr}</span>
+                                <span class="text-gray-300 hidden sm:inline">•</span>
+                                <span class="text-gray-400 hidden sm:inline">${details}</span>
+                            </div>
+                        </div>
+
+                        <!-- Status & Hash -->
+                        <div class="flex items-center gap-3">
+                            <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 border border-emerald-300 px-2 py-0.5 rounded-full">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Verified
+                            </span>
+                            <span class="font-mono text-xs text-gray-600 hover:text-blue-600 hover:underline cursor-pointer bg-gray-100 px-2 py-1 rounded">${shortHash}</span>
+                            <button class="text-gray-400 hover:text-gray-600 border border-gray-200 rounded p-1 bg-gray-50">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                </div>
+            </div>
+            `;
+        }
+
+        logContainer.innerHTML = html;
+
+    } catch (error) {
+        console.error("Error fetching logs:", error);
+        logContainer.innerHTML = `<p class="text-center text-red-500 py-5">Ralat memuatkan log aktiviti. Semak rule pangkalan data anda.</p>`;
+    }
+}
+
+// 3. EXECUTE FUNCTIONS
+document.getElementById("runAudit").addEventListener("click", async()=>{
+    const btn = document.getElementById("runAudit");
+    btn.disabled = true;
+    btn.innerHTML = `<svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Running...`;
+    
+    await runAudit();
+    await fetchActivityLogs(); // Segarkan log sekali bila audit berjalan
+
+    btn.innerHTML = "Jalankan Audit Penuh";
+    btn.disabled = false;
 });
 
-document.getElementById("tbStatus").innerHTML=
-
-Math.abs(debit-credit)<0.01
-
-?
-
-"✅ Balanced"
-
-:
-
-"❌ Not Balanced";
-
-
-const pv =
-await getDocs(
-collection(db,"paymentVouchers")
-);
-
-let pending=0;
-
-pv.forEach(d=>{
-
-if(d.data().status=="PENDING"){
-
-pending++;
-
-}
-
-});
-
-document.getElementById("pvStatus").innerHTML=
-
-pending==0
-
-?
-
-"✅ No Pending"
-
-:
-
-pending+" Pending";
-
-
-document.getElementById("plStatus").innerHTML=
-"✅ Verified";
-
-document.getElementById("bsStatus").innerHTML=
-"✅ Verified";
-
-
-let score=100;
-
-if(Math.abs(debit-credit)>0.01){
-
-score-=40;
-
-}
-
-if(pending>0){
-
-score-=10;
-
-}
-
-document.getElementById("auditScore").innerHTML=
-score+"%";
-
-}
-
-document
-.getElementById("runAudit")
-.addEventListener("click", async()=>{
-
-const btn =
-document.getElementById("runAudit");
-
-btn.disabled = true;
-btn.innerHTML = "Running...";
-
-await runAudit();
-
-btn.innerHTML = "Run Audit";
-btn.disabled = false;
-
-});
-
+// Run masa mula-mula page buka
 runAudit();
-  
+fetchActivityLogs();
 
 </script>
-
 </body>
 </html>
-
 
 
 
