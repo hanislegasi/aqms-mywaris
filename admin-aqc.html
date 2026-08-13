@@ -9,9 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+        body { font-family: 'Inter', sans-serif; }
     </style>  
 </head>
 
@@ -52,7 +50,7 @@
         </div>
 
         <!-- Quick Stats Overview -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Jumlah Perunding</p>
@@ -62,6 +60,7 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                 </div>
             </div>
+            
             <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Jumlah Career Sales</p>
@@ -71,13 +70,15 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
             </div>
-            <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Perunding Berbayar (Paid)</p>
-                    <h3 id="statTotalPaid" class="text-2xl font-bold text-gray-800 mt-1">-</h3>
-                </div>
-                <div class="p-3 bg-purple-50 text-purple-700 rounded-xl">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+
+            <!-- Kad Pecahan Level -->
+            <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Pecahan Pangkat</p>
+                <div class="grid grid-cols-2 gap-y-1 gap-x-4 text-sm font-medium text-gray-600">
+                    <div class="flex justify-between">AQC: <span id="countAQC" class="font-bold text-gray-900">0</span></div>
+                    <div class="flex justify-between">AQC-AS: <span id="countAS" class="font-bold text-blue-700">0</span></div>
+                    <div class="flex justify-between">AQC-UM: <span id="countUM" class="font-bold text-purple-700">0</span></div>
+                    <div class="flex justify-between">MGAM: <span id="countMGAM" class="font-bold text-amber-600">0</span></div>
                 </div>
             </div>
         </div>
@@ -92,7 +93,7 @@
             <input
                 id="searchInput"
                 type="text"
-                placeholder="Cari nama, telefon, email, no AQC atau level perunding..."
+                placeholder="Cari nama, no AQC, upline, negeri atau level perunding..."
                 class="w-full pl-11 pr-4 py-4 rounded-2xl border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#153638] focus:border-transparent transition duration-150 text-base"
             >
         </div>
@@ -104,13 +105,13 @@
                     <thead class="bg-[#153638] text-white">
                         <tr>
                             <th class="p-3 text-left">Bil</th>
-<th class="p-3 text-left">Tarikh Daftar</th>
-<th class="p-3 text-left">No AQC</th>
-<th class="p-3 text-left">Nama</th>
-<th class="p-3 text-left">Level</th>
-<th class="p-3 text-left">Telefon</th>
-<th class="p-3 text-left">Career Sales</th>
-<th class="p-3 text-left">Status</th>
+                            <th class="p-3 text-left">Tarikh Daftar</th>
+                            <th class="p-3 text-left">No AQC</th>
+                            <th class="p-3 text-left min-w-[200px]">Maklumat Perunding</th>
+                            <th class="p-3 text-left">Upline</th>
+                            <th class="p-3 text-left">Level</th>
+                            <th class="p-3 text-left">Sales (RM)</th>
+                            <th class="p-3 text-center min-w-[180px]">Tindakan</th>
                         </tr>
                     </thead>
                     <tbody id="consultantList" class="divide-y divide-gray-100">
@@ -132,18 +133,17 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <p class="font-medium text-gray-600">Tiada padanan data ditemui</p>
-                <p class="text-xs text-gray-400 mt-1">Cuba kata kunci carian yang lain.</p>
             </div>
         </div>
 
     </div>
 
-    <!-- Notification Toast System (Moden) -->
+    <!-- Notification Toast System -->
     <div id="toast" class="fixed bottom-5 right-5 bg-gray-900 text-white px-6 py-4 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none z-50 flex items-center gap-3">
         <span class="p-1 bg-green-500 rounded-full text-white inline-block">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
         </span>
-        <span id="toastMessage" class="font-medium text-sm">Action Successful</span>
+        <span id="toastMessage" class="font-medium text-sm">Berjaya</span>
     </div>
 
     <!-- Firebase Scripts -->
@@ -153,7 +153,6 @@
             getFirestore, 
             collection, 
             getDocs, 
-            getDoc, 
             doc, 
             updateDoc 
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -164,7 +163,6 @@
             onAuthStateChanged 
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-        // Firebase Configuration (Telah Dipelihara)
         let firebaseConfig = {
             apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
             authDomain: "alqawthar-mywaris.firebaseapp.com",
@@ -174,21 +172,16 @@
             appId: "1:3498810778:web:ee36e0fe42f76698046e23"
         };
 
-        // Menyokong pemboleh ubah persekitaran (Global Env) jika diakses melalui kerangka kerja khusus
         if (typeof __firebase_config !== 'undefined') {
-            try {
-                firebaseConfig = JSON.parse(__firebase_config);
-            } catch (e) {
-                console.error("Gagal mengurai __firebase_config, menggunakan konfigurasi lalai.", e);
-            }
+            try { firebaseConfig = JSON.parse(__firebase_config); } catch (e) { }
         }
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // Fungsi Memaparkan Toast Notification
-        function showToast(message) {
+        // Toast Notification
+        window.showToast = function(message) {
             const toast = document.getElementById("toast");
             const toastMsg = document.getElementById("toastMessage");
             toastMsg.textContent = message;
@@ -200,7 +193,6 @@
             }, 3000);
         }
 
-        // Jalankan Autentikasi terlebih dahulu mengikut Standard Keselamatan Firebase
         const initAuth = async () => {
             if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                 await signInWithCustomToken(auth, __initial_auth_token);
@@ -209,190 +201,192 @@
             }
         };
 
-        // Mulakan proses memuatkan data selepas pengguna dikesan aktif
         onAuthStateChanged(auth, async (user) => {
             if (!user) return;
             await loadConsultantsData();
         });
 
-        // Jalankan fungsi pengesahan
         initAuth().catch(err => console.error("Ralat pengesahan:", err));
 
-        // Memuatkan dan Menyusun Data Perunding
+        // Fungsi Memuatkan Data Utama
         async function loadConsultantsData() {
             try {
-                // Ambil semua dokumen tanpa order kompleks terus dari Firestore demi keselamatan & prestasi optimum
                 const snapshot = await getDocs(collection(db, "consultants"));
                 
                 let consultants = [];
                 let totalSales = 0;
-                let paidCount = 0;
+                let cAQC = 0, cAS = 0, cUM = 0, cMGAM = 0;
 
                 snapshot.forEach((d) => {
                     const u = d.data();
-                    consultants.push({
-                        id: d.id,
-                        ...u
-                    });
+                    consultants.push({ id: d.id, ...u });
                     
-                    // Kira Statistik ringkas untuk paparan atas
                     totalSales += (u.careerSales || 0);
-                    if (u.consultantPaymentStatus === "paid") {
-                        paidCount++;
-                    }
+
+                    // Kira Pecahan Pangkat
+                    if(u.consultantLevel === "AQC") cAQC++;
+                    else if(u.consultantLevel === "AQC-AS") cAS++;
+                    else if(u.consultantLevel === "AQC-UM") cUM++;
+                    else if(u.consultantLevel === "MGAM") cMGAM++;
+                    else cAQC++; // Default jika undefined
                 });
 
-                // KEMAS KINI STATISTIK
+                // Update Stats UI
                 document.getElementById("statTotalConsultants").textContent = consultants.length;
                 document.getElementById("statTotalSales").textContent = "RM" + totalSales.toLocaleString("ms-MY");
-                document.getElementById("statTotalPaid").textContent = `${paidCount} / ${consultants.length}`;
+                document.getElementById("countAQC").textContent = cAQC;
+                document.getElementById("countAS").textContent = cAS;
+                document.getElementById("countUM").textContent = cUM;
+                document.getElementById("countMGAM").textContent = cMGAM;
 
-                // PENYUSUNAN TERKINI (LATEST REGISTERED FIRST) - ISIH DI DALAM MEMORI (JS MEMORY SORT)
+                // Sort: Paling Baru Di Atas
                 consultants.sort((a, b) => {
                     const getJoinDateTime = (item) => {
                         if (!item.joinDate) return 0;
                         if (item.joinDate.toDate) return item.joinDate.toDate().getTime();
-                        if (item.joinDate instanceof Date) return item.joinDate.getTime();
                         const parsedDate = new Date(item.joinDate);
                         return isNaN(parsedDate.getTime()) ? 0 : parsedDate.getTime();
                     };
-
-                    const timeA = getJoinDateTime(a);
-                    const timeB = getJoinDateTime(b);
-
-                    return timeB - timeA; // Tertib menurun (Descennding) - Yang paling baru diletak di atas sekali
+                    return getJoinDateTime(b) - getJoinDateTime(a);
                 });
 
-                // BINAKAN BARIS JADUAL (HTML BUILDER)
                 let html = "";
                 let bil = 1;
 
                 if (consultants.length === 0) {
-                    html = `
-                        <tr>
-                            <td colspan="8" class="p-8 text-center text-gray-500 font-medium">
-                                Tiada data perunding ditemui dalam pangkalan data.
-                            </td>
-                        </tr>
-                    `;
+                    html = `<tr><td colspan="8" class="p-8 text-center text-gray-500 font-medium">Tiada data perunding ditemui.</td></tr>`;
                 } else {
                     consultants.forEach((u) => {
-                        const joinDate = u.joinDate?.toDate 
-                            ? u.joinDate.toDate() 
-                            : (u.joinDate instanceof Date ? u.joinDate : new Date(u.joinDate));
+                        const joinDate = u.joinDate?.toDate ? u.joinDate.toDate() : (u.joinDate instanceof Date ? u.joinDate : new Date(u.joinDate));
+                        const state = u.state || "Tiada Negeri";
+                        const upline = u.upline || "Tiada Upline";
+                        const lvl = u.consultantLevel || "AQC";
+
+                        // Logik Action Column (Tindakan)
+                        let actionHTML = "";
+                        if (u.promotionRequest) {
+                            actionHTML = `
+                                <div class="flex flex-col gap-1.5 items-center">
+                                    <span class="text-[11px] font-bold text-orange-600 bg-orange-100 px-2 py-0.5 rounded-md">Mohon: ${u.requestedLevel}</span>
+                                    <div class="flex gap-1 mt-1">
+                                        <button onclick="window.approvePromo('${u.id}', '${u.requestedLevel}')" class="bg-green-500 hover:bg-green-600 text-white text-xs px-3 py-1.5 rounded-lg shadow-sm font-semibold transition">Lulus</button>
+                                        <button onclick="window.rejectPromo('${u.id}')" class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg shadow-sm font-semibold transition">Tolak</button>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            actionHTML = `
+                                <div class="flex items-center justify-center gap-1.5">
+                                    <select id="select_${u.id}" class="text-xs border border-gray-300 rounded-lg p-1.5 bg-gray-50 outline-none focus:ring-1 focus:ring-[#153638]">
+                                        <option value="AQC" ${lvl==='AQC'?'selected':''}>AQC</option>
+                                        <option value="AQC-AS" ${lvl==='AQC-AS'?'selected':''}>AQC-AS</option>
+                                        <option value="AQC-UM" ${lvl==='AQC-UM'?'selected':''}>AQC-UM</option>
+                                        <option value="MGAM" ${lvl==='MGAM'?'selected':''}>MGAM</option>
+                                    </select>
+                                    <button onclick="window.updateLevel('${u.id}')" class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs px-3 py-1.5 rounded-lg font-semibold transition shadow-sm">Save</button>
+                                </div>
+                            `;
+                        }
 
                         html += `
                             <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                               <td class="p-4 text-sm font-semibold">
-                                    ${bil++}
+                                <td class="p-4 text-sm font-semibold">${bil++}</td>
+                                <td class="p-4 text-sm font-medium text-gray-600">${isNaN(joinDate) ? "-" : joinDate.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' })}</td>
+                                <td class="p-4 text-sm font-bold text-[#153638]">${u.consultantNo || "-"}</td>
+                                <td class="p-4">
+                                    <div class="text-sm font-bold text-gray-800">${u.nama || "-"}</div>
+                                    <div class="text-xs text-gray-500 mt-0.5">${u.telefon || "-"} • ${state}</div>
                                 </td>
-                                <td class="p-4 text-sm font-semibold">
-                                    ${isNaN(joinDate) ? "-" : joinDate.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' })}
-                                </td>
-                                <td class="p-4 text-sm font-semibold">
-                                    ${u.consultantNo || "-"}
-                                </td>
-                                <td class="p-4 text-sm font-semibold">
-                                    <a href="admin-consultant-details.html?id=${u.id}" class="text-[#153638] hover:underline hover:text-green-800 flex items-center gap-1">
-                                        ${u.nama}
-                                        <svg class="w-4 h-4 opacity-0 hover:opacity-100 transition-opacity inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                                    </a>
-                                </td>
-                                <td class="p-4 text-sm font-semibold">
-                                    <span class="bg-gray-100 text-gray-700 px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider">
-                                        ${u.consultantLevel || "-"}
-                                    </span>
-                                </td>
-                                <td class="p-4 text-sm font-semibold">
-                                    ${u.telefon || "-"}
-                                </td>
-                               <td class="p-4 text-sm font-semibold">
-                                    RM${(u.careerSales || 0).toLocaleString()}
-                                </td>
+                                <td class="p-4 text-sm font-medium text-blue-600">${upline}</td>
                                 <td class="p-4 text-sm">
-                                    <span class="px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider
-                                        ${u.consultantPaymentStatus === "paid" 
-                                            ? "bg-green-100 text-green-800 border border-green-200" 
-                                            : "bg-red-100 text-red-800 border border-red-200"}
-                                    ">
-                                        ${u.consultantPaymentStatus || "unpaid"}
-                                    </span>
+                                    <span class="bg-gray-100 text-gray-700 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider border border-gray-200">${lvl}</span>
                                 </td>
+                                <td class="p-4 text-sm font-bold text-green-700">RM${(u.careerSales || 0).toLocaleString()}</td>
+                                <td class="p-4 text-center align-middle">${actionHTML}</td>
                             </tr>
                         `;
                     });
                 }
 
                 document.getElementById("consultantList").innerHTML = html;
-                initActionButtons(); // Sediakan event listeners pada butang-butang kelulusan jika wujud
                 
             } catch (error) {
-                console.error("Ralat ketika memuatkan senarai perunding:", error);
-                document.getElementById("consultantList").innerHTML = `
-                    <tr>
-                        <td colspan="8" class="p-8 text-center text-red-600 font-medium">
-                            Gagal mendapatkan sambungan data daripada Firebase. Sila semak sambungan internet anda.
-                        </td>
-                    </tr>
-                `;
+                console.error("Ralat memuatkan:", error);
+                document.getElementById("consultantList").innerHTML = `<tr><td colspan="8" class="p-8 text-center text-red-600">Gagal mendapatkan data. Sila semak sambungan internet.</td></tr>`;
             }
         }
 
-        // Fungsi carian masa nyata (Real-time Search Filter)
-        const searchInput = document.getElementById("searchInput");
-        searchInput.addEventListener("keyup", () => {
-            const keyword = searchInput.value.toLowerCase();
+        // Carian Masa Nyata (Search)
+        document.getElementById("searchInput").addEventListener("keyup", (e) => {
+            const keyword = e.target.value.toLowerCase();
             const rows = document.querySelectorAll("#consultantList tr");
-            let hasVisibleRow = false;
+            let hasVisible = false;
 
             rows.forEach(row => {
+                // Jangan hilangkan row loading/empty message
+                if(row.children.length === 1) return; 
+
                 const text = row.innerText.toLowerCase();
                 if (text.includes(keyword)) {
                     row.style.display = "";
-                    hasVisibleRow = true;
+                    hasVisible = true;
                 } else {
                     row.style.display = "none";
                 }
             });
 
-            // Uruskan Paparan "Empty State" jika carian tiada padanan
             const emptyState = document.getElementById("emptyState");
-            if (!hasVisibleRow && rows.length > 0) {
-                emptyState.classList.remove("hidden");
-            } else {
-                emptyState.classList.add("hidden");
-            }
+            if (!hasVisible && rows.length > 0) emptyState.classList.remove("hidden");
+            else emptyState.classList.add("hidden");
         });
-          
-        // Sediakan Event Listener untuk butang kelulusan kenaikan pangkat (Promotion Approval)
-        function initActionButtons() {
-            document.querySelectorAll(".approveBtn").forEach((btn) => {
-                btn.addEventListener("click", async () => {
-                    const id = btn.dataset.id;
-                    try {
-                        const snap = await getDoc(doc(db, "consultants", id));
-                        const data = snap.data();
 
-                        await updateDoc(doc(db, "consultants", id), {
-                            consultantLevel: data.requestedLevel,
-                            promotionRequest: false,
-                            requestedLevel: "",
-                            promotionApprovedAt: new Date()
-                        });
+        // ==========================================
+        // FUNGSI TINDAKAN (Tukar Pangkat & Kelulusan)
+        // Didaftarkan ke window supaya boleh dipanggil dari onclick=""
+        // ==========================================
 
-                        showToast(`Promosi Perunding Berjaya Diluluskan!`);
-                        
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1500);
-
-                    } catch (error) {
-                        console.error("Ralat kelulusan:", error);
-                        showToast("Ralat berlaku! Gagal mengemas kini status.");
-                    }
+        window.approvePromo = async (uid, newLevel) => {
+            if(!confirm(`Sah untuk naikkan ke ${newLevel}?`)) return;
+            try {
+                await updateDoc(doc(db, "consultants", uid), {
+                    consultantLevel: newLevel,
+                    promotionDate: new Date(), // Reset tarikh maintain 1 tahun
+                    promotionRequest: false,
+                    requestedLevel: null
                 });
-            });
-        }
+                window.showToast("Berjaya diluluskan!");
+                setTimeout(() => location.reload(), 1500);
+            } catch (error) { alert("Ralat: " + error.message); }
+        };
+
+        window.rejectPromo = async (uid) => {
+            if(!confirm("Pasti mahu tolak permohonan ini?")) return;
+            try {
+                await updateDoc(doc(db, "consultants", uid), {
+                    promotionRequest: false,
+                    requestedLevel: null
+                });
+                window.showToast("Permohonan ditolak.");
+                setTimeout(() => location.reload(), 1500);
+            } catch (error) { alert("Ralat: " + error.message); }
+        };
+
+        window.updateLevel = async (uid) => {
+            const dropdown = document.getElementById(`select_${uid}`);
+            const newLevel = dropdown.value;
+            
+            if(!confirm(`Anda pasti mahu menukar pangkat secara paksa ke ${newLevel}?`)) return;
+            try {
+                await updateDoc(doc(db, "consultants", uid), {
+                    consultantLevel: newLevel,
+                    promotionDate: new Date(), // Reset tarikh maintain 1 tahun
+                    promotionRequest: false
+                });
+                window.showToast("Pangkat berjaya dikemaskini!");
+                setTimeout(() => location.reload(), 1500);
+            } catch (error) { alert("Ralat: " + error.message); }
+        };
+
     </script>
 </body>
 </html>
