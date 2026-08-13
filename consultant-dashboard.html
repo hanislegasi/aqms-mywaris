@@ -135,12 +135,12 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
 import { getFirestore, doc, getDoc, getDocs, collection, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-authDomain: "alqawthar-mywaris.firebaseapp.com",
-projectId: "alqawthar-mywaris",
-storageBucket: "alqawthar-mywaris.firebasestorage.app",
-messagingSenderId: "3498810778",
-appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+    apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+    authDomain: "alqawthar-mywaris.firebaseapp.com",
+    projectId: "alqawthar-mywaris",
+    storageBucket: "alqawthar-mywaris.firebasestorage.app",
+    messagingSenderId: "3498810778",
+    appId: "1:3498810778:web:ee36e0fe42f76698046e23"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -150,361 +150,357 @@ const db = getFirestore(app);
 let consultantData = null;
 
 onAuthStateChanged(auth, async(user)=>{
-if(!user){
-window.location.href = "login.html";
-return;
-}
-
-const consultantSnap = await getDoc(doc(db, "consultants", user.uid));
-const data = consultantSnap.data();
-
-sessionStorage.setItem("consultantNo", data.consultantNo);
-sessionStorage.setItem("consultantName", data.nama);
-sessionStorage.setItem("userUid", user.uid);
- 
-consultantData = data;
-
-const compSnap = await getDoc(doc(db, "settings", "compensation"));
-const comp = compSnap.exists() ? compSnap.data() : {};
-
-const priceWasiat = Number(comp.wasiatPrice || 350);
-const priceHibah = Number(comp.hibahPrice || 2500);
-const priceSepencarian = Number(comp.sepencarianPrice || 800);
-const priceMawaris = Number(comp.mawarisPrice || 3000);
- 
-const referralLink = window.location.origin + "/register.html?ref=" + consultantData.consultantNo;
-
-let sales = 0;
-let nextLevel = "";
-let targetSales = 0;
-
-// Tarik target sales dari database (letak nilai default jika admin belum set)
-const targetAQCAS = Number(comp.targetSalesAQCAS || 30000);
-const targetAQCUM = Number(comp.targetSalesAQCUM || 60000);
-const targetMGAM = Number(comp.targetSalesMGAM || 120000);
-
-if(data.consultantLevel === "AQC"){
-    nextLevel = "AQC-AS";
-    targetSales = targetAQCAS;
-} else if(data.consultantLevel === "AQC-AS"){
-    nextLevel = "AQC-UM";
-    targetSales = targetAQCUM;
-} else if(data.consultantLevel === "AQC-UM"){
-    nextLevel = "MGAM";
-    targetSales = targetMGAM;
-} else {
-    nextLevel = "TOP LEVEL";
-    targetSales = 0;
-}
-
-const renewalDate = data.renewalDate?.toDate ? data.renewalDate.toDate() : new Date(data.renewalDate);
-const today = new Date();
-const diffDays = Math.ceil((renewalDate - today) / (1000 * 60 * 60 * 24));
-
-if(diffDays <= 30){
-document.getElementById("renewalBanner").classList.remove("hidden");
-document.getElementById("renewalBanner").innerHTML = `
-<div class="bg-red-50 border border-red-200 rounded-2xl p-5">
-<h2 class="font-bold text-red-700 text-lg">Renewal Reminder</h2>
-<p class="mt-2">Membership anda akan tamat dalam <b>${diffDays} hari</b>.</p>
-<a href="consultant-renewal.html" class="inline-block mt-4 bg-red-500 text-white px-5 py-3 rounded-xl">Renew Now</a>
-</div>
-`;
-}
-
-const monthlySales = { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0 };
-const monthlyCommission = [0,0,0,0,0,0,0,0,0,0,0,0];
-const monthlyOverride = [0,0,0,0,0,0,0,0,0,0,0,0];
- 
-let activeClients = 0;
-let totalSales = 0;
-let wasiatSales = 0;
-let hibahSales = 0;
-let sepencarianSales = 0;
-let mawarisSales = 0;
-
-const usersSnap = await getDocs(collection(db,"users"));
-usersSnap.forEach((d)=>{
-const u = d.data();
-if(u.role==="customer" && (u.referral || "").trim()===data.consultantNo){
-    activeClients++;
-if(u.wasiatPaymentStatus === "paid"){
-    wasiatSales++;
-    totalSales += priceWasiat;
-    const m = u.joinDate?.toDate()?.getMonth() + 1;
-    if(m) { monthlySales[m] += priceWasiat; }
-}
-if(u.hibahPaymentStatus === "paid"){
-    hibahSales++; 
-    totalSales += priceHibah;
-    const m = u.joinDate?.toDate()?.getMonth() + 1;
-    if(m) { monthlySales[m] += priceHibah; }
-}
-if(u.sepencarianPaymentStatus === "paid"){
-    sepencarianSales++; 
-    totalSales += priceSepencarian;
-    const m = u.joinDate?.toDate()?.getMonth() + 1;
-    if(m) { monthlySales[m] += priceSepencarian; }
-}
-if(u.mawarisPaymentStatus === "paid"){
-    mawarisSales++; 
-    totalSales += priceMawaris;
-    const m = u.joinDate?.toDate()?.getMonth() + 1;
-    if(m) { monthlySales[m] += priceMawaris; }
-}
-}
-});
-
-const historySnap = await getDocs(query(collection(db,"overrideHistory"), where("receiver", "==", data.consultantNo)));
-let totalCommission = 0;
-const ledgerSnap = await getDocs(collection(db,"ledger"));
-const paymentSnap = await getDocs(query(collection(db,"paymentVouchers"), where("consultantNo","==",data.consultantNo), where("status","==","PAID")));
-
-let paid = 0;
-paymentSnap.forEach((d)=>{
-const pv = d.data();
-paid += Number(pv.amount || 0);
-});
-
-ledgerSnap.forEach((d)=>{
-const row = d.data();
-const trxDate = row.date?.toDate();
-if(trxDate && row.consultantNo === data.consultantNo){
-const month = trxDate.getMonth();
-if(row.accountCode==="2000"){ monthlyCommission[month]+=Number(row.credit||0); }
-if(row.accountCode==="2100"){ monthlyOverride[month]+=Number(row.credit||0); }
-}
-if(row.consultantNo === data.consultantNo){
-if(row.accountCode === "2000" && row.credit > 0){
-totalCommission += Number(row.credit);
-}
-}
-}); 
-
-let totalOverriding = 0;
-let overridingSales = 0;
-
-ledgerSnap.forEach((d)=>{
-    const row = d.data();
-    if(row.consultantNo === data.consultantNo && row.accountCode === "2100" && row.credit > 0){
-        totalOverriding += Number(row.credit);
+    if(!user){
+        window.location.href = "login.html";
+        return;
     }
-});
 
-historySnap.forEach((d)=>{
-    const h = d.data();
-    const aqcNo = h.fromConsultant; 
-    if (!aqcNo || aqcNo === data.consultantNo) return;
-    overridingSales += Number(h.sales || 0);
-});
+    // 1. AMBIL DATA KONSULTAN & SETTINGS
+    const consultantSnap = await getDoc(doc(db, "consultants", user.uid));
+    const data = consultantSnap.data();
+    consultantData = data;
 
-let totalMyUsb = 0;
-ledgerSnap.forEach((d) => {
-    const r = d.data();
-    if (r.accountCode === "2150" && r.consultantNo === data.consultantNo) {
-        totalMyUsb += Number(r.credit || 0) - Number(r.debit || 0);
+    sessionStorage.setItem("consultantNo", data.consultantNo);
+    sessionStorage.setItem("consultantName", data.nama);
+    sessionStorage.setItem("userUid", user.uid);
+
+    const compSnap = await getDoc(doc(db, "settings", "compensation"));
+    const comp = compSnap.exists() ? compSnap.data() : {};
+
+    const priceWasiat = Number(comp.wasiatPrice || 350);
+    const priceHibah = Number(comp.hibahPrice || 2500);
+    const priceSepencarian = Number(comp.sepencarianPrice || 800);
+    const priceMawaris = Number(comp.mawarisPrice || 3000);
+
+    // 2. SEMAKAN BANNER RENEWAL
+    const renewalDate = data.renewalDate?.toDate ? data.renewalDate.toDate() : new Date(data.renewalDate);
+    const today = new Date();
+    const diffDays = Math.ceil((renewalDate - today) / (1000 * 60 * 60 * 24));
+
+    if(diffDays <= 30){
+        document.getElementById("renewalBanner").classList.remove("hidden");
+        document.getElementById("renewalBanner").innerHTML = `
+        <div class="bg-red-50 border border-red-200 rounded-2xl p-5">
+            <h2 class="font-bold text-red-700 text-lg">Renewal Reminder</h2>
+            <p class="mt-2">Membership anda akan tamat dalam <b>${diffDays} hari</b>.</p>
+            <a href="consultant-renewal.html" class="inline-block mt-4 bg-red-500 text-white px-5 py-3 rounded-xl">Renew Now</a>
+        </div>`;
     }
-});
 
-const earned = totalCommission + totalOverriding + totalMyUsb;
-const outstanding = earned - paid;
+    // 3. KIRA JUALAN (PERSONAL) & CLIENT
+    const monthlySales = { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0 };
+    let activeClients = 0;
+    let totalSales = 0; // Jualan Peribadi
+    let wasiatSales = 0, hibahSales = 0, sepencarianSales = 0, mawarisSales = 0;
 
-document.getElementById("earnedCard").innerHTML = "RM" + earned.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
-document.getElementById("usbAmount").innerHTML = "RM" + totalMyUsb.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+    const usersSnap = await getDocs(collection(db,"users"));
+    usersSnap.forEach((d)=>{
+        const u = d.data();
+        if(u.role==="customer" && (u.referral || "").trim()===data.consultantNo){
+            activeClients++;
+            if(u.wasiatPaymentStatus === "paid"){ wasiatSales++; totalSales += priceWasiat; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceWasiat; }
+            if(u.hibahPaymentStatus === "paid"){ hibahSales++; totalSales += priceHibah; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceHibah; }
+            if(u.sepencarianPaymentStatus === "paid"){ sepencarianSales++; totalSales += priceSepencarian; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceSepencarian; }
+            if(u.mawarisPaymentStatus === "paid"){ mawarisSales++; totalSales += priceMawaris; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceMawaris; }
+        }
+    });
 
-let commissionRate = 0;
-let overridingRate = 0;
+    // 4. KIRA REKRUT & OVERRIDING (TEAM SALES)
+    let totalRecruits = 0;
+    // Mengira jumlah downline berdasarkan upline atau referral
+    const agentsQuery = await getDocs(query(collection(db, "consultants"), where("upline", "==", data.consultantNo)));
+    totalRecruits = agentsQuery.size;
 
-if(data.consultantLevel === "AQC"){
-    commissionRate = Number(comp.commissionAQC || 35);
-    overridingRate = Number(comp.overrideAQC || 0);
-} else if(data.consultantLevel === "AQC-AS"){
-    commissionRate = Number(comp.commissionAQCAS || 38);
-    overridingRate = Number(comp.overrideAQCAS || 3);
-} else if(data.consultantLevel === "AQC-UM"){
-    commissionRate = Number(comp.commissionAQCUM || 40);
-    overridingRate = Number(comp.overrideAQCUM || 4);
-} else if(data.consultantLevel === "MGAM"){
-    commissionRate = Number(comp.commissionMGAM || 45);
-    overridingRate = Number(comp.overrideMGAM || 5);
-}
+    let overridingSales = 0; // Jualan Kumpulan
+    const historySnap = await getDocs(query(collection(db,"overrideHistory"), where("receiver", "==", data.consultantNo)));
+    historySnap.forEach((d)=>{
+        const h = d.data();
+        if (h.fromConsultant && h.fromConsultant !== data.consultantNo) {
+            overridingSales += Number(h.sales || 0);
+        }
+    });
 
-document.getElementById("paidCard").innerHTML = "RM" + paid.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
-document.getElementById("outstandingCard").innerHTML = "RM" + outstanding.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+    // 5. TETAPKAN TARGET PROMOTE & MAINTAIN DARI ADMIN SETTINGS
+    const promoteSalesAQCAS = Number(comp.targetSalesAQCAS || 30000);
+    const promoteSalesAQCUM = Number(comp.targetSalesAQCUM || 60000);
+    const promoteSalesMGAM = Number(comp.targetSalesMGAM || 120000);
+    const promoteRecruitUM = Number(comp.targetRecruitAQCUM || 10);
+    const promoteRecruitMGAM = Number(comp.targetRecruitMGAM || 20);
 
-await updateDoc(doc(db,"consultants",user.uid), {
-careerSales: totalSales,
-totalSales,
-totalCommission,
-totalOverriding
-});
+    const maintainSalesAS = Number(comp.maintainSalesAQCAS || 30000);
+    const maintainSalesUM = Number(comp.maintainSalesAQCUM || 30000);
+    const maintainSalesMGAM = Number(comp.maintainSalesMGAM || 240000);
+    const maintainRecruitAS = Number(comp.maintainRecruitAQCAS || 5);
+    const maintainRecruitUM = Number(comp.maintainRecruitAQCUM || 10);
+    const maintainRecruitMGAM = Number(comp.maintainRecruitMGAM || 20);
 
-const progress = targetSales > 0 ? Math.min(100, (totalSales / targetSales) * 100) : 100;
-const remaining = Math.max(0, targetSales - totalSales);
+    // 6. LOGIK PROMOTE (NAIK PANGKAT)
+    let nextLevel = "";
+    let targetSales = 0;
+    let targetRecruits = 0;
+    let currentSalesForPromote = 0;
 
-if(totalSales >= targetSales && nextLevel !== "TOP LEVEL" && !data.promotionRequest){
-await updateDoc(doc(db,"consultants",user.uid), {
-promotionRequest: true,
-requestedLevel: nextLevel,
-promotionRequestDate: new Date()
-});
-}
- 
-document.getElementById("welcomeText").innerHTML = data.nama;
-document.getElementById("promotionCard").innerHTML = `
-<h2 class="text-xl font-bold mb-3">Career Progression</h2>
-<p>Current Level: <b>${data.consultantLevel}</b></p>
-<p class="mt-2">Commission: <b>${commissionRate}%</b></p>
-<p>Overriding: <b>${overridingRate}%</b></p>
-<p>Team Sales: <b>RM${overridingSales.toLocaleString()}</b></p>
-<p>Overriding Earned: <b class="text-green-600">RM${totalOverriding.toLocaleString()}</b></p>
-<p>${data.consultantLevel === "MGAM" ? `<div class="mt-3 text-green-700 font-bold">You are our Elite MGAM Leader. Keep inspiring and growing your team.</div>` : `<p>Next Level: <b>${nextLevel}</b></p>`}</p>
-<div class="w-full bg-gray-200 rounded-full h-4 mt-4">
-<div class="bg-green-500 h-4 rounded-full" style="width:${progress}%"></div>
-</div>
-<p class="mt-2">RM${totalSales.toLocaleString()} / RM${targetSales.toLocaleString()}</p>
-<p class="mt-2 text-red-600 font-semibold">
-${data.promotionRequest ? `<div class="mt-3 bg-yellow-100 text-yellow-700 p-3 rounded-xl">Promotion Request Submitted<br>Menunggu kelulusan HQ.</div>` : `RM${remaining.toLocaleString()} lagi untuk naik ke ${nextLevel}`}
-</p>
-`;
- 
-document.getElementById("profileContent").innerHTML = `
-<p><b>Nama:</b> ${data.nama}</p>
-<p><b>No Konsultan:</b> ${data.consultantNo}</p>
-<p><b>Level:</b> ${data.consultantLevel}</p>
-<p><b>Telefon:</b> ${data.telefon}</p>
-<p><b>Email:</b> ${data.email || "-"}</p>
-<p><b>IC:</b> ${data.ic || "-"}</p>
-<p><b>Negeri:</b> ${data.state || "-"}</p>
-<p><b>Bank:</b> ${data.bankName || "-"}</p>
-<p><b>No Akaun:</b> ${data.bankAccount || "-"}</p>
-`;
+    if(data.consultantLevel === "AQC"){
+        nextLevel = "AQC-AS";
+        targetSales = promoteSalesAQCAS;
+        targetRecruits = 0; // Tiada syarat rekrut ke AS
+        currentSalesForPromote = totalSales; // AQC guna Personal Sales
+    } else if(data.consultantLevel === "AQC-AS"){
+        nextLevel = "AQC-UM";
+        targetSales = promoteSalesAQCUM;
+        targetRecruits = promoteRecruitUM;
+        currentSalesForPromote = overridingSales; // Guna Team Sales
+    } else if(data.consultantLevel === "AQC-UM"){
+        nextLevel = "MGAM";
+        targetSales = promoteSalesMGAM;
+        targetRecruits = promoteRecruitMGAM;
+        currentSalesForPromote = overridingSales; // Guna Team Sales
+    } else {
+        nextLevel = "TOP LEVEL";
+    }
 
-document.getElementById("activeClients").innerHTML = activeClients;
-document.getElementById("totalSales").innerHTML = "RM" + totalSales.toLocaleString(undefined, {minimumFractionDigits: 2});
-document.getElementById("totalCommission").innerHTML = "RM" + totalCommission.toLocaleString(undefined, {minimumFractionDigits: 2});
-document.getElementById("totalOverriding").innerHTML = "RM" + totalOverriding.toLocaleString(undefined, {minimumFractionDigits: 2});
+    // 7. LOGIK MAINTAIN & DEMOTION
+    let maintainSalesReq = 0;
+    let maintainRecruitReq = 0;
+    let currentSalesForMaintain = totalSales; 
+    let isDemoteWarning = false;
 
-Chart.register(ChartDataLabels);
- 
-new Chart(document.getElementById("productChart"), {
-    type: "pie",
-    data: {
-        labels: ["Wasiat", "Hibah", "Sepencarian", "Mawaris"],
-        datasets: [{
-            data: [wasiatSales, hibahSales, sepencarianSales, mawarisSales],
-            backgroundColor: ["#3B82F6", "#F43F5E", "#F59E0B", "#FACC15"]
-        }]
-    },
-    options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-        legend: { position: "top", align: "center", labels: { boxWidth: 12, padding: 15 } },
-        datalabels: {
-            color: "#fff",
-            font: { weight: "bold", size: 14 },
-            formatter: (value, context) => {
-                if (value === 0) return ""; 
-                const dataSet = context.chart.data.datasets[0].data;
-                const total = dataSet.reduce((a,b)=>a+b,0);
-                return total ? ((value / total) * 100).toFixed(1) + "%" : "";
-            }
+    if (data.consultantLevel === "AQC-AS") {
+        maintainSalesReq = maintainSalesAS;
+        maintainRecruitReq = maintainRecruitAS;
+    } else if (data.consultantLevel === "AQC-UM") {
+        maintainSalesReq = maintainSalesUM;
+        maintainRecruitReq = maintainRecruitUM;
+    } else if (data.consultantLevel === "MGAM") {
+        maintainSalesReq = maintainSalesMGAM;
+        maintainRecruitReq = maintainRecruitMGAM;
+        currentSalesForMaintain = overridingSales; // MGAM guna Team Sales
+    }
+
+    // Penilaian 1 Tahun dari tarikh pangkat
+    const promoDate = data.promotionDate?.toDate ? data.promotionDate.toDate() : new Date();
+    const daysSincePromoted = Math.floor((today - promoDate) / (1000 * 60 * 60 * 24));
+    if (data.consultantLevel !== "AQC" && daysSincePromoted >= 365) {
+        if (currentSalesForMaintain < maintainSalesReq || totalRecruits < maintainRecruitReq) {
+            isDemoteWarning = true;
         }
     }
-}
-});
 
-const ctx = document.getElementById("salesChart").getContext("2d");
-new Chart(ctx, {
-    type: "bar",
-    data: {
-        labels: ["Jan", "Feb", "Mac", "Apr", "Mei", "Jun", "Jul", "Ogos", "Sep", "Okt", "Nov", "Dis"],
-        datasets: [
-            {
-                label: "Sales",
-                data: [monthlySales[1], monthlySales[2], monthlySales[3], monthlySales[4], monthlySales[5], monthlySales[6], monthlySales[7], monthlySales[8], monthlySales[9], monthlySales[10], monthlySales[11], monthlySales[12]],
-                backgroundColor: "rgba(59, 130, 246, 0.85)",
-                hoverBackgroundColor: "rgba(37, 99, 235, 1)",
-                borderRadius: 4,
-                borderSkipped: false
-            },
-            {
-                label: "Commission",
-                data: monthlyCommission,
-                backgroundColor: "rgba(16, 185, 129, 0.85)",
-                hoverBackgroundColor: "rgba(5, 150, 105, 1)",
-                borderRadius: 4,
-                borderSkipped: false
-            },
-            {
-                label: "Override",
-                data: monthlyOverride,
-                backgroundColor: "rgba(245, 158, 11, 0.85)",
-                hoverBackgroundColor: "rgba(217, 119, 6, 1)",
-                borderRadius: 4,
-                borderSkipped: false
+    // 8. KIRAAN KEWANGAN (LEDGER, COMMISSION, USB)
+    let totalCommission = 0, totalOverriding = 0, totalMyUsb = 0, paid = 0;
+    const monthlyCommission = [0,0,0,0,0,0,0,0,0,0,0,0];
+    const monthlyOverride = [0,0,0,0,0,0,0,0,0,0,0,0];
+
+    const paymentSnap = await getDocs(query(collection(db,"paymentVouchers"), where("consultantNo","==",data.consultantNo), where("status","==","PAID")));
+    paymentSnap.forEach((d)=>{ paid += Number(d.data().amount || 0); });
+
+    const ledgerSnap = await getDocs(collection(db,"ledger"));
+    ledgerSnap.forEach((d)=>{
+        const row = d.data();
+        if(row.consultantNo === data.consultantNo){
+            const month = row.date?.toDate()?.getMonth();
+            if(row.accountCode==="2000" && row.credit > 0){ 
+                totalCommission += Number(row.credit); 
+                if(month !== undefined) monthlyCommission[month]+=Number(row.credit);
             }
-        ]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: { mode: 'index', intersect: false },
-        plugins: {
-            legend: { position: "top", labels: { usePointStyle: true, padding: 20, font: { family: "'Inter', sans-serif" } } },
-            tooltip: {
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                titleColor: '#1f2937',
-                bodyColor: '#4b5563',
-                borderColor: '#e5e7eb',
-                borderWidth: 1,
-                padding: 12,
-                boxPadding: 4,
-                usePointStyle: true,
-                titleFont: { family: "'Inter', sans-serif", size: 14, weight: 'bold' },
-                bodyFont: { family: "'Inter', sans-serif", size: 13 }
-            },
-            datalabels: { display: false }
+            if(row.accountCode==="2100" && row.credit > 0){ 
+                totalOverriding += Number(row.credit); 
+                if(month !== undefined) monthlyOverride[month]+=Number(row.credit);
+            }
+            if(row.accountCode==="2150"){
+                totalMyUsb += Number(row.credit || 0) - Number(row.debit || 0);
+            }
+        }
+    });
+
+    const earned = totalCommission + totalOverriding + totalMyUsb;
+    const outstanding = earned - paid;
+
+    // 9. KEMASKINI DATABASE JUALAN SEMASA
+    await updateDoc(doc(db,"consultants",user.uid), {
+        careerSales: totalSales,
+        totalSales,
+        totalCommission,
+        totalOverriding
+    });
+
+    // 10. AUTO-REQUEST PROMOTION KE DB JIKA LULUS
+    const isSalesPassed = currentSalesForPromote >= targetSales;
+    const isRecruitPassed = totalRecruits >= targetRecruits;
+    if (nextLevel !== "TOP LEVEL" && isSalesPassed && isRecruitPassed && !data.promotionRequest) {
+        await updateDoc(doc(db,"consultants",user.uid), {
+            promotionRequest: true,
+            requestedLevel: nextLevel,
+            promotionRequestDate: new Date()
+        });
+        data.promotionRequest = true; // Update local state
+    }
+
+    // 11. PAPARAN UI (CARDS, PROFILE, DLL)
+    document.getElementById("welcomeText").innerHTML = data.nama;
+    document.getElementById("earnedCard").innerHTML = "RM" + earned.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+    document.getElementById("paidCard").innerHTML = "RM" + paid.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+    document.getElementById("outstandingCard").innerHTML = "RM" + outstanding.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+    document.getElementById("usbAmount").innerHTML = "RM" + totalMyUsb.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+    
+    document.getElementById("activeClients").innerHTML = activeClients;
+    document.getElementById("totalSales").innerHTML = "RM" + totalSales.toLocaleString("ms-MY", {minimumFractionDigits: 2});
+    document.getElementById("totalCommission").innerHTML = "RM" + totalCommission.toLocaleString("ms-MY", {minimumFractionDigits: 2});
+    document.getElementById("totalOverriding").innerHTML = "RM" + totalOverriding.toLocaleString("ms-MY", {minimumFractionDigits: 2});
+
+    // KAD PROMOSI / CAREER PROGRESSION
+    const salesProgress = targetSales > 0 ? Math.min(100, (currentSalesForPromote / targetSales) * 100) : 100;
+    const recruitProgress = targetRecruits > 0 ? Math.min(100, (totalRecruits / targetRecruits) * 100) : 100;
+    const remainingSales = Math.max(0, targetSales - currentSalesForPromote);
+    const remainingRecruit = Math.max(0, targetRecruits - totalRecruits);
+
+    let uiHTML = `
+        <h2 class="text-xl font-bold mb-3 text-[#153638]">Career Progression</h2>
+        <p>Pangkat Semasa: <b class="text-blue-700">${data.consultantLevel}</b></p>
+        <p class="mt-2 text-sm text-gray-600">Jualan Peribadi: <b>RM${totalSales.toLocaleString()}</b></p>
+        <p class="text-sm text-gray-600">Jualan Kumpulan (Team): <b>RM${overridingSales.toLocaleString()}</b></p>
+        <p class="text-sm text-gray-600">Jumlah Rekrut (Ejen): <b>${totalRecruits} Orang</b></p>
+    `;
+
+    if (isDemoteWarning) {
+        uiHTML += `
+            <div class="mt-4 bg-red-50 border border-red-200 text-red-700 p-3 rounded-xl text-sm leading-snug">
+                <b>⚠️ Amaran Demotion:</b> Anda gagal mencapai KPI tahunan (RM${maintainSalesReq.toLocaleString()} Jualan & ${maintainRecruitReq} Rekrut). Sila hubungi HQ dengan segera.
+            </div>`;
+    }
+
+    if (data.consultantLevel === "MGAM") {
+        uiHTML += `<div class="mt-4 bg-amber-100 text-amber-800 p-3 rounded-xl font-bold text-sm">Tahniah! Anda merupakan rakan kongsi elit MGAM tertinggi agensi.</div>`;
+    } else {
+        uiHTML += `
+            <div class="mt-5 border-t border-gray-100 pt-4">
+                <h3 class="font-bold text-gray-700 mb-3">Misi Naik ke ${nextLevel}</h3>
+                
+                <div class="mb-3">
+                    <div class="flex justify-between text-xs mb-1">
+                        <span>Jualan Target</span>
+                        <span class="font-bold text-green-700">${salesProgress.toFixed(0)}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-green-500 h-2.5 rounded-full" style="width:${salesProgress}%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">RM${currentSalesForPromote.toLocaleString()} / RM${targetSales.toLocaleString()}</p>
+                </div>`;
+
+        if (targetRecruits > 0) {
+            uiHTML += `
+                <div class="mb-3">
+                    <div class="flex justify-between text-xs mb-1">
+                        <span>Rekrut Target</span>
+                        <span class="font-bold text-blue-700">${recruitProgress.toFixed(0)}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-blue-500 h-2.5 rounded-full" style="width:${recruitProgress}%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">${totalRecruits} / ${targetRecruits} Orang</p>
+                </div>`;
+        }
+
+        if (data.promotionRequest) {
+            uiHTML += `<div class="mt-4 bg-yellow-50 text-yellow-700 p-3 rounded-xl text-sm font-semibold border border-yellow-200">Tahniah! Permohonan naik pangkat ke ${nextLevel} sedang diproses oleh HQ.</div>`;
+        } else {
+            uiHTML += `<p class="mt-3 text-xs text-red-500 font-medium">Baki RM${remainingSales.toLocaleString()} jualan ${targetRecruits > 0 ? `dan ${remainingRecruit} rekrut ` : ''}untuk naik pangkat.</p>`;
+        }
+        uiHTML += `</div>`;
+    }
+    document.getElementById("promotionCard").innerHTML = uiHTML;
+
+    document.getElementById("profileContent").innerHTML = `
+        <p><b>Nama:</b> ${data.nama}</p>
+        <p><b>No Konsultan:</b> ${data.consultantNo}</p>
+        <p><b>Level:</b> ${data.consultantLevel}</p>
+        <p><b>Telefon:</b> ${data.telefon}</p>
+        <p><b>Email:</b> ${data.email || "-"}</p>
+        <p><b>IC:</b> ${data.ic || "-"}</p>
+        <p><b>Negeri:</b> ${data.state || "-"}</p>
+        <p><b>Bank:</b> ${data.bankName || "-"}</p>
+        <p><b>No Akaun:</b> ${data.bankAccount || "-"}</p>
+    `;
+
+    // 12. LUKIS CARTA (CHARTS)
+    Chart.register(ChartDataLabels);
+    new Chart(document.getElementById("productChart"), {
+        type: "pie",
+        data: {
+            labels: ["Wasiat", "Hibah", "Sepencarian", "Mawaris"],
+            datasets: [{
+                data: [wasiatSales, hibahSales, sepencarianSales, mawarisSales],
+                backgroundColor: ["#3B82F6", "#F43F5E", "#F59E0B", "#FACC15"]
+            }]
         },
-        scales: {
-            x: { grid: { display: false, drawBorder: false }, ticks: { font: { family: "'Inter', sans-serif" } } },
-            y: { beginAtZero: true, grid: { color: '#f3f4f6', drawBorder: false, borderDash: [5, 5] }, ticks: { font: { family: "'Inter', sans-serif" }, padding: 10 } }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: "top", align: "center", labels: { boxWidth: 12, padding: 15 } },
+                datalabels: {
+                    color: "#fff",
+                    font: { weight: "bold", size: 14 },
+                    formatter: (value, context) => {
+                        if (value === 0) return ""; 
+                        const dataSet = context.chart.data.datasets[0].data;
+                        const total = dataSet.reduce((a,b)=>a+b,0);
+                        return total ? ((value / total) * 100).toFixed(1) + "%" : "";
+                    }
+                }
+            }
         }
-    }
+    });
+
+    const ctx = document.getElementById("salesChart").getContext("2d");
+    new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Jan", "Feb", "Mac", "Apr", "Mei", "Jun", "Jul", "Ogos", "Sep", "Okt", "Nov", "Dis"],
+            datasets: [
+                { label: "Sales", data: [monthlySales[1], monthlySales[2], monthlySales[3], monthlySales[4], monthlySales[5], monthlySales[6], monthlySales[7], monthlySales[8], monthlySales[9], monthlySales[10], monthlySales[11], monthlySales[12]], backgroundColor: "rgba(59, 130, 246, 0.85)", hoverBackgroundColor: "rgba(37, 99, 235, 1)", borderRadius: 4 },
+                { label: "Commission", data: monthlyCommission, backgroundColor: "rgba(16, 185, 129, 0.85)", hoverBackgroundColor: "rgba(5, 150, 105, 1)", borderRadius: 4 },
+                { label: "Override", data: monthlyOverride, backgroundColor: "rgba(245, 158, 11, 0.85)", hoverBackgroundColor: "rgba(217, 119, 6, 1)", borderRadius: 4 }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { position: "top", labels: { usePointStyle: true, padding: 20, font: { family: "'Inter', sans-serif" } } },
+                tooltip: { backgroundColor: 'rgba(255, 255, 255, 0.95)', titleColor: '#1f2937', bodyColor: '#4b5563', borderColor: '#e5e7eb', borderWidth: 1, padding: 12, usePointStyle: true },
+                datalabels: { display: false }
+            },
+            scales: {
+                x: { grid: { display: false, drawBorder: false } },
+                y: { beginAtZero: true, grid: { color: '#f3f4f6', drawBorder: false, borderDash: [5, 5] } }
+            }
+        }
+    }); 
+
+    // 13. BUTANG NAVIGASI
+    document.getElementById("clientsBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-clients.html"; });
+    document.getElementById("careerBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-career.html"; });
+    document.getElementById("overridingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-overriding.html"; });
+    document.getElementById("usbBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-usb.html"; });
+    document.getElementById("trainingBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-training.html"; });
+    document.getElementById("renewalBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-renewal.html"; });  
+    document.getElementById("marketingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-marketing.html"; });
+
+    document.getElementById("editProfileBtn")?.addEventListener("click", () => { window.location.href = "consultant-profile-edit.html"; });
+    document.getElementById("profileBtn")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.remove("hidden"); });
+    document.getElementById("closeProfile")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.add("hidden"); });
+    document.getElementById("logoutBtn").addEventListener("click", async()=>{ await signOut(auth); window.location.href = "index.html"; });
+
+    document.getElementById("copyReferralBtn").addEventListener("click", async()=>{
+        try{
+            await navigator.clipboard.writeText(window.location.origin + window.location.pathname.replace("consultant-dashboard.html", "register.html") + "?ref=" + consultantData.consultantNo);
+            const btn = document.getElementById("copyReferralBtn");
+            btn.innerHTML = "✓ Copied";
+            setTimeout(()=>{ btn.innerHTML = "Copy Link"; },2000);
+        }catch(err){ alert("Gagal copy link"); }
+    });
+
 }); 
-
-document.getElementById("clientsBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-clients.html"; });
-document.getElementById("careerBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-career.html"; });
-document.getElementById("overridingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-overriding.html"; });
-document.getElementById("usbBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-usb.html"; });
-document.getElementById("trainingBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-training.html"; });
-document.getElementById("renewalBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-renewal.html"; });  
-document.getElementById("marketingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-marketing.html"; });
-
-// BUTANG EDIT PROFILE
-document.getElementById("editProfileBtn")?.addEventListener("click", () => {
-    window.location.href = "consultant-profile-edit.html";
-});
-  
-document.getElementById("copyReferralBtn").addEventListener("click", async()=>{
-try{
-const referralLink = window.location.origin + window.location.pathname.replace("consultant-dashboard.html", "register.html") + "?ref=" + consultantData.consultantNo;
-await navigator.clipboard.writeText(referralLink);
-const btn = document.getElementById("copyReferralBtn");
-btn.innerHTML = "✓ Copied";
-setTimeout(()=>{ btn.innerHTML = "Copy Link"; },2000);
-}catch(err){
-alert("Gagal copy link");
-console.log(err);
-}
-});
-
-document.getElementById("profileBtn")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.remove("hidden"); });
-document.getElementById("closeProfile")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.add("hidden"); });
-document.getElementById("logoutBtn").addEventListener("click", async()=>{ await signOut(auth); window.location.href = "index.html"; });
-
-}); // Penutup rasmi tunggal untuk onAuthStateChanged
 </script>
 
 </body>
