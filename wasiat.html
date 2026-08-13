@@ -67,7 +67,7 @@ class="w-full border rounded-lg p-3">
 <input
 type="text"
 id="ic"
-placeholder="No Kad Pengenalan"
+placeholder="No Kad Pengenalan" 
 class="w-full border rounded-lg p-3">
 
 <input
@@ -1356,6 +1356,46 @@ document.getElementById(
 data.pemegangAmanah.telefon || "";
 
 }
+
+// --- SKRIP FORMAT UNTUK SEMUA RUANGAN DALAM BORANG ---
+
+document.addEventListener('input', function (e) {
+    let target = e.target;
+    let val = target.value;
+
+    // 1. FORMAT NAMA (Semua input yang ada perkataan 'nama' atau 'penama')
+    if (target.id.toLowerCase().includes('nama') || target.className.toLowerCase().includes('nama') || target.id.toLowerCase().includes('penama') || target.className.toLowerCase().includes('penama')) {
+        // Abaikan select element
+        if (target.tagName === 'INPUT') {
+            target.value = val.replace(/\w\S*/g, (txt) => {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+        }
+    }
+
+    // 2. FORMAT NO IC (Semua input yang ada perkataan 'ic')
+    if (target.id.toLowerCase().includes('ic') || target.className.toLowerCase().includes('ic')) {
+        let cleanVal = val.replace(/\D/g, ''); // Buang selain nombor
+        let formatted = '';
+        
+        if (cleanVal.length > 0) formatted += cleanVal.substring(0, 6);
+        if (cleanVal.length > 6) formatted += '-' + cleanVal.substring(6, 8);
+        if (cleanVal.length > 8) formatted += '-' + cleanVal.substring(8, 12);
+        
+        target.value = formatted;
+    }
+
+    // 3. FORMAT NO TELEFON (Semua input yang ada perkataan 'telefon')
+    if (target.id.toLowerCase().includes('telefon') || target.className.toLowerCase().includes('telefon')) {
+        let cleanVal = val.replace(/\D/g, ''); // Buang selain nombor
+        let formatted = '';
+        
+        if (cleanVal.length > 0) formatted += cleanVal.substring(0, 3);
+        if (cleanVal.length > 3) formatted += '-' + cleanVal.substring(3, 11);
+        
+        target.value = formatted;
+    }
+});
   
 if(data.hartaAlih){
 
