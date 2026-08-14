@@ -398,85 +398,136 @@ Admin Settings
             </button>
         </div>
 
-               <!-- ================= SALES SIMULATION ================= -->
-        <div class="bg-gradient-to-br from-gray-900 to-[#153638] rounded-2xl shadow-lg p-6 lg:p-8 text-white mb-8">
-            <h2 class="text-xl font-bold mb-6 border-b border-gray-600 pb-3">Simulasi Sales & Profit</h2>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-                <div>
-                    <label class="font-medium text-sm text-gray-300 block mb-1">Wasiat (Unit)</label>
-                    <input id="simWasiat" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
-                </div>
-                <div>
-                    <label class="font-medium text-sm text-gray-300 block mb-1">Hibah (Unit)</label>
-                    <input id="simHibah" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
-                </div>
-                <div>
-                    <label class="font-medium text-sm text-gray-300 block mb-1">Sepencarian (Unit)</label>
-                    <input id="simSepencarian" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
-                </div>
-                <div>
-                    <label class="font-medium text-sm text-gray-300 block mb-1">Mawaris (Unit)</label>
-                    <input id="simMawaris" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-5 mt-8">
-                <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5">
-                    <p class="text-sm text-gray-300 mb-1">Total Sales</p>
-                    <p id="simSales" class="text-3xl font-bold text-[#45d9d7]">RM 0</p>
-                </div>
-                <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5">
-                    <p class="text-sm text-gray-300 mb-1">Total Commission Pool</p>
-                    <p id="simCommission" class="text-2xl font-bold">RM 0</p>
-                </div>
-                <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5">
-                    <p class="text-sm text-gray-300 mb-1">Total Override Pool</p>
-                    <p id="simOverride" class="text-2xl font-bold">RM 0</p>
-                </div>
-            </div>
-
-            <div class="bg-gray-800 p-4 rounded-lg mt-4">
-    <div class="flex justify-between items-center mb-3">
-        <span class="text-gray-400 font-semibold">Total Company Pool</span>
-        <span id="simCompanyPool" class="font-bold text-white">RM 0.00</span>
-    </div>
+<!-- ================= SALES SIMULATION ================= -->
+<div class="bg-gradient-to-br from-gray-900 to-[#153638] rounded-2xl shadow-lg p-6 lg:p-8 text-white mb-8">
+    <h2 class="text-xl font-bold mb-6 border-b border-gray-600 pb-3">Simulasi Sales & Profit</h2>
     
-    <!-- Pecahan Company Pool -->
-    <div class="border-t border-gray-700 pt-3 space-y-2 text-sm">
-        <div class="flex justify-between text-gray-400">
-            <span>↳ Admin & Operation</span>
-            <span id="simAdmin" class="text-gray-300">RM 0.00</span>
+    <!-- 1. INPUT UNIT PRODUK -->
+    <p class="text-sm font-semibold text-[#45d9d7] uppercase tracking-wider mb-3">1. Jualan Unit Produk</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div>
+            <label class="font-medium text-xs text-gray-300 block mb-1">Wasiat (Unit)</label>
+            <input id="simWasiat" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
         </div>
-        <div class="flex justify-between text-gray-400">
-            <span>↳ Allowance</span>
-            <span id="simAllowance" class="text-gray-300">RM 0.00</span>
+        <div>
+            <label class="font-medium text-xs text-gray-300 block mb-1">Hibah (Unit)</label>
+            <input id="simHibah" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
         </div>
-        <div class="flex justify-between text-gray-400">
-            <span>↳ Royalty</span>
-            <span id="simRoyalty" class="text-gray-300">RM 0.00</span>
+        <div>
+            <label class="font-medium text-xs text-gray-300 block mb-1">Sepencarian (Unit)</label>
+            <input id="simSepencarian" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
         </div>
-    </div>
-</div>
-               <div class="space-y-4">
-
-    <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5">
-        <p class="text-sm text-gray-300 mb-1">Gross Profit</p>
-        <p id="simProfit" class="text-2xl font-bold text-green-400">RM 0</p>
-    </div>
-
-    <div id="marginCard" class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5 transition-colors">
-        <p class="text-sm text-gray-300 mb-1">Profit Margin</p>
-        <p id="simMargin" class="text-2xl font-bold">0%</p>
-    </div>
-
-</div>            </div>
+        <div>
+            <label class="font-medium text-xs text-gray-300 block mb-1">Mawaris (Unit)</label>
+            <input id="simMawaris" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
         </div>
     </div>
 
-<!-- Kad Margin/Profit kekal seperti sedia ada -->
-<div id="marginCard" class="...">
-   <!-- ... -->
+    <!-- 2. INPUT BILANGAN PERUNDING (BAHARU) -->
+    <p class="text-sm font-semibold text-[#45d9d7] uppercase tracking-wider mb-3">2. Bilangan Perunding (Agensi)</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div>
+            <label class="font-medium text-xs text-gray-300 block mb-1">Bil. AQC</label>
+            <input id="bilAqc" type="number" value="10" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
+        </div>
+        <div>
+            <label class="font-medium text-xs text-gray-300 block mb-1">Bil. AQC-AS</label>
+            <input id="bilAqcas" type="number" value="5" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
+        </div>
+        <div>
+            <label class="font-medium text-xs text-gray-300 block mb-1">Bil. AQC-UM</label>
+            <input id="bilAqcum" type="number" value="2" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
+        </div>
+        <div>
+            <label class="font-medium text-xs text-gray-300 block mb-1">Bil. MGAM</label>
+            <input id="bilMgam" type="number" value="1" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
+        </div>
+    </div>
+
+    <hr class="border-gray-700 my-6">
+
+    <!-- 3. RINGKASAN UTAMA -->
+    <div class="grid md:grid-cols-3 gap-5 mb-6">
+        <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5">
+            <p class="text-sm text-gray-300 mb-1">Total Sales</p>
+            <p id="simSales" class="text-3xl font-bold text-[#45d9d7]">RM 0.00</p>
+        </div>
+        <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5">
+            <p class="text-sm text-gray-300 mb-1">Total Commission Pool</p>
+            <p id="simCommission" class="text-2xl font-bold">RM 0.00</p>
+        </div>
+        <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5">
+            <p class="text-sm text-gray-300 mb-1">Total Override Pool</p>
+            <p id="simOverride" class="text-2xl font-bold">RM 0.00</p>
+        </div>
+    </div>
+
+    <!-- 4. PECAHAN COMPANY POOL & PROFIT -->
+    <div class="grid md:grid-cols-2 gap-5 mb-6">
+        <!-- Company Pool Breakdown -->
+        <div class="bg-gray-800/80 p-5 rounded-xl border border-gray-700">
+            <div class="flex justify-between items-center mb-3">
+                <span class="text-gray-300 font-semibold">Total Company Pool</span>
+                <span id="simCompanyPool" class="font-bold text-white text-lg">RM 0.00</span>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-3 space-y-2 text-sm">
+                <div class="flex justify-between text-gray-400">
+                    <span>↳ Admin & Operation</span>
+                    <span id="simAdmin" class="text-gray-200">RM 0.00</span>
+                </div>
+                <div class="flex justify-between text-gray-400">
+                    <span>↳ Total Allowance</span>
+                    <span id="simTotalAllowance" class="text-gray-200">RM 0.00</span>
+                </div>
+                <!-- Khas untuk Paparan Elaun Seorang Pengarah -->
+                <div class="flex justify-between text-gray-400 pl-4 text-xs italic">
+                    <span>↳ Elaun Seorang Pengarah (3 orang)</span>
+                    <span id="simAllowancePerDirector" class="text-[#45d9d7]">RM 0.00 / pax</span>
+                </div>
+                <div class="flex justify-between text-gray-400">
+                    <span>↳ Royalty</span>
+                    <span id="simRoyalty" class="text-gray-200">RM 0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profit & Margin -->
+        <div class="space-y-4">
+            <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5">
+                <p class="text-sm text-gray-300 mb-1">Gross Profit</p>
+                <p id="simProfit" class="text-2xl font-bold text-green-400">RM 0.00</p>
+            </div>
+
+            <div id="marginCard" class="bg-white/10 backdrop-blur border border-white/10 rounded-xl p-5 transition-colors">
+                <p class="text-sm text-gray-300 mb-1">Profit Margin</p>
+                <p id="simMargin" class="text-2xl font-bold">0%</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. ANGGARAN PURATA PENDAPATAN PERUNDING (BAHARU) -->
+    <div class="bg-gray-800/50 p-5 rounded-xl border border-gray-700">
+        <h3 class="text-sm font-semibold text-[#45d9d7] uppercase tracking-wider mb-3">Anggaran Purata Pendapatan Perunding (Comm + Override)</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div class="bg-gray-900/60 p-3 rounded-lg border border-gray-700">
+                <p class="text-xs text-gray-400">Purata Seorang AQC</p>
+                <p id="simAvgAQC" class="text-lg font-bold text-white mt-1">RM 0.00</p>
+            </div>
+            <div class="bg-gray-900/60 p-3 rounded-lg border border-gray-700">
+                <p class="text-xs text-gray-400">Purata Seorang AQC-AS</p>
+                <p id="simAvgAQCAS" class="text-lg font-bold text-white mt-1">RM 0.00</p>
+            </div>
+            <div class="bg-gray-900/60 p-3 rounded-lg border border-gray-700">
+                <p class="text-xs text-gray-400">Purata Seorang AQC-UM</p>
+                <p id="simAvgAQCUM" class="text-lg font-bold text-white mt-1">RM 0.00</p>
+            </div>
+            <div class="bg-gray-900/60 p-3 rounded-lg border border-gray-700">
+                <p class="text-xs text-gray-400">Purata Seorang MGAM</p>
+                <p id="simAvgMGAM" class="text-lg font-bold text-white mt-1">RM 0.00</p>
+            </div>
+        </div>
+    </div>
 </div>
 
     <script type="module">
@@ -514,7 +565,7 @@ Admin Settings
             maintainRecruitAQCAS: 5, maintainRecruitAQCUM: 10, maintainRecruitMGAM: 15,
             memberValidity: 365, consultantRegistrationFee: 200,
             renewalAQC: 100, renewalAQCAS: 150, renewalAQCUM: 250, renewalMGAM: 500,
-        };
+           };
 
         const companyFields = ["companyName", "registrationNo", "companyEmail", "companyAddress"];
         
@@ -605,45 +656,140 @@ Admin Settings
             }
         }
 
-        // ================= SALES SIMULATION =================
+       // ================= SALES SIMULATION =================
 function calculateSimulation() {
+    // A. Mengambil Nilai Input
+    // 1. Harga Produk
+    const prcWasiat = getVal("wasiatPrice");
+    const prcHibah = getVal("hibahPrice");
+    const prcSepencarian = getVal("sepencarianPrice");
+    const prcMawaris = getVal("mawarisPrice");
+
+    // 2. Bilangan Jualan Produk
+    const qtyWasiat = getVal("simWasiat");
+    const qtyHibah = getVal("simHibah");
+    const qtySepencarian = getVal("simSepencarian");
+    const qtyMawaris = getVal("simMawaris");
+
+    // 3. Tetapan Peratusan (Pools & Breakdown)
+    const pctCommPool = getVal("commissionPool") / 100;
+    const pctOverridePool = getVal("overridePool") / 100;
+    const pctCompanyPool = getVal("companyPool") / 100;
+
+    const pctAdmin = getVal("adminOperation") / 100;
+    const pctAllowance = getVal("allowance") / 100;
+    const pctRoyalty = getVal("royalty") / 100;
+
+    // *** BARU: Bilangan Perunding Mengikut Pangkat ***
+    // (Pastikan ID ini wujud dalam HTML anda)
+    const bilAQC = Math.max(1, getVal("bilAqc")); // Minimum 1 untuk elak 'divide by zero'
+    const bilAQCAS = Math.max(0, getVal("bilAqcas"));
+    const bilAQCUM = Math.max(0, getVal("bilAqcum"));
+    const bilMGAM = Math.max(0, getVal("bilMgam"));
+    const totalConsultants = bilAQC + bilAQCAS + bilAQCUM + bilMGAM;
+
+    // ====================================================
+
+    // B. Pengiraan Jualan Kasar (Gross Sales)
     const sales = 
-        (getVal("simWasiat") * getVal("wasiatPrice")) +
-        (getVal("simHibah") * getVal("hibahPrice")) +
-        (getVal("simSepencarian") * getVal("sepencarianPrice")) +
-        (getVal("simMawaris") * getVal("mawarisPrice"));
+        (qtyWasiat * prcWasiat) +
+        (qtyHibah * prcHibah) +
+        (qtySepencarian * prcSepencarian) +
+        (qtyMawaris * prcMawaris);
 
-    // 1. Pengiraan Pool Utama (Berdasarkan % Total Sales)
-    const commissionAmount = sales * (getVal("commissionPool") / 100);
-    const overrideAmount = sales * (getVal("overridePool") / 100);
-    const companyPoolAmount = sales * (getVal("companyPool") / 100);
+    // C. Pengiraan Pool Utama
+    const commissionAmount = sales * pctCommPool;
+    const overrideAmount = sales * pctOverridePool;
+    const companyPoolAmount = sales * pctCompanyPool;
 
-    // 2. Pecahan Dalam Company Pool (Tolak dari Total Sales mengikut % Breakdown)
-    const adminAmount = sales * (getVal("adminOperation") / 100);
-    const allowanceAmount = sales * (getVal("allowance") / 100);
-    const royaltyAmount = sales * (getVal("royalty") / 100);
+    // D. Pecahan Dalam Company Pool (breakdown peratusan dari total sales)
+    const adminAmount = sales * pctAdmin;
+    const allowanceAmount = sales * pctAllowance;
+    const royaltyAmount = sales * pctRoyalty;
 
-    // 3. Pengiraan Untung Bersih (Net Profit)
+    // E. Pengiraan Untung Bersih (Net Profit)
     const totalExpenses = commissionAmount + overrideAmount + adminAmount + allowanceAmount + royaltyAmount;
     const profit = sales - totalExpenses;
-    
     const margin = sales > 0 ? (profit / sales) * 100 : 0;
 
-    // Fungsi bantuan untuk format matawang (supaya kod lebih kemas)
+    // ====================================================
+    // *** F. LOGIK BARU & PENGIRAAN TERPERINCI ***
+    // ====================================================
+
+    // 1. Pecahan Alaun Pengarah (Dibahagi 3)
+    const totalDirectors = 3;
+    const allowancePerDirector = allowanceAmount > 0 ? allowanceAmount / totalDirectors : 0;
+
+    // 2. Anggaran Teori Agihan Komisyen & Override (Untuk Paparan UI)
+    // Memandangkan kod asal guna peratusan pukal, kita buat anggaran agihan
+    // berdasarkan wajaran pangkat (MGAM paling tinggi, AQC paling rendah).
+
+    // Wajaran Agihan (Contoh): MGAM(4), AQCUM(3), AQCAS(2), AQC(1)
+    const weightAQC = 1;
+    const weightAQCAS = 2;
+    const weightAQCUM = 3;
+    const weightMGAM = 4;
+
+    const totalWeight = 
+        (bilAQC * weightAQC) + 
+        (bilAQCAS * weightAQCAS) + 
+        (bilAQCUM * weightAQCUM) + 
+        (bilMGAM * weightMGAM);
+
+    // Total Agihan Agency (Commission + Override)
+    const totalAgencyPayable = commissionAmount + overrideAmount;
+
+    // Pengiraan Anggaran Purata Pendapatan Sorg-sorg
+    let avgIncomeAQC = 0, avgIncomeAQCAS = 0, avgIncomeAQCUM = 0, avgIncomeMGAM = 0;
+
+    if (totalWeight > 0 && totalAgencyPayable > 0) {
+        const valuePerWeight = totalAgencyPayable / totalWeight;
+        
+        avgIncomeAQC = valuePerWeight * weightAQC;
+        avgIncomeAQCAS = valuePerWeight * weightAQCAS;
+        avgIncomeAQCUM = valuePerWeight * weightAQCUM;
+        avgIncomeMGAM = valuePerWeight * weightMGAM;
+    }
+
+    // 3. Komisyen, Override, USB (Konseptual berdasarkan Pool)
+    // Di simulasi ini, kita takrifkan:
+    // Commission = Personal Sales Comm (sebahagian besar Comm Pool)
+    // Override = Overriding Comm (sebahagian besar Override Pool)
+    // USB = Universal Sales Bonus (Bonus tambahan dari Company jualan Mawaris contohnya)
+    // Untuk mudahkan jualan, kita paparkan total pool yang payable ke agency.
+    const totalCommAndOverride = commissionAmount + overrideAmount;
+
+
+    // ====================================================
+    // G. Kemaskini UI
+    // ====================================================
+
+    // Fungsi bantuan untuk format matawang
     const formatRM = (val) => "RM " + val.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-    // 4. Kemaskini UI (Pastikan ID ini wujud dalam HTML anda)
+    // 1. Pengiraan Asas
     if(el("simSales")) el("simSales").innerText = formatRM(sales);
-    if(el("simCommission")) el("simCommission").innerText = formatRM(commissionAmount);
-    if(el("simOverride")) el("simOverride").innerText = formatRM(overrideAmount);
-    if(el("simCompanyPool")) el("simCompanyPool").innerText = formatRM(companyPoolAmount);
     
-    // Kemaskini UI untuk Pecahan Company Pool
+    // Kad Jualan Agensi (Gabungan Comm + Override)
+    if(el("simAgencyPayable")) el("simAgencyPayable").innerText = formatRM(totalCommAndOverride);
+    
+    // Pecahan Company Pool UI
+    if(el("simCompanyPool")) el("simCompanyPool").innerText = formatRM(companyPoolAmount);
     if(el("simAdmin")) el("simAdmin").innerText = formatRM(adminAmount);
-    if(el("simAllowance")) el("simAllowance").innerText = formatRM(allowanceAmount);
     if(el("simRoyalty")) el("simRoyalty").innerText = formatRM(royaltyAmount);
 
-    // Format Keuntungan (Profit) dengan warna merah (rugi) atau hijau (untung)
+    // *** 2. BARU: Kemaskini Alaun Pengarah ***
+    if(el("simTotalAllowance")) el("simTotalAllowance").innerText = formatRM(allowanceAmount);
+    if(el("simAllowancePerDirector")) el("simAllowancePerDirector").innerText = formatRM(allowancePerDirector);
+
+    // *** 3. BARU: Kemaskini Teori Pendapatan Perunding (Sorg-sorg) ***
+    if(el("simAvgAQC")) el("simAvgAQC").innerText = formatRM(avgIncomeAQC);
+    if(el("simAvgAQCAS")) el("simAvgAQCAS").innerText = formatRM(avgIncomeAQCAS);
+    if(el("simAvgAQCUM")) el("simAvgAQCUM").innerText = formatRM(avgIncomeAQCUM);
+    if(el("simAvgMGAM")) el("simAvgMGAM").innerText = formatRM(avgIncomeMGAM);
+
+
+    // 4. Format Keuntungan (Profit) & Margin
     const profitEl = el("simProfit");
     if(profitEl) {
         profitEl.innerText = formatRM(profit);
@@ -652,7 +798,7 @@ function calculateSimulation() {
 
     if(el("simMargin")) el("simMargin").innerText = margin.toFixed(1) + "%";
 
-    // Kemaskini Gaya Kad Margin
+    // 5. Gaya Kad Margin
     const marginCard = el("marginCard");
     if(marginCard) {
         marginCard.className = "rounded-xl p-5 transition-colors border " + 
@@ -683,6 +829,16 @@ function calculateSimulation() {
             });
         });
 
+const simTriggers = [
+    "simWasiat", "simHibah", "simSepencarian", "simMawaris",
+    "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice",
+    // *** TAMBAH ID BARU DI SINI ***
+    "bilAqc", "bilAqcas", "bilAqcum", "bilMgam"
+];
+simTriggers.forEach(id => {
+    if(el(id)) el(id).addEventListener("input", calculateSimulation);
+});
+      
         // ================= SAVE SETTINGS =================
         el("saveSettings").addEventListener("click", async () => {
             const btn = el("saveSettings");
