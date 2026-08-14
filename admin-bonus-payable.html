@@ -63,22 +63,13 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import {
-            getFirestore, collection, getDocs, doc, getDoc, addDoc, updateDoc, query, where
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        
-        const firebaseConfig = {
-            apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-            authDomain: "alqawthar-mywaris.firebaseapp.com",
-            projectId: "alqawthar-mywaris",
-            storageBucket: "alqawthar-mywaris.firebasestorage.app",
-            messagingSenderId: "3498810778",
-            appId: "1:3498810778:web:ee36e0fe42f76698046e23"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        // 1. Tarik db (dan auth jika perlu) dari fail berpusat
+    import { db } from './firebase.js';
+    
+    // 2. Tarik fungsi-fungsi operasi Firestore yang awak gunakan
+    import {
+        collection, getDocs, doc, getDoc, addDoc, updateDoc, query, where
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
