@@ -280,21 +280,8 @@ body{ font-family: Inter, sans-serif; }
 </div>
     
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-// FIREBASE CONFIG
-const firebaseConfig = {
-    apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-    authDomain: "alqawthar-mywaris.firebaseapp.com",
-    projectId: "alqawthar-mywaris",
-    storageBucket: "alqawthar-mywaris.firebasestorage.app",
-    messagingSenderId: "3498810778",
-    appId: "1:3498810778:web:ee36e0fe42f76698046e23"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+import { db } from './firebase.js';
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Helper function untuk format Ringgit Malaysia
 const formatRM = (val) => Number(val).toLocaleString("ms-MY");
