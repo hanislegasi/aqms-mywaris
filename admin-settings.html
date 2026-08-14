@@ -812,6 +812,7 @@ function calculateSimulation() {
         const simTriggers = [
             "simWasiat", "simHibah", "simSepencarian", "simMawaris",
             "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice"
+           "bilAqc", "bilAqcas", "bilAqcum", "bilMgam"
         ];
         simTriggers.forEach(id => {
             if(el(id)) el(id).addEventListener("input", calculateSimulation);
@@ -829,15 +830,6 @@ function calculateSimulation() {
             });
         });
 
-const simTriggers = [
-    "simWasiat", "simHibah", "simSepencarian", "simMawaris",
-    "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice",
-    // *** TAMBAH ID BARU DI SINI ***
-    "bilAqc", "bilAqcas", "bilAqcum", "bilMgam"
-];
-simTriggers.forEach(id => {
-    if(el(id)) el(id).addEventListener("input", calculateSimulation);
-});
       
         // ================= SAVE SETTINGS =================
         el("saveSettings").addEventListener("click", async () => {
