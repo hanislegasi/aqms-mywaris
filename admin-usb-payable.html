@@ -41,10 +41,24 @@
     </div>
 
     <script type="module">
-        // 1. Tarik 'db' dari fail konfigurasi berpusat
-        import { db } from './firebase.js';
-        import { collection, getDocs, doc, getDoc, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+       // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
+import { db, auth } from './firebase.js';
 
+// 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
+import { 
+    onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+// 3. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
+import { 
+    collection, 
+    getDocs, 
+    doc, 
+    getDoc, 
+    addDoc, 
+    query, 
+    where 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
 
         const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
