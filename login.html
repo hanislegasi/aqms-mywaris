@@ -36,12 +36,24 @@
       </button>
     </form>
 
-    <div class="text-center mt-4">
-      <a href="register.html" class="text-blue-600">
-        Belum ada akaun?
-      </a>
+    <!-- Pilihan Pendaftaran (AQM & AQC) -->
+    <div class="mt-8 pt-6 border-t border-gray-200">
+      <p class="text-sm text-center text-gray-500 mb-4 font-medium">Belum mempunyai akaun? Daftar sekarang:</p>
+      
+      <div class="flex flex-col gap-3">
+        <!-- Butang Daftar AQM (Pelanggan Biasa) -->
+        <a href="register.html" class="w-full flex justify-center items-center gap-2 bg-gray-50 hover:bg-gray-100 text-[#153638] border border-gray-300 px-4 py-2.5 rounded-xl font-semibold transition duration-150 shadow-sm">
+          <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+          Daftar sebagai AQM (Pelanggan)
+        </a>
+
+        <!-- Butang Daftar AQC (Perunding) -->
+        <a href="consultant-registration.html" class="w-full flex justify-center items-center gap-2 bg-[#d8ae81]/20 hover:bg-[#d8ae81]/30 text-[#8b6528] border border-[#d8ae81]/50 px-4 py-2.5 rounded-xl font-semibold transition duration-150 shadow-sm">
+          <svg class="w-5 h-5 text-[#8b6528]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+          Daftar sebagai AQC (Perunding)
+        </a>
+      </div>
     </div>
-  </div>
 
  <script type="module">
     // 1. Tarik db dan auth dari fail berpusat (Pendek dan kemas)
