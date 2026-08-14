@@ -43,23 +43,13 @@
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-      authDomain: "alqawthar-mywaris.firebaseapp.com",
-      projectId: "alqawthar-mywaris",
-      storageBucket: "alqawthar-mywaris.firebasestorage.app",
-      messagingSenderId: "3498810778",
-      appId: "1:3498810778:web:ee36e0fe42f76698046e23"
-    };
+ <script type="module">
+    // 1. Tarik db dan auth dari fail berpusat (Pendek dan kemas)
+    import { db, auth } from './firebase.js';
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    // 2. Tarik fungsi yang digunakan sahaja
+    import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -72,6 +62,22 @@
         alert("Login berjaya");
 
         const uid = auth.currentUser.uid;
+
+        // ==========================================
+        // SEMAKAN 1: Adakah dia ADMIN HQ?
+        // ==========================================
+        const adminRef = doc(db, "admins", uid);
+        const adminDoc = await getDoc(adminRef);
+
+        if (adminDoc.exists()) {
+          // Jika profilnya wujud dalam koleksi 'admins', terus terbangkan ke Admin Dashboard!
+          window.location.href = "admin-dashboard.html";
+          return; // Berhentikan fungsi di sini supaya ia tak baca kod di bawah.
+        }
+
+        // ==========================================
+        // SEMAKAN 2: Jika bukan Admin, dia Perunding atau Pelanggan?
+        // ==========================================
         const userRef = doc(db, "users", uid);
         const userDoc = await getDoc(userRef);
 
@@ -79,14 +85,14 @@
         let consultantNo = "";
         let nama = "";
 
-        // 1. Check jika dokumen users wujud
+        // Check jika dokumen users wujud
         if (userDoc.exists()) {
           const userData = userDoc.data();
           role = userData.role || "customer";
           consultantNo = userData.consultantNo || "";
           nama = userData.nama || "";
         } else {
-          // 2. AUTO-HEAL: Jika users tak wujud, cari dalam consultants
+          // AUTO-HEAL: Jika users tak wujud, cari dalam consultants
           const consultantRef = doc(db, "consultants", uid);
           const consultantDoc = await getDoc(consultantRef);
 
@@ -112,22 +118,20 @@
         }
 
         // 3. Halakan pengguna mengikut role yang sah
-        if (role === "admin") {
-          window.location.href = "admin-dashboard.html";
-        } 
-        else if (role === "consultant") {
+        if (role === "consultant") {
           sessionStorage.setItem("consultantNo", consultantNo);
           sessionStorage.setItem("consultantName", nama);
           sessionStorage.setItem("userUid", uid);
           window.location.href = "consultant-dashboard.html";
         } 
         else {
+          // Pelanggan biasa pergi ke dashboard portal
           window.location.href = "dashboard.html";
         }
 
       } catch (error) {
         console.error(error);
-        alert("Code: " + error.code + "\nMessage: " + error.message);
+        alert("Ralat Log Masuk: " + error.message);
       }
     });
   </script>
