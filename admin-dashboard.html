@@ -560,17 +560,41 @@ const processDocData = (data, type) => {
 
         try {
             const userDoc = await getDoc(doc(db, "admins", user.uid));
+            
             if (userDoc.exists()) {
                 const userData = userDoc.data();
-                if (userData.role !== "admin") {
-                    alert("Akses ditolak");
+                const userRole = userData.role; // Tarik data role
+
+                // 1. Semak jika dia bukan dalam senarai role admin yang sah
+                if (!["superadmin", "admin_ops", "admin_finance", "admin"].includes(userRole)) {
+                    alert("Akses ditolak. Anda tiada kebenaran.");
                     window.location.href = "dashboard.html";
                     return;
                 }
+
+                // 2. KAWALAN PAPARAN BUTANG (RBAC)
+                if (userRole === "admin_ops") {
+                    // Admin 1: Akses AQM & AQC sahaja
+                    document.getElementById("accountBtn").classList.add("hidden");
+                    document.getElementById("auditBtn").classList.add("hidden");
+                    document.getElementById("settingBtn").classList.add("hidden");
+                } 
+                else if (userRole === "admin_finance") {
+                    // Admin 2: Akses Akaun sahaja
+                    document.getElementById("aqmBtn").classList.add("hidden");
+                    document.getElementById("aqcBtn").classList.add("hidden");
+                    document.getElementById("auditBtn").classList.add("hidden");
+                    document.getElementById("settingBtn").classList.add("hidden");
+                }
+                // Jika "superadmin", kod tak buat apa-apa (semua 5 butang kekal terpapar)
+
+                // 3. Teruskan muat data KPI
                 loadKPI();
+                
             } else {
                 alert("Ralat profil pengguna tidak dijumpai.");
                 await signOut(auth);
+                window.location.href = "login.html";
             }
         } catch (error) {
             console.error("Auth check error:", error);
