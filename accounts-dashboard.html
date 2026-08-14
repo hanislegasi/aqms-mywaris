@@ -281,24 +281,46 @@ class="text-sm">
             const snap = await getDocs(collection(db, "ledger"));
             const allocationSnap = await getDocs(collection(db, "companyAllocation"));
 
-            // DEKLARASI PEMBOLEHUBAH BAHARU
-            let consultantFund = 0;
-            let adminFund = 0;
-            let allowanceFund = 0;
-            let bonusFund = 0;
-            let usbFund = 0;
-            let royaltyFund = 0;
+            // 1. DEKLARASI PEMBOLEHUBAH
+let adminFund = 0;
+let allowanceFund = 0;
+let royaltyFund = 0;
 
-            allocationSnap.forEach((d) => {
-                const a = d.data();
-                // Nota: Pastikan nama a.xxxx di bawah sama dengan 'field' dalam pangkalan data Firestore anda
-                consultantFund += Number(a.consultant || 0); 
-                adminFund += Number(a.adminOperation || 0); 
-                allowanceFund += Number(a.allowance || 0); 
-                bonusFund += Number(a.bonus || 0);
-                usbFund += Number(a.usb || 0);
-                royaltyFund += Number(a.royalty || 0); 
-            });
+let consultantFund = 0;
+let bonusFund = 0;
+let usbFund = 0;
+
+// 2. KIRA DARI 'companyAllocation' (Guna allocationSnap sedia ada)
+allocationSnap.forEach((d) => {
+    const a = d.data();
+    // Berdasarkan Capture_4.JPG
+    adminFund += Number(a.adminOperation || 0); 
+    allowanceFund += Number(a.allowance || 0); 
+    royaltyFund += Number(a.royalty || 0); 
+});
+
+// 3. KIRA DARI 'ledger' UNTUK BONUS, USB & CONSULTANT
+// Kita perlu buat panggil data (query) ke collection 'ledger'
+const ledgerRef = collection(db, "ledger");
+const ledgerSnap = await getDocs(ledgerRef);
+
+ledgerSnap.forEach((doc) => {
+    const data = doc.data();
+    
+    // Kiraan asas akaun liabiliti: Lebihan (Kredit - Debit)
+    // Berdasarkan Capture11.JPG & Capture12.JPG, nilai berada di 'credit' dan 'debit'
+    const amount = Number(data.credit || 0) - Number(data.debit || 0);
+
+    // Semak nama akaun
+    if (data.account === "Bonus Payable") {
+        bonusFund += amount;
+    } else if (data.account === "USB Payable") {
+        usbFund += amount;
+    } else if (data.account === "Commission Payable") {
+        // Saya andaikan nama akaun untuk consultant adalah "Consultant Payable" di dalam ledger
+        consultantFund += amount;
+    }
+});
 
             let html = "";
             let income = 0;
@@ -367,13 +389,13 @@ coaSnap.forEach(doc=>{
             document.getElementById("bankCard").innerHTML =
 "RM" + money(bankBalance);
             document.getElementById("transactionCard").innerHTML = count;
-            // UPDATE STATS UI UNTUK PAYABLES
-            document.getElementById("consultantFund").innerHTML = "RM" + money(consultantFund);
-            document.getElementById("adminFund").innerHTML = "RM" + money(adminFund);
-            document.getElementById("allowanceFund").innerHTML = "RM" + money(allowanceFund);
-            document.getElementById("bonusFund").innerHTML = "RM" + money(bonusFund);
-            document.getElementById("usbFund").innerHTML = "RM" + money(usbFund);
-            document.getElementById("royaltyFund").innerHTML = "RM" + money(royaltyFund);
+// UPDATE STATS UI UNTUK PAYABLES
+document.getElementById("consultantFund").innerHTML = "RM" + money(consultantFund);
+document.getElementById("adminFund").innerHTML = "RM" + money(adminFund);
+document.getElementById("allowanceFund").innerHTML = "RM" + money(allowanceFund);
+document.getElementById("bonusFund").innerHTML = "RM" + money(bonusFund);
+document.getElementById("usbFund").innerHTML = "RM" + money(usbFund);
+document.getElementById("royaltyFund").innerHTML = "RM" + money(royaltyFund);
 
 
 //==============================
