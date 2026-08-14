@@ -256,7 +256,7 @@ onAuthStateChanged(auth, async(user)=>{
 
 const adminSnap =
 await getDoc(
-doc(db,"users",user.uid)
+doc(db,"admins",user.uid)
 );
 
 const admin =
