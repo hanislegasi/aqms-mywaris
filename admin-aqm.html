@@ -252,24 +252,30 @@ new URLSearchParams(location.search);
 const filterStatus =
 params.get("status");
 
-onAuthStateChanged(auth, async(user)=>{
+onAuthStateChanged(auth, async (user) => {
+    // Pastikan user wujud (sudah login) sebelum panggil database
+    if (user) {
+        const adminSnap = await getDoc(doc(db, "admins", user.uid));
+        
+        // Pastikan dokumen admin wujud dalam database
+        if (adminSnap.exists()) {
+            const admin = adminSnap.data();
 
-const adminSnap =
-await getDoc(
-doc(db,"admins",user.uid)
-);
-
-const admin =
-adminSnap.data();
-
-if(admin.role !== "admin"){
-
-window.location.href =
-"dashboard.html";
-
-return;
-
-}
+            // Benarkan akses JIKA role adalah "admin" ATAU "superadmin"
+            if (!["admin", "admin_ops", "superadmin"].includes(admin.role)) {
+                window.location.href = "dashboard.html";
+                return;
+            }
+        } else {
+            // Jika tiada rekod dalam collection 'admins'
+            window.location.href = "dashboard.html";
+            return;
+        }
+    } else {
+        // Jika belum login, tendang ke login page
+        window.location.href = "login.html"; // Tukar ikut nama fail login awak
+    }
+});
 
   
 const snapshot =
