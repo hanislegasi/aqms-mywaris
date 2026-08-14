@@ -41,22 +41,11 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, getDoc, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        // 1. Tarik 'db' dari fail konfigurasi berpusat
+        import { db } from './firebase.js';
+        import { collection, getDocs, doc, getDoc, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-            authDomain: "alqawthar-mywaris.firebaseapp.com",
-            projectId: "alqawthar-mywaris",
-            storageBucket: "alqawthar-mywaris.firebasestorage.app",
-            messagingSenderId: "3498810778",
-            appId: "1:3498810778:web:ee36e0fe42f76698046e23"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        
 
         const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
