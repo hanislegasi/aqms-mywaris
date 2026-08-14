@@ -165,6 +165,27 @@
         alert("Ralat Log Masuk: " + error.message);
       }
     });
+
+  
+    // Logik untuk buka dan tutup dropdown pendaftaran
+    const btnToggleRegister = document.getElementById('btnToggleRegister');
+    const registerMenu = document.getElementById('registerMenu');
+    const dropdownContainer = document.getElementById('registerDropdownContainer');
+
+    // Klik butang untuk toggle menu
+    btnToggleRegister.addEventListener('click', (e) => {
+      e.stopPropagation(); // Elakkan dari trigger fungsi tutup di bawah
+      registerMenu.classList.toggle('hidden');
+    });
+
+    // Tutup menu jika klik di mana-mana ruang kosong luar dari dropdown
+    document.addEventListener('click', (e) => {
+      if (!dropdownContainer.contains(e.target)) {
+        registerMenu.classList.add('hidden');
+      }
+    });
+  
+   
   </script>
 </body>
 </html>
