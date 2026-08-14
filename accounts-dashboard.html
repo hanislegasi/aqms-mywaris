@@ -100,24 +100,28 @@
             </div>
         </div>
 
-        <!-- Reserve Funds Cards -->
-        <h2 class="text-lg font-bold text-gray-800 mb-3">Reserve Funds</h2>
-        <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <!-- Payables Summary Cards -->
+        <h2 class="text-lg font-bold text-gray-800 mb-3">Payables Summary</h2>
+        <div class="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
             <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
-                <p class="text-gray-500 text-sm font-medium mb-1">Company Reserve</p>
-                <h2 id="companyFund" class="text-xl md:text-2xl font-bold text-gray-800">RM0.00</h2>
+                <p class="text-gray-500 text-sm font-medium mb-1">Consultant Payable</p>
+                <h2 id="consultantFund" class="text-xl md:text-2xl font-bold text-gray-800">RM0.00</h2>
             </div>
             <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
-                <p class="text-gray-500 text-sm font-medium mb-1">Shareholder Reserve</p>
-                <h2 id="shareholderFund" class="text-xl md:text-2xl font-bold text-gray-800">RM0.00</h2>
+                <p class="text-gray-500 text-sm font-medium mb-1">Admin Payable</p>
+                <h2 id="adminFund" class="text-xl md:text-2xl font-bold text-gray-800">RM0.00</h2>
             </div>
             <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
                 <p class="text-gray-500 text-sm font-medium mb-1">Allowance Payable</p>
                 <h2 id="allowanceFund" class="text-xl md:text-2xl font-bold text-gray-800">RM0.00</h2>
             </div>
             <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
-                <p class="text-gray-500 text-sm font-medium mb-1">Admin Payable</p>
-                <h2 id="adminFund" class="text-xl md:text-2xl font-bold text-gray-800">RM0.00</h2>
+                <p class="text-gray-500 text-sm font-medium mb-1">Bonus Payable</p>
+                <h2 id="bonusFund" class="text-xl md:text-2xl font-bold text-gray-800">RM0.00</h2>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
+                <p class="text-gray-500 text-sm font-medium mb-1">USB Payable</p>
+                <h2 id="usbFund" class="text-xl md:text-2xl font-bold text-gray-800">RM0.00</h2>
             </div>
             <div class="bg-white rounded-xl shadow-sm p-5 flex flex-col justify-center min-h-[110px] border border-gray-100">
                 <p class="text-gray-500 text-sm font-medium mb-1">Royalty Payable</p>
@@ -277,19 +281,23 @@ class="text-sm">
             const snap = await getDocs(collection(db, "ledger"));
             const allocationSnap = await getDocs(collection(db, "companyAllocation"));
 
-            let companyFund = 0;
-            let shareholderFund = 0;
-            let allowanceFund = 0;
+            // DEKLARASI PEMBOLEHUBAH BAHARU
+            let consultantFund = 0;
             let adminFund = 0;
+            let allowanceFund = 0;
+            let bonusFund = 0;
+            let usbFund = 0;
             let royaltyFund = 0;
 
             allocationSnap.forEach((d) => {
                 const a = d.data();
-                companyFund += Number(a.company || 0);
-                shareholderFund += Number(a.shareholder || 0);
-                allowanceFund += Number(a.allowance || 0);
-                adminFund += Number(a.adminOperation || 0);
-                royaltyFund += Number(a.royalty || 0);
+                // Nota: Pastikan nama a.xxxx di bawah sama dengan 'field' dalam pangkalan data Firestore anda
+                consultantFund += Number(a.consultant || 0); 
+                adminFund += Number(a.adminOperation || 0); 
+                allowanceFund += Number(a.allowance || 0); 
+                bonusFund += Number(a.bonus || 0);
+                usbFund += Number(a.usb || 0);
+                royaltyFund += Number(a.royalty || 0); 
             });
 
             let html = "";
@@ -359,10 +367,12 @@ coaSnap.forEach(doc=>{
             document.getElementById("bankCard").innerHTML =
 "RM" + money(bankBalance);
             document.getElementById("transactionCard").innerHTML = count;
-            document.getElementById("companyFund").innerHTML = "RM" + money(companyFund);
-            document.getElementById("shareholderFund").innerHTML = "RM" + money(shareholderFund);
-            document.getElementById("allowanceFund").innerHTML = "RM" + money(allowanceFund);
+            // UPDATE STATS UI UNTUK PAYABLES
+            document.getElementById("consultantFund").innerHTML = "RM" + money(consultantFund);
             document.getElementById("adminFund").innerHTML = "RM" + money(adminFund);
+            document.getElementById("allowanceFund").innerHTML = "RM" + money(allowanceFund);
+            document.getElementById("bonusFund").innerHTML = "RM" + money(bonusFund);
+            document.getElementById("usbFund").innerHTML = "RM" + money(usbFund);
             document.getElementById("royaltyFund").innerHTML = "RM" + money(royaltyFund);
 
 
