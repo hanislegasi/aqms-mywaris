@@ -279,23 +279,25 @@
                             `;
                         }
 
-                        html += `
-                            <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                <td class="p-4 text-lg font-semibold">${bil++}</td>
-                                <td class="p-4 text-lg font-medium text-gray-600">${isNaN(joinDate) ? "-" : joinDate.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' })}</td>
-                                <td class="p-4 text-lg font-bold text-[#153638]">${u.consultantNo || "-"}</td>
-                                <td class="p-4">
-                                    <div class="text-lg font-bold text-gray-800">${u.nama || "-"}</div>
-                                    <div class="text-sm text-gray-500 mt-0.5">${u.telefon || "-"} • ${state}</div>
-                                </td>
-                                <td class="p-4 text-lg font-medium text-blue-600">${upline}</td>
-                                <td class="p-4 text-lg">
-                                    <span class="bg-gray-100 text-gray-700 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider border border-gray-200">${lvl}</span>
-                                </td>
-                                <td class="p-4 text-lg font-bold text-green-700">RM${(u.careerSales || 0).toLocaleString()}</td>
-                                <td class="p-4 text-center align-middle">${actionHTML}</td>
-                            </tr>
-                        `;
+                       html += `
+    <tr onclick="window.location.href='admin-consultants-detail.html?id=${u.id}'" class="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
+        <td class="p-4 text-lg font-semibold">${bil++}</td>
+        <td class="p-4 text-lg font-medium text-gray-600">${isNaN(joinDate) ? "-" : joinDate.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' })}</td>
+        <td class="p-4 text-lg font-bold text-[#153638]">${u.consultantNo || "-"}</td>
+        <td class="p-4">
+            <div class="text-lg font-bold text-gray-800">${u.nama || "-"}</div>
+            <div class="text-sm text-gray-500 mt-0.5">${u.telefon || "-"} • ${state}</div>
+        </td>
+        <td class="p-4 text-lg font-medium text-blue-600">${upline}</td>
+        <td class="p-4 text-lg">
+            <span class="bg-gray-100 text-gray-700 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider border border-gray-200">${lvl}</span>
+        </td>
+        <td class="p-4 text-lg font-bold text-green-700">RM${(u.careerSales || 0).toLocaleString()}</td>
+        <td class="p-4 text-center align-middle" onclick="event.stopPropagation()">
+            ${actionHTML}
+        </td>
+    </tr>
+`;
                     });
                 }
 
