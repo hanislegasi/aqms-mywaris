@@ -117,7 +117,7 @@
                 const user = userCredential.user;
 
                 // 3. Simpan maklumat profil ke Firestore (Koleksi 'users')
-                await setDoc(doc(db, "users", user.uid), {
+                await setDoc(doc(db, "admins", user.uid), {
                     nama: nama,
                     ic: ic,
                     telefon: telefon,
