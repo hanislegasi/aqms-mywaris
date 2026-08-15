@@ -656,22 +656,20 @@ Admin Settings
             }
         }
 
-       // ================= SALES SIMULATION =================
+  // ================= SALES SIMULATION =================
 function calculateSimulation() {
-    // A. Mengambil Nilai Input
-    // 1. Harga Produk
+    // A. Mengambil Nilai Input Jualan & Harga
     const prcWasiat = getVal("wasiatPrice");
     const prcHibah = getVal("hibahPrice");
     const prcSepencarian = getVal("sepencarianPrice");
     const prcMawaris = getVal("mawarisPrice");
 
-    // 2. Bilangan Jualan Produk
     const qtyWasiat = getVal("simWasiat");
     const qtyHibah = getVal("simHibah");
     const qtySepencarian = getVal("simSepencarian");
     const qtyMawaris = getVal("simMawaris");
 
-    // 3. Tetapan Peratusan (Pools & Breakdown)
+    // B. Mengambil Nilai Tetapan Pools & Company Breakdown (Dari Setting Sedia Ada)
     const pctCommPool = getVal("commissionPool") / 100;
     const pctOverridePool = getVal("overridePool") / 100;
     const pctCompanyPool = getVal("companyPool") / 100;
@@ -680,116 +678,109 @@ function calculateSimulation() {
     const pctAllowance = getVal("allowance") / 100;
     const pctRoyalty = getVal("royalty") / 100;
 
-    // *** BARU: Bilangan Perunding Mengikut Pangkat ***
-    // (Pastikan ID ini wujud dalam HTML anda)
-    const bilAQC = Math.max(1, getVal("bilAqc")); // Minimum 1 untuk elak 'divide by zero'
+    // C. Mengambil Nilai Peratusan Spesifik Pangkat (Dari Setting Sedia Ada)
+    const commAQC = getVal("commissionAQC");
+    const commAQCAS = getVal("commissionAQCAS");
+    const commAQCUM = getVal("commissionAQCUM");
+    const commMGAM = getVal("commissionMGAM");
+
+    const overAQC = getVal("overrideAQC");
+    const overAQCAS = getVal("overrideAQCAS");
+    const overAQCUM = getVal("overrideAQCUM");
+    const overMGAM = getVal("overrideMGAM");
+
+    // D. Bilangan Perunding Mengikut Pangkat (Input Simulasi)
+    const bilAQC = Math.max(1, getVal("bilAqc")); // Minimum 1 elak ralat
     const bilAQCAS = Math.max(0, getVal("bilAqcas"));
     const bilAQCUM = Math.max(0, getVal("bilAqcum"));
     const bilMGAM = Math.max(0, getVal("bilMgam"));
-    const totalConsultants = bilAQC + bilAQCAS + bilAQCUM + bilMGAM;
 
     // ====================================================
 
-    // B. Pengiraan Jualan Kasar (Gross Sales)
+    // 1. Pengiraan Jualan Kasar (Gross Sales)
     const sales = 
         (qtyWasiat * prcWasiat) +
         (qtyHibah * prcHibah) +
         (qtySepencarian * prcSepencarian) +
         (qtyMawaris * prcMawaris);
 
-    // C. Pengiraan Pool Utama
+    // 2. Pengiraan Pool Utama
     const commissionAmount = sales * pctCommPool;
     const overrideAmount = sales * pctOverridePool;
     const companyPoolAmount = sales * pctCompanyPool;
 
-    // D. Pecahan Dalam Company Pool (breakdown peratusan dari total sales)
+    // 3. Pecahan Dalam Company Pool (Tolak dari Total Sales)
     const adminAmount = sales * pctAdmin;
     const allowanceAmount = sales * pctAllowance;
     const royaltyAmount = sales * pctRoyalty;
 
-    // E. Pengiraan Untung Bersih (Net Profit)
+    // 4. Pengiraan Untung Bersih (Net Profit) & Margin
     const totalExpenses = commissionAmount + overrideAmount + adminAmount + allowanceAmount + royaltyAmount;
     const profit = sales - totalExpenses;
     const margin = sales > 0 ? (profit / sales) * 100 : 0;
 
-    // ====================================================
-    // *** F. LOGIK BARU & PENGIRAAN TERPERINCI ***
-    // ====================================================
-
-    // 1. Pecahan Alaun Pengarah (Dibahagi 3)
+    // 5. Pecahan Alaun Pengarah (Dibahagi 3)
     const totalDirectors = 3;
     const allowancePerDirector = allowanceAmount > 0 ? allowanceAmount / totalDirectors : 0;
 
-    // 2. Anggaran Teori Agihan Komisyen & Override (Untuk Paparan UI)
-    // Memandangkan kod asal guna peratusan pukal, kita buat anggaran agihan
-    // berdasarkan wajaran pangkat (MGAM paling tinggi, AQC paling rendah).
+    // ====================================================
+    // *** 6. PENGIRAAN PURATA PENDAPATAN PERUNDING (MENGGUNAKAN DATA SEBENAR) ***
+    // ====================================================
+    
+    // Gabungkan % Comm + % Override untuk mendapatkan kuasa potensi setiap pangkat
+    const rateAQC = commAQC + overAQC;       // Cth: 35 + 0 = 35
+    const rateAQCAS = commAQCAS + overAQCAS; // Cth: 38 + 3 = 41
+    const rateAQCUM = commAQCUM + overAQCUM; // Cth: 40 + 4 = 44
+    const rateMGAM = commMGAM + overMGAM;    // Cth: 45 + 5 = 50
 
-    // Wajaran Agihan (Contoh): MGAM(4), AQCUM(3), AQCAS(2), AQC(1)
-    const weightAQC = 1;
-    const weightAQCAS = 2;
-    const weightAQCUM = 3;
-    const weightMGAM = 4;
-
+    // Kira Total Wajaran (Weight) Organisasi
     const totalWeight = 
-        (bilAQC * weightAQC) + 
-        (bilAQCAS * weightAQCAS) + 
-        (bilAQCUM * weightAQCUM) + 
-        (bilMGAM * weightMGAM);
+        (bilAQC * rateAQC) + 
+        (bilAQCAS * rateAQCAS) + 
+        (bilAQCUM * rateAQCUM) + 
+        (bilMGAM * rateMGAM);
 
-    // Total Agihan Agency (Commission + Override)
+    // Total dana yang dibayar ke agensi
     const totalAgencyPayable = commissionAmount + overrideAmount;
 
-    // Pengiraan Anggaran Purata Pendapatan Sorg-sorg
+    // Agihkan Total Dana berdasarkan peratusan (wajaran) masing-masing
     let avgIncomeAQC = 0, avgIncomeAQCAS = 0, avgIncomeAQCUM = 0, avgIncomeMGAM = 0;
 
     if (totalWeight > 0 && totalAgencyPayable > 0) {
-        const valuePerWeight = totalAgencyPayable / totalWeight;
+        const valuePerPercentPoint = totalAgencyPayable / totalWeight;
         
-        avgIncomeAQC = valuePerWeight * weightAQC;
-        avgIncomeAQCAS = valuePerWeight * weightAQCAS;
-        avgIncomeAQCUM = valuePerWeight * weightAQCUM;
-        avgIncomeMGAM = valuePerWeight * weightMGAM;
+        avgIncomeAQC = valuePerPercentPoint * rateAQC;
+        avgIncomeAQCAS = valuePerPercentPoint * rateAQCAS;
+        avgIncomeAQCUM = valuePerPercentPoint * rateAQCUM;
+        avgIncomeMGAM = valuePerPercentPoint * rateMGAM;
     }
 
-    // 3. Komisyen, Override, USB (Konseptual berdasarkan Pool)
-    // Di simulasi ini, kita takrifkan:
-    // Commission = Personal Sales Comm (sebahagian besar Comm Pool)
-    // Override = Overriding Comm (sebahagian besar Override Pool)
-    // USB = Universal Sales Bonus (Bonus tambahan dari Company jualan Mawaris contohnya)
-    // Untuk mudahkan jualan, kita paparkan total pool yang payable ke agency.
-    const totalCommAndOverride = commissionAmount + overrideAmount;
-
-
     // ====================================================
-    // G. Kemaskini UI
+    // 7. KEMASKINI UI KAD SIMULASI
     // ====================================================
 
-    // Fungsi bantuan untuk format matawang
+    // Fungsi format matawang
     const formatRM = (val) => "RM " + val.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-    // 1. Pengiraan Asas
+    // Kad Asas & Pools (Total Commission dan Total Override dipaparkan di sini)
     if(el("simSales")) el("simSales").innerText = formatRM(sales);
+    if(el("simCommission")) el("simCommission").innerText = formatRM(commissionAmount);
+    if(el("simOverride")) el("simOverride").innerText = formatRM(overrideAmount);
     
-    // Kad Jualan Agensi (Gabungan Comm + Override)
-    if(el("simAgencyPayable")) el("simAgencyPayable").innerText = formatRM(totalCommAndOverride);
-    
-    // Pecahan Company Pool UI
+    // Kad Company Pool & Pecahan
     if(el("simCompanyPool")) el("simCompanyPool").innerText = formatRM(companyPoolAmount);
     if(el("simAdmin")) el("simAdmin").innerText = formatRM(adminAmount);
-    if(el("simRoyalty")) el("simRoyalty").innerText = formatRM(royaltyAmount);
-
-    // *** 2. BARU: Kemaskini Alaun Pengarah ***
     if(el("simTotalAllowance")) el("simTotalAllowance").innerText = formatRM(allowanceAmount);
     if(el("simAllowancePerDirector")) el("simAllowancePerDirector").innerText = formatRM(allowancePerDirector);
+    if(el("simRoyalty")) el("simRoyalty").innerText = formatRM(royaltyAmount);
 
-    // *** 3. BARU: Kemaskini Teori Pendapatan Perunding (Sorg-sorg) ***
+    // Kad Purata Pendapatan Perunding (Sorg-sorg)
     if(el("simAvgAQC")) el("simAvgAQC").innerText = formatRM(avgIncomeAQC);
     if(el("simAvgAQCAS")) el("simAvgAQCAS").innerText = formatRM(avgIncomeAQCAS);
     if(el("simAvgAQCUM")) el("simAvgAQCUM").innerText = formatRM(avgIncomeAQCUM);
     if(el("simAvgMGAM")) el("simAvgMGAM").innerText = formatRM(avgIncomeMGAM);
 
-
-    // 4. Format Keuntungan (Profit) & Margin
+    // Kad Profit & Margin
     const profitEl = el("simProfit");
     if(profitEl) {
         profitEl.innerText = formatRM(profit);
@@ -798,7 +789,6 @@ function calculateSimulation() {
 
     if(el("simMargin")) el("simMargin").innerText = margin.toFixed(1) + "%";
 
-    // 5. Gaya Kad Margin
     const marginCard = el("marginCard");
     if(marginCard) {
         marginCard.className = "rounded-xl p-5 transition-colors border " + 
