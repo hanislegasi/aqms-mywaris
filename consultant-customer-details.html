@@ -69,56 +69,23 @@ Memuatkan data...
 
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+// 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
+import { db, auth } from './firebase.js';
 
+// 2. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
 import {
-getFirestore,
-doc,
-getDoc,
-updateDoc,
-serverTimestamp,
-addDoc,
-collection
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    doc,
+    getDoc,
+    updateDoc,
+    serverTimestamp,
+    addDoc,
+    collection
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// 3. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
 import {
-getAuth,
-onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-const firebaseConfig = {
-
-apiKey:
-"AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-
-authDomain:
-"alqawthar-mywaris.firebaseapp.com",
-
-projectId:
-"alqawthar-mywaris",
-
-storageBucket:
-"alqawthar-mywaris.firebasestorage.app",
-
-messagingSenderId:
-"3498810778",
-
-appId:
-"1:3498810778:web:ee36e0fe42f76698046e23"
-
-};
-
-const app =
-initializeApp(firebaseConfig);
-
-const db =
-getFirestore(app);
-
-const auth =
-getAuth(app);
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 onAuthStateChanged(auth, async(user)=>{
 
