@@ -697,7 +697,7 @@ function calculateSimulation() {
         (qtySepencarian * prcSepencarian) +
         (qtyMawaris * prcMawaris);
 
-    // Pengiraan Pool 
+    // Pengiraan Pool (Daripada Total Sales)
     const commissionAmount = sales * pctCommPool; // RM 350 * 35% = RM 122.50
     const overrideAmount = sales * pctOverridePool; // RM 350 * 12% = RM 42.00
     const companyPoolAmount = sales * pctCompanyPool; // RM 350 * 48% = RM 168.00
@@ -717,16 +717,17 @@ function calculateSimulation() {
     const margin = sales > 0 ? (profit / sales) * 100 : 0;
 
     // ====================================================
-    // *** PENGIRAAN PENDAPATAN PERUNDING (EXCEL LOGIC) ***
+    // *** PENGIRAAN PENDAPATAN PERUNDING (LOGIK BARU YANG TEPAT) ***
     // ====================================================
     
     // 1. AQC ambik semua dari Commission Pool (RM 122.50)
     const totalAqcIncome = commissionAmount; 
     
-    // 2. AQC-AS, UM & MGAM ambik peratusan dari Override Pool (RM 42.00)
-    const totalAqcasIncome = overrideAmount * overAQCAS; // RM 42 * 0.03 = RM 1.26
-    const totalAqcumIncome = overrideAmount * overAQCUM; // RM 42 * 0.04 = RM 1.68
-    const totalMgamIncome = overrideAmount * overMGAM;   // RM 42 * 0.05 = RM 2.10
+    // 2. Upline ambik peratusan DARIPADA TOTAL SALES, bukan dari Override Pool
+    // Kerana 3% + 4% + 5% = 12% (Ngam-ngam sama dengan saiz Override Pool)
+    const totalAqcasIncome = sales * overAQCAS; // RM 350 * 3% = RM 10.50
+    const totalAqcumIncome = sales * overAQCUM; // RM 350 * 4% = RM 14.00
+    const totalMgamIncome = sales * overMGAM;   // RM 350 * 5% = RM 17.50
 
     // 3. Bahagikan ikut bilangan supaya dapat pendapatan SEORANG
     const incomeAQC = bilAQC > 0 ? (totalAqcIncome / bilAQC) : 0;
@@ -749,7 +750,7 @@ function calculateSimulation() {
     if(el("simAllowancePerDirector")) el("simAllowancePerDirector").innerText = formatRM(allowancePerDirector);
     if(el("simRoyalty")) el("simRoyalty").innerText = formatRM(royaltyAmount);
 
-    // KEMASKINI DATA KE KAD PENDAPATAN BAWAH (FIXED)
+    // KEMASKINI DATA KE KAD PENDAPATAN BAWAH
     if(el("simAvgAQC")) el("simAvgAQC").innerText = formatRM(incomeAQC);
     if(el("simAvgAQCAS")) el("simAvgAQCAS").innerText = formatRM(incomeAQCAS);
     if(el("simAvgAQCUM")) el("simAvgAQCUM").innerText = formatRM(incomeAQCUM);
@@ -772,7 +773,7 @@ function calculateSimulation() {
             "bg-green-900/30 border-green-500/50 text-green-100"));
     }
 }
-        // ================= EVENT LISTENERS =================
+      // ================= EVENT LISTENERS =================
         // Input Triggers for Simulation
         const simTriggers = [
             "simWasiat", "simHibah", "simSepencarian", "simMawaris",
