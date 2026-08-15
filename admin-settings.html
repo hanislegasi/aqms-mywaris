@@ -656,7 +656,7 @@ Admin Settings
             }
         }
 
-  // ================= SALES SIMULATION =================
+// ================= SALES SIMULATION =================
 function calculateSimulation() {
     // A. Mengambil Nilai Input Jualan & Harga
     const prcWasiat = getVal("wasiatPrice");
@@ -812,6 +812,9 @@ function calculateSimulation() {
         const poolTriggers = [
             "companyPool", "commissionPool", "overridePool",
             "adminOperation", "allowance", "royalty"
+          // Tambah ID compensation kat sini
+    "commissionAQC", "commissionAQCAS", "commissionAQCUM", "commissionMGAM",
+    "overrideAQC", "overrideAQCAS", "overrideAQCUM", "overrideMGAM"
         ];
         poolTriggers.forEach(id => {
             if(el(id)) el(id).addEventListener("input", () => {
