@@ -1706,84 +1706,78 @@ pihak.benefisiari
                         
 document.getElementById("sectionHibah").innerHTML = hibahHTML;                        
 
-const currentDocRef =
-data.docRef ||
-data.docRefNo ||
-"-";
+try {
+    const currentDocRef = data.docRef || data.docRefNo || "-";
 
+    // 1. Masukkan Nombor Rujukan ke TOC
+    const docRefTOC = document.getElementById("docRefTOC");
+    if (docRefTOC) docRefTOC.innerHTML = `DOC REF: ${currentDocRef}`;
 
+    // 2. Set muka surat Maklumat
+    const tocMaklumat = document.getElementById("tocMaklumat");
+    if (tocMaklumat) tocMaklumat.innerText = "2";
 
-// 1. Masukkan Nombor Rujukan ke TOC
-const docRefTOC = document.getElementById("docRefTOC");
-if (docRefTOC) docRefTOC.innerHTML = `DOC REF: ${currentDocRef}`;
+    // 3. JANA SENARAI PENERIMA HIBAH DALAM TOC SECARA AUTOMATIK
+    const tocHibahList = document.getElementById("tocHibahList");
+    if (tocHibahList && groupedHibah) {
+        tocHibahList.innerHTML = ""; // Kosongkan dulu
+        Object.keys(groupedHibah).forEach((namaPenerima, idx) => {
+            const safeId = "tocHibah_" + idx;
+            tocHibahList.innerHTML += `
+                <div class="flex items-end w-full">
+                    <span class="font-medium uppercase tracking-wide whitespace-nowrap">• ${namaPenerima}</span>
+                    <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-6px]"></div>
+                    <span id="${safeId}" class="font-bold">-</span>
+                </div>
+            `;
+        });
+    }
 
-// 2. Set muka surat Maklumat
-const tocMaklumat = document.getElementById("tocMaklumat");
-if (tocMaklumat) tocMaklumat.innerText = "2";
+    // 4. Gelung Muka Surat (Footer & Cari Nombor Page)
+    const pages = document.querySelectorAll(".a4-page");
+    let hibahCounterIndex = 0;
 
-// 3. JANA SENARAI PENERIMA HIBAH DALAM TOC SECARA AUTOMATIK
-const tocHibahList = document.getElementById("tocHibahList");
-if (tocHibahList && groupedHibah) {
-    tocHibahList.innerHTML = ""; // Kosongkan dulu
-    Object.keys(groupedHibah).forEach((namaPenerima, idx) => {
-        const safeId = "tocHibah_" + idx;
-        tocHibahList.innerHTML += `
-            <div class="flex items-end w-full">
-                <span class="font-medium uppercase tracking-wide whitespace-nowrap">• ${namaPenerima}</span>
-                <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-6px]"></div>
-                <span id="${safeId}" class="font-bold">-</span>
-            </div>
-        `;
+    pages.forEach((page, index) => {
+        if (index === 0) return; // Abaikan Cover Page
+        const pageNum = index + 1;
+
+        // Update Footer
+        const footer = page.querySelector(".pdf-footer");
+        if (footer) {
+            footer.innerHTML = `
+                <span class="footer-docref">${currentDocRef}</span>
+                <span class="page-number">${pageNum}</span>
+            `;
+        }
+
+        // Update TOC Wasiat
+        if (page.closest("#sectionWasiat")) {
+            const tocWasiat = document.getElementById("tocWasiat");
+            if (tocWasiat && tocWasiat.innerText === "-") {
+                tocWasiat.innerText = pageNum;
+            }
+        }
+
+        // Update TOC Hibah (Padankan mengikut urutan penerima yang dirender)
+        if (page.closest("#sectionHibah")) {
+            const targetId = "tocHibah_" + hibahCounterIndex;
+            const targetSpan = document.getElementById(targetId);
+            
+            if (targetSpan && targetSpan.innerText === "-") {
+                targetSpan.innerText = pageNum;
+                hibahCounterIndex++; // Pindah ke penerima seterusnya untuk page seterusnya
+            }
+        }
+
+        // Update TOC Lampiran
+        if (page.closest("#sectionLampiran")) {
+            const tocLampiran = document.getElementById("tocLampiran");
+            if (tocLampiran && tocLampiran.innerText === "-") {
+                tocLampiran.innerText = pageNum;
+            }
+        }
     });
-}
 
-// 4. Gelung Muka Surat (Footer & Cari Nombor Page)
-const pages = document.querySelectorAll(".a4-page");
-let hibahCounterIndex = 0;
-
-pages.forEach((page, index) => {
-    if (index === 0) return; // Abaikan Cover Page
-    const pageNum = index + 1;
-
-    // Update Footer
-    const footer = page.querySelector(".pdf-footer");
-    if (footer) {
-        footer.innerHTML = `
-            <span class="footer-docref">${currentDocRef}</span>
-            <span class="page-number">${pageNum}</span>
-        `;
-    }
-
-    // Update TOC Wasiat
-    if (page.closest("#sectionWasiat")) {
-        const tocWasiat = document.getElementById("tocWasiat");
-        if (tocWasiat && tocWasiat.innerText === "-") {
-            tocWasiat.innerText = pageNum;
-        }
-    }
-
-    // Update TOC Hibah (Padankan mengikut urutan penerima yang dirender)
-    if (page.closest("#sectionHibah")) {
-        // Semak jika halaman ini adalah muka surat mula bagi setiap penerima hibah
-        const targetId = "tocHibah_" + hibahCounterIndex;
-        const targetSpan = document.getElementById(targetId);
-        
-        if (targetSpan && targetSpan.innerText === "-") {
-            targetSpan.innerText = pageNum;
-            hibahCounterIndex++; // Pindah ke penerima seterusnya untuk page seterusnya
-        }
-    }
-
-    // Update TOC Lampiran
-    if (page.closest("#sectionLampiran")) {
-        const tocLampiran = document.getElementById("tocLampiran");
-        if (tocLampiran && tocLampiran.innerText === "-") {
-            tocLampiran.innerText = pageNum;
-        }
-    }
-});
-
-                        
 } catch (e) {
     console.log("Ralat TOC:", e);
 }
