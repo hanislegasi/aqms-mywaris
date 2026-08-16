@@ -214,10 +214,7 @@ margin:0 !important;
                 </div>
 
                <!-- PAGE 2 (MAKLUMAT) -->
-                <div class="a4-page p-[18mm]">
-                    <!-- (Kod jadual Maklumat anda yang sedia ada...) -->
-                </div>
-
+               
                 <!-- ========================================== -->
                 <!-- PAGE 3 (ISI KANDUNGAN) MASUKKAN DI SINI    -->
                 <!-- ========================================== -->
@@ -1703,13 +1700,17 @@ data.docRefNo ||
 // Dapatkan semua muka surat
 const pages = document.querySelectorAll(".a4-page");
 
-// 1. Masukkan Nombor Rujukan ke dalam Isi Kandungan (Jika elemen ada)
+// 1. Masukkan Nombor Rujukan ke dalam Isi Kandungan (Dengan selamat)
 const docRefTOC = document.getElementById("docRefTOC");
-if (docRefTOC) docRefTOC.innerHTML = `DOC REF: ${currentDocRef}`;
+if (docRefTOC) {
+    docRefTOC.innerHTML = `DOC REF: ${currentDocRef}`;
+}
 
-// 2. Set muka surat Maklumat & Perunding (Sentiasa muka surat 2)
+// 2. Set muka surat Maklumat & Perunding
 const tocMaklumat = document.getElementById("tocMaklumat");
-if (tocMaklumat) tocMaklumat.innerText = "2";
+if (tocMaklumat) {
+    tocMaklumat.innerText = "2";
+}
 
 // 3. Loop untuk semak setiap page dan masukkan nombor footer serta kemaskini TOC
 pages.forEach((page, index) => {
