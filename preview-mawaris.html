@@ -383,134 +383,123 @@ class="border border-gray-300 p-5 font-medium">
     <!-- SCRIPT FIREBASE & LOGIK APLIKASI -->
     <script type="module">
         
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, collection, getDocs, setDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+// 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
+import { db, auth } from './firebase.js';
 
-        // Konfigurasi Responsif untuk Viewport Desktop & Mobile
-        function updateScale() {
+// 2. Tarik fungsi Auth yang berkaitan sahaja
+import { 
+    onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-             const wrapper = document.getElementById('scale-wrapper');
-             const pdfContent = document.getElementById('pdfContent');
+// 3. Tarik fungsi Firestore yang berkaitan sahaja
+import { 
+    doc, 
+    getDoc, 
+    updateDoc, 
+    collection, 
+    getDocs, 
+    setDoc, 
+    addDoc 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-            if (!wrapper || !pdfContent) return;
-            
-             const containerWidth = window.innerWidth;
-             const targetWidth = 794; // Lebar A4 (~210mm dalam piksel pada resolusi piawai)
-             const padding = 32;
+// Konfigurasi Responsif untuk Viewport Desktop & Mobile
+function updateScale() {
+    const wrapper = document.getElementById('scale-wrapper');
+    const pdfContent = document.getElementById('pdfContent');
 
-            if (containerWidth < targetWidth + padding) {
-                // Kecilkan paparan untuk skrin mobile
-                 scale = (containerWidth - padding) / targetWidth;
-                wrapper.style.transform = `scale(${scale})`;
-                
-                // Baiki ketinggian bekas supaya tiada ruang kosong di bawah elemen
-                 actualHeight = pdfContent.offsetHeight;
-                 scaledHeight = actualHeight * scale;
-                wrapper.style.marginBottom = `-${actualHeight - scaledHeight}px`;
-            } else {
-                // Paparan desktop normal
-                wrapper.style.transform = 'scale(1)';
-                wrapper.style.marginBottom = '0px';
-            }
-        }
+    if (!wrapper || !pdfContent) return;
+    
+    const containerWidth = window.innerWidth;
+    const targetWidth = 794; // Lebar A4 (~210mm dalam piksel pada resolusi piawai)
+    const padding = 32;
 
-        // Kemaskini skala ketika resize
-        window.addEventListener('resize', updateScale);
-        window.addEventListener('DOMContentLoaded', () => {
-            // Berikan masa rendering sejenak sebelum skala
-            setTimeout(updateScale, 100);
-        });
+    if (containerWidth < targetWidth + padding) {
+        // Kecilkan paparan untuk skrin mobile
+        const scale = (containerWidth - padding) / targetWidth;
+        wrapper.style.transform = `scale(${scale})`;
+        
+        // Baiki ketinggian bekas supaya tiada ruang kosong di bawah elemen
+        const actualHeight = pdfContent.offsetHeight;
+        const scaledHeight = actualHeight * scale;
+        wrapper.style.marginBottom = `-${actualHeight - scaledHeight}px`;
+    } else {
+        // Paparan desktop normal
+        wrapper.style.transform = 'scale(1)';
+        wrapper.style.marginBottom = '0px';
+    }
+}
+
+// Kemaskini skala ketika resize
+window.addEventListener('resize', updateScale);
+window.addEventListener('DOMContentLoaded', () => {
+    // Berikan masa rendering sejenak sebelum skala
+    setTimeout(updateScale, 100);
+});
 
 async function imageToBase64(url){
-
-      const response = await fetch(url);
-
-if(!response.ok){
-    throw new Error("Image gagal dimuatkan");
-}
+    const response = await fetch(url);
+    if(!response.ok){
+        throw new Error("Image gagal dimuatkan");
+    }
     
     const blob = await response.blob();
-
     return new Promise((resolve)=>{
-
-         const reader = new FileReader();
-
+        const reader = new FileReader();
         reader.onloadend = ()=>{
-
             resolve(reader.result);
-
         };
-
         reader.readAsDataURL(blob);
-
     });
-
 }
         
-        // Download Logik PDF
-        document.getElementById("downloadBtn").addEventListener("click", async () => {
-             wrapper = document.getElementById('scale-wrapper');
-             element = document.getElementById("pdfContent");
+// Download Logik PDF
+document.getElementById("downloadBtn").addEventListener("click", async () => {
+    const wrapper = document.getElementById('scale-wrapper');
+    const element = document.getElementById("pdfContent");
 
-            // 1. Simpan tetapan skala dan margin asal
-             originalTransform = wrapper.style.transform;
-             originalMarginBottom = wrapper.style.marginBottom;
-             originalMargin = element.style.margin;
+    // 1. Simpan tetapan skala dan margin asal
+    const originalTransform = wrapper.style.transform;
+    const originalMarginBottom = wrapper.style.marginBottom;
+    const originalMargin = element.style.margin;
 
-            // 2. Buang skala sementara & paksa kedudukan paksi kiri (PUNCA ruang kosong)
-            wrapper.style.transform = 'scale(1)';
-            wrapper.style.marginBottom = '0px';
-            wrapper.style.transformOrigin = 'top left'; 
-            element.style.margin = '0'; // Buang margin auto sementara
+    // 2. Buang skala sementara & paksa kedudukan paksi kiri (PUNCA ruang kosong)
+    wrapper.style.transform = 'scale(1)';
+    wrapper.style.marginBottom = '0px';
+    wrapper.style.transformOrigin = 'top left'; 
+    element.style.margin = '0'; // Buang margin auto sementara
 
-            // 3. Beri masa kepada browser untuk kemaskini DOM
-            await new Promise(r => setTimeout(r,150));
+    // 3. Beri masa kepada browser untuk kemaskini DOM
+    await new Promise(r => setTimeout(r,150));
+    await document.fonts.ready;
+    
+    const options = {
+        margin: 0,
+        filename: "Mawaris.pdf",
+        image: { type: "jpeg", quality: 0.92 },
+        html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            scrollY: 0,
+            scrollX: 0, // Set koordinat X ke 0
+            windowWidth: document.documentElement.offsetWidth
+        },                
+        pagebreak: { mode: ['css'] }, // Pastikan html2pdf__page-break berfungsi
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait", compress: true }
+    };
 
-            await document.fonts.ready;
-            
-             const options = {
-                margin: 0,
-                filename: "Mawaris.pdf",
-                image: { type: "jpeg", quality: 0.92 },
-                html2canvas: { 
-                    scale: 2, 
-                    useCORS: true, 
-                    scrollY: 0,
-                    scrollX: 0, // Set koordinat X ke 0
-                    windowWidth: document.documentElement.offsetWidth
-                },                
-                 pagebreak: { mode: ['css'] }, // Pastikan html2pdf__page-break berfungsi
-                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait", compress: true }
-            };
+    // 4. Proses render PDF
+    html2pdf().set(options).from(element).save().then(() => {
+        // 5. Kembalikan semua tetapan asal
+        wrapper.style.transform = originalTransform;
+        wrapper.style.marginBottom = originalMarginBottom;
+        wrapper.style.transformOrigin = 'top center';
+        element.style.margin = originalMargin || '0 auto';
+    });
+});
 
-            
-            // 4. Proses render PDF
-            html2pdf().set(options).from(element).save().then(() => {
-                // 5. Kembalikan semua tetapan asal
-                wrapper.style.transform = originalTransform;
-                wrapper.style.marginBottom = originalMarginBottom;
-                wrapper.style.transformOrigin = 'top center';
-                element.style.margin = originalMargin || '0 auto';
-            });
-        });
-
-        
-        // --------------------------------------------------------
-        // FIREBASE LOGIC
-        // --------------------------------------------------------
-        const firebaseConfig = {
-            apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-            authDomain: "alqawthar-mywaris.firebaseapp.com",
-            projectId: "alqawthar-mywaris",
-            storageBucket: "alqawthar-mywaris.firebasestorage.app",
-            messagingSenderId: "3498810778",
-            appId: "1:3498810778:web:ee36e0fe42f76698046e23"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+// --------------------------------------------------------
+// KONFIGURASI FIREBASE LAMA DI BAHAGIAN BAWAH TELAH DIBUANG
+// --------------------------------------------------------
 
         onAuthStateChanged(auth, async(user)=>{
 
