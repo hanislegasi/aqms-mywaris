@@ -1693,15 +1693,16 @@ data.docRefNo ||
 
 // --- KEMASKINI ISI KANDUNGAN DENGAN SELAMAT ---
 try {
-    const docRefTOC = document.getElementById("docRefTOC");
-    if (docRefTOC) {
-        docRefTOC.innerHTML = `DOC REF: ${currentDocRef}`;
-    }
+   const docRefTOC = document.getElementById("docRefTOC");
+if (docRefTOC) {
+    docRefTOC.innerHTML = `DOC REF: ${currentDocRef}`;
+}
 
-    const tocMaklumat = document.getElementById("tocMaklumat");
-    if (tocMaklumat) {
-        tocMaklumat.innerText = "2";
-    }
+// Kemaskini Muka Surat Maklumat dengan selamat
+const tocMaklumat = document.getElementById("tocMaklumat");
+if (tocMaklumat) {
+    tocMaklumat.innerText = "2";
+}
 
     const pages = document.querySelectorAll(".a4-page");
     pages.forEach((page, index) => {
