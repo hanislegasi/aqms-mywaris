@@ -216,7 +216,7 @@ margin:0 !important;
              <!-- PAGE 2 (MAKLUMAT PELANGGAN & PERUNDING) -->
                 <div class="a4-page p-[18mm]">
                     <div class="border-b-2 border-[#153638] pb-4 mb-6 mt-5">
-                        <p id="docRef2" class="text-[#153638] text-xl font-bold font-cinzel tracking-widest">
+                        <p id="docRef2" class="text-[#153638] text-lg font-bold font-cinzel tracking-widest">
                             DOC REF: -
                         </p>
                     </div>
@@ -241,7 +241,7 @@ margin:0 !important;
                 <div class="a4-page p-[18mm]">
                     
                     <div class="border-b-2 border-[#153638] pb-4 mb-10 mt-5">
-                        <p id="docRefTOC" class="text-[#153638] text-xl font-bold font-cinzel tracking-widest">
+                        <p id="docRefTOC" class="text-[#153638] text-lg font-bold font-cinzel tracking-widest">
                             DOC REF: -
                         </p>
                     </div>
@@ -264,11 +264,15 @@ margin:0 !important;
                             <span id="tocWasiat" class="font-bold">-</span>
                         </div>
 
-                        <div class="flex items-end w-full">
-                            <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Dokumen Hibah</span>
-                            <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
-                            <span id="tocHibah" class="font-bold">-</span>
-                        </div>
+                        <!-- Dokumen Hibah (Pecahan Mengikut Penerima) -->
+        <div class="w-full space-y-4">
+            <div class="font-semibold uppercase tracking-wide">Dokumen Pengisytiharan Hibah:</div>
+            
+            <!-- Tempat kosong untuk senarai penerima dimasukkan secara dinamik oleh JS -->
+            <div id="tocHibahList" class="space-y-4 pl-6">
+                <!-- JavaScript akan masukkan senarai penerima di sini secara automatik -->
+            </div>
+        </div>
 
                         <div class="flex items-end w-full">
                             <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Lampiran</span>
@@ -1743,13 +1747,30 @@ if (tocMaklumat) {
             }
         }
 
-        // Update TOC Hibah
-        if (page.closest("#sectionHibah")) {
-            const tocHibah = document.getElementById("tocHibah");
-            if (tocHibah && tocHibah.innerText === "-") {
-                tocHibah.innerText = pageNum;
+        // 2. Hibah (Pecahan mengikut Penerima berdasarkan atribut data-penerima)
+    if (page.closest("#sectionHibah")) {
+        // Cari elemen tajuk penerima di dalam halaman ini (pastikan template hibah ada tanda nama penerima)
+        const penerimaHeader = page.querySelector("[data-nama-penerima]");
+        if (penerimaHeader) {
+            const namaPenerima = penerimaHeader.getAttribute("data-nama-penerima");
+            const penerimaId = "tocHibah_" + namaPenerima.replace(/[^a-zA-Z0-9]/g, "_");
+            
+            let penerimaSpan = document.getElementById(penerimaId);
+            if (!penerimaSpan) {
+                // Jika belum wujud dalam senarai TOC, masukkan elemen baru
+                const tocHibahList = document.getElementById("tocHibahList");
+                if (tocHibahList) {
+                    tocHibahList.innerHTML += `
+                        <div class="flex items-end w-full">
+                            <span class="font-medium uppercase tracking-wide whitespace-nowrap">> ${namaPenerima}</span>
+                            <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-6px]"></div>
+                            <span id="${penerimaId}" class="font-bold">${pageNum}</span>
+                        </div>
+                    `;
+                }
             }
         }
+    }
 
         // Update TOC Lampiran
         if (page.closest("#sectionLampiran")) {
