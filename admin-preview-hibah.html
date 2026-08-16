@@ -1697,63 +1697,60 @@ data.docRef ||
 data.docRefNo ||
 "-";
 
-// Dapatkan semua muka surat
-const pages = document.querySelectorAll(".a4-page");
+// --- KEMASKINI ISI KANDUNGAN DENGAN SELAMAT ---
+try {
+    const docRefTOC = document.getElementById("docRefTOC");
+    if (docRefTOC) {
+        docRefTOC.innerHTML = `DOC REF: ${currentDocRef}`;
+    }
 
-// 1. Masukkan Nombor Rujukan ke dalam Isi Kandungan (Dengan selamat)
-const docRefTOC = document.getElementById("docRefTOC");
-if (docRefTOC) {
-    docRefTOC.innerHTML = `DOC REF: ${currentDocRef}`;
+    const tocMaklumat = document.getElementById("tocMaklumat");
+    if (tocMaklumat) {
+        tocMaklumat.innerText = "2";
+    }
+
+    const pages = document.querySelectorAll(".a4-page");
+    pages.forEach((page, index) => {
+        if (index === 0) return; // Abaikan Cover Page
+
+        const pageNum = index + 1;
+
+        // Update Footer
+        const footer = page.querySelector(".pdf-footer");
+        if (footer) {
+            footer.innerHTML = `
+                <span class="footer-docref">${currentDocRef}</span>
+                <span class="page-number">${pageNum}</span>
+            `;
+        }
+
+        // Update TOC Wasiat
+        if (page.closest("#sectionWasiat")) {
+            const tocWasiat = document.getElementById("tocWasiat");
+            if (tocWasiat && tocWasiat.innerText === "-") {
+                tocWasiat.innerText = pageNum;
+            }
+        }
+
+        // Update TOC Hibah
+        if (page.closest("#sectionHibah")) {
+            const tocHibah = document.getElementById("tocHibah");
+            if (tocHibah && tocHibah.innerText === "-") {
+                tocHibah.innerText = pageNum;
+            }
+        }
+
+        // Update TOC Lampiran
+        if (page.closest("#sectionLampiran")) {
+            const tocLampiran = document.getElementById("tocLampiran");
+            if (tocLampiran && tocLampiran.innerText === "-") {
+                tocLampiran.innerText = pageNum;
+            }
+        }
+    });
+} catch (e) {
+    console.log("Ralat TOC:", e);
 }
-
-// 2. Set muka surat Maklumat & Perunding
-const tocMaklumat = document.getElementById("tocMaklumat");
-if (tocMaklumat) {
-    tocMaklumat.innerText = "2";
-}
-
-// 3. Loop untuk semak setiap page dan masukkan nombor footer serta kemaskini TOC
-pages.forEach((page, index) => {
-    if (index === 0) return; // Abaikan Cover Page (Index 0)
-
-    const pageNum = index + 1; // Index 1 bermaksud muka surat 2
-
-    // --- BAHAGIAN A: UPDATE FOOTER ---
-    const footer = page.querySelector(".pdf-footer");
-    if (footer) {
-        footer.innerHTML = `
-            <span class="footer-docref">${currentDocRef}</span>
-            <span class="page-number">${pageNum}</span>
-        `;
-    }
-
-    // --- BAHAGIAN B: UPDATE ISI KANDUNGAN (TOC) AUTOMATIK ---
-    
-    // Semak jika muka surat ini adalah sebahagian daripada Wasiat
-    if (page.closest("#sectionWasiat")) {
-        const tocWasiat = document.getElementById("tocWasiat");
-        // Update hanya jika ia masih kosong ('-'), bermaksud ini muka surat pertama Wasiat
-        if (tocWasiat && tocWasiat.innerText === "-") {
-            tocWasiat.innerText = pageNum;
-        }
-    }
-
-    // Semak jika muka surat ini adalah sebahagian daripada Hibah
-    if (page.closest("#sectionHibah")) {
-        const tocHibah = document.getElementById("tocHibah");
-        if (tocHibah && tocHibah.innerText === "-") {
-            tocHibah.innerText = pageNum;
-        }
-    }
-
-    // Semak jika muka surat ini adalah sebahagian daripada Lampiran
-    if (page.closest("#sectionLampiran")) {
-        const tocLampiran = document.getElementById("tocLampiran");
-        if (tocLampiran && tocLampiran.innerText === "-") {
-            tocLampiran.innerText = pageNum;
-        }
-    }
-});
                         
 /*
 document.getElementById(
