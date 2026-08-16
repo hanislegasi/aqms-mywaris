@@ -64,16 +64,16 @@
   </div>
 
   <!-- KAD HOOK DINAMIK -->
-  <div id="hookCard" class="mb-6 rounded-2xl p-6 border border-amber-300/50 bg-amber-50/80 backdrop-blur-md shadow-xl text-center transition-all duration-500">
-    <div id="hookTextContainer">
-      <h3 class="text-lg sm:text-xl font-bold text-[#153638] mb-1">
-        Lindungi Masa Depan Orang Tersayang Hari Ini 
-      </h3>
-      <p class="text-sm text-gray-700 font-medium">
-        Jangan biarkan waris anda dibebani rintangan harta pusaka. Sila pilih pakej perkhidmatan di bawah untuk mulakan perancangan rasmi anda.
-      </p>
-    </div>
+<div id="hookCard" class="mb-6 rounded-2xl p-6 border border-[#e4c19d]/30 bg-[#07363c] backdrop-blur-md shadow-xl text-center transition-all duration-500">
+  <div id="hookTextContainer">
+    <h3 class="text-lg sm:text-xl font-bold text-[#e4c19d] mb-1">
+      Lindungi Masa Depan Orang Tersayang Hari Ini 
+    </h3>
+    <p class="text-sm text-[#e4c19d]/80 font-medium">
+      Jangan biarkan waris anda dibebani rintangan harta pusaka. Sila pilih pakej perkhidmatan di bawah untuk mulakan perancangan rasmi anda.
+    </p>
   </div>
+</div>
     
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
 
@@ -213,18 +213,20 @@
 <script>
   function prosesPembelian() {
     const hookCard = document.getElementById('hookCard');
-    hookCard.className = "w-full mb-6 rounded-2xl p-6 border border-emerald-300/60 bg-emerald-50/90 backdrop-blur-md shadow-xl text-center transition-all duration-500";
+    // Tukar background kepada #e4c19d dan border disesuaikan sedikit supaya padan
+    hookCard.className = "w-full mb-6 rounded-2xl p-6 border border-[#07363c]/20 bg-[#e4c19d] backdrop-blur-md shadow-xl text-center transition-all duration-500";
     
     const container = document.getElementById('hookTextContainer');
+    // Tukar tulisan tajuk utama dan perenggan kepada #07363c
     container.innerHTML = `
-      <h3 class="text-lg sm:text-xl font-bold text-emerald-900 flex items-center justify-center gap-2">
+      <h3 class="text-lg sm:text-xl font-bold text-[#07363c] flex items-center justify-center gap-2">
         Terima kasih kerana bijak memilih untuk ketenangan abadi. 
       </h3>
-      <p class="text-xs sm:text-sm text-emerald-700 mt-1">
+      <p class="text-xs sm:text-sm text-[#07363c]/80 mt-1">
         Setiap orang mempunyai hak dan tanggungjawab masing-masing di dunia mahupun di akhirat.
       </p>
     `;
-
+ 
     localStorage.setItem("hasPurchased", "true");
   }
 
