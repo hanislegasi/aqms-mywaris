@@ -1144,63 +1144,32 @@ placeholder="Contoh: Salinan Geran Rumah">
   <!-- FIREBASE -->
   <script type="module">
 
-    import { initializeApp }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+// 1. Tarik 'db', 'auth', dan 'storage' dari fail konfigurasi berpusat
+import { db, auth, storage } from './firebase.js';
 
-    import {
-      getAuth,
-      onAuthStateChanged
-    }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-   import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+// 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
 import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  deleteObject
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    const firebaseConfig = {
+// 3. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
+import {
+    doc,
+    setDoc,
+    getDoc,
+    collection,
+    addDoc,
+    getDocs,
+    deleteDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-      apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-
-      authDomain: "alqawthar-mywaris.firebaseapp.com",
-
-      projectId: "alqawthar-mywaris",
-
-      storageBucket: "alqawthar-mywaris.firebasestorage.app",
-
-      messagingSenderId: "3498810778",
-
-      appId: "1:3498810778:web:ee36e0fe42f76698046e23"
-
-    };
-
-    const app =
-      initializeApp(firebaseConfig);
-
-    const auth =
-      getAuth(app);
-
-    const db =
-      getFirestore(app);
-
-    const storage =
-getStorage(app);
+// 4. Tarik fungsi Storage yang berkaitan sahaja (buang getStorage)
+import {
+    ref,
+    uploadBytes,
+    getDownloadURL,
+    deleteObject
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
     let currentUser = null;
 
