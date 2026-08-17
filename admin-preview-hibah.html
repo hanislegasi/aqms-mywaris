@@ -628,8 +628,11 @@ const userData = userDoc.data();
 
 const groupedHibah = groupHibahByRecipient(data);
 
-// Dapatkan kod perunding (contoh: dari userData.referral atau field yang menyimpan kod)
-const consultantCode = userData?.referral || data.consultantCode;
+// Cuba semak pelbagai kemungkinan tempat simpan kod perunding
+const consultantCode = userData?.referral || userData?.consultantCode || data.consultantCode || data.referral;
+
+// Semak apa yang berjaya dikesan (Boleh tengok kat Console F12 nanti)
+console.log("Kod Perunding yang dikesan:", consultantCode);
 
 let consultantData = {};
 
@@ -712,7 +715,7 @@ approvedDate
                         document.getElementById("telefonTable").innerHTML = data.telefon || "-";
                         document.getElementById("alamatTable").innerHTML = alamatPenuh || "-";
                         document.getElementById("kodTable").innerHTML = userData?.referral || "-";
-                        document.getElementById("telefonPerundingTable").innerHTML = consultantsData.telefon || "-";
+                        document.getElementById("telefonPerundingTable").innerHTML = consultantData.telefon || "-";
 
 let lampiranWaris = `
 <table
