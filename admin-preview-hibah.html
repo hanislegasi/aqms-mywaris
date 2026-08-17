@@ -1625,7 +1625,7 @@ Object.values(groupedHibah).forEach((item, index) => {
     const pihak = getPihakPenerima(item);
     console.log(item);
 
-    // Proses data penerima seperti biasa
+    // Proses data ganti tempat kosong macam biasa
     let contentForThisRecipient = hibahContent
         .replaceAll("{{NAMA_PENERIMA}}", pihak.nama)
         .replaceAll("{{TABLE_ALIH}}", generateAlihTable(item.hartaAlih))
@@ -1645,15 +1645,16 @@ Object.values(groupedHibah).forEach((item, index) => {
         .replaceAll("{{INTRO_PENERIMA}}", pihak.intro)
         .replaceAll("{{BENEFISIARI}}", pihak.benefisiari);
 
-    // KITA BUNGKUS KESEMUA MUKA SURAT PENERIMA INI DALAM SATU DIV KHAS
-    hibahHTML += `
-        <div class="hibah-recipient-wrapper" data-target="tocHibah_${index}">
-            ${contentForThisRecipient}
-        </div>
-    `;
+    // =======================================================
+    // TEKNIK KEBAL: Kita 'cop' ID pada setiap helai kertas
+    // Walaupun HTML berterabur, kertas ini tetap tahu ia milik siapa!
+    // =======================================================
+    contentForThisRecipient = contentForThisRecipient.replaceAll('class="a4-page', `data-target="tocHibah_${index}" class="a4-page`);
+
+    hibahHTML += contentForThisRecipient;
 });
 
-document.getElementById("sectionHibah").innerHTML = hibahHTML;                 
+document.getElementById("sectionHibah").innerHTML = hibahHTML;            
 
 try {
     const currentDocRef = data.docRef || data.docRefNo || "-";
@@ -1706,17 +1707,16 @@ try {
             }
         }
 
-        // Update TOC Hibah - Cara Bungkusan (Paling Kebal)
-        const recipientWrapper = page.closest(".hibah-recipient-wrapper");
-        if (recipientWrapper) {
-            // Skrip akan baca ID wrapper tempat muka surat ini berada
-            const targetId = recipientWrapper.getAttribute("data-target"); 
-            const targetSpan = document.getElementById(targetId);
-            
-            // Jika span TOC masih "-", maksudnya ini muka surat PERTAMA untuk penerima ini.
-            // Jika sudah ada nombor (muka surat ke-2, ke-3 dst), ia takkan ditimpa lagi.
-            if (targetSpan && targetSpan.innerText === "-") {
-                targetSpan.innerText = pageNum; 
+        // Update TOC Hibah - Skrip akan terus baca ID yang kita 'cop' pada kertas tadi!
+        if (page.closest("#sectionHibah")) {
+            const targetId = page.getAttribute("data-target"); 
+            if (targetId) {
+                const targetSpan = document.getElementById(targetId);
+                
+                // Jika masih "-", ia akan catat muka surat PERTAMA yang dijumpai untuk ID tersebut
+                if (targetSpan && targetSpan.innerText === "-") {
+                    targetSpan.innerText = pageNum; 
+                }
             }
         }
 
