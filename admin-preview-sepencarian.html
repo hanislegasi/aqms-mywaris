@@ -1631,78 +1631,40 @@ function formatDateMY(dateStr){
                 
 let sepencarianHTML = "";
 
-Object.values(groupedSepencarian).forEach(item=>{
+// 1. Tambah parameter 'index' di sini
+Object.values(groupedSepencarian).forEach((item, index) => { 
 
     const pihak = {
-
         nama: item.nama,
         ic: item.ic,
         alamat: item.alamat
-
     };
-console.log("PIHAK:", pihak);
-    sepencarianHTML += sepencarianContent
+    
+    console.log("PIHAK:", pihak);
 
-    .replaceAll(
-        "{{TABLE_ALIH}}",
-        generateAlihTable(item.hartaAlih)
-    )
-
-    .replaceAll(
-        "{{TABLE_TAK_ALIH}}",
-        generateTakAlihTable(item.hartaTakAlih)
-    )
-
-.replaceAll(
-"{{NAMA_PEMILIK}}",
-data.nama || "-"
-)
-
-.replaceAll(
-"{{IC_PEMILIK}}",
-data.ic || "-"
-)
-
-.replaceAll(
-"{{ALAMAT_PEMILIK}}",
-alamatPenuh || "-"
-)
-
-.replaceAll(
-"{{TELEFON_PEMILIK}}",
-data.telefon || "-"
-)
-        
-       .replaceAll(
-        "{{NAMA_PENERIMA}}",
-        pihak.nama
-    )
-
-    .replaceAll(
-        "{{IC_PENERIMA}}",
-        pihak.ic
-    )
-
-.replaceAll(
-"{{ALAMAT_PENERIMA}}",
-pihak.alamat || "-"
-)
-        
-    .replaceAll(
-        "{{HUBUNGAN}}",
-        item.hubungan
-    )
-
-    .replaceAll(
-        "{{PERATUS}}",
-        item.peratus
+    // 2. Suntik penanda data-target ke muka surat pertama untuk penerima ini
+    let templateKandungan = sepencarianContent.replace(
+        /class="a4-page/i, 
+        `data-target="tocSepencarian_${index}" class="a4-page`
     );
+
+    // 3. Gunakan pembolehubah templateKandungan yang telah ditandai
+    sepencarianHTML += templateKandungan
+    .replaceAll("{{TABLE_ALIH}}", generateAlihTable(item.hartaAlih))
+    .replaceAll("{{TABLE_TAK_ALIH}}", generateTakAlihTable(item.hartaTakAlih))
+    .replaceAll("{{NAMA_PEMILIK}}", data.nama || "-")
+    .replaceAll("{{IC_PEMILIK}}", data.ic || "-")
+    .replaceAll("{{ALAMAT_PEMILIK}}", alamatPenuh || "-")
+    .replaceAll("{{TELEFON_PEMILIK}}", data.telefon || "-")
+    .replaceAll("{{NAMA_PENERIMA}}", pihak.nama)
+    .replaceAll("{{IC_PENERIMA}}", pihak.ic)
+    .replaceAll("{{ALAMAT_PENERIMA}}", pihak.alamat || "-")
+    .replaceAll("{{HUBUNGAN}}", item.hubungan)
+    .replaceAll("{{PERATUS}}", item.peratus);
 
 });
 
-document.getElementById(
-    "sectionSepencarian"
-).innerHTML = sepencarianHTML;
+document.getElementById("sectionSepencarian").innerHTML = sepencarianHTML;
                         
 try {
     const currentDocRef = data.docRef || data.docRefNo || "-";
