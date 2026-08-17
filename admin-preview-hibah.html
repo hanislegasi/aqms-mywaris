@@ -691,7 +691,7 @@ approvedDate
                         document.getElementById("telefonTable").innerHTML = data.telefon || "-";
                         document.getElementById("alamatTable").innerHTML = alamatPenuh || "-";
                         document.getElementById("kodTable").innerHTML = userData?.referral || "-";
-                        document.getElementById("telefonPerundingTable").innerHTML = consultantData.telefon || "-";
+                        document.getElementById("telefonPerundingTable").innerHTML = safeConsultant.telefon || "-";
 
 let lampiranWaris = `
 <table
