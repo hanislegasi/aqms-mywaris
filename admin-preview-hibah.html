@@ -1599,121 +1599,61 @@ let hibahHTML = "";
 
 Object.values(groupedHibah).forEach((item, index) => {
 
-function getPihakPenerima(item){
-
-    const bawahUmur =
-        item.status === "bawah18" ||
-        item.status === "oku";
-
-    if(bawahUmur){
-
-        const p = item.pemegangAmanah || {};
-
-        return{
-
-            nama: p.nama || "-",
-            ic: p.ic || "-",
-            alamat: p.alamat || item.alamat || "-",
-
-            gelaran: "Pemegang Amanah",
-
-            intro:
-`selaku <strong>"Pemegang Amanah"</strong> bagi pihak
-<strong>${item.nama}</strong>
-(Penerima Hibah)`,
-
-            benefisiari:item.nama
-
+    function getPihakPenerima(item) {
+        const bawahUmur = item.status === "bawah18" || item.status === "oku";
+        if (bawahUmur) {
+            const p = item.pemegangAmanah || {};
+            return {
+                nama: p.nama || "-",
+                ic: p.ic || "-",
+                alamat: p.alamat || item.alamat || "-",
+                gelaran: "Pemegang Amanah",
+                intro: `selaku <strong>"Pemegang Amanah"</strong> bagi pihak <strong>${item.nama}</strong> (Penerima Hibah)`,
+                benefisiari: item.nama
+            };
+        }
+        return {
+            nama: item.nama,
+            ic: item.ic,
+            alamat: item.alamat,
+            gelaran: "Penerima Hibah",
+            intro: `(selepas ini disebut sebagai <strong>"Penerima Hibah"</strong>)`,
+            benefisiari: item.nama
         };
-
     }
 
-    return{
-
-        nama:item.nama,
-        ic:item.ic,
-        alamat:item.alamat,
-
-        gelaran:"Penerima Hibah",
-
-        intro:`(selepas ini disebut sebagai
-<strong>"Penerima Hibah"</strong>)`,
-
-        benefisiari:item.nama
-
-    };
-
-}
-
-const pihak = getPihakPenerima(item);   
+    const pihak = getPihakPenerima(item);
     console.log(item);
 
-    // 2. BINA PENANDA TOC TERSEMBUNYI
-    // Penanda ini akan memegang ID unik untuk penerima ini (contoh: tocHibah_0, tocHibah_1)
-    const tocMarker = `<span class="toc-hibah-marker hidden" style="display:none;" data-target="tocHibah_${index}"></span>`;
+    // Proses data penerima seperti biasa
+    let contentForThisRecipient = hibahContent
+        .replaceAll("{{NAMA_PENERIMA}}", pihak.nama)
+        .replaceAll("{{TABLE_ALIH}}", generateAlihTable(item.hartaAlih))
+        .replaceAll("{{TABLE_TAK_ALIH}}", generateTakAlihTable(item.hartaTakAlih))
+        .replaceAll("{{PEMEGANG_AMANAH}}", generatePemegangAmanah(item))
+        .replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
+        .replaceAll("{{IC_PEMBERI}}", data.ic || "-")
+        .replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-")
+        .replaceAll("{{TELEFON_PEMBERI}}", data.telefon || "-")
+        .replaceAll("{{IC_PENERIMA}}", pihak.ic || "-")
+        .replaceAll("{{HUBUNGAN}}", item.hubungan || "-")
+        .replaceAll("{{ALAMAT_PENERIMA}}", pihak.alamat || "-")
+        .replaceAll("{{PERATUS}}", item.peratus || "-")
+        .replaceAll("{{TARIKH_DOKUMEN}}", approvedDate ? approvedDate.toLocaleDateString("ms-MY") : "-")
+        .replaceAll("{{TARIKH_LAHIR}}", formatDateMY(item.tarikhLahir))
+        .replaceAll("{{LABEL_PENERIMA}}", pihak.gelaran)
+        .replaceAll("{{INTRO_PENERIMA}}", pihak.intro)
+        .replaceAll("{{BENEFISIARI}}", pihak.benefisiari);
 
-    // 3. SUNTIK PENANDA KE MUKA SURAT PERTAMA
-    // Kita guna .replace() (bukan .replaceAll) untuk meletakkan marker ini hanya pada NAMA_PENERIMA yang paling awal muncul dalam template.
-    let currentContent = hibahContent.replace("{{NAMA_PENERIMA}}", tocMarker + "{{NAMA_PENERIMA}}");
-    
-    hibahHTML += hibahContent
-              .replaceAll(
-            "{{NAMA_PENERIMA}}",
-            pihak.nama
-        )
-       .replaceAll(
-    "{{TABLE_ALIH}}",
-    generateAlihTable(item.hartaAlih)
-)
-        .replaceAll(
-    "{{TABLE_TAK_ALIH}}",
-    generateTakAlihTable(item.hartaTakAlih)
-)
+    // KITA BUNGKUS KESEMUA MUKA SURAT PENERIMA INI DALAM SATU DIV KHAS
+    hibahHTML += `
+        <div class="hibah-recipient-wrapper" data-target="tocHibah_${index}">
+            ${contentForThisRecipient}
+        </div>
+    `;
+});
 
-.replaceAll(
-"{{PEMEGANG_AMANAH}}",
-generatePemegangAmanah(item)
-)
-        
-.replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
-.replaceAll("{{IC_PEMBERI}}", data.ic || "-")
-.replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-")
-.replaceAll("{{TELEFON_PEMBERI}}", data.telefon || "-")
-
-.replaceAll("{{IC_PENERIMA}}", pihak.ic || "-")
-.replaceAll("{{HUBUNGAN}}", item.hubungan || "-")
-.replaceAll("{{ALAMAT_PENERIMA}}", pihak.alamat || "-")
-.replaceAll("{{PERATUS}}", item.peratus || "-")
-.replaceAll(
-   "{{TARIKH_DOKUMEN}}",
-   approvedDate
-      ? approvedDate.toLocaleDateString("ms-MY")
-      : "-"
-)
-
-.replaceAll(
-    "{{TARIKH_LAHIR}}",
-    formatDateMY(item.tarikhLahir)
-)
-
-.replaceAll(
-"{{LABEL_PENERIMA}}",
-pihak.gelaran
-)
-
-.replaceAll(
-"{{INTRO_PENERIMA}}",
-pihak.intro
-)
-
-.replaceAll(
-"{{BENEFISIARI}}",
-pihak.benefisiari
-)
-
-});   
-                        
-document.getElementById("sectionHibah").innerHTML = hibahHTML;                        
+document.getElementById("sectionHibah").innerHTML = hibahHTML;                 
 
 try {
     const currentDocRef = data.docRef || data.docRefNo || "-";
@@ -1730,11 +1670,8 @@ try {
     const tocHibahList = document.getElementById("tocHibahList");
     if (tocHibahList && groupedHibah) {
         tocHibahList.innerHTML = ""; 
-
-        // Guna loop yang sama dengan Object.values
         Object.values(groupedHibah).forEach((item, index) => {
             const safeId = "tocHibah_" + index;
-            // Paparkan nama benefisiari (penerima sebenar)
             tocHibahList.innerHTML += `
                 <div class="flex items-end w-full">
                     <span class="font-medium uppercase tracking-wide whitespace-nowrap">• ${item.nama}</span>
@@ -1769,18 +1706,17 @@ try {
             }
         }
 
-        // Update TOC Hibah - Cari Penanda Rahsia tadi!
-        if (page.closest("#sectionHibah")) {
-            // Skrip akan check jika page ini mengandungi penanda yang kita suntik di Langkah 1
-            const marker = page.querySelector(".toc-hibah-marker");
+        // Update TOC Hibah - Cara Bungkusan (Paling Kebal)
+        const recipientWrapper = page.closest(".hibah-recipient-wrapper");
+        if (recipientWrapper) {
+            // Skrip akan baca ID wrapper tempat muka surat ini berada
+            const targetId = recipientWrapper.getAttribute("data-target"); 
+            const targetSpan = document.getElementById(targetId);
             
-            if (marker) {
-                const targetId = marker.getAttribute("data-target"); // Cth: "tocHibah_1"
-                const targetSpan = document.getElementById(targetId);
-                
-                if (targetSpan && targetSpan.innerText === "-") {
-                    targetSpan.innerText = pageNum; // Daftar nombor page untuk Fatty Moore / Mary Moore secara tepat
-                }
+            // Jika span TOC masih "-", maksudnya ini muka surat PERTAMA untuk penerima ini.
+            // Jika sudah ada nombor (muka surat ke-2, ke-3 dst), ia takkan ditimpa lagi.
+            if (targetSpan && targetSpan.innerText === "-") {
+                targetSpan.innerText = pageNum; 
             }
         }
 
@@ -1794,7 +1730,7 @@ try {
     });
 
 } catch (e) {
-    console.log("Ralat TOC:", e);
+    console.error("Ralat TOC:", e);
 }
                         
 /*
