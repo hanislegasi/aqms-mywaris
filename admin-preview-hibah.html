@@ -221,7 +221,7 @@ margin:0 !important;
                         </p>
                     </div>
 
-                    <h2 class="text-2xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-8">
+                    <h2 class="text-1xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-8">
                         MAKLUMAT PELANGGAN & PERUNDING
                     </h2>
 
@@ -231,7 +231,7 @@ margin:0 !important;
                         <p><strong>No. Telefon:</strong> <span id="telefonTable">-</span></p>
                         <p><strong>Alamat:</strong> <span id="alamatTable">-</span></p>
                         <p><strong>Kod Perunding:</strong> <span id="kodTable">-</span></p>
-                        <p><strong>Tarikh Diluluskan:</strong> <span id="approvedTable">-</span></p>
+                        <p><strong>No. Telefon Perunding:</strong> <span id="telefonPerundingTable">-</span></p>
                     </div>
 
                     <div class="pdf-footer"></div>
@@ -246,7 +246,7 @@ margin:0 !important;
                         </p>
                     </div>
 
-                    <h2 class="text-3xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-16 underline underline-offset-[12px] decoration-1">
+                    <h2 class="text-1xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-16 underline underline-offset-[12px] decoration-1">
                         ISI KANDUNGAN
                     </h2>
 
@@ -691,10 +691,7 @@ approvedDate
                         document.getElementById("telefonTable").innerHTML = data.telefon || "-";
                         document.getElementById("alamatTable").innerHTML = alamatPenuh || "-";
                         document.getElementById("kodTable").innerHTML = userData?.referral || "-";
-                        document.getElementById("approvedTable").innerHTML =
-approvedDate
-? approvedDate.toLocaleDateString("ms-MY")
-: "-";
+                        document.getElementById("telefonPerundingTable").innerHTML = userData?.telefon || "-";
 
 let lampiranWaris = `
 <table
@@ -1667,17 +1664,26 @@ try {
     const tocMaklumat = document.getElementById("tocMaklumat");
     if (tocMaklumat) tocMaklumat.innerText = "2";
 
-    // 3. JANA SENARAI PENERIMA HIBAH DALAM TOC
+  // 3. JANA SENARAI PENERIMA HIBAH DALAM TOC
     const tocHibahList = document.getElementById("tocHibahList");
     if (tocHibahList && groupedHibah) {
         tocHibahList.innerHTML = ""; 
+        
+        // PAKSA JARAK RAPAT: Guna 'space-y-2' (atau space-y-1) dan margin atas (mt-2)
+        // 'pl-4' digunakan supaya senarai ini masuk ke dalam (indent) sedikit.
+        tocHibahList.className = "w-full pl-4 mt-2 space-y-2"; 
+
         Object.values(groupedHibah).forEach((item, index) => {
             const safeId = "tocHibah_" + index;
             tocHibahList.innerHTML += `
                 <div class="flex items-end w-full">
-                    <span class="font-medium uppercase tracking-wide whitespace-nowrap">• ${item.nama}</span>
-                    <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-6px]"></div>
-                    <span id="${safeId}" class="font-bold">-</span>
+                    <!-- KECILKAN FONT: Tambah text-[14px] atau text-sm pada nama -->
+                    <span class="text-[14px] font-medium uppercase tracking-wide whitespace-nowrap opacity-90">• ${item.nama}</span>
+                    
+                    <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div>
+                    
+                    <!-- KECILKAN FONT: Tambah text-[14px] pada nombor muka surat -->
+                    <span id="${safeId}" class="text-[14px] font-bold">-</span>
                 </div>
             `;
         });
