@@ -1945,7 +1945,20 @@ try {
             }
         }
 
-        // Update TOC Hibah - Skrip akan terus baca ID yang kita 'cop' pada kertas tadi!
+      // Update TOC Sepencarian - Skrip akan terus baca ID yang kita 'cop' pada kertas tadi!
+        if (page.closest("#sectionSepencarian")) {
+            const targetId = page.getAttribute("data-target"); 
+            if (targetId) {
+                const targetSpan = document.getElementById(targetId);
+                
+                // Jika masih "-", ia akan catat muka surat PERTAMA yang dijumpai untuk ID tersebut
+                if (targetSpan && targetSpan.innerText === "-") {
+                    targetSpan.innerText = pageNum; 
+                }
+            }
+        }
+
+                // Update TOC Hibah - Skrip akan terus baca ID yang kita 'cop' pada kertas tadi!
         if (page.closest("#sectionHibah")) {
             const targetId = page.getAttribute("data-target"); 
             if (targetId) {
