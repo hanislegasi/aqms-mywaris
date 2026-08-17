@@ -635,14 +635,13 @@ let consultantData = {};
 if (consultantCode) {
     try {
         const cleanCode = consultantCode.trim();
-        console.log("Mencari dokumen dengan Kod Perunding:", cleanCode);
+        console.log("Mencari perunding dengan consultantNo:", cleanCode);
 
         // 1. Rujuk kepada koleksi "consultants"
         const consultantsRef = collection(db, "consultants");
         
-        // 2. Buat query untuk cari kod tersebut. 
-        // PENTING: Gantikan "agentCode" dengan nama field sebenar dalam Firestore anda yang menyimpan nilai "AQC0001"
-        const q = query(consultantsRef, where("agentCode", "==", cleanCode)); 
+        // 2. Buat query menggunakan field "consultantNo"
+        const q = query(consultantsRef, where("consultantNo", "==", cleanCode)); 
         
         const querySnapshot = await getDocs(q);
 
@@ -651,16 +650,14 @@ if (consultantCode) {
             consultantData = querySnapshot.docs[0].data();
             console.log("Berjaya jumpa perunding:", consultantData);
         } else {
-            console.warn(`Perunding dengan kod "${cleanCode}" TIDAK WUJUD dalam koleksi "consultants".`);
+            console.warn(`Perunding dengan consultantNo "${cleanCode}" TIDAK WUJUD dalam koleksi "consultants".`);
         }
     } catch (error) {
         console.error("Ralat Firebase:", error);
     }
 }
 
-
-
-                       
+                     
                        
                         
 
