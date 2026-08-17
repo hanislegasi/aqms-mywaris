@@ -362,7 +362,7 @@ import { db, auth } from './firebase.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 // 3. Tarik alat Firestore dari Firebase
-import { doc, getDoc, updateDoc, collection, getDocs, setDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { doc, getDoc, updateDoc, collection, getDocs, setDoc, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // Konfigurasi Responsif untuk Viewport Desktop & Mobile
         function updateScale() {
@@ -634,18 +634,24 @@ let consultantData = {};
 
 if (consultantCode) {
     try {
-        // Bersihkan sebarang ruang kosong (whitespace) yang tidak sengaja
         const cleanCode = consultantCode.trim();
-        console.log("Mencari dokumen dengan ID:", cleanCode);
+        console.log("Mencari dokumen dengan Kod Perunding:", cleanCode);
 
-        const consultantDocRef = doc(db, "consultants", cleanCode);
-        const consultantDocSnap = await getDoc(consultantDocRef);
+        // 1. Rujuk kepada koleksi "consultants"
+        const consultantsRef = collection(db, "consultants");
+        
+        // 2. Buat query untuk cari kod tersebut. 
+        // PENTING: Gantikan "agentCode" dengan nama field sebenar dalam Firestore anda yang menyimpan nilai "AQC0001"
+        const q = query(consultantsRef, where("agentCode", "==", cleanCode)); 
+        
+        const querySnapshot = await getDocs(q);
 
-        if (consultantDocSnap.exists()) {
-            consultantData = consultantDocSnap.data();
+        if (!querySnapshot.empty) {
+            // 3. Ambil data dari dokumen pertama yang sepadan
+            consultantData = querySnapshot.docs[0].data();
             console.log("Berjaya jumpa perunding:", consultantData);
         } else {
-            console.warn(`Dokumen ID "${cleanCode}" TIDAK WUJUD dalam koleksi "consultants". Sila semak ejaan nama koleksi di Firestore.`);
+            console.warn(`Perunding dengan kod "${cleanCode}" TIDAK WUJUD dalam koleksi "consultants".`);
         }
     } catch (error) {
         console.error("Ralat Firebase:", error);
