@@ -628,30 +628,29 @@ const userData = userDoc.data();
 
 const groupedHibah = groupHibahByRecipient(data);
 
-// Cuba semak pelbagai kemungkinan tempat simpan kod perunding
-const consultantCode = userData?.referral || userData?.consultantCode || data.consultantCode || data.referral;
-
-// Semak apa yang berjaya dikesan (Boleh tengok kat Console F12 nanti)
-console.log("Kod Perunding yang dikesan:", consultantCode);
+const consultantCode = userData?.referral || data.consultantCode;
 
 let consultantData = {};
 
 if (consultantCode) {
     try {
-        // Ambil dokumen dari collection 'consultants' berdasarkan ID (contoh: AQC0001)
-        const consultantDocRef = doc(db, "consultants", consultantCode);
+        // Bersihkan sebarang ruang kosong (whitespace) yang tidak sengaja
+        const cleanCode = consultantCode.trim();
+        console.log("Mencari dokumen dengan ID:", cleanCode);
+
+        const consultantDocRef = doc(db, "consultants", cleanCode);
         const consultantDocSnap = await getDoc(consultantDocRef);
 
         if (consultantDocSnap.exists()) {
             consultantData = consultantDocSnap.data();
+            console.log("Berjaya jumpa perunding:", consultantData);
         } else {
-            console.warn("Perunding tidak dijumpai dalam database.");
+            console.warn(`Dokumen ID "${cleanCode}" TIDAK WUJUD dalam koleksi "consultants". Sila semak ejaan nama koleksi di Firestore.`);
         }
     } catch (error) {
-        console.error("Ralat semasa mengambil data perunding:", error);
+        console.error("Ralat Firebase:", error);
     }
 }
-
 
 
 
