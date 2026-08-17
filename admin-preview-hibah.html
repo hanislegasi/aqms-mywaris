@@ -213,58 +213,34 @@ margin:0 !important;
                     
                 </div>
 
-             <!-- PAGE 2 (MAKLUMAT PELANGGAN & PERUNDING) -->
-                <div class="a4-page p-[18mm]">
-                    <div class="border-b-2 border-[#153638] pb-4 mb-6 mt-5">
-                        <p id="docRef2" class="text-[#153638] text-lg font-bold font-cinzel tracking-widest">
-                            DOC REF: -
-                        </p>
-                    </div>
+<!-- PAGE 2 (ISI KANDUNGAN) -->
+<div class="a4-page p-[18mm]">
+    
+    <div class="border-b-2 border-[#153638] pb-4 mb-10 mt-5">
+        <p id="docRefTOC" class="text-[#153638] text-lg font-bold font-cinzel tracking-widest">
+            DOC REF: -
+        </p>
+    </div>
 
-                    <h2 class="text-xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-8">
-                        MAKLUMAT PELANGGAN & PERUNDING
-                    </h2>
+    <h2 class="text-xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-16 underline underline-offset-[12px] decoration-1">
+        ISI KANDUNGAN
+    </h2>
 
-                    <div class="space-y-4 text-lg font-cinzel text-[#153638]">
-                        <p><strong>Nama:</strong> <span id="namaTable">-</span></p>
-                        <p><strong>No. Kad Pengenalan:</strong> <span id="icTable">-</span></p>
-                        <p><strong>No. Telefon:</strong> <span id="telefonTable">-</span></p>
-                        <p><strong>Alamat:</strong> <span id="alamatTable">-</span></p>
-                        <p><strong>Kod Perunding:</strong> <span id="kodTable">-</span></p>
-                        <p><strong>No. Telefon Perunding:</strong> <span id="telefonPerundingTable">-</span></p>
-                    </div>
+    <div class="max-w-4xl mx-auto space-y-8 text-lg font-cinzel text-[#153638]">
+        
+        <div class="flex items-end w-full">
+            <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Butiran Pelanggan & Perunding</span>
+            <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
+            <span id="tocMaklumat" class="font-bold">-</span>
+        </div>
 
-                    <div class="pdf-footer"></div>
-                </div>
+        <div class="flex items-end w-full">
+            <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Dokumen Wasiat</span>
+            <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
+            <span id="tocWasiat" class="font-bold">-</span>
+        </div>
 
-                <!-- PAGE 3 (ISI KANDUNGAN) -->
-                <div class="a4-page p-[18mm]">
-                    
-                    <div class="border-b-2 border-[#153638] pb-4 mb-10 mt-5">
-                        <p id="docRefTOC" class="text-[#153638] text-lg font-bold font-cinzel tracking-widest">
-                            DOC REF: -
-                        </p>
-                    </div>
-
-                    <h2 class="text-xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-16 underline underline-offset-[12px] decoration-1">
-                        ISI KANDUNGAN
-                    </h2>
-
-                    <div class="max-w-4xl mx-auto space-y-8 text-lg font-cinzel text-[#153638]">
-                        
-                        <div class="flex items-end w-full">
-                            <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Butiran Pelanggan & Perunding</span>
-                            <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
-                            <span id="tocMaklumat" class="font-bold">-</span>
-                        </div>
-
-                        <div class="flex items-end w-full">
-                            <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Dokumen Wasiat</span>
-                            <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
-                            <span id="tocWasiat" class="font-bold">-</span>
-                        </div>
-
-                        <!-- Dokumen Hibah (Pecahan Mengikut Penerima) -->
+        <!-- Dokumen Hibah (Pecahan Mengikut Penerima) -->
         <div class="w-full space-y-4">
             <div class="font-semibold uppercase tracking-wide">Dokumen Pengisytiharan Hibah:</div>
             
@@ -274,21 +250,45 @@ margin:0 !important;
             </div>
         </div>
 
-                        <div class="flex items-end w-full">
-                            <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Lampiran</span>
-                            <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
-                            <span id="tocLampiran" class="font-bold">-</span>
-                        </div>
+        <div class="flex items-end w-full">
+            <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Lampiran</span>
+            <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
+            <span id="tocLampiran" class="font-bold">-</span>
+        </div>
 
-                    </div>
-                    
-                    <div class="pdf-footer"></div>
-                </div>
+    </div>
+    
+    <div class="pdf-footer"></div>
+</div>
 
-                <!-- BAHAGIAN KANDUNGAN DINAMIK (WASIAT & HIBAH) -->
-                <div id="sectionWasiat"></div>
-                <div id="sectionHibah"></div>
-                <div id="sectionLampiran"></div>
+<!-- PAGE 3 (MAKLUMAT PELANGGAN & PERUNDING) -->
+<div class="a4-page p-[18mm]">
+    <div class="border-b-2 border-[#153638] pb-4 mb-6 mt-5">
+        <p id="docRef2" class="text-[#153638] text-lg font-bold font-cinzel tracking-widest">
+            DOC REF: -
+        </p>
+    </div>
+
+    <h2 class="text-xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-8">
+        MAKLUMAT PELANGGAN & PERUNDING
+    </h2>
+
+    <div class="space-y-4 text-lg font-cinzel text-[#153638]">
+        <p><strong>Nama:</strong> <span id="namaTable">-</span></p>
+        <p><strong>No. Kad Pengenalan:</strong> <span id="icTable">-</span></p>
+        <p><strong>No. Telefon:</strong> <span id="telefonTable">-</span></p>
+        <p><strong>Alamat:</strong> <span id="alamatTable">-</span></p>
+        <p><strong>Kod Perunding:</strong> <span id="kodTable">-</span></p>
+        <p><strong>No. Telefon Perunding:</strong> <span id="telefonPerundingTable">-</span></p>
+    </div>
+
+    <div class="pdf-footer"></div>
+</div>
+
+<!-- BAHAGIAN KANDUNGAN DINAMIK (WASIAT & HIBAH) -->
+<div id="sectionWasiat"></div>
+<div id="sectionHibah"></div>
+<div id="sectionLampiran"></div>
 
 
 <span class="page-number">
