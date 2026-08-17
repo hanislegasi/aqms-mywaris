@@ -1647,6 +1647,15 @@ function getPihakPenerima(item){
 
 const pihak = getPihakPenerima(item);   
     console.log(item);
+
+    / 2. BINA PENANDA TOC TERSEMBUNYI
+    // Penanda ini akan memegang ID unik untuk penerima ini (contoh: tocHibah_0, tocHibah_1)
+    const tocMarker = `<span class="toc-hibah-marker hidden" style="display:none;" data-target="tocHibah_${index}"></span>`;
+
+    // 3. SUNTIK PENANDA KE MUKA SURAT PERTAMA
+    // Kita guna .replace() (bukan .replaceAll) untuk meletakkan marker ini hanya pada NAMA_PENERIMA yang paling awal muncul dalam template.
+    let currentContent = hibahContent.replace("{{NAMA_PENERIMA}}", tocMarker + "{{NAMA_PENERIMA}}");
+    
     hibahHTML += hibahContent
               .replaceAll(
             "{{NAMA_PENERIMA}}",
@@ -1717,15 +1726,18 @@ try {
     const tocMaklumat = document.getElementById("tocMaklumat");
     if (tocMaklumat) tocMaklumat.innerText = "2";
 
-    // 3. JANA SENARAI PENERIMA HIBAH DALAM TOC SECARA AUTOMATIK
+    // 3. JANA SENARAI PENERIMA HIBAH DALAM TOC
     const tocHibahList = document.getElementById("tocHibahList");
     if (tocHibahList && groupedHibah) {
-        tocHibahList.innerHTML = ""; // Kosongkan dulu
-        Object.keys(groupedHibah).forEach((namaPenerima, idx) => {
-            const safeId = "tocHibah_" + idx;
+        tocHibahList.innerHTML = ""; 
+
+        // Guna loop yang sama dengan Object.values
+        Object.values(groupedHibah).forEach((item, index) => {
+            const safeId = "tocHibah_" + index;
+            // Paparkan nama benefisiari (penerima sebenar)
             tocHibahList.innerHTML += `
                 <div class="flex items-end w-full">
-                    <span class="font-medium uppercase tracking-wide whitespace-nowrap">• ${namaPenerima}</span>
+                    <span class="font-medium uppercase tracking-wide whitespace-nowrap">• ${item.nama}</span>
                     <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-6px]"></div>
                     <span id="${safeId}" class="font-bold">-</span>
                 </div>
@@ -1733,9 +1745,8 @@ try {
         });
     }
 
-    // 4. Gelung Muka Surat (Footer & Cari Nombor Page)
+    // 4. Gelung Muka Surat Keseluruhan
     const pages = document.querySelectorAll(".a4-page");
-    let hibahCounterIndex = 0;
 
     pages.forEach((page, index) => {
         if (index === 0) return; // Abaikan Cover Page
@@ -1758,14 +1769,18 @@ try {
             }
         }
 
-        // Update TOC Hibah (Padankan mengikut urutan penerima yang dirender)
+        // Update TOC Hibah - Cari Penanda Rahsia tadi!
         if (page.closest("#sectionHibah")) {
-            const targetId = "tocHibah_" + hibahCounterIndex;
-            const targetSpan = document.getElementById(targetId);
+            // Skrip akan check jika page ini mengandungi penanda yang kita suntik di Langkah 1
+            const marker = page.querySelector(".toc-hibah-marker");
             
-            if (targetSpan && targetSpan.innerText === "-") {
-                targetSpan.innerText = pageNum;
-                hibahCounterIndex++; // Pindah ke penerima seterusnya untuk page seterusnya
+            if (marker) {
+                const targetId = marker.getAttribute("data-target"); // Cth: "tocHibah_1"
+                const targetSpan = document.getElementById(targetId);
+                
+                if (targetSpan && targetSpan.innerText === "-") {
+                    targetSpan.innerText = pageNum; // Daftar nombor page untuk Fatty Moore / Mary Moore secara tepat
+                }
             }
         }
 
