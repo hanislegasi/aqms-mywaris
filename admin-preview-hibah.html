@@ -628,14 +628,35 @@ const userData = userDoc.data();
 
 const groupedHibah = groupHibahByRecipient(data);
 
-const safeConsultant = typeof consultantData !== 'undefined' ? consultantData : {};
+// Dapatkan kod perunding (contoh: dari userData.referral atau field yang menyimpan kod)
+const consultantCode = userData?.referral || data.consultantCode;
+
+let consultantData = {};
+
+if (consultantCode) {
+    try {
+        // Ambil dokumen dari collection 'consultants' berdasarkan ID (contoh: AQC0001)
+        const consultantDocRef = doc(db, "consultants", consultantCode);
+        const consultantDocSnap = await getDoc(consultantDocRef);
+
+        if (consultantDocSnap.exists()) {
+            consultantData = consultantDocSnap.data();
+        } else {
+            console.warn("Perunding tidak dijumpai dalam database.");
+        }
+    } catch (error) {
+        console.error("Ralat semasa mengambil data perunding:", error);
+    }
+}
+
+
+
 
                        
                        
                         
 
 const huruf = "abcdefghijklmnopqrstuvwxyz";
-
 const wasiat13Html = (data.wasiatSatuPerTiga || [])
 .map((item,index)=>`
 <table style="
@@ -691,7 +712,7 @@ approvedDate
                         document.getElementById("telefonTable").innerHTML = data.telefon || "-";
                         document.getElementById("alamatTable").innerHTML = alamatPenuh || "-";
                         document.getElementById("kodTable").innerHTML = userData?.referral || "-";
-                        document.getElementById("telefonPerundingTable").innerHTML = safeConsultant.telefon || "-";
+                        document.getElementById("telefonPerundingTable").innerHTML = consultantData.telefon || "-";
 
 let lampiranWaris = `
 <table
