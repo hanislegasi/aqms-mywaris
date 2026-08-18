@@ -140,6 +140,32 @@ import {
         console.log("Receipt ID :", receiptId);
 
         // ---------------------
+        // Load Company Settings
+        // ---------------------
+        async function loadCompanySettings() {
+            try {
+                // Tarik data dari koleksi "settings", dokumen "company"
+                const settingsSnap = await getDoc(doc(db, "settings", "company"));
+                
+                if (settingsSnap.exists()) {
+                    const settings = settingsSnap.data();
+                    
+                    // Gantikan teks pada HTML dengan data dari Firestore
+                    document.getElementById("companyName").textContent = 
+                        settings?.companyName || "AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.";
+                    
+                    document.getElementById("registrationNo").textContent = 
+                        "Registration No : " + (settings?.registrationNo || "-");
+                }
+            } catch (error) {
+                console.error("Ralat menarik data syarikat: ", error);
+            }
+        }
+
+        // Panggil fungsi ini supaya ia terus berjalan
+        loadCompanySettings();
+        
+        // ---------------------
         // Load Receipt
         // ---------------------
         async function loadReceipt() {
