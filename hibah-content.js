@@ -86,8 +86,7 @@ Bahawasanya Dokumen Pengisytiharan Hibah ini adalah pengisytiharan terakhir dan 
 <div class="a4-page p-[18mm]">
 
 <p>
-<strong>DOKUMEN PENGISYTIHARAN HIBAH</strong> ini diperbuat pada
-<strong>{{TARIKH_DOKUMEN}}</strong>.
+<strong>DOKUMEN PENGISYTIHARAN HIBAH</strong> ini diperbuat pada:-
 </p>
 
 <p style="text-align:center;"><strong>ANTARA</strong></p>
@@ -1263,7 +1262,7 @@ text-align:justify;
 line-height:1.6;
 vertical-align:top;
 ">
-Dokumen hibah ini disediakan untuk menzahirkan tindakan Pemberi Hibah menghibahkan harta/harta-hartanya kepada Penerima/Penerima-Penerima Hibah tertentu seperti yang telah ditetapkan di dalam Dokumen Pengisytiharan Hibah yang telah disediakan oleh pihak Hans Legasi Resources Sdn.Bhd. dan telah ditandatangani pada ...............................
+Dokumen hibah ini disediakan untuk menzahirkan tindakan Pemberi Hibah menghibahkan harta/harta-hartanya kepada Penerima/Penerima-Penerima Hibah tertentu seperti yang telah ditetapkan di dalam Dokumen Pengisytiharan Hibah yang telah disediakan oleh pihak Al-Qawthar Mawaris Synergy Sdn.Bhd. 
 </td>
 </tr>
 
