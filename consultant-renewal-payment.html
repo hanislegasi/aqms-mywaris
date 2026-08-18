@@ -165,8 +165,10 @@ document
 .getElementById("payRenewalBtn")
 ?.addEventListener("click", async()=>{
 
-const currentExpiry =
-new Date(data.renewalDate);
+// Semak sama ada renewalDate wujud dan tukar format Timestamp ke Date dengan betul
+const currentExpiry = data?.renewalDate?.toDate 
+    ? data.renewalDate.toDate() 
+    : (data?.renewalDate ? new Date(data.renewalDate) : new Date());
 
 const newExpiry =
 new Date(currentExpiry);
