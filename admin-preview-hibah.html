@@ -234,10 +234,34 @@ margin:0 !important;
             <span id="tocMaklumat" class="font-bold">-</span>
         </div>
 
-        <div class="flex items-end w-full">
-            <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Dokumen Wasiat</span>
-            <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
-            <span id="tocWasiat" class="font-bold">-</span>
+        <!-- Dokumen Wasiat (Utama & Sub) -->
+        <div class="w-full space-y-4">
+            <div class="flex items-end w-full">
+                <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Dokumen Wasiat</span>
+                <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
+                <span id="tocWasiat" class="font-bold">-</span>
+            </div>
+            
+            <!-- Senarai Sub Wasiat -->
+            <div class="w-full pl-4 space-y-2">
+                <div class="flex items-end w-full">
+                    <span class="text-[14px] font-medium uppercase tracking-wide whitespace-nowrap opacity-90">• Pelantikan Wasi</span>
+                    <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div>
+                    <span id="tocWasiat_wasi" class="text-[14px] font-bold">-</span>
+                </div>
+                
+                <div class="flex items-end w-full">
+                    <span class="text-[14px] font-medium uppercase tracking-wide whitespace-nowrap opacity-90">• Pembahagian Harta Pusaka Saya (Wasiat 1/3)</span>
+                    <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div>
+                    <span id="tocWasiat_13" class="text-[14px] font-bold">-</span>
+                </div>
+                
+                <div class="flex items-end w-full">
+                    <span class="text-[14px] font-medium uppercase tracking-wide whitespace-nowrap opacity-90">• Pesanan Kepada Waris</span>
+                    <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div>
+                    <span id="tocWasiat_pesanan" class="text-[14px] font-bold">-</span>
+                </div>
+            </div>
         </div>
 
         <!-- Dokumen Hibah (Pecahan Mengikut Penerima) -->
@@ -1712,11 +1736,32 @@ try {
             `;
         }
 
-        // Update TOC Wasiat
+       // Update TOC Wasiat (Dan Sub-Topik)
         if (page.closest("#sectionWasiat")) {
             const tocWasiat = document.getElementById("tocWasiat");
             if (tocWasiat && tocWasiat.innerText === "-") {
                 tocWasiat.innerText = pageNum;
+            }
+            
+            // Baca keseluruhan teks pada helaian kertas ini
+            const pageText = page.innerText.toUpperCase();
+            
+            // 1. Kesan Helaian 'Pelantikan Wasi'
+            const tocWasi = document.getElementById("tocWasiat_wasi");
+            if (tocWasi && tocWasi.innerText === "-" && pageText.includes("PELANTIKAN WASI")) {
+                tocWasi.innerText = pageNum;
+            }
+            
+            // 2. Kesan Helaian 'Pembahagian Harta Pusaka' atau Wasiat 1/3
+            const toc13 = document.getElementById("tocWasiat_13");
+            if (toc13 && toc13.innerText === "-" && (pageText.includes("PEMBAHAGIAN HARTA PUSAKA") || pageText.includes("SATU PER TIGA"))) {
+                toc13.innerText = pageNum;
+            }
+            
+            // 3. Kesan Helaian 'Pesanan Kepada Waris'
+            const tocPesanan = document.getElementById("tocWasiat_pesanan");
+            if (tocPesanan && tocPesanan.innerText === "-" && pageText.includes("PESANAN KEPADA WARIS")) {
+                tocPesanan.innerText = pageNum;
             }
         }
 
