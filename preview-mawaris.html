@@ -241,78 +241,96 @@ margin:0 !important;
                     
                 </div>
 
-                <!-- PAGE 2 (MAKLUMAT) -->
-                <div class="a4-page p-[18mm]">
-                    
-                    <div class="border-b-2 border-[#153638] pb-4 mb-10 mt-5">
-                        <p id="docRef2" class="text-[#153638] text-xl font-bold font-cinzel tracking-widest">
-                            DOC REF: AQMS-MAW-2026-001
-                        </p>
-                    </div>
-
-                   <table class="w-full border-collapse border border-gray-300 text-sm font-cinzel text-gray-800">
-                        <tr>
-                            <td class="border border-gray-300 p-5 font-semibold w-1/3 bg-gray-50">NAMA</td>
-                            <td id="namaTable" class="border border-gray-300 p-5 font-medium">-</td>
-                        </tr>
-                        <tr>
-                            <td class="border border-gray-300 p-5 font-semibold bg-gray-50">NO. KAD PENGENALAN</td>
-                            <td id="icTable" class="border border-gray-300 p-5 font-medium">-</td>
-                        </tr>
-                        <tr>
-                            <td class="border border-gray-300 p-5 font-semibold bg-gray-50">NO. TELEFON</td>
-                            <td id="telefonTable" class="border border-gray-300 p-5 font-medium">-</td>
-                        </tr>
-                        <tr>
-                            <td class="border border-gray-300 p-5 font-semibold bg-gray-50">ALAMAT</td>
-                            <td id="alamatTable" class="border border-gray-300 p-5 font-medium">-</td>
-                        </tr>
-                        <tr>
-                            <td class="border border-gray-300 p-5 font-semibold bg-gray-50">NO. KOD PERUNDING</td>
-                            <td id="kodTable" class="border border-gray-300 p-5 font-medium">-</td>
-                        </tr>
-
-                       <tr>
-<td class="border border-gray-300 p-5 font-semibold bg-gray-50">
-TARIKH DOKUMEN
-</td>
-
-<td id="approvedTable"
-class="border border-gray-300 p-5 font-medium">
--
-</td>
-</tr>
-                    </table>
-
-<div class="pdf-footer">
-
-
-
-<span class="page-number">
-2
-</span>
-
-</div>
-                    
-</div>
-
-<!-- PAGE 3 -->
-
-              
-<div
-<div id="sectionWasiat">
-</div>
-
-<div id="sectionSepencarian">
-</div>
+<!-- PAGE 2 (ISI KANDUNGAN) -->
+<div class="a4-page p-[18mm]">
     
-<div id="sectionHibah">
-</div>
-                
-<div id="sectionLampiran">
+    <div class="border-b-2 border-[#153638] pb-4 mb-10 mt-5">
+        <p id="docRefTOC" class="text-[#153638] text-lg font-bold font-cinzel tracking-widest">
+            DOC REF: -
+        </p>
+    </div>
+
+    <h2 class="text-xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-16 underline underline-offset-[12px] decoration-1">
+        ISI KANDUNGAN
+    </h2>
+
+    <div class="max-w-4xl mx-auto space-y-8 text-lg font-cinzel text-[#153638]">
+        
+        <div class="flex items-end w-full">
+            <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Butiran Pelanggan & Perunding</span>
+            <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
+            <span id="tocMaklumat" class="font-bold">-</span>
+        </div>
+
+        <div class="flex items-end w-full">
+            <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Dokumen Wasiat</span>
+            <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
+            <span id="tocWasiat" class="font-bold">-</span>
+        </div>
+
+<!-- Dokumen Sepencarian -->
+        <div class="w-full space-y-4">
+            <div class="font-semibold uppercase tracking-wide">Dokumen Deklarasi Harta Sepencarian:</div>
+            
+            <!-- Tempat kosong untuk senarai penerima dimasukkan secara dinamik oleh JS -->
+            <div id="tocSepencarian" class="space-y-4 pl-6">
+                <!-- JavaScript akan masukkan senarai penerima di sini secara automatik -->
+            </div>
+        </div>
+        
+        <!-- Dokumen Hibah (Pecahan Mengikut Penerima) -->
+        <div class="w-full space-y-4">
+            <div class="font-semibold uppercase tracking-wide">Dokumen Pengisytiharan Hibah:</div>
+            
+            <!-- Tempat kosong untuk senarai penerima dimasukkan secara dinamik oleh JS -->
+            <div id="tocHibahList" class="space-y-4 pl-6">
+                <!-- JavaScript akan masukkan senarai penerima di sini secara automatik -->
+            </div>
+        </div>
+
+        <div class="flex items-end w-full">
+            <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Lampiran</span>
+            <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
+            <span id="tocLampiran" class="font-bold">-</span>
+        </div>
+
+    </div>
+    
+    <div class="pdf-footer"></div>
 </div>
 
+<!-- PAGE 3 (MAKLUMAT PELANGGAN & PERUNDING) -->
+<div class="a4-page p-[18mm]">
+    <div class="border-b-2 border-[#153638] pb-4 mb-6 mt-5">
+        <p id="docRef2" class="text-[#153638] text-lg font-bold font-cinzel tracking-widest">
+            DOC REF: -
+        </p>
+    </div>
+
+    <h2 class="text-xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-8">
+        MAKLUMAT PELANGGAN & PERUNDING
+    </h2>
+
+    <div class="space-y-4 text-lg font-cinzel text-[#153638]">
+        <p><strong>Nama:</strong> <span id="namaTable">-</span></p>
+        <p><strong>No. Kad Pengenalan:</strong> <span id="icTable">-</span></p>
+        <p><strong>No. Telefon:</strong> <span id="telefonTable">-</span></p>
+        <p><strong>Alamat:</strong> <span id="alamatTable">-</span></p>
+        <p><strong>Kod Perunding:</strong> <span id="kodTable">-</span></p>
+        <p><strong>No. Telefon Perunding:</strong> <span id="telefonPerundingTable">-</span></p>
+    </div>
+
+    <div class="pdf-footer"></div>
 </div>
+
+<!-- BAHAGIAN KANDUNGAN DINAMIK (WASIAT & HIBAH) -->
+<div id="sectionWasiat"></div>
+<div id="sectionSepencarian"></div>   
+<div id="sectionHibah"></div>
+<div id="sectionLampiran"></div>
+
+</div>  
+                
 </div>
                 
  </main>
@@ -399,7 +417,9 @@ import {
     collection, 
     getDocs, 
     setDoc, 
-    addDoc 
+    addDoc,
+    query,
+    where
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Konfigurasi Responsif untuk Viewport Desktop & Mobile
@@ -886,7 +906,34 @@ userId,
 
 const groupedSepencarian = groupSepencarianByRecipient(data);
 
+const consultantCode = userData?.referral || data.consultantCode;
 
+let consultantData = {};
+
+if (consultantCode) {
+    try {
+        const cleanCode = consultantCode.trim();
+        console.log("Mencari perunding dengan consultantNo:", cleanCode);
+
+        // 1. Rujuk kepada koleksi "consultants"
+        const consultantsRef = collection(db, "consultants");
+        
+        // 2. Buat query menggunakan field "consultantNo"
+        const q = query(consultantsRef, where("consultantNo", "==", cleanCode)); 
+        
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            // 3. Ambil data dari dokumen pertama yang sepadan
+            consultantData = querySnapshot.docs[0].data();
+            console.log("Berjaya jumpa perunding:", consultantData);
+        } else {
+            console.warn(`Perunding dengan consultantNo "${cleanCode}" TIDAK WUJUD dalam koleksi "consultants".`);
+        }
+    } catch (error) {
+        console.error("Ralat Firebase:", error);
+    }
+}
 
                        
                        
@@ -949,10 +996,7 @@ approvedDate
                         document.getElementById("telefonTable").innerHTML = data.telefon || "-";
                         document.getElementById("alamatTable").innerHTML = alamatPenuh || "-";
                         document.getElementById("kodTable").innerHTML = userData?.referral || "-";
-                        document.getElementById("approvedTable").innerHTML =
-approvedDate
-? approvedDate.toLocaleDateString("ms-MY")
-: "-";
+                        document.getElementById("telefonPerundingTable").innerHTML = consultantData.telefon || "-";
 
 let lampiranWaris = `
 <table
@@ -1855,222 +1899,229 @@ function formatDateMY(dateStr){
 
 let hibahHTML = "";
 
-Object.values(groupedHibah).forEach(item=>{
+Object.values(groupedHibah).forEach((item, index) => {
 
-function getPihakPenerima(item){
-
-    const bawahUmur =
-        item.status === "bawah18" ||
-        item.status === "oku";
-
-    if(bawahUmur){
-
-        const p = item.pemegangAmanah || {};
-
-        return{
-
-            nama: p.nama || "-",
-            ic: p.ic || "-",
-            alamat: p.alamat || item.alamat || "-",
-
-            gelaran: "Pemegang Amanah",
-
-            intro:
-`selaku <strong>"Pemegang Amanah"</strong> bagi pihak
-<strong>${item.nama}</strong>
-(Penerima Hibah)`,
-
-            benefisiari:item.nama
-
+    function getPihakPenerima(item) {
+        const bawahUmur = item.status === "bawah18" || item.status === "oku";
+        if (bawahUmur) {
+            const p = item.pemegangAmanah || {};
+            return {
+                nama: p.nama || "-",
+                ic: p.ic || "-",
+                alamat: p.alamat || item.alamat || "-",
+                gelaran: "Pemegang Amanah",
+                intro: `selaku <strong>"Pemegang Amanah"</strong> bagi pihak <strong>${item.nama}</strong> (Penerima Hibah)`,
+                benefisiari: item.nama
+            };
+        }
+        return {
+            nama: item.nama,
+            ic: item.ic,
+            alamat: item.alamat,
+            gelaran: "Penerima Hibah",
+            intro: `(selepas ini disebut sebagai <strong>"Penerima Hibah"</strong>)`,
+            benefisiari: item.nama
         };
-
     }
 
-    return{
-
-        nama:item.nama,
-        ic:item.ic,
-        alamat:item.alamat,
-
-        gelaran:"Penerima Hibah",
-
-        intro:`(selepas ini disebut sebagai
-<strong>"Penerima Hibah"</strong>)`,
-
-        benefisiari:item.nama
-
-    };
-
-}
-
-const pihak = getPihakPenerima(item);   
+    const pihak = getPihakPenerima(item);
     console.log(item);
-    hibahHTML += hibahContent
-              .replaceAll(
-            "{{NAMA_PENERIMA}}",
-            pihak.nama
-        )
-       .replaceAll(
-    "{{TABLE_ALIH}}",
-    generateAlihTable(item.hartaAlih)
-)
-        .replaceAll(
-    "{{TABLE_TAK_ALIH}}",
-    generateTakAlihTable(item.hartaTakAlih)
-)
 
-.replaceAll(
-"{{PEMEGANG_AMANAH}}",
-generatePemegangAmanah(item)
-)
-        
-.replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
-.replaceAll("{{IC_PEMBERI}}", data.ic || "-")
-.replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-")
-.replaceAll("{{TELEFON_PEMBERI}}", data.telefon || "-")
+    // Proses data ganti tempat kosong macam biasa
+    let contentForThisRecipient = hibahContent
+        .replaceAll("{{NAMA_PENERIMA}}", pihak.nama)
+        .replaceAll("{{TABLE_ALIH}}", generateAlihTable(item.hartaAlih))
+        .replaceAll("{{TABLE_TAK_ALIH}}", generateTakAlihTable(item.hartaTakAlih))
+        .replaceAll("{{PEMEGANG_AMANAH}}", generatePemegangAmanah(item))
+        .replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
+        .replaceAll("{{IC_PEMBERI}}", data.ic || "-")
+        .replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-")
+        .replaceAll("{{TELEFON_PEMBERI}}", data.telefon || "-")
+        .replaceAll("{{IC_PENERIMA}}", pihak.ic || "-")
+        .replaceAll("{{HUBUNGAN}}", item.hubungan || "-")
+        .replaceAll("{{ALAMAT_PENERIMA}}", pihak.alamat || "-")
+        .replaceAll("{{PERATUS}}", item.peratus || "-")
+        .replaceAll("{{TARIKH_DOKUMEN}}", approvedDate ? approvedDate.toLocaleDateString("ms-MY") : "-")
+        .replaceAll("{{TARIKH_LAHIR}}", formatDateMY(item.tarikhLahir))
+        .replaceAll("{{LABEL_PENERIMA}}", pihak.gelaran)
+        .replaceAll("{{INTRO_PENERIMA}}", pihak.intro)
+        .replaceAll("{{BENEFISIARI}}", pihak.benefisiari);
 
-.replaceAll("{{IC_PENERIMA}}", pihak.ic || "-")
-.replaceAll("{{HUBUNGAN}}", item.hubungan || "-")
-.replaceAll("{{ALAMAT_PENERIMA}}", pihak.alamat || "-")
-.replaceAll("{{PERATUS}}", item.peratus || "-")
-.replaceAll(
-   "{{TARIKH_DOKUMEN}}",
-   approvedDate
-      ? approvedDate.toLocaleDateString("ms-MY")
-      : "-"
-)
+    // =======================================================
+    // TEKNIK KEBAL: Kita 'cop' ID pada setiap helai kertas
+    // Walaupun HTML berterabur, kertas ini tetap tahu ia milik siapa!
+    // =======================================================
+    contentForThisRecipient = contentForThisRecipient.replaceAll('class="a4-page', `data-target="tocHibah_${index}" class="a4-page`);
 
-.replaceAll(
-    "{{TARIKH_LAHIR}}",
-    formatDateMY(item.tarikhLahir)
-)
+    hibahHTML += contentForThisRecipient;
+});
 
-.replaceAll(
-"{{LABEL_PENERIMA}}",
-pihak.gelaran
-)
-
-.replaceAll(
-"{{INTRO_PENERIMA}}",
-pihak.intro
-)
-
-.replaceAll(
-"{{BENEFISIARI}}",
-pihak.benefisiari
-)
-
-});   
-                        
-document.getElementById("sectionHibah").innerHTML = hibahHTML;  
-                        
+document.getElementById("sectionHibah").innerHTML = hibahHTML;     
                         
                 
 let sepencarianHTML = "";
 
-Object.values(groupedSepencarian).forEach(item=>{
+// 1. Tambah parameter 'index' di sini
+Object.values(groupedSepencarian).forEach((item, index) => { 
 
     const pihak = {
-
         nama: item.nama,
         ic: item.ic,
         alamat: item.alamat
-
     };
-console.log("PIHAK:", pihak);
-    sepencarianHTML += sepencarianContent
+    
+    console.log("PIHAK:", pihak);
 
-    .replaceAll(
-        "{{TABLE_ALIH}}",
-        generateAlihTable(item.hartaAlih)
-    )
-
-    .replaceAll(
-        "{{TABLE_TAK_ALIH}}",
-        generateTakAlihTable(item.hartaTakAlih)
-    )
-
-.replaceAll(
-"{{NAMA_PEMILIK}}",
-data.nama || "-"
-)
-
-.replaceAll(
-"{{IC_PEMILIK}}",
-data.ic || "-"
-)
-
-.replaceAll(
-"{{ALAMAT_PEMILIK}}",
-alamatPenuh || "-"
-)
-
-.replaceAll(
-"{{TELEFON_PEMILIK}}",
-data.telefon || "-"
-)
-        
-       .replaceAll(
-        "{{NAMA_PENERIMA}}",
-        pihak.nama
-    )
-
-    .replaceAll(
-        "{{IC_PENERIMA}}",
-        pihak.ic
-    )
-
-.replaceAll(
-"{{ALAMAT_PENERIMA}}",
-pihak.alamat || "-"
-)
-        
-    .replaceAll(
-        "{{HUBUNGAN}}",
-        item.hubungan
-    )
-
-    .replaceAll(
-        "{{PERATUS}}",
-        item.peratus
+    // 2. Suntik penanda data-target ke muka surat pertama untuk penerima ini
+    let templateKandungan = sepencarianContent.replace(
+        /class="a4-page/i, 
+        `data-target="tocSepencarian_${index}" class="a4-page`
     );
+
+    // 3. Gunakan pembolehubah templateKandungan yang telah ditandai
+    sepencarianHTML += templateKandungan
+    .replaceAll("{{TABLE_ALIH}}", generateAlihTable(item.hartaAlih))
+    .replaceAll("{{TABLE_TAK_ALIH}}", generateTakAlihTable(item.hartaTakAlih))
+    .replaceAll("{{NAMA_PEMILIK}}", data.nama || "-")
+    .replaceAll("{{IC_PEMILIK}}", data.ic || "-")
+    .replaceAll("{{ALAMAT_PEMILIK}}", alamatPenuh || "-")
+    .replaceAll("{{TELEFON_PEMILIK}}", data.telefon || "-")
+    .replaceAll("{{NAMA_PENERIMA}}", pihak.nama)
+    .replaceAll("{{IC_PENERIMA}}", pihak.ic)
+    .replaceAll("{{ALAMAT_PENERIMA}}", pihak.alamat || "-")
+    .replaceAll("{{HUBUNGAN}}", item.hubungan)
+    .replaceAll("{{PERATUS}}", item.peratus);
 
 });
 
-document.getElementById(
-    "sectionSepencarian"
-).innerHTML = sepencarianHTML;
+document.getElementById("sectionSepencarian").innerHTML = sepencarianHTML;
                         
-const currentDocRef =
-data.docRef ||
-data.docRefNo ||
-"-";
+try {
+    const currentDocRef = data.docRef || data.docRefNo || "-";
 
-const pages =
-document.querySelectorAll(
-".a4-page"
-);
+    // 1. Masukkan Nombor Rujukan ke TOC
+    const docRefTOC = document.getElementById("docRefTOC");
+    if (docRefTOC) docRefTOC.innerHTML = `DOC REF: ${currentDocRef}`;
 
-pages.forEach((page,index)=>{
+    // 2. Set muka surat Maklumat
+    const tocMaklumat = document.getElementById("tocMaklumat");
+    if (tocMaklumat) tocMaklumat.innerText = "3";
 
-if(index === 0) return;
+// 3a. JANA SENARAI PENERIMA SEPENCARIAN DALAM TOC
+    const tocSepencarianList = document.getElementById("tocSepencarian");
+    
+    if (tocSepencarianList && groupedSepencarian) {
+        tocSepencarianList.innerHTML = ""; 
+        
+        // PAKSA JARAK RAPAT: Guna 'space-y-2' (atau space-y-1) dan margin atas (mt-2)
+        // 'pl-4' digunakan supaya senarai ini masuk ke dalam (indent) sedikit.
+        tocSepencarianList.className = "w-full pl-4 mt-2 space-y-2"; 
 
-const footer =
-page.querySelector(".pdf-footer");
+        Object.values(groupedSepencarian).forEach((item, index) => {
+            // Hasilkan ID yang sepadan untuk Sepencarian
+            const safeId = "tocSepencarian_" + index;
+            
+            tocSepencarianList.innerHTML += `
+                <div class="flex items-end w-full">
+                    <!-- KECILKAN FONT: Tambah text-[14px] atau text-sm pada nama -->
+                    <span class="text-[14px] font-medium uppercase tracking-wide whitespace-nowrap opacity-90">• ${item.nama}</span>
+                    
+                    <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div>
+                    
+                    <!-- KECILKAN FONT: Tambah text-[14px] pada nombor muka surat -->
+                    <span id="${safeId}" class="text-[14px] font-bold">-</span>
+                </div>
+            `;
+        });
+    }
+    
+  // 3b. JANA SENARAI PENERIMA HIBAH DALAM TOC
+    const tocHibahList = document.getElementById("tocHibahList");
+    if (tocHibahList && groupedHibah) {
+        tocHibahList.innerHTML = ""; 
+        
+        // PAKSA JARAK RAPAT: Guna 'space-y-2' (atau space-y-1) dan margin atas (mt-2)
+        // 'pl-4' digunakan supaya senarai ini masuk ke dalam (indent) sedikit.
+        tocHibahList.className = "w-full pl-4 mt-2 space-y-2"; 
 
-if(!footer) return;
+        Object.values(groupedHibah).forEach((item, index) => {
+            const safeId = "tocHibah_" + index;
+            tocHibahList.innerHTML += `
+                <div class="flex items-end w-full">
+                    <!-- KECILKAN FONT: Tambah text-[14px] atau text-sm pada nama -->
+                    <span class="text-[14px] font-medium uppercase tracking-wide whitespace-nowrap opacity-90">• ${item.nama}</span>
+                    
+                    <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div>
+                    
+                    <!-- KECILKAN FONT: Tambah text-[14px] pada nombor muka surat -->
+                    <span id="${safeId}" class="text-[14px] font-bold">-</span>
+                </div>
+            `;
+        });
+    }
 
-footer.innerHTML = `
-<span class="footer-docref">
-${currentDocRef}
-</span>
+    // 4. Gelung Muka Surat Keseluruhan
+    const pages = document.querySelectorAll(".a4-page");
 
-<span class="page-number">
-${index + 1}
-</span>
-`;
+    pages.forEach((page, index) => {
+        if (index === 0) return; // Abaikan Cover Page
+        const pageNum = index + 1;
 
-});    
+        // Update Footer
+        const footer = page.querySelector(".pdf-footer");
+        if (footer) {
+            footer.innerHTML = `
+                <span class="footer-docref">${currentDocRef}</span>
+                <span class="page-number">${pageNum}</span>
+            `;
+        }
+
+        // Update TOC Wasiat
+        if (page.closest("#sectionWasiat")) {
+            const tocWasiat = document.getElementById("tocWasiat");
+            if (tocWasiat && tocWasiat.innerText === "-") {
+                tocWasiat.innerText = pageNum;
+            }
+        }
+
+      // Update TOC Sepencarian - Skrip akan terus baca ID yang kita 'cop' pada kertas tadi!
+        if (page.closest("#sectionSepencarian")) {
+            const targetId = page.getAttribute("data-target"); 
+            if (targetId) {
+                const targetSpan = document.getElementById(targetId);
+                
+                // Jika masih "-", ia akan catat muka surat PERTAMA yang dijumpai untuk ID tersebut
+                if (targetSpan && targetSpan.innerText === "-") {
+                    targetSpan.innerText = pageNum; 
+                }
+            }
+        }
+
+                // Update TOC Hibah - Skrip akan terus baca ID yang kita 'cop' pada kertas tadi!
+        if (page.closest("#sectionHibah")) {
+            const targetId = page.getAttribute("data-target"); 
+            if (targetId) {
+                const targetSpan = document.getElementById(targetId);
+                
+                // Jika masih "-", ia akan catat muka surat PERTAMA yang dijumpai untuk ID tersebut
+                if (targetSpan && targetSpan.innerText === "-") {
+                    targetSpan.innerText = pageNum; 
+                }
+            }
+        }
+
+        // Update TOC Lampiran
+        if (page.closest("#sectionLampiran")) {
+            const tocLampiran = document.getElementById("tocLampiran");
+            if (tocLampiran && tocLampiran.innerText === "-") {
+                tocLampiran.innerText = pageNum;
+            }
+        }
+    });
+
+} catch (e) {
+    console.error("Ralat TOC:", e);
+}     
                         
 /*
 document.getElementById(
