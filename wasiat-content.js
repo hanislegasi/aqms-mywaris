@@ -331,7 +331,7 @@ Selepas ditolak hutang, obligasi-obligasi lain yang tertunggak ke atasnya, dan a
 <div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>4. PEMBAHAGIAN HARTA PUSAKA SAYA (WASIAT 1/3)</strong>
+<strong>4. WASIAT 1/3</strong>
 </h3>
 
 <p>
