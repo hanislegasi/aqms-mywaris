@@ -94,6 +94,20 @@ import {
             consultantData = consultantSnap.docs[0].data();
           }
         }
+
+// ===== DELIVERY ALERT (FUNGSI BARU) =====
+      function getDeliveryAlert(data) {
+        if (!data.deliveryChoice) return ""; // Jika pelanggan belum buat pilihan
+
+        if (data.deliveryChoice === "existing") {
+            return `<div class="mb-4 bg-gray-50 text-gray-700 px-3 py-2 rounded-lg border border-gray-200 text-sm">📮 <b>Pos ke Alamat Asal</b></div>`;
+        } else if (data.deliveryChoice === "new") {
+            return `<div class="mb-4 bg-red-50 text-red-700 px-3 py-2 rounded-lg border border-red-200 text-sm">📮 <b>Pos ke Alamat Baru:</b><br><span class="text-gray-800">${data.deliveryAddress || "-"}</span></div>`;
+        } else if (data.deliveryChoice === "consultant") {
+            return `<div class="mb-4 bg-blue-50 text-blue-700 px-3 py-2 rounded-lg border border-blue-200 text-sm">🤝 <b>Serahan Tangan (Oleh Perunding)</b></div>`;
+        }
+        return "";
+      }
         
         // WASIAT STATUS
         const wasiatSnap = await getDoc(doc(db, "users", userId, "wasiat", "maklumat"));
@@ -335,6 +349,7 @@ import {
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
                     <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    ${getDeliveryAlert(wasiatData)}
                     <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
                     <input type="datetime-local" id="wasiatSentAt" value="${wasiatSentAt ? wasiatSentAt.substring(0, 16) : ""}" ${wasiatStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
                     <input id="wasiatCourier" class="w-full border rounded-lg p-2 mb-2" placeholder="Courier" value="${wasiatCourier}">
@@ -385,6 +400,7 @@ import {
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
                     <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    ${getDeliveryAlert(hibahData)}
                     <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
                     <input type="datetime-local" id="hibahSentAt" value="${hibahSentAt ? hibahSentAt.substring(0, 16) : ""}" ${hibahStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
                     <input id="hibahCourier" class="w-full border rounded-lg p-2 mb-2" placeholder="Courier" value="${hibahCourier}">
@@ -435,6 +451,7 @@ import {
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
                     <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    ${getDeliveryAlert(sepencarianData)}
                     <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
                     <input type="datetime-local" id="sepencarianSentAt" value="${sepencarianSentAt ? sepencarianSentAt.substring(0, 16) : ""}" ${sepencarianStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
                     <input id="sepencarianCourier" class="w-full border rounded-lg p-2 mb-2" placeholder="Courier" value="${sepencarianCourier}">
@@ -485,6 +502,7 @@ import {
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
                     <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    ${getDeliveryAlert(mawarisData)}
                     <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
                     <input type="datetime-local" id="mawarisSentAt" value="${mawarisSentAt ? mawarisSentAt.substring(0, 16) : ""}" ${mawarisStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
                     <input id="mawarisCourier" class="w-full border rounded-lg p-2 mb-2" placeholder="Courier" value="${mawarisCourier}">
