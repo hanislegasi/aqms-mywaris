@@ -332,6 +332,20 @@ ${status || "DRAFT"}
 
 }
 
+// ===== DELIVERY ALERT (FUNGSI BARU) =====
+function getDeliveryAlert(data) {
+    if (!data.deliveryChoice) return ""; // Jika pelanggan belum buat pilihan
+
+    if (data.deliveryChoice === "existing") {
+        return `<div class="mt-1 text-[10.5px] leading-tight bg-gray-50 text-gray-600 px-2 py-1.5 rounded border border-gray-200">📮 Pos (Alamat Asal)</div>`;
+    } else if (data.deliveryChoice === "new") {
+        return `<div class="mt-1 text-[10.5px] leading-tight bg-red-50 text-red-700 px-2 py-1.5 rounded border border-red-200">📮 <b>Pos (Alamat Baru):</b><br><span class="text-gray-700">${data.deliveryAddress || "-"}</span></div>`;
+    } else if (data.deliveryChoice === "consultant") {
+        return `<div class="mt-1 text-[10.5px] leading-tight bg-blue-50 text-blue-700 px-2 py-1.5 rounded border border-blue-200">🤝 Serahan Perunding</div>`;
+    }
+    return "";
+}
+  
 for(const userDoc of users){
 
 const user = userDoc.data();
@@ -437,13 +451,14 @@ if(filterStatus && data.status === filterStatus){
 };
 
 pendingList.push(`
-<div class="text-left">
-    <div>${icon[data.status] || "📄"} ${data.docRef || "-"}</div>
-    <div class="text-xs text-gray-500">
-${getStatusBadge(data.status) || "DRAFT"}
-</div>
-</div>
-`);
+    <div class="text-left mb-2 pb-2 border-b border-gray-100 last:border-0 last:pb-0 last:mb-0">
+        <div class="font-medium text-gray-800">${icon[data.status] || "📄"} ${data.docRef || "-"}</div>
+        <div>
+            ${getStatusBadge(data.status)}
+        </div>
+        ${getDeliveryAlert(data)}
+    </div>
+    `);
 }
 
 // =====================
