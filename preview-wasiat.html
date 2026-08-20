@@ -522,15 +522,17 @@ window.open(
 
 const agreeVerify = document.getElementById("agreeVerify");
         const verifyBtn = document.getElementById("verifyBtn");
+        
+        // Panggil elemen butang radio dan kotak alamat
         const deliveryRadios = document.querySelectorAll('.delivery-radio');
         const newDeliveryAddress = document.getElementById("newDeliveryAddress");
 
-        // Fungsi untuk semak jika pelanggan dah isi semua yang wajib
+        // Fungsi untuk semak borang dan tunjuk/sorok kotak
         function checkFormValidity() {
             let isDeliverySelected = false;
             let deliveryValue = "";
             
-            // Periksa radio button mana yang dipilih
+            // Periksa pilihan mana yang ditekan
             for (const radio of deliveryRadios) {
                 if (radio.checked) {
                     isDeliverySelected = true;
@@ -539,47 +541,46 @@ const agreeVerify = document.getElementById("agreeVerify");
                 }
             }
 
-            // Tunjuk atau sembunyikan kotak alamat baru
+            // Tunjuk (remove hidden) atau Sembunyikan (add hidden) kotak alamat
             if (deliveryValue === "new") {
                 newDeliveryAddress.classList.remove("hidden");
             } else {
                 newDeliveryAddress.classList.add("hidden");
             }
 
-            // Pastikan jika alamat baru dipilih, kotak tidak dibiarkan kosong
+            // Semak adakah kotak alamat sudah diisi jika "new" dipilih
             const isAddressValid = deliveryValue === "new" ? newDeliveryAddress.value.trim() !== "" : true;
 
-            // Buka butang HANYA JIKA checkbox ditanda & pilihan penghantaran dibuat
+            // Buka butang sahkan jika semua syarat dipenuhi
             verifyBtn.disabled = !(agreeVerify.checked && isDeliverySelected && isAddressValid);
         }
 
-        // Pantau sebarang perubahan pada checkbox, radio button dan kotak alamat
+        // Dengar sebarang klik atau taip dari user
         agreeVerify.addEventListener("change", checkFormValidity);
         deliveryRadios.forEach(radio => radio.addEventListener("change", checkFormValidity));
         newDeliveryAddress.addEventListener("input", checkFormValidity);
 
-        // Apabila butang disahkan
+        // Apabila butang ditekan
         verifyBtn.addEventListener("click", async () => {
             if (verifyBtn.disabled) return;
             if (!confirm("Adakah anda pasti semua maklumat adalah betul?")) return;
 
             try {
-                // Dapatkan nilai pilihan penghantaran
                 let selectedDelivery = "";
                 for (const radio of deliveryRadios) {
                     if (radio.checked) selectedDelivery = radio.value;
                 }
 
+                // Ganti "hibah" ikut kesesuaian fail (jika wasiat, letak "wasiat")
                 const docRef = doc(db, "users", userId, "wasiat", "maklumat");
 
-                // Kemaskini Firestore beserta pilihan pelanggan
                 await updateDoc(docRef, {
                     status: "VERIFIED",
                     verified: true,
                     verifiedAt: new Date().toISOString(),
                     verifiedBy: user.uid,
-                    deliveryChoice: selectedDelivery, // Simpan 'existing', 'new', atau 'consultant'
-                    deliveryAddress: selectedDelivery === "new" ? newDeliveryAddress.value.trim() : "" // Simpan alamat jika ada
+                    deliveryChoice: selectedDelivery,
+                    deliveryAddress: selectedDelivery === "new" ? newDeliveryAddress.value.trim() : ""
                 });
 
                 alert("Terima kasih. Pengesahan anda telah berjaya direkodkan.");
@@ -589,7 +590,7 @@ const agreeVerify = document.getElementById("agreeVerify");
                 console.error(err);
                 alert("Gagal menyimpan pengesahan.");
             }
-        });
+        }); 
             
             try {
                 
