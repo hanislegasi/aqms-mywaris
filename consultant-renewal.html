@@ -108,12 +108,34 @@ Math.ceil(
 (1000 * 60 * 60 * 24)
 );  
 
+// Dapatkan tahun semasa
+const currentYear = new Date().getFullYear();
+
+// Fungsi pintar untuk semak lulus dan tahun
+function semakLulusTerkini(modulData) {
+    if (modulData && modulData.status === "passed") {
+        let tahunLulus = 0;
+        
+        if (modulData.updatedAt) {
+            tahunLulus = new Date(modulData.updatedAt).getFullYear();
+        } else if (modulData.timestamp) {
+            tahunLulus = new Date(modulData.timestamp).getFullYear();
+        }
+        
+        // Hanya kira sebagai lengkap JIKA tahun ujian adalah tahun semasa
+        if (tahunLulus === currentYear) {
+            return 1;
+        }
+    }
+    return 0; // Jika tiada rekod atau rekod tahun lepas
+}
+
 let completed = 0;
 
-if(data?.training?.wasiat?.status === "passed") completed++;
-if(data?.training?.hibah?.status === "passed") completed++;
-if(data?.training?.faraid?.status === "passed") completed++;
-if(data?.training?.amla?.status === "passed") completed++;
+completed += semakLulusTerkini(data?.training?.wasiat);
+completed += semakLulusTerkini(data?.training?.hibah);
+completed += semakLulusTerkini(data?.training?.faraid);
+completed += semakLulusTerkini(data?.training?.amla);
 
 const renewalStatus =
 document.getElementById(
