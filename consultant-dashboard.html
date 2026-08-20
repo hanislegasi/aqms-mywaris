@@ -495,22 +495,21 @@ onAuthStateChanged(auth, async(user)=>{
 
     // 13. BUTANG NAVIGASI
     if (isExpired) {
-        // KUNCI SEMUA BUTANG JIKA EXPIRED
+        // KUNCI BUTANG JIKA EXPIRED (trainingBtn DIBUANG DARI SENARAI INI)
         const buttonsToDisable = [
             "clientsBtn", "overridingBtn", "careerBtn", 
-            "trainingBtn", "marketingBtn", "copyReferralBtn"
+            "marketingBtn", "copyReferralBtn"
         ];
         
         buttonsToDisable.forEach(id => {
             const btn = document.getElementById(id);
             if(btn) {
-                btn.disabled = true; // Kunci fungsi klik
-                btn.classList.remove("bg-[#153638]", "hover:bg-[#1e4d50]"); // Buang warna asal
-                btn.classList.add("bg-gray-400", "cursor-not-allowed"); // Tukar kelabu
+                btn.disabled = true;
+                btn.classList.remove("bg-[#153638]", "hover:bg-[#1e4d50]");
+                btn.classList.add("bg-gray-400", "cursor-not-allowed");
             }
         });
 
-        // Untuk butang myUSB & Statement (sebab awak guna onclick di HTML, kita kena buang secara paksa)
         const usbBtnHtml = document.querySelector("button[onclick=\"window.location.href='consultant-usb.html'\"]");
         if(usbBtnHtml) {
             usbBtnHtml.removeAttribute("onclick");
@@ -527,17 +526,17 @@ onAuthStateChanged(auth, async(user)=>{
             statementBtnHtml.classList.add("bg-gray-400", "cursor-not-allowed");
         }
         
-        // Butang ini SAHAJA yang dibenarkan klik jika expired
+        // Butang SAHAJA yang dibenarkan klik jika expired (Kini termasuk CPD)
         document.getElementById("renewalBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-renewal.html"; });
+        document.getElementById("trainingBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-training.html"; });
         
     } else {
         // LOGIK KLIK MACAM BIASA JIKA BELUM EXPIRED
         document.getElementById("clientsBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-clients.html"; });
         document.getElementById("careerBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-career.html"; });
         document.getElementById("overridingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-overriding.html"; });
-        // Butang USB & Statement tak perlu declare kat sini sebab awak dah letak onclick di HTML
-        document.getElementById("trainingBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-training.html"; });
         document.getElementById("renewalBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-renewal.html"; });  
+        document.getElementById("trainingBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-training.html"; });
         document.getElementById("marketingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-marketing.html"; });
         
         document.getElementById("copyReferralBtn").addEventListener("click", async()=>{
@@ -550,12 +549,12 @@ onAuthStateChanged(auth, async(user)=>{
         });
     }
 
-    // Butang Profil & Logout sentiasa boleh diklik tak kira expired atau tidak
+    // Butang Profil & Logout sentiasa aktif
     document.getElementById("editProfileBtn")?.addEventListener("click", () => { window.location.href = "consultant-profile-edit.html"; });
     document.getElementById("profileBtn")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.remove("hidden"); });
     document.getElementById("closeProfile")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.add("hidden"); });
     document.getElementById("logoutBtn").addEventListener("click", async()=>{ await signOut(auth); window.location.href = "index.html"; });
-
+  
     document.getElementById("copyReferralBtn").addEventListener("click", async()=>{
         try{
             await navigator.clipboard.writeText(window.location.origin + window.location.pathname.replace("consultant-dashboard.html", "register.html") + "?ref=" + consultantData.consultantNo);
