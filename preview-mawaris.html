@@ -604,43 +604,77 @@ window.open(
 
 };
 
-const agreeVerify = document.getElementById("agreeVerify");
-const verifyBtn = document.getElementById("verifyBtn");
+        const agreeVerify = document.getElementById("agreeVerify");
+        const verifyBtn = document.getElementById("verifyBtn");
+        
+        // Panggil elemen butang radio dan kotak alamat
+        const deliveryRadios = document.querySelectorAll('.delivery-radio');
+        const newDeliveryAddress = document.getElementById("newDeliveryAddress");
 
-agreeVerify.addEventListener("change", () => {
-    verifyBtn.disabled = !agreeVerify.checked;
-});
+        // Fungsi untuk semak borang dan tunjuk/sorok kotak
+        function checkFormValidity() {
+            let isDeliverySelected = false;
+            let deliveryValue = "";
+            
+            // Periksa pilihan mana yang ditekan
+            for (const radio of deliveryRadios) {
+                if (radio.checked) {
+                    isDeliverySelected = true;
+                    deliveryValue = radio.value;
+                    break;
+                }
+            }
 
-verifyBtn.addEventListener("click", async () => {
+            // Tunjuk (remove hidden) atau Sembunyikan (add hidden) kotak alamat
+            if (deliveryValue === "new") {
+                newDeliveryAddress.classList.remove("hidden");
+            } else {
+                newDeliveryAddress.classList.add("hidden");
+            }
 
-    if (!agreeVerify.checked) return;
+            // Semak adakah kotak alamat sudah diisi jika "new" dipilih
+            const isAddressValid = deliveryValue === "new" ? newDeliveryAddress.value.trim() !== "" : true;
 
-    if (!confirm("Adakah anda pasti semua maklumat adalah betul?")) return;
+            // Buka butang sahkan jika semua syarat dipenuhi
+            verifyBtn.disabled = !(agreeVerify.checked && isDeliverySelected && isAddressValid);
+        }
 
-    try {
+        // Dengar sebarang klik atau taip dari user
+        agreeVerify.addEventListener("change", checkFormValidity);
+        deliveryRadios.forEach(radio => radio.addEventListener("change", checkFormValidity));
+        newDeliveryAddress.addEventListener("input", checkFormValidity);
 
-        const docRef = doc(db, "users", userId, "mawaris", "maklumat");
+        // Apabila butang ditekan
+        verifyBtn.addEventListener("click", async () => {
+            if (verifyBtn.disabled) return;
+            if (!confirm("Adakah anda pasti semua maklumat adalah betul?")) return;
 
-        await updateDoc(docRef, {
-            status: "VERIFIED",
-            verified: true,
-            verifiedAt: new Date().toISOString(),
-            verifiedBy: user.uid
-        });
+            try {
+                let selectedDelivery = "";
+                for (const radio of deliveryRadios) {
+                    if (radio.checked) selectedDelivery = radio.value;
+                }
 
-        alert("Terima kasih. Pengesahan anda telah berjaya direkodkan.");
+                // Ganti "hibah" ikut kesesuaian fail (jika wasiat, letak "wasiat")
+                const docRef = doc(db, "users", userId, "mawaris", "maklumat");
 
-        location.reload();
+                await updateDoc(docRef, {
+                    status: "VERIFIED",
+                    verified: true,
+                    verifiedAt: new Date().toISOString(),
+                    verifiedBy: user.uid,
+                    deliveryChoice: selectedDelivery,
+                    deliveryAddress: selectedDelivery === "new" ? newDeliveryAddress.value.trim() : ""
+                });
 
-    } catch (err) {
+                alert("Terima kasih. Pengesahan anda telah berjaya direkodkan.");
+                location.reload();
 
-        console.error(err);
-
-        alert("Gagal menyimpan pengesahan.");
-
-    }
-
-});
+            } catch (err) {
+                console.error(err);
+                alert("Gagal menyimpan pengesahan.");
+            }
+        }); 
             
             try {
 
