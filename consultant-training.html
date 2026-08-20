@@ -364,7 +364,7 @@ let completed = 0;
                 } else {
                     // Ada rekod lulus, TAPI ujian tahun lepas (Kuning)
                     statusBadge.innerHTML = `⚠️ PERLU RENEW`;
-                    statusBadge.className = "bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-semibold";
+                    statusBadge.className = "bg-red-100 text-white-700 px-3 py-1 rounded-full text-sm font-semibold";
                     statsText.innerHTML = `Rekod Lama: Lulus pada tahun ${tahunLulus || "lepas"}.<br>Sila ambil ujian bagi tahun ${currentYear}.`;
                     return 0; // Tidak dikira lengkap untuk tahun ini
                 }
