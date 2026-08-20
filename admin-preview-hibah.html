@@ -1591,17 +1591,15 @@ function generateTakAlihTable(list){
     `;
 
     list.forEach(item => {
-        // 1. Tarik nama dan alamat berdasarkan format Firebase anda
-        const namaHarta = item.nama || "-";
-        const alamatHarta = item.alamat ? `<br><span style="font-size:12px; color:#555;">${item.alamat}</span>` : "";
+        // Guna item.namaHarta (seperti kod asal anda)
+        const namaHarta = item.namaHarta || item.nama || "-"; 
         
-        // 2. Tarik peratusan dari penerima pertama dalam array penerimaHibahTakAlih
-        let peratus = 0;
-        if (item.peratus) {
-            // Jika data sudah di-filter dari luar
-            peratus = item.peratus;
-        } else if (item.penerimaHibahTakAlih && item.penerimaHibahTakAlih.length > 0) {
-            // Tarik data peratus dari array Firebase
+        // Panggil item.alamat
+        const alamatHarta = item.alamat ? `<br><span style="font-size:12px; color:#555;">${item.alamat}</span>` : "";
+
+        // Cari peratus (sokong bentuk array dari firebase ATAU terus item.peratus)
+        let peratus = item.peratus || 0;
+        if (!peratus && item.penerimaHibahTakAlih && item.penerimaHibahTakAlih.length > 0) {
             peratus = item.penerimaHibahTakAlih[0].peratus; 
         }
 
