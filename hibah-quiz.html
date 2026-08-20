@@ -484,7 +484,6 @@ console.log("Attempts:", oldAttempts + 1);
 await updateDoc(
 doc(db,"consultants",currentUser.uid),
 {
-
  
 "training.hibah.status":"passed",
 
@@ -498,7 +497,10 @@ score,
 oldAttempts + 1,
 
 "training.hibah.completedAt":
-new Date()
+new Date().toISOString(),
+
+"training.hibah.updatedAt":
+new Date().toISOString()
 }
 );
  
