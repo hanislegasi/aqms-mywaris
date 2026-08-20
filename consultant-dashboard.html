@@ -175,18 +175,31 @@ onAuthStateChanged(auth, async(user)=>{
     const priceSepencarian = Number(comp.sepencarianPrice || 800);
     const priceMawaris = Number(comp.mawarisPrice || 3000);
 
-    // 2. SEMAKAN BANNER RENEWAL
+   // 2. SEMAKAN BANNER RENEWAL & EXPIRY
     const renewalDate = data.renewalDate?.toDate ? data.renewalDate.toDate() : new Date(data.renewalDate);
     const today = new Date();
     const diffDays = Math.ceil((renewalDate - today) / (1000 * 60 * 60 * 24));
+    
+    // Pembolehubah untuk kesan jika dah expired (hari kurang dari 0)
+    const isExpired = diffDays < 0; 
 
-    if(diffDays <= 30){
+    if (isExpired) {
+        // Banner Akaun Expired
+        document.getElementById("renewalBanner").classList.remove("hidden");
+        document.getElementById("renewalBanner").innerHTML = `
+        <div class="bg-red-600 text-white border border-red-800 rounded-2xl p-5 shadow-lg">
+            <h2 class="font-bold text-xl">Akaun Telah Tamat Tempoh!</h2>
+            <p class="mt-2 text-red-100">Keahlian anda telah tamat tempoh pada <b>${renewalDate.toLocaleDateString('ms-MY')}</b>. Sila perbaharui (renew) keahlian segera untuk mengakses semula sistem.</p>
+            <a href="consultant-renewal.html" class="inline-block mt-4 bg-white text-red-700 font-bold px-5 py-3 rounded-xl hover:bg-gray-100 transition shadow">Renew Sekarang</a>
+        </div>`;
+    } else if(diffDays <= 30){
+        // Banner Amaran Nak Dekat Expired
         document.getElementById("renewalBanner").classList.remove("hidden");
         document.getElementById("renewalBanner").innerHTML = `
         <div class="bg-red-50 border border-red-200 rounded-2xl p-5">
             <h2 class="font-bold text-red-700 text-lg">Renewal Reminder</h2>
-            <p class="mt-2">Membership anda akan tamat dalam <b>${diffDays} hari</b>.</p>
-            <a href="consultant-renewal.html" class="inline-block mt-4 bg-red-500 text-white px-5 py-3 rounded-xl">Renew Now</a>
+            <p class="mt-2 text-gray-700">Membership anda akan tamat dalam <b>${diffDays} hari</b>.</p>
+            <a href="consultant-renewal.html" class="inline-block mt-4 bg-red-500 text-white px-5 py-3 rounded-xl hover:bg-red-600">Renew Now</a>
         </div>`;
     }
 
@@ -481,14 +494,63 @@ onAuthStateChanged(auth, async(user)=>{
     }); 
 
     // 13. BUTANG NAVIGASI
-    document.getElementById("clientsBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-clients.html"; });
-    document.getElementById("careerBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-career.html"; });
-    document.getElementById("overridingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-overriding.html"; });
-    document.getElementById("usbBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-usb.html"; });
-    document.getElementById("trainingBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-training.html"; });
-    document.getElementById("renewalBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-renewal.html"; });  
-    document.getElementById("marketingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-marketing.html"; });
+    if (isExpired) {
+        // KUNCI SEMUA BUTANG JIKA EXPIRED
+        const buttonsToDisable = [
+            "clientsBtn", "overridingBtn", "careerBtn", 
+            "trainingBtn", "marketingBtn", "copyReferralBtn"
+        ];
+        
+        buttonsToDisable.forEach(id => {
+            const btn = document.getElementById(id);
+            if(btn) {
+                btn.disabled = true; // Kunci fungsi klik
+                btn.classList.remove("bg-[#153638]", "hover:bg-[#1e4d50]"); // Buang warna asal
+                btn.classList.add("bg-gray-400", "cursor-not-allowed"); // Tukar kelabu
+            }
+        });
 
+        // Untuk butang myUSB & Statement (sebab awak guna onclick di HTML, kita kena buang secara paksa)
+        const usbBtnHtml = document.querySelector("button[onclick=\"window.location.href='consultant-usb.html'\"]");
+        if(usbBtnHtml) {
+            usbBtnHtml.removeAttribute("onclick");
+            usbBtnHtml.disabled = true;
+            usbBtnHtml.classList.remove("bg-[#153638]", "hover:bg-[#1e4d50]");
+            usbBtnHtml.classList.add("bg-gray-400", "cursor-not-allowed");
+        }
+
+        const statementBtnHtml = document.querySelector("button[onclick=\"window.location.href='my-statement.html'\"]");
+        if(statementBtnHtml) {
+            statementBtnHtml.removeAttribute("onclick");
+            statementBtnHtml.disabled = true;
+            statementBtnHtml.classList.remove("bg-[#153638]", "hover:bg-[#1e4d50]");
+            statementBtnHtml.classList.add("bg-gray-400", "cursor-not-allowed");
+        }
+        
+        // Butang ini SAHAJA yang dibenarkan klik jika expired
+        document.getElementById("renewalBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-renewal.html"; });
+        
+    } else {
+        // LOGIK KLIK MACAM BIASA JIKA BELUM EXPIRED
+        document.getElementById("clientsBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-clients.html"; });
+        document.getElementById("careerBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-career.html"; });
+        document.getElementById("overridingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-overriding.html"; });
+        // Butang USB & Statement tak perlu declare kat sini sebab awak dah letak onclick di HTML
+        document.getElementById("trainingBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-training.html"; });
+        document.getElementById("renewalBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-renewal.html"; });  
+        document.getElementById("marketingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-marketing.html"; });
+        
+        document.getElementById("copyReferralBtn").addEventListener("click", async()=>{
+            try{
+                await navigator.clipboard.writeText(window.location.origin + window.location.pathname.replace("consultant-dashboard.html", "register.html") + "?ref=" + consultantData.consultantNo);
+                const btn = document.getElementById("copyReferralBtn");
+                btn.innerHTML = "✓ Copied";
+                setTimeout(()=>{ btn.innerHTML = "Copy Referral Link"; },2000);
+            }catch(err){ alert("Gagal copy link"); }
+        });
+    }
+
+    // Butang Profil & Logout sentiasa boleh diklik tak kira expired atau tidak
     document.getElementById("editProfileBtn")?.addEventListener("click", () => { window.location.href = "consultant-profile-edit.html"; });
     document.getElementById("profileBtn")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.remove("hidden"); });
     document.getElementById("closeProfile")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.add("hidden"); });
