@@ -90,129 +90,128 @@
     </div>
 
     <!-- Scrollable Flex Container -->
-    <div class="flex gap-4 overflow-x-auto pb-4 snap-x" style="scrollbar-width: thin; scrollbar-color: #e5c18e #123133;">
+    <div class="flex gap-3 overflow-x-auto pb-4 snap-x" style="scrollbar-width: thin; scrollbar-color: #e5c18e #123133;">
         
         <!-- 1. Approved -->
-        <div class="min-w-[210px] bg-white rounded-xl p-4 flex flex-col snap-start shrink-0">
+        <div onclick="window.location.href='consultant-clients.html?status=APPROVED'" class="min-w-[190px] xl:min-w-0 xl:flex-1 bg-white rounded-xl p-3 flex flex-col snap-start shrink-0 cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-[#e5c18e] transition-all duration-200">
             <div class="flex justify-between items-center mb-2">
-                <span class="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded">1. Approved</span>
-                <svg class="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded">1. Approved</span>
+                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
             </div>
-            <h3 class="font-bold text-gray-800 mb-4">Diluluskan</h3>
-            <div class="flex justify-between text-sm text-gray-600 mb-1">
+            <h3 class="font-bold text-gray-800 text-sm mb-3">Diluluskan</h3>
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
                 <span>Selesai:</span>
                 <span id="tl_approved_done" class="font-bold text-gray-900">0</span>
             </div>
-            <div class="bg-orange-50 border border-orange-100 rounded p-2 flex justify-between text-sm mt-auto">
+            <div class="bg-orange-50 border border-orange-100 rounded p-2 flex justify-between text-xs mt-auto">
                 <span class="text-gray-700">Belum Cetak:</span>
                 <span id="tl_approved_pending" class="font-bold text-gray-900">0</span>
             </div>
         </div>
 
         <!-- 2. Printed -->
-        <div class="min-w-[210px] bg-white rounded-xl p-4 flex flex-col snap-start shrink-0">
+        <div onclick="window.location.href='consultant-clients.html?status=PRINTED'" class="min-w-[190px] xl:min-w-0 xl:flex-1 bg-white rounded-xl p-3 flex flex-col snap-start shrink-0 cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-[#e5c18e] transition-all duration-200">
             <div class="flex justify-between items-center mb-2">
-                <span class="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded">2. Printed</span>
-                <svg class="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded">2. Printed</span>
+                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
             </div>
-            <h3 class="font-bold text-gray-800 mb-4">Dicetak</h3>
-            <div class="flex justify-between text-sm text-gray-600 mb-1">
+            <h3 class="font-bold text-gray-800 text-sm mb-3">Dicetak</h3>
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
                 <span>Selesai:</span>
                 <span id="tl_printed_done" class="font-bold text-gray-900">0</span>
             </div>
-            <div class="bg-orange-50 border border-orange-100 rounded p-2 flex justify-between text-sm mt-auto">
+            <div class="bg-orange-50 border border-orange-100 rounded p-2 flex justify-between text-xs mt-auto">
                 <span class="text-gray-700">Belum Hantar:</span>
                 <span id="tl_printed_pending" class="font-bold text-gray-900">0</span>
             </div>
         </div>
 
         <!-- 3. Sent -->
-        <div class="min-w-[210px] bg-white rounded-xl p-4 flex flex-col snap-start shrink-0">
+        <div onclick="window.location.href='consultant-clients.html?status=SENT'" class="min-w-[190px] xl:min-w-0 xl:flex-1 bg-white rounded-xl p-3 flex flex-col snap-start shrink-0 cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-[#e5c18e] transition-all duration-200">
             <div class="flex justify-between items-center mb-2">
-                <span class="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded">3. Sent</span>
-                <svg class="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded">3. Sent</span>
+                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
             </div>
-            <h3 class="font-bold text-gray-800 mb-4">Dihantar Kurier</h3>
-            <div class="flex justify-between text-sm text-gray-600 mb-1">
+            <h3 class="font-bold text-gray-800 text-sm mb-3">Dihantar Kurier</h3>
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
                 <span>Selesai:</span>
                 <span id="tl_sent_done" class="font-bold text-gray-900">0</span>
             </div>
-            <div class="bg-orange-50 border border-orange-100 rounded p-2 flex justify-between text-sm mt-auto">
-                <span class="text-gray-700">Menunggu Akad:</span>
+            <div class="bg-orange-50 border border-orange-100 rounded p-2 flex justify-between text-xs mt-auto">
+                <span class="text-gray-700">Tunggu Akad:</span>
                 <span id="tl_sent_pending" class="font-bold text-gray-900">0</span>
             </div>
         </div>
 
         <!-- 4. Akad -->
-        <div class="min-w-[210px] bg-white rounded-xl p-4 flex flex-col snap-start shrink-0">
+        <div onclick="window.location.href='consultant-clients.html?status=AKAD'" class="min-w-[190px] xl:min-w-0 xl:flex-1 bg-white rounded-xl p-3 flex flex-col snap-start shrink-0 cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-[#e5c18e] transition-all duration-200">
             <div class="flex justify-between items-center mb-2">
-                <span class="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded">4. Akad</span>
-                <svg class="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded">4. Akad</span>
+                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
             </div>
-            <h3 class="font-bold text-gray-800 mb-4">Selesai Akad</h3>
-            <div class="flex justify-between text-sm text-gray-600 mb-1">
+            <h3 class="font-bold text-gray-800 text-sm mb-3">Selesai Akad</h3>
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
                 <span>Selesai:</span>
                 <span id="tl_akad_done" class="font-bold text-gray-900">0</span>
             </div>
-            <div class="bg-orange-50 border border-orange-100 rounded p-2 flex justify-between text-sm mt-auto">
-                <span class="text-gray-700">Belum Stamping:</span>
+            <div class="bg-orange-50 border border-orange-100 rounded p-2 flex justify-between text-xs mt-auto">
+                <span class="text-gray-700">Tunggu Setem:</span>
                 <span id="tl_akad_pending" class="font-bold text-gray-900">0</span>
             </div>
         </div>
 
         <!-- 5. Stamping -->
-        <div class="min-w-[210px] bg-white rounded-xl p-4 flex flex-col snap-start shrink-0">
+        <div onclick="window.location.href='consultant-clients.html?status=STAMPING'" class="min-w-[190px] xl:min-w-0 xl:flex-1 bg-white rounded-xl p-3 flex flex-col snap-start shrink-0 cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-[#e5c18e] transition-all duration-200">
             <div class="flex justify-between items-center mb-2">
-                <span class="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded">5. Stamping</span>
-                <svg class="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded">5. Stamping</span>
+                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
             </div>
-            <h3 class="font-bold text-gray-800 mb-4">Duti Setem LHDN</h3>
-            <div class="flex justify-between text-sm text-gray-600 mb-1">
+            <h3 class="font-bold text-gray-800 text-sm mb-3">Duti Setem</h3>
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
                 <span>Selesai:</span>
                 <span id="tl_stamping_done" class="font-bold text-gray-900">0</span>
             </div>
-            <div class="bg-orange-50 border border-orange-100 rounded p-2 flex justify-between text-sm mt-auto">
+            <div class="bg-orange-50 border border-orange-100 rounded p-2 flex justify-between text-xs mt-auto">
                 <span class="text-gray-700">Belum Diserah:</span>
                 <span id="tl_stamping_pending" class="font-bold text-gray-900">0</span>
             </div>
         </div>
 
         <!-- 6. Serah AQM -->
-        <div class="min-w-[210px] bg-white rounded-xl p-4 flex flex-col snap-start shrink-0">
+        <div onclick="window.location.href='consultant-clients.html?status=HANDOVER'" class="min-w-[190px] xl:min-w-0 xl:flex-1 bg-white rounded-xl p-3 flex flex-col snap-start shrink-0 cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-[#e5c18e] transition-all duration-200">
             <div class="flex justify-between items-center mb-2">
-                <span class="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded">6. Serah AQM</span>
-                <svg class="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded">6. Serah AQM</span>
+                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
             </div>
-            <h3 class="font-bold text-gray-800 mb-4">Diserahkan AQM</h3>
-            <div class="flex justify-between text-sm text-gray-600 mb-1">
+            <h3 class="font-bold text-gray-800 text-sm mb-3">Serah ke AQM</h3>
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
                 <span>Selesai:</span>
                 <span id="tl_handover_done" class="font-bold text-gray-900">0</span>
             </div>
-            <div class="bg-orange-50 border border-orange-100 rounded p-2 flex justify-between text-sm mt-auto">
+            <div class="bg-orange-50 border border-orange-100 rounded p-2 flex justify-between text-xs mt-auto">
                 <span class="text-gray-700">Belum Terima:</span>
                 <span id="tl_handover_pending" class="font-bold text-gray-900">0</span>
             </div>
         </div>
 
         <!-- 7. Terima AQM -->
-        <div class="min-w-[210px] bg-white rounded-xl p-4 flex flex-col snap-start shrink-0">
+        <div onclick="window.location.href='consultant-clients.html?status=COMPLETED'" class="min-w-[190px] xl:min-w-0 xl:flex-1 bg-white rounded-xl p-3 flex flex-col snap-start shrink-0 cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-[#e5c18e] transition-all duration-200">
             <div class="flex justify-between items-center mb-2">
-                <span class="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded">7. Terima AQM</span>
-                <svg class="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded">7. Terima AQM</span>
+                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
             </div>
-            <h3 class="font-bold text-gray-800 mb-4">AQM Terima (Tamat)</h3>
-            <div class="flex justify-between text-sm text-gray-600 mb-1">
-                <span>Sepenuhnya Selesai:</span>
+            <h3 class="font-bold text-gray-800 text-sm mb-3">AQM Terima</h3>
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
+                <span>Sepenuhnya:</span>
                 <span id="tl_received_done" class="font-bold text-gray-900">0</span>
             </div>
-            <div class="bg-gray-100 border border-gray-200 rounded p-2 flex justify-between text-sm mt-auto">
+            <div class="bg-gray-100 border border-gray-200 rounded p-2 flex justify-between text-xs mt-auto">
                 <span class="text-gray-400">Baki:</span>
                 <span class="font-bold text-gray-400">-</span>
             </div>
         </div>
 
     </div>
-</div>
   
 <!-- KPI (5 Kotak Sebaris) -->
 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-5">
