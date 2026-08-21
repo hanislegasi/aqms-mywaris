@@ -1606,14 +1606,13 @@ function generateTakAlihTable(list){
         html += `
         <tr>
             <td style="border:1px solid #000;padding:8px;">
-                <b>${namaHarta}</b>
-                ${alamatHarta} 
+                ${namaHarta} 
             </td>
             <td style="border:1px solid #000;padding:8px;">
                 ${item.rujukan || "-"}
             </td>
             <td style="border:1px solid #000;padding:8px;">
-                ${item.alamat || "-"}
+                ${item.alamatHarta || "-"}
             </td>
             <td style="border:1px solid #000;padding:8px;text-align:center;">
                 ${convertToFraction(Number(peratus))}
