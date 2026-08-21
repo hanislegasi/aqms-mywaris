@@ -992,7 +992,7 @@ lampiranHartaTakAlih += `
 
 // 1. Letak fungsi convertToFraction di bahagian paling atas
 function convertToFraction(percentage) {
-    if (!percentage || percentage === 0) return "0 BAHAGIAN";
+    if (!percentage || percentage === 0) return "0 Bahagian";
     
     // Peratusan berasaskan 100
     let numerator = percentage;
@@ -1005,7 +1005,7 @@ function convertToFraction(percentage) {
     const top = numerator / divisor;
     const bottom = denominator / divisor;
     
-    return `${top}/${bottom} BAHAGIAN`;
+    return `${top}/${bottom} Bahagian`;
 }
 
 let lampiranBerpenama = "";
@@ -1091,110 +1091,89 @@ if (!data.hartaBerpenama || !data.hartaBerpenama.length) {
     });
 }
                         
-let lampiranTakaful = `
-<table
-style="
-width:100%;
-border-collapse:collapse;
-font-size:14px;
-">
+let lampiranTakaful = "";
 
-<tr>
-<th style="border:1px solid #000;padding:8px;">Syarikat</th>
-<th style="border:1px solid #000;padding:8px;">No Polisi</th>
-<th style="border:1px solid #000;padding:8px;">Penerima</th>
-<th style="border:1px solid #000;padding:8px;">IC</th>
-<th style="border:1px solid #000;padding:8px;">Hubungan</th>
-<th style="border:1px solid #000;padding:8px;">Bahagian (%)</th>
-</tr>
-`;
-
-data.takaful?.forEach(item=>{
-
-    // PENERIMA WARIS
-    if(item.jenisPenerima==="waris"){
-
-        (item.penerimaWaris || []).forEach((w,index)=>{
-
-            lampiranTakaful += `
-
-<tr>
-
-<td style="border:1px solid #000;padding:8px;">
-${index===0 ? (item.syarikat || "-") : ""}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${index===0 ? (item.polisi || "-") : ""}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${w.nama || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${w.ic || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${w.hubungan || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${w.bahagian || "-"}%
-</td>
-
-</tr>
-
-`;
-
-        });
-
-    }
-
-    // PENERIMA ORANG LAIN
-    else{
-
+if (!data.takaful || !data.takaful.length) {
+    lampiranTakaful = "<p>Tiada maklumat Takaful.</p>";
+} else {
+    data.takaful.forEach((item, index) => {
+        
+        // Jarakkan sedikit antara jadual jika ada lebih dari 1 polisi takaful
         lampiranTakaful += `
+        <div style="margin-bottom: 20px;">
+        <table style="width:100%; border-collapse:collapse; font-size:14px;">
+            <tr>
+                <th style="border:1px solid #000;padding:8px;">Syarikat</th>
+                <th style="border:1px solid #000;padding:8px;">No Polisi</th>
+                <th style="border:1px solid #000;padding:8px;">Penerima</th>
+                <th style="border:1px solid #000;padding:8px;">IC</th>
+                <th style="border:1px solid #000;padding:8px;">Hubungan</th>
+                <th style="border:1px solid #000;padding:8px;">Bahagian</th>
+            </tr>
+        `;
 
-<tr>
+        // -- PENERIMA WARIS --
+        if (item.jenisPenerima === "waris") {
+            (item.penerimaWaris || []).forEach((w, idx) => {
+                lampiranTakaful += `
+                <tr>
+                    <td style="border:1px solid #000;padding:8px;text-align:center;">
+                        ${idx === 0 ? (item.syarikat || "-") : ""}
+                    </td>
+                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                        ${idx === 0 ? (item.polisi || "-") : ""}
+                    </td>
+                    <td style="border:1px solid #000;padding:8px;">
+                        ${w.nama || "-"}
+                    </td>
+                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                        ${w.ic || "-"}
+                    </td>
+                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                        ${w.hubungan || "-"}
+                    </td>
+                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                        ${convertToFraction(w.bahagian)}
+                    </td>
+                </tr>
+                `;
+            });
+        } 
+        
+        // -- PENERIMA ORANG LAIN --
+        else {
+            lampiranTakaful += `
+            <tr>
+                <td style="border:1px solid #000;padding:8px;text-align:center;">
+                    ${item.syarikat || "-"}
+                </td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                    ${item.polisi || "-"}
+                </td>
+                <td style="border:1px solid #000;padding:8px;">
+                    ${item.penerimaLain?.nama || "-"}
+                </td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                    ${item.penerimaLain?.ic || "-"}
+                </td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                    ${item.penerimaLain?.hubungan || "-"}
+                </td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                    ${convertToFraction(item.penerimaLain?.bahagian)}
+                </td>
+            </tr>
+            `;
+        }
 
-<td style="border:1px solid #000;padding:8px;">
-${item.syarikat || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${item.polisi || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.penerimaLain?.nama || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${item.penerimaLain?.ic || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${item.penerimaLain?.hubungan || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${item.penerimaLain?.bahagian || "-"}%
-</td>
-
-</tr>
-
-`;
-
-    }
-
-});
-
-lampiranTakaful += `
-</table>
-`;
-
+        // Tutup jadual untuk polisi ini dan div pemisah
+        lampiranTakaful += `
+        </table>
+        </div>
+        `;
+    });
+}
+                        
 let lampiranPemiutang = "";
 
 if (!data.pemiutang || !data.pemiutang.length) {
