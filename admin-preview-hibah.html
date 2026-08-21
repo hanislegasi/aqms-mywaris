@@ -728,10 +728,7 @@ approvedDate
 let lampiranWaris = `
 <table
 style="
-width:100%;
-border-collapse:collapse;
-font-size:14px;
-">
+width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid;">
 
 <tr>
 
@@ -795,11 +792,7 @@ lampiranWaris += `
 
 let lampiranPemegangAmanah = `
 <table
-style="
-width:100%;
-border-collapse:collapse;
-font-size:14px;
-">
+style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid;">
 
 <tr>
 <th style="border:1px solid #000;padding:8px;width:30%;">
@@ -856,11 +849,7 @@ ${data.pemegangAmanah?.telefon || "-"}
 
 let lampiranHartaAlih = `
 <table
-style="
-width:100%;
-border-collapse:collapse;
-font-size:14px;
-">
+style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid;">
 
 <tr>
 <th style="border:1px solid #000;padding:8px;">Nama Harta</th>
@@ -929,11 +918,7 @@ lampiranHartaAlih += `
 
 let lampiranHartaTakAlih = `
 <table
-style="
-width:100%;
-border-collapse:collapse;
-font-size:14px;
-">
+style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid;">
 
 <tr>
 <th style="border:1px solid #000;padding:8px;">Nama Harta</th>
@@ -1017,7 +1002,7 @@ if (!data.hartaBerpenama || !data.hartaBerpenama.length) {
         
         // Jarakkan sedikit antara jadual jika ada lebih dari 1 harta
         lampiranBerpenama += `
-        <div style="margin-bottom: 20px;">
+        <div style="margin-bottom: 20px; page-break-inside: avoid;">
         <table style="width:100%; border-collapse:collapse; font-size:14px;">
             <tr>
                 <th style="border:1px solid #000;padding:8px;">Jenis</th>
@@ -1100,7 +1085,7 @@ if (!data.takaful || !data.takaful.length) {
         
         // Jarakkan sedikit antara jadual jika ada lebih dari 1 polisi takaful
         lampiranTakaful += `
-        <div style="margin-bottom: 20px;">
+        <div style="margin-bottom: 20px; page-break-inside: avoid;">
         <table style="width:100%; border-collapse:collapse; font-size:14px;">
             <tr>
                 <th style="border:1px solid #000;padding:8px;">Syarikat</th>
@@ -1181,7 +1166,7 @@ if (!data.pemiutang || !data.pemiutang.length) {
 } else {
     data.pemiutang.forEach((item, index) => {
         lampiranPemiutang += `
-        <table style="width:100%; border-collapse:collapse; font-size:14px; margin-bottom:15px;">
+        <table style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid; margin-bottom:15px;">
             <tr>
                 <th style="border:1px solid #000; padding:8px; width:35%; text-align:center;">
                     Perkara ${data.pemiutang.length > 1 ? `(${index + 1})` : ""}
@@ -1218,7 +1203,7 @@ if (!data.penghutang || !data.penghutang.length) {
 } else {
     data.penghutang.forEach((item, index) => {
         lampiranPenghutang += `
-        <table style="width:100%; border-collapse:collapse; font-size:14px; margin-bottom:15px;">
+        <table style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid; margin-bottom:15px;">
             <tr>
                 <th style="border:1px solid #000; padding:8px; width:35%; text-align:center;">
                     Perkara ${data.pemiutang.length > 1 ? `(${index + 1})` : ""}
