@@ -990,14 +990,22 @@ lampiranHartaTakAlih += `
 </table>
 `;
 
-// 1. Pastikan fungsi convertToFraction ini ada di atas kod anda (jika belum ada)
+// 1. Letak fungsi convertToFraction di bahagian paling atas
 function convertToFraction(percentage) {
-    if (!percentage || percentage === 0 || percentage === "-") return "0 BAHAGIAN";
-    let numerator = Number(percentage);
+    if (!percentage || percentage === 0) return "0 BAHAGIAN";
+    
+    // Peratusan berasaskan 100
+    let numerator = percentage;
     let denominator = 100;
+    
+    // Cari faktor sepunya terbesar (GCD) untuk permudahkan pecahan
     const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
     const divisor = gcd(numerator, denominator);
-    return `${numerator / divisor}/${denominator / divisor} BAHAGIAN`;
+    
+    const top = numerator / divisor;
+    const bottom = denominator / divisor;
+    
+    return `${top}/${bottom} BAHAGIAN`;
 }
 
 // 2. Kod untuk jana Lampiran Harta Berpenama
@@ -1478,23 +1486,7 @@ document.getElementById("sectionWasiat").innerHTML = finalContent;
 
 document.getElementById("sectionLampiran").innerHTML = lampiranHTML;
                         
-// 1. Letak fungsi convertToFraction di bahagian paling atas
-function convertToFraction(percentage) {
-    if (!percentage || percentage === 0) return "0 BAHAGIAN";
-    
-    // Peratusan berasaskan 100
-    let numerator = percentage;
-    let denominator = 100;
-    
-    // Cari faktor sepunya terbesar (GCD) untuk permudahkan pecahan
-    const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
-    const divisor = gcd(numerator, denominator);
-    
-    const top = numerator / divisor;
-    const bottom = denominator / divisor;
-    
-    return `${top}/${bottom} BAHAGIAN`;
-}
+
 
 // 2. Fungsi Harta Alih
 function generateAlihTable(list){
