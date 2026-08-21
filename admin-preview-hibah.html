@@ -1549,17 +1549,10 @@ function generateAlihTable(list){
     list.forEach(item => {
         html += `
         <tr>
-            <td style="border:1px solid #000;padding:8px;">
-                ${item.namaHarta}
-            </td>
-            <td style="border:1px solid #000;padding:8px;">
-                ${item.rujukan}
-            </td>
-            <td style="border:1px solid #000;padding:8px;">
-                ${item.nilai}
-            </td>
+           <td style="border:1px solid #000;padding:8px;">${item.namaHarta}</td>
+            <td style="border:1px solid #000;padding:8px;">${item.rujukan}</td>
+            <td style="border:1px solid #000;padding:8px;">${item.nilai}</td>
             <td style="border:1px solid #000;padding:8px;text-align:center;">
-                <!-- Panggil fungsi convertToFraction di sini -->
                 ${convertToFraction(item.peratus)}
             </td>
         </tr>
@@ -1594,17 +1587,11 @@ function generateTakAlihTable(list){
     list.forEach(item => {
         html += `
         <tr>
-            <td style="border:1px solid #000;padding:8px;">
-                ${namaHarta} 
-            </td>
-            <td style="border:1px solid #000;padding:8px;">
-                ${item.rujukan || "-"}
-            </td>
-            <td style="border:1px solid #000;padding:8px;">
-                ${alamatHarta}
-            </td>
+            <td style="border:1px solid #000;padding:8px;">${item.namaHarta}</td>
+            <td style="border:1px solid #000;padding:8px;">${item.rujukan}</td>
+            <td style="border:1px solid #000;padding:8px;">${item.alamat}</td>
             <td style="border:1px solid #000;padding:8px;text-align:center;">
-                ${convertToFraction(Number(peratus))}
+                ${convertToFraction(item.peratus)}
             </td>
         </tr>
         `;
