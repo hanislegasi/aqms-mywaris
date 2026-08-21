@@ -990,109 +990,99 @@ lampiranHartaTakAlih += `
 </table>
 `;
 
-let lampiranBerpenama = `
-<table
-style="
-width:100%;
-border-collapse:collapse;
-font-size:14px;
-">
+// 1. Pastikan fungsi convertToFraction ini ada di atas kod anda (jika belum ada)
+function convertToFraction(percentage) {
+    if (!percentage || percentage === 0 || percentage === "-") return "0 BAHAGIAN";
+    let numerator = Number(percentage);
+    let denominator = 100;
+    const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+    const divisor = gcd(numerator, denominator);
+    return `${numerator / divisor}/${denominator / divisor} BAHAGIAN`;
+}
 
-<tr>
-<th style="border:1px solid #000;padding:8px;">Jenis</th>
-<th style="border:1px solid #000;padding:8px;">No Akaun</th>
-<th style="border:1px solid #000;padding:8px;">Penama</th>
-<th style="border:1px solid #000;padding:8px;">IC Penama</th>
-<th style="border:1px solid #000;padding:8px;">Hubungan</th>
-<th style="border:1px solid #000;padding:8px;">Bahagian (%)</th>
-</tr>
-`;                        
+// 2. Kod untuk jana Lampiran Harta Berpenama
+let lampiranBerpenama = "";
 
-data.hartaBerpenama?.forEach(item=>{
-
-    // PENAMA WARIS
-    if(item.jenisPenama==="waris"){
-
-        (item.penamaWaris || []).forEach((w,index)=>{
-
-            lampiranBerpenama += `
-
-<tr>
-
-<td style="border:1px solid #000;padding:8px;">
-${index===0 ? (item.jenis || "-") : ""}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center;">
-${index===0 ? (item.akaun || "-") : ""}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${w.nama || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${w.ic || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${w.hubungan || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${w.bahagian || "-"}%
-</td>
-
-</tr>
-
-`;
-
-        });
-
-    }
-
-    // PENAMA ORANG LAIN
-    else{
-
+if (!data.hartaBerpenama || !data.hartaBerpenama.length) {
+    lampiranBerpenama = "<p>Tiada maklumat Harta Berpenama.</p>";
+} else {
+    data.hartaBerpenama.forEach((item, index) => {
+        
+        // Buka jadual baharu untuk setiap Harta Berpenama
         lampiranBerpenama += `
+        <table style="width:100%; border-collapse:collapse; font-size:14px; margin-bottom:20px;">
+            <tr>
+                <th style="border:1px solid #000; padding:8px; width:30%; text-align:left;">
+                    Perkara ${data.hartaBerpenama.length > 1 ? `(${index + 1})` : ""}
+                </th>
+                <th style="border:1px solid #000; padding:8px; width:70%; text-align:left;">
+                    Maklumat
+                </th>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">Jenis</td>
+                <td style="border:1px solid #000; padding:8px;">${item.jenis || "-"}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">No. Akaun</td>
+                <td style="border:1px solid #000; padding:8px;">${item.akaun || "-"}</td>
+            </tr>
+        `;
 
-<tr>
+        // -- JIKA PENAMA ADALAH WARIS (Boleh jadi ramai) --
+        if (item.jenisPenama === "waris" && item.penamaWaris && item.penamaWaris.length > 0) {
+            item.penamaWaris.forEach((w, idx) => {
+                // Label tambahan jika waris lebih dari 1 (Contoh: Nama Penama 1, Nama Penama 2)
+                let labelSuffix = item.penamaWaris.length > 1 ? ` ${idx + 1}` : "";
+                
+                lampiranBerpenama += `
+                <tr>
+                    <td style="border:1px solid #000; padding:8px; background-color:#f9f9f9;">Nama Penama${labelSuffix}</td>
+                    <td style="border:1px solid #000; padding:8px; background-color:#f9f9f9;">${w.nama || "-"}</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid #000; padding:8px;">No. Kad Pengenalan${labelSuffix}</td>
+                    <td style="border:1px solid #000; padding:8px;">${w.ic || "-"}</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid #000; padding:8px;">Hubungan${labelSuffix}</td>
+                    <td style="border:1px solid #000; padding:8px;">${w.hubungan || "-"}</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid #000; padding:8px;">Bahagian${labelSuffix}</td>
+                    <td style="border:1px solid #000; padding:8px; font-weight:bold;">${convertToFraction(w.bahagian)}</td>
+                </tr>
+                `;
+            });
+        } 
+        
+        // -- JIKA PENAMA ADALAH ORANG LAIN (Biasanya hanya seorang) --
+        else if (item.jenisPenama !== "waris" && item.penamaLain) {
+            lampiranBerpenama += `
+            <tr>
+                <td style="border:1px solid #000; padding:8px; background-color:#f9f9f9;">Nama Penama</td>
+                <td style="border:1px solid #000; padding:8px; background-color:#f9f9f9;">${item.penamaLain.nama || "-"}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">No. Kad Pengenalan</td>
+                <td style="border:1px solid #000; padding:8px;">${item.penamaLain.ic || "-"}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">Hubungan</td>
+                <td style="border:1px solid #000; padding:8px;">${item.penamaLain.hubungan || "-"}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">Bahagian</td>
+                <td style="border:1px solid #000; padding:8px; font-weight:bold;">${convertToFraction(item.penamaLain.bahagian)}</td>
+            </tr>
+            `;
+        }
 
-<td style="border:1px solid #000;padding:8px;">
-${item.jenis || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center;">
-${item.akaun || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.penamaLain?.nama || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${item.penamaLain?.ic || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${item.penamaLain?.hubungan || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${item.penamaLain?.bahagian || "-"}%
-</td>
-
-</tr>
-
-`;
-
-    }
-
-});
-lampiranBerpenama += `
-</table>
-`;
-
+        // Tutup jadual untuk harta ini
+        lampiranBerpenama += `</table>`;
+    });
+}
+                        
 let lampiranTakaful = `
 <table
 style="
