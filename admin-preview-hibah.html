@@ -764,15 +764,15 @@ lampiranWaris += `
 ${w.nama || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${w.ic || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${w.hubungan || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${
 w.status==="bawah18"
 ? "Bawah 18 Tahun"
@@ -802,11 +802,11 @@ font-size:14px;
 ">
 
 <tr>
-<th style="border:1px solid #000;padding:8px;">
+<th style="border:1px solid #000;padding:8px;width:30%;">
 Perkara
 </th>
 
-<th style="border:1px solid #000;padding:8px;">
+<th style="border:1px solid #000;padding:8px;width:70%;">
 Maklumat
 </th>
 </tr>
@@ -903,15 +903,15 @@ lampiranHartaAlih += `
 ${item.nama || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${item.rujukan || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:right;">
 ${item.nilai || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${pemilikanText}
 </td>
 
@@ -940,7 +940,7 @@ font-size:14px;
 <th style="border:1px solid #000;padding:8px;">No Geran</th>
 <th style="border:1px solid #000;padding:8px;">Nilai</th>
 <th style="border:1px solid #000;padding:8px;">Pemilikan</th>
-<th style="border:1px solid #000;padding:8px;">Kategori</th>
+
 </tr>
 `;
 
@@ -967,21 +967,19 @@ lampiranHartaTakAlih += `
 ${item.nama || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${item.rujukan || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:right;">
 ${item.nilai || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${pemilikanText}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
-${kategoriText}
-</td>
+
 
 </tr>
 `;
@@ -1025,7 +1023,7 @@ data.hartaBerpenama?.forEach(item=>{
 ${index===0 ? (item.jenis || "-") : ""}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${index===0 ? (item.akaun || "-") : ""}
 </td>
 
@@ -1033,15 +1031,15 @@ ${index===0 ? (item.akaun || "-") : ""}
 ${w.nama || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${w.ic || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${w.hubungan || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${w.bahagian || "-"}%
 </td>
 
@@ -1064,7 +1062,7 @@ ${w.bahagian || "-"}%
 ${item.jenis || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${item.akaun || "-"}
 </td>
 
@@ -1072,15 +1070,15 @@ ${item.akaun || "-"}
 ${item.penamaLain?.nama || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${item.penamaLain?.ic || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${item.penamaLain?.hubungan || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${item.penamaLain?.bahagian || "-"}%
 </td>
 
@@ -1128,7 +1126,7 @@ data.takaful?.forEach(item=>{
 ${index===0 ? (item.syarikat || "-") : ""}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${index===0 ? (item.polisi || "-") : ""}
 </td>
 
@@ -1136,15 +1134,15 @@ ${index===0 ? (item.polisi || "-") : ""}
 ${w.nama || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${w.ic || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${w.hubungan || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${w.bahagian || "-"}%
 </td>
 
@@ -1167,7 +1165,7 @@ ${w.bahagian || "-"}%
 ${item.syarikat || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${item.polisi || "-"}
 </td>
 
@@ -1175,15 +1173,15 @@ ${item.polisi || "-"}
 ${item.penerimaLain?.nama || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${item.penerimaLain?.ic || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${item.penerimaLain?.hubungan || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${item.penerimaLain?.bahagian || "-"}%
 </td>
 
@@ -1220,11 +1218,11 @@ lampiranPemiutang += `
 ${item.nama || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${item.jenis || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:right;">
 ${item.baki || "-"}
 </td>
 
@@ -1263,11 +1261,11 @@ lampiranPenghutang += `
 ${item.nama || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${item.jenis || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:right;">
 ${item.baki || "-"}
 </td>
 
