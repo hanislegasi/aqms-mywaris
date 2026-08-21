@@ -593,6 +593,7 @@ console.log(info);
                 namaHarta:item.nama || "-",
                 rujukan:item.rujukan || "-",
                 nilai:item.nilai || "-",
+                alamat: item.alamat || "-", // <-- TAMBAH BARIS INI
                 pemilikan:item.pemilikan || "-",
                 kategori:item.kategori || "-",
                 peratus:penerima.peratus || "-"
@@ -1591,18 +1592,6 @@ function generateTakAlihTable(list){
     `;
 
     list.forEach(item => {
-        // Guna item.namaHarta (seperti kod asal anda)
-        const namaHarta = item.namaHarta || item.nama || "-"; 
-        
-        // Panggil item.alamat
-        const alamatHarta = item.alamat ? `<br><span style="font-size:12px; color:#555;">${item.alamat}</span>` : "";
-
-        // Cari peratus (sokong bentuk array dari firebase ATAU terus item.peratus)
-        let peratus = item.peratus || 0;
-        if (!peratus && item.penerimaHibahTakAlih && item.penerimaHibahTakAlih.length > 0) {
-            peratus = item.penerimaHibahTakAlih[0].peratus; 
-        }
-
         html += `
         <tr>
             <td style="border:1px solid #000;padding:8px;">
