@@ -1197,73 +1197,42 @@ lampiranTakaful += `
 </table>
 `;
 
-let lampiranPemiutang = `
-<table
-style="
-width:100%;
-border-collapse:collapse;
-font-size:14px;
-">
+let lampiranPemiutang = "";
 
-<tr>
-<th style="border:1px solid #000;padding:8px;width:30%;">
-Perkara
-</th>
-
-<th style="border:1px solid #000;padding:8px;width:70%;">
-Maklumat
-</th>
-</tr>
-
-
-
-<tr>
-<td style="border:1px solid #000;padding:8px;">
-Pemiutang
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${data.pemiutang?.nama || "-"}
-</td>
-</tr>
-
-
-
-<tr>
-<td style="border:1px solid #000;padding:8px;">
-Jenis Hutang
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${data.pemiutang?.jenis || "-"}
-</td>
-</tr>
-
-
-<tr>
-<td style="border:1px solid #000;padding:8px;">
-Baki
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${data.pemiutang?.baki || "-"}
-</td>
-</tr>
-
-
-<tr>
-<td style="border:1px solid #000;padding:8px;">
-Kaedah Penyelesaian
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${data.pemiutang?.kaedah || "-"}
-</td>
-</tr>
-
-
-</table>
-`;
+if (!data.pemiutang || !data.pemiutang.length) {
+    lampiranPemiutang = "<p>Tiada maklumat pemiutang.</p>";
+} else {
+    data.pemiutang.forEach((item, index) => {
+        lampiranPemiutang += `
+        <table style="width:100%; border-collapse:collapse; font-size:14px; margin-bottom:15px;">
+            <tr>
+                <th style="border:1px solid #000; padding:8px; width:35%; text-align:left;">
+                    Perkara ${data.pemiutang.length > 1 ? `(${index + 1})` : ""}
+                </th>
+                <th style="border:1px solid #000; padding:8px; width:65%; text-align:left;">
+                    Maklumat
+                </th>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">Pemiutang</td>
+                <td style="border:1px solid #000; padding:8px;">${item.nama || "-"}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">Jenis Hutang</td>
+                <td style="border:1px solid #000; padding:8px;">${item.jenis || "-"}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">Baki</td>
+                <td style="border:1px solid #000; padding:8px;">${item.baki || "-"}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">Kaedah Penyelesaian</td>
+                <td style="border:1px solid #000; padding:8px;">${item.kaedah || "-"}</td>
+            </tr>
+        </table>
+        `;
+    });
+}
                         
  let lampiranPenghutang = `
 <table style="width:100%;border-collapse:collapse;font-size:14px;">
