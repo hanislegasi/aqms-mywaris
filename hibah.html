@@ -1178,6 +1178,34 @@ import {
 
     let currentUser = null;
 
+let currentUser = null;
+
+    // --- FUNGSI FORMAT RM UNTUK ONINPUT HTML ---
+    window.formatRM = function(input) {
+        let val = input.value;
+        
+        // Jika input ada tanda '%' (contoh untuk bahagian wasiat), jangan format ke RM
+        if (val.includes('%')) {
+            return;
+        }
+
+        // Buang semua karakter kecuali nombor dan titik perpuluhan
+        let numStr = val.replace(/[^0-9.]/g, '');
+        
+        if (numStr !== "") {
+            let parts = numStr.split('.');
+            // Tambah koma untuk nilai beribu
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            
+            // Cantumkan semula dengan tulisan RM di depan
+            input.value = "RM " + parts.join('.');
+        } else {
+            // Kosongkan ruangan jika tiada nombor
+            input.value = "";
+        }
+    };
+
+    
     // CHECK LOGIN
     onAuthStateChanged(auth, async(user)=>{
 
@@ -5024,20 +5052,6 @@ checkPemegangAmanah();
             target.value = formatted;
         }
 
-// 4. FORMAT RM & KOMA (Berdasarkan placeholder "bahagian")
-    if (identifier.includes('bahagian')) {
-        let trimVal = val.trim();
-        if (trimVal.toLowerCase().startsWith('rm')) {
-            let numStr = trimVal.replace(/[^0-9.]/g, '');
-            if (numStr !== "") {
-                let parts = numStr.split('.');
-                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                target.value = "RM" + parts.join('.');
-            } else {
-                target.value = "RM";
-            }
-        }
-    }
 });
     
   </script>
