@@ -1182,23 +1182,27 @@ let currentUser = null;
     window.formatRM = function(input) {
         let val = input.value;
         
-        // Jika input ada tanda '%' (contoh untuk bahagian wasiat), jangan format ke RM
-        if (val.includes('%')) {
+        // 1. Jika kotak kosong (sebab user tekan delete semua), biarkan kosong
+        if (val.trim() === "") {
             return;
         }
 
-        // Buang semua karakter kecuali nombor dan titik perpuluhan
+        // 2. Jangan sekat jika user nak taip pecahan (1/2), peratus (50%), atau perkataan (Sama Rata).
+        // Kod ini akan semak jika ada huruf normal selain dari huruf 'R' dan 'M'.
+        let adaHurufLain = /[a-zA-Z]/.test(val.replace(/[rRmM\s,.]/g, ''));
+        if (val.includes('%') || val.includes('/') || adaHurufLain) {
+            return; // Hentikan auto-format, biarkan user menaip dengan bebas
+        }
+
+        // 3. Jika ia hanya nombor, barulah kita jalankan tugas auto-format ke RM
         let numStr = val.replace(/[^0-9.]/g, '');
         
         if (numStr !== "") {
             let parts = numStr.split('.');
-            // Tambah koma untuk nilai beribu
             parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            
-            // Cantumkan semula dengan tulisan RM di depan
             input.value = "RM " + parts.join('.');
         } else {
-            // Kosongkan ruangan jika tiada nombor
+            // 4. Jika user tekan backspace sampai cuma tinggal tulisan "RM ", kita tolong kosongkan kotak terus.
             input.value = "";
         }
     };
