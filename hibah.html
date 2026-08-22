@@ -246,10 +246,6 @@ class="w-full border rounded-lg p-3 notaWasiat"
 rows="3"
 placeholder="Nota"></textarea>
 
-</div>
-
-</div>
-
 <!-- BUTANG PADAM WASIAT -->
 <button
 type="button"
@@ -1308,6 +1304,11 @@ value="${item.penerima || ''}">
 class="w-full border rounded-lg p-3 notaWasiat"
 placeholder="Nota">${item.nota || ''}</textarea>
 
+<!-- LETAK BUTANG PADAM DI SINI -->
+<button type="button" class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg mt-3">
+Padam Wasiat
+</button>
+
 </div>
 `
 );
@@ -1555,7 +1556,8 @@ Perkongsian Nama
 type="text"
 class="w-full border rounded-lg p-3 nilaiAlih"
 placeholder="Anggaran Nilai"
-value="${item.nilai || ''}">
+value="${item.nilai || ''}"
+oninput="formatRM(this)">
 
 <select
 class="w-full border rounded-lg p-3 kategoriAlih">
@@ -1802,7 +1804,8 @@ Perkongsian Nama
 type="text"
 class="w-full border rounded-lg p-3 nilaiTakAlih"
 placeholder="Anggaran Nilai"
-value="${item.nilai || ''}">
+value="${item.nilai || ''}"
+oninput="formatRM(this)">
 
 <textarea
 class="w-full border rounded-lg p-3 alamatTakAlih"
@@ -2193,7 +2196,8 @@ value="${item.jenis || ''}" placeholder="Jenis Hutang">
 <input
 type="text"
 class="w-full border rounded-lg p-3 bakiHutangPemiutang"
-value="${item.baki || ''}" placeholder="Baki Hutang">
+value="${item.baki || ''}" placeholder="Baki Hutang"
+oninput="formatRM(this)">
 
 <textarea
 class="w-full border rounded-lg p-3 kaedahPenyelesaianPemiutang"
@@ -2245,7 +2249,8 @@ value="${item.jenis || ''}" placeholder="Jenis Hutang">
 <input
 type="text"
 class="w-full border rounded-lg p-3 bakiHutangPenghutang"
-value="${item.baki || ''}" placeholder="Baki Hutang">
+value="${item.baki || ''}" placeholder="Baki Hutang"
+oninput="formatRM(this)">
 
 <textarea
 class="w-full border rounded-lg p-3 kaedahPenyelesaianPenghutang"
@@ -3269,7 +3274,8 @@ placeholder="Butiran Harta">
 <input
 type="text"
 class="w-full border rounded-lg p-3 bahagianWasiat"
-placeholder="Bahagian (RM atau %)">
+placeholder="Bahagian (RM atau %)"
+oninput="formatRM(this)">
 
 <input
 type="text"
@@ -3280,6 +3286,13 @@ placeholder="Penerima">
 class="w-full border rounded-lg p-3 notaWasiat"
 rows="3"
 placeholder="Nota"></textarea>
+
+<!-- TAMBAH BUTANG PADAM DI SINI -->
+        <button
+        type="button"
+        class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg mt-3">
+        Padam Wasiat
+        </button>
 
 </div>
 
@@ -3428,7 +3441,8 @@ Perkongsian Nama
 <input
 type="text"
 class="w-full border rounded-lg p-3 nilaiAlih"
-placeholder="Anggaran Nilai">
+placeholder="Anggaran Nilai"
+oninput="formatRM(this)">
 
 <select
 class="w-full border rounded-lg p-3 kategoriAlih">
@@ -4285,7 +4299,8 @@ Perkongsian Nama
 <input
 type="text"
 class="w-full border rounded-lg p-3 nilaiTakAlih"
-placeholder="Anggaran Nilai">
+placeholder="Anggaran Nilai"
+oninput="formatRM(this)">
 
 <textarea
 class="w-full border rounded-lg p-3 alamatTakAlih"
@@ -4747,7 +4762,8 @@ placeholder="Jenis Hutang">
 <input
 type="text"
 class="w-full border rounded-lg p-3 bakiHutangPemiutang"
-placeholder="Baki Hutang">
+placeholder="Baki Hutang"
+oninput="formatRM(this)">
 
 <textarea
 class="w-full border rounded-lg p-3 kaedahPenyelesaianPemiutang"
@@ -4788,7 +4804,8 @@ placeholder="Jenis Hutang">
 <input
 type="text"
 class="w-full border rounded-lg p-3 bakiHutangPenghutang"
-placeholder="Baki Hutang">
+placeholder="Baki Hutang"
+oninput="formatRM(this)">
 
 <textarea
 class="w-full border rounded-lg p-3 kaedahPenyelesaianPenghutang"
