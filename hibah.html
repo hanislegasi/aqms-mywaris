@@ -1320,7 +1320,8 @@ value="${item.harta || ''}">
 type="text"
 class="w-full border rounded-lg p-3 bahagianWasiat"
 placeholder="Bahagian (RM atau %)"
-value="${item.bahagian || ''}">
+value="${item.bahagian || ''}"
+oninput="formatRM(this)">
 
 <input
 type="text"
