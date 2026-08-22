@@ -1358,6 +1358,25 @@ type="text"
 class="w-full border rounded-lg p-3 telefonWaris"
 value="${item.telefon || ''}">
 
+<div class="flex items-center gap-3">
+
+<label class="w-32 font-medium text-gray-700">
+Tarikh Lahir
+</label>
+
+<input
+type="date"
+class="flex-1 border rounded-lg p-3 tarikhLahirWaris"
+value="${item.tarikhLahir || ''}">
+
+</div>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 alamatWaris"
+placeholder="Alamat"
+value="${item.alamat || ''}">
+
 <select
 class="w-full border rounded-lg p-3 statusWaris">
 
