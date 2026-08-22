@@ -634,6 +634,7 @@ senaraiPenerima.forEach(penerima=>{
                 namaHarta:item.nama || "-",
                 rujukan:item.rujukan || "-",
                 nilai:item.nilai || "-",
+                alamat: item.alamat || "-", // <-- TAMBAH BARIS INI
                 pemilikan:item.pemilikan || "-",
                 kategori:item.kategori || "-",
                 peratus:penerima.peratus || "-"
@@ -861,10 +862,7 @@ approvedDate
 let lampiranWaris = `
 <table
 style="
-width:100%;
-border-collapse:collapse;
-font-size:14px;
-">
+width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid;">
 
 <tr>
 
@@ -897,15 +895,15 @@ lampiranWaris += `
 ${w.nama || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center !important;">
 ${w.ic || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center !important;">
 ${w.hubungan || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center !important;">
 ${
 w.status==="bawah18"
 ? "Bawah 18 Tahun"
@@ -928,18 +926,14 @@ lampiranWaris += `
 
 let lampiranPemegangAmanah = `
 <table
-style="
-width:100%;
-border-collapse:collapse;
-font-size:14px;
-">
+style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid;">
 
 <tr>
-<th style="border:1px solid #000;padding:8px;">
+<th style="border:1px solid #000;padding:8px;width:30%;">
 Perkara
 </th>
 
-<th style="border:1px solid #000;padding:8px;">
+<th style="border:1px solid #000;padding:8px;width:70%;">
 Maklumat
 </th>
 </tr>
@@ -989,18 +983,14 @@ ${data.pemegangAmanah?.telefon || "-"}
 
 let lampiranHartaAlih = `
 <table
-style="
-width:100%;
-border-collapse:collapse;
-font-size:14px;
-">
+style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid;">
 
 <tr>
 <th style="border:1px solid #000;padding:8px;">Nama Harta</th>
 <th style="border:1px solid #000;padding:8px;">Rujukan</th>
 <th style="border:1px solid #000;padding:8px;">Nilai</th>
 <th style="border:1px solid #000;padding:8px;">Pemilikan</th>
-<th style="border:1px solid #000;padding:8px;">Kategori</th>
+
 </tr>
 `;
                         
@@ -1026,9 +1016,7 @@ if(item.kategori==="sepencarian"){
 kategoriText = "Harta Sepencarian";
 }
 
-if(item.kategori==="faraid"){
-kategoriText = "Faraid";
-}
+
 
 lampiranHartaAlih += `
 
@@ -1038,21 +1026,19 @@ lampiranHartaAlih += `
 ${item.nama || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center !important;">
 ${item.rujukan || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:right !important;">
 ${item.nilai || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center !important;">
 ${pemilikanText}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
-${kategoriText}
-</td>
+
 
 </tr>
 
@@ -1066,18 +1052,14 @@ lampiranHartaAlih += `
 
 let lampiranHartaTakAlih = `
 <table
-style="
-width:100%;
-border-collapse:collapse;
-font-size:14px;
-">
+style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid;">
 
 <tr>
 <th style="border:1px solid #000;padding:8px;">Nama Harta</th>
 <th style="border:1px solid #000;padding:8px;">No Geran</th>
 <th style="border:1px solid #000;padding:8px;">Nilai</th>
 <th style="border:1px solid #000;padding:8px;">Pemilikan</th>
-<th style="border:1px solid #000;padding:8px;">Kategori</th>
+
 </tr>
 `;
 
@@ -1104,21 +1086,19 @@ lampiranHartaTakAlih += `
 ${item.nama || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center !important;">
 ${item.rujukan || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:right !important;">
 ${item.nilai || "-"}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center !important;">
 ${pemilikanText}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
-${kategoriText}
-</td>
+
 
 </tr>
 `;
@@ -1129,298 +1109,263 @@ lampiranHartaTakAlih += `
 </table>
 `;
 
-let lampiranBerpenama = `
-<table
-style="
-width:100%;
-border-collapse:collapse;
-font-size:14px;
-">
+// 1. Letak fungsi convertToFraction di bahagian paling atas
+function convertToFraction(percentage) {
+    if (!percentage || percentage === 0) return "0 Bahagian";
+    
+    // Peratusan berasaskan 100
+    let numerator = percentage;
+    let denominator = 100;
+    
+    // Cari faktor sepunya terbesar (GCD) untuk permudahkan pecahan
+    const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+    const divisor = gcd(numerator, denominator);
+    
+    const top = numerator / divisor;
+    const bottom = denominator / divisor;
+    
+    return `${top}/${bottom} Bahagian`;
+}
 
-<tr>
-<th style="border:1px solid #000;padding:8px;">Jenis</th>
-<th style="border:1px solid #000;padding:8px;">No Akaun</th>
-<th style="border:1px solid #000;padding:8px;">Penama</th>
-<th style="border:1px solid #000;padding:8px;">IC Penama</th>
-<th style="border:1px solid #000;padding:8px;">Hubungan</th>
-<th style="border:1px solid #000;padding:8px;">Bahagian (%)</th>
-</tr>
-`;                        
+let lampiranBerpenama = "";
 
-data.hartaBerpenama?.forEach(item=>{
-
-    // PENAMA WARIS
-    if(item.jenisPenama==="waris"){
-
-        (item.penamaWaris || []).forEach((w,index)=>{
-
-            lampiranBerpenama += `
-
-<tr>
-
-<td style="border:1px solid #000;padding:8px;">
-${index===0 ? (item.jenis || "-") : ""}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${index===0 ? (item.akaun || "-") : ""}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${w.nama || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${w.ic || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${w.hubungan || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${w.bahagian || "-"}%
-</td>
-
-</tr>
-
-`;
-
-        });
-
-    }
-
-    // PENAMA ORANG LAIN
-    else{
-
+if (!data.hartaBerpenama || !data.hartaBerpenama.length) {
+    lampiranBerpenama = "<p>Tiada maklumat Harta Berpenama.</p>";
+} else {
+    data.hartaBerpenama.forEach((item, index) => {
+        
+        // Jarakkan sedikit antara jadual jika ada lebih dari 1 harta
         lampiranBerpenama += `
+        <div style="margin-bottom: 20px; page-break-inside: avoid;">
+        <table style="width:100%; border-collapse:collapse; font-size:14px;">
+            <tr>
+                <th style="border:1px solid #000;padding:8px;">Jenis</th>
+                <th style="border:1px solid #000;padding:8px;">No Akaun</th>
+                <th style="border:1px solid #000;padding:8px;">Penama</th>
+                <th style="border:1px solid #000;padding:8px;">IC Penama</th>
+                <th style="border:1px solid #000;padding:8px;">Hubungan</th>
+                <th style="border:1px solid #000;padding:8px;">Bahagian</th>
+            </tr>
+        `;
 
-<tr>
+        // -- PENAMA WARIS --
+        if (item.jenisPenama === "waris") {
+            (item.penamaWaris || []).forEach((w, idx) => {
+                lampiranBerpenama += `
+                <tr>
+                    <td style="border:1px solid #000;padding:8px;text-align:center;">
+                        ${idx === 0 ? (item.jenis || "-") : ""}
+                    </td>
+                    <td style="border:1px solid #000;padding:8px;text-align:center;">
+                        ${idx === 0 ? (item.akaun || "-") : ""}
+                    </td>
+                    <td style="border:1px solid #000;padding:8px;">
+                        ${w.nama || "-"}
+                    </td>
+                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                        ${w.ic || "-"}
+                    </td>
+                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                        ${w.hubungan || "-"}
+                    </td>
+                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                        ${convertToFraction(w.bahagian)}
+                    </td>
+                </tr>
+                `;
+            });
+        } 
+        
+        // -- PENAMA ORANG LAIN --
+        else {
+            lampiranBerpenama += `
+            <tr>
+                <td style="border:1px solid #000;padding:8px;text-align:center;">
+                    ${item.jenis || "-"}
+                </td>
+                <td style="border:1px solid #000;padding:8px;text-align:center;">
+                    ${item.akaun || "-"}
+                </td>
+                <td style="border:1px solid #000;padding:8px;">
+                    ${item.penamaLain?.nama || "-"}
+                </td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                    ${item.penamaLain?.ic || "-"}
+                </td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                    ${item.penamaLain?.hubungan || "-"}
+                </td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                    ${convertToFraction(item.penamaLain?.bahagian)}
+                </td>
+            </tr>
+            `;
+        }
 
-<td style="border:1px solid #000;padding:8px;">
-${item.jenis || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.akaun || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.penamaLain?.nama || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.penamaLain?.ic || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.penamaLain?.hubungan || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.penamaLain?.bahagian || "-"}%
-</td>
-
-</tr>
-
-`;
-
-    }
-
-});
-lampiranBerpenama += `
-</table>
-`;
-
-let lampiranTakaful = `
-<table
-style="
-width:100%;
-border-collapse:collapse;
-font-size:14px;
-">
-
-<tr>
-<th style="border:1px solid #000;padding:8px;">Syarikat</th>
-<th style="border:1px solid #000;padding:8px;">No Polisi</th>
-<th style="border:1px solid #000;padding:8px;">Penerima</th>
-<th style="border:1px solid #000;padding:8px;">IC</th>
-<th style="border:1px solid #000;padding:8px;">Hubungan</th>
-<th style="border:1px solid #000;padding:8px;">Bahagian (%)</th>
-</tr>
-`;
-
-data.takaful?.forEach(item=>{
-
-    // PENERIMA WARIS
-    if(item.jenisPenerima==="waris"){
-
-        (item.penerimaWaris || []).forEach((w,index)=>{
-
-            lampiranTakaful += `
-
-<tr>
-
-<td style="border:1px solid #000;padding:8px;">
-${index===0 ? (item.syarikat || "-") : ""}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${index===0 ? (item.polisi || "-") : ""}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${w.nama || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${w.ic || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${w.hubungan || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${w.bahagian || "-"}%
-</td>
-
-</tr>
-
-`;
-
-        });
-
-    }
-
-    // PENERIMA ORANG LAIN
-    else{
-
-        lampiranTakaful += `
-
-<tr>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.syarikat || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.polisi || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.penerimaLain?.nama || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.penerimaLain?.ic || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.penerimaLain?.hubungan || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.penerimaLain?.bahagian || "-"}%
-</td>
-
-</tr>
-
-`;
-
-    }
-
-});
-
-lampiranTakaful += `
-</table>
-`;
-
- let lampiranPemiutang = `
-<table style="width:100%;border-collapse:collapse;font-size:14px;">
-
-<tr>
-<th style="border:1px solid #000;padding:8px;">Pemiutang</th>
-<th style="border:1px solid #000;padding:8px;">Jenis Hutang</th>
-<th style="border:1px solid #000;padding:8px;">Baki</th>
-<th style="border:1px solid #000;padding:8px;">Kaedah Penyelesaian</th>
-</tr>
-`;
-
-data.pemiutang?.forEach(item=>{
-
-lampiranPemiutang += `
-
-<tr>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.nama || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.jenis || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.baki || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.kaedah || "-"}
-</td>
-
-</tr>
-
-`;
-
-});
-
-lampiranPemiutang += `
-</table>
-`;
+        // Tutup jadual untuk harta ini dan div pemisah
+        lampiranBerpenama += `
+        </table>
+        </div>
+        `;
+    });
+}
                         
- let lampiranPenghutang = `
-<table style="width:100%;border-collapse:collapse;font-size:14px;">
+let lampiranTakaful = "";
 
-<tr>
-<th style="border:1px solid #000;padding:8px;">Penghutang</th>
-<th style="border:1px solid #000;padding:8px;">Jenis Hutang</th>
-<th style="border:1px solid #000;padding:8px;">Baki</th>
-<th style="border:1px solid #000;padding:8px;">Kaedah Penyelesaian</th>
-</tr>
-`;                       
+if (!data.takaful || !data.takaful.length) {
+    lampiranTakaful = "<p>Tiada maklumat Takaful.</p>";
+} else {
+    data.takaful.forEach((item, index) => {
+        
+        // Jarakkan sedikit antara jadual jika ada lebih dari 1 polisi takaful
+        lampiranTakaful += `
+        <div style="margin-bottom: 20px; page-break-inside: avoid;">
+        <table style="width:100%; border-collapse:collapse; font-size:14px;">
+            <tr>
+                <th style="border:1px solid #000;padding:8px;">Syarikat</th>
+                <th style="border:1px solid #000;padding:8px;">No Polisi</th>
+                <th style="border:1px solid #000;padding:8px;">Penerima</th>
+                <th style="border:1px solid #000;padding:8px;">IC</th>
+                <th style="border:1px solid #000;padding:8px;">Hubungan</th>
+                <th style="border:1px solid #000;padding:8px;">Bahagian</th>
+            </tr>
+        `;
 
-data.penghutang?.forEach(item=>{
+        // -- PENERIMA WARIS --
+        if (item.jenisPenerima === "waris") {
+            (item.penerimaWaris || []).forEach((w, idx) => {
+                lampiranTakaful += `
+                <tr>
+                    <td style="border:1px solid #000;padding:8px;text-align:center;">
+                        ${idx === 0 ? (item.syarikat || "-") : ""}
+                    </td>
+                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                        ${idx === 0 ? (item.polisi || "-") : ""}
+                    </td>
+                    <td style="border:1px solid #000;padding:8px;">
+                        ${w.nama || "-"}
+                    </td>
+                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                        ${w.ic || "-"}
+                    </td>
+                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                        ${w.hubungan || "-"}
+                    </td>
+                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                        ${convertToFraction(w.bahagian)}
+                    </td>
+                </tr>
+                `;
+            });
+        } 
+        
+        // -- PENERIMA ORANG LAIN --
+        else {
+            lampiranTakaful += `
+            <tr>
+                <td style="border:1px solid #000;padding:8px;text-align:center;">
+                    ${item.syarikat || "-"}
+                </td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                    ${item.polisi || "-"}
+                </td>
+                <td style="border:1px solid #000;padding:8px;">
+                    ${item.penerimaLain?.nama || "-"}
+                </td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                    ${item.penerimaLain?.ic || "-"}
+                </td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                    ${item.penerimaLain?.hubungan || "-"}
+                </td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
+                    ${convertToFraction(item.penerimaLain?.bahagian)}
+                </td>
+            </tr>
+            `;
+        }
 
-lampiranPenghutang += `
+        // Tutup jadual untuk polisi ini dan div pemisah
+        lampiranTakaful += `
+        </table>
+        </div>
+        `;
+    });
+}
+                        
+let lampiranPemiutang = "";
 
-<tr>
+if (!data.pemiutang || !data.pemiutang.length) {
+    lampiranPemiutang = "<p>Tiada maklumat pemiutang.</p>";
+} else {
+    data.pemiutang.forEach((item, index) => {
+        lampiranPemiutang += `
+        <table style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid; margin-bottom:15px;">
+            <tr>
+                <th style="border:1px solid #000; padding:8px; width:35%; text-align:center;">
+                    Perkara ${data.pemiutang.length > 1 ? `(${index + 1})` : ""}
+                </th>
+                <th style="border:1px solid #000; padding:8px; width:65%; text-align:center;">
+                    Maklumat
+                </th>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">Pemiutang</td>
+                <td style="border:1px solid #000; padding:8px;">${item.nama || "-"}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">Jenis Hutang</td>
+                <td style="border:1px solid #000; padding:8px;">${item.jenis || "-"}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">Baki</td>
+                <td style="border:1px solid #000; padding:8px;">${item.baki || "-"}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">Kaedah Penyelesaian</td>
+                <td style="border:1px solid #000; padding:8px;">${item.kaedah || "-"}</td>
+            </tr>
+        </table>
+        `;
+    });
+}
+                        
+let lampiranPenghutang = "";
 
-<td style="border:1px solid #000;padding:8px;">
-${item.nama || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.jenis || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.baki || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.kaedah || "-"}
-</td>
-
-</tr>
-
-`;
-
-});
-
-lampiranPenghutang += `
-</table>
-`;
+if (!data.penghutang || !data.penghutang.length) {
+    lampiranPenghutang = "<p>Tiada maklumat penghutang.</p>";
+} else {
+    data.penghutang.forEach((item, index) => {
+        lampiranPenghutang += `
+        <table style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid; margin-bottom:15px;">
+            <tr>
+                <th style="border:1px solid #000; padding:8px; width:35%; text-align:center;">
+                    Perkara ${data.pemiutang.length > 1 ? `(${index + 1})` : ""}
+                </th>
+                <th style="border:1px solid #000; padding:8px; width:65%; text-align:center;">
+                    Maklumat
+                </th>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">Penghutang</td>
+                <td style="border:1px solid #000; padding:8px;">${item.nama || "-"}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">Jenis Hutang</td>
+                <td style="border:1px solid #000; padding:8px;">${item.jenis || "-"}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">Baki</td>
+                <td style="border:1px solid #000; padding:8px;">${item.baki || "-"}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000; padding:8px;">Kaedah Penyelesaian</td>
+                <td style="border:1px solid #000; padding:8px;">${item.kaedah || "-"}</td>
+            </tr>
+        </table>
+        `;
+    });
+}
 
 const pesananText =
 data.pesananWasiat || "Tiada pesanan khusus.";
@@ -1639,65 +1584,48 @@ document.getElementById("sectionWasiat").innerHTML = finalContent;
 
 document.getElementById("sectionLampiran").innerHTML = lampiranHTML;
                        
+// 2. Fungsi Harta Alih
 function generateAlihTable(list){
-
     if(!list.length){
-
         return "<p>Tiada Harta Alih.</p>";
-
     }
 
     let html = `
     <table style="
         width:100%;
         border-collapse:collapse;
-        font-size:14px;
+        font-size:14px; page-break-inside: avoid;
         margin-top:10px;
     ">
-
     <tr>
         <th style="border:1px solid #000;padding:8px;">Nama Harta</th>
         <th style="border:1px solid #000;padding:8px;">Rujukan</th>
         <th style="border:1px solid #000;padding:8px;">Nilai</th>
-        <th style="border:1px solid #000;padding:8px;">Peratus</th>
+        <!-- Tukar tajuk kolum ke Bahagian -->
+        <th style="border:1px solid #000;padding:8px;">Bahagian</th> 
     </tr>
     `;
 
-    list.forEach(item=>{
-
+    list.forEach(item => {
         html += `
         <tr>
-
-            <td style="border:1px solid #000;padding:8px;">
-                ${item.namaHarta}
-            </td>
-
-            <td style="border:1px solid #000;padding:8px;">
-                ${item.rujukan}
-            </td>
-
-            <td style="border:1px solid #000;padding:8px;">
-                ${item.nilai}
-            </td>
-
+           <td style="border:1px solid #000;padding:8px;">${item.namaHarta}</td>
+            <td style="border:1px solid #000;padding:8px;text-align:center;">${item.rujukan}</td>
+            <td style="border:1px solid #000;padding:8px;text-align:right;">${item.nilai}</td>
             <td style="border:1px solid #000;padding:8px;text-align:center;">
-                ${item.peratus}%
+                ${convertToFraction(item.peratus)}
             </td>
-
         </tr>
         `;
-
     });
 
     html += "</table>";
-
     return html;
-
 }
 
+// 3. Fungsi Harta Tak Alih
 function generateTakAlihTable(list){
-
-    if(!list.length){
+    if(!list || !list.length){
         return "<p>Tiada Harta Tak Alih.</p>";
     }
 
@@ -1705,45 +1633,32 @@ function generateTakAlihTable(list){
     <table style="
         width:100%;
         border-collapse:collapse;
-        font-size:14px;
+        font-size:14px; page-break-inside: avoid;
         margin-top:10px;
     ">
     <tr>
         <th style="border:1px solid #000;padding:8px;">Nama Harta</th>
         <th style="border:1px solid #000;padding:8px;">No. Geran</th>
-        <th style="border:1px solid #000;padding:8px;">Nilai</th>
-        <th style="border:1px solid #000;padding:8px;">Peratus</th>
+        <th style="border:1px solid #000;padding:8px;">Alamat</th>
+        <th style="border:1px solid #000;padding:8px;">Bahagian</th>
     </tr>
     `;
 
-    list.forEach(item=>{
-
+    list.forEach(item => {
         html += `
         <tr>
-            <td style="border:1px solid #000;padding:8px;">
-                ${item.namaHarta}
-            </td>
-
-            <td style="border:1px solid #000;padding:8px;">
-                ${item.rujukan}
-            </td>
-
-            <td style="border:1px solid #000;padding:8px;">
-                ${item.nilai}
-            </td>
-
+            <td style="border:1px solid #000;padding:8px;">${item.namaHarta}</td>
+            <td style="border:1px solid #000;padding:8px;text-align:center;">${item.rujukan}</td>
+            <td style="border:1px solid #000;padding:8px;">${item.alamat}</td>
             <td style="border:1px solid #000;padding:8px;text-align:center;">
-                ${item.peratus}%
+                ${convertToFraction(item.peratus)}
             </td>
         </tr>
         `;
-
     });
 
     html += "</table>";
-
     return html;
-
 }
 
 function formatDateMY(dateStr){
