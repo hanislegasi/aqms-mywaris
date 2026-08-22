@@ -233,7 +233,8 @@ placeholder="Butiran Harta">
 <input
 type="text"
 class="w-full border rounded-lg p-3 bahagianWasiat"
-placeholder="Bahagian (RM atau %)">
+placeholder="Bahagian (RM atau %)"
+oninput="formatRM(this)">
 
 <input
 type="text"
@@ -249,6 +250,18 @@ placeholder="Nota"></textarea>
 
 </div>
 
+<!-- BUTANG PADAM WASIAT -->
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg mt-3">
+Padam Wasiat
+</button>
+  
+</div>
+
+</div>  
+
+  
 <button
 type="button"
 id="addWasiatBtn"
@@ -360,7 +373,7 @@ Padam
 </div>
 
 </div>
-
+ 
 <button
 type="button"
 id="addWarisBtn"
@@ -518,7 +531,8 @@ Perkongsian Nama
 <input
 type="text"
 class="w-full border rounded-lg p-3 nilaiAlih"
-placeholder="Anggaran Nilai">
+placeholder="Anggaran Nilai"
+oninput="formatRM(this)">
 
 <select
 class="w-full border rounded-lg p-3 kategoriAlih">
@@ -635,7 +649,8 @@ Perkongsian Nama
 <input
 type="text"
 class="w-full border rounded-lg p-3 nilaiTakAlih"
-placeholder="Anggaran Nilai">
+placeholder="Anggaran Nilai"
+oninput="formatRM(this)">
 
 <textarea
 class="w-full border rounded-lg p-3 alamatTakAlih"
@@ -985,7 +1000,8 @@ placeholder="Jenis Hutang">
 <input
 type="text"
 class="w-full border rounded-lg p-3 bakiHutangPemiutang"
-placeholder="Baki Hutang">
+placeholder="Baki Hutang"
+oninput="formatRM(this)">
 
 <textarea
 class="w-full border rounded-lg p-3 kaedahPenyelesaianPemiutang"
@@ -1031,7 +1047,8 @@ placeholder="Jenis Hutang">
 <input
 type="text"
 class="w-full border rounded-lg p-3 bakiHutangPenghutang"
-placeholder="Baki Hutang">
+placeholder="Baki Hutang"
+oninput="formatRM(this)">
 
 <textarea
 class="w-full border rounded-lg p-3 kaedahPenyelesaianPenghutang"
@@ -4990,6 +5007,22 @@ checkPemegangAmanah();
             target.value = formatted;
         }
     });
+
+// 4. FORMAT RM & KOMA (Berdasarkan placeholder "bahagian")
+    if (identifier.includes('bahagian')) {
+        let trimVal = val.trim();
+        if (trimVal.toLowerCase().startsWith('rm')) {
+            let numStr = trimVal.replace(/[^0-9.]/g, '');
+            if (numStr !== "") {
+                let parts = numStr.split('.');
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                target.value = "RM" + parts.join('.');
+            } else {
+                target.value = "RM";
+            }
+        }
+    }
+});
     
   </script>
 
