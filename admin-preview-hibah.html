@@ -1001,8 +1001,6 @@ if (!data.hartaBerpenama || !data.hartaBerpenama.length) {
     lampiranBerpenama = "<p>Tiada maklumat Harta Berpenama.</p>";
 } else {
     data.hartaBerpenama.forEach((item, index) => {
-        
-        // Jarakkan sedikit antara jadual jika ada lebih dari 1 harta
         lampiranBerpenama += `
         <div style="margin-bottom: 20px; page-break-inside: avoid;">
         <table style="width:100%; border-collapse:collapse; font-size:14px;">
@@ -1016,61 +1014,69 @@ if (!data.hartaBerpenama || !data.hartaBerpenama.length) {
             </tr>
         `;
 
-        // -- PENAMA WARIS --
-        if (item.jenisPenama === "waris") {
-            (item.penamaWaris || []).forEach((w, idx) => {
+        // -- FORMAT LAMA (Direct Data) --
+        if (!item.jenisPenama) {
+            lampiranBerpenama += `
+            <tr>
+                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.jenis || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.akaun || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;">${item.penama || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.ic || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.hubungan || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${convertToFraction(item.bahagian)}</td>
+            </tr>
+            `;
+        }
+        // -- FORMAT BARU (PENAMA WARIS RAMAI) --
+        else if (item.jenisPenama === "waris") {
+            const penamaList = item.penamaWaris || [];
+            const rowCount = penamaList.length > 0 ? penamaList.length : 1; // Kira jumlah waris untuk di-merge
+
+            if (penamaList.length === 0) {
+                // Jika user letak waris tapi tak isi nama
                 lampiranBerpenama += `
                 <tr>
-                    <td style="border:1px solid #000;padding:8px;text-align:center;">
-                        ${idx === 0 ? (item.jenis || "-") : ""}
-                    </td>
-                    <td style="border:1px solid #000;padding:8px;text-align:center;">
-                        ${idx === 0 ? (item.akaun || "-") : ""}
-                    </td>
-                    <td style="border:1px solid #000;padding:8px;">
-                        ${w.nama || "-"}
-                    </td>
-                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                        ${w.ic || "-"}
-                    </td>
-                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                        ${w.hubungan || "-"}
-                    </td>
-                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                        ${convertToFraction(w.bahagian)}
-                    </td>
-                </tr>
-                `;
-            });
+                    <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.jenis || "-"}</td>
+                    <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.akaun || "-"}</td>
+                    <td colspan="4" style="border:1px solid #000;padding:8px;text-align:center;">Tiada Penama Direkodkan</td>
+                </tr>`;
+            } else {
+                penamaList.forEach((w, idx) => {
+                    lampiranBerpenama += `<tr>`;
+                    
+                    // Kolum Jenis dan No Akaun HANYA dilukis pada baris pertama, dan disuruh merge ke bawah (rowspan)
+                    if (idx === 0) {
+                        lampiranBerpenama += `
+                        <td rowspan="${rowCount}" style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.jenis || "-"}</td>
+                        <td rowspan="${rowCount}" style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.akaun || "-"}</td>
+                        `;
+                    }
+
+                    // Kolum Penama dan ke atas dilukis seperti biasa setiap baris
+                    lampiranBerpenama += `
+                        <td style="border:1px solid #000;padding:8px;">${w.nama || "-"}</td>
+                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${w.ic || "-"}</td>
+                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${w.hubungan || "-"}</td>
+                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${convertToFraction(w.bahagian)}</td>
+                    </tr>
+                    `;
+                });
+            }
         } 
-        
-        // -- PENAMA ORANG LAIN --
+        // -- FORMAT BARU (PENAMA ORANG LAIN) --
         else {
             lampiranBerpenama += `
             <tr>
-                <td style="border:1px solid #000;padding:8px;text-align:center;">
-                    ${item.jenis || "-"}
-                </td>
-                <td style="border:1px solid #000;padding:8px;text-align:center;">
-                    ${item.akaun || "-"}
-                </td>
-                <td style="border:1px solid #000;padding:8px;">
-                    ${item.penamaLain?.nama || "-"}
-                </td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                    ${item.penamaLain?.ic || "-"}
-                </td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                    ${item.penamaLain?.hubungan || "-"}
-                </td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                    ${convertToFraction(item.penamaLain?.bahagian)}
-                </td>
+                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.jenis || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.akaun || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;">${item.penamaLain?.nama || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.penamaLain?.ic || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.penamaLain?.hubungan || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${convertToFraction(item.penamaLain?.bahagian)}</td>
             </tr>
             `;
         }
 
-        // Tutup jadual untuk harta ini dan div pemisah
         lampiranBerpenama += `
         </table>
         </div>
@@ -1084,8 +1090,6 @@ if (!data.takaful || !data.takaful.length) {
     lampiranTakaful = "<p>Tiada maklumat Takaful.</p>";
 } else {
     data.takaful.forEach((item, index) => {
-        
-        // Jarakkan sedikit antara jadual jika ada lebih dari 1 polisi takaful
         lampiranTakaful += `
         <div style="margin-bottom: 20px; page-break-inside: avoid;">
         <table style="width:100%; border-collapse:collapse; font-size:14px;">
@@ -1099,61 +1103,68 @@ if (!data.takaful || !data.takaful.length) {
             </tr>
         `;
 
-        // -- PENERIMA WARIS --
-        if (item.jenisPenerima === "waris") {
-            (item.penerimaWaris || []).forEach((w, idx) => {
+        // -- FORMAT LAMA (Direct Data) --
+        if (!item.jenisPenerima) {
+            lampiranTakaful += `
+            <tr>
+                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.syarikat || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.polisi || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;">${item.penerima || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.ic || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.hubungan || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${convertToFraction(item.bahagian)}</td>
+            </tr>
+            `;
+        }
+        // -- FORMAT BARU (PENERIMA WARIS RAMAI) --
+        else if (item.jenisPenerima === "waris") {
+            const penerimaList = item.penerimaWaris || [];
+            const rowCount = penerimaList.length > 0 ? penerimaList.length : 1; // Kira jumlah waris
+
+            if (penerimaList.length === 0) {
                 lampiranTakaful += `
                 <tr>
-                    <td style="border:1px solid #000;padding:8px;text-align:center;">
-                        ${idx === 0 ? (item.syarikat || "-") : ""}
-                    </td>
-                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                        ${idx === 0 ? (item.polisi || "-") : ""}
-                    </td>
-                    <td style="border:1px solid #000;padding:8px;">
-                        ${w.nama || "-"}
-                    </td>
-                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                        ${w.ic || "-"}
-                    </td>
-                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                        ${w.hubungan || "-"}
-                    </td>
-                    <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                        ${convertToFraction(w.bahagian)}
-                    </td>
-                </tr>
-                `;
-            });
+                    <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.syarikat || "-"}</td>
+                    <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.polisi || "-"}</td>
+                    <td colspan="4" style="border:1px solid #000;padding:8px;text-align:center;">Tiada Penerima Direkodkan</td>
+                </tr>`;
+            } else {
+                penerimaList.forEach((w, idx) => {
+                    lampiranTakaful += `<tr>`;
+                    
+                    // Kolum Syarikat dan No Polisi HANYA dilukis pada baris pertama, merge ke bawah (rowspan)
+                    if (idx === 0) {
+                        lampiranTakaful += `
+                        <td rowspan="${rowCount}" style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.syarikat || "-"}</td>
+                        <td rowspan="${rowCount}" style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.polisi || "-"}</td>
+                        `;
+                    }
+
+                    // Kolum Penerima dan ke atas dilukis seperti biasa
+                    lampiranTakaful += `
+                        <td style="border:1px solid #000;padding:8px;">${w.nama || "-"}</td>
+                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${w.ic || "-"}</td>
+                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${w.hubungan || "-"}</td>
+                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${convertToFraction(w.bahagian)}</td>
+                    </tr>
+                    `;
+                });
+            }
         } 
-        
-        // -- PENERIMA ORANG LAIN --
+        // -- FORMAT BARU (PENERIMA ORANG LAIN) --
         else {
             lampiranTakaful += `
             <tr>
-                <td style="border:1px solid #000;padding:8px;text-align:center;">
-                    ${item.syarikat || "-"}
-                </td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                    ${item.polisi || "-"}
-                </td>
-                <td style="border:1px solid #000;padding:8px;">
-                    ${item.penerimaLain?.nama || "-"}
-                </td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                    ${item.penerimaLain?.ic || "-"}
-                </td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                    ${item.penerimaLain?.hubungan || "-"}
-                </td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                    ${convertToFraction(item.penerimaLain?.bahagian)}
-                </td>
+                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.syarikat || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.polisi || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;">${item.penerimaLain?.nama || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.penerimaLain?.ic || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.penerimaLain?.hubungan || "-"}</td>
+                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${convertToFraction(item.penerimaLain?.bahagian)}</td>
             </tr>
             `;
         }
 
-        // Tutup jadual untuk polisi ini dan div pemisah
         lampiranTakaful += `
         </table>
         </div>
