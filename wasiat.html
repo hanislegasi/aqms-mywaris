@@ -1300,7 +1300,9 @@ value="${item.harta || ''}">
 <input
 type="text"
 class="w-full border rounded-lg p-3 bahagianWasiat"
-value="${item.bahagian || ''}">
+placeholder="Bahagian (RM atau %)"
+value="${item.bahagian || ''}"
+oninput="formatRM(this)">
 
 <input
 type="text"
