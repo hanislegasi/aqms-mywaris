@@ -451,7 +451,7 @@ if(!response.ok){
                
 
         const params = new URLSearchParams(window.location.search);
-        const userId = params.get("id");
+        let userId = params.get("id");
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
@@ -466,13 +466,11 @@ if(!response.ok){
                 // CHECK USER ROLE
 
 const loginUserId = user.uid;
-
 const loginSnap = await getDoc(
     doc(db, "users", loginUserId)
 );
 
 const loginData = loginSnap.data();
-
 if(loginData?.role === "admin"){
 
     // Admin boleh buka mana-mana customer
@@ -481,15 +479,10 @@ if(loginData?.role === "admin"){
 }else{
 
     // Customer hanya boleh buka dokumen sendiri
-
     if(loginUserId !== userId){
-
         alert("Akses ditolak");
-
         window.location.href="dashboard.html";
-
         return;
-
     }
 
     // Paksa baca dokumen sendiri
