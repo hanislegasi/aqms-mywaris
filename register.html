@@ -7,7 +7,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+<body class="bg-gray-100 min-h-screen flex items-center justify-center py-10">
 
 <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
 
@@ -61,19 +61,35 @@ required>
 
 <p
 id="referralName"
-class="text-sm text-green-600">
+class="text-sm text-green-600 font-semibold mb-2">
 </p>
+
+<!-- KOTAK KONSEN PDPA (WAJIB) -->
+<div class="flex items-start mt-2">
+    <input id="pdpaConsent" type="checkbox" class="w-5 h-5 text-[#153638] bg-white border-gray-300 rounded focus:ring-[#153638] mt-1 cursor-pointer" required>
+    <label for="pdpaConsent" class="ml-3 text-xs text-gray-600 cursor-pointer leading-relaxed">
+        Saya bersetuju dengan <a href="terms.html" target="_blank" class="text-blue-600 font-semibold hover:underline">Terma & Syarat</a> dan mengakui telah membaca serta memahami <a href="privacy-notice.html" target="_blank" class="text-blue-600 font-semibold hover:underline">Notis Privasi (PDPA)</a>.
+    </label>
+</div>
+
+<!-- KOTAK KONSEN MARKETING (PILIHAN) -->
+<div class="flex items-start mb-6">
+    <input id="marketingConsent" type="checkbox" class="w-5 h-5 text-[#153638] bg-white border-gray-300 rounded focus:ring-[#153638] mt-1 cursor-pointer">
+    <label for="marketingConsent" class="ml-3 text-xs text-gray-600 cursor-pointer leading-relaxed">
+        (Pilihan) Saya bersetuju untuk menerima maklumat terkini, buletin, dan tawaran promosi daripada syarikat.
+    </label>
+</div>
 
 <button
 type="submit"
-class="w-full bg-[#153638] text-white py-3 rounded-lg font-bold hover:opacity-90 transition">
+class="w-full bg-[#153638] text-white py-3 rounded-lg font-bold hover:opacity-90 transition mt-4">
 Daftar Akaun
 </button>
 
 </form>
 
 <div class="text-center mt-4">
-<a href="login.html" class="text-blue-600 hover:underline">
+<a href="login.html" class="text-blue-600 text-sm hover:underline">
 Sudah ada akaun? Log Masuk
 </a>
 </div>
@@ -85,12 +101,12 @@ Sudah ada akaun? Log Masuk
 // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
 import { db, auth } from './firebase.js';
 
-// 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
+// 2. Tarik fungsi Auth yang berkaitan sahaja
 import {
     createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// 3. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
+// 3. Tarik fungsi Firestore yang berkaitan sahaja
 import {
     doc,
     setDoc,
@@ -121,7 +137,7 @@ document.getElementById("referral").addEventListener("blur", async()=>{
   });
 
   document.getElementById("referralName").innerHTML = sponsor
-    ? "✓ " + sponsor
+    ? "✓ Perunding: " + sponsor
     : "❌ No Konsultan tidak sah";
 });
 
@@ -134,6 +150,10 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
   const telefon = document.getElementById("telefon").value;
   const password = document.getElementById("password").value;
   const referral = document.getElementById("referral").value;
+  
+  // Kutip status checkbox PDPA & Marketing
+  const pdpaAgreed = document.getElementById("pdpaConsent").checked;
+  const marketingAgreed = document.getElementById("marketingConsent").checked;
 
   if(!referral){
     alert("Sila masukkan Kod Referral");
@@ -164,7 +184,7 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
     
     const uid = userCredential.user.uid;
 
-    // Simpan terus ke collection 'users' untuk pelanggan AQM
+    // Simpan terus ke collection 'users' beserta rekod PDPA
     await setDoc(doc(db, "users", uid), {
       nama,
       ic,
@@ -176,6 +196,15 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
       leadStatus: "REGISTERED",
       paymentStatus: "unpaid",
       memberNo: null,
+      
+      // REKOD KONSEN PDPA & MARKETING
+      consent: {
+          pdpaAgreed: pdpaAgreed,
+          marketingAgreed: marketingAgreed,
+          agreedAt: new Date().toISOString(),
+          version: "1.0"
+      },
+
       createdAt: new Date()
     });
 
