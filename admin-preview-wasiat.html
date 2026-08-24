@@ -537,7 +537,11 @@ const huruf = "abcdefghijklmnopqrstuvwxyz";
 
 let bahagianWasiat13 = "";
 
-if (!data.wasiatSatuPerTiga || !data.wasiatSatuPerTiga.length) {
+// 1. TAMBAH PENAPIS INI: Buang rekod jika ruangan 'harta' dibiarkan kosong
+const wasiatSah = (data.wasiatSatuPerTiga || []).filter(item => item.harta && item.harta.trim() !== "");
+
+// 2. TUKAR SYARAT INI: Check wasiatSah.length, bukan data.wasiatSatuPerTiga.length
+if (wasiatSah.length === 0) {
     // KES 1: JIKA TIADA DATA WASIAT 1/3 (Ayat pendek sahaja)
     bahagianWasiat13 = `
     <p>
