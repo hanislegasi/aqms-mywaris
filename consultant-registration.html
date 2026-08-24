@@ -259,6 +259,9 @@ document.getElementById("consultantForm").addEventListener("submit", async(e)=>{
             user = userCredential.user;
         }
 
+        // --- TANGKAP NILAI CHECKBOX DI SINI (SEBELUM SETDOC) ---
+        const pdpaAgreed = document.getElementById("agentPdpaConsent").checked;
+
         // Simpan pendaftaran ke Firestore
         await setDoc(doc(db, "consultants", user.uid), {
             uid: user.uid,
@@ -275,22 +278,20 @@ document.getElementById("consultantForm").addEventListener("submit", async(e)=>{
             
             upline: finalUpline, 
 
-// Tangkap nilai
-const pdpaAgreed = document.getElementById("agentPdpaConsent").checked;
-
-// Masukkan dalam payload pendaftaran Consultant
-consent: {
-    pdpaAgreed: pdpaAgreed,
-    confidentialityAgreed: true, // Automatik setuju sebab wajib
-    agreedAt: new Date().toISOString(),
-    version: "1.0"
-},
-          
+            // --- MASUKKAN OBJEK CONSENT DI SINI ---
+            consent: {
+                pdpaAgreed: pdpaAgreed,
+                confidentialityAgreed: true, // Automatik setuju sebab wajib
+                agreedAt: new Date().toISOString(),
+                version: "1.0"
+            },
+            
             consultantLevel: "AQC",
             consultantPaymentStatus: "pending",
             createdAt: new Date()
         });
 
+       
         // Update role di collection users
         await setDoc(doc(db, "users", user.uid), {
             role: "consultant"
