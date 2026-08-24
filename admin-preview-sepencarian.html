@@ -677,12 +677,24 @@ if (consultantCode) {
 
 const huruf = "abcdefghijklmnopqrstuvwxyz";
 
-let wasiat13Html = "";
+let bahagianWasiat13 = "";
 
-if (!data.wasiatSatuPerTiga || !data.wasiatSatuPerTiga.length) {
-    wasiat13Html = "<p>Tiada maklumat Wasiat 1/3.</p>";
+// 1. TAMBAH PENAPIS INI: Buang rekod jika ruangan 'harta' dibiarkan kosong
+const wasiatSah = (data.wasiatSatuPerTiga || []).filter(item => item.harta && item.harta.trim() !== "");
+
+// 2. TUKAR SYARAT INI: Check wasiatSah.length, bukan data.wasiatSatuPerTiga.length
+if (wasiatSah.length === 0) {
+    // KES 1: JIKA TIADA DATA WASIAT 1/3 (Ayat pendek sahaja)
+    bahagianWasiat13 = `
+    <p>
+        Harta Pusaka saya hendaklah dibahagikan mengikut pembahagian yang dinyatakan di dalam dokumen wasiat ini kepada waris-waris saya yang sah dan layak untuk menerima harta pusaka tersebut. 
+        Senarai waris-waris saya pada masa dokumen wasiat ini dibuat dilampirkan bersama dokumen wasiat ini sebagai <strong>Lampiran A</strong>. 
+        Pembahagian yang saya nyatakan adalah selepas ditolak bahagian <strong>Wasiat 1/3</strong> saya kepada bukan waris seperti yang diperincikan di bawah (jika ada).
+    </p>
+    `;
 } else {
-    wasiat13Html = `
+    // KES 2: JIKA ADA DATA WASIAT 1/3 (Ayat panjang + Jadual)
+    let tableWasiat = `
     <table style="width:100%; border-collapse:collapse; font-size:14px; margin-top:10px; page-break-inside:avoid;">
         <thead>
             <tr>
@@ -706,7 +718,21 @@ if (!data.wasiatSatuPerTiga || !data.wasiatSatuPerTiga.length) {
         </tbody>
     </table>
     `;
-}
+
+    bahagianWasiat13 = `
+    <p>
+        Harta Pusaka saya hendaklah dibahagikan mengikut pembahagian yang dinyatakan di dalam dokumen wasiat ini kepada waris-waris saya yang sah dan layak untuk menerima harta pusaka tersebut. 
+        Senarai waris-waris saya pada masa dokumen wasiat ini dibuat dilampirkan bersama dokumen wasiat ini sebagai <strong>Lampiran A</strong>. 
+        Pembahagian yang saya nyatakan adalah selepas ditolak bahagian <strong>Wasiat 1/3</strong> saya kepada bukan waris seperti yang diperincikan di bawah.
+    </p>
+    <p>
+        Adalah ditegaskan bahawa sekiranya nilai bahagian yang dinyatakan di bawah tidak melebihi satu pertiga (1/3) daripada jumlah sebenar Harta Pusaka saya, 
+        ia hendaklah dilaksanakan sepenuhnya. Namun, sekiranya nilai tersebut didapati melebihi kadar satu pertiga (1/3), 
+        maka perlaksanaannya hendaklah dihadkan setakat maksimum 1/3 daripada jumlah sebenar Harta Pusaka saya sahaja.
+    </p>
+    ${tableWasiat}
+    `;
+}                    
 
                        
                         
@@ -1409,10 +1435,7 @@ data.namaWasi2 || "-"
 data.icWasi2 || "-"
 )
 
-.replace(
-  "{{WASIAT_SATU_PER_TIGA}}",
-  wasiat13Html
-);
+.replaceAll("{{SEKSYEN_WASIAT_13}}", bahagianWasiat13);
 
 let lampiranHTML = "";
 
