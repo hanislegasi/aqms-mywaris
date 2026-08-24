@@ -334,10 +334,6 @@ Selepas ditolak hutang, obligasi-obligasi lain yang tertunggak ke atasnya, dan a
 <strong>4. WASIAT 1/3</strong>
 </h3>
 
-<p>
-Harta Pusaka saya hendaklah dibahagikan mengikut pembahagian yang dinyatakan di dalam dokumen wasiat ini kepada waris-waris saya yang sah dan layak untuk menerima harta pusaka tersebut. 
-Senarai waris-waris saya pada masa dokumen wasiat ini dibuat dilampirkan bersama dokumen wasiat ini sebagai <strong>Lampiran A</strong>. 
-Pembahagian yang saya nyatakan adalah selepas ditolak bahagian <strong>Wasiat 1/3</strong> saya (jika ada) kepada bukan waris seperti yang diperincikan di bawah.</p> 
 
 {{SEKSYEN_WASIAT_13}}
 
