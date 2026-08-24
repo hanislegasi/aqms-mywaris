@@ -147,6 +147,13 @@ type="text"
 placeholder="Kod Upline (AQC001)"
 class="w-full border p-3 rounded-xl">
 
+<div class="flex items-start mt-4 mb-6">
+    <input id="agentPdpaConsent" type="checkbox" class="w-5 h-5 text-[#153638] bg-white border-gray-300 rounded focus:ring-[#153638] mt-1 cursor-pointer" required>
+    <label for="agentPdpaConsent" class="ml-3 text-xs text-gray-600 cursor-pointer leading-relaxed text-justify">
+        Saya bersetuju dengan <strong>Polisi PDPA 2010</strong> dan berikrar akan mematuhi dasar <strong>Kerahsiaan Data (Confidentiality)</strong> secara mutlak. Saya faham bahawa sebarang pendedahan, salah guna, atau kecuaian terhadap maklumat peribadi dan harta pusaka pelanggan tanpa kebenaran adalah satu jenayah perundangan dan melanggar dasar Syarikat.
+    </label>
+</div>
+  
 <button
 id="registerButton"
 type="submit"
@@ -267,7 +274,18 @@ document.getElementById("consultantForm").addEventListener("submit", async(e)=>{
             state: document.getElementById("state").value,
             
             upline: finalUpline, 
-            
+
+// Tangkap nilai
+const pdpaAgreed = document.getElementById("agentPdpaConsent").checked;
+
+// Masukkan dalam payload pendaftaran Consultant
+consent: {
+    pdpaAgreed: pdpaAgreed,
+    confidentialityAgreed: true, // Automatik setuju sebab wajib
+    agreedAt: new Date().toISOString(),
+    version: "1.0"
+},
+          
             consultantLevel: "AQC",
             consultantPaymentStatus: "pending",
             createdAt: new Date()
