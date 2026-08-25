@@ -242,121 +242,82 @@ document.querySelectorAll(".deleteBtn").forEach(btn=>{
     });
 
 });
-        
+               
+window.markPaid = async (pvId, type, payee, amount) => {
+            if (!confirm("Confirm payment?")) return;
+            
+            const pvDoc = await getDoc(doc(db, "paymentVouchers", pvId));
+            const pv = pvDoc.data();
 
+            // 1. Tarik COA macam biasa
+            const coaSnap = await getDocs(collection(db, "chartOfAccounts"));
+            const coaMap = {};
+            coaSnap.forEach((d) => {
+                const coa = d.data();
+                coaMap[coa.code] = coa;
+            });
 
-
-        
-       window.markPaid = async (
-pvId,
-type,
-payee,
-amount
-) => {
-            // Mengekalkan fungsi confirm() asal seperti permintaan anda
-            if (!confirm("Confirm payment?")) {
-                return;
-           
-}       
-           
-const pvDoc = 
-await getDoc(doc(db, "paymentVouchers", pvId)
-);
-
-const pv = pvDoc.data();
-
-const coaSnap = await getDocs(
-    collection(db,"chartOfAccounts")
-);
-
-const coaMap = {};
-
-coaSnap.forEach((d)=>{
-
-    const coa = d.data();
-
-    coaMap[coa.code] = coa;
-
-});
-
-const bank = coaMap["1000"];
-
-const accounts =
-pv.accounts || [];
-           
-console.log("PV ID =", pvId);
-console.log(pv);
+            const bank = coaMap["1000"]; // Akaun Bank (Kredit)
+            const accounts = pv.accounts || [];
                       
-for(const item of accounts){
+            // 2. Loop DEBIT (Dinamik tarik dari apa yang tersimpan dalam PV)
+            for(const item of accounts){
+                const currentCoa = coaMap[item.accountCode] || {};
 
-await addDoc(
-collection(db,"ledger"),
-{
+                await addDoc(collection(db, "ledger"), {
+                    date: new Date(),
+                    accountCode: item.accountCode || "",
+                    account: item.accountName || "",
+                    category: currentCoa.category || "",
+                    cashFlowType: currentCoa.cashFlowType || "",
+                    normalBalance: currentCoa.normalBalance || "",
+                    reportGroup: currentCoa.reportGroup || "",
+                    consultantNo: pv.consultantNo || "",
+                    consultantName: pv.consultantName || "",
+                    description: payee,
+                    debit: item.amount,
+                    credit: 0,
+                    paymentType: type,
+                    transactionGroup: pv.pvNo
+                });
+            }
 
-date:new Date(),
+            // 3. Masukkan rekod KREDIT (1000 - Bank)
+            if (bank) {
+                await addDoc(collection(db, "ledger"), {
+                    date: new Date(),
+                    accountCode: bank.code,
+                    account: bank.name,
+                    category: bank.category || "",
+                    cashFlowType: bank.cashFlowType || "",
+                    normalBalance: bank.normalBalance || "",
+                    reportGroup: bank.reportGroup || "",
+                    description: payee,
+                    debit: 0,
+                    credit: amount,
+                    paymentType: type,
+                    transactionGroup: pv.pvNo
+                });  
+            }
 
-accountCode:item.accountCode,
-
-account:item.accountName,
-
-category:item.category,
-
-cashFlowType:item.cashFlowType,
-
-normalBalance:item.normalBalance,
-
-reportGroup:item.reportGroup,
-
-consultantNo: pv.consultantNo,
-consultantName: pv.consultantName,
-
-description: payee,
-
-debit:item.amount,
-credit:0,
-
-paymentType:type,
-
-transactionGroup:pv.pvNo
-
-});
-
-}
-           
-
-
-           
-await addDoc(collection(db,"ledger"),{
-
-date:new Date(),
-
-accountCode:bank.code,
-account:bank.name,
-
-category:bank.category,
-cashFlowType:bank.cashFlowType,
-normalBalance:bank.normalBalance,
-reportGroup:bank.reportGroup,
-
-description:payee,
-
-debit:0,
-credit:amount,
-
-paymentType:type,
-transactionGroup:pv.pvNo
-
-});  
-
-           
-           
+            // 4. Update Status PV kepada PAID
             await updateDoc(doc(db, "paymentVouchers", pvId), {
                 status: "PAID",
                 paidAt: new Date()
             });
 
-            // Mengekalkan fungsi alert() asal seperti permintaan anda
-            alert("Payment completed");
+            // 5. NOTIFY AQC (UPDATE STATUS KLIEN KEPADA "paid")
+            if (pv.clientId && pv.prodName) {
+                try {
+                    await updateDoc(doc(db, "users", pv.clientId, pv.prodName, "maklumat"), {
+                        claimStatus: "paid"
+                    });
+                } catch (error) {
+                    console.error("Gagal update status klien:", error);
+                }
+            }
+
+            alert("Payment completed and ledger updated!");
             location.reload();
         };
     </script>
