@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myClaims - AQM Consultant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- HTML2PDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body { font-family: Inter, sans-serif; }
+        
+        /* Sorokkan template PV daripada paparan skrin tapi wujud untuk HTML2PDF */
+        #pvTemplateWrapper {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- HEADER -->
+    <div class="bg-[#153638] text-white p-5 shadow">
+        <h1 class="text-2xl font-bold">myClaims</h1>
+        <p class="text-gray-200 text-sm">Tuntutan Bayaran Balik Kos Stamping Dokumen</p>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="max-w-6xl mx-auto p-5 mt-4">
+        
+        <div class="flex justify-between items-center mb-6">
+            <a href="dashboard-consultant.html" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition">
+                ← Kembali
+            </a>
+        </div>
+
+        <div class="bg-white rounded-xl shadow p-6">
+            <h2 class="text-lg font-bold text-[#153638] mb-4">Senarai Dokumen Selesai (Boleh Dituntut)</h2>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100 border-b-2 border-gray-300 text-[#153638]">
+                            <th class="p-3 font-semibold">Pelanggan</th>
+                            <th class="p-3 font-semibold">Dokumen</th>
+                            <th class="p-3 font-semibold">No. Rujukan</th>
+                            <th class="p-3 font-semibold">Status Semasa</th>
+                            <th class="p-3 font-semibold text-center">Tindakan / Tuntutan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="claimListTable">
+                        <tr><td colspan="5" class="p-4 text-center text-gray-500">Memuatkan data senarai tuntutan...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- HIDDEN TEMPLATE UNTUK PAYMENT VOUCHER (PV) -->
+    <div id="pvTemplateWrapper">
+        <div id="pvDocument" style="background: white; width: 800px; padding: 50px; color: black;">
+            <h1 style="text-align: center; border-bottom: 3px solid #153638; padding-bottom: 10px; font-size: 28px; color: #153638;">PAYMENT VOUCHER</h1>
+            
+            <div style="display: flex; justify-content: space-between; margin-top: 30px; font-size: 16px;">
+                <div>
+                    <strong>Bayar Kepada (Perunding):</strong> <br>
+                    <span id="pvConsName">-</span> <br>
+                    No. AQC: <span id="pvConsNo">-</span>
+                </div>
+                <div style="text-align: right;">
+                    <strong>Tarikh Tuntutan:</strong> <span id="pvDate">-</span> <br>
+                    <strong>No. PV (Auto):</strong> <span id="pvRefAuto">-</span>
+                </div>
+            </div>
+
+            <table style="width: 100%; margin-top: 40px; border-collapse: collapse; font-size: 16px;">
+                <tr style="background: #f3f4f6;">
+                    <th style="border: 1px solid #ccc; padding: 12px; text-align: left;">Keterangan Tuntutan (Description)</th>
+                    <th style="border: 1px solid #ccc; padding: 12px; text-align: right;">Amaun (RM)</th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ccc; padding: 15px;">
+                        Tuntutan Kos Stamping (Duti Setem LHDN) <br><br>
+                        <strong>No. Rujukan Dokumen:</strong> <span id="pvDocRef">-</span> <br>
+                        <strong>Nama Pelanggan:</strong> <span id="pvCustName">-</span>
+                    </td>
+                    <td style="border: 1px solid #ccc; padding: 15px; text-align: right; vertical-align: top;">
+                        <span id="pvAmount">100.00</span> <!-- Nilai Default Tuntutan -->
+                    </td>
+                </tr>
+                <tr style="background: #f3f4f6; font-weight: bold;">
+                    <td style="border: 1px solid #ccc; padding: 12px; text-align: right;">JUMLAH KESELURUHAN</td>
+                    <td style="border: 1px solid #ccc; padding: 12px; text-align: right;">RM <span id="pvTotal">100.00</span></td>
+                </tr>
+            </table>
+
+            <div style="margin-top: 40px; border: 1px dashed #ccc; padding: 15px; background: #fafafa;">
+                <strong style="color: #153638;">Maklumat Pembayaran (Akaun Bank):</strong><br>
+                Bank: <span id="pvBankName">-</span> <br>
+                No Akaun: <span id="pvBankAcc">-</span>
+            </div>
+
+            <div style="margin-top: 80px; display: flex; justify-content: space-between;">
+                <div style="text-align: center; width: 250px; border-top: 1px solid black; padding-top: 5px;">
+                    Disediakan Oleh (Sistem AQMS)
+                </div>
+                <div style="text-align: center; width: 250px; border-top: 1px solid black; padding-top: 5px;">
+                    Diluluskan Oleh (Bahagian Akaun)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIREBASE SCRIPT -->
+    <script type="module">
+        import { db, auth } from './firebase.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { doc, getDoc, getDocs, collection, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        let currentConsultant = null;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            try {
+                // 1. Tarik Data Konsultan
+                const consSnap = await getDoc(doc(db, "consultants", user.uid));
+                if (!consSnap.exists()) return;
+                currentConsultant = consSnap.data();
+
+                // Set Data PV secara bersedia
+                document.getElementById("pvConsName").innerText = currentConsultant.nama.toUpperCase();
+                document.getElementById("pvConsNo").innerText = currentConsultant.consultantNo;
+                document.getElementById("pvBankName").innerText = currentConsultant.bankName || "-";
+                document.getElementById("pvBankAcc").innerText = currentConsultant.bankAccount || "-";
+
+                // 2. Cari Semua Pelanggan Di Bawah Konsultan Ini
+                const q = query(collection(db, "users"), where("referral", "==", currentConsultant.consultantNo));
+                const clientsSnap = await getDocs(q);
+
+                const claimableDocs = [];
+                const products = ["wasiat", "hibah", "sepencarian", "mawaris"];
+
+                // 3. Loop Pelanggan & Semak Dokumen Yang Dah Selesai
+                for (const clientDoc of clientsSnap.docs) {
+                    const clientData = clientDoc.data();
+                    
+                    for (const prod of products) {
+                        const prodRef = doc(db, "users", clientDoc.id, prod, "maklumat");
+                        const prodSnap = await getDoc(prodRef);
+
+                        if (prodSnap.exists()) {
+                            const pData = prodSnap.data();
+                            // HANYA dokumen yang COMPLETED atau STAMPED boleh di-claim
+                            if (pData.status === "COMPLETED" || pData.status === "STAMPED") {
+                                claimableDocs.push({
+                                    id: clientDoc.id,
+                                    prodName: prod,
+                                    clientName: clientData.nama,
+                                    docRefNo: pData.docRef || "-",
+                                    status: pData.status,
+                                    claimStatus: pData.claimStatus || "unclaimed"
+                                });
+                            }
+                        }
+                    }
+                }
+
+                // 4. Render ke dalam Jadual UI
+                renderTable(claimableDocs);
+
+            } catch (error) {
+                console.error("Ralat memuatkan tuntutan:", error);
+                document.getElementById("claimListTable").innerHTML = `<tr><td colspan="5" class="p-4 text-center text-red-500">Ralat: ${error.message}</td></tr>`;
+            }
+        });
+
+        function renderTable(docs) {
+            const tbody = document.getElementById("claimListTable");
+            tbody.innerHTML = "";
+
+            if (docs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-5 text-center text-gray-500 font-medium">Tiada dokumen berstatus COMPLETED / STAMPED untuk dituntut buat masa ini.</td></tr>`;
+                return;
+            }
+
+            docs.forEach((d) => {
+                const tr = document.createElement("tr");
+                tr.className = "border-b hover:bg-gray-50 transition";
+
+                let actionHtml = "";
+                if (d.claimStatus === "claimed") {
+                    actionHtml = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-xs font-bold shadow-inner inline-block">✅ Tuntutan Selesai (PV Dijana)</span>`;
+                } else {
+                    actionHtml = `
+                        <button class="claim-btn bg-green-600 hover:bg-green-700 transition text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md"
+                                data-userid="${d.id}" data-prod="${d.prodName}" data-docref="${d.docRefNo}" data-cust="${d.clientName}">
+                            📄 Jana PV & Tuntut
+                        </button>
+                    `;
+                }
+
+                tr.innerHTML = `
+                    <td class="p-3">${d.clientName}</td>
+                    <td class="p-3 font-semibold text-gray-700 uppercase">${d.prodName}</td>
+                    <td class="p-3">${d.docRefNo}</td>
+                    <td class="p-3"><span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded border border-blue-200">${d.status}</span></td>
+                    <td class="p-3 text-center">${actionHtml}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Pasang fungsi pada butang Claim
+            document.querySelectorAll(".claim-btn").forEach(btn => {
+                btn.addEventListener("click", handleClaimAction);
+            });
+        }
+
+        async function handleClaimAction(e) {
+            const btn = e.currentTarget;
+            const userId = btn.getAttribute("data-userid");
+            const prod = btn.getAttribute("data-prod");
+            const docRefNo = btn.getAttribute("data-docref");
+            const custName = btn.getAttribute("data-cust");
+
+            const confirmClaim = confirm(`Jana Payment Voucher (PV) untuk dokumen ${docRefNo}?\n(Tindakan ini tidak boleh diundur)`);
+            if(!confirmClaim) return;
+
+            btn.innerText = "Memproses...";
+            btn.disabled = true;
+
+            try {
+                // 1. Update status claim di Firestore (Elak double claim)
+                const docRef = doc(db, "users", userId, prod, "maklumat");
+                const claimDateStr = new Date().toISOString();
+                
+                await updateDoc(docRef, {
+                    claimStatus: "claimed",
+                    claimedAt: claimDateStr
+                });
+
+                // 2. Isi data dinamik ke dalam Template PV (Hidden)
+                const todayMY = new Date().toLocaleDateString("ms-MY");
+                const randomPVNo = "PV-" + Math.floor(1000 + Math.random() * 9000); // Nombor PV ringkas
+                
+                document.getElementById("pvDocRef").innerText = docRefNo;
+                document.getElementById("pvCustName").innerText = custName.toUpperCase();
+                document.getElementById("pvDate").innerText = todayMY;
+                document.getElementById("pvRefAuto").innerText = randomPVNo;
+
+                // 3. JANA PDF MENGGUNAKAN HTML2PDF
+                const element = document.getElementById("pvDocument");
+                
+                // Pilihan kualiti rendering PDF
+                const opt = {
+                    margin:       0,
+                    filename:     `PV_Claim_${docRefNo}.pdf`,
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2 },
+                    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+                };
+
+                // Tukar, save PDF, kemudian ubah UI
+                html2pdf().set(opt).from(element).save().then(() => {
+                    // Tukar butang UI kepada status selesai
+                    const parentTd = btn.parentElement;
+                    parentTd.innerHTML = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-xs font-bold shadow-inner inline-block">✅ Tuntutan Selesai (PV Dijana)</span>`;
+                    alert("Berjaya! Dokumen PV sedang di-download ke peranti anda.");
+                });
+
+            } catch (error) {
+                console.error("Gagal claim:", error);
+                alert("Ralat sistem: " + error.message);
+                btn.innerText = "📄 Jana PV & Tuntut";
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
