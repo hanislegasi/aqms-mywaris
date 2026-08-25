@@ -293,7 +293,7 @@
                     consultantName: currentConsultant.nama,
                     consultantId: auth.currentUser.uid,
                     amount: claimAmount, // Guna nilai yang diisi AQC
-                    date: new Date().toLocaleDateString("en-GB"),
+                    date: new Date().toISOString(),
                     beneficiaries: [],
                     accounts: [
                         { 
