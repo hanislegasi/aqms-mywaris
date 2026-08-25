@@ -299,28 +299,29 @@
                 const randomPVNo = "PV-" + Date.now(); 
                 const claimAmount = parseFloat(inputAmt); // Tukar teks jadi nombor
                 
-                const newPVData = {
+               const newPVData = {
                     pvNo: randomPVNo,
                     type: "CONSULTANT", 
                     status: "PENDING", 
                     payee: currentConsultant.nama,
                     consultantName: currentConsultant.nama,
                     consultantId: auth.currentUser.uid,
-                    // ==========================================
-                    // TAMBAH 2 BARIS INI UNTUK RUJUKAN ADMIN
-                    // ==========================================
                     clientId: userId,
                     prodName: prod,
-                    amount: claimAmount, // Guna nilai yang diisi AQC
+                    amount: claimAmount,
                     date: new Date().toISOString(),
                     beneficiaries: [],
+                    
+                    // KEMASKINI DI SINI: Masukkan accountCode
                     accounts: [
                         { 
+                            accountCode: "5710", // <--- Sistem rujuk COA ini
                             accountName: `Tuntutan Kos Stamping - ${prod.toUpperCase()} (${docRefNo}) - Klien: ${custName}`, 
                             amount: claimAmount 
                         }
                     ],
-                    receiptUrl: receiptUrl, // <--- URL RESIT DISIMPAN DI SINI
+                    
+                    receiptUrl: receiptUrl,
                     paymentMethod: "",
                     referenceNo: "",
                     remarks: "Tuntutan dijana secara automatik oleh sistem myClaims (AQC). Resit telah dilampirkan.",
