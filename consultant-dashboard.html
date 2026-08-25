@@ -752,7 +752,7 @@ onAuthStateChanged(auth, async(user)=>{
         document.getElementById("renewalBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-renewal.html"; });  
         document.getElementById("trainingBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-training.html"; });
         document.getElementById("marketingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-marketing.html"; });
-        
+        document.getElementById("claimsBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-claims.html"; });
         document.getElementById("copyReferralBtn").addEventListener("click", async()=>{
             try{
                 await navigator.clipboard.writeText(window.location.origin + window.location.pathname.replace("consultant-dashboard.html", "register.html") + "?ref=" + consultantData.consultantNo);
