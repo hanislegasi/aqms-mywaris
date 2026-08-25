@@ -195,7 +195,7 @@
 
             docs.forEach((d) => {
                 const tr = document.createElement("tr");
-                tr.className = "border-b hover:bg-gray-50 transition text-sm";
+                tr.className = "border-b hover:bg-gray-50 transition text-lg";
 
                 let tdRmHtml = "";
                 let tdResitHtml = "";
@@ -205,14 +205,14 @@
                     // Jika dah claim, letak sengkang (-) pada kotak input dan papar status selesai
                     tdRmHtml = `<span class="text-gray-400 font-bold">-</span>`;
                     tdResitHtml = `<span class="text-gray-400 font-bold">-</span>`;
-                    tdActionHtml = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-xs font-bold shadow-inner inline-block whitespace-nowrap">✅ Tuntutan Dihantar</span>`;
+                    tdActionHtml = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-lg font-bold shadow-inner inline-block whitespace-nowrap">✅ Tuntutan Dihantar</span>`;
                 } else {
                     // Kolum berasingan untuk isian data
-                    tdRmHtml = `<input type="number" id="amt_${d.id}_${d.prodName}" placeholder="Cth: 10" class="border border-gray-300 p-2 rounded-lg text-sm w-20 text-center focus:ring-2 focus:ring-[#153638] outline-none mx-auto block" min="1">`;
+                    tdRmHtml = `<input type="number" id="amt_${d.id}_${d.prodName}" placeholder="Cth: 10" class="border border-gray-300 p-2 rounded-lg text-lg w-20 text-center focus:ring-2 focus:ring-[#153638] outline-none mx-auto block" min="1">`;
                     
-                    tdResitHtml = `<input type="file" id="resit_${d.id}_${d.prodName}" accept="image/*,.pdf" class="text-xs w-48 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:font-semibold file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300 cursor-pointer border border-gray-200 rounded-lg p-1 mx-auto block">`;
+                    tdResitHtml = `<input type="file" id="resit_${d.id}_${d.prodName}" accept="image/*,.pdf" class="text-lg w-48 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:font-semibold file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300 cursor-pointer border border-gray-200 rounded-lg p-1 mx-auto block">`;
                     
-                    tdActionHtml = `<button class="claim-btn bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md w-full max-w-[100px] mx-auto block whitespace-nowrap"
+                    tdActionHtml = `<button class="claim-btn bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-5 py-2 rounded-lg text-lg font-bold shadow-md w-full max-w-[100px] mx-auto block whitespace-nowrap"
                                     data-userid="${d.id}" data-prod="${d.prodName}" data-docref="${d.docRefNo}" data-cust="${d.clientName}">
                                 Tuntut
                             </button>`;
