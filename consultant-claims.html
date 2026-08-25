@@ -113,14 +113,19 @@
         </div>
     </div>
 
-    <!-- FIREBASE SCRIPT -->
+   <!-- FIREBASE SCRIPT -->
     <script type="module">
         import { db, auth } from './firebase.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { doc, getDoc, getDocs, collection, query, where, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        
+        // --- TAMBAH IMPORT INI UNTUK UPLOAD RESIT ---
+        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
+        const storage = getStorage(); // Aktifkan Storage
         let currentConsultant = null;
-
+        
+       
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 window.location.href = "login.html";
@@ -175,7 +180,7 @@
             }
         });
 
-        function renderTable(docs) {
+       function renderTable(docs) {
             const tbody = document.getElementById("claimListTable");
             tbody.innerHTML = "";
 
@@ -192,11 +197,18 @@
                 if (d.claimStatus === "claimed") {
                     actionHtml = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-xs font-bold shadow-inner inline-block">✅ Tuntutan Dihantar</span>`;
                 } else {
+                    // UI BARU: Ada kotak RM dan Upload File
                     actionHtml = `
-                        <button class="claim-btn bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md"
-                                data-userid="${d.id}" data-prod="${d.prodName}" data-docref="${d.docRefNo}" data-cust="${d.clientName}">
-                            Tuntut
-                        </button>
+                        <div class="flex flex-col gap-2 items-center justify-center">
+                            <input type="number" id="amt_${d.id}_${d.prodName}" placeholder="Nilai (RM)" class="border border-gray-300 p-2 rounded text-sm w-full max-w-[160px]" min="1">
+                            
+                            <input type="file" id="resit_${d.id}_${d.prodName}" accept="image/*,.pdf" class="text-xs w-full max-w-[160px] file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-[#153638] file:text-white hover:file:bg-[#1d4a4d] cursor-pointer">
+                            
+                            <button class="claim-btn bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md w-full max-w-[160px]"
+                                    data-userid="${d.id}" data-prod="${d.prodName}" data-docref="${d.docRefNo}" data-cust="${d.clientName}">
+                                Tuntut
+                            </button>
+                        </div>
                     `;
                 }
 
@@ -223,54 +235,80 @@
             const docRefNo = btn.getAttribute("data-docref");
             const custName = btn.getAttribute("data-cust");
 
-            const confirmClaim = confirm(`Hantar tuntutan stamping untuk dokumen ${docRefNo} pelanggan ${custName}?`);
+            // TANGKAP NILAI RM & FILE RESIT
+            const inputAmt = document.getElementById(`amt_${userId}_${prod}`).value;
+            const inputFile = document.getElementById(`resit_${userId}_${prod}`).files[0];
+
+            // VALIDATION: Pastikan AQC isi semua sebelum Tuntut
+            if (!inputAmt || inputAmt <= 0) {
+                alert("Sila masukkan nilai tuntutan (RM) yang sah.");
+                return;
+            }
+            if (!inputFile) {
+                alert("Sila muat naik (upload) fail resit terlebih dahulu.");
+                return;
+            }
+
+            const confirmClaim = confirm(`Hantar tuntutan bernilai RM${inputAmt} berserta lampiran resit untuk dokumen ${docRefNo}?`);
             if(!confirmClaim) return;
 
-            btn.innerText = "Memproses...";
+            btn.innerText = "Memuat Naik Resit...";
             btn.disabled = true;
 
             try {
-                // 1. Kunci status claim klien di Firestore (Elak double claim)
+                // 1. UPLOAD RESIT KE FIREBASE STORAGE
+                // Nama fail diubah supaya unik (gabungan No Dokumen + Timestamp)
+                const fileExtension = inputFile.name.split('.').pop();
+                const uniqueFileName = `resit_stamping/${docRefNo}_${Date.now()}.${fileExtension}`;
+                const stRef = storageRef(storage, uniqueFileName);
+                
+                await uploadBytes(stRef, inputFile);
+                const receiptUrl = await getDownloadURL(stRef); // Dapatkan URL Resit
+
+                btn.innerText = "Menyimpan Data...";
+
+                // 2. Kunci status claim klien di Firestore (Elak double claim)
                 const prodRef = doc(db, "users", userId, prod, "maklumat");
                 await updateDoc(prodRef, {
                     claimStatus: "claimed",
                     claimedAt: new Date().toISOString()
                 });
 
-                // 2. Sediakan data untuk Payment Voucher (Masuk terus ke database Admin)
-                // Guna Date.now() untuk PV yang lebih unik dan elak duplicate
+                // 3. Sediakan data untuk Payment Voucher
                 const randomPVNo = "PV-" + Date.now(); 
+                const claimAmount = parseFloat(inputAmt); // Tukar teks jadi nombor
                 
                 const newPVData = {
                     pvNo: randomPVNo,
-                    type: "CONSULTANT", // Sepadan dengan list PV Admin
+                    type: "CONSULTANT", 
                     status: "PENDING", 
                     payee: currentConsultant.nama,
                     consultantName: currentConsultant.nama,
                     consultantId: auth.currentUser.uid,
-                    amount: 10.00, // Amaun Duti Setem. Boleh ubah jika amaun lain
-                    date: new Date().toLocaleDateString("en-GB"), // Format DD/MM/YYYY
+                    amount: claimAmount, // Guna nilai yang diisi AQC
+                    date: new Date().toLocaleDateString("en-GB"),
                     beneficiaries: [],
                     accounts: [
                         { 
                             accountName: `Tuntutan Kos Stamping - ${prod.toUpperCase()} (${docRefNo}) - Klien: ${custName}`, 
-                            amount: 10.00 
+                            amount: claimAmount 
                         }
                     ],
+                    receiptUrl: receiptUrl, // <--- URL RESIT DISIMPAN DI SINI
                     paymentMethod: "",
                     referenceNo: "",
-                    remarks: "Tuntutan dijana secara automatik oleh sistem myClaims (AQC)",
+                    remarks: "Tuntutan dijana secara automatik oleh sistem myClaims (AQC). Resit telah dilampirkan.",
                     paymentDate: "",
                     createdAt: new Date().toISOString()
                 };
 
-                // 3. Masukkan rekod PV baharu ke Firestore
+                // 4. Masukkan rekod PV baharu ke Firestore
                 await addDoc(collection(db, "paymentVouchers"), newPVData);
 
-                // 4. Tukar butang AQC kepada status Selesai (Tiada Redirect)
-                const parentTd = btn.parentElement;
-                parentTd.innerHTML = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-xs font-bold shadow-inner inline-block">✅ Tuntutan Dihantar</span>`;
-                alert("Berjaya! Tuntutan anda telah dihantar ke bahagian Pengurusan untuk diproses.");
+                // 5. Tukar UI kepada status Selesai
+                const parentDiv = btn.parentElement.parentElement;
+                parentDiv.innerHTML = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-xs font-bold shadow-inner inline-block">✅ Tuntutan Dihantar</span>`;
+                alert("Berjaya! Tuntutan dan resit anda telah dihantar ke bahagian Pengurusan.");
 
             } catch (error) {
                 console.error("Gagal claim:", error);
