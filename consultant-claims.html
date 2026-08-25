@@ -197,19 +197,22 @@
                 if (d.claimStatus === "claimed") {
                     actionHtml = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-xs font-bold shadow-inner inline-block">✅ Tuntutan Dihantar</span>`;
                 } else {
-                    // UI BARU: Ada kotak RM dan Upload File
-                    actionHtml = `
-                        <div class="flex flex-col gap-2 items-center justify-center">
-                            <input type="number" id="amt_${d.id}_${d.prodName}" placeholder="Nilai (RM)" class="border border-gray-300 p-2 rounded text-sm w-full max-w-[160px]" min="1">
-                            
-                            <input type="file" id="resit_${d.id}_${d.prodName}" accept="image/*,.pdf" class="text-xs w-full max-w-[160px] file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-[#153638] file:text-white hover:file:bg-[#1d4a4d] cursor-pointer">
-                            
-                            <button class="claim-btn bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md w-full max-w-[160px]"
-                                    data-userid="${d.id}" data-prod="${d.prodName}" data-docref="${d.docRefNo}" data-cust="${d.clientName}">
-                                Tuntut
-                            </button>
-                        </div>
-                    `;
+                   // UI BARU: Susunan sebaris (flex-row) yang lebih kemas
+                actionHtml = `
+                    <div class="flex flex-row items-center justify-center gap-3">
+                        <!-- Kotak Nilai RM (Dikecilkan sikit) -->
+                        <input type="number" id="amt_${d.id}_${d.prodName}" placeholder="RM" class="border border-gray-300 p-2 rounded-lg text-sm w-24 text-center focus:ring-2 focus:ring-[#153638] outline-none" min="1">
+                        
+                        <!-- Kotak Upload Resit -->
+                        <input type="file" id="resit_${d.id}_${d.prodName}" accept="image/*,.pdf" class="text-xs w-[190px] file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:font-semibold file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300 cursor-pointer border border-gray-200 rounded-lg p-1">
+                        
+                        <!-- Butang Tuntut -->
+                        <button class="claim-btn bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md whitespace-nowrap"
+                                data-userid="${d.id}" data-prod="${d.prodName}" data-docref="${d.docRefNo}" data-cust="${d.clientName}">
+                            Tuntut
+                        </button>
+                    </div>
+                `;
                 }
 
                 tr.innerHTML = `
