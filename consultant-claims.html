@@ -133,12 +133,6 @@
                 if (!consSnap.exists()) return;
                 currentConsultant = consSnap.data();
 
-                // Set Data PV secara bersedia
-                document.getElementById("pvConsName").innerText = currentConsultant.nama.toUpperCase();
-                document.getElementById("pvConsNo").innerText = currentConsultant.consultantNo;
-                document.getElementById("pvBankName").innerText = currentConsultant.bankName || "-";
-                document.getElementById("pvBankAcc").innerText = currentConsultant.bankAccount || "-";
-
                 // 2. Cari Semua Pelanggan Di Bawah Konsultan Ini
                 const q = query(collection(db, "users"), where("referral", "==", currentConsultant.consultantNo));
                 const clientsSnap = await getDocs(q);
@@ -146,7 +140,7 @@
                 const claimableDocs = [];
                 const products = ["wasiat", "hibah", "sepencarian", "mawaris"];
 
-                // 3. Loop Pelanggan & Semak Dokumen Yang Dah Selesai
+                // 3. Loop Pelanggan & Semak Dokumen (Yang Workflow / Status = RECEIVED)
                 for (const clientDoc of clientsSnap.docs) {
                     const clientData = clientDoc.data();
                     
@@ -156,14 +150,15 @@
 
                         if (prodSnap.exists()) {
                             const pData = prodSnap.data();
-                            // HANYA dokumen yang COMPLETED atau STAMPED boleh di-claim
-                            if (pData.status === "COMPLETED" || pData.status === "STAMPED") {
+                            
+                            // SYARAT BARU: HANYA jika workflow atau status adalah RECEIVED
+                            if (pData.workflow === "RECEIVED" || pData.status === "RECEIVED") {
                                 claimableDocs.push({
                                     id: clientDoc.id,
                                     prodName: prod,
                                     clientName: clientData.nama,
                                     docRefNo: pData.docRef || "-",
-                                    status: pData.status,
+                                    status: "RECEIVED",
                                     claimStatus: pData.claimStatus || "unclaimed"
                                 });
                             }
@@ -185,7 +180,7 @@
             tbody.innerHTML = "";
 
             if (docs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-5 text-center text-gray-500 font-medium">Tiada dokumen berstatus COMPLETED / STAMPED untuk dituntut buat masa ini.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="p-5 text-center text-gray-500 font-medium">Tiada dokumen berstatus RECEIVED untuk dituntut buat masa ini.</td></tr>`;
                 return;
             }
 
@@ -195,12 +190,12 @@
 
                 let actionHtml = "";
                 if (d.claimStatus === "claimed") {
-                    actionHtml = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-xs font-bold shadow-inner inline-block">✅ Tuntutan Selesai (PV Dijana)</span>`;
+                    actionHtml = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-xs font-bold shadow-inner inline-block">✅ Tuntutan Dihantar</span>`;
                 } else {
                     actionHtml = `
-                        <button class="claim-btn bg-green-600 hover:bg-green-700 transition text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md"
+                        <button class="claim-btn bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md"
                                 data-userid="${d.id}" data-prod="${d.prodName}" data-docref="${d.docRefNo}" data-cust="${d.clientName}">
-                            📄 Jana PV & Tuntut
+                            Tuntut
                         </button>
                     `;
                 }
@@ -209,7 +204,7 @@
                     <td class="p-3">${d.clientName}</td>
                     <td class="p-3 font-semibold text-gray-700 uppercase">${d.prodName}</td>
                     <td class="p-3">${d.docRefNo}</td>
-                    <td class="p-3"><span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded border border-blue-200">${d.status}</span></td>
+                    <td class="p-3"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded border border-green-200">${d.status}</span></td>
                     <td class="p-3 text-center">${actionHtml}</td>
                 `;
                 tbody.appendChild(tr);
@@ -221,14 +216,14 @@
             });
         }
 
-       async function handleClaimAction(e) {
+        async function handleClaimAction(e) {
             const btn = e.currentTarget;
             const userId = btn.getAttribute("data-userid");
             const prod = btn.getAttribute("data-prod");
             const docRefNo = btn.getAttribute("data-docref");
             const custName = btn.getAttribute("data-cust");
 
-            const confirmClaim = confirm(`Jana Payment Voucher (PV) untuk dokumen ${docRefNo}?\n(Tindakan ini tidak boleh diundur)`);
+            const confirmClaim = confirm(`Hantar tuntutan stamping untuk dokumen ${docRefNo} pelanggan ${custName}?`);
             if(!confirmClaim) return;
 
             btn.innerText = "Memproses...";
@@ -242,43 +237,48 @@
                     claimedAt: new Date().toISOString()
                 });
 
-                // 2. Sediakan data untuk Payment Voucher baharu
-                const randomPVNo = "PV-" + Math.floor(1000 + Math.random() * 9000);
+                // 2. Sediakan data untuk Payment Voucher (Masuk terus ke database Admin)
+                // Guna Date.now() untuk PV yang lebih unik dan elak duplicate
+                const randomPVNo = "PV-" + Date.now(); 
                 
                 const newPVData = {
                     pvNo: randomPVNo,
-                    status: "PENDING", // Status awal
+                    type: "CONSULTANT", // Sepadan dengan list PV Admin
+                    status: "PENDING", 
                     payee: currentConsultant.nama,
                     consultantName: currentConsultant.nama,
-                    consultantId: auth.currentUser.uid, // ID AQC
-                    amount: 100.00, // Amaun default claim stamping (Boleh diubah)
-                    beneficiaries: [], // Kosongkan sebab ni claim AQC, bukan agihan pusaka
+                    consultantId: auth.currentUser.uid,
+                    amount: 10.00, // Amaun Duti Setem. Boleh ubah jika amaun lain
+                    date: new Date().toLocaleDateString("en-GB"), // Format DD/MM/YYYY
+                    beneficiaries: [],
                     accounts: [
                         { 
                             accountName: `Tuntutan Kos Stamping - ${prod.toUpperCase()} (${docRefNo}) - Klien: ${custName}`, 
-                            amount: 100.00 
+                            amount: 10.00 
                         }
                     ],
                     paymentMethod: "",
                     referenceNo: "",
-                    remarks: "Tuntutan dijana secara automatik oleh sistem myClaims",
+                    remarks: "Tuntutan dijana secara automatik oleh sistem myClaims (AQC)",
                     paymentDate: "",
                     createdAt: new Date().toISOString()
                 };
 
                 // 3. Masukkan rekod PV baharu ke Firestore
-                const pvDocRef = await addDoc(collection(db, "paymentVouchers"), newPVData);
+                await addDoc(collection(db, "paymentVouchers"), newPVData);
 
-                // 4. Redirect terus ke muka surat Payment Voucher awak!
-                // Pastikan nama fail di bawah sama dengan nama fail HTML yang awak tunjuk tadi
-                window.location.href = `payment-voucher-detail.html?id=${pvDocRef.id}`;
+                // 4. Tukar butang AQC kepada status Selesai (Tiada Redirect)
+                const parentTd = btn.parentElement;
+                parentTd.innerHTML = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-xs font-bold shadow-inner inline-block">✅ Tuntutan Dihantar</span>`;
+                alert("Berjaya! Tuntutan anda telah dihantar ke bahagian Pengurusan untuk diproses.");
 
             } catch (error) {
                 console.error("Gagal claim:", error);
                 alert("Ralat sistem: " + error.message);
-                btn.innerText = "📄 Jana PV & Tuntut";
+                btn.innerText = "Tuntut";
                 btn.disabled = false;
             }
-        }    </script>
+        }
+    </script>
 </body>
 </html>
