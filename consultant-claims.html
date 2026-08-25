@@ -201,7 +201,17 @@
                 let tdResitHtml = "";
                 let tdActionHtml = "";
 
-                if (d.claimStatus === "claimed") {
+                // KOTAK STATUS DEFAULT (Hijau: RECEIVED)
+                let statusDisplay = `<span class="bg-green-100 text-green-800 text-sm font-bold px-3 py-1.5 rounded-lg border border-green-200 shadow-sm inline-block">${d.status}</span>`;
+
+                   if (d.claimStatus === "paid") {
+                    // JIKA ADMIN DAH TEKAN PAID
+                    statusDisplay = `<span class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1.5 rounded-lg border border-blue-200 shadow-sm inline-block">PAID</span>`;
+                    tdRmHtml = `<span class="text-gray-400 font-bold">-</span>`;
+                    tdResitHtml = `<span class="text-gray-400 font-bold">-</span>`;
+                    tdActionHtml = `<span class="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-inner inline-block whitespace-nowrap">💸 Selesai Dibayar</span>`;
+                
+                } else if (d.claimStatus === "claimed") {
                     // Jika dah claim, letak sengkang (-) pada kotak input dan papar status selesai
                     tdRmHtml = `<span class="text-gray-400 font-bold">-</span>`;
                     tdResitHtml = `<span class="text-gray-400 font-bold">-</span>`;
@@ -296,6 +306,11 @@
                     payee: currentConsultant.nama,
                     consultantName: currentConsultant.nama,
                     consultantId: auth.currentUser.uid,
+                    // ==========================================
+                    // TAMBAH 2 BARIS INI UNTUK RUJUKAN ADMIN
+                    // ==========================================
+                    clientId: userId,
+                    prodName: prod,
                     amount: claimAmount, // Guna nilai yang diisi AQC
                     date: new Date().toISOString(),
                     beneficiaries: [],
