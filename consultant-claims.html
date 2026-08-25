@@ -316,9 +316,18 @@
                 // 4. Masukkan rekod PV baharu ke Firestore
                 await addDoc(collection(db, "paymentVouchers"), newPVData);
 
-                // 5. Tukar UI kepada status Selesai
-                const parentDiv = btn.parentElement.parentElement;
-                parentDiv.innerHTML = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-xs font-bold shadow-inner inline-block">✅ Tuntutan Dihantar</span>`;
+                // 5. Tukar UI kepada status Selesai tanpa merosakkan kolum jadual
+                const trRow = btn.closest("tr"); // Cari baris (row) semasa
+                
+                // Gantikan kolum Nilai RM (Kolum ke-5)
+                trRow.cells[4].innerHTML = `<span class="text-gray-400 font-bold">-</span>`;
+                
+                // Gantikan kolum Bukti Resit (Kolum ke-6)
+                trRow.cells[5].innerHTML = `<span class="text-gray-400 font-bold">-</span>`;
+                
+                // Gantikan kolum Tindakan (Kolum ke-7) dengan label bersaiz text-lg
+                trRow.cells[6].innerHTML = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-sm font-bold shadow-inner inline-block whitespace-nowrap">✅ Tuntutan Dihantar</span>`;
+                
                 alert("Berjaya! Tuntutan dan resit anda telah dihantar ke bahagian Pengurusan.");
 
             } catch (error) {
