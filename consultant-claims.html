@@ -117,7 +117,7 @@
     <script type="module">
         import { db, auth } from './firebase.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { doc, getDoc, getDocs, collection, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { doc, getDoc, getDocs, collection, query, where, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         let currentConsultant = null;
 
@@ -221,7 +221,7 @@
             });
         }
 
-        async function handleClaimAction(e) {
+       async function handleClaimAction(e) {
             const btn = e.currentTarget;
             const userId = btn.getAttribute("data-userid");
             const prod = btn.getAttribute("data-prod");
@@ -235,43 +235,43 @@
             btn.disabled = true;
 
             try {
-                // 1. Update status claim di Firestore (Elak double claim)
-                const docRef = doc(db, "users", userId, prod, "maklumat");
-                const claimDateStr = new Date().toISOString();
-                
-                await updateDoc(docRef, {
+                // 1. Kunci status claim klien di Firestore (Elak double claim)
+                const prodRef = doc(db, "users", userId, prod, "maklumat");
+                await updateDoc(prodRef, {
                     claimStatus: "claimed",
-                    claimedAt: claimDateStr
+                    claimedAt: new Date().toISOString()
                 });
 
-                // 2. Isi data dinamik ke dalam Template PV (Hidden)
-                const todayMY = new Date().toLocaleDateString("ms-MY");
-                const randomPVNo = "PV-" + Math.floor(1000 + Math.random() * 9000); // Nombor PV ringkas
+                // 2. Sediakan data untuk Payment Voucher baharu
+                const randomPVNo = "PV-" + Math.floor(1000 + Math.random() * 9000);
                 
-                document.getElementById("pvDocRef").innerText = docRefNo;
-                document.getElementById("pvCustName").innerText = custName.toUpperCase();
-                document.getElementById("pvDate").innerText = todayMY;
-                document.getElementById("pvRefAuto").innerText = randomPVNo;
-
-                // 3. JANA PDF MENGGUNAKAN HTML2PDF
-                const element = document.getElementById("pvDocument");
-                
-                // Pilihan kualiti rendering PDF
-                const opt = {
-                    margin:       0,
-                    filename:     `PV_Claim_${docRefNo}.pdf`,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2 },
-                    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+                const newPVData = {
+                    pvNo: randomPVNo,
+                    status: "PENDING", // Status awal
+                    payee: currentConsultant.nama,
+                    consultantName: currentConsultant.nama,
+                    consultantId: auth.currentUser.uid, // ID AQC
+                    amount: 100.00, // Amaun default claim stamping (Boleh diubah)
+                    beneficiaries: [], // Kosongkan sebab ni claim AQC, bukan agihan pusaka
+                    accounts: [
+                        { 
+                            accountName: `Tuntutan Kos Stamping - ${prod.toUpperCase()} (${docRefNo}) - Klien: ${custName}`, 
+                            amount: 100.00 
+                        }
+                    ],
+                    paymentMethod: "",
+                    referenceNo: "",
+                    remarks: "Tuntutan dijana secara automatik oleh sistem myClaims",
+                    paymentDate: "",
+                    createdAt: new Date().toISOString()
                 };
 
-                // Tukar, save PDF, kemudian ubah UI
-                html2pdf().set(opt).from(element).save().then(() => {
-                    // Tukar butang UI kepada status selesai
-                    const parentTd = btn.parentElement;
-                    parentTd.innerHTML = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-xs font-bold shadow-inner inline-block">✅ Tuntutan Selesai (PV Dijana)</span>`;
-                    alert("Berjaya! Dokumen PV sedang di-download ke peranti anda.");
-                });
+                // 3. Masukkan rekod PV baharu ke Firestore
+                const pvDocRef = await addDoc(collection(db, "paymentVouchers"), newPVData);
+
+                // 4. Redirect terus ke muka surat Payment Voucher awak!
+                // Pastikan nama fail di bawah sama dengan nama fail HTML yang awak tunjuk tadi
+                window.location.href = `payment-voucher-detail.html?id=${pvDocRef.id}`;
 
             } catch (error) {
                 console.error("Gagal claim:", error);
@@ -279,7 +279,6 @@
                 btn.innerText = "📄 Jana PV & Tuntut";
                 btn.disabled = false;
             }
-        }
-    </script>
+        }    </script>
 </body>
 </html>
