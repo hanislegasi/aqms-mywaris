@@ -40,17 +40,20 @@
             
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-gray-100 border-b-2 border-gray-300 text-[#153638]">
-                            <th class="p-3 font-semibold">Pelanggan</th>
-                            <th class="p-3 font-semibold">Dokumen</th>
-                            <th class="p-3 font-semibold">No. Rujukan</th>
-                            <th class="p-3 font-semibold">Status Semasa</th>
-                            <th class="p-3 font-semibold text-center">Tindakan / Tuntutan</th>
+                   <thead>
+                        <tr class="bg-gray-100 border-b-2 border-gray-300 text-[#153638] text-sm">
+                            <th class="p-3 font-semibold whitespace-nowrap">Pelanggan</th>
+                            <th class="p-3 font-semibold whitespace-nowrap">Dokumen</th>
+                            <th class="p-3 font-semibold whitespace-nowrap">No. Rujukan</th>
+                            <th class="p-3 font-semibold whitespace-nowrap">Status Semasa</th>
+                            <th class="p-3 font-semibold text-center whitespace-nowrap">Nilai (RM)</th>
+                            <th class="p-3 font-semibold text-center whitespace-nowrap">Bukti Resit</th>
+                            <th class="p-3 font-semibold text-center whitespace-nowrap">Tindakan</th>
                         </tr>
                     </thead>
                     <tbody id="claimListTable">
-                        <tr><td colspan="5" class="p-4 text-center text-gray-500">Memuatkan data senarai tuntutan...</td></tr>
+                        <!-- Tukar colspan="5" kepada colspan="7" -->
+                        <tr><td colspan="7" class="p-4 text-center text-gray-500">Memuatkan data senarai tuntutan...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -185,42 +188,44 @@
             tbody.innerHTML = "";
 
             if (docs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-5 text-center text-gray-500 font-medium">Tiada dokumen berstatus RECEIVED untuk dituntut buat masa ini.</td></tr>`;
+                // Tukar colspan ke 7
+                tbody.innerHTML = `<tr><td colspan="7" class="p-5 text-center text-gray-500 font-medium">Tiada dokumen berstatus RECEIVED untuk dituntut buat masa ini.</td></tr>`;
                 return;
             }
 
             docs.forEach((d) => {
                 const tr = document.createElement("tr");
-                tr.className = "border-b hover:bg-gray-50 transition";
+                tr.className = "border-b hover:bg-gray-50 transition text-sm";
 
-                let actionHtml = "";
+                let tdRmHtml = "";
+                let tdResitHtml = "";
+                let tdActionHtml = "";
+
                 if (d.claimStatus === "claimed") {
-                    actionHtml = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-xs font-bold shadow-inner inline-block">✅ Tuntutan Dihantar</span>`;
+                    // Jika dah claim, letak sengkang (-) pada kotak input dan papar status selesai
+                    tdRmHtml = `<span class="text-gray-400 font-bold">-</span>`;
+                    tdResitHtml = `<span class="text-gray-400 font-bold">-</span>`;
+                    tdActionHtml = `<span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-xs font-bold shadow-inner inline-block whitespace-nowrap">✅ Tuntutan Dihantar</span>`;
                 } else {
-                   // UI BARU: Susunan sebaris (flex-row) yang lebih kemas
-                actionHtml = `
-                    <div class="flex flex-row items-center justify-center gap-3">
-                        <!-- Kotak Nilai RM (Dikecilkan sikit) -->
-                        <input type="number" id="amt_${d.id}_${d.prodName}" placeholder="RM" class="border border-gray-300 p-2 rounded-lg text-sm w-24 text-center focus:ring-2 focus:ring-[#153638] outline-none" min="1">
-                        
-                        <!-- Kotak Upload Resit -->
-                        <input type="file" id="resit_${d.id}_${d.prodName}" accept="image/*,.pdf" class="text-xs w-[190px] file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:font-semibold file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300 cursor-pointer border border-gray-200 rounded-lg p-1">
-                        
-                        <!-- Butang Tuntut -->
-                        <button class="claim-btn bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md whitespace-nowrap"
-                                data-userid="${d.id}" data-prod="${d.prodName}" data-docref="${d.docRefNo}" data-cust="${d.clientName}">
-                            Tuntut
-                        </button>
-                    </div>
-                `;
+                    // Kolum berasingan untuk isian data
+                    tdRmHtml = `<input type="number" id="amt_${d.id}_${d.prodName}" placeholder="Cth: 10" class="border border-gray-300 p-2 rounded-lg text-sm w-20 text-center focus:ring-2 focus:ring-[#153638] outline-none mx-auto block" min="1">`;
+                    
+                    tdResitHtml = `<input type="file" id="resit_${d.id}_${d.prodName}" accept="image/*,.pdf" class="text-xs w-48 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:font-semibold file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300 cursor-pointer border border-gray-200 rounded-lg p-1 mx-auto block">`;
+                    
+                    tdActionHtml = `<button class="claim-btn bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md w-full max-w-[100px] mx-auto block whitespace-nowrap"
+                                    data-userid="${d.id}" data-prod="${d.prodName}" data-docref="${d.docRefNo}" data-cust="${d.clientName}">
+                                Tuntut
+                            </button>`;
                 }
 
                 tr.innerHTML = `
-                    <td class="p-3">${d.clientName}</td>
-                    <td class="p-3 font-semibold text-gray-700 uppercase">${d.prodName}</td>
-                    <td class="p-3">${d.docRefNo}</td>
-                    <td class="p-3"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded border border-green-200">${d.status}</span></td>
-                    <td class="p-3 text-center">${actionHtml}</td>
+                    <td class="p-3 align-middle">${d.clientName}</td>
+                    <td class="p-3 font-semibold text-gray-700 uppercase align-middle">${d.prodName}</td>
+                    <td class="p-3 align-middle">${d.docRefNo}</td>
+                    <td class="p-3 align-middle"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded border border-green-200">${d.status}</span></td>
+                    <td class="p-3 text-center align-middle">${tdRmHtml}</td>
+                    <td class="p-3 text-center align-middle">${tdResitHtml}</td>
+                    <td class="p-3 text-center align-middle">${tdActionHtml}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -230,7 +235,6 @@
                 btn.addEventListener("click", handleClaimAction);
             });
         }
-
         async function handleClaimAction(e) {
             const btn = e.currentTarget;
             const userId = btn.getAttribute("data-userid");
