@@ -23,7 +23,7 @@
             background-color: #f3f4f6;
             margin: 0;
             padding: 0;
-            
+            overflow-x: hidden; /* <-- BARIS BARU */
             /* --- TAMBAH 4 BARIS INI UNTUK HALANG HANDPHONE BESARKAN TEKS --- */
             -webkit-text-size-adjust: none;
             -moz-text-size-adjust: none;
@@ -175,7 +175,7 @@ margin:0 !important;
     </div>
 
     <!-- MAIN CONTENT & PDF PREVIEW WRAPPER -->
-    <main class="flex-grow flex flex-col items-center pt-8 pb-4 overflow-auto">
+   <main class="flex-grow flex flex-col items-center pt-8 pb-4 overflow-y-auto overflow-x-hidden">
         
         <!-- WRAPPER UNTUK SKALA (Bagi paparan mobile cantik) -->
         <div id="scale-wrapper" class="drop-shadow-2xl">
@@ -1749,6 +1749,16 @@ try {
 } catch (e) {
     console.error("Ralat TOC:", e);
 }
+
+// FIX: kira semula scale & marginBottom SELEPAS semua a4-page dinamik
+// (wasiat/hibah/lampiran) siap dimasukkan ke DOM. Panggilan updateScale()
+// yang asal jalan 100ms lepas DOMContentLoaded -- iaitu SEBELUM data
+// Firestore ni sampai -- jadi ia guna ketinggian "skeleton" je (3 page),
+// bukan ketinggian sebenar (boleh jadi berbelas-belas page selepas
+// wasiat/hibah/lampiran generate). Desktop tak nampak isu ni sebab
+// desktop terus scale(1) tanpa kira ketinggian langsung.
+await document.fonts.ready;
+updateScale();
                         
 /*
 document.getElementById(
