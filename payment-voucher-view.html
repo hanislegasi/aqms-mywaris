@@ -45,20 +45,14 @@ id="voucherArea"
 class="bg-white rounded-xl shadow p-4">
 
 <div class="text-center mb-4">
+                <h1 id="companyName" class="text-2xl font-bold uppercase">
+                    Memuatkan...
+                </h1>
+                
+                <p class="text-lg font-semibold mt-2">PAYMENT VOUCHER</p>
+                <p class="text-gray-500 text-sm">Financial Management Centre</p>
+            </div>
 
-<h1 class="text-2xl font-bold">
-AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.
-</h1>
-
-<p class="text-lg font-semibold mt-2">
-PAYMENT VOUCHER
-</p>
-
-<p class="text-gray-500 text-sm">
-Financial Management Centre
-</p>
-
-</div>
   
 <div class="grid md:grid-cols-2 gap-4 mb-6">
 
@@ -179,6 +173,16 @@ Amount
 </tbody>
 
 </table>
+
+<!-- ============================================== -->
+            <!-- BAHAGIAN LAMPIRAN RESIT (DITAMBAH DI SINI) -->
+            <!-- ============================================== -->
+            <hr class="my-3">
+            <h2 class="font-bold text-lg mb-4">Lampiran Resit (Bukti Bayaran)</h2>
+            <div id="receiptSection" class="mb-6 p-4 border rounded-xl bg-gray-50 flex items-center justify-between">
+                <p class="text-sm text-gray-500 italic">Tiada lampiran resit untuk PV ini.</p>
+            </div>
+            <!-- ============================================== -->
   
 <hr class="my-3">
 
@@ -323,6 +327,26 @@ pvRef
 const pv =
 pvSnap.data();
 
+// ==============================================
+        // TARIK NAMA SYARIKAT DARI SETTINGS
+        // ==============================================
+        try {
+            // Andaikan data syarikat disimpan dalam collection "settings", document "company"
+            const companyRef = doc(db, "settings", "company");
+            const companySnap = await getDoc(companyRef);
+            
+            if (companySnap.exists() && companySnap.data().companyName) {
+                document.getElementById("companyName").innerText = companySnap.data().companyName;
+            } else {
+                // Fallback (jika data belum diset dalam database)
+                document.getElementById("companyName").innerText = "AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.";
+            }
+        } catch (error) {
+            console.error("Gagal menarik nama syarikat:", error);
+            document.getElementById("companyName").innerText = "AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.";
+        }
+        // ==============================================
+  
 document.getElementById("pvNo").innerHTML =
 pv.pvNo;
 
@@ -395,6 +419,29 @@ RM${Number(item.amount).toFixed(2)}
 
 document.getElementById("accountTable").innerHTML=
 accountHTML;
+
+// ==============================================
+        // LOGIK MEMAPARKAN RESIT (DITAMBAH DI SINI)
+        // ==============================================
+        if (pv.receiptUrl) {
+            document.getElementById("receiptSection").innerHTML = `
+                <div class="flex items-center gap-4">
+                    <div class="bg-[#153638] text-white p-3 rounded-lg text-xl shadow-md">
+                        📄
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">Resit Stamping LHDN</p>
+                        <a href="${pv.receiptUrl}" target="_blank" class="text-blue-600 text-sm hover:underline">
+                            Lihat Dokumen
+                        </a>
+                    </div>
+                </div>
+                <a href="${pv.receiptUrl}" target="_blank" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-5 py-2 rounded-lg text-sm font-bold transition border border-blue-200 shadow-sm">
+                    Buka Resit ↗
+                </a>
+            `;
+        }
+        // ==============================================
   
 document.getElementById("paymentMethod").value =
 pv.paymentMethod || "";
