@@ -61,12 +61,11 @@
         <input type="text" id="namaSyarikat" placeholder="Nama Syarikat (Sdn Bhd)" class="w-full border rounded-lg p-3 mb-3">
         <input type="text" id="noSsm" placeholder="No. Pendaftaran Syarikat (SSM)" class="w-full border rounded-lg p-3 mb-3">
 
-        <!-- DROPDOWN DINAMIK AGIHAN SAHAM -->
-        <select id="kategoriAgihanSaham" class="w-full border rounded-lg p-3 mb-3 font-semibold text-[#153638] bg-gray-50">
-            <option value="">Pilih Kategori Agihan Saham</option>
-            <option value="faraid">Faraid Sahaja</option>
-            <option value="hibah">Hibah Kepada Waris</option>
-            <option value="buysell">Buy-Sell Agreement (Ada Rakan Kongsi)</option>
+        <!-- DROPDOWN STATUS PEMILIKAN (PEMILIK TUNGGAL / RAKAN KONGSI) -->
+        <select id="statusPemilikan" class="w-full border rounded-lg p-3 mb-3 font-semibold text-[#153638] bg-gray-50">
+            <option value="">Pilih Status Pemilikan Syarikat</option>
+            <option value="rakankongsi">Dimiliki Bersama Rakan Kongsi (Buy-Sell Agreement)</option>
+            <option value="tunggal">Dimiliki Oleh Saya Seorang (Pemilik Tunggal / Hibah)</option>
         </select>
 
         <!-- KOTAK JIKA PILIH BUY-SELL AGREEMENT -->
@@ -233,7 +232,7 @@
         // 2. KORPORAT & WASI
         document.getElementById("namaSyarikat").value = data.namaSyarikat || "";
         document.getElementById("noSsm").value = data.noSsm || "";
-        document.getElementById("kategoriAgihanSaham").value = data.kategoriAgihanSaham || "";
+        document.getElementById("statusPemilikan").value = data.statusPemilikan || "";
         document.getElementById("tarikhPerjanjian").value = data.tarikhPerjanjian || "";
         
         document.getElementById("namaWasi1").value = data.namaWasi1 || "";
@@ -260,10 +259,10 @@
         populateWarisDropdowns();
 
         // TRIGGER DROPDOWN KORPORAT
-        document.getElementById("kategoriAgihanSaham").dispatchEvent(new Event("change"));
+        document.getElementById("statusPemilikan").dispatchEvent(new Event("change"));
 
         // LOAD HIBAH SAHAM KORPORAT
-        if(data.kategoriAgihanSaham === "hibah" && data.penerimaHibahSaham){
+       if(data.statusPemilikan === "tunggal" && data.penerimaHibahSaham){
             const container = document.getElementById("hibahSahamContainer");
             container.innerHTML = "";
             data.penerimaHibahSaham.forEach(p => {
@@ -299,19 +298,19 @@
       }
     });
 
-    // --- LOGIK KATEGORI AGIHAN SAHAM ---
-    const katAgihanSelect = document.getElementById("kategoriAgihanSaham");
+    // --- LOGIK STATUS PEMILIKAN ---
+    const statusPemilikanSelect = document.getElementById("statusPemilikan");
     const buySellSect = document.getElementById("buySellSection");
     const hibahSect = document.getElementById("hibahSahamSection");
 
-    katAgihanSelect.addEventListener("change", function(){
+    statusPemilikanSelect.addEventListener("change", function(){
         buySellSect.classList.add("hidden");
         hibahSect.classList.add("hidden");
 
-        if(this.value === "buysell"){
-            buySellSect.classList.remove("hidden");
-        } else if (this.value === "hibah"){
-            hibahSect.classList.remove("hidden");
+        if(this.value === "rakankongsi"){
+            buySellSect.classList.remove("hidden"); // Tunjuk Tarikh Perjanjian
+        } else if (this.value === "tunggal"){
+            hibahSect.classList.remove("hidden"); // Tunjuk Kotak Penerima Hibah
             const container = document.getElementById("hibahSahamContainer");
             if(container.children.length === 0){
                 addPenerimaHibahSaham(container);
@@ -575,9 +574,9 @@
             });          
 
             // Kutip Hibah Saham
-            const kategoriAgihanSaham = document.getElementById("kategoriAgihanSaham").value;
+            const statusPemilikan = document.getElementById("statusPemilikan").value;
             const penerimaHibahSaham = [];
-            if(kategoriAgihanSaham === "hibah"){
+            if(statusPemilikan === "tunggal"){
                 document.querySelectorAll(".penerimaHibahSahamRow").forEach(row => {
                     penerimaHibahSaham.push({
                         nama: row.querySelector(".namaPenerimaHibahSaham").value,
