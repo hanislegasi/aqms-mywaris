@@ -75,7 +75,7 @@ Admin Settings
         <!-- ================= PRODUCT ================= -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
             <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Harga Produk</h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-5">
                 <div>
                     <label class="font-medium text-sm text-gray-600 block mb-1">Wasiat (RM)</label>
                     <input id="wasiatPrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
@@ -92,13 +92,17 @@ Admin Settings
                     <label class="font-medium text-sm text-gray-600 block mb-1">Mawaris (RM)</label>
                     <input id="mawarisPrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
                 </div>
+                </div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Mawaris Korporat (RM)</label>
+                    <input id="corporatePrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
             </div>
         </div>
 
         <!-- ================= RENEWAL ================= -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
             <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Renewal Produk</h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-5">
                 <div>
                     <label class="font-medium text-sm text-gray-600 block mb-1">Renewal Wasiat</label>
                     <input id="wasiatRenewal" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
@@ -114,6 +118,10 @@ Admin Settings
                 <div>
                     <label class="font-medium text-sm text-gray-600 block mb-1">Renewal Mawaris</label>
                     <input id="mawarisRenewal" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                </div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Renewal Mawaris Korporat</label>
+                    <input id="corporateRenewal" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
                 </div>
             </div>
         </div>
@@ -404,7 +412,7 @@ Admin Settings
     
     <!-- 1. INPUT UNIT PRODUK -->
     <p class="text-sm font-semibold text-[#45d9d7] uppercase tracking-wider mb-3">1. Jualan Unit Produk</p>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
         <div>
             <label class="font-medium text-xs text-gray-300 block mb-1">Wasiat (Unit)</label>
             <input id="simWasiat" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
@@ -421,8 +429,12 @@ Admin Settings
             <label class="font-medium text-xs text-gray-300 block mb-1">Mawaris (Unit)</label>
             <input id="simMawaris" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
         </div>
+        <div>
+            <label class="font-medium text-xs text-gray-300 block mb-1">Korporat (Unit)</label>
+            <input id="simCorporate" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
+        </div>
     </div>
-
+    
     <!-- 2. INPUT BILANGAN PERUNDING (BAHARU) -->
     <p class="text-sm font-semibold text-[#45d9d7] uppercase tracking-wider mb-3">2. Bilangan Perunding (Agensi)</p>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -550,8 +562,8 @@ Admin Settings
         };
 
         const defaultCompensationSettings = {
-            wasiatPrice: 350, hibahPrice: 2500, sepencarianPrice: 800, mawarisPrice: 3000,
-            wasiatRenewal: 50, hibahRenewal: 50, sepencarianRenewal: 50, mawarisRenewal: 80,
+            wasiatPrice: 350, hibahPrice: 2500, sepencarianPrice: 800, mawarisPrice: 3000, corporatePrice: 6000,
+            wasiatRenewal: 50, hibahRenewal: 50, sepencarianRenewal: 50, mawarisRenewal: 80, corporateRenewal: 200,
             commissionAQC: 35, commissionAQCAS: 38, commissionAQCUM: 40, commissionMGAM: 45,
             overrideAQC: 0, overrideAQCAS: 3, overrideAQCUM: 4, overrideMGAM: 5,
             usb: 5, usbRegistrationAmount: 50, usbLockPeriod: 3,
@@ -569,8 +581,8 @@ Admin Settings
         const companyFields = ["companyName", "registrationNo", "companyEmail", "companyAddress"];
         
         const compensationFields = [
-            "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice",
-            "wasiatRenewal", "hibahRenewal", "sepencarianRenewal", "mawarisRenewal",
+            "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice", "corporatePrice",
+            "wasiatRenewal", "hibahRenewal", "sepencarianRenewal", "mawarisRenewal", "corporateRenewal", 
             "commissionAQC", "commissionAQCAS", "commissionAQCUM", "commissionMGAM",
             "overrideAQC", "overrideAQCAS", "overrideAQCUM", "overrideMGAM",
             "usb", "usbRegistrationAmount", "usbLockPeriod", "targetSalesBonus", "rewardBonus", "kpiPeriod",
@@ -662,11 +674,13 @@ function calculateSimulation() {
     const prcHibah = getVal("hibahPrice");
     const prcSepencarian = getVal("sepencarianPrice");
     const prcMawaris = getVal("mawarisPrice");
+    const prcCorporate = getVal("corporatePrice"); // <-- 1. Tambah ini
 
     const qtyWasiat = getVal("simWasiat");
     const qtyHibah = getVal("simHibah");
     const qtySepencarian = getVal("simSepencarian");
     const qtyMawaris = getVal("simMawaris");
+    const qtyCorporate = getVal("simCorporate"); // <-- 2. Tambah ini
 
     // 2. Ambil Peratusan Pool & Syarikat
     const pctCommPool = getVal("commissionPool") / 100;   // 35%
@@ -695,7 +709,8 @@ function calculateSimulation() {
         (qtyWasiat * prcWasiat) +
         (qtyHibah * prcHibah) +
         (qtySepencarian * prcSepencarian) +
-        (qtyMawaris * prcMawaris);
+        (qtyMawaris * prcMawaris) +
+        (qtyCorporate * prcCorporate); // <-- 3. Tambah ini
 
     // Pengiraan Pool (Daripada Total Sales)
     const commissionAmount = sales * pctCommPool; // RM 350 * 35% = RM 122.50
@@ -775,9 +790,9 @@ function calculateSimulation() {
 }
       // ================= EVENT LISTENERS =================
         // Input Triggers for Simulation
-        const simTriggers = [
-            "simWasiat", "simHibah", "simSepencarian", "simMawaris",
-            "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice",
+       const simTriggers = [
+            "simWasiat", "simHibah", "simSepencarian", "simMawaris", "simCorporate", // <-- Tambah simCorporate
+            "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice", "corporatePrice", // <-- Tambah corporatePrice
            "bilAqc", "bilAqcas", "bilAqcum", "bilMgam"
         ];
         simTriggers.forEach(id => {
