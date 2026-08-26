@@ -89,14 +89,10 @@ Loading...
 // 1. Tarik 'db' dari fail konfigurasi berpusat
 import { db } from './firebase.js';
 
-// 2. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
-import {
-    collection,
-    getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+// 2. Tarik fungsi Firestore yang berkaitan sahaja
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
   
 function money(value){
-
     return Number(value || 0).toLocaleString(
         "en-US",
         {
@@ -104,328 +100,190 @@ function money(value){
             maximumFractionDigits:2
         }
     );
-
 }
-  
-const snap =
-await getDocs(
-collection(db,"ledger")
-);
 
-
+// ==========================================
+// TAMBAHAN: Tarik Chart of Accounts (COA) Master Data Terlebih Dahulu
+// ==========================================
+const coaSnap = await getDocs(collection(db, "chartOfAccounts"));
+const coaMap = {};
+coaSnap.forEach((d) => {
+    const coaData = d.data();
+    coaMap[coaData.code] = coaData.name; // Simpan kod dan nama rasmi akaun
+});
+// ==========================================
   
+const snap = await getDocs(collection(db,"ledger"));
 const accounts = {};
 
 snap.forEach((d)=>{
+    const row = d.data();
+    const code = String(row.accountCode);
 
-const row = d.data();
-
-const code =
-String(row.accountCode);
-
-if(!accounts[code]){
-
-accounts[code] = {
-
-account:
-row.account,
-
-rows:[],
-
-debit:0,
-
-credit:0,
-
-balance:0
-
-};
-
-}
-accounts[code].rows.push(row);
-
-accounts[code].debit +=
-Number(row.debit || 0);
-
-accounts[code].credit +=
-Number(row.credit || 0);
-
+    if(!accounts[code]){
+        accounts[code] = {
+            // ==========================================
+            // KEMASKINI: Wajib guna nama rasmi dari COA. 
+            // ==========================================
+            account: coaMap[code] || row.account || "Tiada Nama Akaun",
+            rows:[],
+            debit:0,
+            credit:0,
+            balance:0
+        };
+    }
+    
+    accounts[code].rows.push(row);
+    accounts[code].debit += Number(row.debit || 0);
+    accounts[code].credit += Number(row.credit || 0);
 });
 
 let originalHtml = "";
-  
 let html = "";
 
 Object.keys(accounts)
 .sort()
 .forEach((code)=>{
 
-const acc =
-accounts[code];
+    const acc = accounts[code];
+    const dates = acc.rows.map(r=>{
+        if(r.date?.toDate){
+            return r.date.toDate().toISOString().substring(0,10);
+        }
+        return "";
+    });
 
-const dates =
-acc.rows.map(r=>{
+    const latestDate = dates.sort().reverse()[0] || "";
 
-if(r.date?.toDate){
+    html += `
+    <div class="ledger-card bg-white rounded-xl shadow-sm border p-4 mb-4" data-date="${latestDate}">
+        <!-- TAJUK GL SEKARANG AKAN KEKAL KEMAS -->
+        <h2 class="text-xl font-bold mb-3 uppercase text-[#153638]">
+            ${code} - ${acc.account}
+        </h2>
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="bg-[#153638] text-white">
+                    <th class="p-3 text-left">Date</th>
+                    <th class="p-3 text-left">Description</th>
+                    <th class="p-3 text-right">Debit</th>
+                    <th class="p-3 text-right">Credit</th>
+                    <th class="p-3 text-right">Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
 
-return r.date.toDate()
-.toISOString()
-.substring(0,10);
+    acc.rows.sort((a,b)=>{
+        const dateA = a.date?.toDate ? a.date.toDate() : new Date(a.date);
+        const dateB = b.date?.toDate ? b.date.toDate() : new Date(b.date);
+        return dateA - dateB;
+    });
 
-}
+    let balance = 0;
 
-return "";
+    acc.rows.forEach((row)=>{
+        const rowDate = row.date?.toDate ? row.date.toDate().toISOString().substring(0,10) : "";
+        
+        balance += Number(row.debit || 0);
+        balance -= Number(row.credit || 0);
 
-});
+        html += `
+        <tr class="ledger-row border-b hover:bg-gray-50 transition" data-date="${rowDate}">
+            <td class="p-3 whitespace-nowrap">
+                ${row.date?.toDate ? row.date.toDate().toLocaleDateString("ms-MY") : "-"}
+            </td>
+            
+            <!-- MAKLUMAT PANJANG (KLIEN/DOKUMEN) AKAN MUNCUL DI SINI -->
+            <td class="p-3 text-gray-700">
+                ${row.description || "-"}
+            </td>
+            
+            <td class="p-3 text-right text-gray-800">
+                RM${money(row.debit)}
+            </td>
+            <td class="p-3 text-right text-gray-800">
+                RM${money(row.credit)}
+            </td>
+            <td class="p-3 text-right font-semibold ${balance < 0 ? 'text-red-600' : 'text-[#153638]'}">
+                RM${money(balance)}
+            </td>
+        </tr>
+        `;
+    });
 
-const latestDate =
-dates.sort().reverse()[0] || "";
-
-html += `
-
-<div
-class="ledger-card bg-white rounded-xl shadow-sm border p-4 mb-4"
-data-date="${latestDate}">
-
-<h2 class="text-xl font-bold mb-3">
-${code} - ${acc.account}
-</h2>
-
-<table class="w-full text-sm">
-
-<thead>
-
-<tr class="bg-[#153638] text-white">
-
-<th class="p-3 text-left">Date</th>
-<th class="p-3 text-left">Description</th>
-<th class="p-3 text-right">Debit</th>
-<th class="p-3 text-right">Credit</th>
-<th class="p-3 text-right">Balance</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-`;
-
-acc.rows.sort((a,b)=>{
-
-const dateA =
-a.date?.toDate
-? a.date.toDate()
-: new Date(a.date);
-
-const dateB =
-b.date?.toDate
-? b.date.toDate()
-: new Date(b.date);
-
-return dateA - dateB;
-
-});
-
-let balance = 0;
-
-acc.rows.forEach((row)=>{
-
-const rowDate =
-row.date?.toDate
-? row.date.toDate().toISOString().substring(0,10)
-: "";
-
-  
-balance +=
-Number(row.debit || 0);
-
-balance -=
-Number(row.credit || 0);
-
-html += `
-
-<tr
-class="ledger-row border-b hover:bg-gray-50"
-data-date="${rowDate}">
-
-<td class="p-3">
-${
-row.date?.toDate
-?
-row.date.toDate().toLocaleDateString("ms-MY")
-:
-"-"
-}
-</td>
-
-<td class="p-3">
-${row.description || "-"}
-</td>
-
-<td class="p-3 text-right">
-RM${money(row.debit)}
-</td>
-
-<td class="p-3 text-right">
-RM${money(row.credit)}
-</td>
-
-<td class="p-3 text-right">
-RM${money(balance)}
-</td>
-
-</tr>
-`;
-
-});
-
-html += `
-
-<tr class="ledger-total font-bold bg-gray-100">
-
-<td colspan="2" class="p-3">
-TOTAL
-</td>
-
-<td class="totalDebit p-3 text-right">
-RM${money(acc.debit)}
-</td>
-
-<td class="totalCredit p-3 text-right">
-RM${money(acc.credit)}
-</td>
-
-<td class="totalBalance p-3 text-right">
-RM${money(balance)}
-</td>
-
-</tr>
-
-</table>
-
-</div>
-
-`;
-
+    html += `
+            <tr class="ledger-total font-bold bg-gray-100 text-[#153638]">
+                <td colspan="2" class="p-3 text-right uppercase">
+                    Total
+                </td>
+                <td class="totalDebit p-3 text-right">
+                    RM${money(acc.debit)}
+                </td>
+                <td class="totalCredit p-3 text-right">
+                    RM${money(acc.credit)}
+                </td>
+                <td class="totalBalance p-3 text-right">
+                    RM${money(balance)}
+                </td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+    `;
 });
 
 originalHtml = html;
-
-document.getElementById(
-"plCard"
-).innerHTML =
-html;
+document.getElementById("plCard").innerHTML = html;
 
 function filterLedger(){
+    const keyword = document.getElementById("ledgerSearch").value.toLowerCase();
+    const from = document.getElementById("dateFrom").value;
+    const to = document.getElementById("dateTo").value;
 
-const keyword =
-document.getElementById("ledgerSearch").value.toLowerCase();
+    document.querySelectorAll(".ledger-card").forEach(card=>{
+        let visibleRows = 0;
+        const rows = card.querySelectorAll("tbody tr");
 
-const from =
-document.getElementById("dateFrom").value;
+        rows.forEach(row=>{
+            if(row.innerText.includes("Total")) return;
 
-const to =
-document.getElementById("dateTo").value;
+            const cells = row.querySelectorAll("td");
+            const dateText = cells[0].innerText.trim();
+            const desc = row.innerText.toLowerCase();
 
-document.querySelectorAll(".ledger-card").forEach(card=>{
+            let show = true;
 
-let visibleRows = 0;
+            if(keyword && !desc.includes(keyword)) show = false;
 
-const rows = card.querySelectorAll("tbody tr");
+            if(dateText){
+                const p = dateText.split("/");
+                const rowDate = `${p[2]}-${p[1].padStart(2,"0")}-${p[0].padStart(2,"0")}`;
 
-rows.forEach(row=>{
+                if(from && rowDate < from) show = false;
+                if(to && rowDate > to) show = false;
+            }
 
-if(row.innerText.includes("TOTAL")) return;
+            row.style.display = show ? "" : "none";
+            if(show) visibleRows++;
+        });
 
-const cells = row.querySelectorAll("td");
-
-const dateText = cells[0].innerText.trim();
-
-const desc =
-row.innerText.toLowerCase();
-
-let show = true;
-
-if(keyword && !desc.includes(keyword))
-show = false;
-
-if(dateText){
-
-const p =
-dateText.split("/");
-
-const rowDate =
-`${p[2]}-${p[1].padStart(2,"0")}-${p[0].padStart(2,"0")}`;
-
-if(from && rowDate < from)
-show = false;
-
-if(to && rowDate > to)
-show = false;
-
+        card.style.display = visibleRows ? "" : "none";
+    });
 }
-
-row.style.display =
-show ? "" : "none";
-
-if(show) visibleRows++;
-
-});
-
-card.style.display =
-visibleRows ? "" : "none";
-
-});
-
-}
-
   
-document
-.getElementById("ledgerSearch")
-.addEventListener("input", filterLedger);
-
-document
-.getElementById("dateFrom")
-.addEventListener("change", filterLedger);
-
-document
-.getElementById("dateTo")
-.addEventListener("change", filterLedger);
+document.getElementById("ledgerSearch").addEventListener("input", filterLedger);
+document.getElementById("dateFrom").addEventListener("change", filterLedger);
+document.getElementById("dateTo").addEventListener("change", filterLedger);
   
-
-document
-.getElementById("exportPdfBtn")
-.addEventListener(
-"click",
-()=>{
-
-html2pdf().set({
-
-margin:0.3,
-
-filename:"General-Ledger.pdf",
-
-image:{
-type:"jpeg",
-quality:1
-},
-
-html2canvas:{
-scale:2
-},
-
-jsPDF:{
-unit:"in",
-format:"a4",
-orientation:"portrait"
-}
-
-})
-.from(
-document.getElementById("plCard")
-)
-.save();
-
+document.getElementById("exportPdfBtn").addEventListener("click", ()=>{
+    html2pdf().set({
+        margin:0.3,
+        filename:"General-Ledger.pdf",
+        image:{type:"jpeg", quality:1},
+        html2canvas:{scale:2},
+        jsPDF:{unit:"in", format:"a4", orientation:"portrait"}
+    }).from(document.getElementById("plCard")).save();
 });
   
 </script>
