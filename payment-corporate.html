@@ -150,7 +150,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 let currentUser = null;
-let saleAmount = 350; // Fallback jika DB tiada
+let saleAmount = 6000; // Fallback jika DB tiada
 let compData = null; // Simpan data compensation daripada Firestore
 
 // 1. TUNGGU USER LOG IN DAN AMBIL HARGA SEBENAR DARI FIREBASE
@@ -172,11 +172,14 @@ onAuthStateChanged(auth, async (user) => {
             }
         }
         
-        document.getElementById("displayAmount").innerText = "RM" + saleAmount;
+        // Format nombor jadi cantik: RM 6,000.00
+        const formattedPrice = Number(saleAmount).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        document.getElementById("displayAmount").innerText = "RM " + formattedPrice;
         
     } catch (error) {
         console.error("Gagal ambil harga:", error);
-        document.getElementById("displayAmount").innerText = "RM" + saleAmount;
+        const formattedPrice = Number(saleAmount).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        document.getElementById("displayAmount").innerText = "RM " + formattedPrice;
     }
 });
 
