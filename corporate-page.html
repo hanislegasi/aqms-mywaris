@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corporate</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 min-h-screen" style="font-family: 'Inter', sans-serif;">
+
+<div class="bg-[#153638] text-white px-5 py-6 shadow">
+  <div class="flex justify-between items-center">
+    <div>
+      <h1 class="text-2xl font-bold">my-Corporate</h1>
+      <p id="namaUser">Memuatkan...</p>
+    </div>
+  </div>
+</div>
+
+<div class="p-5">
+  <a href="dashboard.html" class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-5">
+    ← Kembali ke Dashboard
+  </a>
+
+  <h2 class="font-bold text-xl mb-4">Corporate</h2>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <div id="profileCard" class="h-full">Loading...</div>
+    <div id="corporateTimeline" class="h-full"></div>
+  </div>
+
+  <hr class="my-8">
+
+  <div class="flex justify-end gap-3">
+    <a href="payment-aqm-receipts.html" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 flex-shrink-0">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6M7 4h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/>
+      </svg>
+      <span>Resit Saya</span>
+    </a>
+
+    <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold">
+      Logout
+    </button>
+  </div>
+</div>
+
+<script type="module">
+// 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
+import { db, auth } from './firebase.js';
+
+// 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
+import { 
+    onAuthStateChanged, 
+    signOut 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+// 3. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
+import { 
+    doc, 
+    getDoc, 
+    updateDoc, 
+    serverTimestamp, 
+    collection, 
+    getDocs, 
+    query, 
+    where 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+onAuthStateChanged(auth, async(user) => {
+  if(!user){
+    window.location.href="login.html";
+    return;
+  }
+
+  let corporatePrice = 350;
+
+  try {
+    const compensationSnap = await getDoc(doc(db, "settings", "compensation"));
+    if (compensationSnap.exists()) {
+      const compensationData = compensationSnap.data();
+      if (compensationData.corporatePrice !== undefined) {
+        corporatePrice = compensationData.corporatePrice;
+      }
+    }
+  } catch (error) {
+    console.error("RALAT FIRESTORE:", error.message);
+  }
+
+  const docSnap = await getDoc(doc(db, "users", user.uid));
+  if(docSnap.exists()){
+    const userData = docSnap.data();
+
+    const consultantQuery = query(
+      collection(db, "consultants"),
+      where("consultantNo", "==", userData.referral)
+    );
+    const consultantSnap = await getDocs(consultantQuery);
+    let consultantData = {};
+    if (!consultantSnap.empty) {
+      consultantData = consultantSnap.docs[0].data();
+    }
+      
+    document.getElementById("namaUser").innerHTML = "Selamat datang, " + userData.nama;
+
+    const corporateSnap = await getDoc(doc(db, "users", user.uid, "corporate", "maklumat"));
+    const corporateData = corporateSnap.exists() ? corporateSnap.data() : {};
+
+    let bakiHari = "-";
+    if(corporateData.expiryDate){
+      const today = new Date();
+      const expiry = new Date(corporateData.expiryDate);
+      bakiHari = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
+    }
+
+    let renewalAlert = "";
+    if(bakiHari !== "-" && bakiHari <= 30 && bakiHari > 0){
+      renewalAlert = `
+        <div class="bg-orange-50 border border-orange-300 rounded-xl p-4 mb-6">
+          <h3 class="font-bold text-orange-700">⚠ Keahlian Akan Tamat</h3>
+          <p class="mt-1">Keahlian anda akan tamat dalam <strong>${bakiHari} hari</strong>.</p>
+          <a href="renewal.html" class="inline-block mt-3 bg-orange-500 text-white px-4 py-2 rounded-lg">Perbaharui Sekarang</a>
+        </div>
+      `;
+    }
+
+    const currentStatus = (corporateData.status || "DRAFT").toUpperCase();
+    
+    // Render Profil Card & Kad Butang
+    document.getElementById("profileCard").innerHTML = renewalAlert + `
+      <div class="bg-gradient-to-r from-[#153638] to-[#24575a] text-white rounded-2xl p-6 shadow h-full flex flex-col justify-between">
+        <div>
+          <div class="flex justify-between items-start">
+            <div class="flex-1">
+              <p class="text-sm font-bold uppercase tracking-widest text-white/60">Profil Pecorporate</p>
+              <h2 class="text-2xl font-bold mt-2">${userData.nama || "-"}</h2>
+            </div>
+            <div class="ml-8">
+              <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold">
+                ${(userData.nama || "U")[0]}
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 space-y-3">
+            <p class="text-sm font-bold uppercase text-white/50 mb-2">Maklumat Peribadi</p>
+            <div class="space-y-3 text-sm">
+              <div class="flex justify-between border-b border-white/10 pb-2">
+                <span class="text-white/70">Telefon</span>
+                <b>${userData.telefon || "-"}</b>
+              </div>
+              <div class="flex justify-between border-b border-white/10 pb-2">
+                <span class="text-white/70">Emel</span>
+                <b>${userData.email || "-"}</b>
+              </div>
+              <div class="flex justify-between border-b border-white/10 pb-2">
+                <span class="text-white/70">Alamat</span>
+                <b class="text-right max-w-[60%]">
+                  ${[corporateData.alamat1, corporateData.alamat2, `${corporateData.poskod || ""} ${corporateData.bandar || ""}`.trim(), corporateData.negeri].filter(Boolean).join(", ") || "-"}
+                </b>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <p class="text-sm font-bold uppercase text-white/50 mb-2">Maklumat Keahlian</p>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between border-b border-white/10 pb-2">
+                  <span class="text-white/70">No. Ahli</span>
+                  <b>${userData.memberNo || "-"}</b>
+                </div>
+                <div class="flex justify-between border-b border-white/10 pb-2">
+                  <span class="text-white/70">Tamat Keahlian</span>
+                  <b>${corporateData.expiryDate ? new Date(corporateData.expiryDate).toLocaleDateString("ms-MY") : "-"}</b>
+                </div>
+                <div class="flex justify-between border-b border-white/10 pb-2">
+                  <span class="text-white/70">Baki</span>
+                  <b>${bakiHari} Hari</b>
+                </div>
+                <div class="flex justify-between border-b border-white/10 pb-2">
+                  <span class="text-white/70">Status</span>
+                  <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-xs">
+                    ${bakiHari<=0 ? "KEAHLIAN TAMAT" : userData.corporatePaymentStatus==="paid" ? "AHLI AKTIF" : "PROSPEK"}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <p class="text-sm font-bold uppercase text-white/50 mb-2">Pegawai Perunding</p>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between border-b border-white/10 pb-2">
+                  <span class="text-white/70">Nama</span>
+                  <b>${consultantData.nama || "-"}</b>
+                </div>
+                <div class="flex justify-between border-b border-white/10 pb-2">
+                  <span class="text-white/70">Telefon</span>
+                  <b>${consultantData.telefon || "-"}</b>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <p class="text-sm font-bold uppercase text-white/50 mb-2">Maklumat Dokumen</p>
+              <div class="space-y-3 text-sm">
+                <div class="flex justify-between border-b border-white/10 pb-2">
+                  <span class="text-white/70">No. Dokumen</span>
+                  <b>${corporateData.docRef || "-"}</b>
+                </div>
+                <div class="flex justify-between border-b border-white/10 pb-2">
+                  <span class="text-white/70">Status Dokumen</span>
+                  <b>${currentStatus}</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BAHAGIAN KAD BUTANG CORPORATE DAN LIHAT DOKUMEN -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
+          <a id="corporateButton" href="payment-corporate.html" class="bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl p-4 flex items-center gap-4 transition">
+            <div class="bg-white/20 p-2.5 rounded-xl">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <p id="corporateTitle" class="font-semibold text-base">Corporate</p>
+                <span id="editIcon"></span>
+              </div>
+              <p id="corporateStatus" class="hidden"></p>
+            </div>
+          </a>
+
+          <!-- BUTANG LIHAT DOKUMEN (DIASINGKAN SECARA BERSIH) -->
+          <a id="btnLihatDokumen" href="preview-corporate.html" class="hidden bg-emerald-600 hover:bg-emerald-700 border border-emerald-500/30 rounded-2xl p-4 flex items-center gap-4 transition">
+            <div class="bg-emerald-500/40 p-2.5 rounded-xl">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+            </div>
+            <span class="font-semibold text-white">Lihat Dokumen</span>
+          </a>
+        </div>
+      </div>
+    `;
+
+    // Render Timeline Status
+    const done = (status) => {
+      const order = ["APPROVED", "VERIFIED", "PRINTED", "SENT", "AKAD", "STAMPING", "HANDOVER", "RECEIVED"];
+      return order.indexOf(currentStatus) >= order.indexOf(status);
+    };
+
+    function timelineItem(doneStatus, title, date, extra = "") {
+      return `
+        <div class="flex gap-4 mb-6">
+          <div class="flex flex-col items-center">
+            <div class="${doneStatus ? "bg-green-600 text-white" : "bg-gray-200 text-gray-500"} w-10 h-10 rounded-full flex items-center justify-center font-bold">✓</div>
+          </div>
+          <div class="flex-1">
+            <h4 class="font-semibold ${doneStatus ? "text-green-700" : "text-gray-500"}">${title}</h4>
+            <p class="text-sm text-gray-500">${date}</p>
+            <div class="text-sm text-gray-600 mt-1">${extra}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    document.getElementById("corporateTimeline").innerHTML = `
+  <div class="relative overflow-hidden bg-white rounded-2xl shadow p-6 border border-gray-100">
+    
+    <!-- 1. GAMBAR LATAR BELAKANG -->
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none" 
+         style="background-image: url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=2000');">
+    </div>
+
+    <!-- 2. LAPISAN PEMALAP (OVERLAY) -->
+    <!-- Tukar bg-white/90 kepada bg-white/80 jika nak gambar nampak lebih jelas, atau bg-white/95 jika nak gambar lebih samar -->
+    <div class="absolute inset-0 bg-white/90 backdrop-blur-[2px] pointer-events-none"></div>
+
+    <!-- 3. KANDUNGAN TIMELINE (Guna relative z-10 supaya teks & butang berada di atas gambar) -->
+    <div class="relative z-10">
+      <h3 class="font-bold text-lg mb-5 text-[#153638]">Status Timeline</h3>
+      ${timelineItem(done("APPROVED"), "Approved", corporateData.approvedAt ? new Date(corporateData.approvedAt).toLocaleDateString("ms-MY") : "-")}
+      ${timelineItem(done("PRINTED"), "Printed", corporateData.printedAt ? new Date(corporateData.printedAt).toLocaleDateString("ms-MY") : "-")}
+      ${timelineItem(done("SENT"), "Sent", corporateData.sentAt ? new Date(corporateData.sentAt).toLocaleDateString("ms-MY") : "-", `Courier : ${corporateData.courier || "-"}<br>Tracking : ${corporateData.trackingNo || "-"}`)}
+      ${timelineItem(done("AKAD"), "Akad", corporateData.akadDate || "-", corporateData.akadTime || "")}
+      ${timelineItem(done("STAMPING"), "Stamping", corporateData.stampingDate || "-", corporateData.stampingRef || "")}
+      ${timelineItem(done("HANDOVER"), "Diserahkan Kepada AQM", corporateData.handoverDate || "-", corporateData.handoverRemarks || "")}
+      ${timelineItem(done("RECEIVED"), "AQM Terima Dokumen", corporateData.receivedDate || "-", !corporateData.receivedDate ? `
+        <input type="date" id="receivedDate" class="border rounded-lg p-2 mt-2 w-full bg-white/80">
+        <button id="confirmReceived" class="bg-green-600 hover:bg-green-700 text-white rounded-lg mt-2 w-full py-2 font-medium transition">Sah Terima</button>
+      ` : "")}
+    </div>
+
+  </div>
+`;
+
+
+    // LOGIK PEMBAYARAN & SEMAKAN BUTTON LIHAT DOKUMEN
+    const lihatDokumenBtn = document.getElementById("btnLihatDokumen");
+
+    if (userData.corporatePaymentStatus === "paid") {
+      if (bakiHari <= 0) {
+        // JIKA KEAHLIAN TAMAT
+        document.getElementById("corporateButton").href = "renewal.html";
+        document.getElementById("corporateTitle").innerText = "Corporate";
+        
+        const statusEl = document.getElementById("corporateStatus");
+        statusEl.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 inline text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3-1.343 3-3V7a3 3 0 10-6 0v1c0 1.657 1.343 3 3 3zm-6 0h12a1 1 0 011 1v7a2 2 0 01-2 2H7a2 2 0 01-2-2v-7a1 1 0 011-1z"/>
+          </svg> Keahlian Tamat
+        `;
+        statusEl.classList.remove("hidden");
+        statusEl.classList.add("text-sm", "text-amber-600", "mt-1");
+
+        if (lihatDokumenBtn) {
+          lihatDokumenBtn.classList.add("hidden");
+          lihatDokumenBtn.style.display = "none";
+        }
+      } else {
+        // JIKA SUDAH BAYAR DAN AKTIF
+        document.getElementById("corporateButton").href = "corporate.html";
+        document.getElementById("corporateTitle").innerText = "Corporate"; 
+        
+        document.getElementById("editIcon").innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.862 4.487a2.25 2.25 0 113.182 3.182L8.25 19.463 4.5 20.25l.787-3.75L16.862 4.487z"/>
+          </svg>
+        `;
+
+        // SEMAK SAMA ADA DOKUMEN TELAH APPROVED
+        if (currentStatus === "APPROVED" || done("APPROVED")) {
+          if (lihatDokumenBtn) {
+            lihatDokumenBtn.classList.remove("hidden");
+            lihatDokumenBtn.style.display = "flex";
+          }
+        } else {
+          if (lihatDokumenBtn) {
+            lihatDokumenBtn.classList.add("hidden");
+            lihatDokumenBtn.style.display = "none";
+          }
+        }
+      }
+    } else {
+      // JIKA BELUM BAYAR (PROSPEK)
+      document.getElementById("corporateButton").href = "payment-corporate.html";
+      document.getElementById("corporateTitle").innerText = `Bayar RM${corporatePrice}`; 
+      
+      const statusEl = document.getElementById("corporateStatus");
+      statusEl.innerText = "";
+      statusEl.classList.add("hidden"); 
+
+      if (lihatDokumenBtn) {
+        lihatDokumenBtn.classList.add("hidden");
+        lihatDokumenBtn.style.display = "none";
+      }
+    }
+
+    const receiveBtn = document.getElementById("confirmReceived");
+    if(receiveBtn){
+      receiveBtn.onclick = async()=>{
+        const receivedDate = document.getElementById("receivedDate").value;
+        if(!receivedDate){
+          alert("Sila pilih tarikh.");
+          return;
+        }
+
+        await updateDoc(doc(db, "users", user.uid, "corporate", "maklumat"), {
+          receivedDate,
+          status:"RECEIVED",
+          receivedUpdatedAt:serverTimestamp()
+        });
+
+        alert("Dokumen berjaya disahkan diterima.");
+        location.reload();
+      };
+    }
+
+  } // docSnap.exists()
+}); // onAuthStateChanged
+
+document.getElementById("logoutBtn").addEventListener("click", async()=>{
+  try{
+    await signOut(auth);
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.replace("index.html");
+  } catch(error){
+    console.log(error);
+  }
+});
+</script>
+
+</body>
+</html>
