@@ -215,7 +215,7 @@
         <li>• Dokumen bercetak dipos selepas disahkan</li>
         <li>• Kemaskini tanpa had sepanjang keahlian aktif</li>
         <li>• Senarai aset tanpa had</li>
-        <li id="mawariscorporateRenewalText"></li>
+        <li id="corporateRenewalText"></li>
         <li>• Termasuk kemudahan Khairat Kematian</li>
       </ul>
 
@@ -339,12 +339,17 @@ import {
       updateProductCard(userData.hibahPaymentStatus, "hibahCard", "hibahTitle", "hibahButton", "hibahButtonText", "hibahIcon", "hibah-page.html", "Hibah");
       updateProductCard(userData.sepencarianPaymentStatus, "sepencarianCard", "sepencarianTitle", "sepencarianButton", "sepencarianButtonText", "sepencarianIcon", "sepencarian-page.html", "Harta Sepencarian");
       updateProductCard(userData.mawarisPaymentStatus, "mawarisCard", "mawarisTitle", "mawarisButton", "mawarisButtonText", "mawarisIcon", "mawaris-page.html", "Mawaris");  
-      updateProductCard(userData.corporatePaymentStatus, "corporateCard", "corporateTitle", "corporateButton", "corporateButtonText", "corporateIcon", "corporate-page.html", "Mawaris");  
+      updateProductCard(userData.corporatePaymentStatus, "corporateCard", "corporateTitle", "corporateButton", "corporateButtonText", "corporateIcon", "corporate-page.html", "Mawaris Korporat");  
 
       document.getElementById("namaUser").innerHTML = "Selamat datang, " + userData.nama;
 
-      const hasPaidProduct = userData.wasiatPaymentStatus === "paid" || userData.hibahPaymentStatus === "paid" || userData.sepencarianPaymentStatus === "paid" || userData.mawarisPaymentStatus === "paid";
-
+      const hasPaidProduct = 
+        userData.wasiatPaymentStatus === "paid" || 
+        userData.hibahPaymentStatus === "paid" || 
+        userData.sepencarianPaymentStatus === "paid" || 
+        userData.mawarisPaymentStatus === "paid" ||
+        userData.corporatePaymentStatus === "paid";
+      
       if (hasPaidProduct && typeof prosesPembelian === "function") {
         prosesPembelian();
       }
