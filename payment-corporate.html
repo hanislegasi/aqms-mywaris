@@ -246,7 +246,7 @@ agreeBtn.addEventListener("click", async () => {
         // Ledger: Credit Sales
         await addDoc(collection(db, "ledger"), {
             date: txnDate,
-            accountCode: "4040",
+            accountCode: "4050",
             account: "Sales - Corporate",
             category: "income",
             description: memberNo + " " + customer.nama,
@@ -254,7 +254,7 @@ agreeBtn.addEventListener("click", async () => {
             credit: saleAmount,
             transactionGroup: memberNo,
             paymentType: "CUSTOMER",
-            sourceAccount: "4040",
+            sourceAccount: "4050",
         });
 
         // Ledger: Debit Bank
@@ -267,7 +267,7 @@ agreeBtn.addEventListener("click", async () => {
             debit: saleAmount,
             credit: 0,
             paymentType: "CUSTOMER",
-            sourceAccount: "4040",
+            sourceAccount: "4050",
             transactionGroup: memberNo
         });
         
@@ -494,7 +494,7 @@ agreeBtn.addEventListener("click", async () => {
 
         // CREATE PAYMENT RECEIPT
         await addDoc(collection(db, "receipts"), {
-            receiptNo: "MAW-" + Date.now(),
+            receiptNo: "MCO-" + Date.now(),
             uid: currentUser.uid,
             memberNo: memberNo,
             payerName: customer.nama,
