@@ -98,57 +98,77 @@ sama ada yang wujud kini atau pada masa hadapan, di dalam syarikat:
 </p>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>FASAL 2: PELANTIKAN WASI</strong>
+<strong>FASAL 2: PELANTIKAN WASI DAN PEMEGANG AMANAH (PIHAK KETIGA)</strong>
 </h3>
 
 <p>
 Maka saya dengan ini:
 </p>
 
-<p>
-Melantik <strong>{{HUBUNGAN_WASI1}}</strong> saya iaitu <strong>{{NAMA_WASI1}}</strong> No. K/P <strong>{{NO_IC_WASI1}}</strong> sebagai <strong>WASI PERTAMA</strong> untuk menguruskan harta pusaka saya.
-</p>
+<tr valign="top">
+<td width="30">1.</td>
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
+Saya dengan ini melantik <strong>{{NAMA_WASI1}}</strong> (No. Pendaftaran Syarikat: <strong>{{NO_IC_WASI1}}</strong>), 
+yang beralamat di [ALAMAT SYARIKAT AMANAH], 
+sebagai Wasi dan Pemegang Amanah Tunggal (Sole Executor and Trustee) khusus bagi mentadbir Saham Syarikat saya.
+</td>
+</tr>
 
-
-<p>
-Sekiranya, dalam apa jua keadaan di mana Wasi Pertama di atas telah meninggal dunia atau hilang upaya daripada menjalankan tanggungjawab sebagai Wasi, 
-ATAU tidak dapat memulakan (initiate) proses pentadbiran bagi harta pusaka saya dalam masa 60 hari selepas kematian saya, 
-maka saya dengan ini melantik <strong>{{HUBUNGAN_WASI2}}</strong> saya iaitu <strong>{{NAMA_WASI2}}</strong> No. K/P <strong>{{NO_IC_WASI2}}</strong> sebagai <strong>PENTADBIR GANTIAN</strong>.
-</p>
-
+<tr valign="top">
+<td>2.</td>
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
+Wasi diberi kuasa mutlak untuk memohon Surat Kuasa Mentadbir Wasiat (Grant of Probate) dan menandatangani semua dokumen penyerahan hak, 
+resolusi, dan pindah milik saham bagi pihak saya.
+</td>
+</tr>
 
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>3. TANGGUNGJAWAB WASI</strong>
+<strong>FASAL 3: ARAHAN PEMATUHAN PERJANJIAN JUAL BELI SAHAM (BUY-SELL COMPLIANCE)</strong>
 </h3>
 
 <p>
-Wasi dan pemegang amanah saya yang telah dilantik perlu menjalankan tanggungjawab yang berikut untuk mentadbir dan mengurus harta pusaka saya dan melaksanakan arahan-arahan yang dinyatakan di dalam perenggan ini selama mana ia tidak melanggar hukum syarak, iaitu:
+Sekiranya berlaku kematian saya, saya mengarahkan Wasi saya untuk dengan serta-merta:
 </p>
 
-<p>
-<strong>3.1
-Menghubungi Al-Qawthar Mawaris Synergy atau wakil mereka</strong> untuk mendapatkan khidmat nasihat tentang pengurusan harta pusaka secara PERCUMA.
-</p>
+<tr valign="top">
+<td width="30">1.</td>
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
+Mematuhi dan menguatkuasakan segala terma yang terkandung di dalam Perjanjian Jual Beli Saham & Pewarisan (Buy-Sell Agreement) bertarikh [TARIKH PERJANJIAN] yang telah ditandatangani antara saya, 
+rakan kongsi, dan Syarikat.
+</td>
+</tr>
 
-<p>
-<strong>3.2
-Mengumpulkan waris-waris Faraid</strong> secepat mungkin untuk berbincang tentang pengurusan pusaka saya.
-</p>
+<tr valign="top">
+<td>2.</td>
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
+Menjual dan memindahkan kesemua Saham Syarikat saya kepada rakan-rakan kongsi saya yang masih hidup atau penama mereka, 
+seperti yang ditetapkan dalam Perjanjian tersebut.
+</td>
+</tr>
 
-<p>
-<strong>3.3
-Mengumpulkan dan menguruskan harta-harta tunai</strong></p>
-<p>
-Saya mengarahkan Wasi dan pemegang amanah saya untuk mengumpulkan kesemua harta tunai saya yang mempunyai penama (Dana Pantas) untuk digunakan sebagai perbelanjaan pentadbiran harta pusaka serta digunakan oleh waris-waris Faraid bagi melangsungkan kehidupan mereka mengikut hak mereka dan arahan saya (jika semua waris yang berhak mengikut hukum Faraid bersetuju). Wasi saya juga perlu memperuntukkan jumlah wang tunai yang cukup untuk melunaskan hutang-hutang saya seperti di dalam Klausa (3.5).
-</p>
+<tr valign="top">
+<td>3.</td>
+<td style="
+padding-bottom:12px;
+text-align:justify;
+">
+Menerima, mengutip, dan memegang hasil wang tunai jualan saham (Sale Proceeds) yang dibayar oleh rakan kongsi saya atau daripada serahan pampasan Keyman Takaful.
+</td>
+</tr>
 
-<p>
-<strong>3.4
-Menjelaskan belanja pengebumian saya</strong></p>
-<p>
-Wasi saya diberi mandat untuk menjelaskan belanja pengebumian saya dari harta pusaka saya dengan kadar yang segera.
-</p>
 
 <div class="pdf-footer">
 
@@ -162,246 +182,55 @@ Wasi saya diberi mandat untuk menjelaskan belanja pengebumian saya dari harta pu
 
 <div class="a4-page p-[18mm]">
 
-<p>
-<strong>3.5
-Melunaskan hutang</strong></p>
-<p>
-Saya mengarahkan Wasi saya untuk membayar semua hutang saya meliputi hutang kepada Allah SWT seperti zakat harta, nazar, kaffarah dan upah haji (sekiranya saya meninggal dunia sebelum menunaikan haji) mahupun hutang kepada manusia dan organisasi seperti bank, koperasi, syarikat atau apa-apa sahaja entiti yang mungkin saya terhutang sepanjang hayat saya.
-</p>
-
-<p>
-<strong>3.6
-Memungut hutang</strong></p>
-<p>
-Wasi saya juga perlu untuk memungut hutang saya dari penghutang-penghutang yang masih belum melunaskan hutang mereka kepada saya (Sekiranya ada) untuk ditadbirkan sebagai sebahagian harta pusaka saya.
-</p>
-
-
-
-<p>
-<strong>3.7
-Mengumpulkan Harta Pusaka</strong></p>
-<p>
-Wasi saya juga perlu memainkan peranan aktif untuk mengumpul serta mengenal pasti kedudukan harta-harta saya supaya tidak ada harta yang tertinggal di dalam pentadbiran harta pusaka saya.
-</p>
-
-<p>
-<strong>3.8
-Bahagian untuk waris tanpa hadir</strong></p>
-<p>
-Sekiranya terdapat mana-mana waris saya tidak dapat hadir atau sukar dihubungi (selepas ini dirujuk sebagai waris tanpa hadir) pada bila-bila masa proses pentadbiran pusaka berjalan, Wasi saya diberikan kuasa untuk membahagikan harta pusaka saya kepada waris-waris yang hadir terdahulu. 
-Bahagian waris tanpa hadir boleh dipegang oleh Wasi atau diamanahkan kepada Syarikat Amanah seperti yang difikirkan sesuai oleh Wasi. 
-Sekiranya bahagian ini diserahkan kepada Syarikat Amanah, maka sebarang perbelanjaan yang mungkin timbul dari urusan ini bolehlah ditolak dari bahagian waris tersebut.
-</p>
-
-<p>
-<strong>3.9
-Menjaga harta pusaka berbentuk hartanah</strong></p>
-<p>
-Sepanjang proses pentadbiran harta pusaka saya berjalan, saya memberi kuasa kepada Wasi dan Pemegang Amanah saya untuk membuat pertimbangan bagi mengambil tindakan untuk mendapatkan perlindungan takaful bagi tujuan menjaga keselamatan harta pusaka saya yang berbentuk hartanah dari risiko kerosakan, kebakaran atau kemusnahan. 
-Kos untuk langganan perlindungan takaful ini hendaklah ditolak dari harta pusaka saya.
-</p>
-
-<div class="pdf-footer">
-
-<span class="docRef"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
-
-<div class="a4-page p-[18mm]">
-
-<p>
-<strong>3.10
-Pengurusan bahagian untuk waris di bawah umur dan waris tidak waras akal fikiran (unsound mind)</strong></p>
-<p>
-Sekiranya Wasi dan Pemegang Amanah saya mendapati waris di bawah umur dan/ atau waris tidak waras akal fikiran (unsound mind) dan terdapat wang tunai (cash) dari harta pusaka, maka saya dengan ini mengarahkan Wasi dan Pemegang Amanah individu ini untuk melepaskan hak sebagai Wasi dan Pemegang Amanah harta kepada Syarikat Amanah yang difikirkan sesuai oleh Wasi saya.
-</p>
-<p>Syarikat Amanah akan menjadi Wasi bagi urusan harta pusaka saya dan Pemegang Amanah harta bagi waris saya yang ketika agihan harta pusaka ingin dibuat berada di bawah umur lapan belas (18) tahun (minor). Syarikat Amanah hendaklah memegang secara amanah (hold on trust) bahagian tersebut sehingga waris ini mencapai umur majoriti (lebih dari umur 18 tahun).
-</p>
-<p>Syarikat Amanah juga akan menjadi Pemegang Amanah harta bagi waris saya telah disahkan sebagai tidak waras fikiran (unsound mind) yang mempunyai kad pengesahan OKU dari agensi yang berkenaan atau sekiranya tiada kad berkenaan, pada pandangan Syarikat Amanah selepas penyiasatan terperinci dilakukan, mendapati bahawa terdapat bukti kukuh bahawa waris berkenaan adalah di dalam kategori tidak waras fikiran, maka saya dengan ini mengarahkan Syarikat Amanah untuk memegang bahagian harta waris ini secara amanah (hold on trust).</p>
-<p>
-Syarikat Amanah hendaklah berurusan hanya dengan penjaga sah (hadhanah) yang telah diberikan hak oleh Mahkamah Syariah atau waris yang diyakini (selepas penyiasatan dilakukan) menjaga waris di atas, bagi tujuan membayar apa-apa peruntukan perbelanjaan saradiri, kesihatan, kebajikan atau apa-apa perbelanjaan yang difikirkan munasabah untuk waris berkenaan. Jumlah bayaran dan pemasaan (timing) bayaran adalah di atas budibicara Syarikat Amanah.
-</p>
-
-
-<p>
-Walau apa pun (notwithstanding) Klausa arahan di atas hanya berkuatkuasa di dalam keadaan:
-</p>
-
-<table
-style="
-width:100%;
-border-collapse:collapse;
-margin-top:12px;
-margin-bottom:18px;
-">
-
-<tr valign="top">
-
-<td
-style="
-width:70px;
-padding:0;
-font-weight:bold;
-font-size:15px;
-line-height:1.6;
-vertical-align:top;
-padding-top:1px;
-">
-3.10.1
-</td>
-
-<td
-style="
-padding:0;
-text-align:justify;
-line-height:1.6;
-vertical-align:top;
-">
-Wasi dan Pemegang Amanah individu yang dilantik di dalam dokumen ini bersetuju menyerahkan kuasa sebagai Wasi dan Pemegang Amanah kepada Syarikat Amanah dan kes pusaka saya dibicarakan di Mahkamah Tinggi Sivil. Sekiranya Wasi dan Pemegang Amanah adalah terdiri dari individu seperti yang saya nyatakan di dalam dokumen ini, maka arahan untuk memegang bahagian waris di bawah umur dan waris Orang Kelainan Upaya ini tertakluk kepada perintah berkaitan yang dikeluarkan oleh Mahkamah Tinggi Sivil.
-</td>
-
-</tr>
-
-<tr>
-<td colspan="2" style="height:18px;"></td>
-</tr>
-
-<tr valign="top">
-
-<td
-style="
-width:70px;
-padding:0;
-font-weight:bold;
-font-size:15px;
-line-height:1.6;
-vertical-align:top;
-padding-top:1px;
-">
-3.10.1
-</td>
-
-<td
-style="
-padding:0;
-text-align:justify;
-line-height:1.6;
-vertical-align:top;
-">
-Jika kes pusaka saya dibicarakan di Pejabat Pusaka Kecil, maka arahan untuk memegang bahagian waris di bawah umur dan waris Orang Kelainan Upaya ini adalah tertakluk sepenuhnya kepada perintah berkaitan yang dikeluarkan oleh Pejabat Pusaka Kecil berdasarkan peruntukan Akta Pembahagian Pesaka Kecil 1955.
-</td>
-
-</tr>
-
-</table>
-
-<div class="pdf-footer">
-
-<span class="docRef"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
-
-<div class="a4-page p-[18mm]">
-
-<p>
-<strong>3.11
-Kos pentadbiran harta pusaka</strong></p>
-<p>
-Wasi dan Pemegang Amanah saya hendaklah menjelaskan segala perbelanjaan yang berkaitan dengan pentadbiran harta pusaka ini dari harta pusaka saya. Sekiranya ada waris yang telah mendahulukan wang mereka bagi tujuan tanggungan kos tersebut, maka Wasi dan Pemegang Amanah hendaklah membayar semula perbelanjaan tersebut dari harta pusaka saya. 
-<p>Walaupun begitu, sekiranya waris tersebut tidak mahu membuat sebarang tuntutan, Wasi dan Pemegang Amanah saya tidak perlu menggantikannya dan hanya Allah SWT sahaja yang mampu membalas jasa waris tersebut.</p>
-Di dalam apa keadaan sekalipun, kos pentadbiran harta pusaka (jika ada) hendaklah ditolak terlebih dahulu dari harta pusaka saya sebelum diagih kepada waris yang berhak mengikut Hukum Faraid.
-</p>
-
-
-
-<p>
-<strong>3.12
-Pentadbiran Harta Pusaka</strong></p>
-<p>
-Wasi saya hendaklah menjalankan tanggungjawab mentadbir harta pusaka saya dengan amanah, jujur dan ikhlas serta memastikan kehendak Syariah di dalam urusan ini diikuti dengan sebaiknya.
-Kesemua senarai pemiutang (dengan siapa saya berhutang), Penghutang (siapa yang berhutang dengan saya), Harta dan Waris saya akan lampirkan bersama dokumen ini dan akan dikemaskini dari masa ke semasa.
-</p>
-
-<p>
-<strong>3.13
-Kaedah Pembahagian Harta Pusaka</strong></p>
-<p>
-Selepas ditolak hutang, obligasi-obligasi lain yang tertunggak ke atasnya, dan apa-apa bentuk agihan dan hak keatas harta saya mengikut Undang-Undang Syariah, harta pusaka saya hendaklah diagihkan oleh Wasi dan Pemegang Amanah saya kepada waris-waris yang berhak mengikut Hukum Faraid. Walaupun demikian, sekiranya terdapat permuafakatan di antara waris-waris tentang bagaimana harta pusaka ingin diagihkan, maka kaedah agihan permuafakatan itulah yang akan digunapakai.
-</p>
-
-<div class="pdf-footer">
-
-<span class="docRef"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
-
-<div class="a4-page p-[18mm]">
-
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>4. WASIAT 1/3</strong>
+<strong>FASAL 4: AGIHAN HASIL WANG TUNAI JUALAN SAHAM</strong>
 </h3>
 
+Selepas Wasi menerima wang tunai hasil jualan Saham Syarikat, wang tersebut hendaklah diurus dan diagihkan mengikut turutan keutamaan berikut:
 
+<p>
+<strong>Pertama: Penyelesaian Kos dan Hutang</strong></p>
+<p>
+Membayar sebarang kos pentadbiran Wasi, duti setem, kos guaman peribadi, cukai LHDN, dan hutang-hutang peribadi saya (jika ada tuntutan).
+</p>
+
+<p>
+<strong>Kedua: Wasiat 1/3 - Jika Ada</strong></p>
+<p>
 {{SEKSYEN_WASIAT_13}}
 
+<p>
+<strong>Ketiga: Agihan Faraid Kepada Waris</strong></p>
+<p>
+Baki keseluruhan wang tunai tersebut hendaklah diagihkan kepada waris-waris saya yang sah dan berhak pada tarikh kematian saya, 
+mengikut Hukum Faraid (Sijil Faraid yang dikeluarkan oleh Mahkamah Syariah yang berbidang kuasa).
+
+<div class="pdf-footer">
+
+<span class="docRef"></span>
+
+<span class="page-number"></span>
+
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
+
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>5. KEBOLEHASINGAN (SEVERABILITY)</strong>
+<strong>FASAL 5: WASIAT PESANAN KEPADA WARIS</strong>
+</h3>
+
+{{PESANAN_WASIAT}}
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>FASAL 6: KEBOLEHASINGAN (SEVERABILITY)</strong>
 </h3>
 
 <p>
 Saya dengan ini mengakui bahawa saya faham yang permintaan pembahagian saya seperti di atas adalah tertakluk kepada persetujuan waris-waris saya yang sah dan layak mengikut Hukum Faraid. Sekiranya ada di antara mereka yang tidak bersetuju, maka hak mereka seperti yang tertakluk di bawah Hukum Faraid hendaklah diserahkan kepada mereka. Bagi waris-waris yang sah dan layak yang lain yang bersetuju, maka pembahagian untuk mereka yang lain akan mengikut formula seperti yang saya minta.
 </p>
 
-<div class="pdf-footer">
-
-<span class="docRef"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
-
-<div class="a4-page p-[18mm]">
-
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>6. PESANAN KEPADA WARIS</strong>
-</h3>
-
-
-{{PESANAN_WASIAT}}
-
-<div class="pdf-footer">
-
-<span class="docRef"></span>
-
-<span class="page-number"></span>
-
-</div>
-
-</div>
-
-<div class="a4-page p-[18mm]">
-
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>7. PEMBATALAN DOKUMEN SEBELUM INI</strong>
-</h3>
-<p>
-Seperti di dalam ikrar permulaan Dokumen ini, saya dengan ini memaklumkan bahawa apa-apa sahaja dokumen wasiat saya yang terdahulu yang telah saya buat sebelum ini dan sebelum Dokumen Wasiat ini dibuat adalah terbatal sendirinya.
-</p>
 
 <div
 style="
