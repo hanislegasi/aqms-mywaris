@@ -1,284 +1,292 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>General Ledger</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        body {
-            font-family: Inter, sans-serif;
-        }
-        /* Elak jadual terpotong separuh muka surat bila export PDF */
-        .ledger-card {
-            page-break-inside: avoid;
-            break-inside: avoid;
-        }
-    </style>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>General Ledger</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  
+<style>
+body{
+font-family: Inter, sans-serif;
+}
+</style>
+  
 </head>
 
 <body class="bg-gray-100">
 
-    <div class="bg-[#153638] text-white p-5">
-        <h1 class="text-2xl font-bold">General Ledger</h1>
+<div class="bg-[#153638] text-white p-5">
+
+<h1 class="text-2xl font-bold">
+General Ledger
+</h1>
+
+
+  
+</div>
+
+<div class="p-5">
+  
+<div class="flex items-center gap-3 mb-6">
+
+<a
+href="accounts-dashboard.html"
+class="h-12 px-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded-xl font-medium">
+
+← Akaun
+
+</a>
+
+<button
+id="exportPdfBtn"
+class="h-12 px-6 flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-xl font-medium">
+
+Export PDF
+
+</button>
+
+</div>
+  
+<div class="grid md:grid-cols-4 gap-3 mb-6">
+
+<input
+type="date"
+id="dateFrom"
+class="border rounded-xl p-3 h-12">
+  
+<input
+type="date"
+id="dateTo"
+class="border rounded-xl p-3 h-12">
+
+<input
+type="text"
+id="ledgerSearch"
+placeholder="Cari kod, nama atau description..."
+class="border rounded-xl p-3 h-12">
+  
+</div>
+
+<div
+id="plCard"
+class="space-y-5">
+
+Loading...
+
+</div>
+  
+
+</div>
+
+<script type="module">
+
+// 1. Tarik 'db' dari fail konfigurasi berpusat
+import { db } from './firebase.js';
+
+// 2. Tarik fungsi Firestore yang berkaitan sahaja
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  
+function money(value){
+    return Number(value || 0).toLocaleString(
+        "en-US",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+}
+
+// ==========================================
+// TAMBAHAN: Tarik Chart of Accounts (COA) Master Data Terlebih Dahulu
+// ==========================================
+const coaSnap = await getDocs(collection(db, "chartOfAccounts"));
+const coaMap = {};
+coaSnap.forEach((d) => {
+    const coaData = d.data();
+    coaMap[coaData.code] = coaData.name; // Simpan kod dan nama rasmi akaun
+});
+// ==========================================
+  
+const snap = await getDocs(collection(db,"ledger"));
+const accounts = {};
+
+snap.forEach((d)=>{
+    const row = d.data();
+    const code = String(row.accountCode);
+
+    if(!accounts[code]){
+        accounts[code] = {
+            // ==========================================
+            // KEMASKINI: Wajib guna nama rasmi dari COA. 
+            // ==========================================
+            account: coaMap[code] || row.account || "Tiada Nama Akaun",
+            rows:[],
+            debit:0,
+            credit:0,
+            balance:0
+        };
+    }
+    
+    accounts[code].rows.push(row);
+    accounts[code].debit += Number(row.debit || 0);
+    accounts[code].credit += Number(row.credit || 0);
+});
+
+let originalHtml = "";
+let html = "";
+
+Object.keys(accounts)
+.sort()
+.forEach((code)=>{
+
+    const acc = accounts[code];
+    const dates = acc.rows.map(r=>{
+        if(r.date?.toDate){
+            return r.date.toDate().toISOString().substring(0,10);
+        }
+        return "";
+    });
+
+    const latestDate = dates.sort().reverse()[0] || "";
+
+    html += `
+    <div class="ledger-card bg-white rounded-xl shadow-sm border p-4 mb-4" data-date="${latestDate}">
+        <!-- TAJUK GL SEKARANG AKAN KEKAL KEMAS -->
+        <h2 class="text-xl font-bold mb-3 uppercase text-[#153638]">
+            ${code} - ${acc.account}
+        </h2>
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="bg-[#153638] text-white">
+                    <th class="p-3 text-left">Date</th>
+                    <th class="p-3 text-left">Description</th>
+                    <th class="p-3 text-right">Debit</th>
+                    <th class="p-3 text-right">Credit</th>
+                    <th class="p-3 text-right">Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    acc.rows.sort((a,b)=>{
+        const dateA = a.date?.toDate ? a.date.toDate() : new Date(a.date);
+        const dateB = b.date?.toDate ? b.date.toDate() : new Date(b.date);
+        return dateA - dateB;
+    });
+
+    let balance = 0;
+
+    acc.rows.forEach((row)=>{
+        const rowDate = row.date?.toDate ? row.date.toDate().toISOString().substring(0,10) : "";
+        
+        balance += Number(row.debit || 0);
+        balance -= Number(row.credit || 0);
+
+        html += `
+        <tr class="ledger-row border-b hover:bg-gray-50 transition" data-date="${rowDate}">
+            <td class="p-3 whitespace-nowrap">
+                ${row.date?.toDate ? row.date.toDate().toLocaleDateString("ms-MY") : "-"}
+            </td>
+            
+            <!-- MAKLUMAT PANJANG (KLIEN/DOKUMEN) AKAN MUNCUL DI SINI -->
+            <td class="p-3 text-gray-700">
+                ${row.description || "-"}
+            </td>
+            
+            <td class="p-3 text-right text-gray-800">
+                RM${money(row.debit)}
+            </td>
+            <td class="p-3 text-right text-gray-800">
+                RM${money(row.credit)}
+            </td>
+            <td class="p-3 text-right font-semibold ${balance < 0 ? 'text-red-600' : 'text-[#153638]'}">
+                RM${money(balance)}
+            </td>
+        </tr>
+        `;
+    });
+
+    html += `
+            <tr class="ledger-total font-bold bg-gray-100 text-[#153638]">
+                <td colspan="2" class="p-3 text-right uppercase">
+                    Total
+                </td>
+                <td class="totalDebit p-3 text-right">
+                    RM${money(acc.debit)}
+                </td>
+                <td class="totalCredit p-3 text-right">
+                    RM${money(acc.credit)}
+                </td>
+                <td class="totalBalance p-3 text-right">
+                    RM${money(balance)}
+                </td>
+            </tr>
+        </tbody>
+        </table>
     </div>
+    `;
+});
 
-    <div class="p-5">
-        <div class="flex items-center gap-3 mb-6">
-            <a href="accounts-dashboard.html"
-                class="h-12 px-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded-xl font-medium">
-                ← Akaun
-            </a>
-            <button id="exportPdfBtn"
-                class="h-12 px-6 flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-xl font-medium">
-                Export PDF
-            </button>
-        </div>
+originalHtml = html;
+document.getElementById("plCard").innerHTML = html;
 
-        <div class="grid md:grid-cols-4 gap-3 mb-6">
-            <input type="date" id="dateFrom" class="border rounded-xl p-3 h-12" title="Tarikh Mula">
-            <input type="date" id="dateTo" class="border rounded-xl p-3 h-12" title="Tarikh Akhir">
-            <input type="text" id="ledgerSearch" placeholder="Cari kod, nama atau description..."
-                class="border rounded-xl p-3 h-12 md:col-span-2">
-        </div>
+function filterLedger(){
+    const keyword = document.getElementById("ledgerSearch").value.toLowerCase();
+    const from = document.getElementById("dateFrom").value;
+    const to = document.getElementById("dateTo").value;
 
-        <div id="plCard" class="space-y-5">
-            <div class="text-center py-10 text-gray-500 font-medium">
-                Memuat turun rekod lejar...
-            </div>
-        </div>
-    </div>
+    document.querySelectorAll(".ledger-card").forEach(card=>{
+        let visibleRows = 0;
+        const rows = card.querySelectorAll("tbody tr");
 
-    <script type="module">
-        import { db } from './firebase.js';
-        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        rows.forEach(row=>{
+            if(row.innerText.includes("Total")) return;
 
-        // Global variables untuk simpan data asal
-        let rawLedgerData = [];
-        let coaMap = {};
+            const cells = row.querySelectorAll("td");
+            const dateText = cells[0].innerText.trim();
+            const desc = row.innerText.toLowerCase();
 
-        function money(value) {
-            return Number(value || 0).toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
-        }
+            let show = true;
 
-        // Parse tarikh Firestore dengan selamat kepada ISO String YYYY-MM-DD
-        function parseDate(dateObj) {
-            if (!dateObj) return "";
-            if (dateObj.toDate) return dateObj.toDate().toISOString().substring(0, 10);
-            return new Date(dateObj).toISOString().substring(0, 10);
-        }
+            if(keyword && !desc.includes(keyword)) show = false;
 
-        // Format tarikh untuk paparan (DD/MM/YYYY)
-        function formatDateDisplay(isoString) {
-            if (!isoString) return "-";
-            const [year, month, day] = isoString.split("-");
-            return `${day}/${month}/${year}`;
-        }
+            if(dateText){
+                const p = dateText.split("/");
+                const rowDate = `${p[2]}-${p[1].padStart(2,"0")}-${p[0].padStart(2,"0")}`;
 
-        async function init() {
-            try {
-                // 1. Tarik Chart of Accounts (COA)
-                const coaSnap = await getDocs(collection(db, "chartOfAccounts"));
-                coaSnap.forEach((d) => {
-                    const coaData = d.data();
-                    coaMap[coaData.code] = coaData.name;
-                });
-
-                // 2. Tarik Ledger Data
-                const snap = await getDocs(collection(db, "ledger"));
-                snap.forEach((d) => {
-                    const row = d.data();
-                    row.isoDate = parseDate(row.date); // Simpan ISO date untuk mudahkan filter
-                    rawLedgerData.push(row);
-                });
-
-                // 3. Render pertama kali (tanpa filter)
-                renderLedger();
-
-            } catch (error) {
-                console.error("Ralat menarik data:", error);
-                document.getElementById("plCard").innerHTML = `<div class="text-red-500 p-5">Gagal memuat turun data. Sila semak sambungan / rules Firebase anda.</div>`;
-            }
-        }
-
-        function renderLedger() {
-            const keyword = document.getElementById("ledgerSearch").value.toLowerCase();
-            const from = document.getElementById("dateFrom").value;
-            const to = document.getElementById("dateTo").value;
-
-            const accounts = {};
-
-            // Proses data mengikut filter
-            rawLedgerData.forEach((row) => {
-                const code = String(row.accountCode);
-                const desc = (row.description || "").toLowerCase();
-                const accName = (coaMap[code] || row.account || "Tiada Nama Akaun").toLowerCase();
-
-                if (!accounts[code]) {
-                    accounts[code] = {
-                        accountName: coaMap[code] || row.account || "Tiada Nama Akaun",
-                        rows: [],
-                        openingBalance: 0
-                    };
-                }
-
-                const isBeforeFrom = from && row.isoDate < from;
-                const isAfterTo = to && row.isoDate > to;
-
-                // Logik untuk Baki Bawa Hadapan (Brought Forward)
-                if (isBeforeFrom) {
-                    // Jika tarikh transaksi adalah sebelum dateFrom, kita sumbang pada Opening Balance
-                    accounts[code].openingBalance += (Number(row.debit || 0) - Number(row.credit || 0));
-                } 
-                else if (!isAfterTo) {
-                    // Cek keyword jika ada
-                    let matchSearch = true;
-                    if (keyword && !desc.includes(keyword) && !code.toLowerCase().includes(keyword) && !accName.includes(keyword)) {
-                        matchSearch = false;
-                    }
-
-                    if (matchSearch) {
-                        accounts[code].rows.push(row);
-                    }
-                }
-            });
-
-            let html = "";
-            let hasData = false;
-
-            Object.keys(accounts).sort().forEach((code) => {
-                const acc = accounts[code];
-                
-                // Abaikan akaun jika tiada transaksi dan tiada opening balance
-                if (acc.rows.length === 0 && acc.openingBalance === 0) return;
-                
-                hasData = true;
-
-                // Susun transaksi berdasarkan tarikh secara menaik (chronological)
-                acc.rows.sort((a, b) => a.isoDate.localeCompare(b.isoDate));
-
-                let runningBalance = acc.openingBalance;
-                let totalDebit = 0;
-                let totalCredit = 0;
-
-                html += `
-                <div class="ledger-card bg-white rounded-xl shadow-sm border p-4 mb-4">
-                    <h2 class="text-xl font-bold mb-3 uppercase text-[#153638]">
-                        ${code} - ${acc.accountName}
-                    </h2>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm">
-                            <thead>
-                                <tr class="bg-[#153638] text-white">
-                                    <th class="p-3 text-left w-32">Tarikh</th>
-                                    <th class="p-3 text-left">Penerangan</th>
-                                    <th class="p-3 text-right w-32">Debit (RM)</th>
-                                    <th class="p-3 text-right w-32">Kredit (RM)</th>
-                                    <th class="p-3 text-right w-32">Baki (RM)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                `;
-
-                // Render Baki Bawa Hadapan (Jika filter 'Date From' digunakan)
-                if (from) {
-                    html += `
-                        <tr class="border-b bg-gray-50">
-                            <td class="p-3 font-semibold">-</td>
-                            <td class="p-3 font-semibold italic">Baki Bawa Hadapan (B/F)</td>
-                            <td class="p-3 text-right">-</td>
-                            <td class="p-3 text-right">-</td>
-                            <td class="p-3 text-right font-semibold ${runningBalance < 0 ? 'text-red-600' : 'text-[#153638]'}">
-                                ${money(runningBalance)}
-                            </td>
-                        </tr>
-                    `;
-                }
-
-                // Loop setiap transaksi yang lepas filter
-                acc.rows.forEach((row) => {
-                    const debit = Number(row.debit || 0);
-                    const credit = Number(row.credit || 0);
-                    
-                    runningBalance += (debit - credit);
-                    totalDebit += debit;
-                    totalCredit += credit;
-
-                    html += `
-                        <tr class="border-b hover:bg-gray-50 transition">
-                            <td class="p-3 whitespace-nowrap">
-                                ${formatDateDisplay(row.isoDate)}
-                            </td>
-                            <td class="p-3 text-gray-700">
-                                ${row.description || "-"}
-                            </td>
-                            <td class="p-3 text-right text-gray-800">
-                                ${debit > 0 ? money(debit) : "-"}
-                            </td>
-                            <td class="p-3 text-right text-gray-800">
-                                ${credit > 0 ? money(credit) : "-"}
-                            </td>
-                            <td class="p-3 text-right font-semibold ${runningBalance < 0 ? 'text-red-600' : 'text-[#153638]'}">
-                                ${money(runningBalance)}
-                            </td>
-                        </tr>
-                    `;
-                });
-
-                // Total Bar
-                html += `
-                                <tr class="font-bold bg-gray-100 text-[#153638]">
-                                    <td colspan="2" class="p-3 text-right uppercase border-t-2 border-gray-300">
-                                        Jumlah Tempoh Ini
-                                    </td>
-                                    <td class="p-3 text-right border-t-2 border-gray-300">
-                                        ${money(totalDebit)}
-                                    </td>
-                                    <td class="p-3 text-right border-t-2 border-gray-300">
-                                        ${money(totalCredit)}
-                                    </td>
-                                    <td class="p-3 text-right border-t-2 border-gray-300">
-                                        ${money(runningBalance)}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                `;
-            });
-
-            if (!hasData) {
-                html = `<div class="text-center py-10 text-gray-500 font-medium">Tiada rekod dijumpai berdasarkan carian/tarikh ini.</div>`;
+                if(from && rowDate < from) show = false;
+                if(to && rowDate > to) show = false;
             }
 
-            document.getElementById("plCard").innerHTML = html;
-        }
-
-        // Listeners: Guna 'renderLedger' setiap kali ada perubahan
-        document.getElementById("ledgerSearch").addEventListener("input", renderLedger);
-        document.getElementById("dateFrom").addEventListener("change", renderLedger);
-        document.getElementById("dateTo").addEventListener("change", renderLedger);
-
-        // Export PDF
-        document.getElementById("exportPdfBtn").addEventListener("click", () => {
-            const element = document.getElementById("plCard");
-            html2pdf().set({
-                margin: 0.4,
-                filename: "General-Ledger.pdf",
-                image: { type: "jpeg", quality: 1 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
-            }).from(element).save();
+            row.style.display = show ? "" : "none";
+            if(show) visibleRows++;
         });
 
-        // Mula jalankan aplikasi
-        init();
+        card.style.display = visibleRows ? "" : "none";
+    });
+}
+  
+document.getElementById("ledgerSearch").addEventListener("input", filterLedger);
+document.getElementById("dateFrom").addEventListener("change", filterLedger);
+document.getElementById("dateTo").addEventListener("change", filterLedger);
+  
+document.getElementById("exportPdfBtn").addEventListener("click", ()=>{
+    html2pdf().set({
+        margin:0.3,
+        filename:"General-Ledger.pdf",
+        image:{type:"jpeg", quality:1},
+        html2canvas:{scale:2},
+        jsPDF:{unit:"in", format:"a4", orientation:"portrait"}
+    }).from(document.getElementById("plCard")).save();
+});
+  
+</script>
 
-    </script>
 </body>
 </html>
