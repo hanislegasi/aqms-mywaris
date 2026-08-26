@@ -172,11 +172,14 @@ onAuthStateChanged(auth, async (user) => {
             }
         }
         
-        document.getElementById("displayAmount").innerText = "RM" + saleAmount;
+        // Format nombor jadi cantik: RM 800.00
+        const formattedPrice = Number(saleAmount).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        document.getElementById("displayAmount").innerText = "RM " + formattedPrice;
         
     } catch (error) {
         console.error("Gagal ambil harga:", error);
-        document.getElementById("displayAmount").innerText = "RM" + saleAmount;
+        const formattedPrice = Number(saleAmount).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        document.getElementById("displayAmount").innerText = "RM " + formattedPrice;
     }
 });
 
