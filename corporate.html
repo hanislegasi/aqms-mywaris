@@ -1,0 +1,5181 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Corporate | MyWaris</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+
+body{
+font-family: Inter, sans-serif;
+}
+
+</style>
+  
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- HEADER -->
+  <div class="bg-[#153638] text-white p-5 shadow">
+
+    <h1 class="text-2xl font-bold">
+      Pakej Corporate
+    </h1>
+
+    <p class="text-gray-200">
+      Lengkapkan maklumat wasiat anda
+    </p>
+
+  </div>
+
+ <a
+    href="corporate-page.html"
+    class="block text-center bg-gray-200 hover:bg-gray-300 transition text-gray-700 py-3 rounded-lg font-semibold">
+
+    ← Kembali ke my-Corporate
+
+  </a>
+  
+  <!-- FORM -->
+  <div class="max-w-3xl mx-auto p-5">
+
+    <form
+      id="wasiatForm"
+      class="bg-white p-6 rounded-2xl shadow space-y-6">
+
+      <!-- SECTION 1 -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 1 : Butiran Pewasiat
+</h2>
+
+<div class="space-y-4">
+
+<input
+type="text"
+id="nama"
+placeholder="Nama Penuh"
+class="w-full border rounded-lg p-3">
+
+<input
+type="text"
+id="ic"
+placeholder="No Kad Pengenalan"
+class="w-full border rounded-lg p-3">
+
+<input
+id="alamat1"
+type="text"
+placeholder="Alamat Baris 1 (No. Rumah, Nama Jalan)"
+class="w-full border rounded-lg p-3">
+
+<input
+id="alamat2"
+type="text"
+placeholder="Alamat Baris 2 (Taman, Kampung, Apartment)"
+class="w-full border rounded-lg p-3 mt-4">
+
+<div class="grid grid-cols-3 gap-4 mt-4">
+
+<input
+id="poskod"
+type="text"
+placeholder="Poskod"
+class="w-full border rounded-lg p-3">
+
+<input
+id="bandar"
+type="text"
+placeholder="Bandar"
+class="w-full border rounded-lg p-3">
+
+<select
+id="negeri"
+class="w-full border rounded-lg p-3">
+
+<option value="" selected disabled>
+Negeri
+</option>
+
+<option>Johor</option>
+<option>Kedah</option>
+<option>Kelantan</option>
+<option>Melaka</option>
+<option>Negeri Sembilan</option>
+<option>Pahang</option>
+<option>Perak</option>
+<option>Perlis</option>
+<option>Pulau Pinang</option>
+<option>Sabah</option>
+<option>Sarawak</option>
+<option>Selangor</option>
+<option>Terengganu</option>
+<option>WP Kuala Lumpur</option>
+<option>WP Labuan</option>
+<option>WP Putrajaya</option>
+
+</select>
+
+</div>
+  
+<input
+type="text"
+id="telefon"
+placeholder="No Telefon"
+class="w-full border rounded-lg p-3">
+
+</div>
+
+</div>
+
+<!-- SECTION 2 -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 2 : Pelantikan Wasi
+</h2>
+
+<h3 class="font-semibold mb-2">
+Maklumat Wasi Pertama
+</h3>
+
+<input
+type="text"
+id="namaWasi1"
+placeholder="Nama Wasi"
+class="w-full border rounded-lg p-3 mb-3">
+
+<input
+type="text"
+id="icWasi1"
+placeholder="No IC"
+class="w-full border rounded-lg p-3 mb-3">
+
+<input
+type="text"
+id="hubunganWasi1"
+placeholder="Hubungan"
+class="w-full border rounded-lg p-3 mb-3">
+
+<textarea
+id="alamatWasi1"
+rows="2"
+placeholder="Alamat"
+class="w-full border rounded-lg p-3 mb-3"></textarea>
+
+<input
+type="text"
+id="telefonWasi1"
+placeholder="No Telefon"
+class="w-full border rounded-lg p-3">
+
+<hr class="my-6">
+
+<h3 class="font-semibold mb-2">
+Maklumat Wasi Kedua (Wasi Gantian)
+</h3>
+
+<input
+type="text"
+id="namaWasi2"
+placeholder="Nama Wasi Kedua"
+class="w-full border rounded-lg p-3 mb-3">
+
+<input
+type="text"
+id="icWasi2"
+placeholder="No IC"
+class="w-full border rounded-lg p-3 mb-3">
+
+<input
+type="text"
+id="hubunganWasi2"
+placeholder="Hubungan"
+class="w-full border rounded-lg p-3 mb-3">
+
+<textarea
+id="alamatWasi2"
+rows="2"
+placeholder="Alamat"
+class="w-full border rounded-lg p-3 mb-3"></textarea>
+
+<input
+type="text"
+id="telefonWasi2"
+placeholder="No Telefon"
+class="w-full border rounded-lg p-3">
+  
+</div>
+
+<!-- SECTION 3 -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 3 : Wasiat 1/3
+</h2>
+
+<div id="wasiatContainer">
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hartaWasiat"
+placeholder="Butiran Harta">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bahagianWasiat"
+placeholder="Bahagian (RM atau %)"
+oninput="formatRM(this)">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penerimaWasiat"
+placeholder="Penerima">
+
+<textarea
+class="w-full border rounded-lg p-3 notaWasiat"
+rows="3"
+placeholder="Nota"></textarea>
+
+<!-- BUTANG PADAM WASIAT -->
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg mt-3">
+Padam Wasiat
+</button>
+  
+</div>
+
+</div>
+
+<button
+type="button"
+id="addWasiatBtn"
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
++ Tambah Wasiat
+
+</button>
+
+</div>
+      
+<!-- SECTION 4 -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 4 : Pesanan Wasiat
+</h2>
+
+<textarea
+id="pesananWasiat"
+rows="10"
+placeholder="Taip atau paste pesanan wasiat di sini..."
+class="w-full border rounded-lg p-3">
+</textarea>
+
+<p class="text-sm text-gray-500 mt-2">
+Anda juga boleh copy & paste kandungan daripada dokumen Word.
+</p>
+
+</div>     
+
+<!-- SECTION 6 -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 5 : Senarai Waris
+</h2>
+
+<div id="warisContainer">
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 nacorporate"
+placeholder="Nama Waris">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icWaris"
+placeholder="No IC">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganWaris"
+placeholder="Hubungan">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 telefonWaris"
+placeholder="No Telefon">
+
+<div class="flex items-center gap-3">
+
+    <label
+        class="w-32 font-medium text-gray-700">
+        Tarikh Lahir
+    </label>
+
+    <input
+        type="date"
+        class="flex-1 border rounded-lg p-3 tarikhLahirWaris">
+
+</div>
+  
+<textarea
+rows="2"
+class="w-full border rounded-lg p-3 alamatWaris"
+placeholder="Alamat"></textarea>
+  
+<select
+class="w-full border rounded-lg p-3 statusWaris">
+
+<option value="">
+Status Waris
+</option>
+
+<option value="dewasa">
+Dewasa
+</option>
+
+<option value="bawah18">
+Bawah 18 Tahun
+</option>
+
+<option value="oku">
+OKU
+</option>
+
+</select>
+
+<!-- BUTANG PADAM WARIS -->
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+Padam
+</button>
+
+</div>
+
+</div>
+
+<button
+type="button"
+id="addWarisBtn"
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
++ Tambah Waris
+
+</button>
+
+</div>
+
+<!-- SECTION 6 -->
+<div id="sectionPemegangAmanah" class="hidden">
+
+<h2 class="font-bold text-xl mb-4">
+Section 6 : Pemegang Amanah
+</h2>
+
+<div class="border rounded-xl p-4 space-y-3">
+
+<p class="text-sm text-gray-600">
+Adakah anda ingin melantik Pemegang Amanah?
+</p>
+
+<select
+id="pilihanPemegangAmanah"
+class="w-full border rounded-lg p-3">
+
+<option value="">
+Pilih
+</option>
+
+<option value="tidak">
+Tidak
+</option>
+
+<option value="ya">
+Ya
+</option>
+
+</select>
+
+<div
+id="pemegangAmanahDetail"
+class="hidden space-y-3">
+
+<select
+id="jenisPemegangAmanah"
+class="w-full border rounded-lg p-3">
+
+<option value="">
+Pilih Pemegang Amanah
+</option>
+
+<option value="pasangan">
+Pasangan
+</option>
+
+<option value="lain">
+Orang Lain
+</option>
+
+</select>
+
+<div
+id="pemegangAmanahPasangan"
+class="hidden mt-3">
+
+<select
+id="namaPemegangAmanahPasangan"
+class="w-full border rounded-lg p-3">
+
+<option value="">
+Pilih Pasangan
+</option>
+
+</select>
+
+</div>
+  
+<div
+id="pemegangAmanahLain"
+class="space-y-3">
+
+<input
+type="text"
+id="namaPemegangAmanah"
+class="w-full border rounded-lg p-3"
+placeholder="Nama">
+
+<input
+type="text"
+id="icPemegangAmanah"
+class="w-full border rounded-lg p-3"
+placeholder="No IC">
+
+<input
+type="text"
+id="hubunganPemegangAmanah"
+class="w-full border rounded-lg p-3"
+placeholder="Hubungan">
+
+<input
+type="text"
+id="telefonPemegangAmanah"
+class="w-full border rounded-lg p-3"
+placeholder="No Telefon">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+      
+<!-- SECTION 7A -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 7A : Harta Alih
+</h2>
+
+<div id="hartaAlihContainer">
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaHartaAlih"
+placeholder="Nama Harta">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 noRujukanAlih"
+placeholder="No Akaun / Rujukan">
+
+<select
+class="w-full border rounded-lg p-3 pemilikanAlih">
+
+<option value="">
+Pemilikan
+</option>
+
+<option value="milikPenuh">
+Milik Penuh
+</option>
+
+<option value="perkongsian">
+Perkongsian Nama
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 nilaiAlih"
+placeholder="Anggaran Nilai"
+oninput="formatRM(this)">
+
+<select
+class="w-full border rounded-lg p-3 kategoriAlih">
+
+<option value="">Pilih Kategori</option>
+  
+<option value="faraid">
+Faraid
+</option>
+
+<option value="hibah">
+Hibah
+</option>
+
+<option value="sepencarian">
+Harta Sepencarian
+</option>
+
+</select>
+<div class="detailKategoriAlih hidden mt-3">
+
+<div class="hibahSection hidden">
+
+<div class="hibahPenerimaContainer">
+</div>
+
+<div class="flex gap-2 mt-3">
+<button
+type="button"
+class="addPenerimaHibahBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
++ Tambah Penerima
+</button>
+
+<button
+type="button"
+class="deleteLastPenerimaBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+Padam Penerima
+</button>
+</div>
+
+</div>
+  
+<div class="sepencarianSection hidden">
+  
+<select
+class="w-full border rounded-lg p-3 namaPenerimaSepencarian">
+
+<option value="">
+Pilih Pasangan
+</option>
+
+</select>
+  
+</div>
+  
+</div>
+
+<!-- BUTANG PADAM HARTA ALIH -->
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg mt-3">
+Padam Harta
+</button>
+
+</div>
+
+</div>
+
+<button
+type="button"
+id="addHartaAlihBtn"
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
++ Tambah Harta Alih
+
+</button>
+
+</div>
+
+<!-- SECTION 7B -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 7B : Harta Tak Alih
+</h2>
+
+<div id="hartaTakAlihContainer">
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaHartaTakAlih"
+placeholder="Nama Harta">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 noRujukanTakAlih"
+placeholder="No Geran / Rujukan">
+
+<select
+class="w-full border rounded-lg p-3 pemilikanTakAlih">
+
+<option value="">
+Pemilikan
+</option>
+
+<option value="milikPenuh">
+Milik Penuh
+</option>
+
+<option value="perkongsian">
+Perkongsian Nama
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 nilaiTakAlih"
+placeholder="Anggaran Nilai"
+oninput="formatRM(this)">
+
+<textarea
+class="w-full border rounded-lg p-3 alamatTakAlih"
+rows="3"
+placeholder="Alamat Harta">
+</textarea>
+
+<select
+class="w-full border rounded-lg p-3 kategoriTakAlih">
+
+<option value="">Pilih Kategori</option>
+  
+<option value="faraid">
+Faraid
+</option>
+
+<option value="hibah">
+Hibah
+</option>
+
+<option value="sepencarian">
+Harta Sepencarian
+</option>
+
+</select>
+
+<div class="detailKategoriTakAlih hidden mt-3">
+
+<div class="hibahSectionTakAlih hidden">
+
+<div class="hibahPenerimaContainerTakAlih">
+</div>
+
+<div class="flex gap-2 mt-3">
+<button
+type="button"
+class="addPenerimaHibahTakAlihBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
++ Tambah Penerima
+</button>
+
+<button
+type="button"
+class="deleteLastPenerimaTakAlihBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+Padam Penerima
+</button>
+</div>
+
+</div>
+
+<div class="sepencarianSectionTakAlih hidden">
+
+<select
+class="w-full border rounded-lg p-3 namaPenerimaSepencarianTakAlih">
+
+<option value="">
+Pilih Pasangan
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<!-- BUTANG PADAM HARTA TAK ALIH -->
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg mt-3">
+Padam Harta
+</button>
+  
+</div>
+
+</div>  
+
+<button
+type="button"
+id="addHartaTakAlihBtn"
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
++ Tambah Harta Tak Alih
+
+</button>
+
+</div>      
+
+<!-- SECTION 7C -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 7C : Harta Berpenama
+</h2>
+
+<div id="hartaBerpenamaContainer">
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<select
+class="w-full border rounded-lg p-3 jenisBerpenama">
+
+<option value="">
+Pilih Jenis
+</option>
+
+<option value="KWSP">
+KWSP
+</option>
+
+<option value="Tabung Haji">
+Tabung Haji
+</option>
+
+<option value="ASB">
+ASB
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 akaunBerpenama"
+placeholder="No Akaun">
+
+<select
+class="w-full border rounded-lg p-3 jenisPenama">
+
+<option value="">
+Pilih Penama
+</option>
+
+<option value="waris">
+Waris
+</option>
+
+<option value="lain">
+Orang Lain
+</option>
+
+</select>
+
+<div class="penacorporateSection hidden">
+
+<div class="penacorporateContainer">
+</div>
+
+<div class="flex gap-2 mt-3">
+
+<button
+type="button"
+class="addPenacorporateBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
+
++ Tambah Penama
+
+</button>
+
+<button
+type="button"
+class="deletePenacorporateBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam Penama
+
+</button>
+
+</div>
+
+</div>
+
+<div class="penamaLainSection hidden space-y-3">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penama"
+placeholder="Nama Penama">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penamaIC"
+placeholder="No IC">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penamaHubungan"
+placeholder="Hubungan">
+
+</div>
+<input
+type="number"
+class="w-full border rounded-lg p-3 bahagianPenamaLain"
+placeholder="Bahagian (%)">
+
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam
+
+</button>  
+
+</div>
+
+</div>
+
+<button
+type="button"
+id="addBerpenamaBtn"
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
++ Tambah Harta Berpenama
+
+</button>
+
+</div>
+
+<!-- SECTION 7D -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 7D : Maklumat Takaful
+</h2>
+
+<div id="takafulContainer">
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 syarikatTakaful"
+placeholder="Nama Syarikat">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 polisiTakaful"
+placeholder="Nama Polisi">
+
+<select
+class="w-full border rounded-lg p-3 jenisPenerimaTakaful">
+
+<option value="">
+Pilih Penerima
+</option>
+
+<option value="waris">
+Waris
+</option>
+
+<option value="lain">
+Orang Lain
+</option>
+
+</select>
+
+<!-- WARIS -->
+
+<div class="penericorporateTakafulSection hidden">
+
+<div class="penericorporateTakafulContainer">
+</div>
+
+<div class="flex gap-2 mt-3">
+
+<button
+type="button"
+class="addPenericorporateTakafulBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
+
++ Tambah Penerima
+
+</button>
+
+<button
+type="button"
+class="deletePenericorporateTakafulBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam Penerima
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ORANG LAIN -->
+
+<div class="penerimaLainTakafulSection hidden space-y-3">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penerimaTakaful"
+placeholder="Nama Penerima">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icPenerimaTakaful"
+placeholder="No IC">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganTakaful"
+placeholder="Hubungan">
+
+<input
+type="number"
+class="w-full border rounded-lg p-3 bahagianPenerimaTakaful"
+placeholder="Bahagian (%)">
+
+</div>
+
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam
+
+</button>
+
+</div>
+
+</div>
+
+<button
+type="button"
+id="addTakafulBtn"
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
++ Tambah Takaful
+
+</button>
+
+</div>
+      
+<!-- SECTION 8A -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 8A : Senarai Pemiutang
+</h2>
+
+<div id="pemiutangContainer">
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaPemiutang"
+placeholder="Nama Pemiutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 jenisHutangPemiutang"
+placeholder="Jenis Hutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bakiHutangPemiutang"
+placeholder="Baki Hutang"
+oninput="formatRM(this)">
+
+<textarea
+class="w-full border rounded-lg p-3 kaedahPenyelesaianPemiutang"
+rows="3"
+placeholder="Kaedah Penyelesaian"></textarea>
+
+<!-- TAMBAH BUTANG INI -->
+    <button type="button" class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+        Padam
+    </button>
+
+</div>
+
+</div>
+
+<button
+type="button"
+id="addPemiutangBtn"
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
++ Tambah Pemiutang
+
+</button>
+
+</div>
+
+<!-- SECTION 8B -->
+<div>
+
+<h2 class="font-bold text-xl mb-4">
+Section 8B : Senarai Penghutang
+</h2>
+
+<div id="penghutangContainer">
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaPenghutang"
+placeholder="Nama Penghutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 jenisHutangPenghutang"
+placeholder="Jenis Hutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bakiHutangPenghutang"
+placeholder="Baki Hutang"
+oninput="formatRM(this)">
+
+<textarea
+class="w-full border rounded-lg p-3 kaedahPenyelesaianPenghutang"
+rows="3"
+placeholder="Kaedah Penyelesaian"></textarea>
+
+<!-- TAMBAH BUTANG INI -->
+    <button type="button" class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+        Padam
+    </button>
+
+</div>
+
+</div>
+
+<button
+type="button"
+id="addPenghutangBtn"
+class="bg-[#153638] text-white px-4 py-2 rounded-lg">
+
++ Tambah Penghutang
+
+</button>
+
+</div>      
+      
+<!-- LAMPIRAN -->
+<div class="space-y-3">
+
+  <h2 class="text-xl font-bold text-[#153638]">
+    Lampiran Dokumen
+  </h2>
+
+<div class="mb-3">
+
+<label class="block font-medium mb-1">
+Nama Lampiran
+</label>
+
+<input
+type="text"
+id="namaLampiran"
+class="w-full border rounded-lg p-2 mb-3"
+placeholder="Contoh: Salinan Geran Rumah">
+
+</div>
+  
+  <input
+    type="file"
+    id="fileInput"
+    class="w-full border rounded-lg p-3">
+
+  <button
+    type="button"
+    id="uploadBtn"
+    class="bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-5 py-3 rounded-lg">
+
+    Muat Naik Lampiran
+
+  </button>
+
+  <div
+    id="fileList"
+    class="space-y-2">
+  </div>
+
+</div>
+      
+      <div class="space-y-4">
+
+  <!-- BUTTON -->
+  <button
+    type="submit"
+    class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-lg font-semibold">
+
+    Simpan 
+
+  </button>
+
+  <a
+    href="corporate-page.html"
+    class="block text-center bg-gray-200 hover:bg-gray-300 transition text-gray-700 py-3 rounded-lg font-semibold">
+
+    ← Kembali ke Dashboard
+
+  </a>
+
+  <a
+    href="preview-draf-corporate.html"
+    class="block text-center bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-lg font-semibold">
+
+    Preview →
+
+  </a>
+
+</div>   
+      <!-- STATUS -->
+      <p
+        id="status"
+        class="text-center text-green-600 font-medium">
+      </p>
+
+    </form>
+
+  </div>
+
+  <!-- FIREBASE -->
+  <script type="module">
+
+// 1. Tarik 'db', 'auth', dan 'storage' dari fail konfigurasi berpusat
+import { db, auth, storage } from './firebase.js';
+
+// 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
+import {
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+// 3. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
+import {
+    doc,
+    setDoc,
+    getDoc,
+    collection,
+    addDoc,
+    getDocs,
+    deleteDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// 4. Tarik fungsi Storage yang berkaitan sahaja (buang getStorage)
+import {
+    ref,
+    uploadBytes,
+    getDownloadURL,
+    deleteObject
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+    let currentUser = null;
+
+ // --- FUNGSI FORMAT RM UNTUK ONINPUT HTML ---
+    window.formatRM = function(input) {
+        let val = input.value;
+        
+        // 1. Jika kotak kosong (sebab user tekan delete semua), biarkan kosong
+        if (val.trim() === "") {
+            return;
+        }
+
+        // 2. Jangan sekat jika user nak taip pecahan (1/2), peratus (50%), atau perkataan (Sama Rata).
+        // Kod ini akan semak jika ada huruf normal selain dari huruf 'R' dan 'M'.
+        let adaHurufLain = /[a-zA-Z]/.test(val.replace(/[rRmM\s,.]/g, ''));
+        if (val.includes('%') || val.includes('/') || adaHurufLain) {
+            return; // Hentikan auto-format, biarkan user menaip dengan bebas
+        }
+
+        // 3. Jika ia hanya nombor, barulah kita jalankan tugas auto-format ke RM
+        let numStr = val.replace(/[^0-9.]/g, '');
+        
+        if (numStr !== "") {
+            let parts = numStr.split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            input.value = "RM " + parts.join('.');
+        } else {
+            // 4. Jika user tekan backspace sampai cuma tinggal tulisan "RM ", kita tolong kosongkan kotak terus.
+            input.value = "";
+        }
+    };
+    
+    // CHECK LOGIN
+    onAuthStateChanged(auth, async(user)=>{
+
+      if(!user){
+
+        window.location.href =
+          "login.html";
+
+        return;
+
+      }
+
+      currentUser = user;
+      loadFiles();
+
+const docSnap =
+await getDoc(
+  doc(
+    db,
+    "users",
+    currentUser.uid,
+    "corporate",
+    "maklumat"
+  )
+);
+
+if(docSnap.exists()){
+
+  const data = docSnap.data();
+
+  document.getElementById("nama").value =
+    data.nama || "";
+
+  document.getElementById("ic").value =
+    data.ic || "";
+
+    document.getElementById("alamat1").value =
+data.alamat1 || "";
+
+document.getElementById("alamat2").value =
+data.alamat2 || "";
+
+document.getElementById("poskod").value =
+data.poskod || "";
+
+document.getElementById("bandar").value =
+data.bandar || "";
+
+document.getElementById("negeri").value =
+data.negeri || "";
+
+    document.getElementById("telefon").value =
+    data.telefon || "";
+  
+document.getElementById("namaWasi1").value =
+data.namaWasi1 || "";
+
+document.getElementById("icWasi1").value =
+data.icWasi1 || "";
+
+document.getElementById("hubunganWasi1").value =
+data.hubunganWasi1 || "";
+
+document.getElementById("alamatWasi1").value =
+data.alamatWasi1 || "";
+
+document.getElementById("telefonWasi1").value =
+data.telefonWasi1 || "";
+
+document.getElementById("namaWasi2").value =
+data.namaWasi2 || "";
+
+document.getElementById("icWasi2").value =
+data.icWasi2 || "";
+
+document.getElementById("hubunganWasi2").value =
+data.hubunganWasi2 || "";
+
+document.getElementById("alamatWasi2").value =
+data.alamatWasi2 || "";
+
+document.getElementById("telefonWasi2").value =
+data.telefonWasi2 || "";
+
+document.getElementById("pesananWasiat").value =
+data.pesananWasiat || "";
+  
+      
+// LOAD SECTION 3
+if(data.wasiatSatuPerTiga){
+
+document.getElementById(
+"wasiatContainer"
+).innerHTML = "";
+
+data.wasiatSatuPerTiga.forEach(item=>{
+
+document.getElementById(
+"wasiatContainer"
+).insertAdjacentHTML(
+"beforeend",
+`
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hartaWasiat"
+placeholder="Butiran Harta"
+value="${item.harta || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bahagianWasiat"
+placeholder="Bahagian (RM atau %)"
+value="${item.bahagian || ''}"
+oninput="formatRM(this)">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penerimaWasiat"
+placeholder="Penerima"
+value="${item.penerima || ''}">
+
+<textarea
+class="w-full border rounded-lg p-3 notaWasiat"
+placeholder="Nota">${item.nota || ''}</textarea>
+
+<!-- LETAK BUTANG PADAM DI SINI -->
+<button type="button" class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg mt-3">
+Padam Wasiat
+</button>
+
+</div>
+`
+);
+
+});
+
+}
+
+if(data.waris){
+
+document.getElementById(
+"warisContainer"
+).innerHTML = "";
+
+data.waris.forEach(item=>{
+
+document.getElementById(
+"warisContainer"
+).insertAdjacentHTML(
+"beforeend",
+`
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 nacorporate"
+placeholder="Nama Waris"
+value="${item.nama || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icWaris"
+placeholder="No IC"
+value="${item.ic || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganWaris"
+placeholder="Hubungan"
+value="${item.hubungan || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 telefonWaris"
+placeholder="No Telefon"
+value="${item.telefon || ''}">
+
+<div class="flex items-center gap-3">
+
+<label class="w-32 font-medium text-gray-700">
+Tarikh Lahir
+</label>
+
+<input
+type="date"
+class="flex-1 border rounded-lg p-3 tarikhLahirWaris"
+value="${item.tarikhLahir || ''}">
+
+</div>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 alamatWaris"
+placeholder="Alamat"
+value="${item.alamat || ''}">
+
+<select
+class="w-full border rounded-lg p-3 statusWaris">
+
+<option value="dewasa"
+${item.status==="dewasa"?"selected":""}>
+Dewasa
+</option>
+
+<option value="bawah18"
+${item.status==="bawah18"?"selected":""}>
+Bawah 18 Tahun
+</option>
+
+<option value="oku"
+${item.status==="oku"?"selected":""}>
+OKU
+</option>
+
+</select>
+
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+Padam
+</button>
+
+</div>
+`
+);
+
+});
+  
+populateWarisDropdown();
+populateWarisDropdownTakAlih();
+populateWarisDropdownHibah();
+populatePasanganDropdown();
+populatePemegangAmanahPasangan();
+populateWarisDropdownPenama();
+  
+checkPemegangAmanah();
+
+}   
+
+
+if(data.pemegangAmanah){
+
+document.getElementById(
+"pilihanPemegangAmanah"
+).value =
+data.pemegangAmanah.pilihan || "";
+
+if(
+data.pemegangAmanah.pilihan === "ya"
+){
+
+document
+.getElementById(
+"pemegangAmanahDetail"
+)
+.classList.remove(
+"hidden"
+);
+
+}
+
+document.getElementById(
+"jenisPemegangAmanah"
+).value =
+data.pemegangAmanah.jenis || "";
+
+if(
+data.pemegangAmanah.jenis ===
+"pasangan"
+){
+
+document
+.getElementById(
+"pemegangAmanahPasangan"
+)
+.classList.remove(
+"hidden"
+);
+
+document.getElementById(
+"namaPemegangAmanahPasangan"
+).value =
+data.pemegangAmanah.nama || "";
+
+}  
+
+if(
+data.pemegangAmanah.jenis === "lain"
+){
+
+document
+.getElementById(
+"pemegangAmanahLain"
+)
+.classList.remove(
+"hidden"
+);
+
+}
+
+document.getElementById(
+"namaPemegangAmanah"
+).value =
+data.pemegangAmanah.nama || "";
+
+document.getElementById(
+"icPemegangAmanah"
+).value =
+data.pemegangAmanah.ic || "";
+
+document.getElementById(
+"hubunganPemegangAmanah"
+).value =
+data.pemegangAmanah.hubungan || "";
+
+document.getElementById(
+"telefonPemegangAmanah"
+).value =
+data.pemegangAmanah.telefon || "";
+
+}
+
+console.log(data.hartaAlih);
+  
+if(data.hartaAlih){
+
+document.getElementById(
+"hartaAlihContainer"
+).innerHTML = "";
+
+data.hartaAlih.forEach(item=>{
+
+document.getElementById(
+"hartaAlihContainer"
+).insertAdjacentHTML(
+"beforeend",
+`
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaHartaAlih"
+placeholder="Nama Harta"
+value="${item.nama || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 noRujukanAlih"
+placeholder="No Akaun / Rujukan"
+value="${item.rujukan || ''}">
+
+<select
+class="w-full border rounded-lg p-3 pemilikanAlih">
+
+<option value="">
+Pemilikan
+</option>
+
+<option
+value="milikPenuh"
+${item.pemilikan==="milikPenuh"?"selected":""}>
+Milik Penuh
+</option>
+
+<option
+value="perkongsian"
+${item.pemilikan==="perkongsian"?"selected":""}>
+Perkongsian Nama
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 nilaiAlih"
+placeholder="Anggaran Nilai"
+value="${item.nilai || ''}"
+oninput="formatRM(this)">
+
+<select
+class="w-full border rounded-lg p-3 kategoriAlih">
+
+<option value="">Pilih Kategori</option>
+
+<option
+value="faraid"
+${item.kategori==="faraid"?"selected":""}>
+Faraid
+</option>
+
+<option
+value="hibah"
+${item.kategori==="hibah"?"selected":""}>
+Hibah
+</option>
+
+<option
+value="sepencarian"
+${item.kategori==="sepencarian"?"selected":""}>
+Harta Sepencarian
+</option>
+
+</select>
+
+<div class="detailKategoriAlih hidden mt-3">
+
+<div class="hibahSection hidden">
+
+<div class="hibahPenerimaContainer">
+</div>
+
+<div class="flex gap-2 mt-3">
+<button
+type="button"
+class="addPenerimaHibahBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
++ Tambah Penerima
+</button>
+
+<button
+type="button"
+class="deleteLastPenerimaBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+Padam Penerima
+</button>
+</div>
+
+</div>
+
+<div class="sepencarianSection hidden">
+
+<select
+class="w-full border rounded-lg p-3 namaPenerimaSepencarian">
+
+<option value="">
+Pilih Pasangan
+</option>
+
+</select>
+
+<input
+type="number"
+class="w-full border rounded-lg p-3 mt-2 peratusSepencarian"
+placeholder="Peratus (%)"
+min="0"
+max="100"
+step="0.01">
+
+</div>
+
+</div>
+
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg mt-3">
+Padam Harta
+</button>
+
+</div>
+`
+);
+
+});
+
+setupKategoriAlih();
+populateWarisDropdown();
+populatePasanganDropdown();
+
+document
+.querySelectorAll(".kategoriAlih")
+.forEach((select,index)=>{
+
+if(select.value==="hibah"){
+
+document
+.querySelectorAll(
+".detailKategoriAlih"
+)[index]
+.classList.remove("hidden");
+
+document
+.querySelectorAll(
+".hibahSection"
+)[index]
+.classList.remove("hidden");
+
+}
+
+if(select.value==="sepencarian"){
+
+document
+.querySelectorAll(
+".detailKategoriAlih"
+)[index]
+.classList.remove("hidden");
+
+document
+.querySelectorAll(
+".sepencarianSection"
+)[index]
+.classList.remove("hidden");
+
+}
+
+});
+
+data.hartaAlih.forEach((item,index)=>{
+
+// RESTORE HIBAH
+if(
+item.kategori === "hibah"
+&&
+item.penerimaHibah
+){
+
+const detail =
+document.querySelectorAll(
+".detailKategoriAlih"
+)[index];
+
+const hibahContainer =
+detail.querySelector(
+".hibahPenerimaContainer"
+);
+
+item.penerimaHibah.forEach(p=>{
+
+addPenerimaHibah(
+hibahContainer
+);
+
+});
+
+const selects =
+hibahContainer.querySelectorAll(
+".penerimaHibah"
+);
+
+const peratus =
+hibahContainer.querySelectorAll(
+".peratusHibah"
+);
+
+item.penerimaHibah.forEach(
+(p,i)=>{
+
+if(selects[i]){
+
+selects[i].value =
+p.nama || "";
+
+}
+
+if(peratus[i]){
+
+peratus[i].value =
+p.peratus || "";
+
+}
+
+});
+
+}
+
+// RESTORE SEPENCARIAN
+if(
+item.kategori === "sepencarian"
+){
+
+const select =
+document.querySelectorAll(
+".namaPenerimaSepencarian"
+)[index];
+
+if(select){
+
+    select.value =
+    item.penerimaSepencarian?.[0]?.nama || "";
+
+}
+
+const peratus =
+document.querySelectorAll(
+".peratusSepencarian"
+)[index];
+
+if(peratus){
+
+    peratus.value =
+    item.penerimaSepencarian?.[0]?.peratus || "";
+
+}
+
+}
+
+});
+  
+}
+
+if(data.hartaTakAlih){
+
+document.getElementById(
+"hartaTakAlihContainer"
+).innerHTML = "";
+
+data.hartaTakAlih.forEach(item=>{
+
+document.getElementById(
+"hartaTakAlihContainer"
+).insertAdjacentHTML(
+"beforeend",
+`
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaHartaTakAlih"
+placeholder="Nama Harta"
+value="${item.nama || ''}">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 noRujukanTakAlih"
+placeholder="No Geran / Rujukan"
+value="${item.rujukan || ''}">
+
+<select
+class="w-full border rounded-lg p-3 pemilikanTakAlih">
+
+<option value="">
+Pemilikan
+</option>
+
+<option
+value="milikPenuh"
+${item.pemilikan==="milikPenuh"?"selected":""}>
+Milik Penuh
+</option>
+
+<option
+value="perkongsian"
+${item.pemilikan==="perkongsian"?"selected":""}>
+Perkongsian Nama
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 nilaiTakAlih"
+placeholder="Anggaran Nilai"
+value="${item.nilai || ''}"
+oninput="formatRM(this)">
+
+<textarea
+class="w-full border rounded-lg p-3 alamatTakAlih"
+rows="3"
+placeholder="Alamat Harta">${item.alamat || ''}</textarea>
+
+<select
+class="w-full border rounded-lg p-3 kategoriTakAlih">
+
+<option value="">Pilih Kategori</option>
+
+<option
+value="faraid"
+${item.kategori==="faraid"?"selected":""}>
+Faraid
+</option>
+
+<option
+value="hibah"
+${item.kategori==="hibah"?"selected":""}>
+Hibah
+</option>
+
+<option
+value="sepencarian"
+${item.kategori==="sepencarian"?"selected":""}>
+Harta Sepencarian
+</option>
+
+</select>
+
+<div class="detailKategoriTakAlih hidden mt-3">
+
+<div class="hibahSectionTakAlih hidden">
+
+<div class="hibahPenerimaContainerTakAlih">
+</div>
+
+<div class="flex gap-2 mt-3">
+<button
+type="button"
+class="addPenerimaHibahTakAlihBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
++ Tambah Penerima
+</button>
+
+<button
+type="button"
+class="deleteLastPenerimaTakAlihBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+Padam Penerima
+</button>
+</div>
+
+</div>
+
+<div class="sepencarianSectionTakAlih hidden">
+
+<select
+class="w-full border rounded-lg p-3 namaPenerimaSepencarianTakAlih">
+
+<option value="">
+Pilih Pasangan
+</option>
+
+</select>
+
+<input
+type="number"
+class="w-full border rounded-lg p-3 mt-2 peratusSepencarianTakAlih"
+placeholder="Peratus (%)"
+min="0"
+max="100"
+step="0.01">
+
+</div>
+
+</div>
+
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg mt-3">
+Padam Harta
+</button>
+
+</div>
+
+`
+);
+
+});
+
+setupKategoriTakAlih();
+populateWarisDropdownHibahTakAlih();
+populatePasanganDropdownTakAlih();  
+
+document
+.querySelectorAll(".kategoriTakAlih")
+.forEach((select,index)=>{
+
+if(select.value==="hibah"){
+
+document
+.querySelectorAll(
+".detailKategoriTakAlih"
+)[index]
+.classList.remove("hidden");
+
+document
+.querySelectorAll(
+".hibahSectionTakAlih"
+)[index]
+.classList.remove("hidden");
+
+}
+
+if(select.value==="sepencarian"){
+
+document
+.querySelectorAll(
+".detailKategoriTakAlih"
+)[index]
+.classList.remove("hidden");
+
+document
+.querySelectorAll(
+".sepencarianSectionTakAlih"
+)[index]
+.classList.remove("hidden");
+
+
+}
+
+});
+
+data.hartaTakAlih.forEach((item,index)=>{
+
+// RESTORE HIBAH
+if(
+item.kategori === "hibah"
+&&
+item.penerimaHibahTakAlih
+){
+
+const detail =
+document.querySelectorAll(
+".detailKategoriTakAlih"
+)[index];
+
+const hibahContainer =
+detail.querySelector(
+".hibahPenerimaContainerTakAlih"
+);
+
+item.penerimaHibahTakAlih.forEach(()=>{
+
+addPenerimaHibahTakAlih(
+hibahContainer
+);
+
+});
+
+const selects =
+hibahContainer.querySelectorAll(
+".penerimaHibahTakAlih"
+);
+
+const peratus =
+hibahContainer.querySelectorAll(
+".peratusHibahTakAlih"
+);
+
+item.penerimaHibahTakAlih.forEach(
+(p,i)=>{
+
+if(selects[i]){
+selects[i].value =
+p.nama || "";
+}
+
+if(peratus[i]){
+peratus[i].value =
+p.peratus || "";
+}
+
+});
+
+}
+
+// RESTORE SEPENCARIAN
+if(
+item.kategori === "sepencarian"
+){
+
+const pasangan =
+document.querySelectorAll(
+".namaPenerimaSepencarianTakAlih"
+)[index];
+
+if(pasangan){
+
+pasangan.value =
+item.penerimaSepencarianTakAlih?.[0]?.nama || "";
+
+}
+
+const peratus =
+document.querySelectorAll(
+".peratusSepencarianTakAlih"
+)[index];
+
+if(peratus){
+
+    peratus.value =
+    item.penerimaSepencarianTakAlih?.[0]?.peratus || "";
+
+}
+  
+}
+
+});
+
+}
+
+if (data.hartaBerpenama) {
+
+    document.getElementById("hartaBerpenamaContainer").innerHTML = "";
+
+    data.hartaBerpenama.forEach(item => {
+
+        // Guna function yang dah kita buat dalam Part 1
+        document.getElementById("addBerpenamaBtn").click();
+
+        const row = document.querySelector(
+            "#hartaBerpenamaContainer > div:last-child"
+        );
+
+        row.querySelector(".jenisBerpenama").value =
+            item.jenis || "";
+
+        row.querySelector(".akaunBerpenama").value =
+            item.akaun || "";
+
+        row.querySelector(".jenisPenama").value =
+            item.jenisPenama || "";
+
+        // trigger show/hide section
+        row.querySelector(".jenisPenama")
+            .dispatchEvent(new Event("change"));
+
+        //---------------------------------
+        // WARIS
+        //---------------------------------
+
+        if (item.jenisPenama === "waris") {
+
+            const container =
+                row.querySelector(".penacorporateContainer");
+
+            container.innerHTML = "";
+
+            (item.penacorporate || []).forEach(w => {
+
+                addPenacorporate(container);
+
+                const last =
+                    container.lastElementChild;
+
+                last.querySelector(".pilihWarisPenama").value =
+                    w.nama || "";
+
+                last.querySelector(".bahagianPenacorporate").value =
+                    w.bahagian || "";
+
+            });
+
+        }
+
+        //---------------------------------
+        // ORANG LAIN
+        //---------------------------------
+
+        if (item.jenisPenama === "lain") {
+
+            row.querySelector(".penama").value =
+                item.penamaLain?.nama || "";
+
+            row.querySelector(".penamaIC").value =
+                item.penamaLain?.ic || "";
+
+            row.querySelector(".penamaHubungan").value =
+                item.penamaLain?.hubungan || "";
+
+            row.querySelector(".bahagianPenamaLain").value =
+                item.penamaLain?.bahagian || "";
+
+        }
+
+    });
+
+}
+
+if (data.takaful) {
+
+    document.getElementById("takafulContainer").innerHTML = "";
+
+    data.takaful.forEach(item => {
+
+        document.getElementById("addTakafulBtn").click();
+
+        const row = document.querySelector(
+            "#takafulContainer > div:last-child"
+        );
+
+        row.querySelector(".syarikatTakaful").value =
+            item.syarikat || "";
+
+        row.querySelector(".polisiTakaful").value =
+            item.polisi || "";
+
+        row.querySelector(".jenisPenerimaTakaful").value =
+            item.jenisPenerima || "";
+
+        row.querySelector(".jenisPenerimaTakaful")
+            .dispatchEvent(new Event("change"));
+
+        //---------------------------------
+        // WARIS
+        //---------------------------------
+
+        if (item.jenisPenerima === "waris") {
+
+            const container =
+                row.querySelector(".penericorporateTakafulContainer");
+
+            container.innerHTML = "";
+
+            (item.penericorporate || []).forEach(w => {
+
+                addPenericorporateTakaful(container);
+
+                const last =
+                    container.lastElementChild;
+
+                last.querySelector(".pilihWarisTakaful").value =
+                    w.nama || "";
+
+                last.querySelector(".bahagianWarisTakaful").value =
+                    w.bahagian || "";
+
+            });
+
+        }
+
+        //---------------------------------
+        // ORANG LAIN
+        //---------------------------------
+
+        if (item.jenisPenerima === "lain") {
+
+            row.querySelector(".penerimaTakaful").value =
+                item.penerimaLain?.nama || "";
+
+            row.querySelector(".icPenerimaTakaful").value =
+                item.penerimaLain?.ic || "";
+
+            row.querySelector(".hubunganTakaful").value =
+                item.penerimaLain?.hubungan || "";
+
+            row.querySelector(".bahagianPenerimaTakaful").value =
+                item.penerimaLain?.bahagian || "";
+
+        }
+
+    });
+
+}
+  
+if(data.pemiutang){
+
+document.getElementById(
+"pemiutangContainer"
+).innerHTML = "";
+
+data.pemiutang.forEach(item=>{
+
+document.getElementById(
+"pemiutangContainer"
+).insertAdjacentHTML(
+"beforeend",
+`
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaPemiutang"
+value="${item.nama || ''}" placeholder="Nama Pemiutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 jenisHutangPemiutang"
+value="${item.jenis || ''}" placeholder="Jenis Hutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bakiHutangPemiutang"
+value="${item.baki || ''}" placeholder="Baki Hutang"
+oninput="formatRM(this)">
+
+<textarea
+class="w-full border rounded-lg p-3 kaedahPenyelesaianPemiutang"
+rows="3" placeholder="Kaedah Penyelesaian">${item.kaedah || ''}</textarea>
+
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam
+
+</button>
+
+</div>
+
+`
+);
+
+});
+
+}
+
+if(data.penghutang){
+
+document.getElementById(
+"penghutangContainer"
+).innerHTML = "";
+
+data.penghutang.forEach(item=>{
+
+document.getElementById(
+"penghutangContainer"
+).insertAdjacentHTML(
+"beforeend",
+`
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaPenghutang"
+value="${item.nama || ''}" placeholder="Nama Penghutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 jenisHutangPenghutang"
+value="${item.jenis || ''}" placeholder="Jenis Hutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bakiHutangPenghutang"
+value="${item.baki || ''}" placeholder="Baki Hutang"
+oninput="formatRM(this)">
+
+<textarea
+class="w-full border rounded-lg p-3 kaedahPenyelesaianPenghutang"
+rows="3" placeholder="Kaedah Penyelesaian">${item.kaedah || ''}</textarea>
+
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam
+
+</button>
+
+</div>
+
+`
+);
+
+});
+
+}  
+  
+}
+
+});
+
+document
+.getElementById("pilihanPemegangAmanah")
+.addEventListener("change",function(){
+
+if(this.value==="ya"){
+
+document
+.getElementById("pemegangAmanahDetail")
+.classList.remove("hidden");
+
+}else{
+
+document
+.getElementById("pemegangAmanahDetail")
+.classList.add("hidden");
+
+}
+
+});
+
+document
+.getElementById("jenisPemegangAmanah")
+.addEventListener("change",function(){
+
+if(this.value==="lain"){
+
+document
+.getElementById("namaPemegangAmanah")
+.readOnly = false;
+
+document
+.getElementById("icPemegangAmanah")
+.readOnly = false;
+
+document
+.getElementById("hubunganPemegangAmanah")
+.readOnly = false;
+
+document
+.getElementById("telefonPemegangAmanah")
+.readOnly = false;
+
+document
+.getElementById("namaPemegangAmanah").value = "";
+document.getElementById("icPemegangAmanah").value = "";
+document.getElementById("hubunganPemegangAmanah").value = "";
+document.getElementById("telefonPemegangAmanah").value = "";  
+
+document
+.getElementById(
+"pemegangAmanahLain"
+).classList.remove("hidden");
+
+document
+.getElementById(
+"pemegangAmanahPasangan"
+).classList.add("hidden");
+
+}
+
+else if(this.value==="pasangan"){
+
+document
+.getElementById("namaPemegangAmanah")
+.readOnly = true;
+
+document
+.getElementById("icPemegangAmanah")
+.readOnly = true;
+
+document
+.getElementById("hubunganPemegangAmanah")
+.readOnly = true;
+
+document
+.getElementById("telefonPemegangAmanah")
+.readOnly = true;
+  
+document
+.getElementById(
+"pemegangAmanahPasangan"
+).classList.remove("hidden");
+
+document
+.getElementById(
+"pemegangAmanahLain"
+).classList.add("hidden");
+
+}
+
+else{
+
+document
+.getElementById(
+"pemegangAmanahPasangan"
+).classList.add("hidden");
+
+document
+.getElementById(
+"pemegangAmanahLain"
+).classList.add("hidden");
+
+}
+
+});
+
+document
+.getElementById(
+"namaPemegangAmanahPasangan"
+)
+.addEventListener(
+"change",
+function(){
+
+const namaDipilih = this.value;
+
+const index =
+[...document.querySelectorAll(".nacorporate")]
+.findIndex(
+x => x.value === namaDipilih
+);
+
+if(index < 0) return;
+
+document.getElementById(
+"namaPemegangAmanah"
+).value =
+document
+.querySelectorAll(".nacorporate")
+[index]
+?.value || "";
+
+document.getElementById(
+"icPemegangAmanah"
+).value =
+document
+.querySelectorAll(".icWaris")
+[index]
+?.value || "";
+
+document.getElementById(
+"hubunganPemegangAmanah"
+).value =
+document
+.querySelectorAll(".hubunganWaris")
+[index]
+?.value || "";
+
+document.getElementById(
+"telefonPemegangAmanah"
+).value =
+document
+.querySelectorAll(".telefonWaris")
+[index]
+?.value || "";
+
+});    
+
+function checkPemegangAmanah(){
+
+let perluPemegangAmanah = false;
+
+document
+.querySelectorAll(".statusWaris")
+.forEach(select=>{
+
+if(
+select.value === "bawah18" ||
+select.value === "oku"
+){
+
+perluPemegangAmanah = true;
+
+}
+
+});
+
+const section =
+document.getElementById(
+"sectionPemegangAmanah"
+);
+
+if(perluPemegangAmanah){
+
+section.classList.remove(
+"hidden"
+);
+
+}else{
+
+section.classList.add(
+"hidden"
+);
+
+}
+
+}
+    
+// LOAD FILES (TERMASUK BUTANG PADAM)
+async function loadFiles(){
+  const snapshot = await getDocs(
+    collection(
+      db,
+      "users",
+      currentUser.uid,
+      "corporateDocuments"
+    )
+  );
+
+  let html = "";
+
+  snapshot.forEach((docSnap)=>{
+    const data = docSnap.data();
+    const docId = docSnap.id;
+
+    html += `
+    <div id="doc-${docId}" class="bg-gray-100 p-4 rounded-xl space-y-3">
+      <div class="flex justify-between items-center">
+        <p class="text-sm font-medium text-gray-700">
+          ${data.namaLampiran || data.fileName}
+        </p>
+
+        <div class="flex items-center gap-3">
+          <a
+            href="${data.fileURL}"
+            target="_blank"
+            class="text-[#153638] font-semibold text-sm">
+            Buka
+          </a>
+          <button
+            type="button"
+            class="deleteFileBtn bg-red-600 hover:bg-red-700 transition text-white text-xs px-3 py-1 rounded-lg"
+            data-id="${docId}"
+            data-filename="${data.fileName}">
+            Padam
+          </button>
+        </div>
+      </div>
+
+      ${
+        data.fileName.endsWith(".pdf")
+        ? `<iframe src="${data.fileURL}" class="w-full h-96 rounded-lg border"></iframe>`
+        : `<img src="${data.fileURL}" class="w-full rounded-lg border">`
+      }
+    </div>
+    `;
+  });
+
+  document.getElementById("fileList").innerHTML = html || `<p class="text-xs text-gray-400">Tiada lampiran dimuat naik.</p>`;
+}
+
+// UPLOAD FILE
+document.getElementById("uploadBtn").addEventListener("click", async()=>{
+  const fileInput = document.getElementById("fileInput");
+  const namaLampiranInput = document.getElementById("namaLampiran");
+  
+  const file = fileInput.files[0];
+  const namaLampiran = namaLampiranInput.value.trim();
+
+  if(!namaLampiran){
+    alert("Sila masukkan Nama Lampiran.");
+    return;
+  }
+
+  if(!file){
+    alert("Sila pilih fail.");
+    return;
+  }
+
+  try{
+    const storageRef = ref(
+      storage,
+      "corporate/" + currentUser.uid + "/" + file.name
+    );
+
+    await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(storageRef);
+
+    // SAVE FILE INFO KE FIRESTORE
+    await addDoc(
+      collection(
+        db,
+        "users",
+        currentUser.uid,
+        "corporateDocuments"
+      ),
+      {
+        fileName: file.name,
+        namaLampiran: namaLampiran || file.name,
+        fileURL: downloadURL,
+        createdAt: new Date()
+      }
+    );
+
+    namaLampiranInput.value = "";
+    fileInput.value = "";
+
+    // Muat semula senarai supaya butang padam dan fungsi event sedia ada
+    await loadFiles();
+
+  } catch(error){
+    console.log(error);
+    alert("Gagal muat naik: " + error.message);
+  }
+});
+
+// EVENT LISTENER KHAS UNTUK PADAM FAIL DARI FIRESTORE & STORAGE
+document.getElementById("fileList").addEventListener("click", async (e) => {
+  if (e.target.classList.contains("deleteFileBtn")) {
+    const docId = e.target.getAttribute("data-id");
+    const fileName = e.target.getAttribute("data-filename");
+
+    if (!confirm("Adakah anda pasti ingin memadam lampiran ini?")) return;
+
+    try {
+      // 1. Padam rekod dari Firestore
+      await deleteDoc(
+        doc(db, "users", currentUser.uid, "corporateDocuments", docId)
+      );
+
+      // 2. Padam fail dari Storage
+      const storageRef = ref(storage, "corporate/" + currentUser.uid + "/" + fileName);
+      await deleteObject(storageRef);
+
+      // 3. Buang elemen UI secara langsung
+      const targetCard = document.getElementById(`doc-${docId}`);
+      if (targetCard) targetCard.remove();
+
+      const fileList = document.getElementById("fileList");
+      if (fileList.children.length === 0) {
+        fileList.innerHTML = `<p class="text-xs text-gray-400">Tiada lampiran dimuat naik.</p>`;
+      }
+
+    } catch (error) {
+      console.error("Ralat memadam fail:", error);
+      alert("Gagal memadam fail: " + error.message);
+    }
+  }
+});
+
+
+   
+    // SUBMIT FORM
+    document
+      .getElementById("wasiatForm")
+      .addEventListener("submit", async(e)=>{
+
+        e.preventDefault();
+
+        try{
+
+const wasiatSatuPerTiga = [];
+
+document
+.querySelectorAll(".hartaWasiat")
+.forEach((item,index)=>{
+
+wasiatSatuPerTiga.push({
+
+harta:
+document.querySelectorAll(".hartaWasiat")[index].value,
+
+bahagian:
+document.querySelectorAll(".bahagianWasiat")[index].value,
+
+penerima:
+document.querySelectorAll(".penerimaWasiat")[index].value,
+
+nota:
+document.querySelectorAll(".notaWasiat")[index].value
+
+});
+
+});
+
+const warisList = [];
+
+document
+.querySelectorAll(".nacorporate")
+.forEach((item,index)=>{
+
+warisList.push({
+
+nama:
+document.querySelectorAll(".nacorporate")[index].value,
+
+ic:
+document.querySelectorAll(".icWaris")[index].value,
+
+hubungan:
+document.querySelectorAll(".hubunganWaris")[index].value,
+
+telefon:
+document.querySelectorAll(".telefonWaris")[index].value,
+
+tarikhLahir:
+document.querySelectorAll(".tarikhLahirWaris")[index].value,
+
+alamat:
+document.querySelectorAll(".alamatWaris")[index].value,
+  
+status:
+document.querySelectorAll(".statusWaris")[index].value
+
+});
+
+});          
+
+const hartaAlih = [];
+
+document
+.querySelectorAll(".namaHartaAlih")
+.forEach((item,index)=>{
+
+const penerimaHibah = [];
+
+document
+.querySelectorAll(
+".detailKategoriAlih"
+)
+[index]
+.querySelectorAll(
+".penerimaHibah"
+)
+.forEach((select,pIndex)=>{
+
+penerimaHibah.push({
+
+nama: select.value,
+
+peratus:
+document
+.querySelectorAll(
+".detailKategoriAlih"
+)
+[index]
+.querySelectorAll(
+".peratusHibah"
+)
+[pIndex]
+?.value || ""
+
+});
+
+});
+
+let penerimaSepencarian = [];
+
+const namaSepencarian =
+document.querySelectorAll(
+".namaPenerimaSepencarian"
+)[index]?.value || "";
+
+if(namaSepencarian){
+
+    const warisDipilih =
+    warisList.find(
+        w => w.nama === namaSepencarian
+    );
+
+    penerimaSepencarian.push({
+
+    nama: namaSepencarian,
+
+    ic: warisDipilih?.ic || "",
+
+    hubungan: warisDipilih?.hubungan || "",
+
+    peratus:
+    document.querySelectorAll(
+        ".peratusSepencarian"
+    )[index]?.value || ""
+
+});
+
+}
+  
+hartaAlih.push({
+
+nama:
+document.querySelectorAll(".namaHartaAlih")[index].value,
+
+rujukan:
+document.querySelectorAll(".noRujukanAlih")[index].value,
+
+pemilikan:
+document.querySelectorAll(".pemilikanAlih")[index].value,
+
+nilai:
+document.querySelectorAll(".nilaiAlih")[index].value,
+
+kategori:
+document.querySelectorAll(".kategoriAlih")[index].value,
+
+penerimaHibah:
+penerimaHibah,
+
+penerimaSepencarian:
+penerimaSepencarian
+
+});
+
+});
+          
+const hartaTakAlih = [];
+
+document
+.querySelectorAll(".namaHartaTakAlih")
+.forEach((item,index)=>{
+
+const penerimaHibahTakAlih = [];
+
+document
+.querySelectorAll(
+".detailKategoriTakAlih"
+)
+[index]
+.querySelectorAll(
+".penerimaHibahTakAlih"
+)
+.forEach((select,pIndex)=>{
+
+penerimaHibahTakAlih.push({
+
+nama: select.value,
+
+peratus:
+document
+.querySelectorAll(
+".detailKategoriTakAlih"
+)
+[index]
+.querySelectorAll(
+".peratusHibahTakAlih"
+)
+[pIndex]
+?.value || ""
+
+});
+
+});
+
+let penerimaSepencarianTakAlih = [];
+
+const namaSepencarianTakAlih =
+document.querySelectorAll(
+".namaPenerimaSepencarianTakAlih"
+)[index]?.value || "";
+
+if(namaSepencarianTakAlih){
+
+    const warisDipilih =
+    warisList.find(
+        w => w.nama === namaSepencarianTakAlih
+    );
+
+    penerimaSepencarianTakAlih.push({
+
+    nama: namaSepencarianTakAlih,
+
+    ic: warisDipilih?.ic || "",
+
+    hubungan: warisDipilih?.hubungan || "",
+
+    peratus:
+    document.querySelectorAll(
+        ".peratusSepencarianTakAlih"
+    )[index]?.value || ""
+
+});
+  
+}
+
+console.log("nama =", namaSepencarianTakAlih);
+console.log("variable =", penerimaSepencarianTakAlih);
+console.log(Array.isArray(penerimaSepencarianTakAlih));
+  
+hartaTakAlih.push({
+
+nama:
+document.querySelectorAll(".namaHartaTakAlih")[index].value,
+
+rujukan:
+document.querySelectorAll(".noRujukanTakAlih")[index].value,
+
+pemilikan:
+document.querySelectorAll(".pemilikanTakAlih")[index].value,
+
+nilai:
+document.querySelectorAll(".nilaiTakAlih")[index].value,
+
+alamat:
+document.querySelectorAll(".alamatTakAlih")[index].value,
+
+kategori:
+document.querySelectorAll(".kategoriTakAlih")[index].value,
+
+penerimaHibahTakAlih:
+penerimaHibahTakAlih,
+
+penerimaSepencarianTakAlih:
+penerimaSepencarianTakAlih
+
+});
+
+});
+
+const hartaBerpenama=[];
+
+document
+.querySelectorAll(
+"#hartaBerpenamaContainer > div"
+)
+.forEach(row=>{
+
+const jenis=
+row.querySelector(".jenisBerpenama").value;
+
+const akaun=
+row.querySelector(".akaunBerpenama").value;
+
+const jenisPenama=
+row.querySelector(".jenisPenama").value;
+
+const penacorporate=[];
+
+if(jenisPenama==="waris"){
+
+row
+.querySelectorAll(".penacorporateRow")
+.forEach(r=>{
+
+const nama=
+r.querySelector(".pilihWarisPenama").value;
+
+const bahagian=
+r.querySelector(".bahagianPenacorporate").value;
+
+const idx=
+[...document.querySelectorAll(".nacorporate")]
+.findIndex(
+x=>x.value===nama
+);
+
+penacorporate.push({
+
+nama,
+
+ic:
+idx>=0
+?
+document.querySelectorAll(".icWaris")[idx].value
+:
+"",
+
+hubungan:
+idx>=0
+?
+document.querySelectorAll(".hubunganWaris")[idx].value
+:
+"",
+
+bahagian
+
+});
+
+});
+
+}
+
+const penamaLain={
+
+nama:
+row.querySelector(".penama")?.value || "",
+
+ic:
+row.querySelector(".penamaIC")?.value || "",
+
+hubungan:
+row.querySelector(".penamaHubungan")?.value || "",
+
+bahagian:
+row.querySelector(".bahagianPenamaLain")?.value || ""
+
+};
+
+hartaBerpenama.push({
+
+jenis,
+
+akaun,
+
+jenisPenama,
+
+penacorporate,
+
+penamaLain
+
+});
+
+});
+          
+const takaful=[];
+
+document
+.querySelectorAll("#takafulContainer > div")
+.forEach(row=>{
+
+const syarikat=
+row.querySelector(".syarikatTakaful").value;
+
+const polisi=
+row.querySelector(".polisiTakaful").value;
+
+const jenisPenerima=
+row.querySelector(".jenisPenerimaTakaful").value;
+
+const penericorporate=[];
+
+if(jenisPenerima==="waris"){
+
+row
+.querySelectorAll(".penericorporateTakafulRow")
+.forEach(r=>{
+
+const nama=
+r.querySelector(".pilihWarisTakaful").value;
+
+const bahagian=
+r.querySelector(".bahagianWarisTakaful").value;
+
+const idx=
+[...document.querySelectorAll(".nacorporate")]
+.findIndex(
+x=>x.value===nama
+);
+
+penericorporate.push({
+
+nama,
+
+ic:
+idx>=0
+?
+document.querySelectorAll(".icWaris")[idx].value
+:
+"",
+
+hubungan:
+idx>=0
+?
+document.querySelectorAll(".hubunganWaris")[idx].value
+:
+"",
+
+bahagian
+
+});
+
+});
+
+}
+
+const penerimaLain={
+
+nama:
+row.querySelector(".penerimaTakaful")?.value || "",
+
+ic:
+row.querySelector(".icPenerimaTakaful")?.value || "",
+
+hubungan:
+row.querySelector(".hubunganTakaful")?.value || "",
+
+bahagian:
+row.querySelector(".bahagianPenerimaTakaful")?.value || ""
+
+};
+
+takaful.push({
+
+syarikat,
+
+polisi,
+
+jenisPenerima,
+
+penericorporate,
+
+penerimaLain
+
+});
+
+});
+
+const pemiutang = [];
+
+document
+.querySelectorAll(".namaPemiutang")
+.forEach((item,index)=>{
+
+pemiutang.push({
+
+nama:
+document.querySelectorAll(
+".namaPemiutang"
+)[index].value,
+
+jenis:
+document.querySelectorAll(
+".jenisHutangPemiutang"
+)[index].value,
+
+baki:
+document.querySelectorAll(
+".bakiHutangPemiutang"
+)[index].value,
+
+kaedah:
+document.querySelectorAll(
+".kaedahPenyelesaianPemiutang"
+)[index].value
+
+});
+
+});
+
+const penghutang = [];
+
+document
+.querySelectorAll(".namaPenghutang")
+.forEach((item,index)=>{
+
+penghutang.push({
+
+nama:
+document.querySelectorAll(
+".namaPenghutang"
+)[index].value,
+
+jenis:
+document.querySelectorAll(
+".jenisHutangPenghutang"
+)[index].value,
+
+baki:
+document.querySelectorAll(
+".bakiHutangPenghutang"
+)[index].value,
+
+kaedah:
+document.querySelectorAll(
+".kaedahPenyelesaianPenghutang"
+)[index].value
+
+});
+
+});          
+          
+const pemegangAmanah = {
+
+pilihan:
+document.getElementById(
+"pilihanPemegangAmanah"
+).value,
+
+jenis:
+document.getElementById(
+"jenisPemegangAmanah"
+).value,
+
+nama:
+document.getElementById(
+"namaPemegangAmanah"
+)?.value || "",
+
+ic:
+document.getElementById(
+"icPemegangAmanah"
+)?.value || "",
+
+hubungan:
+document.getElementById(
+"hubunganPemegangAmanah"
+)?.value || "",
+
+telefon:
+document.getElementById(
+"telefonPemegangAmanah"
+)?.value || ""
+
+}; 
+
+const alamat1 =
+document.getElementById("alamat1").value.trim();
+
+const alamat2 =
+document.getElementById("alamat2").value.trim();
+
+const poskod =
+document.getElementById("poskod").value.trim();
+
+const bandar =
+document.getElementById("bandar").value.trim();
+
+const negeri =
+document.getElementById("negeri").value.trim();
+          
+          await setDoc(
+
+            doc(
+              db,
+              "users",
+              currentUser.uid,
+              "corporate",
+              "maklumat"
+            ),
+
+            {
+  nama:
+  document.getElementById("nama").value,
+
+  ic:
+  document.getElementById("ic").value,
+
+alamat1: alamat1,
+alamat2: alamat2,
+poskod: poskod,
+bandar: bandar,
+negeri: negeri,
+
+alamat: [
+alamat1,
+alamat2,
+`${poskod} ${bandar}`.trim(),
+negeri
+].filter(Boolean).join(", "),
+
+  telefon:
+  document.getElementById("telefon").value,
+
+  namaWasi1:
+  document.getElementById("namaWasi1").value,
+
+  icWasi1:
+  document.getElementById("icWasi1").value,
+
+  hubunganWasi1:
+  document.getElementById("hubunganWasi1").value,
+
+  alamatWasi1:
+  document.getElementById("alamatWasi1").value,
+
+  telefonWasi1:
+  document.getElementById("telefonWasi1").value,
+
+  namaWasi2:
+document.getElementById("namaWasi2").value,
+
+icWasi2:
+document.getElementById("icWasi2").value,
+
+hubunganWasi2:
+document.getElementById("hubunganWasi2").value,
+
+alamatWasi2:
+document.getElementById("alamatWasi2").value,
+
+telefonWasi2:
+document.getElementById("telefonWasi2").value,
+
+wasiatSatuPerTiga:
+wasiatSatuPerTiga,  
+
+pesananWasiat:
+document.getElementById("pesananWasiat").value,  
+
+waris:
+warisList,      
+
+hartaAlih:
+hartaAlih,        
+
+hartaTakAlih: 
+hartaTakAlih,   
+
+hartaBerpenama:
+hartaBerpenama,   
+
+takaful:
+takaful,     
+
+pemiutang:
+pemiutang,
+
+penghutang:
+penghutang,    
+
+pemegangAmanah:
+pemegangAmanah,              
+              
+createdAt: new Date(),   // sementara dulu
+updatedAt: new Date()    // setiap kali save
+},
+
+{
+merge: true
+}
+
+);
+
+          document.getElementById(
+            "status"
+          ).innerHTML =
+
+          "Maklumat berjaya disimpan.";
+
+        }
+
+        catch(error){
+
+          document.getElementById(
+            "status"
+          ).innerHTML =
+
+          error.message;
+
+        }
+
+      });
+
+document
+.getElementById("addWasiatBtn")
+.addEventListener("click", ()=>{
+
+const html = `
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hartaWasiat"
+placeholder="Butiran Harta">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bahagianWasiat"
+placeholder="Bahagian (RM atau %)"
+oninput="formatRM(this)">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penerimaWasiat"
+placeholder="Penerima">
+
+<textarea
+class="w-full border rounded-lg p-3 notaWasiat"
+rows="3"
+placeholder="Nota"></textarea>
+
+<!-- TAMBAH BUTANG PADAM DI SINI -->
+        <button
+        type="button"
+        class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg mt-3">
+        Padam Wasiat
+        </button>
+
+</div>
+
+`;
+
+document
+.getElementById("wasiatContainer")
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+populateWarisDropdown();
+populateWarisDropdownTakAlih();
+  
+});
+
+document
+.getElementById("addWarisBtn")
+.addEventListener("click", ()=>{
+
+const html = `
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 nacorporate"
+placeholder="Nama Waris">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icWaris"
+placeholder="No IC">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganWaris"
+placeholder="Hubungan">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 telefonWaris"
+placeholder="No Telefon">
+
+<div class="flex items-center gap-3">
+
+    <label
+        class="w-32 font-medium text-gray-700">
+        Tarikh Lahir
+    </label>
+
+    <input
+        type="date"
+        class="flex-1 border rounded-lg p-3 tarikhLahirWaris">
+
+</div>
+
+<textarea
+class="w-full border rounded-lg p-3 alamatWaris"
+rows="2"
+placeholder="Alamat"></textarea>
+
+<select
+class="w-full border rounded-lg p-3 statusWaris">
+
+<option value="">
+Status Waris
+</option>
+
+<option value="dewasa">
+Dewasa
+</option>
+
+<option value="bawah18">
+Bawah 18 Tahun
+</option>
+
+<option value="oku">
+OKU
+</option>
+
+</select>
+
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+Padam
+</button>
+
+</div>
+
+`;
+
+document
+.getElementById("warisContainer")
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+populateWarisDropdown();
+populateWarisDropdownTakAlih();
+populateWarisDropdownHibah();
+populatePasanganDropdown();
+populatePemegangAmanahPasangan();
+populateWarisDropdownPenama();  
+
+checkPemegangAmanah();  
+  
+});
+
+document
+.getElementById("addHartaAlihBtn")
+.addEventListener("click", ()=>{
+
+const html = `
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaHartaAlih"
+placeholder="Nama Harta">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 noRujukanAlih"
+placeholder="No Akaun / Rujukan">
+
+<select
+class="w-full border rounded-lg p-3 pemilikanAlih">
+
+<option value="">Pemilikan</option>
+
+<option value="milikPenuh">
+Milik Penuh
+</option>
+
+<option value="perkongsian">
+Perkongsian Nama
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 nilaiAlih"
+placeholder="Anggaran Nilai"
+oninput="formatRM(this)">
+
+<select
+class="w-full border rounded-lg p-3 kategoriAlih">
+
+<option value="">Pilih Kategori</option>
+
+<option value="faraid">Faraid</option>
+<option value="hibah">Hibah</option>
+<option value="sepencarian">Harta Sepencarian</option>
+
+</select>
+
+<div class="detailKategoriAlih hidden mt-3">
+
+<div class="hibahSection hidden">
+
+<div class="hibahPenerimaContainer">
+</div>
+
+<div class="flex gap-2 mt-3">
+<button
+type="button"
+class="addPenerimaHibahBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
++ Tambah Penerima
+</button>
+
+<button
+type="button"
+class="deleteLastPenerimaBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+Padam Penerima
+</button>
+</div>
+
+</div>
+
+<div class="sepencarianSection hidden">
+
+<select
+class="w-full border rounded-lg p-3 namaPenerimaSepencarian">
+
+<option value="">
+Pilih Pasangan
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg mt-3">
+Padam Harta
+</button>
+
+</div>
+
+`;
+document
+.getElementById("hartaAlihContainer")
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+setupKategoriAlih();
+populateWarisDropdown();
+populatePasanganDropdown();
+
+  
+});
+
+function setupKategoriAlih(){
+
+document
+.querySelectorAll(".kategoriAlih")
+.forEach((select,index)=>{
+
+const updateKategori = ()=>{
+
+const detail =
+document.querySelectorAll(
+".detailKategoriAlih"
+)[index];
+
+if(!detail) return;  
+
+const hibah =
+detail.querySelector(
+".hibahSection"
+);
+
+const sepencarian =
+detail.querySelector(
+".sepencarianSection"
+);
+
+if(!hibah || !sepencarian) return;
+  
+detail.classList.add("hidden");
+hibah.classList.add("hidden");
+sepencarian.classList.add("hidden");
+
+if(select.value==="hibah"){
+
+detail.classList.remove("hidden");
+hibah.classList.remove("hidden");
+
+}
+
+if(select.value==="sepencarian"){
+
+detail.classList.remove("hidden");
+sepencarian.classList.remove("hidden");
+
+populatePasanganDropdown();
+
+}
+
+};
+
+select.onchange = updateKategori;
+
+/* INI BARIS PENTING */
+updateKategori();
+
+});
+
+}
+    
+function populateWarisDropdown(){
+
+const waris = [];
+
+document
+.querySelectorAll(".nacorporate")
+.forEach((item,index)=>{
+
+waris.push({
+
+nama:item.value,
+
+hubungan:
+document.querySelectorAll(
+".hubunganWaris"
+)[index].value
+
+});
+
+});
+
+document
+.querySelectorAll(".namaPenerimaAlih")
+.forEach(select=>{
+
+const currentValue =
+select.value;
+
+select.innerHTML = `
+<option value="">
+Pilih Penerima
+</option>
+
+<option value="custom">
++ Orang Lain
+</option>
+`;
+
+waris.forEach(w=>{
+
+if(w.nama){
+
+select.innerHTML += `
+<option value="${w.nama}">
+${w.nama}
+ (${w.hubungan})
+</option>
+`;
+
+}
+
+});
+
+const savedValue =
+select.dataset.selected || currentValue;
+
+select.value = savedValue;
+
+});
+
+}    
+  
+setupKategoriAlih();
+populateWarisDropdown();
+populatePasanganDropdown();
+
+function populateWarisDropdownPenama(){
+
+const waris = [];
+
+document
+.querySelectorAll(".nacorporate")
+.forEach((item,index)=>{
+
+waris.push({
+
+nama:item.value,
+
+ic:
+document.querySelectorAll(".icWaris")[index].value,
+
+hubungan:
+document.querySelectorAll(".hubunganWaris")[index].value
+
+});
+
+});
+
+document
+.querySelectorAll(".pilihWarisPenama")
+.forEach(select=>{
+
+const currentValue = select.value;
+
+select.innerHTML = `
+<option value="">
+Pilih Waris
+</option>
+`;
+
+waris.forEach(w=>{
+
+if(w.nama){
+
+select.innerHTML += `
+<option value="${w.nama}">
+${w.nama} (${w.hubungan})
+</option>
+`;
+
+}
+
+});
+
+select.value = currentValue;
+
+});
+
+}
+
+    
+function addPenerimaHibah(container){
+
+const html = `
+
+<div class="grid grid-cols-12 gap-3 mb-3">
+
+<select
+class="col-span-9 w-full border rounded-lg p-3 penerimaHibah">
+
+<option value="">
+Pilih Waris
+</option>
+
+</select>
+
+<input
+type="number"
+class="col-span-3 w-full border rounded-lg p-3 peratusHibah"
+placeholder="%">
+
+</div>
+
+`;
+
+container.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+populateWarisDropdownHibah();
+
+}
+
+function addPenerimaHibahTakAlih(container){
+
+const html = `
+
+<div class="grid grid-cols-12 gap-3 mb-3">
+
+<select
+class="col-span-9 w-full border rounded-lg p-3 penerimaHibahTakAlih">
+
+<option value="">
+Pilih Waris
+</option>
+
+</select>
+
+<input
+type="number"
+class="col-span-3 w-full border rounded-lg p-3 peratusHibahTakAlih"
+placeholder="%">
+
+</div>
+
+`;
+
+container.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+populateWarisDropdownHibahTakAlih();
+
+}
+
+function addPenacorporate(container){
+
+const html = `
+
+<div class="grid grid-cols-12 gap-3 mb-3 penacorporateRow">
+
+<select
+class="col-span-8 w-full border rounded-lg p-3 pilihWarisPenama">
+
+<option value="">
+Pilih Waris
+</option>
+
+</select>
+
+<input
+type="number"
+class="col-span-4 w-full border rounded-lg p-3 bahagianPenacorporate"
+placeholder="%">
+
+</div>
+
+`;
+
+container.insertAdjacentHTML("beforeend", html);
+
+populateWarisDropdownPenama();
+
+const newRow =
+container.querySelector(".penacorporateRow:last-child");
+
+const dropdown =
+newRow.querySelector(".pilihWarisPenama");
+
+dropdown.addEventListener("change",()=>{
+
+    const warisIndex =
+    [...document.querySelectorAll(".nacorporate")]
+    .findIndex(
+        x=>x.value===dropdown.value
+    );
+
+    if(warisIndex<0) return;
+
+    console.log(
+        "Penama dipilih:",
+        dropdown.value
+    );
+
+});
+
+}
+
+function populateWarisDropdownTakaful(){
+
+const waris=[];
+
+document
+.querySelectorAll(".nacorporate")
+.forEach((item,index)=>{
+
+waris.push({
+
+nama:item.value,
+
+hubungan:
+document.querySelectorAll(".hubunganWaris")[index].value
+
+});
+
+});
+
+document
+.querySelectorAll(".pilihWarisTakaful")
+.forEach(select=>{
+
+const currentValue=
+select.value;
+
+select.innerHTML=`
+<option value="">
+Pilih Waris
+</option>
+`;
+
+waris.forEach(w=>{
+
+if(w.nama){
+
+select.innerHTML+=`
+
+<option value="${w.nama}">
+${w.nama} (${w.hubungan})
+</option>
+
+`;
+
+}
+
+});
+
+select.value=currentValue;
+
+});
+
+}
+    
+function addPenericorporateTakaful(container){
+
+const html = `
+
+<div class="grid grid-cols-12 gap-3 mb-3 penericorporateTakafulRow">
+
+<select
+class="col-span-8 w-full border rounded-lg p-3 pilihWarisTakaful">
+
+<option value="">
+Pilih Waris
+</option>
+
+</select>
+
+<input
+type="number"
+class="col-span-4 w-full border rounded-lg p-3 bahagianWarisTakaful"
+placeholder="%">
+
+</div>
+
+`;
+
+container.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+populateWarisDropdownTakaful();
+
+}
+    
+function populatePemegangAmanahPasangan(){
+
+const select =
+document.getElementById(
+"namaPemegangAmanahPasangan"
+);
+
+if(!select)return;
+
+select.innerHTML = `
+<option value="">
+Pilih Pasangan
+</option>
+`;
+
+document
+.querySelectorAll(".hubunganWaris")
+.forEach((hub,index)=>{
+
+if(
+hub.value
+.toLowerCase()
+.includes("isteri")
+||
+hub.value
+.toLowerCase()
+.includes("suami")
+){
+
+const nama =
+document
+.querySelectorAll(".nacorporate")
+[index]
+?.value || "";
+
+if(nama){
+
+select.innerHTML += `
+<option value="${nama}">
+${nama} (${hub.value})
+</option>
+`;
+
+}
+
+}
+
+});
+
+}
+
+    
+function populateWarisDropdownHibah(){
+
+const waris = [];
+
+document
+.querySelectorAll(".nacorporate")
+.forEach((item,index)=>{
+
+waris.push({
+
+nama:item.value,
+
+hubungan:
+document.querySelectorAll(
+".hubunganWaris"
+)[index].value
+
+});
+
+});
+
+document
+.querySelectorAll(".penerimaHibah")
+.forEach(select=>{
+
+const currentValue =
+select.value;
+
+select.innerHTML =
+`<option value="">
+Pilih Waris
+</option>`;
+
+waris.forEach(w=>{
+
+if(w.nama){
+
+select.innerHTML += `
+<option value="${w.nama}">
+${w.nama} (${w.hubungan})
+</option>
+`;
+
+}
+
+});
+
+select.value =
+currentValue;
+
+});
+
+}
+
+function populateWarisDropdownHibahTakAlih(){
+
+const waris = [];
+
+document
+.querySelectorAll(".nacorporate")
+.forEach((item,index)=>{
+
+waris.push({
+
+nama:item.value,
+
+hubungan:
+document.querySelectorAll(
+".hubunganWaris"
+)[index].value
+
+});
+
+});
+
+document
+.querySelectorAll(".penerimaHibahTakAlih")
+.forEach(select=>{
+
+const currentValue =
+select.value;
+
+select.innerHTML =
+`<option value="">
+Pilih Waris
+</option>`;
+
+waris.forEach(w=>{
+
+if(w.nama){
+
+select.innerHTML += `
+<option value="${w.nama}">
+${w.nama} (${w.hubungan})
+</option>
+`;
+
+}
+
+});
+
+select.value =
+currentValue;
+
+});
+
+}
+
+    
+function populatePasanganDropdown(){
+
+const pasangan = [];
+
+document
+.querySelectorAll(".nacorporate")
+.forEach((item,index)=>{
+
+const hubungan =
+document
+.querySelectorAll(".hubunganWaris")
+[index]
+.value
+.toLowerCase();
+
+if(
+hubungan.includes("isteri")
+||
+hubungan.includes("suami")
+){
+
+pasangan.push({
+
+nama:item.value,
+
+hubungan:
+document
+.querySelectorAll(".hubunganWaris")
+[index]
+.value
+
+});
+
+}
+
+});
+
+document
+.querySelectorAll(
+".namaPenerimaSepencarian"
+)
+.forEach(select=>{
+
+const currentValue =
+select.value;
+
+select.innerHTML =
+`<option value="">
+Pilih Pasangan
+</option>`;
+
+pasangan.forEach(p=>{
+
+select.innerHTML += `
+<option value="${p.nama}">
+${p.nama} (${p.hubungan})
+</option>
+`;
+
+});
+
+select.value =
+currentValue;
+
+});
+
+}
+
+function populatePasanganDropdownTakAlih(){
+
+const pasangan = [];
+
+document
+.querySelectorAll(".nacorporate")
+.forEach((item,index)=>{
+
+const hubungan =
+document
+.querySelectorAll(".hubunganWaris")
+[index]
+.value
+.toLowerCase();
+
+if(
+hubungan.includes("isteri")
+||
+hubungan.includes("suami")
+){
+
+pasangan.push({
+
+nama:item.value,
+
+hubungan:
+document
+.querySelectorAll(".hubunganWaris")
+[index]
+.value
+
+});
+
+}
+
+});
+
+document
+.querySelectorAll(
+".namaPenerimaSepencarianTakAlih"
+)
+.forEach(select=>{
+
+const currentValue =
+select.value;
+
+select.innerHTML =
+`<option value="">
+Pilih Pasangan
+</option>`;
+
+pasangan.forEach(p=>{
+
+select.innerHTML += `
+<option value="${p.nama}">
+${p.nama} (${p.hubungan})
+</option>
+`;
+
+});
+
+select.value =
+currentValue;
+
+});
+
+}
+
+    
+function populateWarisDropdownTakAlih(){
+
+const waris = [];
+
+document
+.querySelectorAll(".nacorporate")
+.forEach((item,index)=>{
+
+waris.push({
+
+nama:item.value,
+
+hubungan:
+document.querySelectorAll(
+".hubunganWaris"
+)[index].value
+
+});
+
+});
+
+document
+.querySelectorAll(".namaPenerimaTakAlih")
+.forEach(select=>{
+
+const currentValue =
+select.value;
+
+select.innerHTML = `
+<option value="">
+Pilih Penerima
+</option>
+
+<option value="custom">
++ Orang Lain
+</option>
+`;
+
+waris.forEach(w=>{
+
+if(w.nama){
+
+select.innerHTML += `
+<option value="${w.nama}">
+${w.nama} (${w.hubungan})
+</option>
+`;
+
+}
+
+});
+
+const savedValue =
+select.dataset.selected || currentValue;
+
+select.value = savedValue;
+
+});
+
+}
+
+setupKategoriTakAlih();
+populateWarisDropdownTakAlih();
+    
+document
+.getElementById("addHartaTakAlihBtn")
+.addEventListener("click",()=>{
+
+const html = `
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaHartaTakAlih"
+placeholder="Nama Harta">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 noRujukanTakAlih"
+placeholder="No Akaun / Rujukan">
+
+<select
+class="w-full border rounded-lg p-3 pemilikanTakAlih">
+
+<option value="">Pemilikan</option>
+
+<option value="milikPenuh">
+Milik Penuh
+</option>
+
+<option value="perkongsian">
+Perkongsian Nama
+</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 nilaiTakAlih"
+placeholder="Anggaran Nilai"
+oninput="formatRM(this)">
+
+<textarea
+class="w-full border rounded-lg p-3 alamatTakAlih"
+rows="3"
+placeholder="Alamat Harta">
+</textarea>
+
+<select
+class="w-full border rounded-lg p-3 kategoriTakAlih">
+
+<option value="">Pilih Kategori</option>
+
+<option value="faraid">Faraid</option>
+<option value="hibah">Hibah</option>
+<option value="sepencarian">Harta Sepencarian</option>
+
+</select>
+
+<div class="detailKategoriTakAlih hidden mt-3">
+
+<div class="hibahSectionTakAlih hidden">
+
+<div class="hibahPenerimaContainerTakAlih">
+</div>
+
+<div class="flex gap-2 mt-3">
+<button
+type="button"
+class="addPenerimaHibahTakAlihBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
++ Tambah Penerima
+</button>
+
+<button
+type="button"
+class="deleteLastPenerimaTakAlihBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+Padam Penerima
+</button>
+</div>
+
+</div>
+
+<div class="sepencarianSectionTakAlih hidden">
+
+<select
+class="w-full border rounded-lg p-3 namaPenerimaSepencarianTakAlih">
+
+<option value="">
+Pilih Pasangan
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg mt-3">
+Padam Harta
+</button>
+
+</div>
+
+`;
+
+document
+.getElementById(
+"hartaTakAlihContainer"
+)
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+setupKategoriTakAlih();
+populateWarisDropdownHibahTakAlih();
+populatePasanganDropdownTakAlih();
+  
+});
+
+document
+.getElementById("addBerpenamaBtn")
+.addEventListener("click",()=>{
+
+const html=`
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<select
+class="w-full border rounded-lg p-3 jenisBerpenama">
+
+<option value="">Pilih Jenis</option>
+<option value="KWSP">KWSP</option>
+<option value="Tabung Haji">Tabung Haji</option>
+<option value="ASB">ASB</option>
+
+</select>
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 akaunBerpenama"
+placeholder="No Akaun">
+
+<select
+class="w-full border rounded-lg p-3 jenisPenama">
+
+<option value="">Pilih Penama</option>
+<option value="waris">Waris</option>
+<option value="lain">Orang Lain</option>
+
+</select>
+
+<div class="penacorporateSection hidden">
+
+<div class="penacorporateContainer">
+</div>
+
+<div class="flex gap-2 mt-3">
+
+<button
+type="button"
+class="addPenacorporateBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
+
++ Tambah Penama
+
+</button>
+
+<button
+type="button"
+class="deletePenacorporateBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam Penama
+
+</button>
+
+</div>
+
+</div>
+
+<div class="penamaLainSection hidden space-y-3">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penama"
+placeholder="Nama Penama">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penamaIC"
+placeholder="No IC">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penamaHubungan"
+placeholder="Hubungan">
+
+<input
+type="number"
+class="w-full border rounded-lg p-3 bahagianPenamaLain"
+placeholder="Bahagian (%)">
+
+</div>
+
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam Harta
+
+</button>
+
+</div>
+
+`;
+
+document
+.getElementById("hartaBerpenamaContainer")
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+const row=
+document.querySelector(
+"#hartaBerpenamaContainer > div:last-child"
+);
+
+const jenisPenama=
+row.querySelector(".jenisPenama");
+
+const warisSection=
+row.querySelector(".penacorporateSection");
+
+const lainSection=
+row.querySelector(".penamaLainSection");
+
+const penamaContainer=
+row.querySelector(".penacorporateContainer");
+
+const addBtn=
+row.querySelector(".addPenacorporateBtn");
+
+const deleteBtn=
+row.querySelector(".deletePenacorporateBtn");
+
+jenisPenama.addEventListener("change",()=>{
+
+warisSection.classList.add("hidden");
+lainSection.classList.add("hidden");
+
+if(jenisPenama.value==="waris"){
+
+warisSection.classList.remove("hidden");
+
+if(
+penamaContainer.children.length===0
+){
+
+addPenacorporate(
+penamaContainer
+);
+
+}
+
+}
+
+if(jenisPenama.value==="lain"){
+
+lainSection.classList.remove("hidden");
+
+}
+
+});
+
+addBtn.addEventListener("click",()=>{
+
+addPenacorporate(
+penamaContainer
+);
+
+});
+
+deleteBtn.addEventListener("click",()=>{
+
+const rows=
+penamaContainer.querySelectorAll(
+".penacorporateRow"
+);
+
+if(rows.length){
+
+rows[
+rows.length-1
+].remove();
+
+}
+
+});
+
+});
+    
+document
+.getElementById("addTakafulBtn")
+.addEventListener("click",()=>{
+
+const html=`
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 syarikatTakaful"
+placeholder="Nama Syarikat">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 polisiTakaful"
+placeholder="Nama Polisi">
+
+<select
+class="w-full border rounded-lg p-3 jenisPenerimaTakaful">
+
+<option value="">
+Pilih Penerima
+</option>
+
+<option value="waris">
+Waris
+</option>
+
+<option value="lain">
+Orang Lain
+</option>
+
+</select>
+
+<div class="penericorporateTakafulSection hidden">
+
+<div class="penericorporateTakafulContainer">
+</div>
+
+<div class="flex gap-2 mt-3">
+
+<button
+type="button"
+class="addPenericorporateTakafulBtn bg-green-600 text-white px-3 py-2 rounded-lg flex-1">
+
++ Tambah Penerima
+
+</button>
+
+<button
+type="button"
+class="deletePenericorporateTakafulBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam Penerima
+
+</button>
+
+</div>
+
+</div>
+
+<div class="penerimaLainTakafulSection hidden space-y-3">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 penerimaTakaful"
+placeholder="Nama Penerima">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 icPenerimaTakaful"
+placeholder="No IC">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 hubunganTakaful"
+placeholder="Hubungan">
+
+<input
+type="number"
+class="w-full border rounded-lg p-3 bahagianPenerimaTakaful"
+placeholder="Bahagian (%)">
+
+</div>
+
+<button
+type="button"
+class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg">
+
+Padam
+
+</button>
+
+</div>
+
+`;
+
+document
+.getElementById("takafulContainer")
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+const row=
+document.querySelector(
+"#takafulContainer > div:last-child"
+);
+
+const jenis=
+row.querySelector(".jenisPenerimaTakaful");
+
+const warisSection=
+row.querySelector(".penericorporateTakafulSection");
+
+const lainSection=
+row.querySelector(".penerimaLainTakafulSection");
+
+jenis.addEventListener("change",()=>{
+
+warisSection.classList.add("hidden");
+lainSection.classList.add("hidden");
+
+if(jenis.value==="waris"){
+
+warisSection.classList.remove("hidden");
+
+const container=
+row.querySelector(".penericorporateTakafulContainer");
+
+if(container.children.length===0){
+
+addPenericorporateTakaful(container);
+
+}
+
+}
+
+if(jenis.value==="lain"){
+
+lainSection.classList.remove("hidden");
+
+}
+
+});
+
+row
+.querySelector(".addPenericorporateTakafulBtn")
+.onclick=()=>{
+
+addPenericorporateTakaful(
+
+row.querySelector(".penericorporateTakafulContainer")
+
+);
+
+};
+
+row
+.querySelector(".deletePenericorporateTakafulBtn")
+.onclick=()=>{
+
+const container=
+row.querySelector(".penericorporateTakafulContainer");
+
+if(container.lastElementChild){
+
+container.lastElementChild.remove();
+
+}
+
+};
+
+populateWarisDropdownTakaful();
+
+});
+
+document
+.getElementById("addPemiutangBtn")
+.addEventListener("click",()=>{
+
+const html = `
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaPemiutang"
+placeholder="Nama Pemiutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 jenisHutangPemiutang"
+placeholder="Jenis Hutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bakiHutangPemiutang"
+placeholder="Baki Hutang"
+oninput="formatRM(this)">
+
+<textarea
+class="w-full border rounded-lg p-3 kaedahPenyelesaianPemiutang"
+rows="3"
+placeholder="Kaedah Penyelesaian"></textarea>
+
+<!-- MESTI LETAK BUTANG PADAM DI SINI -->
+        <button type="button" class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg mt-3">
+            Padam
+        </button>
+
+</div>
+
+`;
+
+document
+.getElementById("pemiutangContainer")
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+});
+
+document
+.getElementById("addPenghutangBtn")
+.addEventListener("click",()=>{
+
+const html = `
+
+<div class="border rounded-xl p-4 space-y-3 mb-4">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 namaPenghutang"
+placeholder="Nama Penghutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 jenisHutangPenghutang"
+placeholder="Jenis Hutang">
+
+<input
+type="text"
+class="w-full border rounded-lg p-3 bakiHutangPenghutang"
+placeholder="Baki Hutang"
+oninput="formatRM(this)">
+
+<textarea
+class="w-full border rounded-lg p-3 kaedahPenyelesaianPenghutang"
+rows="3"
+placeholder="Kaedah Penyelesaian"></textarea>
+
+<!-- MESTI LETAK BUTANG PADAM DI SINI -->
+        <button type="button" class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg mt-3">
+            Padam
+        </button>
+
+</div>
+
+`;
+
+document
+.getElementById("penghutangContainer")
+.insertAdjacentHTML(
+"beforeend",
+html
+);
+
+});    
+    
+function setupKategoriTakAlih(){
+
+document
+.querySelectorAll(".kategoriTakAlih")
+.forEach((select,index)=>{
+
+select.addEventListener(
+"change",
+()=>{
+
+const detail =
+document.querySelectorAll(
+".detailKategoriTakAlih"
+)[index];
+
+if(!detail) return;
+
+const hibah =
+detail.querySelector(
+".hibahSectionTakAlih"
+);
+
+const sepencarian =
+detail.querySelector(
+".sepencarianSectionTakAlih"
+);
+
+detail.classList.add("hidden");
+
+hibah.classList.add("hidden");
+
+sepencarian.classList.add("hidden");
+
+if(select.value==="hibah"){
+
+detail.classList.remove("hidden");
+
+hibah.classList.remove("hidden");
+
+}
+
+if(select.value==="sepencarian"){
+
+detail.classList.remove("hidden");
+
+sepencarian.classList.remove("hidden");
+
+}
+
+});
+
+});
+
+}  
+
+document
+.addEventListener(
+"click",
+function(e){
+
+if(
+e.target.classList.contains(
+"addPenerimaHibahBtn"
+)
+){
+ 
+const container =
+e.target
+.closest(".hibahSection")
+.querySelector(
+".hibahPenerimaContainer"
+);
+
+addPenerimaHibah(
+container
+);
+
+}
+
+if(
+e.target.classList.contains(
+"deleteLastPenerimaBtn"
+)
+){
+
+const container =
+e.target
+.closest(".hibahSection")
+.querySelector(
+".hibahPenerimaContainer"
+);
+
+if(container && container.lastElementChild){
+container.lastElementChild.remove();
+}
+
+}
+
+if(
+e.target.classList.contains(
+"addPenerimaHibahTakAlihBtn"
+)
+){
+
+const container =
+e.target
+.closest(".hibahSectionTakAlih")
+.querySelector(
+".hibahPenerimaContainerTakAlih"
+);
+
+addPenerimaHibahTakAlih(
+container
+);
+
+}
+
+if(
+e.target.classList.contains(
+"deleteLastPenerimaTakAlihBtn"
+)
+){
+
+const container =
+e.target
+.closest(".hibahSectionTakAlih")
+.querySelector(
+".hibahPenerimaContainerTakAlih"
+);
+
+if(container && container.lastElementChild){
+container.lastElementChild.remove();
+}
+
+}
+
+if(
+e.target.classList.contains(
+"deleteRowBtn"
+)
+){
+
+e.target
+.closest(".border")
+.remove();
+
+}  
+  
+});
+
+document
+.addEventListener(
+"change",
+function(e){
+
+if(
+e.target.classList.contains(
+"statusWaris"
+)
+){
+
+checkPemegangAmanah();
+
+}
+
+});    
+
+// --- LETAK DI SINI (DI LUAR MANA-MANA BLOK SYARAT / FIRESTORE) ---
+    document.addEventListener('input', function (e) {
+        let target = e.target;
+        if (target.tagName !== 'INPUT') return;
+
+        let val = target.value;
+        let identifier = (target.id + " " + target.className + " " + target.name + " " + target.placeholder).toLowerCase();
+
+        // 1. FORMAT NAMA
+        if (identifier.includes('nama') || identifier.includes('penama')) {
+            target.value = val.replace(/\w\S*/g, (txt) => {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+        }
+
+        // 2. FORMAT NO IC
+        if (identifier.includes('ic') || identifier.includes('kad pengenalan')) {
+            let cleanVal = val.replace(/\D/g, '');
+            let formatted = '';
+            if (cleanVal.length > 0) formatted += cleanVal.substring(0, 6);
+            if (cleanVal.length > 6) formatted += '-' + cleanVal.substring(6, 8);
+            if (cleanVal.length > 8) formatted += '-' + cleanVal.substring(8, 12);
+            target.value = formatted;
+        }
+
+        // 3. FORMAT NO TELEFON
+        if (identifier.includes('telefon') || identifier.includes('phone') || identifier.includes('tel')) {
+            let cleanVal = val.replace(/\D/g, '');
+            let formatted = '';
+            if (cleanVal.length > 0) formatted += cleanVal.substring(0, 3);
+            if (cleanVal.length > 3) formatted += '-' + cleanVal.substring(3, 11);
+            target.value = formatted;
+        }
+    });
+    
+  </script>
+
+</body>
+</html>
