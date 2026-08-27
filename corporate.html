@@ -129,13 +129,35 @@
 
         <hr class="my-6 border-gray-200">
 
-        <!-- MAKLUMAT WASI PERTAMA -->
-        <h3 class="font-semibold mb-2">Maklumat Wasi Pertama</h3>
-        <input type="text" id="namaWasi1" placeholder="Nama Wasi / Syarikat Amanah" class="w-full border rounded-lg p-3 mb-3">
-        <input type="text" id="icWasi1" placeholder="No IC / No Pendaftaran Syarikat" class="w-full border rounded-lg p-3 mb-3">
-        <input type="text" id="hubunganWasi1" placeholder="Hubungan" class="w-full border rounded-lg p-3 mb-3">
-        <textarea id="alamatWasi1" rows="2" placeholder="Alamat" class="w-full border rounded-lg p-3 mb-3"></textarea>
-        <input type="text" id="telefonWasi1" placeholder="No Telefon" class="w-full border rounded-lg p-3">
+        <!-- MAKLUMAT WASI PERTAMA (DENGAN PILIHAN RTB) -->
+        <h3 class="font-semibold mb-3 text-[#153638] text-lg">Maklumat Wasi Pertama</h3>
+        
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+            <label class="block font-semibold text-blue-900 mb-2">Lantik Rakyat Trustee Berhad sebagai Wasi?</label>
+            <select id="pilihanWasi1" class="w-full border rounded-lg p-3 bg-white font-semibold text-[#153638]">
+                <option value="rtb">Ya, Lantik Rakyat Trustee Berhad (Disyorkan)</option>
+                <option value="manual">Tidak, Lantik Individu/Syarikat Lain</option>
+            </select>
+        </div>
+
+        <!-- PAPARAN INFO RTB (Muncul jika pilih RTB) -->
+        <div id="wasi1RTBSection" class="border border-gray-200 bg-gray-50 rounded-xl p-5 mb-4 space-y-2">
+            <p class="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Maklumat Syarikat Amanah</p>
+            <p class="text-sm"><strong>Nama:</strong> Rakyat Trustee Berhad</p>
+            <p class="text-sm"><strong>No. Pendaftaran:</strong> 1462142-U</p>
+            <p class="text-sm"><strong>Alamat:</strong> Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 KL</p>
+            <p class="text-sm"><strong>Telefon:</strong> +603 2602 2722</p>
+            <p class="text-xs text-blue-600 mt-2 italic">*Maklumat ini akan dimasukkan secara automatik ke dalam dokumen anda.</p>
+        </div>
+
+        <!-- KOTAK MANUAL (Muncul jika pilih Tidak) -->
+        <div id="wasi1ManualSection" class="hidden space-y-3 mb-4">
+            <input type="text" id="namaWasi1" placeholder="Nama Wasi / Syarikat Amanah" class="w-full border rounded-lg p-3">
+            <input type="text" id="icWasi1" placeholder="No IC / No Pendaftaran Syarikat" class="w-full border rounded-lg p-3">
+            <input type="text" id="hubunganWasi1" placeholder="Hubungan" class="w-full border rounded-lg p-3">
+            <textarea id="alamatWasi1" rows="2" placeholder="Alamat" class="w-full border rounded-lg p-3"></textarea>
+            <input type="text" id="telefonWasi1" placeholder="No Telefon" class="w-full border rounded-lg p-3">
+        </div>
 
         <hr class="my-6 border-gray-200">
 
@@ -288,7 +310,7 @@
         }
         populateWarisDropdowns();
 
-        // 2. KORPORAT & WASI
+       // 2. KORPORAT & WASI
         document.getElementById("namaSyarikat").value = data.namaSyarikat || "";
         document.getElementById("noSsm").value = data.noSsm || "";
         document.getElementById("alamatSyarikat").value = data.alamatSyarikat || "";
@@ -303,12 +325,37 @@
         document.getElementById("alamatPartner").value = data.alamatPartner || "";
         document.getElementById("sahamPartner").value = data.sahamPartner || "";
         
-        document.getElementById("namaWasi1").value = data.namaWasi1 || "";
-        document.getElementById("icWasi1").value = data.icWasi1 || "";
-        document.getElementById("hubunganWasi1").value = data.hubunganWasi1 || "";
-        document.getElementById("alamatWasi1").value = data.alamatWasi1 || "";
-        document.getElementById("telefonWasi1").value = data.telefonWasi1 || "";
+        // --- LOGIK MUAT TURUN WASI 1 ---
+        if (data.pilihanWasi1 === "manual") {
+            document.getElementById("pilihanWasi1").value = "manual";
+            document.getElementById("namaWasi1").value = data.namaWasi1 || "";
+            document.getElementById("icWasi1").value = data.icWasi1 || "";
+            document.getElementById("hubunganWasi1").value = data.hubunganWasi1 || "";
+            document.getElementById("alamatWasi1").value = data.alamatWasi1 || "";
+            document.getElementById("telefonWasi1").value = data.telefonWasi1 || "";
+        } else {
+            // Default kepada RTB jika kosong atau 'rtb'
+            document.getElementById("pilihanWasi1").value = "rtb";
+        }
         
+        // --- LOGIK BUKA/TUTUP KOTAK WASI 1 ---
+        const pilihanWasi1 = document.getElementById("pilihanWasi1");
+        const wasi1RTBSection = document.getElementById("wasi1RTBSection");
+        const wasi1ManualSection = document.getElementById("wasi1ManualSection");
+
+        function toggleWasi1() {
+            if (pilihanWasi1.value === "rtb") {
+                wasi1RTBSection.classList.remove("hidden");
+                wasi1ManualSection.classList.add("hidden");
+            } else {
+                wasi1RTBSection.classList.add("hidden");
+                wasi1ManualSection.classList.remove("hidden");
+            }
+        }
+        pilihanWasi1.addEventListener("change", toggleWasi1);
+        toggleWasi1(); // Jalankan sekali masa load
+        // ------------------------------------
+
         document.getElementById("namaWasi2").value = data.namaWasi2 || "";
         document.getElementById("icWasi2").value = data.icWasi2 || "";
         document.getElementById("hubunganWasi2").value = data.hubunganWasi2 || "";
@@ -761,18 +808,222 @@
                 penerimaHibahSaham: penerimaHibahSaham,
                 penerimaWakafZurri: penerimaWakafZurri,
                 
-                // WASI DATA
-                namaWasi1: document.getElementById("namaWasi1").value,
-                icWasi1: document.getElementById("icWasi1").value,
-                hubunganWasi1: document.getElementById("hubunganWasi1").value,
-                alamatWasi1: document.getElementById("alamatWasi1").value,
-                telefonWasi1: document.getElementById("telefonWasi1").value,
+                // --- KUTIP DATA WASI 1 ---
+            const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
+            let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
+
+            if (pilihanWasi1Val === "rtb") {
+                finalNamaWasi1 = "Rakyat Trustee Berhad";
+                finalIcWasi1 = "1462142-U";
+                finalHubunganWasi1 = "Syarikat Amanah";
+                finalAlamatWasi1 = "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 KL";
+                finalTelefonWasi1 = "+603 2602 2722";
+            } else {
+                finalNamaWasi1 = document.getElementById("namaWasi1").value;
+                finalIcWasi1 = document.getElementById("icWasi1").value;
+                finalHubunganWasi1 = document.getElementById("hubunganWasi1").value;
+                finalAlamatWasi1 = document.getElementById("alamatWasi1").value;
+                finalTelefonWasi1 = document.getElementById("telefonWasi1").value;
+            }
+
+            // KUTIP ALAMAT
+            const alamat1 = document.getElementById("alamat1").value.trim();
+            const alamat2 = document.getElementById("alamat2").value.trim();
+            const poskod = document.getElementById("poskod").value.trim();
+            const bandar = document.getElementById("bandar").value.trim();
+            const negeri = document.getElementById("negeri").value.trim();
+          
+            await setDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"), {
+                nama: document.getElementById("nama").value,
+                ic: document.getElementById("ic").value,
+                alamat1: alamat1, alamat2: alamat2, poskod: poskod, bandar: bandar, negeri: negeri,
+                alamat: [alamat1, alamat2, `${poskod} ${bandar}`.trim(), negeri].filter(Boolean).join(", "),
+                telefon: document.getElementById("telefon").value,
+                
+                // KORPORAT DATA
+                namaSyarikat: document.getElementById("namaSyarikat").value,
+                noSsm: document.getElementById("noSsm").value,
+                alamatSyarikat: document.getElementById("alamatSyarikat").value,
+                jumlahSaham: document.getElementById("jumlahSaham").value,
+                statusPemilikan: statusPemilikan,
+                mekanismeAgihan: mekanismeAgihan,
+                
+                // DATA BUY-SELL AGREEMENT
+                sahamPewasiat: document.getElementById("sahamPewasiat").value,
+                namaPartner: document.getElementById("namaPartner").value,
+                icPartner: document.getElementById("icPartner").value,
+                alamatPartner: document.getElementById("alamatPartner").value,
+                sahamPartner: document.getElementById("sahamPartner").value,
+                
+                penerimaHibahSaham: penerimaHibahSaham,
+                penerimaWakafZurri: penerimaWakafZurri,
+                
+                // --- KUTIP DATA WASI 1 ---
+            const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
+            let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
+
+            if (pilihanWasi1Val === "rtb") {
+                finalNamaWasi1 = "Rakyat Trustee Berhad";
+                finalIcWasi1 = "1462142-U";
+                finalHubunganWasi1 = "Syarikat Amanah";
+                finalAlamatWasi1 = "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 KL";
+                finalTelefonWasi1 = "+603 2602 2722";
+            } else {
+                finalNamaWasi1 = document.getElementById("namaWasi1").value;
+                finalIcWasi1 = document.getElementById("icWasi1").value;
+                finalHubunganWasi1 = document.getElementById("hubunganWasi1").value;
+                finalAlamatWasi1 = document.getElementById("alamatWasi1").value;
+                finalTelefonWasi1 = document.getElementById("telefonWasi1").value;
+            }
+
+            // KUTIP ALAMAT
+            const alamat1 = document.getElementById("alamat1").value.trim();
+            const alamat2 = document.getElementById("alamat2").value.trim();
+            const poskod = document.getElementById("poskod").value.trim();
+            const bandar = document.getElementById("bandar").value.trim();
+            const negeri = document.getElementById("negeri").value.trim();
+          
+            await setDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"), {
+                nama: document.getElementById("nama").value,
+                ic: document.getElementById("ic").value,
+                alamat1: alamat1, alamat2: alamat2, poskod: poskod, bandar: bandar, negeri: negeri,
+                alamat: [alamat1, alamat2, `${poskod} ${bandar}`.trim(), negeri].filter(Boolean).join(", "),
+                telefon: document.getElementById("telefon").value,
+                
+                // KORPORAT DATA
+                namaSyarikat: document.getElementById("namaSyarikat").value,
+                noSsm: document.getElementById("noSsm").value,
+                alamatSyarikat: document.getElementById("alamatSyarikat").value,
+                jumlahSaham: document.getElementById("jumlahSaham").value,
+                statusPemilikan: statusPemilikan,
+                mekanismeAgihan: mekanismeAgihan,
+                
+                // DATA BUY-SELL AGREEMENT
+                sahamPewasiat: document.getElementById("sahamPewasiat").value,
+                namaPartner: document.getElementById("namaPartner").value,
+                icPartner: document.getElementById("icPartner").value,
+                alamatPartner: document.getElementById("alamatPartner").value,
+                sahamPartner: document.getElementById("sahamPartner").value,
+                
+                penerimaHibahSaham: penerimaHibahSaham,
+                penerimaWakafZurri: penerimaWakafZurri,
+                
+                // --- KUTIP DATA WASI 1 ---
+            const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
+            let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
+
+            if (pilihanWasi1Val === "rtb") {
+                finalNamaWasi1 = "Rakyat Trustee Berhad";
+                finalIcWasi1 = "1462142-U";
+                finalHubunganWasi1 = "Syarikat Amanah";
+                finalAlamatWasi1 = "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 KL";
+                finalTelefonWasi1 = "+603 2602 2722";
+            } else {
+                finalNamaWasi1 = document.getElementById("namaWasi1").value;
+                finalIcWasi1 = document.getElementById("icWasi1").value;
+                finalHubunganWasi1 = document.getElementById("hubunganWasi1").value;
+                finalAlamatWasi1 = document.getElementById("alamatWasi1").value;
+                finalTelefonWasi1 = document.getElementById("telefonWasi1").value;
+            }
+
+            // KUTIP ALAMAT
+            const alamat1 = document.getElementById("alamat1").value.trim();
+            const alamat2 = document.getElementById("alamat2").value.trim();
+            const poskod = document.getElementById("poskod").value.trim();
+            const bandar = document.getElementById("bandar").value.trim();
+            const negeri = document.getElementById("negeri").value.trim();
+          
+            await setDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"), {
+                nama: document.getElementById("nama").value,
+                ic: document.getElementById("ic").value,
+                alamat1: alamat1, alamat2: alamat2, poskod: poskod, bandar: bandar, negeri: negeri,
+                alamat: [alamat1, alamat2, `${poskod} ${bandar}`.trim(), negeri].filter(Boolean).join(", "),
+                telefon: document.getElementById("telefon").value,
+                
+                // KORPORAT DATA
+                namaSyarikat: document.getElementById("namaSyarikat").value,
+                noSsm: document.getElementById("noSsm").value,
+                alamatSyarikat: document.getElementById("alamatSyarikat").value,
+                jumlahSaham: document.getElementById("jumlahSaham").value,
+                statusPemilikan: statusPemilikan,
+                mekanismeAgihan: mekanismeAgihan,
+                
+                // DATA BUY-SELL AGREEMENT
+                sahamPewasiat: document.getElementById("sahamPewasiat").value,
+                namaPartner: document.getElementById("namaPartner").value,
+                icPartner: document.getElementById("icPartner").value,
+                alamatPartner: document.getElementById("alamatPartner").value,
+                sahamPartner: document.getElementById("sahamPartner").value,
+                
+                penerimaHibahSaham: penerimaHibahSaham,
+                penerimaWakafZurri: penerimaWakafZurri,
+                
+                // --- KUTIP DATA WASI 1 ---
+            const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
+            let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
+
+            if (pilihanWasi1Val === "rtb") {
+                finalNamaWasi1 = "Rakyat Trustee Berhad";
+                finalIcWasi1 = "1462142-U";
+                finalHubunganWasi1 = "Syarikat Amanah";
+                finalAlamatWasi1 = "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 KL";
+                finalTelefonWasi1 = "+603 2602 2722";
+            } else {
+                finalNamaWasi1 = document.getElementById("namaWasi1").value;
+                finalIcWasi1 = document.getElementById("icWasi1").value;
+                finalHubunganWasi1 = document.getElementById("hubunganWasi1").value;
+                finalAlamatWasi1 = document.getElementById("alamatWasi1").value;
+                finalTelefonWasi1 = document.getElementById("telefonWasi1").value;
+            }
+
+            // KUTIP ALAMAT
+            const alamat1 = document.getElementById("alamat1").value.trim();
+            const alamat2 = document.getElementById("alamat2").value.trim();
+            const poskod = document.getElementById("poskod").value.trim();
+            const bandar = document.getElementById("bandar").value.trim();
+            const negeri = document.getElementById("negeri").value.trim();
+          
+            await setDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"), {
+                nama: document.getElementById("nama").value,
+                ic: document.getElementById("ic").value,
+                alamat1: alamat1, alamat2: alamat2, poskod: poskod, bandar: bandar, negeri: negeri,
+                alamat: [alamat1, alamat2, `${poskod} ${bandar}`.trim(), negeri].filter(Boolean).join(", "),
+                telefon: document.getElementById("telefon").value,
+                
+                // KORPORAT DATA
+                namaSyarikat: document.getElementById("namaSyarikat").value,
+                noSsm: document.getElementById("noSsm").value,
+                alamatSyarikat: document.getElementById("alamatSyarikat").value,
+                jumlahSaham: document.getElementById("jumlahSaham").value,
+                statusPemilikan: statusPemilikan,
+                mekanismeAgihan: mekanismeAgihan,
+                
+                // DATA BUY-SELL AGREEMENT
+                sahamPewasiat: document.getElementById("sahamPewasiat").value,
+                namaPartner: document.getElementById("namaPartner").value,
+                icPartner: document.getElementById("icPartner").value,
+                alamatPartner: document.getElementById("alamatPartner").value,
+                sahamPartner: document.getElementById("sahamPartner").value,
+                
+                penerimaHibahSaham: penerimaHibahSaham,
+                penerimaWakafZurri: penerimaWakafZurri,
+                
+                // --- WASI DATA ---
+                pilihanWasi1: pilihanWasi1Val,
+                namaWasi1: finalNamaWasi1,
+                icWasi1: finalIcWasi1,
+                hubunganWasi1: finalHubunganWasi1,
+                alamatWasi1: finalAlamatWasi1,
+                telefonWasi1: finalTelefonWasi1,
+
                 namaWasi2: document.getElementById("namaWasi2").value,
                 icWasi2: document.getElementById("icWasi2").value,
                 hubunganWasi2: document.getElementById("hubunganWasi2").value,
                 alamatWasi2: document.getElementById("alamatWasi2").value,
                 telefonWasi2: document.getElementById("telefonWasi2").value,
                 
+                
+                               
                 // OTHER SECTIONS
                 wasiatSatuPerTiga: wasiatSatuPerTiga,  
                 pesananWasiat: document.getElementById("pesananWasiat").value,  
