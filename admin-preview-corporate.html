@@ -211,7 +211,7 @@ margin:0 !important;
 
                     <!-- DOC REF -->
                     <p id="docRef" class="absolute top-[5%] left-[8%] text-[#153638] text-xl font-cinzel tracking-widest font-semibold drop-shadow-md">
-                        AQMS-MAW-2026-001
+                        AQMS-MCO-2026-001
                     </p>
 
                     <!-- YEAR -->
@@ -2004,7 +2004,7 @@ if (!docRefNo) {
         ? (counterSnap.data().corporateCounter || 0) + 1
         : 1;
 
-    docRefNo = `AQMS-MAW-${year}-${String(currentNumber).padStart(3,"0")}`;
+    docRefNo = `AQMS-MCO-${year}-${String(currentNumber).padStart(3,"0")}`;
 
     await setDoc(counterRef, {
         corporateCounter: currentNumber
@@ -2024,8 +2024,8 @@ if (!docRefNo) {
 await addDoc(
     collection(db, "users", userId, "notifications"),
     {
-        title: "Dokumen Corporate Diluluskan",
-        message: `Dokumen Corporate anda (${docRefNo}) telah diluluskan dan sedia untuk dilihat.`,
+        title: "Dokumen Mawaris Korporat Diluluskan",
+        message: `Dokumen Mawaris Korporat anda (${docRefNo}) telah diluluskan dan sedia untuk dilihat.`,
         type: "CORPORATE_APPROVED",
         read: false,
         createdAt: today.toISOString()
