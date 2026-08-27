@@ -406,12 +406,14 @@ const [
     wasiatSnap,
     hibahSnap,
     sepencarianSnap,
-    mawarisSnap
+    mawarisSnap,
+    corporateSnap
 ] = await Promise.all([
     getDoc(doc(db,"users",userDoc.id,"wasiat","maklumat")),
     getDoc(doc(db,"users",userDoc.id,"hibah","maklumat")),
     getDoc(doc(db,"users",userDoc.id,"sepencarian","maklumat")),
-    getDoc(doc(db,"users",userDoc.id,"mawaris","maklumat"))
+    getDoc(doc(db,"users",userDoc.id,"mawaris","maklumat")),
+    getDoc(doc(db,"users",userDoc.id,"corporate","maklumat"))
 ]);
   
 // =====================
@@ -542,6 +544,39 @@ ${getStatusBadge(data.status) || "DRAFT"}
 `);
 }
 
+// =====================
+// CORPORATE
+// =====================
+
+if (corporateSnap.exists()) {
+
+    const data = corporateSnap.data();
+
+if(filterStatus && data.status === filterStatus){
+    matchFilter = true;
+}
+  
+    const icon = {
+    DRAFT: "📝",
+    UNDER_REVIEW: "🟡",
+    APPROVED: "👍",
+    VERIFIED: "🟢",
+    PRINTED: "🖨",
+    SENT: "📦",
+    COMPLETED: "✅"
+};
+
+pendingList.push(`
+<div class="text-left">
+    <div>${icon[data.status] || "📄"} ${data.docRef || "-"}</div>
+    <div class="text-xs text-gray-500">
+${getStatusBadge(data.status) || "DRAFT"}
+</div>
+</div>
+`);
+}
+
+  
 const pending =
 pendingList.length
 ? pendingList.join("<br>")
