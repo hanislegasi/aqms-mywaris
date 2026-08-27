@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="bg-gray-100 min-h-screen" style="font-family: Inter, sans-serif;">
@@ -76,6 +77,7 @@ import {
       let hibahStatus = "BELUM DIISI";
       let sepencarianStatus = "BELUM DIISI";
       let mawarisStatus = "BELUM DIISI";
+      let corporateStatus = "BELUM DIISI";
 
       // LOAD USER
       const docSnap = await getDoc(doc(db, "users", userId));
@@ -297,17 +299,68 @@ import {
           mawarisBakiHari = mawarisExpiryDate !== "-" ? Math.ceil((new Date(mawarisData.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)) : 0;
         }
 
+        // CORPORATE STATUS
+        const corporateSnap = await getDoc(doc(db, "users", userId, "corporate", "maklumat"));
+        let corporateData = {};
+        let corporateDocRef = "-";
+        let corporateApprovedDate = "-";
+        let corporateExpiryDate = "-";
+        let corporateBakiHari = 0;
+        let corporatePrintedAt = null;
+        let corporateSentAt = null;
+        let corporateCompletedAt = null;
+        let corporateDeliveryMethod = "";
+        let corporateCourier = "";
+        let corporateTrackingNo = "";
+        let corporateReceiver = "";
+        let corporateRemarks = "";
+        let corporateAkadDate = "";
+        let corporateAkadTime = "";
+        let corporateStampDate = "";
+        let corporateStampRef = "";
+        let corporateHandoverDate = "";
+        let corporateHandoverRemarks = "";
+        let corporateReceivedDate = "";
+          
+        if (corporateSnap.exists()) {
+          corporateData = corporateSnap.data();
+          corporatePrintedAt = corporateData.printedAt || null;
+          corporateSentAt = corporateData.sentAt || null;
+          corporateAkadDate = corporateData.akadDate || "";
+          corporateAkadTime = corporateData.akadTime || "";
+          corporateStampDate = corporateData.stampingDate || "";
+          corporateStampRef = corporateData.stampingRef || "";
+          corporateHandoverDate = corporateData.handoverDate || "";
+          corporateHandoverRemarks = corporateData.handoverRemarks || "";
+          corporateReceivedDate = corporateData.receivedDate || "";
+          corporateCompletedAt = corporateData.completedAt || null;
+          corporateDeliveryMethod = corporateData.deliveryMethod || "";
+          corporateCourier = corporateData.courier || "";
+          corporateTrackingNo = corporateData.trackingNo || "";
+          corporateReceiver = corporateData.receiver || "";
+          corporateRemarks = corporateData.remarks || "";
+          corporateStatus = corporateData.status || "DRAFT";
+          corporateDocRef = corporateData.docRef || "-";
+          corporateApprovedDate = corporateData.approvedAt ? new Date(corporateData.approvedAt).toLocaleDateString("ms-MY") : "-";
+          corporateExpiryDate = corporateData.expiryDate ? new Date(corporateData.expiryDate).toLocaleDateString("ms-MY") : "-";
+          corporateBakiHari = corporateExpiryDate !== "-" ? Math.ceil((new Date(corporateData.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)) : 0;
+        }
+
         const products = [
           { name: "Wasiat", snap: wasiatSnap, status: wasiatStatus, docRef: wasiatDocRef, preview: "preview-wasiat.html" },
           { name: "Hibah", snap: hibahSnap, status: hibahStatus, docRef: hibahDocRef, preview: "preview-hibah.html" },
           { name: "Harta Sepencarian", snap: sepencarianSnap, status: sepencarianStatus, docRef: sepencarianDocRef, preview: "preview-sepencarian.html" },
-          { name: "Mawaris", snap: mawarisSnap, status: mawarisStatus, docRef: mawarisDocRef, preview: "preview-mawaris.html" }
+          { name: "Mawaris", snap: mawarisSnap, status: mawarisStatus, docRef: mawarisDocRef, preview: "preview-mawaris.html" },
+          { name: "Mawaris Korporat", snap: corporateSnap, status: corporateStatus, docRef: corporateDocRef, preview: "preview-corporate.html" }
         ];
 
         const activeProduct = products.find(product => product.snap.exists());
 
-        const currentCollection = activeProduct
-          ? (activeProduct.name === "Wasiat" ? "wasiat" : activeProduct.name === "Hibah" ? "hibah" : activeProduct.name === "Harta Sepencarian" ? "sepencarian" : "mawaris")
+       const currentCollection = activeProduct
+          ? (activeProduct.name === "Wasiat" ? "wasiat" : 
+             activeProduct.name === "Hibah" ? "hibah" : 
+             activeProduct.name === "Harta Sepencarian" ? "sepencarian" : 
+             activeProduct.name === "Mawaris" ? "mawaris" : "corporate")
           : "wasiat";
 
         document.getElementById("customerInfo").innerHTML = `
@@ -532,6 +585,57 @@ import {
                   </div>
                 </div>
                 ` : ""}
+
+                ${corporateSnap.exists() ? `
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
+                  <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">Corporate</h3>
+                    <p class="text-sm text-gray-500">No Dokumen</p>
+                    <p class="font-semibold mb-3">${corporateDocRef}</p>
+                    <p class="text-sm text-gray-500">Status</p>
+                    <p class="font-semibold mb-6">${corporateStatus}</p>
+                    <a href="admin-preview-corporate.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
+                  </div>
+
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
+                    <input type="datetime-local" id="corporatePrintedAt" value="${corporatePrintedAt ? corporatePrintedAt.substring(0, 16) : ""}" ${corporateStatus === "PRINTED" || corporateStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
+                    <button id="btnPrintCorporate" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
+                  </div>
+
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    ${getDeliveryAlert(corporateData)}
+                    <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
+                    <input type="datetime-local" id="corporateSentAt" value="${corporateSentAt ? corporateSentAt.substring(0, 16) : ""}" ${corporateStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
+                    <input id="corporateCourier" class="w-full border rounded-lg p-2 mb-2" placeholder="Courier" value="${corporateCourier}">
+                    <input id="corporateTrackingNo" class="w-full border rounded-lg p-2 mb-2" placeholder="Tracking No" value="${corporateTrackingNo}">
+                    <input id="corporateReceiver" class="w-full border rounded-lg p-2 mb-2" placeholder="Receiver" value="${corporateReceiver}">
+                    <textarea id="corporateRemarks" class="w-full border rounded-lg p-2 mb-3" rows="3" placeholder="Remarks">${corporateRemarks}</textarea>
+                    <button id="btnSendCorporate" class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">✔ Tandakan Dihantar</button>
+                  </div>
+
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
+                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <p class="font-semibold">${corporateAkadDate || "-"} ${corporateAkadTime || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Stamping</p>
+                    <p class="font-semibold">${corporateStampDate || "-"}</p>
+                    <p class="text-sm">${corporateStampRef || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="font-semibold">${corporateHandoverDate || "-"}</p>
+                    <p class="text-sm">${corporateHandoverRemarks || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="font-semibold text-green-700">${corporateReceivedDate || "-"}</p>
+                    <hr class="my-3">
+                    <button id="btnCompleteCorporate" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
+                  </div>
+                </div>
+                ` : ""}
               </div>
             </div>
           </div>
@@ -554,7 +658,8 @@ import {
           user.wasiatPaymentStatus === "paid" ||
           user.hibahPaymentStatus === "paid" ||
           user.sepencarianPaymentStatus === "paid" ||
-          user.mawarisPaymentStatus === "paid"
+          user.mawarisPaymentStatus === "paid" ||
+          user.corporatePaymentStatus === "paid"
         ) ? "AHLI AKTIF" : "PROSPEK";
 
         // ==================== EVENT LISTENERS (DI DALAM SKOP DOC SNAP) ====================
@@ -883,6 +988,88 @@ import {
           }
         }
 
+        // 5. CORPORATE
+        const btnPrintCorporate = document.getElementById("btnPrintCorporate");
+        const btnSendCorporate = document.getElementById("btnSendCorporate");
+        const btnCompleteCorporate = document.getElementById("btnCompleteCorporate");
+
+        if (btnPrintCorporate) {
+          if (corporateStatus === "VERIFIED") {
+            btnPrintCorporate.disabled = false;
+            btnPrintCorporate.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnPrintCorporate.classList.add("bg-blue-600", "hover:bg-blue-700");
+            btnPrintCorporate.onclick = async () => {
+              const val = document.getElementById("corporatePrintedAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
+              if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
+              await updateDoc(doc(db, "users", userId, "corporate", "maklumat"), {
+                status: "PRINTED",
+                printedAt: val,
+                printedUpdatedAt: serverTimestamp(),
+                printedBy: auth.currentUser.uid
+              });
+              alert("Status berjaya dikemaskini.");
+              location.reload();
+            };
+          } else {
+            btnPrintCorporate.disabled = true;
+            btnPrintCorporate.classList.remove("bg-blue-600", "hover:bg-blue-700");
+            btnPrintCorporate.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        if (btnSendCorporate) {
+          if (corporateStatus === "PRINTED") {
+            btnSendCorporate.disabled = false;
+            btnSendCorporate.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnSendCorporate.classList.add("bg-orange-500", "hover:bg-orange-600");
+            btnSendCorporate.onclick = async () => {
+              const val = document.getElementById("corporateSentAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
+              if (!confirm("Tandakan dokumen telah dihantar?")) return;
+              await updateDoc(doc(db, "users", userId, "corporate", "maklumat"), {
+                status: "SENT",
+                sentAt: val,
+                sentUpdatedAt: serverTimestamp(),
+                sentBy: auth.currentUser.uid,
+                courier: document.getElementById("corporateCourier")?.value || "",
+                trackingNo: document.getElementById("corporateTrackingNo")?.value || "",
+                receiver: document.getElementById("corporateReceiver")?.value || "",
+                remarks: document.getElementById("corporateRemarks")?.value || ""
+              });
+              alert("Dokumen berjaya dihantar.");
+              location.reload();
+            };
+          } else {
+            btnSendCorporate.disabled = true;
+            btnSendCorporate.classList.remove("bg-orange-500", "hover:bg-orange-600");
+            btnSendCorporate.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        if (btnCompleteCorporate) {
+          if (corporateStatus === "SENT") {
+            btnCompleteCorporate.disabled = false;
+            btnCompleteCorporate.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnCompleteCorporate.classList.add("bg-green-600", "hover:bg-green-700");
+            btnCompleteCorporate.onclick = async () => {
+              if (!confirm("Lengkapkan proses ini?")) return;
+              await updateDoc(doc(db, "users", userId, "corporate", "maklumat"), {
+                status: "COMPLETED",
+                completedAt: new Date().toISOString(),
+                completedBy: auth.currentUser.uid
+              });
+              alert("Kes selesai.");
+              location.reload();
+            };
+          } else {
+            btnCompleteCorporate.disabled = true;
+            btnCompleteCorporate.classList.remove("bg-green-600", "hover:bg-green-700");
+            btnCompleteCorporate.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        
       } else {
         document.getElementById("customerInfo").innerHTML = `<p class="text-red-500 font-bold">Pengguna tidak dijumpai.</p>`;
       }
