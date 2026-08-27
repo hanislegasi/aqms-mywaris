@@ -161,14 +161,17 @@
 
         <hr class="my-6 border-gray-200">
 
-        <!-- MAKLUMAT WASI KEDUA -->
-        <h3 class="font-semibold mb-2">Maklumat Wasi Kedua (Wasi Gantian)</h3>
-        <input type="text" id="namaWasi2" placeholder="Nama Wasi Kedua" class="w-full border rounded-lg p-3 mb-3">
-        <input type="text" id="icWasi2" placeholder="No IC" class="w-full border rounded-lg p-3 mb-3">
-        <input type="text" id="hubunganWasi2" placeholder="Hubungan" class="w-full border rounded-lg p-3 mb-3">
-        <textarea id="alamatWasi2" rows="2" placeholder="Alamat" class="w-full border rounded-lg p-3 mb-3"></textarea>
-        <input type="text" id="telefonWasi2" placeholder="No Telefon" class="w-full border rounded-lg p-3">
-      </div>
+        <!-- MAKLUMAT WASI KEDUA (Wasi Gantian) -->
+        <div id="wasi2Section" class="hidden">
+            <hr class="my-6 border-gray-200">
+            <h3 class="font-semibold mb-2">Maklumat Wasi Kedua (Wasi Gantian)</h3>
+            <p class="text-xs text-gray-500 mb-3">Sila lantik individu lain sebagai ganti sekiranya Wasi Pertama gagal/tidak dapat bertindak.</p>
+            <input type="text" id="namaWasi2" placeholder="Nama Wasi Kedua" class="w-full border rounded-lg p-3 mb-3">
+            <input type="text" id="icWasi2" placeholder="No IC" class="w-full border rounded-lg p-3 mb-3">
+            <input type="text" id="hubunganWasi2" placeholder="Hubungan" class="w-full border rounded-lg p-3 mb-3">
+            <textarea id="alamatWasi2" rows="2" placeholder="Alamat" class="w-full border rounded-lg p-3 mb-3"></textarea>
+            <input type="text" id="telefonWasi2" placeholder="No Telefon" class="w-full border rounded-lg p-3 mb-4">
+        </div>
 
       <!-- SECTION 4: WASIAT 1/3 -->
       <div>
@@ -338,18 +341,30 @@
             document.getElementById("pilihanWasi1").value = "rtb";
         }
         
-        // --- LOGIK BUKA/TUTUP KOTAK WASI 1 ---
+       // --- LOGIK BUKA/TUTUP KOTAK WASI 1 & 2 ---
         const pilihanWasi1 = document.getElementById("pilihanWasi1");
         const wasi1RTBSection = document.getElementById("wasi1RTBSection");
         const wasi1ManualSection = document.getElementById("wasi1ManualSection");
+        const wasi2Section = document.getElementById("wasi2Section"); // Tambah ini
 
         function toggleWasi1() {
             if (pilihanWasi1.value === "rtb") {
+                // Jika RTB: Tunjuk info RTB, tutup Manual Wasi 1, tutup Wasi 2
                 wasi1RTBSection.classList.remove("hidden");
                 wasi1ManualSection.classList.add("hidden");
+                wasi2Section.classList.add("hidden");
+                
+                // Kosongkan data Wasi 2 supaya tak masuk database jika user tukar fikiran
+                document.getElementById("namaWasi2").value = "";
+                document.getElementById("icWasi2").value = "";
+                document.getElementById("hubunganWasi2").value = "";
+                document.getElementById("alamatWasi2").value = "";
+                document.getElementById("telefonWasi2").value = "";
             } else {
+                // Jika Manual: Tutup info RTB, tunjuk Manual Wasi 1, tunjuk Wasi 2
                 wasi1RTBSection.classList.add("hidden");
                 wasi1ManualSection.classList.remove("hidden");
+                wasi2Section.classList.remove("hidden");
             }
         }
         pilihanWasi1.addEventListener("change", toggleWasi1);
