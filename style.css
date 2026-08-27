@@ -9,3 +9,14 @@
 .rounded-full {
     border-radius: 0 !important;
 }
+/* Tetapan Font dan Saiz untuk seluruh sistem */
+body {
+    /* 1. Tukar jenis tulisan (Font) */
+    font-family: 'Inter', Arial, sans-serif !important; 
+    
+    /* 2. Tukar saiz asas tulisan */
+    font-size: 16px !important; 
+    
+    /* 3. (Pilihan) Tukar warna asas tulisan */
+    color: #333333 !important; 
+}
