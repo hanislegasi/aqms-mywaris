@@ -8,6 +8,18 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body{ font-family: Inter, sans-serif; }
+    
+        .rounded, 
+        .rounded-sm, 
+        .rounded-md, 
+        .rounded-lg, 
+        .rounded-xl, 
+        .rounded-2xl, 
+        .rounded-3xl,
+        .rounded-full {
+            border-radius: 0 !important;
+        }
+    
   </style>
 </head>
 
@@ -61,18 +73,24 @@
         <input type="text" id="namaSyarikat" placeholder="Nama Syarikat (Sdn Bhd)" class="w-full border rounded-lg p-3 mb-3">
         <input type="text" id="noSsm" placeholder="No. Pendaftaran Syarikat (SSM)" class="w-full border rounded-lg p-3 mb-3">
         
-        <!-- TAMBAHAN UNTUK AGREEMENT -->
         <textarea id="alamatSyarikat" rows="2" placeholder="Alamat Berdaftar Syarikat" class="w-full border rounded-lg p-3 mb-3"></textarea>
         <input type="number" id="jumlahSaham" placeholder="Jumlah Keseluruhan Saham Syarikat (Unit)" class="w-full border rounded-lg p-3 mb-5">
 
-        <!-- DROPDOWN STATUS PEMILIKAN -->
+        <!-- 1. DROPDOWN STATUS PEMILIKAN -->
         <select id="statusPemilikan" class="w-full border rounded-lg p-3 mb-3 font-semibold text-[#153638] bg-gray-50">
             <option value="">Pilih Status Pemilikan Syarikat</option>
-            <option value="rakankongsi">Dimiliki Bersama Rakan Kongsi (Buy-Sell Agreement)</option>
-            <option value="tunggal">Dimiliki Oleh Saya Seorang (Pemilik Tunggal / Hibah)</option>
+            <option value="rakankongsi">Dimiliki Bersama Rakan Kongsi</option>
+            <option value="tunggal">Dimiliki Oleh Saya Seorang (Pemilik Tunggal)</option>
         </select>
 
-        <!-- KOTAK JIKA PILIH BUY-SELL AGREEMENT (RAKAN KONGSI) -->
+        <!-- 2. DROPDOWN MEKANISME AGIHAN (Muncul secara dinamik) -->
+        <div id="mekanismeSection" class="hidden mb-3">
+            <select id="mekanismeAgihan" class="w-full border rounded-lg p-3 font-semibold text-orange-700 bg-orange-50">
+                <option value="">Pilih Mekanisme Pewarisan Saham</option>
+            </select>
+        </div>
+
+        <!-- KOTAK A: BUY-SELL AGREEMENT (RAKAN KONGSI) -->
         <div id="buySellSection" class="hidden mb-3 p-5 border border-blue-200 bg-blue-50 rounded-xl space-y-4">
             <div>
                 <label class="text-xs font-semibold text-blue-800 ml-1 block mb-1">Bilangan Saham Milik Anda (Pewasiat)</label>
@@ -90,13 +108,23 @@
             </div>
         </div>
 
-        <!-- KOTAK JIKA PILIH HIBAH SAHAM -->
+        <!-- KOTAK B: HIBAH SAHAM -->
         <div id="hibahSahamSection" class="hidden mb-3 p-4 border border-green-200 bg-green-50 rounded-xl">
-            <label class="text-xs font-semibold text-green-800 ml-1 mb-2 block">Senarai Penerima Hibah Saham Syarikat</label>
+            <label class="text-xs font-bold text-green-800 ml-1 mb-2 block border-b border-green-200 pb-2">Senarai Penerima Hibah Saham Syarikat</label>
             <div id="hibahSahamContainer"></div>
             <div class="flex gap-2 mt-3">
                 <button type="button" id="addPenerimaHibahSahamBtn" class="bg-green-600 hover:bg-green-700 transition text-white px-3 py-2 rounded-lg flex-1">+ Tambah Penerima Hibah</button>
                 <button type="button" id="deletePenerimaHibahSahamBtn" class="bg-red-600 hover:bg-red-700 transition text-white px-3 py-2 rounded-lg">Padam Penerima</button>
+            </div>
+        </div>
+
+        <!-- KOTAK C: WAKAF SAHAM ZURRI -->
+        <div id="wakafZurriSection" class="hidden mb-3 p-4 border border-purple-200 bg-purple-50 rounded-xl">
+            <label class="text-xs font-bold text-purple-800 ml-1 mb-2 block border-b border-purple-200 pb-2">Senarai Penerima Manfaat Wakaf Saham Zurri (Keturunan)</label>
+            <div id="wakafZurriContainer"></div>
+            <div class="flex gap-2 mt-3">
+                <button type="button" id="addPenerimaWakafZurriBtn" class="bg-purple-600 hover:bg-purple-700 transition text-white px-3 py-2 rounded-lg flex-1">+ Tambah Penerima Manfaat</button>
+                <button type="button" id="deletePenerimaWakafZurriBtn" class="bg-red-600 hover:bg-red-700 transition text-white px-3 py-2 rounded-lg">Padam Penerima</button>
             </div>
         </div>
 
@@ -286,17 +314,35 @@
         // TRIGGER DROPDOWN KORPORAT
         document.getElementById("statusPemilikan").dispatchEvent(new Event("change"));
 
-        // LOAD HIBAH SAHAM KORPORAT
-       if(data.statusPemilikan === "tunggal" && data.penerimaHibahSaham){
-            const container = document.getElementById("hibahSahamContainer");
-            container.innerHTML = "";
-            data.penerimaHibahSaham.forEach(p => {
-                addPenerimaHibahSaham(container);
-                const lastRow = container.lastElementChild;
-                lastRow.querySelector(".namaPenerimaHibahSaham").value = p.nama || "";
-                lastRow.querySelector(".peratusHibahSaham").value = p.peratus || "";
-            });
-        }
+        // Tunggu sekejap supaya dropdown Mekanisme diisi oleh event listener Status Pemilikan
+        setTimeout(() => {
+            document.getElementById("mekanismeAgihan").value = data.mekanismeAgihan || "";
+            document.getElementById("mekanismeAgihan").dispatchEvent(new Event("change"));
+
+            // LOAD HIBAH SAHAM KORPORAT
+            if(data.mekanismeAgihan === "hibah" && data.penerimaHibahSaham){
+                const container = document.getElementById("hibahSahamContainer");
+                container.innerHTML = "";
+                data.penerimaHibahSaham.forEach(p => {
+                    addPenerimaHibahSaham(container);
+                    const lastRow = container.lastElementChild;
+                    lastRow.querySelector(".namaPenerimaHibahSaham").value = p.nama || "";
+                    lastRow.querySelector(".peratusHibahSaham").value = p.peratus || "";
+                });
+            }
+
+            // LOAD WAKAF SAHAM ZURRI KORPORAT
+            if(data.mekanismeAgihan === "wakafzurri" && data.penerimaWakafZurri){
+                const container = document.getElementById("wakafZurriContainer");
+                container.innerHTML = "";
+                data.penerimaWakafZurri.forEach(p => {
+                    addPenerimaWakafZurri(container);
+                    const lastRow = container.lastElementChild;
+                    lastRow.querySelector(".namaPenerimaWakafZurri").value = p.nama || "";
+                    lastRow.querySelector(".peratusWakafZurri").value = p.peratus || "";
+                });
+            }
+        }, 50);
         
         // LOAD WASIAT 1/3
         if(data.wasiatSatuPerTiga){
@@ -323,30 +369,53 @@
       }
     });
 
-    // --- LOGIK STATUS PEMILIKAN ---
+    // --- LOGIK STATUS PEMILIKAN & MEKANISME ---
     const statusPemilikanSelect = document.getElementById("statusPemilikan");
+    const mekanismeSection = document.getElementById("mekanismeSection");
+    const mekanismeAgihanSelect = document.getElementById("mekanismeAgihan");
+
     const buySellSect = document.getElementById("buySellSection");
     const hibahSect = document.getElementById("hibahSahamSection");
+    const wakafSect = document.getElementById("wakafZurriSection");
 
     statusPemilikanSelect.addEventListener("change", function(){
+        mekanismeAgihanSelect.innerHTML = '<option value="">Pilih Mekanisme Pewarisan Saham</option>';
+        mekanismeSection.classList.add("hidden");
         buySellSect.classList.add("hidden");
         hibahSect.classList.add("hidden");
+        wakafSect.classList.add("hidden");
 
         if(this.value === "rakankongsi"){
-            buySellSect.classList.remove("hidden"); // Tunjuk Tarikh Perjanjian
+            mekanismeSection.classList.remove("hidden");
+            mekanismeAgihanSelect.innerHTML += '<option value="buysell">Buy-Sell Agreement (Jual Beli Saham)</option>';
+            mekanismeAgihanSelect.innerHTML += '<option value="wakafzurri">Wakaf Saham Zurri (Bahagian Pewasiat Sahaja)</option>';
         } else if (this.value === "tunggal"){
-            hibahSect.classList.remove("hidden"); // Tunjuk Kotak Penerima Hibah
-            const container = document.getElementById("hibahSahamContainer");
-            if(container.children.length === 0){
-                addPenerimaHibahSaham(container);
-            }
+            mekanismeSection.classList.remove("hidden");
+            mekanismeAgihanSelect.innerHTML += '<option value="hibah">Hibah Saham Mutlak (Kepada Waris)</option>';
+            mekanismeAgihanSelect.innerHTML += '<option value="wakafzurri">Wakaf Saham Zurri (Keseluruhan Saham)</option>';
         }
     });
 
+    mekanismeAgihanSelect.addEventListener("change", function(){
+        buySellSect.classList.add("hidden");
+        hibahSect.classList.add("hidden");
+        wakafSect.classList.add("hidden");
+
+        if(this.value === "buysell"){
+            buySellSect.classList.remove("hidden");
+        } else if(this.value === "hibah"){
+            hibahSect.classList.remove("hidden");
+            if(document.getElementById("hibahSahamContainer").children.length === 0) addPenerimaHibahSaham(document.getElementById("hibahSahamContainer"));
+        } else if(this.value === "wakafzurri"){
+            wakafSect.classList.remove("hidden");
+            if(document.getElementById("wakafZurriContainer").children.length === 0) addPenerimaWakafZurri(document.getElementById("wakafZurriContainer"));
+        }
+    });
+
+    // BTN HIBAH SAHAM
     document.getElementById("addPenerimaHibahSahamBtn").addEventListener("click", () => {
         addPenerimaHibahSaham(document.getElementById("hibahSahamContainer"));
     });
-
     document.getElementById("deletePenerimaHibahSahamBtn").addEventListener("click", () => {
         const container = document.getElementById("hibahSahamContainer");
         if(container.lastElementChild){
@@ -361,6 +430,29 @@
                 <option value="">Pilih Waris</option>
             </select>
             <input type="number" class="col-span-3 w-full border rounded-lg p-3 peratusHibahSaham" placeholder="%">
+        </div>`;
+        container.insertAdjacentHTML("beforeend", html);
+        populateWarisDropdowns();
+    }
+
+    // BTN WAKAF ZURRI
+    document.getElementById("addPenerimaWakafZurriBtn").addEventListener("click", () => {
+        addPenerimaWakafZurri(document.getElementById("wakafZurriContainer"));
+    });
+    document.getElementById("deletePenerimaWakafZurriBtn").addEventListener("click", () => {
+        const container = document.getElementById("wakafZurriContainer");
+        if(container.lastElementChild){
+            container.lastElementChild.remove();
+        }
+    });
+
+    function addPenerimaWakafZurri(container){
+        const html = `
+        <div class="grid grid-cols-12 gap-3 mb-3 penerimaWakafZurriRow">
+            <select class="col-span-9 w-full border rounded-lg p-3 namaPenerimaWakafZurri">
+                <option value="">Pilih Waris</option>
+            </select>
+            <input type="number" class="col-span-3 w-full border rounded-lg p-3 peratusWakafZurri" placeholder="%">
         </div>`;
         container.insertAdjacentHTML("beforeend", html);
         populateWarisDropdowns();
@@ -416,6 +508,16 @@
 
         // Update Dropdown Hibah Saham
         document.querySelectorAll(".namaPenerimaHibahSaham").forEach(select=>{
+            const currentVal = select.value;
+            select.innerHTML = `<option value="">Pilih Waris</option>`;
+            waris.forEach(w=>{
+                if(w.nama) select.innerHTML += `<option value="${w.nama}">${w.nama} (${w.hubungan})</option>`;
+            });
+            select.value = currentVal;
+        });
+
+        // Update Dropdown Wakaf Zurri
+        document.querySelectorAll(".namaPenerimaWakafZurri").forEach(select=>{
             const currentVal = select.value;
             select.innerHTML = `<option value="">Pilih Waris</option>`;
             waris.forEach(w=>{
@@ -598,14 +700,26 @@
                 });
             });          
 
-            // Kutip Hibah Saham
+            // Kutip Mekanisme & Penerima
             const statusPemilikan = document.getElementById("statusPemilikan").value;
+            const mekanismeAgihan = document.getElementById("mekanismeAgihan").value;
+            
             const penerimaHibahSaham = [];
-            if(statusPemilikan === "tunggal"){
+            if(mekanismeAgihan === "hibah"){
                 document.querySelectorAll(".penerimaHibahSahamRow").forEach(row => {
                     penerimaHibahSaham.push({
                         nama: row.querySelector(".namaPenerimaHibahSaham").value,
                         peratus: row.querySelector(".peratusHibahSaham").value
+                    });
+                });
+            }
+
+            const penerimaWakafZurri = [];
+            if(mekanismeAgihan === "wakafzurri"){
+                document.querySelectorAll(".penerimaWakafZurriRow").forEach(row => {
+                    penerimaWakafZurri.push({
+                        nama: row.querySelector(".namaPenerimaWakafZurri").value,
+                        peratus: row.querySelector(".peratusWakafZurri").value
                     });
                 });
             }
@@ -629,6 +743,7 @@
                 alamatSyarikat: document.getElementById("alamatSyarikat").value,
                 jumlahSaham: document.getElementById("jumlahSaham").value,
                 statusPemilikan: statusPemilikan,
+                mekanismeAgihan: mekanismeAgihan,
                 
                 // DATA BUY-SELL AGREEMENT
                 sahamPewasiat: document.getElementById("sahamPewasiat").value,
@@ -638,6 +753,7 @@
                 sahamPartner: document.getElementById("sahamPartner").value,
                 
                 penerimaHibahSaham: penerimaHibahSaham,
+                penerimaWakafZurri: penerimaWakafZurri,
                 
                 // WASI DATA
                 namaWasi1: document.getElementById("namaWasi1").value,
@@ -688,7 +804,6 @@
             target.value = val.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
         }
         if (identifier.includes('ic') || identifier.includes('kad pengenalan') || identifier.includes('ssm')) {
-            // Untuk SSM/IC kita benarkan nombor dan sengkang (tak ketat sangat formatnya bagi fleksibiliti korporat)
             target.value = val.replace(/[^0-9-]/g, '');
         }
         if (identifier.includes('telefon') || identifier.includes('phone') || identifier.includes('tel')) {
