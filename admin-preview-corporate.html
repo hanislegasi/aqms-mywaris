@@ -326,6 +326,9 @@
                         let lampiranPemegangAmanah = "<p>Tiada Pemegang Amanah berasingan dilantik.</p>";
                         if(data.pemegangAmanah && data.pemegangAmanah.pilihan === "ya"){
                             lampiranPemegangAmanah = `<table style="width:100%; border-collapse:collapse; font-size:14px;"><tr><td style="border:1px solid #000;padding:8px;width:30%;"><strong>Nama</strong></td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.nama||"-"}</td></tr><tr><td style="border:1px solid #000;padding:8px;"><strong>No IC</strong></td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.ic||"-"}</td></tr><tr><td style="border:1px solid #000;padding:8px;"><strong>Hubungan</strong></td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.hubungan||"-"}</td></tr><tr><td style="border:1px solid #000;padding:8px;"><strong>Telefon</strong></td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.telefon||"-"}</td></tr></table>`;
+                        } else if(data.pemegangAmanah && data.pemegangAmanah.pilihan === "tidak"){
+                            // Paparkan Maklumat Wasi 1 jika pilih Sama Seperti Wasi
+                            lampiranPemegangAmanah = `<p>Sama seperti Wasi Pertama.</p><table style="width:100%; border-collapse:collapse; font-size:14px; margin-top:10px;"><tr><td style="border:1px solid #000;padding:8px;width:30%;"><strong>Nama</strong></td><td style="border:1px solid #000;padding:8px;">${data.namaWasi1||"-"}</td></tr><tr><td style="border:1px solid #000;padding:8px;"><strong>No IC</strong></td><td style="border:1px solid #000;padding:8px;">${data.icWasi1||"-"}</td></tr><tr><td style="border:1px solid #000;padding:8px;"><strong>Hubungan</strong></td><td style="border:1px solid #000;padding:8px;">${data.hubunganWasi1||"-"}</td></tr><tr><td style="border:1px solid #000;padding:8px;"><strong>Telefon</strong></td><td style="border:1px solid #000;padding:8px;">${data.telefonWasi1||"-"}</td></tr></table>`;
                         }
 
                         const approvedDate = data.approvedAt ? new Date(data.approvedAt) : null;
@@ -399,7 +402,7 @@
                                 // A: Dapatkan Maklumat Waris Sebenar dari senarai Waris
                                 const warisDetail = (data.waris || []).find(w => w.nama === p.nama) || {};
                                 
-                                // B: Logik Pemegang Amanah
+                               // B: Logik Pemegang Amanah
                                 let amanahContent = "";
                                 let introPenerima = `(selepas ini disebut sebagai <strong>"Penerima Hibah Saham"</strong>)`;
                                 let labelPenerima = "Penerima Hibah";
@@ -409,29 +412,49 @@
                                 let tarikhLahirPenerima = formatDateMY(warisDetail.tarikhLahir);
 
                                 if (warisDetail.status === "bawah18" || warisDetail.status === "oku") {
-                                    // Pakej data untuk generatePemegangAmanah()
-                                    let mockItem = {
-                                        ...warisDetail,
-                                        pemegangAmanah: data.pemegangAmanah 
-                                    };
                                     
-                                    if (typeof window.generatePemegangAmanah === "function") {
-                                        amanahContent = window.generatePemegangAmanah(mockItem, data)
-                                            .replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
-                                            .replaceAll("{{IC_PEMBERI}}", data.ic || "-")
-                                            .replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-");
+                                    // Bina data Pemegang Amanah sebenar berdasarkan pilihan
+                                    let actualAmanah = null;
+                                    
+                                    if (data.pemegangAmanah && data.pemegangAmanah.pilihan === "tidak") {
+                                        // Jika "Sama seperti Wasi", kita salin data Wasi 1 dan paksa pilihan jadi "ya"
+                                        actualAmanah = {
+                                            pilihan: "ya", 
+                                            nama: data.namaWasi1 || "-",
+                                            ic: data.icWasi1 || "-",
+                                            hubungan: data.hubunganWasi1 || "-",
+                                            telefon: data.telefonWasi1 || "-",
+                                            alamat: data.alamatWasi1 || "-"
+                                        };
+                                    } else if (data.pemegangAmanah && data.pemegangAmanah.pilihan === "ya") {
+                                        // Jika lantik berbeza, guna data yang diisi
+                                        actualAmanah = data.pemegangAmanah;
                                     }
-                                    
-                                    // Wakil (Pemegang Amanah) menanggung tanggungjawab rasmi
-                                    if(data.pemegangAmanah && data.pemegangAmanah.nama) {
-                                        introPenerima = `selaku <strong>"Pemegang Amanah"</strong> bagi pihak <strong>${p.nama}</strong> (Penerima Hibah Saham)`;
-                                        labelPenerima = "Pemegang Amanah";
-                                        namaPenerimaSbnr = data.pemegangAmanah.nama;
-                                        icPenerimaSbnr = data.pemegangAmanah.ic;
-                                        alamatPenerimaSbnr = data.pemegangAmanah.alamat || alamatPenuh;
+
+                                    if (actualAmanah) {
+                                        // Pakej data untuk generatePemegangAmanah()
+                                        let mockItem = {
+                                            ...warisDetail,
+                                            pemegangAmanah: actualAmanah 
+                                        };
+                                        
+                                        if (typeof window.generatePemegangAmanah === "function") {
+                                            amanahContent = window.generatePemegangAmanah(mockItem, data)
+                                                .replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
+                                                .replaceAll("{{IC_PEMBERI}}", data.ic || "-")
+                                                .replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-");
+                                        }
+                                        
+                                        // Wakil (Pemegang Amanah) menanggung tanggungjawab rasmi dalam dokumen
+                                        if(actualAmanah.nama) {
+                                            introPenerima = `selaku <strong>"Pemegang Amanah"</strong> bagi pihak <strong>${p.nama}</strong> (Penerima Hibah Saham)`;
+                                            labelPenerima = "Pemegang Amanah";
+                                            namaPenerimaSbnr = actualAmanah.nama;
+                                            icPenerimaSbnr = actualAmanah.ic;
+                                            alamatPenerimaSbnr = actualAmanah.alamat || alamatPenuh;
+                                        }
                                     }
                                 }
-
                                 // C: Masukkan data ke dalam templat Hibah
                                 let hContent = hibahContent
                                     .replaceAll("{{PEMEGANG_AMANAH}}", amanahContent)
