@@ -1,0 +1,11 @@
+/* Paksa semua kotak Tailwind menjadi bucu tajam (segi empat tepat) */
+.rounded, 
+.rounded-sm, 
+.rounded-md, 
+.rounded-lg, 
+.rounded-xl, 
+.rounded-2xl, 
+.rounded-3xl,
+.rounded-full {
+    border-radius: 0 !important;
+}
