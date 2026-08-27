@@ -28,7 +28,7 @@
   <div class="max-w-3xl mx-auto p-5">
     <form id="wasiatForm" class="bg-white p-6 rounded-2xl shadow space-y-6">
 
-      <!-- SECTION 1 -->
+      <!-- SECTION 1: BUTIRAN PEWASIAT -->
       <div>
         <h2 class="font-bold text-xl mb-4">Section 1 : Butiran Pewasiat</h2>
         <div class="space-y-4">
@@ -53,9 +53,18 @@
         </div>
       </div>
 
-      <!-- SECTION 2: MAKLUMAT KORPORAT & WASI -->
+      <!-- SECTION 2: SENARAI WARIS (Diubah ke atas) -->
       <div>
-        <h2 class="font-bold text-xl mb-4">Section 2 : Maklumat Korporat & Pelantikan Wasi</h2>
+        <h2 class="font-bold text-xl mb-4">Section 2 : Senarai Waris</h2>
+        <div id="warisContainer">
+          <!-- Item Waris dimasukkan oleh JS -->
+        </div>
+        <button type="button" id="addWarisBtn" class="bg-[#153638] text-white px-4 py-2 rounded-lg">+ Tambah Waris</button>
+      </div>
+
+      <!-- SECTION 3: MAKLUMAT KORPORAT & WASI (Diubah ke bawah) -->
+      <div>
+        <h2 class="font-bold text-xl mb-4">Section 3 : Maklumat Korporat & Pelantikan Wasi</h2>
         
        <!-- MAKLUMAT KORPORAT -->
         <h3 class="font-semibold mb-2 text-[#153638]">Maklumat Syarikat Korporat</h3>
@@ -63,7 +72,17 @@
         <input type="text" id="noSsm" placeholder="No. Pendaftaran Syarikat (SSM)" class="w-full border rounded-lg p-3 mb-3">
         
         <textarea id="alamatSyarikat" rows="2" placeholder="Alamat Berdaftar Syarikat" class="w-full border rounded-lg p-3 mb-3"></textarea>
-        <input type="number" id="jumlahSaham" placeholder="Jumlah Keseluruhan Saham Syarikat (Unit)" class="w-full border rounded-lg p-3 mb-5">
+        
+        <div class="grid grid-cols-2 gap-4 mb-5">
+            <div>
+                <label class="text-xs font-semibold text-gray-500 ml-1 block mb-1">Jumlah Keseluruhan Saham Syarikat</label>
+                <input type="number" id="jumlahSaham" placeholder="Cth: 100000" class="w-full border rounded-lg p-3">
+            </div>
+            <div>
+                <label class="text-xs font-semibold text-gray-500 ml-1 block mb-1">Saham Milik Pewasiat</label>
+                <input type="number" id="sahamPewasiat" placeholder="Cth: 50000" class="w-full border rounded-lg p-3">
+            </div>
+        </div>
 
         <!-- 1. DROPDOWN STATUS PEMILIKAN -->
         <select id="statusPemilikan" class="w-full border rounded-lg p-3 mb-3 font-semibold text-[#153638] bg-gray-50">
@@ -72,7 +91,7 @@
             <option value="tunggal">Dimiliki Oleh Saya Seorang (Pemilik Tunggal)</option>
         </select>
 
-        <!-- 2. DROPDOWN MEKANISME AGIHAN (Muncul secara dinamik) -->
+        <!-- 2. DROPDOWN MEKANISME AGIHAN -->
         <div id="mekanismeSection" class="hidden mb-3">
             <select id="mekanismeAgihan" class="w-full border rounded-lg p-3 font-semibold text-orange-700 bg-orange-50">
                 <option value="">Pilih Mekanisme Pewarisan Saham</option>
@@ -81,25 +100,16 @@
 
         <!-- KOTAK A: BUY-SELL AGREEMENT (RAKAN KONGSI) -->
         <div id="buySellSection" class="hidden mb-3 p-5 border border-blue-200 bg-blue-50 rounded-xl space-y-4">
-            <div>
-                <label class="text-xs font-semibold text-blue-800 ml-1 block mb-1">Bilangan Saham Milik Anda (Pewasiat)</label>
-                <input type="number" id="sahamPewasiat" placeholder="Cth: 50000" class="w-full border rounded-lg p-3">
-            </div>
-
-            <hr class="border-blue-200">
-            
-            <div>
-                <p class="text-sm font-bold text-blue-800 mb-3">Maklumat Rakan Kongsi (Pemegang Saham B)</p>
-                <input type="text" id="namaPartner" placeholder="Nama Rakan Kongsi" class="w-full border rounded-lg p-3 mb-3">
-                <input type="text" id="icPartner" placeholder="No IC Rakan Kongsi" class="w-full border rounded-lg p-3 mb-3">
-                <textarea id="alamatPartner" rows="2" placeholder="Alamat Rakan Kongsi" class="w-full border rounded-lg p-3 mb-3"></textarea>
-                <input type="number" id="sahamPartner" placeholder="Bilangan Saham Milik Rakan Kongsi (Unit)" class="w-full border rounded-lg p-3">
-            </div>
+            <p class="text-sm font-bold text-blue-800 mb-3 border-b border-blue-200 pb-2">Maklumat Rakan Kongsi (Pemegang Saham B)</p>
+            <input type="text" id="namaPartner" placeholder="Nama Rakan Kongsi" class="w-full border rounded-lg p-3">
+            <input type="text" id="icPartner" placeholder="No IC Rakan Kongsi" class="w-full border rounded-lg p-3">
+            <textarea id="alamatPartner" rows="2" placeholder="Alamat Rakan Kongsi" class="w-full border rounded-lg p-3"></textarea>
+            <input type="number" id="sahamPartner" placeholder="Bilangan Saham Milik Rakan Kongsi (Unit)" class="w-full border rounded-lg p-3">
         </div>
 
         <!-- KOTAK B: HIBAH SAHAM -->
         <div id="hibahSahamSection" class="hidden mb-3 p-4 border border-green-200 bg-green-50 rounded-xl">
-            <label class="text-xs font-bold text-green-800 ml-1 mb-2 block border-b border-green-200 pb-2">Senarai Penerima Hibah Saham Syarikat</label>
+            <label class="text-sm font-bold text-green-800 mb-3 block border-b border-green-200 pb-2">Senarai Penerima Hibah Saham Syarikat</label>
             <div id="hibahSahamContainer"></div>
             <div class="flex gap-2 mt-3">
                 <button type="button" id="addPenerimaHibahSahamBtn" class="bg-green-600 hover:bg-green-700 transition text-white px-3 py-2 rounded-lg flex-1">+ Tambah Penerima Hibah</button>
@@ -109,7 +119,7 @@
 
         <!-- KOTAK C: WAKAF SAHAM ZURRI -->
         <div id="wakafZurriSection" class="hidden mb-3 p-4 border border-purple-200 bg-purple-50 rounded-xl">
-            <label class="text-xs font-bold text-purple-800 ml-1 mb-2 block border-b border-purple-200 pb-2">Senarai Penerima Manfaat Wakaf Saham Zurri (Keturunan)</label>
+            <label class="text-sm font-bold text-purple-800 mb-3 block border-b border-purple-200 pb-2">Senarai Penerima Manfaat Wakaf Saham Zurri (Keturunan)</label>
             <div id="wakafZurriContainer"></div>
             <div class="flex gap-2 mt-3">
                 <button type="button" id="addPenerimaWakafZurriBtn" class="bg-purple-600 hover:bg-purple-700 transition text-white px-3 py-2 rounded-lg flex-1">+ Tambah Penerima Manfaat</button>
@@ -138,15 +148,6 @@
         <input type="text" id="telefonWasi2" placeholder="No Telefon" class="w-full border rounded-lg p-3">
       </div>
 
-      <!-- SECTION 3: SENARAI WARIS -->
-      <div>
-        <h2 class="font-bold text-xl mb-4">Section 3 : Senarai Waris</h2>
-        <div id="warisContainer">
-          <!-- Item Waris dimasukkan oleh JS -->
-        </div>
-        <button type="button" id="addWarisBtn" class="bg-[#153638] text-white px-4 py-2 rounded-lg">+ Tambah Waris</button>
-      </div>
-
       <!-- SECTION 4: WASIAT 1/3 -->
       <div>
         <h2 class="font-bold text-xl mb-4">Section 4 : Wasiat 1/3</h2>
@@ -160,7 +161,7 @@
         <textarea id="pesananWasiat" rows="5" placeholder="Taip atau paste pesanan wasiat di sini..." class="w-full border rounded-lg p-3"></textarea>
       </div>     
 
-      <!-- SECTION 6: PEMEGANG AMANAH (Di-hide secara lalai) -->
+      <!-- SECTION 6: PEMEGANG AMANAH -->
       <div id="sectionPemegangAmanah" class="hidden border-t pt-6">
         <h2 class="font-bold text-xl mb-4 text-orange-600">Maklumat Tambahan: Pemegang Amanah (Waris Bawah 18/OKU)</h2>
         <div class="border border-orange-200 bg-orange-50 rounded-xl p-4 space-y-3">
@@ -262,16 +263,25 @@
         document.getElementById("negeri").value = data.negeri || "";
         document.getElementById("telefon").value = data.telefon || "";
         
+        // LOAD WARIS FIRST (So dropdowns work for Sections below)
+        if(data.waris){
+          document.getElementById("warisContainer").innerHTML = "";
+          data.waris.forEach(item=>{
+            addWarisToDOM(item);
+          });
+        }
+        populateWarisDropdowns();
+
         // 2. KORPORAT & WASI
         document.getElementById("namaSyarikat").value = data.namaSyarikat || "";
         document.getElementById("noSsm").value = data.noSsm || "";
         document.getElementById("alamatSyarikat").value = data.alamatSyarikat || "";
         document.getElementById("jumlahSaham").value = data.jumlahSaham || "";
+        document.getElementById("sahamPewasiat").value = data.sahamPewasiat || "";
         
         document.getElementById("statusPemilikan").value = data.statusPemilikan || "";
         
         // Data Rakan Kongsi
-        document.getElementById("sahamPewasiat").value = data.sahamPewasiat || "";
         document.getElementById("namaPartner").value = data.namaPartner || "";
         document.getElementById("icPartner").value = data.icPartner || "";
         document.getElementById("alamatPartner").value = data.alamatPartner || "";
@@ -291,15 +301,6 @@
 
         document.getElementById("pesananWasiat").value = data.pesananWasiat || "";
         
-        // LOAD WARIS FIRST (So dropdowns work)
-        if(data.waris){
-          document.getElementById("warisContainer").innerHTML = "";
-          data.waris.forEach(item=>{
-            addWarisToDOM(item);
-          });
-        }
-        populateWarisDropdowns();
-
         // TRIGGER DROPDOWN KORPORAT
         document.getElementById("statusPemilikan").dispatchEvent(new Event("change"));
 
@@ -782,7 +783,7 @@
         }
     });
 
-   // AUTO FORMATTING (HURUF BESAR & NOMBOR IC)
+    // AUTO FORMATTING (HURUF BESAR & NOMBOR IC)
     document.addEventListener('input', function (e) {
         let target = e.target;
         if (target.tagName !== 'INPUT') return;
