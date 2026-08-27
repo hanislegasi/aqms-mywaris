@@ -6,18 +6,13 @@
     <title>Admin Preview Mawaris Korporat</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- HTML2PDF Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
 
-        .font-cinzel {
-            font-family: 'Cinzel', serif;
-        }
-        .tracking-widest {
-            letter-spacing: 0.1em;
-        }
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        .tracking-widest { letter-spacing: 0.1em; }
 
         body {
             background-color: #f3f4f6;
@@ -25,157 +20,65 @@
             padding: 0;
         }
 
-        /* * Struktur A4 tepat untuk di-render oleh html2pdf. 
-         * Size sebenar dipertahankan, dan skala (scale) hanya dibuat secara visual.
-         */
         #pdfContent {
             width: 210mm;
             background: white;
             margin-left: auto;
-    margin-right: auto;
+            margin-right: auto;
         }
 
         .a4-page {
             width: 210mm;
-            height: 296.5mm; /* Dikurangkan sikit dari 297mm untuk elak blank page ke-3 */
-            background:white;
-            margin:0 auto;
-            box-sizing:border-box;
-            position:relative;
-            overflow:hidden;
-            page-break-after:auto; /* Paksa page break yang sekata */
+            height: 296.5mm; 
+            background: white;
+            margin: 0 auto;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            page-break-after: auto; 
         }
         
-        .a4-page:last-child {
-            page-break-after: auto; /* Tiada pemisah selepas page terakhir */
+        .a4-page:last-child { page-break-after: auto; }
+        .a4-page:not(:first-child){ padding-bottom: 25mm !important; }
+        .page-break{ page-break-before: always; break-before: page; }
+
+        .document-section {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.7;
+            color: #222;
         }
 
-        .a4-page:not(:first-child){
-padding-bottom:25mm !important;
-}
-        
-        .page-break{
-page-break-before:always;
-break-before:page;
-}
+        .document-section p, .document-section td, .document-section li {
+            font-size: 16px;
+            text-align: justify;
+            line-height: 1.7;
+        }
 
-#sectionWasiat{
-    font-family:'Times New Roman', serif;
-    line-height:1.7;
-    color:#222;
-}
+        .document-section p { margin-top: 0; margin-bottom: 14px; }
 
-#sectionWasiat p{
-    font-size:16px;
-    text-align:justify;
-    line-height:1.7;
-    margin-top:0;
-    margin-bottom:14px;
-}
-#sectionWasiat td,
-#sectionWasiat li{
-    text-align:justify !important;
-    font-size:16px;
-}
+        .pdf-footer {
+            position: absolute;
+            bottom: 5mm;
+            left: 18mm;
+            right: 18mm;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+            font-family: 'Times New Roman', serif;
+        }
 
-#sectionHibah{
-    font-family:'Times New Roman', serif;
-    line-height:1.7;
-    color:#222;
-}
-
-#sectionHibah p{
-    font-size:16px;
-    text-align:justify;
-    line-height:1.7;
-    margin-top:0;
-    margin-bottom:14px;
-}
-#sectionHibah td,
-#sectionHibah li{
-    text-align:justify !important;
-    font-size:16px;
-}
-        
- #sectionSepencarian{
-
-    font-family:'Times New Roman', serif;
-    color:#222;
-    line-height:1.7;
-
-}
-
-#sectionSepencarian p{
-
-    font-size:16px;
-    text-align:justify;
-    line-height:1.7;
-    margin-top:0;
-    margin-bottom:14px;
-
-}
-
-#sectionSepencarian td,
-#sectionSepencarian li{
-    font-size:16px;
-    text-align:justify;
-
-}
-
- 
-        .pdf-footer{
-position:absolute;
-bottom:5mm;
-left:18mm;
-right:18mm;
-display:flex;
-justify-content:space-between;
-font-size:12px;
-color:#666;
-font-family:'Times New Roman', serif;
-}
-
-.a4-page{
-position:relative;
-}
-
-        /* Melancarkan transisi skala untuk mobile view */
         #scale-wrapper {
             transform-origin: top center;
             transition: transform 0.2s ease, margin-bottom 0.2s ease;
         }
 
-        @page{
-
-size:A4 portrait;
-
-margin:10mm;
-
-}
-
-@media print{
-
-body{
-
-background:white !important;
-
-}
-
-.no-print{
-
-display:none !important;
-
-}
-
-#scale-wrapper{
-
-transform:none !important;
-
-margin:0 !important;
-
-}
-
-}
+        @page { size: A4 portrait; margin: 10mm; }
+        @media print {
+            body { background: white !important; }
+            .no-print { display: none !important; }
+            #scale-wrapper { transform: none !important; margin: 0 !important; }
+        }
     </style>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -185,698 +88,264 @@ margin:0 !important;
     <!-- HEADER -->
     <div class="bg-[#153638] text-white p-5 shadow-md sticky top-0 z-50">
         <h1 class="text-2xl font-bold font-inter">Admin Preview Corporate</h1>
-        <p class="text-gray-300 text-sm">Semakan Dokumen Customer</p>
+        <p class="text-gray-300 text-sm">Semakan Dokumen Wasiat Korporat</p>
     </div>
 
-    <!-- MAIN CONTENT & PDF PREVIEW WRAPPER -->
+    <!-- MAIN CONTENT -->
     <main class="flex-grow flex flex-col items-center pt-8 pb-4 overflow-auto">
-        
-        <!-- WRAPPER UNTUK SKALA (Bagi paparan mobile cantik) -->
         <div id="scale-wrapper" class="drop-shadow-2xl">
-            
-            <!-- PDF CONTENT SEBENAR -->
             <div id="pdfContent">
 
                 <!-- PAGE 1 (COVER) -->
-<div id="wrapper">
-                
-                <div class="a4-page">
-                    <!-- Gunakan fallback imej jika gambar tempatan tiada untuk preview -->
-                    <img src="images/corporate-cover.png" 
-                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2100&auto=format&fit=crop';" 
-                         class="absolute inset-0 w-full h-full object-cover" alt="Cover Wasiat" />
-                    
+                <div id="wrapper">
+                    <div class="a4-page">
+                        <img src="images/corporate-cover.png" 
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2100&auto=format&fit=crop';" 
+                             class="absolute inset-0 w-full h-full object-cover" alt="Cover Wasiat" />
 
-                    
+                        <p id="docRef" class="absolute top-[5%] left-[8%] text-[#153638] text-xl font-cinzel tracking-widest font-semibold drop-shadow-md">AQMS-MCO-2026-001</p>
+                        <p id="tahun" class="absolute top-[5%] right-[8%] text-dark azure text-4xl font-bold font-cinzel tracking-widest drop-shadow-lg">2026</p>
+                        <p id="namaCover" class="absolute top-[56%] left-[11%] text-dark azure text-2xl font-bold uppercase font-cinzel tracking-widest drop-shadow-lg">NAMA</p>
+                        <p id="icCover" class="absolute top-[62%] left-[11%] text-dark azure text-xl font-bold font-cinzel tracking-widest drop-shadow-md">IC</p>
+                    </div>
 
-                    <!-- DOC REF -->
-                    <p id="docRef" class="absolute top-[5%] left-[8%] text-[#153638] text-xl font-cinzel tracking-widest font-semibold drop-shadow-md">
-                        AQMS-MCO-2026-001
-                    </p>
+                    <!-- PAGE 2 (ISI KANDUNGAN) -->
+                    <div class="a4-page p-[18mm]">
+                        <div class="border-b-2 border-[#153638] pb-4 mb-10 mt-5">
+                            <p id="docRefTOC" class="text-[#153638] text-lg font-bold font-cinzel tracking-widest">DOC REF: -</p>
+                        </div>
+                        <h2 class="text-xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-16 underline underline-offset-[12px] decoration-1">ISI KANDUNGAN</h2>
+                        <div class="max-w-4xl mx-auto space-y-8 text-lg font-cinzel text-[#153638]">
+                            
+                            <div class="flex items-end w-full">
+                                <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Butiran Pelanggan & Perunding</span>
+                                <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
+                                <span id="tocMaklumat" class="font-bold">3</span>
+                            </div>
 
-                    <!-- YEAR -->
-                    <p id="tahun" class="absolute top-[5%] right-[8%] text-dark azure text-4xl font-bold font-cinzel tracking-widest drop-shadow-lg">
-                        2026
-                    </p>
+                            <div class="flex items-end w-full">
+                                <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Dokumen Wasiat Korporat</span>
+                                <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
+                                <span id="tocWasiat" class="font-bold">-</span>
+                            </div>
 
-                    <!-- NAMA -->
-                    <p id="namaCover" class="absolute top-[56%] left-[11%] text-dark azure text-2xl font-bold uppercase font-cinzel tracking-widest drop-shadow-lg">
-                        ALI BIN ABU
-                    </p>
+                            <div class="w-full space-y-4">
+                                <div class="font-semibold uppercase tracking-wide">Mekanisme Pewarisan Saham:</div>
+                                <div id="tocMekanismeList" class="space-y-4 pl-6"></div>
+                            </div>
 
-                    <!-- IC -->
-                    <p id="icCover" class="absolute top-[62%] left-[11%] text-dark azure text-xl font-bold font-cinzel tracking-widest drop-shadow-md">
-                        000000-00-0000
-                    </p>
+                            <div id="tocAmanahContainer" class="flex items-end w-full hidden">
+                                <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Dokumen Pemegang Amanah</span>
+                                <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
+                                <span id="tocAmanah" class="font-bold">-</span>
+                            </div>
 
-                    
+                            <div class="flex items-end w-full">
+                                <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Lampiran</span>
+                                <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
+                                <span id="tocLampiran" class="font-bold">-</span>
+                            </div>
 
+                        </div>
+                        <div class="pdf-footer"></div>
+                    </div>
 
-                    
-                </div>
+                    <!-- PAGE 3 (MAKLUMAT PELANGGAN) -->
+                    <div class="a4-page p-[18mm]">
+                        <div class="border-b-2 border-[#153638] pb-4 mb-6 mt-5">
+                            <p id="docRef2" class="text-[#153638] text-lg font-bold font-cinzel tracking-widest">DOC REF: -</p>
+                        </div>
+                        <h2 class="text-xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-8">MAKLUMAT PELANGGAN & PERUNDING</h2>
+                        <div class="space-y-4 text-lg font-cinzel text-[#153638]">
+                            <p><strong>Nama:</strong> <span id="namaTable">-</span></p>
+                            <p><strong>No. Kad Pengenalan:</strong> <span id="icTable">-</span></p>
+                            <p><strong>No. Telefon:</strong> <span id="telefonTable">-</span></p>
+                            <p><strong>Alamat:</strong> <span id="alamatTable">-</span></p>
+                            <p><strong>Kod Perunding:</strong> <span id="kodTable">-</span></p>
+                            <p><strong>No. Telefon Perunding:</strong> <span id="telefonPerundingTable">-</span></p>
+                        </div>
+                        <div class="pdf-footer"></div>
+                    </div>
 
-<!-- PAGE 2 (ISI KANDUNGAN) -->
-<div class="a4-page p-[18mm]">
-    
-    <div class="border-b-2 border-[#153638] pb-4 mb-10 mt-5">
-        <p id="docRefTOC" class="text-[#153638] text-lg font-bold font-cinzel tracking-widest">
-            DOC REF: -
-        </p>
-    </div>
+                    <!-- DINAMIK CONTENT -->
+                    <div id="sectionWasiat" class="document-section"></div>
+                    <div id="sectionMekanisme" class="document-section"></div>   
+                    <div id="sectionAmanah" class="document-section"></div>
+                    <div id="sectionLampiran" class="document-section"></div>
 
-    <h2 class="text-xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-16 underline underline-offset-[12px] decoration-1">
-        ISI KANDUNGAN
-    </h2>
-
-    <div class="max-w-4xl mx-auto space-y-8 text-lg font-cinzel text-[#153638]">
-        
-        <div class="flex items-end w-full">
-            <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Butiran Pelanggan & Perunding</span>
-            <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
-            <span id="tocMaklumat" class="font-bold">-</span>
-        </div>
-
-                <!-- Dokumen Wasiat (Utama & Sub) -->
-        <div class="w-full space-y-4">
-            <div class="flex items-end w-full">
-                <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Dokumen Wasiat</span>
-                <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
-                <span id="tocWasiat" class="font-bold">-</span>
-            </div>
-            
-            <!-- Senarai Sub Wasiat -->
-            <div class="w-full pl-4 space-y-2">
-                <div class="flex items-end w-full">
-                    <span class="text-[14px] font-medium uppercase tracking-wide whitespace-nowrap opacity-90">• Pelantikan Wasi</span>
-                    <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div>
-                    <span id="tocWasiat_wasi" class="text-[14px] font-bold">-</span>
-                </div>
-                
-                <div class="flex items-end w-full">
-                    <span class="text-[14px] font-medium uppercase tracking-wide whitespace-nowrap opacity-90">• Wasiat 1/3</span>
-                    <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div>
-                    <span id="tocWasiat_13" class="text-[14px] font-bold">-</span>
-                </div>
-                
-                <div class="flex items-end w-full">
-                    <span class="text-[14px] font-medium uppercase tracking-wide whitespace-nowrap opacity-90">• Pesanan Kepada Waris</span>
-                    <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div>
-                    <span id="tocWasiat_pesanan" class="text-[14px] font-bold">-</span>
-                </div>
-            </div>
-        </div>
-
-<!-- Dokumen Sepencarian -->
-        <div class="w-full space-y-4">
-            <div class="font-semibold uppercase tracking-wide">Dokumen Deklarasi Harta Sepencarian:</div>
-            
-            <!-- Tempat kosong untuk senarai penerima dimasukkan secara dinamik oleh JS -->
-            <div id="tocSepencarian" class="space-y-4 pl-6">
-                <!-- JavaScript akan masukkan senarai penerima di sini secara automatik -->
-            </div>
-        </div>
-        
-        <!-- Dokumen Hibah (Pecahan Mengikut Penerima) -->
-        <div class="w-full space-y-4">
-            <div class="font-semibold uppercase tracking-wide">Dokumen Pengisytiharan Hibah:</div>
-            
-            <!-- Tempat kosong untuk senarai penerima dimasukkan secara dinamik oleh JS -->
-            <div id="tocHibahList" class="space-y-4 pl-6">
-                <!-- JavaScript akan masukkan senarai penerima di sini secara automatik -->
-            </div>
-        </div>
-
-        <div class="flex items-end w-full">
-            <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Lampiran</span>
-            <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
-            <span id="tocLampiran" class="font-bold">-</span>
-        </div>
-
-    </div>
-    
-    <div class="pdf-footer"></div>
-</div>
-
-<!-- PAGE 3 (MAKLUMAT PELANGGAN & PERUNDING) -->
-<div class="a4-page p-[18mm]">
-    <div class="border-b-2 border-[#153638] pb-4 mb-6 mt-5">
-        <p id="docRef2" class="text-[#153638] text-lg font-bold font-cinzel tracking-widest">
-            DOC REF: -
-        </p>
-    </div>
-
-    <h2 class="text-xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-8">
-        MAKLUMAT PELANGGAN & PERUNDING
-    </h2>
-
-    <div class="space-y-4 text-lg font-cinzel text-[#153638]">
-        <p><strong>Nama:</strong> <span id="namaTable">-</span></p>
-        <p><strong>No. Kad Pengenalan:</strong> <span id="icTable">-</span></p>
-        <p><strong>No. Telefon:</strong> <span id="telefonTable">-</span></p>
-        <p><strong>Alamat:</strong> <span id="alamatTable">-</span></p>
-        <p><strong>Kod Perunding:</strong> <span id="kodTable">-</span></p>
-        <p><strong>No. Telefon Perunding:</strong> <span id="telefonPerundingTable">-</span></p>
-    </div>
-
-    <div class="pdf-footer"></div>
-</div>
-
-<!-- BAHAGIAN KANDUNGAN DINAMIK (WASIAT & HIBAH) -->
-<div id="sectionWasiat"></div>
-<div id="sectionSepencarian"></div>   
-<div id="sectionHibah"></div>
-<div id="sectionLampiran"></div>
-
-</div>  
-                
-</div>
-                
- </main>
+                </div>                
+            </div>                
+        </div>                
+    </main>
         
     <div class="w-full max-w-3xl mx-auto p-4 mb-8 no-print">
-
-    <!-- Print & Download -->
-    <div class="space-y-4">
-
-        <button
-            id="printBtn"
-            class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold shadow-lg text-lg transition">
-            🖨️ Cetak / Save as PDF (Disyorkan)
-        </button>
-
-        <button
-            id="downloadBtn"
-            class="w-full bg-black hover:bg-gray-800 text-white py-4 rounded-xl font-semibold shadow-lg text-lg transition">
-            📥 Download PDF (Legacy)
-        </button>
-
+        <div class="space-y-4">
+            <button id="printBtn" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold shadow-lg text-lg transition">🖨️ Cetak / Save as PDF (Disyorkan)</button>
+            <button id="downloadBtn" class="w-full bg-black hover:bg-gray-800 text-white py-4 rounded-xl font-semibold shadow-lg text-lg transition">📥 Download PDF (Legacy)</button>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-4">
+            <button id="approveBtn" class="bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold shadow-lg transition">✅ Approve Permohonan</button>
+            <button id="rejectBtn" class="bg-red-600 hover:bg-red-700 text-white py-4 rounded-xl font-semibold shadow-lg transition">❌ Reject Permohonan</button>
+        </div>
     </div>
-
-    <!-- Approve / Reject -->
-    <div class="grid grid-cols-2 gap-4 mt-4">
-
-        <button
-            id="approveBtn"
-            class="bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold shadow-lg transition">
-            ✅ Approve Permohonan
-        </button>
-
-        <button
-            id="rejectBtn"
-            class="bg-red-600 hover:bg-red-700 text-white py-4 rounded-xl font-semibold shadow-lg transition">
-            ❌ Reject Permohonan
-        </button>
-
-    </div>
-
-</div>
         
-    <!-- SCRIPT FIREBASE & LOGIK APLIKASI -->
+    <!-- TEMPLATES -->
+    <script src="wasiat-corporate-content.js"></script>
+    <script src="hibah-content.js"></script>
+    <script src="pemegang-amanah.js"></script>
+    <script src="buy-sell-agreement.js"></script>
+
+    <!-- FIREBASE LOGIC -->
     <script type="module">
-        
-        // 1. Tarik db dan auth dari fail berpusat
-import { db, auth } from './firebase.js';
+        import { db, auth } from './firebase.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { doc, getDoc, updateDoc, collection, getDocs, setDoc, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// 2. Tarik alat Auth dari Firebase
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-// 3. Tarik alat Firestore dari Firebase
-import { doc, getDoc, updateDoc, collection, getDocs, setDoc, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-        // Konfigurasi Responsif untuk Viewport Desktop & Mobile
+        // Konfigurasi Skala Responsif
         function updateScale() {
-
              const wrapper = document.getElementById('scale-wrapper');
              const pdfContent = document.getElementById('pdfContent');
-
             if (!wrapper || !pdfContent) return;
-            
              const containerWidth = window.innerWidth;
-             const targetWidth = 794; // Lebar A4 (~210mm dalam piksel pada resolusi piawai)
+             const targetWidth = 794; 
              const padding = 32;
-
             if (containerWidth < targetWidth + padding) {
-                // Kecilkan paparan untuk skrin mobile
                 const scale = (containerWidth - padding) / targetWidth;
                 wrapper.style.transform = `scale(${scale})`;
-                
-                // Baiki ketinggian bekas supaya tiada ruang kosong di bawah elemen
                  const actualHeight = pdfContent.offsetHeight;
                  const scaledHeight = actualHeight * scale;
                 wrapper.style.marginBottom = `-${actualHeight - scaledHeight}px`;
             } else {
-                // Paparan desktop normal
                 wrapper.style.transform = 'scale(1)';
                 wrapper.style.marginBottom = '0px';
             }
         }
-
-        // Kemaskini skala ketika resize
         window.addEventListener('resize', updateScale);
-        window.addEventListener('DOMContentLoaded', () => {
-            // Berikan masa rendering sejenak sebelum skala
-            setTimeout(updateScale, 100);
-        });
+        window.addEventListener('DOMContentLoaded', () => setTimeout(updateScale, 100));
 
-async function imageToBase64(url){
-
-      const response = await fetch(url);
-
-if(!response.ok){
-    throw new Error("Image gagal dimuatkan");
-}
-    
-    const blob = await response.blob();
-
-    return new Promise((resolve)=>{
-
-         const reader = new FileReader();
-
-        reader.onloadend = ()=>{
-
-            resolve(reader.result);
-
-        };
-
-        reader.readAsDataURL(blob);
-
-    });
-
-}
-        
-        // Download Logik PDF
-        document.getElementById("downloadBtn").addEventListener("click", async () => {
-             wrapper = document.getElementById('scale-wrapper');
-             element = document.getElementById("pdfContent");
-
-            // 1. Simpan tetapan skala dan margin asal
-             originalTransform = wrapper.style.transform;
-             originalMarginBottom = wrapper.style.marginBottom;
-             originalMargin = element.style.margin;
-
-            // 2. Buang skala sementara & paksa kedudukan paksi kiri (PUNCA ruang kosong)
-            wrapper.style.transform = 'scale(1)';
-            wrapper.style.marginBottom = '0px';
-            wrapper.style.transformOrigin = 'top left'; 
-            element.style.margin = '0'; // Buang margin auto sementara
-
-            // 3. Beri masa kepada browser untuk kemaskini DOM
-            await new Promise(r => setTimeout(r,150));
-
-            await document.fonts.ready;
-            
-             const options = {
-                margin: 0,
-                filename: "Corporate.pdf",
-                image: { type: "jpeg", quality: 0.92 },
-                html2canvas: { 
-                    scale: 2, 
-                    useCORS: true, 
-                    scrollY: 0,
-                    scrollX: 0, // Set koordinat X ke 0
-                    windowWidth: document.documentElement.offsetWidth
-                },                
-                 pagebreak: { mode: ['css'] }, // Pastikan html2pdf__page-break berfungsi
-                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait", compress: true }
-            };
-
-            
-            // 4. Proses render PDF
-            html2pdf().set(options).from(element).save().then(() => {
-                // 5. Kembalikan semua tetapan asal
-                wrapper.style.transform = originalTransform;
-                wrapper.style.marginBottom = originalMarginBottom;
-                wrapper.style.transformOrigin = 'top center';
-                element.style.margin = originalMargin || '0 auto';
+        async function imageToBase64(url){
+            const response = await fetch(url);
+            if(!response.ok) throw new Error("Image gagal dimuatkan");
+            const blob = await response.blob();
+            return new Promise((resolve)=>{
+                 const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(blob);
             });
-        });
+        }
 
-document
-.getElementById("printBtn")
-.onclick=()=>{
+        // Format Date Helper
+        function formatDateMY(dateStr){
+            if(!dateStr) return "-";
+            return new Date(dateStr).toLocaleDateString("ms-MY");
+        }
 
-window.open(
-
-`print-corporate.html?id=${userId}`,
-
-"_blank"
-
-);
-
-};
-        
-        // --------------------------------------------------------
-        // FIREBASE LOGIC
-        // --------------------------------------------------------
-       
+        // Generate Jadual Saham (Untuk template Hibah)
+        function generateSahamTable(data, p){
+            return `
+            <table style="width:100%; border-collapse:collapse; font-size:14px; margin-top:10px;">
+                <tr>
+                    <th style="border:1px solid #000;padding:8px;">Nama Syarikat</th>
+                    <th style="border:1px solid #000;padding:8px;">No SSM</th>
+                    <th style="border:1px solid #000;padding:8px;">Pegangan Saham Pewasiat</th>
+                    <th style="border:1px solid #000;padding:8px;">Bahagian Diserahkan</th> 
+                </tr>
+                <tr>
+                   <td style="border:1px solid #000;padding:8px;text-align:center;">${data.namaSyarikat || "-"}</td>
+                   <td style="border:1px solid #000;padding:8px;text-align:center;">${data.noSsm || "-"}</td>
+                   <td style="border:1px solid #000;padding:8px;text-align:center;">${data.sahamPewasiat || "0"} Unit</td>
+                   <td style="border:1px solid #000;padding:8px;text-align:center;">${p.peratus || "-"}%</td>
+                </tr>
+            </table>`;
+        }
 
         const params = new URLSearchParams(window.location.search);
         const userId = params.get("id");
 
         onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                // Boleh diselaraskan jika perlukan login aktif
-                console.log("No user logged in. Redirecting...");
-                // window.location.href = "login.html";
-                return;
-            }
-
+            if (!user) return;
             try {
-                // CHECK ADMIN ROLE
+                // LOAD ADMIN & CUSTOMER
                 const adminDoc = await getDoc(doc(db, "users", user.uid));
-                const adminData = adminDoc.data();
-
-                if (adminData?.role !== "admin") {
-                    alert("Akses ditolak");
-                    window.location.href = "dashboard.html";
-                    return;
+                if (adminDoc.data()?.role !== "admin") {
+                    alert("Akses ditolak"); window.location.href = "dashboard.html"; return;
                 }
 
-                // LOAD CUSTOMER DATA
                 if (userId) {
                     const docRef = doc(db, "users", userId, "corporate", "maklumat");
                     const docSnap = await getDoc(docRef);
 
                     if (docSnap.exists()) {
                         const data = docSnap.data();
+                        const userDoc = await getDoc(doc(db, "users", userId));
+                        const userData = userDoc.data();
 
-const alamatPenuh = [
-        data.alamat1,
-        data.alamat2,
-        `${data.poskod || ""} ${data.bandar || ""}`.trim(),
-        data.negeri
-    ]
-    .filter(Boolean)
-    .join(", ");
+                        const alamatPenuh = [data.alamat1, data.alamat2, `${data.poskod || ""} ${data.bandar || ""}`.trim(), data.negeri].filter(Boolean).join(", ");
                         
-const userDoc = await getDoc(
-    doc(db, "users", userId)
-);
-
-const userData = userDoc.data();
-
-                        
-const warisMap = {};
-
-(data.waris || []).forEach(w => {
-
-    warisMap[(w.nama || "").trim()] = w;
-
-});                     
-
-function groupHibahByRecipient(data){
-
-    const grouped = {};
-
-    function addProperty(item, jenis){
-
-       const senaraiPenerima =
-    item.penerimaHibah ||
-    item.penerimaHibahTakAlih ||
-    [];
-
-if(!senaraiPenerima.length) return;
-
-senaraiPenerima.forEach(penerima=>{
-
-            const nama = penerima.nama?.trim();
-
-            if(!nama) return;
-
-            if(!grouped[nama]){
-
-    const info = warisMap[nama] || {};
-
-    grouped[nama] = {
-
-        nama,
-
-        ic: info.ic || "",
-        hubungan: info.hubungan || "",
-        alamat: info.alamat || "",
-        tarikhLahir: info.tarikhLahir || "",
-        telefon: info.telefon || "",
-        peratus: penerima.peratus || "",
-        
-        status: info.status || "",
-        pemegangAmanah: data.pemegangAmanah || {},
-            
-        hartaAlih: [],
-        hartaTakAlih: []
-
-    };
-
-}
-
-            
-
-            grouped[nama][jenis].push({
-
-                namaHarta:item.nama || "-",
-                rujukan:item.rujukan || "-",
-                nilai:item.nilai || "-",
-                alamat: item.alamat || "-", // <-- TAMBAH BARIS INI
-                pemilikan:item.pemilikan || "-",
-                kategori:item.kategori || "-",
-                peratus:penerima.peratus || "-"
-
-            });
-
-        });
-
-    }
-
-    (data.hartaAlih || []).forEach(item=>{
-        addProperty(item,"hartaAlih");
-    });
-
-    (data.hartaTakAlih || []).forEach(item=>{
-        addProperty(item,"hartaTakAlih");
-    });
-
-    return grouped;
-
-}
-                        
-                        
-const lampiranSnap =
-await getDocs(
-collection(
-db,
-"users",
-userId,
-"corporateDocuments"
-)
-);
-                        
-const groupedHibah = groupHibahByRecipient(data);
-                        
-                        
-function groupSepencarianByRecipient(data){
-
-    const grouped = {};
-
-    function addProperty(item, jenis){
-
-       const senaraiPenerima =
-    item.penerimaSepencarian ||
-    item.penerimaSepencarianTakAlih ||
-    [];
-
-if(!senaraiPenerima.length) return;
-
-console.log(item);
-console.log(item.penerimaSepencarian);
-console.log(item.penerimaSepencarianTakAlih);
-console.log(Array.isArray(item.penerimaSepencarian));
-console.log(Array.isArray(item.penerimaSepencarianTakAlih));
-        
-senaraiPenerima.forEach(penerima=>{
-
-            const nama = penerima.nama?.trim();
-
-            if(!nama) return;
-
-            if(!grouped[nama]){
-
-    const info = warisMap[nama] || {};
-
-    grouped[nama] = {
-
-        nama,
-
-        ic: info.ic || "",
-        hubungan: info.hubungan || "",
-        alamat: info.alamat || "",
-        tarikhLahir: info.tarikhLahir || "",
-        telefon: info.telefon || "",
-        peratus: penerima.peratus || "",
-        
-        status: info.status || "",
-        pemegangAmanah: data.pemegangAmanah || {},
-            
-        hartaAlih: [],
-        hartaTakAlih: []
-
-    };
-
-}
-
-            
-
-            grouped[nama][jenis].push({
-
-                namaHarta:item.nama || "-",
-                rujukan:item.rujukan || "-",
-                nilai:item.nilai || "-",
-                alamat: item.alamat || "-", // <-- TAMBAH BARIS INI
-                pemilikan:item.pemilikan || "-",
-                kategori:item.kategori || "-",
-                peratus:penerima.peratus || "-"
-
-            });
-
-        });
-
-    }
-
-    (data.hartaAlih || []).forEach(item=>{
-        addProperty(item,"hartaAlih");
-    });
-
-    (data.hartaTakAlih || []).forEach(item=>{
-        addProperty(item,"hartaTakAlih");
-    });
-
-    return grouped;
-
-}
-                        
-                        
-
-const sepencarianLampiranSnap =
-await getDocs(
-collection(
-db,
-"users",
-userId,
-"sepencarianDocuments"
-)
-);
-                        
-
-
-const groupedSepencarian = groupSepencarianByRecipient(data);
-
-const consultantCode = userData?.referral || data.consultantCode;
-
-let consultantData = {};
-
-if (consultantCode) {
-    try {
-        const cleanCode = consultantCode.trim();
-        console.log("Mencari perunding dengan consultantNo:", cleanCode);
-
-        // 1. Rujuk kepada koleksi "consultants"
-        const consultantsRef = collection(db, "consultants");
-        
-        // 2. Buat query menggunakan field "consultantNo"
-        const q = query(consultantsRef, where("consultantNo", "==", cleanCode)); 
-        
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
-            // 3. Ambil data dari dokumen pertama yang sepadan
-            consultantData = querySnapshot.docs[0].data();
-            console.log("Berjaya jumpa perunding:", consultantData);
-        } else {
-            console.warn(`Perunding dengan consultantNo "${cleanCode}" TIDAK WUJUD dalam koleksi "consultants".`);
-        }
-    } catch (error) {
-        console.error("Ralat Firebase:", error);
-    }
-}
-
-                       
-                       
-                        
-
-const huruf = "abcdefghijklmnopqrstuvwxyz";
-
-let bahagianWasiat13 = "";
-
-// 1. TAMBAH PENAPIS INI: Buang rekod jika ruangan 'harta' dibiarkan kosong
-const wasiatSah = (data.wasiatSatuPerTiga || []).filter(item => item.harta && item.harta.trim() !== "");
-
-// 2. TUKAR SYARAT INI: Check wasiatSah.length, bukan data.wasiatSatuPerTiga.length
-if (wasiatSah.length === 0) {
-    // KES 1: JIKA TIADA DATA WASIAT 1/3 (Ayat pendek sahaja)
-    bahagianWasiat13 = `
-    <p>
-        Harta Pusaka saya hendaklah dibahagikan mengikut pembahagian yang dinyatakan di dalam dokumen wasiat ini kepada waris-waris saya yang sah dan layak untuk menerima harta pusaka tersebut. 
-        Senarai waris-waris saya pada masa dokumen wasiat ini dibuat dilampirkan bersama dokumen wasiat ini sebagai <strong>Lampiran A</strong>. 
-        Pembahagian yang saya nyatakan adalah selepas ditolak bahagian <strong>Wasiat 1/3</strong> saya kepada bukan waris seperti yang diperincikan di bawah (jika ada).
-    </p>
-    `;
-} else {
-    // KES 2: JIKA ADA DATA WASIAT 1/3 (Ayat panjang + Jadual)
-    let tableWasiat = `
-    <table style="width:100%; border-collapse:collapse; font-size:14px; margin-top:10px; page-break-inside:avoid;">
-        <thead>
-            <tr>
-                <th style="border:1px solid #000; padding:8px; text-align:center; width:5%;">No.</th>
-                <th style="border:1px solid #000; padding:8px; text-align:center; width:25%;">Jenis Harta</th>
-                <th style="border:1px solid #000; padding:8px; text-align:center; width:20%;">Nilai / Bahagian</th>
-                <th style="border:1px solid #000; padding:8px; text-align:center; width:25%;">Penerima</th>
-                <th style="border:1px solid #000; padding:8px; text-align:center; width:25%;">Nota</th>
-            </tr>
-        </thead>
-        <tbody>
-            ${data.wasiatSatuPerTiga.map((item, index) => `
-                <tr>
-                    <td style="border:1px solid #000; padding:8px; text-align:center !important;">${index + 1}</td>
-                    <td style="border:1px solid #000; padding:8px;">${item.harta || "-"}</td>
-                    <td style="border:1px solid #000; padding:8px; text-align:right !important;">${item.bahagian || "-"}</td>
-                    <td style="border:1px solid #000; padding:8px; text-align:center !important;">${item.penerima || "-"}</td>
-                    <td style="border:1px solid #000; padding:8px;">${item.nota || "-"}</td>
-                </tr>
-            `).join("")}
-        </tbody>
-    </table>
-    `;
-
-    bahagianWasiat13 = `
-    <p>
-        Harta Pusaka saya hendaklah dibahagikan mengikut pembahagian yang dinyatakan di dalam dokumen wasiat ini kepada waris-waris saya yang sah dan layak untuk menerima harta pusaka tersebut. 
-        Senarai waris-waris saya pada masa dokumen wasiat ini dibuat dilampirkan bersama dokumen wasiat ini sebagai <strong>Lampiran A</strong>. 
-        Pembahagian yang saya nyatakan adalah selepas ditolak bahagian <strong>Wasiat 1/3</strong> saya kepada bukan waris seperti yang diperincikan di bawah.
-    </p>
-    <p>
-        Adalah ditegaskan bahawa sekiranya nilai bahagian yang dinyatakan di bawah tidak melebihi satu pertiga (1/3) daripada jumlah sebenar Harta Pusaka saya, 
-        ia hendaklah dilaksanakan sepenuhnya. Namun, sekiranya nilai tersebut didapati melebihi kadar satu pertiga (1/3), 
-        maka perlaksanaannya hendaklah dihadkan setakat maksimum 1/3 daripada jumlah sebenar Harta Pusaka saya sahaja.
-    </p>
-    ${tableWasiat}
-    `;
-}                    
-                                               
-                        // UPDATE UI
-                        document.getElementById("docRef").innerHTML = data.docRef || "-";
-                        document.getElementById("docRef2").innerHTML = `DOC REF: ${data.docRef || "-"}`;
-                        
-                       const approvedDate =
-data.approvedAt
-? new Date(data.approvedAt)
-: null;
-                        
-document.getElementById("tahun").innerHTML =
-approvedDate
-? approvedDate.getFullYear()
-: new Date().getFullYear();
-                        
+                        // Perunding
+                        const consultantCode = userData?.referral || data.consultantCode;
+                        let consultantData = {};
+                        if (consultantCode) {
+                            const q = query(collection(db, "consultants"), where("consultantNo", "==", consultantCode.trim())); 
+                            const querySnapshot = await getDocs(q);
+                            if (!querySnapshot.empty) consultantData = querySnapshot.docs[0].data();
+                        }
+
+                        // Wasiat 1/3 Logic
+                        const wasiatSah = (data.wasiatSatuPerTiga || []).filter(item => item.harta && item.harta.trim() !== "");
+                        let bahagianWasiat13 = "";
+                        if (wasiatSah.length === 0) {
+                            bahagianWasiat13 = `<p>Harta Pusaka saya hendaklah dibahagikan mengikut pembahagian yang dinyatakan di dalam dokumen wasiat ini kepada waris-waris saya yang sah dan layak untuk menerima harta pusaka tersebut. Senarai waris-waris saya pada masa dokumen wasiat ini dibuat dilampirkan bersama dokumen wasiat ini sebagai <strong>Lampiran A</strong>.</p>`;
+                        } else {
+                            let tableWasiat = `<table style="width:100%; border-collapse:collapse; font-size:14px; margin-top:10px;"><thead><tr><th style="border:1px solid #000; padding:8px;">No.</th><th style="border:1px solid #000; padding:8px;">Jenis Harta</th><th style="border:1px solid #000; padding:8px;">Nilai / Bahagian</th><th style="border:1px solid #000; padding:8px;">Penerima</th><th style="border:1px solid #000; padding:8px;">Nota</th></tr></thead><tbody>`;
+                            wasiatSah.forEach((item, index) => {
+                                tableWasiat += `<tr><td style="border:1px solid #000; padding:8px; text-align:center;">${index + 1}</td><td style="border:1px solid #000; padding:8px;">${item.harta}</td><td style="border:1px solid #000; padding:8px; text-align:right;">${item.bahagian}</td><td style="border:1px solid #000; padding:8px; text-align:center;">${item.penerima}</td><td style="border:1px solid #000; padding:8px;">${item.nota}</td></tr>`;
+                            });
+                            tableWasiat += `</tbody></table>`;
+                            bahagianWasiat13 = `<p>Harta Pusaka saya hendaklah dibahagikan mengikut pembahagian yang dinyatakan di dalam dokumen wasiat ini. Pembahagian ini adalah selepas ditolak bahagian <strong>Wasiat 1/3</strong> saya kepada bukan waris seperti yang diperincikan di bawah.</p>${tableWasiat}`;
+                        }
+
+                        // Pesanan Logic
+                        const pesananText = data.pesananWasiat || "Tiada pesanan khusus.";
+                        const paragraphs = pesananText.split("\n\n").filter(p => p.trim() !== "");
+                        let pesananHTML = "";
+                        paragraphs.forEach(p => { pesananHTML += `<p style="margin-bottom:12px; line-height:1.6; text-align:justify;">${p}</p>`; });
+
+                        // Lampiran Korporat Logic
+                        let fSaham = (val) => val ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";
+                        let lampiranKorporatHTML = `
+                            <table style="width:100%; border-collapse:collapse; font-size:14px; margin-bottom: 20px;">
+                                <tr><td style="border:1px solid #000; padding:8px; width:30%;"><strong>Nama Syarikat</strong></td><td style="border:1px solid #000; padding:8px;">${data.namaSyarikat || "-"}</td></tr>
+                                <tr><td style="border:1px solid #000; padding:8px;"><strong>No Pendaftaran SSM</strong></td><td style="border:1px solid #000; padding:8px;">${data.noSsm || "-"}</td></tr>
+                                <tr><td style="border:1px solid #000; padding:8px;"><strong>Alamat Berdaftar</strong></td><td style="border:1px solid #000; padding:8px;">${data.alamatSyarikat || "-"}</td></tr>
+                                <tr><td style="border:1px solid #000; padding:8px;"><strong>Jumlah Keseluruhan Saham</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(data.jumlahSaham)} Unit</td></tr>
+                                <tr><td style="border:1px solid #000; padding:8px;"><strong>Saham Milik Pewasiat</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(data.sahamPewasiat)} Unit</td></tr>
+                                <tr><td style="border:1px solid #000; padding:8px;"><strong>Status Pemilikan</strong></td><td style="border:1px solid #000; padding:8px;">${data.statusPemilikan === 'rakankongsi' ? 'Dimiliki Bersama Rakan Kongsi' : 'Pemilik Tunggal'}</td></tr>
+                            </table>
+                        `;
+
+                        // Lampiran Waris & Amanah
+                        let lampiranWaris = `<table style="width:100%; border-collapse:collapse; font-size:14px;"><tr><th style="border:1px solid #000;padding:8px;">Nama</th><th style="border:1px solid #000;padding:8px;">No K/P</th><th style="border:1px solid #000;padding:8px;">Hubungan</th><th style="border:1px solid #000;padding:8px;">Status</th></tr>`;
+                        (data.waris || []).forEach(w => {
+                            let statusText = w.status === "bawah18" ? "Bawah 18 Tahun" : w.status === "oku" ? "OKU" : "Dewasa";
+                            lampiranWaris += `<tr><td style="border:1px solid #000;padding:8px;">${w.nama||"-"}</td><td style="border:1px solid #000;padding:8px;text-align:center;">${w.ic||"-"}</td><td style="border:1px solid #000;padding:8px;text-align:center;">${w.hubungan||"-"}</td><td style="border:1px solid #000;padding:8px;text-align:center;">${statusText}</td></tr>`;
+                        }); lampiranWaris += `</table>`;
+
+                        let lampiranPemegangAmanah = "<p>Tiada Pemegang Amanah berasingan dilantik.</p>";
+                        if(data.pemegangAmanah && data.pemegangAmanah.pilihan === "ya"){
+                            lampiranPemegangAmanah = `<table style="width:100%; border-collapse:collapse; font-size:14px;"><tr><td style="border:1px solid #000;padding:8px;width:30%;"><strong>Nama</strong></td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.nama||"-"}</td></tr><tr><td style="border:1px solid #000;padding:8px;"><strong>No IC</strong></td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.ic||"-"}</td></tr><tr><td style="border:1px solid #000;padding:8px;"><strong>Hubungan</strong></td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.hubungan||"-"}</td></tr><tr><td style="border:1px solid #000;padding:8px;"><strong>Telefon</strong></td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.telefon||"-"}</td></tr></table>`;
+                        }
+
+                        const approvedDate = data.approvedAt ? new Date(data.approvedAt) : null;
+                        const currentDocRef = data.docRef || "-";
+
+                        // UPDATE UI COVER & TABLE
+                        document.getElementById("docRef").innerHTML = currentDocRef;
+                        document.getElementById("docRef2").innerHTML = `DOC REF: ${currentDocRef}`;
+                        document.getElementById("tahun").innerHTML = approvedDate ? approvedDate.getFullYear() : new Date().getFullYear();
                         document.getElementById("namaCover").innerHTML = (data.nama || "-").toUpperCase();
                         document.getElementById("icCover").innerHTML = data.ic || "-";
-                                               
+                        
                         document.getElementById("namaTable").innerHTML = data.nama || "-";
                         document.getElementById("icTable").innerHTML = data.ic || "-";
                         document.getElementById("telefonTable").innerHTML = data.telefon || "-";
@@ -884,1092 +353,157 @@ approvedDate
                         document.getElementById("kodTable").innerHTML = userData?.referral || "-";
                         document.getElementById("telefonPerundingTable").innerHTML = consultantData.telefon || "-";
 
-
-let lampiranWaris = `
-<table
-style="
-width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid;">
-
-<tr>
-
-<th style="border:1px solid #000;padding:8px;">
-Nama
-</th>
-
-<th style="border:1px solid #000;padding:8px;">
-No Kad Pengenalan
-</th>
-
-<th style="border:1px solid #000;padding:8px;">
-Hubungan
-</th>
-
-<th style="border:1px solid #000;padding:8px;">
-Status
-</th>
-
-</tr>
-`;
-
-data.waris?.forEach(w=>{
-
-lampiranWaris += `
-
-<tr>
-
-<td style="border:1px solid #000;padding:8px;">
-${w.nama || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${w.ic || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${w.hubungan || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${
-w.status==="bawah18"
-? "Bawah 18 Tahun"
-:
-w.status==="oku"
-? "OKU"
-:
-"Dewasa"
-}
-</td>
-
-</tr>
-`;
-
-});
-
-lampiranWaris += `
-</table>
-`;                        
-
-let lampiranPemegangAmanah = `
-<table
-style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid;">
-
-<tr>
-<th style="border:1px solid #000;padding:8px;width:30%;">
-Perkara
-</th>
-
-<th style="border:1px solid #000;padding:8px;width:70%;">
-Maklumat
-</th>
-</tr>
-
-<tr>
-<td style="border:1px solid #000;padding:8px;">
-Nama
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${data.pemegangAmanah?.nama || "-"}
-</td>
-</tr>
-
-<tr>
-<td style="border:1px solid #000;padding:8px;">
-No. Kad Pengenalan
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${data.pemegangAmanah?.ic || "-"}
-</td>
-</tr>
-
-<tr>
-<td style="border:1px solid #000;padding:8px;">
-Hubungan
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${data.pemegangAmanah?.hubungan || "-"}
-</td>
-</tr>
-
-<tr>
-<td style="border:1px solid #000;padding:8px;">
-Telefon
-</td>
-
-<td style="border:1px solid #000;padding:8px;">
-${data.pemegangAmanah?.telefon || "-"}
-</td>
-</tr>
-
-</table>
-`;
-
-let lampiranHartaAlih = `
-<table
-style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid;">
-
-<tr>
-<th style="border:1px solid #000;padding:8px;">Nama Harta</th>
-<th style="border:1px solid #000;padding:8px;">Rujukan</th>
-<th style="border:1px solid #000;padding:8px;">Nilai</th>
-<th style="border:1px solid #000;padding:8px;">Pemilikan</th>
-
-</tr>
-`;
-                        
- data.hartaAlih?.forEach(item=>{
-
-let pemilikanText = "-";
-
-if(item.pemilikan==="milikPenuh"){
-pemilikanText = "Milik Penuh";
-}
-
-if(item.pemilikan==="perkongsian"){
-pemilikanText = "Perkongsian Nama";
-}
-
-let kategoriText = item.kategori;
-
-if(item.kategori==="hibah"){
-kategoriText = "Hibah";
-}
-
-if(item.kategori==="sepencarian"){
-kategoriText = "Harta Sepencarian";
-}
-
-
-
-lampiranHartaAlih += `
-
-<tr>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.nama || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${item.rujukan || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:right !important;">
-${item.nilai || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${pemilikanText}
-</td>
-
-
-
-</tr>
-
-`;
-
-});
-
-lampiranHartaAlih += `
-</table>
-`;
-
-let lampiranHartaTakAlih = `
-<table
-style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid;">
-
-<tr>
-<th style="border:1px solid #000;padding:8px;">Nama Harta</th>
-<th style="border:1px solid #000;padding:8px;">No Geran</th>
-<th style="border:1px solid #000;padding:8px;">Nilai</th>
-<th style="border:1px solid #000;padding:8px;">Pemilikan</th>
-
-</tr>
-`;
-
- data.hartaTakAlih?.forEach(item=>{
-
-let pemilikanText =
-item.pemilikan==="perkongsian"
-? "Perkongsian Nama"
-: "Milik Penuh";
-
-let kategoriText =
-item.kategori==="sepencarian"
-? "Harta Sepencarian"
-:
-item.kategori==="hibah"
-? "Hibah"
-:
-"Faraid";
-
-lampiranHartaTakAlih += `
-<tr>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.nama || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${item.rujukan || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:right !important;">
-${item.nilai || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${pemilikanText}
-</td>
-
-
-
-</tr>
-`;
-
-});
-
-lampiranHartaTakAlih += `
-</table>
-`;
-
-// 1. Letak fungsi convertToFraction di bahagian paling atas
-function convertToFraction(percentage) {
-    if (!percentage || percentage === 0) return "0 Bahagian";
-    
-    // Peratusan berasaskan 100
-    let numerator = percentage;
-    let denominator = 100;
-    
-    // Cari faktor sepunya terbesar (GCD) untuk permudahkan pecahan
-    const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
-    const divisor = gcd(numerator, denominator);
-    
-    const top = numerator / divisor;
-    const bottom = denominator / divisor;
-    
-    return `${top}/${bottom} Bahagian`;
-}
-
-let lampiranBerpenama = "";
-
-if (!data.hartaBerpenama || !data.hartaBerpenama.length) {
-    lampiranBerpenama = "<p>Tiada maklumat Harta Berpenama.</p>";
-} else {
-    data.hartaBerpenama.forEach((item, index) => {
-        lampiranBerpenama += `
-        <div style="margin-bottom: 20px; page-break-inside: avoid;">
-        <table style="width:100%; border-collapse:collapse; font-size:14px;">
-            <tr>
-                <th style="border:1px solid #000;padding:8px;">Jenis</th>
-                <th style="border:1px solid #000;padding:8px;">No Akaun</th>
-                <th style="border:1px solid #000;padding:8px;">Penama</th>
-                <th style="border:1px solid #000;padding:8px;">IC Penama</th>
-                <th style="border:1px solid #000;padding:8px;">Hubungan</th>
-                <th style="border:1px solid #000;padding:8px;">Bahagian</th>
-            </tr>
-        `;
-
-        // -- FORMAT LAMA (Direct Data) --
-        if (!item.jenisPenama) {
-            lampiranBerpenama += `
-            <tr>
-                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.jenis || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.akaun || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;">${item.penama || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.ic || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.hubungan || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${convertToFraction(item.bahagian)}</td>
-            </tr>
-            `;
-        }
-        // -- FORMAT BARU (PENAMA WARIS RAMAI) --
-        else if (item.jenisPenama === "waris") {
-            const penamaList = item.penacorporate || [];
-            const rowCount = penamaList.length > 0 ? penamaList.length : 1; // Kira jumlah waris untuk di-merge
-
-            if (penamaList.length === 0) {
-                // Jika user letak waris tapi tak isi nama
-                lampiranBerpenama += `
-                <tr>
-                    <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.jenis || "-"}</td>
-                    <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.akaun || "-"}</td>
-                    <td colspan="4" style="border:1px solid #000;padding:8px;text-align:center;">Tiada Penama Direkodkan</td>
-                </tr>`;
-            } else {
-                penamaList.forEach((w, idx) => {
-                    lampiranBerpenama += `<tr>`;
-                    
-                    // Kolum Jenis dan No Akaun HANYA dilukis pada baris pertama, dan disuruh merge ke bawah (rowspan)
-                    if (idx === 0) {
-                        lampiranBerpenama += `
-                        <td rowspan="${rowCount}" style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.jenis || "-"}</td>
-                        <td rowspan="${rowCount}" style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.akaun || "-"}</td>
-                        `;
-                    }
-
-                    // Kolum Penama dan ke atas dilukis seperti biasa setiap baris
-                    lampiranBerpenama += `
-                        <td style="border:1px solid #000;padding:8px;">${w.nama || "-"}</td>
-                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${w.ic || "-"}</td>
-                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${w.hubungan || "-"}</td>
-                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${convertToFraction(w.bahagian)}</td>
-                    </tr>
-                    `;
-                });
-            }
-        } 
-        // -- FORMAT BARU (PENAMA ORANG LAIN) --
-        else {
-            lampiranBerpenama += `
-            <tr>
-                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.jenis || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.akaun || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;">${item.penamaLain?.nama || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.penamaLain?.ic || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.penamaLain?.hubungan || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${convertToFraction(item.penamaLain?.bahagian)}</td>
-            </tr>
-            `;
-        }
-
-        lampiranBerpenama += `
-        </table>
-        </div>
-        `;
-    });
-}
-
-
-let lampiranTakaful = "";
-
-if (!data.takaful || !data.takaful.length) {
-    lampiranTakaful = "<p>Tiada maklumat Takaful.</p>";
-} else {
-    data.takaful.forEach((item, index) => {
-        lampiranTakaful += `
-        <div style="margin-bottom: 20px; page-break-inside: avoid;">
-        <table style="width:100%; border-collapse:collapse; font-size:14px;">
-            <tr>
-                <th style="border:1px solid #000;padding:8px;">Syarikat</th>
-                <th style="border:1px solid #000;padding:8px;">No Polisi</th>
-                <th style="border:1px solid #000;padding:8px;">Penerima</th>
-                <th style="border:1px solid #000;padding:8px;">IC</th>
-                <th style="border:1px solid #000;padding:8px;">Hubungan</th>
-                <th style="border:1px solid #000;padding:8px;">Bahagian</th>
-            </tr>
-        `;
-
-        // -- FORMAT LAMA (Direct Data) --
-        if (!item.jenisPenerima) {
-            lampiranTakaful += `
-            <tr>
-                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.syarikat || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.polisi || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;">${item.penerima || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.ic || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.hubungan || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${convertToFraction(item.bahagian)}</td>
-            </tr>
-            `;
-        }
-        // -- FORMAT BARU (PENERIMA WARIS RAMAI) --
-        else if (item.jenisPenerima === "waris") {
-            const penerimaList = item.penericorporate || [];
-            const rowCount = penerimaList.length > 0 ? penerimaList.length : 1; // Kira jumlah waris
-
-            if (penerimaList.length === 0) {
-                lampiranTakaful += `
-                <tr>
-                    <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.syarikat || "-"}</td>
-                    <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.polisi || "-"}</td>
-                    <td colspan="4" style="border:1px solid #000;padding:8px;text-align:center;">Tiada Penerima Direkodkan</td>
-                </tr>`;
-            } else {
-                penerimaList.forEach((w, idx) => {
-                    lampiranTakaful += `<tr>`;
-                    
-                    // Kolum Syarikat dan No Polisi HANYA dilukis pada baris pertama, merge ke bawah (rowspan)
-                    if (idx === 0) {
-                        lampiranTakaful += `
-                        <td rowspan="${rowCount}" style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.syarikat || "-"}</td>
-                        <td rowspan="${rowCount}" style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.polisi || "-"}</td>
-                        `;
-                    }
-
-                    // Kolum Penerima dan ke atas dilukis seperti biasa
-                    lampiranTakaful += `
-                        <td style="border:1px solid #000;padding:8px;">${w.nama || "-"}</td>
-                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${w.ic || "-"}</td>
-                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${w.hubungan || "-"}</td>
-                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${convertToFraction(w.bahagian)}</td>
-                    </tr>
-                    `;
-                });
-            }
-        } 
-        // -- FORMAT BARU (PENERIMA ORANG LAIN) --
-        else {
-            lampiranTakaful += `
-            <tr>
-                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.syarikat || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center;vertical-align:middle;">${item.polisi || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;">${item.penerimaLain?.nama || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.penerimaLain?.ic || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.penerimaLain?.hubungan || "-"}</td>
-                <td style="border:1px solid #000;padding:8px;text-align:center !important;">${convertToFraction(item.penerimaLain?.bahagian)}</td>
-            </tr>
-            `;
-        }
-
-        lampiranTakaful += `
-        </table>
-        </div>
-        `;
-    });
-}
-                        
-let lampiranPemiutang = "";
-
-if (!data.pemiutang || !data.pemiutang.length) {
-    lampiranPemiutang = "<p>Tiada maklumat pemiutang.</p>";
-} else {
-    data.pemiutang.forEach((item, index) => {
-        lampiranPemiutang += `
-        <table style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid; margin-bottom:15px;">
-            <tr>
-                <th style="border:1px solid #000; padding:8px; width:35%; text-align:center;">
-                    Perkara ${data.pemiutang.length > 1 ? `(${index + 1})` : ""}
-                </th>
-                <th style="border:1px solid #000; padding:8px; width:65%; text-align:center;">
-                    Maklumat
-                </th>
-            </tr>
-            <tr>
-                <td style="border:1px solid #000; padding:8px;">Pemiutang</td>
-                <td style="border:1px solid #000; padding:8px;">${item.nama || "-"}</td>
-            </tr>
-            <tr>
-                <td style="border:1px solid #000; padding:8px;">Jenis Hutang</td>
-                <td style="border:1px solid #000; padding:8px;">${item.jenis || "-"}</td>
-            </tr>
-            <tr>
-                <td style="border:1px solid #000; padding:8px;">Baki</td>
-                <td style="border:1px solid #000; padding:8px;">${item.baki || "-"}</td>
-            </tr>
-            <tr>
-                <td style="border:1px solid #000; padding:8px;">Kaedah Penyelesaian</td>
-                <td style="border:1px solid #000; padding:8px;">${item.kaedah || "-"}</td>
-            </tr>
-        </table>
-        `;
-    });
-}
-                        
-let lampiranPenghutang = "";
-
-if (!data.penghutang || !data.penghutang.length) {
-    lampiranPenghutang = "<p>Tiada maklumat penghutang.</p>";
-} else {
-    data.penghutang.forEach((item, index) => {
-        lampiranPenghutang += `
-        <table style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid; margin-bottom:15px;">
-            <tr>
-                <th style="border:1px solid #000; padding:8px; width:35%; text-align:center;">
-                    Perkara ${data.pemiutang.length > 1 ? `(${index + 1})` : ""}
-                </th>
-                <th style="border:1px solid #000; padding:8px; width:65%; text-align:center;">
-                    Maklumat
-                </th>
-            </tr>
-            <tr>
-                <td style="border:1px solid #000; padding:8px;">Penghutang</td>
-                <td style="border:1px solid #000; padding:8px;">${item.nama || "-"}</td>
-            </tr>
-            <tr>
-                <td style="border:1px solid #000; padding:8px;">Jenis Hutang</td>
-                <td style="border:1px solid #000; padding:8px;">${item.jenis || "-"}</td>
-            </tr>
-            <tr>
-                <td style="border:1px solid #000; padding:8px;">Baki</td>
-                <td style="border:1px solid #000; padding:8px;">${item.baki || "-"}</td>
-            </tr>
-            <tr>
-                <td style="border:1px solid #000; padding:8px;">Kaedah Penyelesaian</td>
-                <td style="border:1px solid #000; padding:8px;">${item.kaedah || "-"}</td>
-            </tr>
-        </table>
-        `;
-    });
-}
-
-const pesananText =
-data.pesananWasiat || "Tiada pesanan khusus.";
-
-const paragraphs = pesananText
-.split("\n\n")
-.filter(p => p.trim() !== "");
-
-const maxCharsPerPage = 3000;
-
-let currentPageLength = 0;
-let currentPageContent = [];
-let pagesPesanan = [];
-
-paragraphs.forEach(paragraph => {
-
-    if (
-        currentPageLength + paragraph.length >
-        maxCharsPerPage
-    ) {
-
-        pagesPesanan.push(
-            currentPageContent.join("")
-        );
-
-        currentPageContent = [];
-        currentPageLength = 0;
-    }
-
-    currentPageContent.push(`
-        <p style="
-            margin-bottom:12px;
-            line-height:1.6;
-            text-align:justify;
-        ">
-            ${paragraph}
-        </p>
-    `);
-
-    currentPageLength += paragraph.length;
-});
-
-if(currentPageContent.length){
-    pagesPesanan.push(
-        currentPageContent.join("")
-    );
-}
-
-let pesananHTML = pagesPesanan[0] || "";
-
-for(let i=1; i<pagesPesanan.length; i++){
-
-    pesananHTML += `
-
-<div class="pdf-footer">
-</div>
-
-</div>
-
-<div class="a4-page p-[18mm]">
-
-<h3 style="
-margin-top:40px;
-margin-bottom:15px;
-font-weight:bold;
-">
-<strong>
-6. PESANAN KEPADA WARIS (SAMBUNGAN)
-</strong>
-</h3>
-
-${pagesPesanan[i]}
-
-`;
-
-}
-                        
-                        
-let finalContent =
-wasiatCorporateContent
-
-.replaceAll(
-"{{LAMPIRAN_WARIS}}",
-lampiranWaris
-)  
-
-.replaceAll(
-"{{LAMPIRAN_PEMEGANG_AMANAH}}",
-lampiranPemegangAmanah
-)
-
-.replaceAll(
-"{{LAMPIRAN_HARTA_ALIH}}",
-lampiranHartaAlih
-)
-
-.replaceAll(
-"{{LAMPIRAN_HARTA_TAK_ALIH}}",
-lampiranHartaTakAlih
-)
-
-.replaceAll("{{LAMPIRAN_BERPENAMA}}", lampiranBerpenama)
-.replaceAll("{{LAMPIRAN_TAKAFUL}}", lampiranTakaful)
-.replaceAll("{{LAMPIRAN_PEMIUTANG}}", lampiranPemiutang)
-.replaceAll("{{LAMPIRAN_PENGHUTANG}}", lampiranPenghutang)                            
-
-.replaceAll(
-"{{PESANAN_WASIAT}}",
-pesananHTML
-)
-
-.replaceAll(
-"{{NAMA_PEWASIAT}}",
-data.nama || "-"
-)
-
-.replaceAll(
-"{{NO_IC_PEWASIAT}}",
-data.ic || "-"
-)
-
-.replaceAll(
-"{{ALAMAT_PEWASIAT}}",
-alamatPenuh || "-"
-)
+                        // ==========================================
+                        // 1. GENERATE WASIAT KORPORAT CONTENT
+                        // ==========================================
+                        if (typeof wasiatCorporateContent !== 'undefined') {
+                            let wContent = wasiatCorporateContent
+                                .replaceAll("{{LAMPIRAN_KORPORAT}}", lampiranKorporatHTML)
+                                .replaceAll("{{LAMPIRAN_WARIS}}", lampiranWaris)  
+                                .replaceAll("{{LAMPIRAN_PEMEGANG_AMANAH}}", lampiranPemegangAmanah)
+                                .replaceAll("{{PESANAN_WASIAT}}", pesananHTML)
+                                .replaceAll("{{NAMA_PEWASIAT}}", data.nama || "-")
+                                .replaceAll("{{NO_IC_PEWASIAT}}", data.ic || "-")
+                                .replaceAll("{{ALAMAT_PEWASIAT}}", alamatPenuh || "-")
+                                .replaceAll("{{NAMA_SYARIKAT}}", data.namaSyarikat || "-")
+                                .replaceAll("{{NO_SSM}}", data.noSsm || "-")
+                                .replaceAll("{{NAMA_WASI1}}", data.namaWasi1 || "-")
+                                .replaceAll("{{NO_IC_WASI1}}", data.icWasi1 || "-")
+                                .replaceAll("{{ALAMAT_WASI1}}", data.alamatWasi1 || "-")
+                                .replaceAll("{{TARIKH_PERJANJIAN}}", data.mekanismeAgihan === 'buysell' ? formatDateMY(data.tarikhPerjanjian) : "(Rujuk Arahan Hibah / Faraid)")
+                                .replaceAll("{{SEKSYEN_WASIAT_13}}", bahagianWasiat13);
+                            document.getElementById("sectionWasiat").innerHTML = wContent;
+                        }
+
+                        // ==========================================
+                        // 2. GENERATE MEKANISME KORPORAT (BUY-SELL / HIBAH / WAKAF)
+                        // ==========================================
+                        let mekanismeHTML = "";
+                        const tocMekList = document.getElementById("tocMekanismeList");
+                        tocMekList.innerHTML = "";
+
+                        if (data.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !== 'undefined') {
+                            mekanismeHTML = buySellAgreementContent
+                                .replaceAll("{{TARIKH_PERJANJIAN}}", formatDateMY(data.tarikhPerjanjian))
+                                .replaceAll("{{NAMA_PEWASIAT}}", data.nama || "-")
+                                .replaceAll("{{NO_IC_PEWASIAT}}", data.ic || "-")
+                                .replaceAll("{{ALAMAT_PEWASIAT}}", alamatPenuh || "-")
+                                .replaceAll("{{NAMA_PARTNER}}", data.namaPartner || "-")
+                                .replaceAll("{{NO_IC_PARTNER}}", data.icPartner || "-")
+                                .replaceAll("{{ALAMAT_PARTNER}}", data.alamatPartner || "-")
+                                .replaceAll("{{NAMA_SYARIKAT}}", data.namaSyarikat || "-")
+                                .replaceAll("{{NO_SSM}}", data.noSsm || "-")
+                                .replaceAll("{{ALAMAT_SYARIKAT}}", data.alamatSyarikat || "-")
+                                .replaceAll("{{JUMLAH_SAHAM}}", fSaham(data.jumlahSaham))
+                                .replaceAll("{{SAHAM_PEWASIAT}}", fSaham(data.sahamPewasiat))
+                                .replaceAll("{{SAHAM_PARTNER}}", fSaham(data.sahamPartner));
                             
-.replaceAll(
-"{{HUBUNGAN_WASI1}}",
-data.hubunganWasi1 || "-"
-)
-
-.replaceAll(
-"{{NAMA_WASI1}}",
-data.namaWasi1 || "-"
-)
-
-.replaceAll(
-"{{NO_IC_WASI1}}",
-data.icWasi1 || "-"
-)
-
-.replaceAll(
-"{{HUBUNGAN_WASI2}}",
-data.hubunganWasi2 || "-"
-)
-
-.replaceAll(
-"{{NAMA_WASI2}}",
-data.namaWasi2 || "-"
-)
-
-.replaceAll(
-"{{NO_IC_WASI2}}",
-data.icWasi2 || "-"
-)
-
-.replaceAll("{{SEKSYEN_WASIAT_13}}", bahagianWasiat13);
-
-let lampiranHTML = "";
-
-let hurufLampiran = "I".charCodeAt(0);
-
-for(const doc of lampiranSnap.docs){
-
-    const file = doc.data();
-
-    const base64Image =
-    await imageToBase64(file.fileURL);
-
-    lampiranHTML += `
-
-<div class="a4-page p-[18mm]">
-
-<h2
-style="
-font-family:'Times New Roman', serif;
-font-size:28px;
-font-weight:400;
-margin-top:30px;
-margin-bottom:20px;
-color:#153638;
-text-transform:uppercase;
-">
-LAMPIRAN ${String.fromCharCode(hurufLampiran)}
-:
-${(file.namaLampiran || file.fileName).toUpperCase()}
-</h2>
-
-<img
-src="${base64Image}"
-style="
-display:block;
-max-width:170mm;
-max-height:220mm;
-width:auto;
-height:auto;
-margin:20px auto;
-border:1px solid #ccc;
-object-fit:contain;
-">
-
-<div class="pdf-footer"></div>
-
-</div>
-
-`;
-
-    hurufLampiran++;
-
-}
-
-document.getElementById("sectionWasiat").innerHTML = finalContent;
-
-document.getElementById("sectionLampiran").innerHTML = lampiranHTML;
-                       
-// 2. Fungsi Harta Alih
-function generateAlihTable(list){
-    if(!list.length){
-        return "<p>Tiada Harta Alih.</p>";
-    }
-
-    let html = `
-    <table style="
-        width:100%;
-        border-collapse:collapse;
-        font-size:14px; page-break-inside: avoid;
-        margin-top:10px;
-    ">
-    <tr>
-        <th style="border:1px solid #000;padding:8px;">Nama Harta</th>
-        <th style="border:1px solid #000;padding:8px;">Rujukan</th>
-        <th style="border:1px solid #000;padding:8px;">Nilai</th>
-        <!-- Tukar tajuk kolum ke Bahagian -->
-        <th style="border:1px solid #000;padding:8px;">Bahagian</th> 
-    </tr>
-    `;
-
-    list.forEach(item => {
-        html += `
-        <tr>
-           <td style="border:1px solid #000;padding:8px;">${item.namaHarta}</td>
-            <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.rujukan}</td>
-            <td style="border:1px solid #000;padding:8px;text-align:right !important;">${item.nilai}</td>
-            <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                ${convertToFraction(item.peratus)}
-            </td>
-        </tr>
-        `;
-    });
-
-    html += "</table>";
-    return html;
-}
-
-// 3. Fungsi Harta Tak Alih
-function generateTakAlihTable(list){
-    if(!list || !list.length){
-        return "<p>Tiada Harta Tak Alih.</p>";
-    }
-
-    let html = `
-    <table style="
-        width:100%;
-        border-collapse:collapse;
-        font-size:14px; page-break-inside: avoid;
-        margin-top:10px;
-    ">
-    <tr>
-        <th style="border:1px solid #000;padding:8px;">Nama Harta</th>
-        <th style="border:1px solid #000;padding:8px;">No. Geran</th>
-        <th style="border:1px solid #000;padding:8px;">Alamat</th>
-        <th style="border:1px solid #000;padding:8px;">Bahagian</th>
-    </tr>
-    `;
-
-    list.forEach(item => {
-        html += `
-        <tr>
-            <td style="border:1px solid #000;padding:8px;">${item.namaHarta}</td>
-            <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.rujukan}</td>
-            <td style="border:1px solid #000;padding:8px;">${item.alamat}</td>
-            <td style="border:1px solid #000;padding:8px;text-align:center !important;">
-                ${convertToFraction(item.peratus)}
-            </td>
-        </tr>
-        `;
-    });
-
-    html += "</table>";
-    return html;
-}
+                            mekanismeHTML = mekanismeHTML.replace(/class="a4-page/i, `data-target="tocMek_0" class="a4-page`);
+                            tocMekList.innerHTML = `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Perjanjian Jual Beli Saham (Buy-Sell)</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_0" class="text-[14px] font-bold">-</span></div>`;
                         
-function formatDateMY(dateStr){
+                        } else if (data.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefined') {
+                            (data.penerimaHibahSaham || []).forEach((p, index) => {
+                                let hContent = hibahContent
+                                    .replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
+                                    .replaceAll("{{IC_PEMBERI}}", data.ic || "-")
+                                    .replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-")
+                                    .replaceAll("{{TELEFON_PEMBERI}}", data.telefon || "-")
+                                    .replaceAll("{{NAMA_PENERIMA}}", p.nama || "-")
+                                    .replaceAll("{{IC_PENERIMA}}", "-")
+                                    .replaceAll("{{HUBUNGAN}}", "-")
+                                    .replaceAll("{{ALAMAT_PENERIMA}}", "-")
+                                    .replaceAll("{{PERATUS}}", p.peratus || "-")
+                                    .replaceAll("{{TARIKH_DOKUMEN}}", formatDateMY(data.approvedAt))
+                                    .replaceAll("{{TABLE_ALIH}}", generateSahamTable(data, p))
+                                    .replaceAll("{{TABLE_TAK_ALIH}}", "<p>Tiada Harta Tak Alih Terlibat.</p>")
+                                    .replaceAll("{{PEMEGANG_AMANAH}}", "")
+                                    .replaceAll("{{LABEL_PENERIMA}}", "Penerima Hibah")
+                                    .replaceAll("{{INTRO_PENERIMA}}", `(selepas ini disebut sebagai <strong>"Penerima Hibah Saham"</strong>)`)
+                                    .replaceAll("{{BENEFISIARI}}", p.nama);
+                                
+                                hContent = hContent.replace(/class="a4-page/i, `data-target="tocMek_${index}" class="a4-page`);
+                                mekanismeHTML += hContent;
+                                tocMekList.innerHTML += `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Hibah Saham: ${p.nama}</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_${index}" class="text-[14px] font-bold">-</span></div>`;
+                            });
+                        }
+                        // (Tambahan logik Wakaf Zurri jika diperlukan di masa hadapan)
+                        document.getElementById("sectionMekanisme").innerHTML = mekanismeHTML;
 
-    if(!dateStr) return "-";
+                        // ==========================================
+                        // 3. GENERATE PEMEGANG AMANAH (JIKA ADA)
+                        // ==========================================
+                        let amanahHTML = "";
+                        const tocAmanahContainer = document.getElementById("tocAmanahContainer");
+                        if (data.pemegangAmanah && data.pemegangAmanah.pilihan === "ya" && typeof pemegangAmanahContent !== 'undefined') {
+                            amanahHTML = pemegangAmanahContent
+                                .replaceAll("{{NAMA_PEWASIAT}}", data.nama || "-")
+                                .replaceAll("{{NO_IC_PEWASIAT}}", data.ic || "-")
+                                .replaceAll("{{ALAMAT_PEWASIAT}}", alamatPenuh || "-")
+                                .replaceAll("{{NAMA_PEMEGANG_AMANAH}}", data.pemegangAmanah.nama || "-")
+                                .replaceAll("{{IC_PEMEGANG_AMANAH}}", data.pemegangAmanah.ic || "-")
+                                .replaceAll("{{HUBUNGAN_PEMEGANG_AMANAH}}", data.pemegangAmanah.hubungan || "-")
+                                .replaceAll("{{ALAMAT_PEMEGANG_AMANAH}}", data.pemegangAmanah.alamat || "-");
+                            
+                            tocAmanahContainer.classList.remove("hidden");
+                            document.getElementById("sectionAmanah").innerHTML = amanahHTML;
+                        }
 
-    return new Date(dateStr)
-        .toLocaleDateString("ms-MY");
+                        // ==========================================
+                        // 4. GENERATE LAMPIRAN DOKUMEN FIZIKAL
+                        // ==========================================
+                        const lampiranSnap = await getDocs(collection(db, "users", userId, "corporateDocuments"));
+                        let lampiranHTML = "";
+                        let hurufLampiran = "C".charCodeAt(0); // Sambung dari Lampiran B (Pemegang Amanah)
+                        for(const doc of lampiranSnap.docs){
+                            const file = doc.data();
+                            if(file.fileURL.match(/\.(jpeg|jpg|gif|png)$/i) != null) {
+                                const base64Image = await imageToBase64(file.fileURL);
+                                lampiranHTML += `<div class="a4-page p-[18mm]"><h2 style="font-family:'Times New Roman', serif; font-size:28px; margin-top:30px; margin-bottom:20px; color:#153638;">LAMPIRAN ${String.fromCharCode(hurufLampiran)}: ${(file.namaLampiran || file.fileName).toUpperCase()}</h2><img src="${base64Image}" style="display:block; max-width:170mm; max-height:220mm; margin:20px auto; border:1px solid #ccc; object-fit:contain;"><div class="pdf-footer"></div></div>`;
+                                hurufLampiran++;
+                            }
+                        }
+                        document.getElementById("sectionLampiran").innerHTML = lampiranHTML;
 
-}
+                        // ==========================================
+                        // 5. UPDATE TABLE OF CONTENTS (TOC) PAGINATION
+                        // ==========================================
+                        setTimeout(() => {
+                            const pages = document.querySelectorAll(".a4-page");
+                            pages.forEach((page, index) => {
+                                if (index === 0) return; // Skip cover
+                                const pageNum = index + 1;
+                                const footer = page.querySelector(".pdf-footer");
+                                if (footer) footer.innerHTML = `<span class="footer-docref">${currentDocRef}</span><span class="page-number">${pageNum}</span>`;
 
-                        
+                                // TOC Document Utama
+                                if (page.closest("#sectionWasiat")) {
+                                    const tocWasiat = document.getElementById("tocWasiat");
+                                    if (tocWasiat && tocWasiat.innerText === "-") tocWasiat.innerText = pageNum;
+                                }
 
-let hibahHTML = "";
+                                // TOC Mekanisme (Tarik dari ID yang dicop)
+                                if (page.closest("#sectionMekanisme")) {
+                                    const targetId = page.getAttribute("data-target"); 
+                                    if (targetId) {
+                                        const targetSpan = document.getElementById(targetId);
+                                        if (targetSpan && targetSpan.innerText === "-") targetSpan.innerText = pageNum; 
+                                    }
+                                }
 
-Object.values(groupedHibah).forEach((item, index) => {
+                                // TOC Amanah
+                                if (page.closest("#sectionAmanah")) {
+                                    const tocAmanah = document.getElementById("tocAmanah");
+                                    if (tocAmanah && tocAmanah.innerText === "-") tocAmanah.innerText = pageNum;
+                                }
 
-    function getPihakPenerima(item) {
-        const bawahUmur = item.status === "bawah18" || item.status === "oku";
-        if (bawahUmur) {
-            const p = item.pemegangAmanah || {};
-            return {
-                nama: p.nama || "-",
-                ic: p.ic || "-",
-                alamat: p.alamat || item.alamat || "-",
-                gelaran: "Pemegang Amanah",
-                intro: `selaku <strong>"Pemegang Amanah"</strong> bagi pihak <strong>${item.nama}</strong> (Penerima Hibah)`,
-                benefisiari: item.nama
-            };
-        }
-        return {
-            nama: item.nama,
-            ic: item.ic,
-            alamat: item.alamat,
-            gelaran: "Penerima Hibah",
-            intro: `(selepas ini disebut sebagai <strong>"Penerima Hibah"</strong>)`,
-            benefisiari: item.nama
-        };
-    }
+                                // TOC Lampiran
+                                if (page.closest("#sectionLampiran")) {
+                                    const tocLampiran = document.getElementById("tocLampiran");
+                                    if (tocLampiran && tocLampiran.innerText === "-") tocLampiran.innerText = pageNum;
+                                }
+                            });
+                        }, 500);
 
-    const pihak = getPihakPenerima(item);
-    console.log(item);
-
-    // Proses data ganti tempat kosong macam biasa
-    let contentForThisRecipient = hibahContent
-        .replaceAll("{{NAMA_PENERIMA}}", pihak.nama)
-        .replaceAll("{{TABLE_ALIH}}", generateAlihTable(item.hartaAlih))
-        .replaceAll("{{TABLE_TAK_ALIH}}", generateTakAlihTable(item.hartaTakAlih))
-        .replaceAll("{{PEMEGANG_AMANAH}}", generatePemegangAmanah(item))
-        .replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
-        .replaceAll("{{IC_PEMBERI}}", data.ic || "-")
-        .replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-")
-        .replaceAll("{{TELEFON_PEMBERI}}", data.telefon || "-")
-        .replaceAll("{{IC_PENERIMA}}", pihak.ic || "-")
-        .replaceAll("{{HUBUNGAN}}", item.hubungan || "-")
-        .replaceAll("{{ALAMAT_PENERIMA}}", pihak.alamat || "-")
-        .replaceAll("{{PERATUS}}", item.peratus || "-")
-        .replaceAll("{{TARIKH_DOKUMEN}}", approvedDate ? approvedDate.toLocaleDateString("ms-MY") : "-")
-        .replaceAll("{{TARIKH_LAHIR}}", formatDateMY(item.tarikhLahir))
-        .replaceAll("{{LABEL_PENERIMA}}", pihak.gelaran)
-        .replaceAll("{{INTRO_PENERIMA}}", pihak.intro)
-        .replaceAll("{{BENEFISIARI}}", pihak.benefisiari);
-
-    // =======================================================
-    // TEKNIK KEBAL: Kita 'cop' ID pada setiap helai kertas
-    // Walaupun HTML berterabur, kertas ini tetap tahu ia milik siapa!
-    // =======================================================
-    contentForThisRecipient = contentForThisRecipient.replaceAll('class="a4-page', `data-target="tocHibah_${index}" class="a4-page`);
-
-    hibahHTML += contentForThisRecipient;
-});
-
-document.getElementById("sectionHibah").innerHTML = hibahHTML;     
-                        
-                
-let sepencarianHTML = "";
-
-// 1. Tambah parameter 'index' di sini
-Object.values(groupedSepencarian).forEach((item, index) => { 
-
-    const pihak = {
-        nama: item.nama,
-        ic: item.ic,
-        alamat: item.alamat
-    };
-    
-    console.log("PIHAK:", pihak);
-
-    // 2. Suntik penanda data-target ke muka surat pertama untuk penerima ini
-    let templateKandungan = sepencarianContent.replace(
-        /class="a4-page/i, 
-        `data-target="tocSepencarian_${index}" class="a4-page`
-    );
-
-    // 3. Gunakan pembolehubah templateKandungan yang telah ditandai
-    sepencarianHTML += templateKandungan
-    .replaceAll("{{TABLE_ALIH}}", generateAlihTable(item.hartaAlih))
-    .replaceAll("{{TABLE_TAK_ALIH}}", generateTakAlihTable(item.hartaTakAlih))
-    .replaceAll("{{NAMA_PEMILIK}}", data.nama || "-")
-    .replaceAll("{{IC_PEMILIK}}", data.ic || "-")
-    .replaceAll("{{ALAMAT_PEMILIK}}", alamatPenuh || "-")
-    .replaceAll("{{TELEFON_PEMILIK}}", data.telefon || "-")
-    .replaceAll("{{NAMA_PENERIMA}}", pihak.nama)
-    .replaceAll("{{IC_PENERIMA}}", pihak.ic)
-    .replaceAll("{{ALAMAT_PENERIMA}}", pihak.alamat || "-")
-    .replaceAll("{{HUBUNGAN}}", item.hubungan)
-    .replaceAll("{{PERATUS}}", item.peratus);
-
-});
-
-document.getElementById("sectionSepencarian").innerHTML = sepencarianHTML;
-                        
-try {
-    const currentDocRef = data.docRef || data.docRefNo || "-";
-
-    // 1. Masukkan Nombor Rujukan ke TOC
-    const docRefTOC = document.getElementById("docRefTOC");
-    if (docRefTOC) docRefTOC.innerHTML = `DOC REF: ${currentDocRef}`;
-
-    // 2. Set muka surat Maklumat
-    const tocMaklumat = document.getElementById("tocMaklumat");
-    if (tocMaklumat) tocMaklumat.innerText = "3";
-
-// 3a. JANA SENARAI PENERIMA SEPENCARIAN DALAM TOC
-    const tocSepencarianList = document.getElementById("tocSepencarian");
-    
-    if (tocSepencarianList && groupedSepencarian) {
-        tocSepencarianList.innerHTML = ""; 
-        
-        // PAKSA JARAK RAPAT: Guna 'space-y-2' (atau space-y-1) dan margin atas (mt-2)
-        // 'pl-4' digunakan supaya senarai ini masuk ke dalam (indent) sedikit.
-        tocSepencarianList.className = "w-full pl-4 mt-2 space-y-2"; 
-
-        Object.values(groupedSepencarian).forEach((item, index) => {
-            // Hasilkan ID yang sepadan untuk Sepencarian
-            const safeId = "tocSepencarian_" + index;
-            
-            tocSepencarianList.innerHTML += `
-                <div class="flex items-end w-full">
-                    <!-- KECILKAN FONT: Tambah text-[14px] atau text-sm pada nama -->
-                    <span class="text-[14px] font-medium uppercase tracking-wide whitespace-nowrap opacity-90">• ${item.nama}</span>
-                    
-                    <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div>
-                    
-                    <!-- KECILKAN FONT: Tambah text-[14px] pada nombor muka surat -->
-                    <span id="${safeId}" class="text-[14px] font-bold">-</span>
-                </div>
-            `;
-        });
-    }
-    
-  // 3b. JANA SENARAI PENERIMA HIBAH DALAM TOC
-    const tocHibahList = document.getElementById("tocHibahList");
-    if (tocHibahList && groupedHibah) {
-        tocHibahList.innerHTML = ""; 
-        
-        // PAKSA JARAK RAPAT: Guna 'space-y-2' (atau space-y-1) dan margin atas (mt-2)
-        // 'pl-4' digunakan supaya senarai ini masuk ke dalam (indent) sedikit.
-        tocHibahList.className = "w-full pl-4 mt-2 space-y-2"; 
-
-        Object.values(groupedHibah).forEach((item, index) => {
-            const safeId = "tocHibah_" + index;
-            tocHibahList.innerHTML += `
-                <div class="flex items-end w-full">
-                    <!-- KECILKAN FONT: Tambah text-[14px] atau text-sm pada nama -->
-                    <span class="text-[14px] font-medium uppercase tracking-wide whitespace-nowrap opacity-90">• ${item.nama}</span>
-                    
-                    <div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div>
-                    
-                    <!-- KECILKAN FONT: Tambah text-[14px] pada nombor muka surat -->
-                    <span id="${safeId}" class="text-[14px] font-bold">-</span>
-                </div>
-            `;
-        });
-    }
-
-    // 4. Gelung Muka Surat Keseluruhan
-    const pages = document.querySelectorAll(".a4-page");
-
-    pages.forEach((page, index) => {
-        if (index === 0) return; // Abaikan Cover Page
-        const pageNum = index + 1;
-
-        // Update Footer
-        const footer = page.querySelector(".pdf-footer");
-        if (footer) {
-            footer.innerHTML = `
-                <span class="footer-docref">${currentDocRef}</span>
-                <span class="page-number">${pageNum}</span>
-            `;
-        }
-
-       // Update TOC Wasiat (Dan Sub-Topik)
-        if (page.closest("#sectionWasiat")) {
-            const tocWasiat = document.getElementById("tocWasiat");
-            if (tocWasiat && tocWasiat.innerText === "-") {
-                tocWasiat.innerText = pageNum;
-            }
-            
-            // Baca keseluruhan teks pada helaian kertas ini
-            const pageText = page.innerText.toUpperCase();
-            
-            // 1. Kesan Helaian 'Pelantikan Wasi'
-            const tocWasi = document.getElementById("tocWasiat_wasi");
-            if (tocWasi && tocWasi.innerText === "-" && pageText.includes("PELANTIKAN WASI")) {
-                tocWasi.innerText = pageNum;
-            }
-            
-            // 2. Kesan Helaian 'Pembahagian Harta Pusaka' atau Wasiat 1/3
-            const toc13 = document.getElementById("tocWasiat_13");
-            if (toc13 && toc13.innerText === "-" && (pageText.includes("WASIAT 1/3") || pageText.includes("SATU PER TIGA"))) {
-                toc13.innerText = pageNum;
-            }
-            
-            // 3. Kesan Helaian 'Pesanan Kepada Waris'
-            const tocPesanan = document.getElementById("tocWasiat_pesanan");
-            if (tocPesanan && tocPesanan.innerText === "-" && pageText.includes("PESANAN KEPADA WARIS")) {
-                tocPesanan.innerText = pageNum;
-            }
-        }
-
-      // Update TOC Sepencarian - Skrip akan terus baca ID yang kita 'cop' pada kertas tadi!
-        if (page.closest("#sectionSepencarian")) {
-            const targetId = page.getAttribute("data-target"); 
-            if (targetId) {
-                const targetSpan = document.getElementById(targetId);
-                
-                // Jika masih "-", ia akan catat muka surat PERTAMA yang dijumpai untuk ID tersebut
-                if (targetSpan && targetSpan.innerText === "-") {
-                    targetSpan.innerText = pageNum; 
-                }
-            }
-        }
-
-                // Update TOC Hibah - Skrip akan terus baca ID yang kita 'cop' pada kertas tadi!
-        if (page.closest("#sectionHibah")) {
-            const targetId = page.getAttribute("data-target"); 
-            if (targetId) {
-                const targetSpan = document.getElementById(targetId);
-                
-                // Jika masih "-", ia akan catat muka surat PERTAMA yang dijumpai untuk ID tersebut
-                if (targetSpan && targetSpan.innerText === "-") {
-                    targetSpan.innerText = pageNum; 
-                }
-            }
-        }
-
-        // Update TOC Lampiran
-        if (page.closest("#sectionLampiran")) {
-            const tocLampiran = document.getElementById("tocLampiran");
-            if (tocLampiran && tocLampiran.innerText === "-") {
-                tocLampiran.innerText = pageNum;
-            }
-        }
-    });
-
-} catch (e) {
-    console.error("Ralat TOC:", e);
-}  
-                        
-/*
-document.getElementById(
-"footerDocRef1"
-).innerText =
-currentDocRef;
-
-document.getElementById(
-"footerDocRef2"
-).innerText =
-currentDocRef;
-
-document.getElementById(
-"footerDocRef3"
-).innerText =
-currentDocRef;
-*/
                     }
                 }
             } catch (error) {
@@ -1977,39 +511,65 @@ currentDocRef;
             }
         });
 
-        // APPROVE BUTTON
+        // ==========================================
+        // BUTANG CETAK (PDF) & LULUS/TOLAK
+        // ==========================================
+        document.getElementById("printBtn").onclick = () => window.open(`print-corporate.html?id=${userId}`, "_blank");
+
+        document.getElementById("downloadBtn").addEventListener("click", async () => {
+             let wrapper = document.getElementById('scale-wrapper');
+             let element = document.getElementById("pdfContent");
+             let originalTransform = wrapper.style.transform;
+             let originalMarginBottom = wrapper.style.marginBottom;
+             let originalMargin = element.style.margin;
+
+            wrapper.style.transform = 'scale(1)';
+            wrapper.style.marginBottom = '0px';
+            wrapper.style.transformOrigin = 'top left'; 
+            element.style.margin = '0'; 
+
+            await new Promise(r => setTimeout(r,150));
+            await document.fonts.ready;
+            
+             const options = {
+                margin: 0,
+                filename: "Wasiat_Korporat.pdf",
+                image: { type: "jpeg", quality: 0.92 },
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, windowWidth: document.documentElement.offsetWidth },                
+                 pagebreak: { mode: ['css'] }, 
+                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait", compress: true }
+            };
+
+            html2pdf().set(options).from(element).save().then(() => {
+                wrapper.style.transform = originalTransform;
+                wrapper.style.marginBottom = originalMarginBottom;
+                wrapper.style.transformOrigin = 'top center';
+                element.style.margin = originalMargin || '0 auto';
+            });
+        });
+
         document.getElementById("approveBtn").addEventListener("click", async () => {
             if(!userId) return alert("User ID tidak sah!");
-            
             try {
                  const today = new Date();
                  const year = today.getFullYear();
-
-const expiry = new Date(today);
-expiry.setFullYear(expiry.getFullYear() + 1);
+                 const expiry = new Date(today);
+                 expiry.setFullYear(expiry.getFullYear() + 1);
                 
-const corporateRef = doc(db, "users", userId, "corporate", "maklumat");
-const corporateSnap = await getDoc(corporateRef);
-const corporateData = corporateSnap.data();
+                const corporateRef = doc(db, "users", userId, "corporate", "maklumat");
+                const corporateSnap = await getDoc(corporateRef);
+                const corporateData = corporateSnap.data();
                 
                  let docRefNo = corporateData?.docRef;
-let currentNumber = corporateData?.docNumber;
+                 let currentNumber = corporateData?.docNumber;
 
-if (!docRefNo) {
-
-    const counterRef = doc(db, "system", "counter");
-    const counterSnap = await getDoc(counterRef);
-
-    currentNumber = counterSnap.exists()
-        ? (counterSnap.data().corporateCounter || 0) + 1
-        : 1;
-
-    docRefNo = `AQMS-MCO-${year}-${String(currentNumber).padStart(3,"0")}`;
-
-    await setDoc(counterRef, {
-        corporateCounter: currentNumber
-    }, { merge: true });
-}
+                if (!docRefNo) {
+                    const counterRef = doc(db, "system", "counter");
+                    const counterSnap = await getDoc(counterRef);
+                    currentNumber = counterSnap.exists() ? (counterSnap.data().corporateCounter || 0) + 1 : 1;
+                    docRefNo = `AQMS-MCO-${year}-${String(currentNumber).padStart(3,"0")}`;
+                    await setDoc(counterRef, { corporateCounter: currentNumber }, { merge: true });
+                }
 
                 await updateDoc(corporateRef, {
                     status: "APPROVED",
@@ -2019,18 +579,13 @@ if (!docRefNo) {
                     docNumber: currentNumber
                 });
 
-               
-
-await addDoc(
-    collection(db, "users", userId, "notifications"),
-    {
-        title: "Dokumen Mawaris Korporat Diluluskan",
-        message: `Dokumen Mawaris Korporat anda (${docRefNo}) telah diluluskan dan sedia untuk dilihat.`,
-        type: "CORPORATE_APPROVED",
-        read: false,
-        createdAt: today.toISOString()
-    }
-);
+                await addDoc(collection(db, "users", userId, "notifications"), {
+                    title: "Dokumen Wasiat Korporat Diluluskan",
+                    message: `Dokumen Korporat anda (${docRefNo}) telah diluluskan dan sedia untuk dicetak.`,
+                    type: "CORPORATE_APPROVED",
+                    read: false,
+                    createdAt: today.toISOString()
+                });
                 
                 alert("Dokumen berjaya diluluskan");
                 location.reload();
@@ -2040,29 +595,17 @@ await addDoc(
             }
         });
 
-        // REJECT BUTTON
         document.getElementById("rejectBtn").addEventListener("click", async () => {
             if(!userId) return alert("User ID tidak sah!");
-
             try {
-                await updateDoc(doc(db, "users", userId, "corporate", "maklumat"), {
-                    status: "REJECTED"
-                });
+                await updateDoc(doc(db, "users", userId, "corporate", "maklumat"), { status: "REJECTED" });
                 alert("Permohonan berjaya ditolak.");
+                location.reload();
             } catch (error) {
                 console.log(error);
                 alert("Ralat semasa menolak: " + error.message);
             }
         });
     </script>
-
-<script src="wasiat-corporate-content.js"></script>
-
-<script src="hibah-content.js"></script>
-
-<script src="pemegang-amanah.js"></script>
-    
-<script src="buy-sell-agreement.js"></script>
-  
 </body>
 </html>
