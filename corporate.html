@@ -76,11 +76,11 @@
         <div class="grid grid-cols-2 gap-4 mb-5">
             <div>
                 <label class="text-xs font-semibold text-gray-500 ml-1 block mb-1">Jumlah Keseluruhan Saham Syarikat</label>
-                <input type="number" id="jumlahSaham" placeholder="Cth: 100000" class="w-full border rounded-lg p-3">
+                <input type="text" id="jumlahSaham" placeholder="Cth: 100,000" class="w-full border rounded-lg p-3" oninput="formatSaham(this)">
             </div>
             <div>
                 <label class="text-xs font-semibold text-gray-500 ml-1 block mb-1">Saham Milik Pewasiat</label>
-                <input type="number" id="sahamPewasiat" placeholder="Cth: 50000" class="w-full border rounded-lg p-3">
+                <input type="text" id="sahamPewasiat" placeholder="Cth: 50,000" class="w-full border rounded-lg p-3" oninput="formatSaham(this)">
             </div>
         </div>
 
@@ -104,7 +104,7 @@
             <input type="text" id="namaPartner" placeholder="Nama Rakan Kongsi" class="w-full border rounded-lg p-3">
             <input type="text" id="icPartner" placeholder="No IC Rakan Kongsi" class="w-full border rounded-lg p-3">
             <textarea id="alamatPartner" rows="2" placeholder="Alamat Rakan Kongsi" class="w-full border rounded-lg p-3"></textarea>
-            <input type="number" id="sahamPartner" placeholder="Bilangan Saham Milik Rakan Kongsi (Unit)" class="w-full border rounded-lg p-3">
+            <input type="text" id="sahamPartner" placeholder="Bilangan Saham Milik Rakan Kongsi (Unit)" class="w-full border rounded-lg p-3" oninput="formatSaham(this)">
         </div>
 
         <!-- KOTAK B: HIBAH SAHAM -->
@@ -235,6 +235,22 @@
             let parts = numStr.split('.');
             parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             input.value = "RM " + parts.join('.');
+        } else {
+            input.value = "";
+        }
+    };
+
+    // --- FUNGSI FORMAT SAHAM (Koma automatik tanpa RM) ---
+    window.formatSaham = function(input) {
+        let val = input.value;
+        if (val.trim() === "") return;
+        
+        // Buang semua huruf/simbol, ambil nombor sahaja
+        let numStr = val.replace(/[^0-9]/g, '');
+        
+        if (numStr !== "") {
+            // Letak koma setiap 3 digit
+            input.value = numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         } else {
             input.value = "";
         }
