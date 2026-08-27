@@ -724,7 +724,7 @@
       }
     });
 
-    // SUBMIT FORM
+   // SUBMIT FORM
     document.getElementById("wasiatForm").addEventListener("submit", async(e)=>{
         e.preventDefault();
         try{
@@ -777,20 +777,7 @@
                 });
             }
 
-            const alamat1 = document.getElementById("alamat1").value.trim();
-            const alamat2 = document.getElementById("alamat2").value.trim();
-            const poskod = document.getElementById("poskod").value.trim();
-            const bandar = document.getElementById("bandar").value.trim();
-            const negeri = document.getElementById("negeri").value.trim();
-          
-            await setDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"), {
-                nama: document.getElementById("nama").value,
-                ic: document.getElementById("ic").value,
-                alamat1: alamat1, alamat2: alamat2, poskod: poskod, bandar: bandar, negeri: negeri,
-                alamat: [alamat1, alamat2, `${poskod} ${bandar}`.trim(), negeri].filter(Boolean).join(", "),
-                telefon: document.getElementById("telefon").value,
-                
-             // 1. KUTIP DATA WASI 1 DAHULU
+            // 1. KUTIP DATA WASI 1 DAHULU (Pilihan RTB / Manual)
             const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
             let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
 
@@ -808,7 +795,7 @@
                 finalTelefonWasi1 = document.getElementById("telefonWasi1").value;
             }
 
-            // 2. KUTIP ALAMAT DAHULU
+            // 2. KUTIP ALAMAT
             const alamat1 = document.getElementById("alamat1").value.trim();
             const alamat2 = document.getElementById("alamat2").value.trim();
             const poskod = document.getElementById("poskod").value.trim();
@@ -819,11 +806,7 @@
             await setDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"), {
                 nama: document.getElementById("nama").value,
                 ic: document.getElementById("ic").value,
-                alamat1: alamat1, 
-                alamat2: alamat2, 
-                poskod: poskod, 
-                bandar: bandar, 
-                negeri: negeri,
+                alamat1: alamat1, alamat2: alamat2, poskod: poskod, bandar: bandar, negeri: negeri,
                 alamat: [alamat1, alamat2, `${poskod} ${bandar}`.trim(), negeri].filter(Boolean).join(", "),
                 telefon: document.getElementById("telefon").value,
                 
@@ -876,7 +859,7 @@
                 createdAt: new Date(),
                 updatedAt: new Date()
             }, { merge: true });
-          
+
             document.getElementById("status").innerHTML = "Maklumat berjaya disimpan.";
             setTimeout(()=> document.getElementById("status").innerHTML="", 3000);
         }
@@ -884,7 +867,7 @@
             document.getElementById("status").innerHTML = error.message;
         }
     });
-
+    
     // AUTO FORMATTING (HURUF BESAR & NOMBOR IC)
     document.addEventListener('input', function (e) {
         let target = e.target;
