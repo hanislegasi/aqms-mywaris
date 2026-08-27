@@ -134,12 +134,6 @@
                                 <div id="tocMekanismeList" class="space-y-4 pl-6"></div>
                             </div>
 
-                            <div id="tocAmanahContainer" class="flex items-end w-full hidden">
-                                <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Dokumen Pemegang Amanah</span>
-                                <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
-                                <span id="tocAmanah" class="font-bold">-</span>
-                            </div>
-
                             <div class="flex items-end w-full">
                                 <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Lampiran</span>
                                 <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
@@ -234,7 +228,6 @@
             });
         }
 
-        // Format Date Helper
         function formatDateMY(dateStr){
             if(!dateStr) return "-";
             return new Date(dateStr).toLocaleDateString("ms-MY");
@@ -265,7 +258,6 @@
         onAuthStateChanged(auth, async (user) => {
             if (!user) return;
             try {
-                // LOAD ADMIN & CUSTOMER
                 const adminDoc = await getDoc(doc(db, "users", user.uid));
                 if (adminDoc.data()?.role !== "admin") {
                     alert("Akses ditolak"); window.location.href = "dashboard.html"; return;
@@ -324,7 +316,7 @@
                             </table>
                         `;
 
-                        // Lampiran Waris & Amanah
+                        // Lampiran Waris 
                         let lampiranWaris = `<table style="width:100%; border-collapse:collapse; font-size:14px;"><tr><th style="border:1px solid #000;padding:8px;">Nama</th><th style="border:1px solid #000;padding:8px;">No K/P</th><th style="border:1px solid #000;padding:8px;">Hubungan</th><th style="border:1px solid #000;padding:8px;">Status</th></tr>`;
                         (data.waris || []).forEach(w => {
                             let statusText = w.status === "bawah18" ? "Bawah 18 Tahun" : w.status === "oku" ? "OKU" : "Dewasa";
@@ -370,13 +362,13 @@
                                 .replaceAll("{{NAMA_WASI1}}", data.namaWasi1 || "-")
                                 .replaceAll("{{NO_IC_WASI1}}", data.icWasi1 || "-")
                                 .replaceAll("{{ALAMAT_WASI1}}", data.alamatWasi1 || "-")
-                                .replaceAll("{{TARIKH_PERJANJIAN}}", data.mekanismeAgihan === 'buysell' ? formatDateMY(data.tarikhPerjanjian) : "(Rujuk Arahan Hibah / Faraid)")
+                                .replaceAll("{{TARIKH_PERJANJIAN}}", data.mekanismeAgihan === 'buysell' ? formatDateMY(data.tarikhPerjanjian) : "(Rujuk Arahan Hibah)")
                                 .replaceAll("{{SEKSYEN_WASIAT_13}}", bahagianWasiat13);
                             document.getElementById("sectionWasiat").innerHTML = wContent;
                         }
 
                         // ==========================================
-                        // 2. GENERATE MEKANISME KORPORAT (BUY-SELL / HIBAH / WAKAF)
+                        // 2. GENERATE MEKANISME KORPORAT (BUY-SELL / HIBAH)
                         // ==========================================
                         let mekanismeHTML = "";
                         const tocMekList = document.getElementById("tocMekanismeList");
@@ -403,57 +395,78 @@
                         
                         } else if (data.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefined') {
                             (data.penerimaHibahSaham || []).forEach((p, index) => {
+                                
+                                // A: Dapatkan Maklumat Waris Sebenar dari senarai Waris
+                                const warisDetail = (data.waris || []).find(w => w.nama === p.nama) || {};
+                                
+                                // B: Logik Pemegang Amanah
+                                let amanahContent = "";
+                                let introPenerima = `(selepas ini disebut sebagai <strong>"Penerima Hibah Saham"</strong>)`;
+                                let labelPenerima = "Penerima Hibah";
+                                let namaPenerimaSbnr = p.nama || "-";
+                                let icPenerimaSbnr = warisDetail.ic || "-";
+                                let alamatPenerimaSbnr = warisDetail.alamat || "-";
+                                let tarikhLahirPenerima = formatDateMY(warisDetail.tarikhLahir);
+
+                                if (warisDetail.status === "bawah18" || warisDetail.status === "oku") {
+                                    // Pakej data untuk generatePemegangAmanah()
+                                    let mockItem = {
+                                        ...warisDetail,
+                                        pemegangAmanah: data.pemegangAmanah 
+                                    };
+                                    
+                                    if (typeof window.generatePemegangAmanah === "function") {
+                                        amanahContent = window.generatePemegangAmanah(mockItem, data)
+                                            .replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
+                                            .replaceAll("{{IC_PEMBERI}}", data.ic || "-")
+                                            .replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-");
+                                    }
+                                    
+                                    // Wakil (Pemegang Amanah) menanggung tanggungjawab rasmi
+                                    if(data.pemegangAmanah && data.pemegangAmanah.nama) {
+                                        introPenerima = `selaku <strong>"Pemegang Amanah"</strong> bagi pihak <strong>${p.nama}</strong> (Penerima Hibah Saham)`;
+                                        labelPenerima = "Pemegang Amanah";
+                                        namaPenerimaSbnr = data.pemegangAmanah.nama;
+                                        icPenerimaSbnr = data.pemegangAmanah.ic;
+                                        alamatPenerimaSbnr = data.pemegangAmanah.alamat || alamatPenuh;
+                                    }
+                                }
+
+                                // C: Masukkan data ke dalam templat Hibah
                                 let hContent = hibahContent
+                                    .replaceAll("{{PEMEGANG_AMANAH}}", amanahContent)
                                     .replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
                                     .replaceAll("{{IC_PEMBERI}}", data.ic || "-")
                                     .replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-")
                                     .replaceAll("{{TELEFON_PEMBERI}}", data.telefon || "-")
-                                    .replaceAll("{{NAMA_PENERIMA}}", p.nama || "-")
-                                    .replaceAll("{{IC_PENERIMA}}", "-")
-                                    .replaceAll("{{HUBUNGAN}}", "-")
-                                    .replaceAll("{{ALAMAT_PENERIMA}}", "-")
+                                    .replaceAll("{{NAMA_PENERIMA}}", namaPenerimaSbnr)
+                                    .replaceAll("{{IC_PENERIMA}}", icPenerimaSbnr)
+                                    .replaceAll("{{HUBUNGAN}}", warisDetail.hubungan || "-")
+                                    .replaceAll("{{ALAMAT_PENERIMA}}", alamatPenerimaSbnr)
+                                    .replaceAll("{{TARIKH_LAHIR}}", tarikhLahirPenerima)
                                     .replaceAll("{{PERATUS}}", p.peratus || "-")
                                     .replaceAll("{{TARIKH_DOKUMEN}}", formatDateMY(data.approvedAt))
                                     .replaceAll("{{TABLE_ALIH}}", generateSahamTable(data, p))
                                     .replaceAll("{{TABLE_TAK_ALIH}}", "<p>Tiada Harta Tak Alih Terlibat.</p>")
-                                    .replaceAll("{{PEMEGANG_AMANAH}}", "")
-                                    .replaceAll("{{LABEL_PENERIMA}}", "Penerima Hibah")
-                                    .replaceAll("{{INTRO_PENERIMA}}", `(selepas ini disebut sebagai <strong>"Penerima Hibah Saham"</strong>)`)
-                                    .replaceAll("{{BENEFISIARI}}", p.nama);
+                                    .replaceAll("{{LABEL_PENERIMA}}", labelPenerima)
+                                    .replaceAll("{{INTRO_PENERIMA}}", introPenerima)
+                                    .replaceAll("{{BENEFISIARI}}", p.nama || "-");
                                 
                                 hContent = hContent.replace(/class="a4-page/i, `data-target="tocMek_${index}" class="a4-page`);
                                 mekanismeHTML += hContent;
+                                
                                 tocMekList.innerHTML += `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Hibah Saham: ${p.nama}</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_${index}" class="text-[14px] font-bold">-</span></div>`;
                             });
                         }
-                        // (Tambahan logik Wakaf Zurri jika diperlukan di masa hadapan)
+                        
                         document.getElementById("sectionMekanisme").innerHTML = mekanismeHTML;
 
                         // ==========================================
-                        // 3. GENERATE PEMEGANG AMANAH (JIKA ADA)
-                        // ==========================================
-                        let amanahHTML = "";
-                        const tocAmanahContainer = document.getElementById("tocAmanahContainer");
-                        if (data.pemegangAmanah && data.pemegangAmanah.pilihan === "ya" && typeof pemegangAmanahContent !== 'undefined') {
-                            amanahHTML = pemegangAmanahContent
-                                .replaceAll("{{NAMA_PEWASIAT}}", data.nama || "-")
-                                .replaceAll("{{NO_IC_PEWASIAT}}", data.ic || "-")
-                                .replaceAll("{{ALAMAT_PEWASIAT}}", alamatPenuh || "-")
-                                .replaceAll("{{NAMA_PEMEGANG_AMANAH}}", data.pemegangAmanah.nama || "-")
-                                .replaceAll("{{IC_PEMEGANG_AMANAH}}", data.pemegangAmanah.ic || "-")
-                                .replaceAll("{{HUBUNGAN_PEMEGANG_AMANAH}}", data.pemegangAmanah.hubungan || "-")
-                                .replaceAll("{{ALAMAT_PEMEGANG_AMANAH}}", data.pemegangAmanah.alamat || "-");
-                            
-                            tocAmanahContainer.classList.remove("hidden");
-                            document.getElementById("sectionAmanah").innerHTML = amanahHTML;
-                        }
-
-                        // ==========================================
-                        // 4. GENERATE LAMPIRAN DOKUMEN FIZIKAL
+                        // 3. GENERATE LAMPIRAN DOKUMEN FIZIKAL
                         // ==========================================
                         const lampiranSnap = await getDocs(collection(db, "users", userId, "corporateDocuments"));
                         let lampiranHTML = "";
-                        let hurufLampiran = "C".charCodeAt(0); // Sambung dari Lampiran B (Pemegang Amanah)
+                        let hurufLampiran = "C".charCodeAt(0); 
                         for(const doc of lampiranSnap.docs){
                             const file = doc.data();
                             if(file.fileURL.match(/\.(jpeg|jpg|gif|png)$/i) != null) {
@@ -465,23 +478,21 @@
                         document.getElementById("sectionLampiran").innerHTML = lampiranHTML;
 
                         // ==========================================
-                        // 5. UPDATE TABLE OF CONTENTS (TOC) PAGINATION
+                        // 4. UPDATE TABLE OF CONTENTS (TOC) PAGINATION
                         // ==========================================
                         setTimeout(() => {
                             const pages = document.querySelectorAll(".a4-page");
                             pages.forEach((page, index) => {
-                                if (index === 0) return; // Skip cover
+                                if (index === 0) return; 
                                 const pageNum = index + 1;
                                 const footer = page.querySelector(".pdf-footer");
                                 if (footer) footer.innerHTML = `<span class="footer-docref">${currentDocRef}</span><span class="page-number">${pageNum}</span>`;
 
-                                // TOC Document Utama
                                 if (page.closest("#sectionWasiat")) {
                                     const tocWasiat = document.getElementById("tocWasiat");
                                     if (tocWasiat && tocWasiat.innerText === "-") tocWasiat.innerText = pageNum;
                                 }
 
-                                // TOC Mekanisme (Tarik dari ID yang dicop)
                                 if (page.closest("#sectionMekanisme")) {
                                     const targetId = page.getAttribute("data-target"); 
                                     if (targetId) {
@@ -490,13 +501,6 @@
                                     }
                                 }
 
-                                // TOC Amanah
-                                if (page.closest("#sectionAmanah")) {
-                                    const tocAmanah = document.getElementById("tocAmanah");
-                                    if (tocAmanah && tocAmanah.innerText === "-") tocAmanah.innerText = pageNum;
-                                }
-
-                                // TOC Lampiran
                                 if (page.closest("#sectionLampiran")) {
                                     const tocLampiran = document.getElementById("tocLampiran");
                                     if (tocLampiran && tocLampiran.innerText === "-") tocLampiran.innerText = pageNum;
