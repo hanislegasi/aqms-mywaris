@@ -152,11 +152,11 @@ Umur
 ${item.nama}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${item.ic}
 </td>
 
-<td style="border:1px solid #000;padding:8px;">
+<td style="border:1px solid #000;padding:8px;text-align:center;">
 ${item.hubungan}
 </td>
 
