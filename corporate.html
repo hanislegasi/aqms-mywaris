@@ -790,25 +790,7 @@
                 alamat: [alamat1, alamat2, `${poskod} ${bandar}`.trim(), negeri].filter(Boolean).join(", "),
                 telefon: document.getElementById("telefon").value,
                 
-                // KORPORAT DATA
-                namaSyarikat: document.getElementById("namaSyarikat").value,
-                noSsm: document.getElementById("noSsm").value,
-                alamatSyarikat: document.getElementById("alamatSyarikat").value,
-                jumlahSaham: document.getElementById("jumlahSaham").value,
-                statusPemilikan: statusPemilikan,
-                mekanismeAgihan: mekanismeAgihan,
-                
-                // DATA BUY-SELL AGREEMENT
-                sahamPewasiat: document.getElementById("sahamPewasiat").value,
-                namaPartner: document.getElementById("namaPartner").value,
-                icPartner: document.getElementById("icPartner").value,
-                alamatPartner: document.getElementById("alamatPartner").value,
-                sahamPartner: document.getElementById("sahamPartner").value,
-                
-                penerimaHibahSaham: penerimaHibahSaham,
-                penerimaWakafZurri: penerimaWakafZurri,
-                
-                // --- KUTIP DATA WASI 1 ---
+             // 1. KUTIP DATA WASI 1 DAHULU
             const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
             let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
 
@@ -826,167 +808,22 @@
                 finalTelefonWasi1 = document.getElementById("telefonWasi1").value;
             }
 
-            // KUTIP ALAMAT
+            // 2. KUTIP ALAMAT DAHULU
             const alamat1 = document.getElementById("alamat1").value.trim();
             const alamat2 = document.getElementById("alamat2").value.trim();
             const poskod = document.getElementById("poskod").value.trim();
             const bandar = document.getElementById("bandar").value.trim();
             const negeri = document.getElementById("negeri").value.trim();
           
+            // 3. BARU SIMPAN KE FIREBASE
             await setDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"), {
                 nama: document.getElementById("nama").value,
                 ic: document.getElementById("ic").value,
-                alamat1: alamat1, alamat2: alamat2, poskod: poskod, bandar: bandar, negeri: negeri,
-                alamat: [alamat1, alamat2, `${poskod} ${bandar}`.trim(), negeri].filter(Boolean).join(", "),
-                telefon: document.getElementById("telefon").value,
-                
-                // KORPORAT DATA
-                namaSyarikat: document.getElementById("namaSyarikat").value,
-                noSsm: document.getElementById("noSsm").value,
-                alamatSyarikat: document.getElementById("alamatSyarikat").value,
-                jumlahSaham: document.getElementById("jumlahSaham").value,
-                statusPemilikan: statusPemilikan,
-                mekanismeAgihan: mekanismeAgihan,
-                
-                // DATA BUY-SELL AGREEMENT
-                sahamPewasiat: document.getElementById("sahamPewasiat").value,
-                namaPartner: document.getElementById("namaPartner").value,
-                icPartner: document.getElementById("icPartner").value,
-                alamatPartner: document.getElementById("alamatPartner").value,
-                sahamPartner: document.getElementById("sahamPartner").value,
-                
-                penerimaHibahSaham: penerimaHibahSaham,
-                penerimaWakafZurri: penerimaWakafZurri,
-                
-                // --- KUTIP DATA WASI 1 ---
-            const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
-            let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
-
-            if (pilihanWasi1Val === "rtb") {
-                finalNamaWasi1 = "Rakyat Trustee Berhad";
-                finalIcWasi1 = "1462142-U";
-                finalHubunganWasi1 = "Syarikat Amanah";
-                finalAlamatWasi1 = "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 KL";
-                finalTelefonWasi1 = "+603 2602 2722";
-            } else {
-                finalNamaWasi1 = document.getElementById("namaWasi1").value;
-                finalIcWasi1 = document.getElementById("icWasi1").value;
-                finalHubunganWasi1 = document.getElementById("hubunganWasi1").value;
-                finalAlamatWasi1 = document.getElementById("alamatWasi1").value;
-                finalTelefonWasi1 = document.getElementById("telefonWasi1").value;
-            }
-
-            // KUTIP ALAMAT
-            const alamat1 = document.getElementById("alamat1").value.trim();
-            const alamat2 = document.getElementById("alamat2").value.trim();
-            const poskod = document.getElementById("poskod").value.trim();
-            const bandar = document.getElementById("bandar").value.trim();
-            const negeri = document.getElementById("negeri").value.trim();
-          
-            await setDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"), {
-                nama: document.getElementById("nama").value,
-                ic: document.getElementById("ic").value,
-                alamat1: alamat1, alamat2: alamat2, poskod: poskod, bandar: bandar, negeri: negeri,
-                alamat: [alamat1, alamat2, `${poskod} ${bandar}`.trim(), negeri].filter(Boolean).join(", "),
-                telefon: document.getElementById("telefon").value,
-                
-                // KORPORAT DATA
-                namaSyarikat: document.getElementById("namaSyarikat").value,
-                noSsm: document.getElementById("noSsm").value,
-                alamatSyarikat: document.getElementById("alamatSyarikat").value,
-                jumlahSaham: document.getElementById("jumlahSaham").value,
-                statusPemilikan: statusPemilikan,
-                mekanismeAgihan: mekanismeAgihan,
-                
-                // DATA BUY-SELL AGREEMENT
-                sahamPewasiat: document.getElementById("sahamPewasiat").value,
-                namaPartner: document.getElementById("namaPartner").value,
-                icPartner: document.getElementById("icPartner").value,
-                alamatPartner: document.getElementById("alamatPartner").value,
-                sahamPartner: document.getElementById("sahamPartner").value,
-                
-                penerimaHibahSaham: penerimaHibahSaham,
-                penerimaWakafZurri: penerimaWakafZurri,
-                
-                // --- KUTIP DATA WASI 1 ---
-            const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
-            let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
-
-            if (pilihanWasi1Val === "rtb") {
-                finalNamaWasi1 = "Rakyat Trustee Berhad";
-                finalIcWasi1 = "1462142-U";
-                finalHubunganWasi1 = "Syarikat Amanah";
-                finalAlamatWasi1 = "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 KL";
-                finalTelefonWasi1 = "+603 2602 2722";
-            } else {
-                finalNamaWasi1 = document.getElementById("namaWasi1").value;
-                finalIcWasi1 = document.getElementById("icWasi1").value;
-                finalHubunganWasi1 = document.getElementById("hubunganWasi1").value;
-                finalAlamatWasi1 = document.getElementById("alamatWasi1").value;
-                finalTelefonWasi1 = document.getElementById("telefonWasi1").value;
-            }
-
-            // KUTIP ALAMAT
-            const alamat1 = document.getElementById("alamat1").value.trim();
-            const alamat2 = document.getElementById("alamat2").value.trim();
-            const poskod = document.getElementById("poskod").value.trim();
-            const bandar = document.getElementById("bandar").value.trim();
-            const negeri = document.getElementById("negeri").value.trim();
-          
-            await setDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"), {
-                nama: document.getElementById("nama").value,
-                ic: document.getElementById("ic").value,
-                alamat1: alamat1, alamat2: alamat2, poskod: poskod, bandar: bandar, negeri: negeri,
-                alamat: [alamat1, alamat2, `${poskod} ${bandar}`.trim(), negeri].filter(Boolean).join(", "),
-                telefon: document.getElementById("telefon").value,
-                
-                // KORPORAT DATA
-                namaSyarikat: document.getElementById("namaSyarikat").value,
-                noSsm: document.getElementById("noSsm").value,
-                alamatSyarikat: document.getElementById("alamatSyarikat").value,
-                jumlahSaham: document.getElementById("jumlahSaham").value,
-                statusPemilikan: statusPemilikan,
-                mekanismeAgihan: mekanismeAgihan,
-                
-                // DATA BUY-SELL AGREEMENT
-                sahamPewasiat: document.getElementById("sahamPewasiat").value,
-                namaPartner: document.getElementById("namaPartner").value,
-                icPartner: document.getElementById("icPartner").value,
-                alamatPartner: document.getElementById("alamatPartner").value,
-                sahamPartner: document.getElementById("sahamPartner").value,
-                
-                penerimaHibahSaham: penerimaHibahSaham,
-                penerimaWakafZurri: penerimaWakafZurri,
-                
-                // --- KUTIP DATA WASI 1 ---
-            const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
-            let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
-
-            if (pilihanWasi1Val === "rtb") {
-                finalNamaWasi1 = "Rakyat Trustee Berhad";
-                finalIcWasi1 = "1462142-U";
-                finalHubunganWasi1 = "Syarikat Amanah";
-                finalAlamatWasi1 = "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 KL";
-                finalTelefonWasi1 = "+603 2602 2722";
-            } else {
-                finalNamaWasi1 = document.getElementById("namaWasi1").value;
-                finalIcWasi1 = document.getElementById("icWasi1").value;
-                finalHubunganWasi1 = document.getElementById("hubunganWasi1").value;
-                finalAlamatWasi1 = document.getElementById("alamatWasi1").value;
-                finalTelefonWasi1 = document.getElementById("telefonWasi1").value;
-            }
-
-            // KUTIP ALAMAT
-            const alamat1 = document.getElementById("alamat1").value.trim();
-            const alamat2 = document.getElementById("alamat2").value.trim();
-            const poskod = document.getElementById("poskod").value.trim();
-            const bandar = document.getElementById("bandar").value.trim();
-            const negeri = document.getElementById("negeri").value.trim();
-          
-            await setDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"), {
-                nama: document.getElementById("nama").value,
-                ic: document.getElementById("ic").value,
-                alamat1: alamat1, alamat2: alamat2, poskod: poskod, bandar: bandar, negeri: negeri,
+                alamat1: alamat1, 
+                alamat2: alamat2, 
+                poskod: poskod, 
+                bandar: bandar, 
+                negeri: negeri,
                 alamat: [alamat1, alamat2, `${poskod} ${bandar}`.trim(), negeri].filter(Boolean).join(", "),
                 telefon: document.getElementById("telefon").value,
                 
@@ -1022,8 +859,6 @@
                 alamatWasi2: document.getElementById("alamatWasi2").value,
                 telefonWasi2: document.getElementById("telefonWasi2").value,
                 
-                
-                               
                 // OTHER SECTIONS
                 wasiatSatuPerTiga: wasiatSatuPerTiga,  
                 pesananWasiat: document.getElementById("pesananWasiat").value,  
@@ -1041,7 +876,7 @@
                 createdAt: new Date(),
                 updatedAt: new Date()
             }, { merge: true });
-
+          
             document.getElementById("status").innerHTML = "Maklumat berjaya disimpan.";
             setTimeout(()=> document.getElementById("status").innerHTML="", 3000);
         }
