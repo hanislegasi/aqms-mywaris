@@ -35,48 +35,8 @@
           <img src="https://i.postimg.cc/9MttwjKF/Copy-of-A-(4).png" alt="AQMS Logo" class="h-full max-h-16 sm:max-h-20 w-auto object-contain">
         </div>
 
-        <!-- Register Dropdown Area -->
-        <div class="flex items-center gap-2 sm:gap-3">
-          
-          <!-- DROPDOWN DAFTAR AKAUN -->
-          <div class="relative group">
-            <button type="button"
-              class="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-[#d8ae81] text-[#153638] font-semibold rounded-lg hover:opacity-90 transition inline-flex items-center gap-1">
-              <span>Daftar Akaun</span>
-              <!-- Ikon Chevron Down -->
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </button>
-
-            <!-- Menu Dropdown -->
-            <div class="hidden group-hover:block group-focus-within:block absolute right-0 mt-1 w-52 bg-white rounded-xl shadow-xl ring-1 ring-black/5 z-50 overflow-hidden py-1">
-              
-              <!-- Daftar AQM -->
-              <a href="register.html" class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-[#d8ae81]/20 hover:text-[#153638] transition font-medium">
-                <!-- Ikon User Kekal -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2 text-[#153638] shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                Daftar <strong>AQM</strong>&nbsp;(Client)
-              </a>
-
-              <!-- Daftar AQC -->
-              <a href="consultant-registration.html" class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-[#d8ae81]/20 hover:text-[#153638] transition font-medium border-t border-gray-100">
-                <!-- Ikon Briefcase Versi Paling Asas (Dijamin Keluar) -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2 text-[#153638] shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                </svg>
-                Daftar <strong>AQC</strong>&nbsp;(Consultant)
-              </a>
-
-            </div>
-          </div>
-          <!-- DROPDOWN DAFTAR AKAUN TAMAT -->
-
-        </div>
+        <!-- Bahagian kanan header dikosongkan sebab butang daftar dah pindah bawah -->
+        <div></div>
         
       </div>
     </div>
@@ -93,19 +53,58 @@
     <!-- Dark overlay -->
     <div class="absolute inset-0 z-0 bg-black/40"></div>
 
-    <!-- Container untuk Logo Tengah & Butang Login -->
-    <div class="relative z-10 px-4 flex flex-col items-center gap-3">
+    <!-- Container untuk Logo Tengah & Butang-butang -->
+    <div class="relative z-10 px-4 flex flex-col items-center gap-4">
         
         <!-- Logo -->
-        <div class="transform hover:scale-105 transition-transform duration-700">
+        <div class="transform hover:scale-105 transition-transform duration-700 mb-2">
             <img src="https://i.postimg.cc/HxNP7q6R/Copy-of-A-6-removebg-preview.png" alt="AQMS Logo Tengah" class="w-64 sm:w-80 md:w-[400px] drop-shadow-[0_10px_35px_rgba(0,0,0,0.5)]">
         </div>
 
-        <!-- Butang Login: Dikurangkan kelebaran ke w-[260px] dan nipis py-2 -->
+        <!-- Butang Log Masuk -->
         <button onclick="window.location.href='login.html'"
             class="w-56 sm:w-64 md:w-[300px] py-2 text-base border-2 border-[#d8ae81] bg-[#153638]/90 backdrop-blur-sm text-[#d8ae81] rounded-xl hover:bg-[#d8ae81] hover:text-[#153638] transition-all duration-300 font-bold shadow-[0_5px_15px_rgba(0,0,0,0.4)] hover:-translate-y-1">
             Log Masuk
         </button>
+
+        <!-- DROPDOWN DAFTAR AKAUN (DIPINDAHKAN KE SINI) -->
+        <div class="relative group w-56 sm:w-64 md:w-[300px]">
+            <!-- Butang Daftar (Warna Opposite) -->
+            <button type="button"
+                class="w-full py-2 text-base border-2 border-[#153638] bg-[#d8ae81] text-[#153638] rounded-xl hover:bg-[#153638]/90 hover:text-[#d8ae81] hover:border-[#d8ae81] transition-all duration-300 font-bold shadow-[0_5px_15px_rgba(0,0,0,0.4)] hover:-translate-y-1 inline-flex justify-center items-center gap-2">
+                <span>Daftar Akaun</span>
+                <!-- Ikon Chevron Down -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+
+            <!-- Menu Dropdown -->
+            <div class="hidden group-hover:block group-focus-within:block absolute left-0 right-0 mt-2 w-full bg-white rounded-xl shadow-xl ring-1 ring-black/5 z-50 overflow-hidden py-1">
+                
+                <!-- Daftar AQM -->
+                <a href="register.html" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-[#d8ae81]/20 hover:text-[#153638] transition font-medium">
+                    <!-- Ikon User Kekal -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2 text-[#153638] shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Daftar <strong>AQM</strong>&nbsp;(Client)
+                </a>
+
+                <!-- Daftar AQC -->
+                <a href="consultant-registration.html" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-[#d8ae81]/20 hover:text-[#153638] transition font-medium border-t border-gray-100">
+                    <!-- Ikon Briefcase -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2 text-[#153638] shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                    Daftar <strong>AQC</strong>&nbsp;(Consultant)
+                </a>
+
+            </div>
+        </div>
+        <!-- DROPDOWN DAFTAR AKAUN TAMAT -->
 
     </div>
 
