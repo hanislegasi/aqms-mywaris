@@ -151,6 +151,15 @@ resolusi, dan pindah milik saham bagi pihak saya.
 
 {{PESANAN_WASIAT}}
 
+<div class="pdf-footer">
+<span class="footer-docref"></span>
+<span class="page-number"></span>
+</div>
+
+</div>
+
+<div class="a4-page p-[18mm]">
+
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>FASAL 6: KEBOLEHASINGAN (SEVERABILITY)</strong>
 </h3>
