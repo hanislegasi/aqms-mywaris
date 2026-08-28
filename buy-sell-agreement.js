@@ -158,59 +158,74 @@ font-style:italic;
 
 </div>
 
-    <!-- ================= PAGE 4 ================= -->
+<!-- ================= PAGE 4 ================= -->
 <div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:14px; line-height:1.6; text-align:justify; color:#222;">
 
-    <p style="margin-bottom:30px;">
+    <p style="margin-bottom:40px;">
         PADA MENYAKSIKAN HAL DI ATAS, Pihak-Pihak di sini telah menurunkan tandatangan masing-masing pada tarikh yang mula-mula tertulis di atas.
     </p>
 
-    <table width="100%" style="margin-bottom:50px;">
+    <!-- SIGNATURE 1: PEMEGANG SAHAM A -->
+    <table style="width:100%; margin-bottom:50px; border-collapse:collapse;">
         <tr valign="top">
-            <td width="50%">
-                <p style="font-weight:bold; margin-bottom:40px;">DITANDATANGANI OLEH PEMEGANG SAHAM A:</p>
+            <td width="45%">
+                <p style="font-weight:bold; margin-bottom:50px;">DITANDATANGANI OLEH PEMEGANG SAHAM A:</p>
                 <p>..................................................</p>
-                <p><strong>{{NAMA_PEWASIAT}}</strong></p>
+                <p style="margin-top:5px;"><strong>{{NAMA_PEWASIAT}}</strong></p>
                 <p>No. K/P: {{NO_IC_PEWASIAT}}</p>
             </td>
-            <td width="50%">
-                <p style="font-weight:bold; margin-bottom:40px;">Di hadapan (Saksi):</p>
-                <p>Tandatangan: ............................................</p>
-                <p>Nama Saksi:</p>
-                <p>No. K/P:</p>
+            <!-- Ruang Kosong (Spacer) -->
+            <td width="10%"></td>
+            <!-- Saksi 1 -->
+            <td width="45%">
+                <p style="font-weight:bold; margin-bottom:50px;">Di hadapan (Saksi):</p>
+                <p>Tandatangan : ............................................</p>
+                <p style="margin-top:5px;">Nama Saksi : </p>
+                <p>No. K/P &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
             </td>
         </tr>
     </table>
 
-    <table width="100%" style="margin-bottom:50px;">
+    <!-- SIGNATURE 2: PEMEGANG SAHAM B -->
+    <table style="width:100%; margin-bottom:50px; border-collapse:collapse;">
         <tr valign="top">
-            <td width="50%">
-                <p style="font-weight:bold; margin-bottom:40px;">DITANDATANGANI OLEH PEMEGANG SAHAM B:</p>
+            <td width="45%">
+                <p style="font-weight:bold; margin-bottom:50px;">DITANDATANGANI OLEH PEMEGANG SAHAM B:</p>
                 <p>..................................................</p>
-                <p><strong>{{NAMA_PARTNER}}</strong></p>
+                <p style="margin-top:5px;"><strong>{{NAMA_PARTNER}}</strong></p>
                 <p>No. K/P: {{NO_IC_PARTNER}}</p>
             </td>
-            <td width="50%">
-                <p style="font-weight:bold; margin-bottom:40px;">Di hadapan (Saksi):</p>
-                <p>Tandatangan: ............................................</p>
-                <p>Nama Saksi:</p>
-                <p>No. K/P:</p>
+            <!-- Ruang Kosong (Spacer) -->
+            <td width="10%"></td>
+            <!-- Saksi 2 -->
+            <td width="45%">
+                <p style="font-weight:bold; margin-bottom:50px;">Di hadapan (Saksi):</p>
+                <p>Tandatangan : ............................................</p>
+                <p style="margin-top:5px;">Nama Saksi : </p>
+                <p>No. K/P &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
             </td>
         </tr>
     </table>
 
-    <table width="100%">
+    <!-- SIGNATURE 3: SYARIKAT -->
+    <table style="width:100%; margin-bottom:30px; border-collapse:collapse;">
         <tr valign="top">
-            <td width="50%">
-                <p style="font-weight:bold; margin-bottom:40px;">DITANDATANGANI BAGI PIHAK SYARIKAT:</p>
+            <td width="45%">
+                <p style="font-weight:bold; margin-bottom:50px;">DITANDATANGANI BAGI PIHAK SYARIKAT:</p>
                 <p>..................................................</p>
-                <p><strong>{{NAMA_WAKIL_SYARIKAT}}</strong></p>
+                <p style="margin-top:5px;"><strong>{{NAMA_WAKIL_SYARIKAT}}</strong></p>
                 <p>Pengarah / Setiausaha Syarikat</p>
                 <p>Untuk dan bagi pihak:</p>
                 <p><strong>{{NAMA_SYARIKAT}}</strong></p>
             </td>
-            <td width="50%">
-                <!-- Kosong untuk simetri jadual -->
+            <!-- Ruang Kosong (Spacer) -->
+            <td width="10%"></td>
+            <!-- Saksi 3 -->
+            <td width="45%">
+                <p style="font-weight:bold; margin-bottom:50px;">Di hadapan (Saksi):</p>
+                <p>Tandatangan : ............................................</p>
+                <p style="margin-top:5px;">Nama Saksi : </p>
+                <p>No. K/P &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
             </td>
         </tr>
     </table>
@@ -221,4 +236,3 @@ font-style:italic;
     </div>
 
 </div>
-`;
