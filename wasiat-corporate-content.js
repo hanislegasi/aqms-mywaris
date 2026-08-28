@@ -105,9 +105,9 @@ yang beralamat di <strong>{{ALAMAT_WASI1}}</strong>,
 sebagai Wasi dan Pemegang Amanah Tunggal (Sole Executor and Trustee) khusus bagi mentadbir Saham Syarikat saya.
 </td>
 </tr>
-
+{{WASI_KEDUA_TEXT}}
 <tr valign="top">
-<td>2.</td>
+<td>{{NOMBOR_WASI_KUASA}}.</td>
 <td style="padding-bottom:12px; text-align:justify;">
 Wasi diberi kuasa mutlak untuk memohon Surat Kuasa Mentadbir Wasiat (Grant of Probate) dan menandatangani semua dokumen penyerahan hak, 
 resolusi, dan pindah milik saham bagi pihak saya.
@@ -116,35 +116,10 @@ resolusi, dan pindah milik saham bagi pihak saya.
 </table>
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>FASAL 3: ARAHAN PEMATUHAN PERJANJIAN JUAL BELI SAHAM (BUY-SELL COMPLIANCE)</strong>
+<strong>FASAL 3: {{TAJUK_FASAL_3}}</strong>
 </h3>
 
-<p>Sekiranya berlaku kematian saya, saya mengarahkan Wasi saya untuk dengan serta-merta:</p>
-
-<table width="100%" style="border-collapse:collapse;">
-<tr valign="top">
-<td width="30">1.</td>
-<td style="padding-bottom:12px; text-align:justify;">
-Mematuhi dan menguatkuasakan segala terma yang terkandung di dalam Perjanjian Jual Beli Saham & Pewarisan (Buy-Sell Agreement) bertarikh <strong>{{TARIKH_PERJANJIAN}}</strong> yang telah ditandatangani antara saya, 
-rakan kongsi, dan Syarikat.
-</td>
-</tr>
-
-<tr valign="top">
-<td>2.</td>
-<td style="padding-bottom:12px; text-align:justify;">
-Menjual dan memindahkan kesemua Saham Syarikat saya kepada rakan-rakan kongsi saya yang masih hidup atau penama mereka, 
-seperti yang ditetapkan dalam Perjanjian tersebut.
-</td>
-</tr>
-
-<tr valign="top">
-<td>3.</td>
-<td style="padding-bottom:12px; text-align:justify;">
-Menerima, mengutip, dan memegang hasil wang tunai jualan saham (Sale Proceeds) yang dibayar oleh rakan kongsi saya atau daripada serahan pampasan Keyman Takaful.
-</td>
-</tr>
-</table>
+{{KANDUNGAN_FASAL_3}}
 
 <div class="pdf-footer">
 <span class="footer-docref"></span>
@@ -156,24 +131,10 @@ Menerima, mengutip, dan memegang hasil wang tunai jualan saham (Sale Proceeds) y
 <div class="a4-page p-[18mm]">
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>FASAL 4: AGIHAN HASIL WANG TUNAI JUALAN SAHAM</strong>
+<strong>FASAL 4: {{TAJUK_FASAL_4}}</strong>
 </h3>
 
-<p>Selepas Wasi menerima wang tunai hasil jualan Saham Syarikat, wang tersebut hendaklah diurus dan diagihkan mengikut turutan keutamaan berikut:</p>
-
-<p><strong>Pertama: Penyelesaian Kos dan Hutang</strong></p>
-<p>
-Membayar sebarang kos pentadbiran Wasi, duti setem, kos guaman peribadi, cukai LHDN, dan hutang-hutang peribadi saya (jika ada tuntutan).
-</p>
-
-<p><strong>Kedua: Wasiat 1/3 - Jika Ada</strong></p>
-<p>{{SEKSYEN_WASIAT_13}}</p>
-
-<p><strong>Ketiga: Agihan Faraid Kepada Waris</strong></p>
-<p>
-Baki keseluruhan wang tunai tersebut hendaklah diagihkan kepada waris-waris saya yang sah dan berhak pada tarikh kematian saya, 
-mengikut Hukum Faraid (Sijil Faraid yang dikeluarkan oleh Mahkamah Syariah yang berbidang kuasa).
-</p>
+{{KANDUNGAN_FASAL_4}}
 
 <div class="pdf-footer">
 <span class="footer-docref"></span>
@@ -376,8 +337,5 @@ LAMPIRAN B : PEMEGANG AMANAH
 
 </div>
 
-
-
 `;
-
 
