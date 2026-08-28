@@ -470,6 +470,7 @@
                                 .replaceAll("{{NAMA_SYARIKAT}}", data.namaSyarikat || "-")
                                 .replaceAll("{{NO_SSM}}", data.noSsm || "-")
                                 .replaceAll("{{ALAMAT_SYARIKAT}}", data.alamatSyarikat || "-")
+                                .replaceAll("{{NAMA_WAKIL_SYARIKAT}}", (data.namaWakilSyarikat || "-").toUpperCase()) // <-- TAMBAH INI
                                 .replaceAll("{{JUMLAH_SAHAM}}", fSaham(data.jumlahSaham))
                                 .replaceAll("{{SAHAM_PEWASIAT}}", fSaham(data.sahamPewasiat))
                                 .replaceAll("{{SAHAM_PARTNER}}", fSaham(data.sahamPartner));
