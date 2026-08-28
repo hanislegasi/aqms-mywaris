@@ -72,6 +72,7 @@
         <input type="text" id="noSsm" placeholder="No. Pendaftaran Syarikat (SSM)" class="w-full border rounded-lg p-3 mb-3">
         
         <textarea id="alamatSyarikat" rows="2" placeholder="Alamat Berdaftar Syarikat" class="w-full border rounded-lg p-3 mb-3"></textarea>
+        <input type="text" id="namaWakilSyarikat" placeholder="Nama Pengarah / Setiausaha Syarikat (Wakil Tandatangan)" class="w-full border rounded-lg p-3 mb-3">
         
         <div class="grid grid-cols-2 gap-4 mb-5">
             <div>
@@ -319,6 +320,7 @@
         document.getElementById("namaSyarikat").value = data.namaSyarikat || "";
         document.getElementById("noSsm").value = data.noSsm || "";
         document.getElementById("alamatSyarikat").value = data.alamatSyarikat || "";
+        document.getElementById("namaWakilSyarikat").value = data.namaWakilSyarikat || ""; // <-- TAMBAH INI
         document.getElementById("jumlahSaham").value = data.jumlahSaham || "";
         document.getElementById("sahamPewasiat").value = data.sahamPewasiat || "";
         
@@ -838,6 +840,7 @@
                 namaSyarikat: document.getElementById("namaSyarikat").value,
                 noSsm: document.getElementById("noSsm").value,
                 alamatSyarikat: document.getElementById("alamatSyarikat").value,
+                namaWakilSyarikat: document.getElementById("namaWakilSyarikat").value, // <-- TAMBAH INI
                 jumlahSaham: document.getElementById("jumlahSaham").value,
                 statusPemilikan: statusPemilikan,
                 mekanismeAgihan: mekanismeAgihan,
