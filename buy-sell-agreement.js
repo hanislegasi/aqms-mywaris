@@ -1,11 +1,11 @@
 const buySellAgreementContent = `
 
-<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:14px; line-height:1.6; text-align:justify; color:#222;">
+<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
 
-    <h2 style="font-size:20px; font-weight:bold; text-align:center; margin-bottom:5px; color:#153638;">
+    <h2 style="font-size:26px; font-weight:bold; text-align:center; margin-bottom:5px; color:#153638;">
         PERJANJIAN JUAL BELI SAHAM & PEWARISAN KORPORAT
     </h2>
-    <p style="text-align:center; margin-bottom:30px; font-weight:bold; font-size:16px;">
+    <p style="text-align:center; margin-bottom:30px; font-weight:bold; font-size:20px;">
         (CORPORATE BUY-SELL AND SUCCESSION AGREEMENT)
     </p>
 
@@ -65,9 +65,9 @@ const buySellAgreementContent = `
     </div>
 </div>
 
-<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:14px; line-height:1.6; text-align:justify; color:#222;">
+<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
 
-    <p style="font-weight:bold; margin-bottom:20px; text-align:right; background-color:#f3f4f6; padding:10px;">
+    <p style="font-weight:bold; margin-bottom:20px; text-align:left; padding:10px;">
         MAKA DENGAN INI, ADALAH DIPERSETUJUI SEPERTI BERIKUT:
     </p>
 
