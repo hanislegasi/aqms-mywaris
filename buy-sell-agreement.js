@@ -63,6 +63,7 @@ const buySellAgreementContent = `
         <span class="footer-docref"></span>
         <span class="page-number"></span>
     </div>
+</div>
 
 <div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:14px; line-height:1.6; text-align:justify; color:#222;">
 
@@ -78,15 +79,7 @@ const buySellAgreementContent = `
         <tr valign="top"><td width="30">1.3</td><td style="padding-bottom:8px;">"Wasi / Pentadbir" ertinya pihak, waris, penama, atau institusi yang dilantik secara sah mengikut perundangan Syariah mahupun Sivil untuk mentadbir harta pusaka Pemegang Saham Terjejas.</td></tr>
     </table>
 
-    <div class="pdf-footer">
-        <span class="footer-docref"></span>
-        <span class="page-number"></span>
-    </div>
-
-</div>
-
-<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:14px; line-height:1.6; text-align:justify; color:#222;">
-
+    
     <h3 style="font-weight:bold; margin-top:0px; margin-bottom:10px; color:#153638;">FASAL 2: KEWAJIPAN JUALAN DAN BELIAN SAHAM (MANDATORY BUY-SELL OBLIGATION)</h3>
     <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
         <tr valign="top">
@@ -112,6 +105,16 @@ const buySellAgreementContent = `
             </td>
         </tr>
     </table>
+
+    <div class="pdf-footer">
+        <span class="footer-docref"></span>
+        <span class="page-number"></span>
+    </div>
+
+</div>
+
+<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:14px; line-height:1.6; text-align:justify; color:#222;">
+
 
     <h3 style="font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 4: PEMBIAYAAN KORPORAT MELALUI TAKAFUL</h3>
     <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
