@@ -290,7 +290,7 @@
                         let bahagianWasiat13HTML = "";
                         
                         if (wasiatSah.length > 0) {
-                            let tableWasiat = `<table style="width:100%; border-collapse:collapse; font-size:14px; margin-top:10px; margin-bottom:15px; text-align:left;"><thead><tr><th style="border:1px solid #000; padding:8px;">No.</th><th style="border:1px solid #000; padding:8px;">Jenis Harta</th><th style="border:1px solid #000; padding:8px;">Nilai / Bahagian</th><th style="border:1px solid #000; padding:8px;">Penerima</th><th style="border:1px solid #000; padding:8px;">Nota</th></tr></thead><tbody>`;
+                            let tableWasiat = `<table style="width:100%; border-collapse:collapse; font-size:14px; margin-top:10px; margin-bottom:15px; text-align:center;"><thead><tr><th style="border:1px solid #000; padding:8px;">No.</th><th style="border:1px solid #000; padding:8px;">Jenis Harta</th><th style="border:1px solid #000; padding:8px;">Nilai / Bahagian</th><th style="border:1px solid #000; padding:8px;">Penerima</th><th style="border:1px solid #000; padding:8px;">Nota</th></tr></thead><tbody>`;
                             wasiatSah.forEach((item, index) => {
                                 tableWasiat += `<tr><td style="border:1px solid #000; padding:8px; text-align:center;">${index + 1}</td><td style="border:1px solid #000; padding:8px;">${item.harta}</td><td style="border:1px solid #000; padding:8px; text-align:right;">${item.bahagian}</td><td style="border:1px solid #000; padding:8px; text-align:center;">${item.penerima}</td><td style="border:1px solid #000; padding:8px;">${item.nota}</td></tr>`;
                             });
@@ -331,9 +331,9 @@
                             kandunganFasal3 = `
                                 <p>Sekiranya berlaku kematian saya, saya mengarahkan Wasi saya untuk dengan serta-merta:</p>
                                 <table width="100%" style="border-collapse:collapse;">
-                                <tr valign="top"><td width="30">1.</td><td style="padding-bottom:12px; text-align:justify;">Mematuhi dan menguatkuasakan segala terma yang terkandung di dalam Perjanjian Jual Beli Saham & Pewarisan (Buy-Sell Agreement) bertarikh <strong>${data.mekanismeAgihan === 'buysell' ? formatDateMY(data.tarikhPerjanjian) : "(Rujuk Arahan Hibah)"}</strong> yang telah ditandatangani antara saya, rakan kongsi, dan Syarikat.</td></tr>
+                                <tr valign="top"><td width="30">1.</td><td style="padding-bottom:12px; text-align:justify;">Mematuhi dan menguatkuasakan segala terma yang terkandung di dalam <strong>Perjanjian Jual Beli Saham & Pewarisan <em>(Buy-Sell Agreement)</em></strong> bertarikh <strong>${data.mekanismeAgihan === 'buysell' ? formatDateMY(data.tarikhPerjanjian) : "(Rujuk Arahan Hibah)"}</strong> yang telah ditandatangani antara saya, rakan kongsi, dan Syarikat.</td></tr>
                                 <tr valign="top"><td>2.</td><td style="padding-bottom:12px; text-align:justify;">Menjual dan memindahkan kesemua Saham Syarikat saya kepada rakan-rakan kongsi saya yang masih hidup atau penama mereka, seperti yang ditetapkan dalam Perjanjian tersebut.</td></tr>
-                                <tr valign="top"><td>3.</td><td style="padding-bottom:12px; text-align:justify;">Menerima, mengutip, dan memegang hasil wang tunai jualan saham (Sale Proceeds) yang dibayar oleh rakan kongsi saya atau daripada serahan pampasan Keyman Takaful.</td></tr>
+                                <tr valign="top"><td>3.</td><td style="padding-bottom:12px; text-align:justify;">Menerima, mengutip, dan memegang hasil wang tunai jualan saham <em>(Sale Proceeds)</em> yang dibayar oleh rakan kongsi saya atau daripada serahan pampasan <strong>Keyman Takaful</strong>.</td></tr>
                                 </table>
                             `;
                             
@@ -347,14 +347,14 @@
                                 <p>Membayar sebarang kos pentadbiran Wasi, duti setem, kos guaman peribadi, cukai LHDN, dan hutang-hutang peribadi saya (jika ada tuntutan).</p><br>
                                 ${wasiatStr}
                                 <p><strong>${faraidTurutan}: Agihan Faraid Kepada Waris</strong></p>
-                                <p>Baki keseluruhan wang tunai tersebut hendaklah diagihkan kepada waris-waris saya yang sah dan berhak pada tarikh kematian saya, mengikut Hukum Faraid (Sijil Faraid yang dikeluarkan oleh Mahkamah Syariah yang berbidang kuasa).</p>
+                                <p>Baki keseluruhan wang tunai tersebut hendaklah diagihkan kepada waris-waris saya yang sah dan berhak pada tarikh kematian saya, mengikut <strong>Hukum Faraid (Sijil Faraid yang dikeluarkan oleh Mahkamah Syariah yang berbidang kuasa)</strong>.</p>
                             `;
                         } else {
                             // --- KES: MILIKAN TUNGGAL ---
                             tajukFasal3 = "PENGURUSAN DAN PENTADBIRAN SAHAM SYARIKAT";
                             kandunganFasal3 = `
                                 <p>Sekiranya berlaku kematian saya, saya mengarahkan Wasi saya untuk dengan serta-merta mengambil alih pentadbiran kesemua Saham Syarikat saya bagi memastikan kelangsungan perniagaan syarikat tidak terjejas.</p>
-                                <p>Wasi diberi kuasa penuh untuk memindahkan nama saham tersebut, menandatangani resolusi, melantik pengarah baharu (jika perlu) selaras dengan ketetapan Akta Syarikat 2016, sementara menunggu agihan kepada waris atau penerima hibah yang sah.</p>
+                                <p>Wasi diberi kuasa penuh untuk memindahkan nama saham tersebut, menandatangani resolusi, melantik pengarah baharu (jika perlu) selaras dengan ketetapan <strong>Akta Syarikat 2016</strong>, sementara menunggu agihan kepada waris atau penerima hibah yang sah.</p>
                             `;
                             
                             tajukFasal4 = "AGIHAN SAHAM SYARIKAT";
@@ -365,7 +365,7 @@
                                 <p>Saham Syarikat saya hendaklah diurus dan diagihkan mengikut turutan keutamaan berikut:</p>
                                 <p><strong>Pertama: Penyelesaian Kos dan Hutang</strong></p>
                                 <p>Menyelesaikan sebarang kos pentadbiran Wasi, duti setem, kos guaman, dan hutang syarikat/peribadi yang wajib dibayar mengikut tuntutan undang-undang.</p><br>
-                                <p><strong>Kedua: Pelaksanaan Pengisytiharan Hibah / Wakaf (Jika Ada)</strong></p>
+                                <p><strong>Kedua: Pelaksanaan Pengisytiharan Hibah/Wakaf (Jika Ada)</strong></p>
                                 <p>Sekiranya terdapat Dokumen Pengisytiharan Hibah Saham Mutlak atau Wakaf Saham Zurri yang sah di sisi undang-undang dan syarak ke atas saham syarikat ini, Wasi hendaklah menguatkuasakan dokumen tersebut terlebih dahulu dan memindahkan saham kepada penama yang telah ditetapkan.</p><br>
                                 ${wasiatStr}
                                 <p><strong>${faraidTurutan}: Agihan Faraid Kepada Waris</strong></p>
