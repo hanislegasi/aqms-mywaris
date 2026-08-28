@@ -139,13 +139,7 @@ Baki dua pertiga (2/3) atau lebih Saham Syarikat saya (selepas ditolak 1/3 yang 
 </td>
 </tr>
 </table>
- 
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>FASAL 3: {{TAJUK_FASAL_3}}</strong>
-</h3>
- 
-{{KANDUNGAN_FASAL_3}}
- 
+
 <div class="pdf-footer">
 <span class="footer-docref"></span>
 <span class="page-number"></span>
@@ -155,6 +149,13 @@ Baki dua pertiga (2/3) atau lebih Saham Syarikat saya (selepas ditolak 1/3 yang 
  
 <div class="a4-page p-[18mm]">
  
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>FASAL 3: {{TAJUK_FASAL_3}}</strong>
+</h3>
+ 
+{{KANDUNGAN_FASAL_3}}
+ 
+
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>FASAL 3A: HIBAH SEMASA HAYAT (JIKA BERKAITAN)</strong>
 </h3>
@@ -179,6 +180,15 @@ Sebarang hibah bersyarat (<em>"hibah ruqba"</em> atau hibah yang berkuat kuasa s
 </h3>
  
 {{KANDUNGAN_FASAL_4}}
+
+<div class="pdf-footer">
+<span class="footer-docref"></span>
+<span class="page-number"></span>
+</div>
+ 
+</div>
+ 
+<div class="a4-page p-[18mm]">
  
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>FASAL 4A: ZAKAT PERNIAGAAN & PENYELESAIAN HUTANG</strong>
