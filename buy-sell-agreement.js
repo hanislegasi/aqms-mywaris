@@ -2,11 +2,11 @@ const buySellAgreementContent = `
 
 <div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
 
-    <h2 style="font-size:24px; font-weight:bold; text-align:center; margin-bottom:5px; color:#153638;">
+    <h2 style="font-size:20px; font-weight:bold; text-align:center; margin-bottom:5px; color:#153638;">
         PERJANJIAN JUAL BELI SAHAM & PEWARISAN KORPORAT
     </h2>
     <p style="text-align:center; margin-bottom:30px; font-weight:bold; font-size:20px;">
-        (CORPORATE BUY-SELL AND SUCCESSION AGREEMENT)
+        <em>(CORPORATE BUY-SELL AND SUCCESSION AGREEMENT)</em>
     </p>
 
     <p style="margin-bottom:20px;">
