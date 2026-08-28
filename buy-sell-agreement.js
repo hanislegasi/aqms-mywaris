@@ -41,6 +41,14 @@ const buySellAgreementContent = `
             <td><strong>{{NAMA_SYARIKAT}}</strong> (No. Pendaftaran Syarikat: <strong>{{NO_SSM}}</strong>), sebuah syarikat yang diperbadankan di bawah undang-undang Malaysia dan mempunyai alamat berdaftar di <strong>{{ALAMAT_SYARIKAT}}</strong> (selepas ini dirujuk sebagai "Syarikat").</td>
         </tr>
     </table>
+
+<div class="pdf-footer">
+        <span class="footer-docref"></span>
+        <span class="page-number"></span>
+    </div>
+</div>
+ 
+<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
  
     <p style="font-weight:bold; margin-bottom:10px;">BAHAWASANYA (RECITALS):</p>
  
@@ -90,6 +98,14 @@ const buySellAgreementContent = `
         <tr valign="top"><td width="30">1A.2</td><td style="padding-bottom:8px;">Sebarang pembiayaan bagi tujuan pembelian Saham-Saham Tersebut (termasuk melalui Polisi Takaful di Fasal 4 atau kemudahan pembiayaan lain) hendaklah menggunakan produk yang disahkan patuh Syariah oleh Jawatankuasa Syariah institusi berkenaan.</td></tr>
         <tr valign="top"><td width="30">1A.3</td><td style="padding-bottom:8px;">Sebarang ganti rugi lewat bayaran (jika ada) hendaklah berbentuk <em>Ta'widh</em> (ganti rugi kos sebenar) dan bukan faedah kompaun, selaras garis panduan Majlis Penasihat Syariah Bank Negara Malaysia.</td></tr>
     </table>
+
+div class="pdf-footer">
+        <span class="footer-docref"></span>
+        <span class="page-number"></span>
+    </div>
+</div>
+ 
+<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
  
     <h3 style="font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 2: KEWAJIPAN JUALAN DAN BELIAN SAHAM (MANDATORY BUY-SELL OBLIGATION)</h3>
     <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
@@ -172,12 +188,21 @@ const buySellAgreementContent = `
         <tr valign="top"><td width="30">4.2</td><td style="padding-bottom:8px;">Apabila berlakunya Kejadian Pemicu, apa-apa pampasan dan/atau hasil tuntutan yang dibayar di bawah Polisi Takaful tersebut hendaklah dipegang amanah semata-mata bagi tujuan melunaskan balasan belian saham kepada Wasi/Pentadbir Pemegang Saham Terjejas.</td></tr>
         <tr valign="top"><td width="30">4.3</td><td style="padding-bottom:8px;">Sekiranya hasil Polisi Takaful tidak mencukupi untuk melunaskan sepenuhnya Nilai Saksama, baki boleh dibayar secara ansuran munasabah tanpa faedah dalam tempoh tidak melebihi tiga puluh enam (36) bulan, dengan Ta'widh (jika berlaku lewat bayar) mengikut Fasal 1A.3.</td></tr>
     </table>
- 
-    <h3 style="font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 4A: PROSES PEMINDAHAN SAHAM & SETEM HASIL</h3>
+
+     <h3 style="font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 4A: PROSES PEMINDAHAN SAHAM & SETEM HASIL</h3>
     <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
         <tr valign="top"><td width="30">4A.1</td><td style="padding-bottom:8px;">Setelah harga dan struktur belian dipersetujui/ditentukan, Pihak-Pihak hendaklah melaksanakan Borang Pemindahan Saham dan mengemukakan dokumen berkaitan kepada Suruhanjaya Syarikat Malaysia (SSM) dalam tempoh tiga puluh (30) hari, termasuk kelulusan lembaga pengarah dan pematuhan Perlembagaan Syarikat.</td></tr>
         <tr valign="top"><td width="30">4A.2</td><td style="padding-bottom:8px;">Setem hasil <em>(stamp duty)</em> ke atas pemindahan saham hendaklah dijelaskan mengikut Akta Setem 1949 sebelum pendaftaran pemindahan diiktiraf sah di sisi undang-undang.</td></tr>
     </table>
+
+<div class="pdf-footer">
+        <span class="footer-docref"></span>
+        <span class="page-number"></span>
+    </div>
+ 
+</div>
+ 
+<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
  
     <h3 style="font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 5: PEMATUHAN DOKUMEN WASIAT KORPORAT</h3>
     <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
@@ -248,71 +273,107 @@ font-style:italic;
  
 <!-- ================= PAGE 4 ================= -->
 <div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:14px; line-height:1.6; text-align:justify; color:#222;">
- 
+
     <p style="margin-bottom:40px;">
         PADA MENYAKSIKAN HAL DI ATAS, Pihak-Pihak di sini telah menurunkan tandatangan masing-masing pada tarikh yang mula-mula tertulis di atas.
     </p>
- 
+
     <!-- SIGNATURE 1: PEMEGANG SAHAM A -->
-    <table style="width:100%; margin-bottom:50px; border-collapse:collapse;">
-        <tr valign="top">
-            <td width="45%">
-                <p style="font-weight:bold; margin-bottom:50px;">DITANDATANGANI OLEH PEMEGANG SAHAM A:</p>
+    <table style="width:100%; margin-bottom:40px; border-collapse:collapse;">
+        <tr>
+            <td width="45%" valign="top" style="height:45px;">
+                <p style="font-weight:bold;">DITANDATANGANI OLEH PEMEGANG SAHAM A:</p>
+            </td>
+            <td width="10%"></td>
+            <td width="45%" valign="top">
+                <p style="font-weight:bold;">Di hadapan (Saksi):</p>
+            </td>
+        </tr>
+        <tr>
+            <td valign="bottom" style="padding-bottom:5px;">
                 <p>..................................................</p>
-                <p style="margin-top:5px;"><strong>{{NAMA_PEWASIAT}}</strong></p>
+            </td>
+            <td></td>
+            <td valign="bottom" style="padding-bottom:5px;">
+                <p>..................................................</p>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <p><strong>{{NAMA_PEWASIAT}}</strong></p>
                 <p>No. K/P: {{NO_IC_PEWASIAT}}</p>
             </td>
-            <!-- Ruang Kosong (Spacer) -->
-            <td width="10%"></td>
-            <!-- Saksi 1 -->
-            <td width="45%">
-                <p style="font-weight:bold; margin-bottom:50px;">Di hadapan (Saksi):</p>
-                <p>Tandatangan : ............................................</p>
-                <p style="margin-top:5px;">Nama Saksi : </p>
+            <td></td>
+            <td valign="top">
+                <p>Nama Saksi : </p>
                 <p>No. K/P &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
             </td>
         </tr>
     </table>
- 
+
     <!-- SIGNATURE 2: PEMEGANG SAHAM B -->
-    <table style="width:100%; margin-bottom:50px; border-collapse:collapse;">
-        <tr valign="top">
-            <td width="45%">
-                <p style="font-weight:bold; margin-bottom:50px;">DITANDATANGANI OLEH PEMEGANG SAHAM B:</p>
+    <table style="width:100%; margin-bottom:40px; border-collapse:collapse;">
+        <tr>
+            <td width="45%" valign="top" style="height:45px;">
+                <p style="font-weight:bold;">DITANDATANGANI OLEH PEMEGANG SAHAM B:</p>
+            </td>
+            <td width="10%"></td>
+            <td width="45%" valign="top">
+                <p style="font-weight:bold;">Di hadapan (Saksi):</p>
+            </td>
+        </tr>
+        <tr>
+            <td valign="bottom" style="padding-bottom:5px;">
                 <p>..................................................</p>
-                <p style="margin-top:5px;"><strong>{{NAMA_PARTNER}}</strong></p>
+            </td>
+            <td></td>
+            <td valign="bottom" style="padding-bottom:5px;">
+                <p>..................................................</p>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <p><strong>{{NAMA_PARTNER}}</strong></p>
                 <p>No. K/P: {{NO_IC_PARTNER}}</p>
             </td>
-            <!-- Ruang Kosong (Spacer) -->
-            <td width="10%"></td>
-            <!-- Saksi 2 -->
-            <td width="45%">
-                <p style="font-weight:bold; margin-bottom:50px;">Di hadapan (Saksi):</p>
-                <p>Tandatangan : ............................................</p>
-                <p style="margin-top:5px;">Nama Saksi : </p>
+            <td></td>
+            <td valign="top">
+                <p>Nama Saksi : </p>
                 <p>No. K/P &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
             </td>
         </tr>
     </table>
- 
+
     <!-- SIGNATURE 3: SYARIKAT -->
     <table style="width:100%; margin-bottom:30px; border-collapse:collapse;">
-        <tr valign="top">
-            <td width="45%">
-                <p style="font-weight:bold; margin-bottom:50px;">DITANDATANGANI BAGI PIHAK SYARIKAT:</p>
+        <tr>
+            <td width="45%" valign="top" style="height:45px;">
+                <p style="font-weight:bold;">DITANDATANGANI BAGI PIHAK SYARIKAT:</p>
+            </td>
+            <td width="10%"></td>
+            <td width="45%" valign="top">
+                <p style="font-weight:bold;">Di hadapan (Saksi):</p>
+            </td>
+        </tr>
+        <tr>
+            <td valign="bottom" style="padding-bottom:5px;">
                 <p>..................................................</p>
-                <p style="margin-top:5px;"><strong>{{NAMA_WAKIL_SYARIKAT}}</strong></p>
+            </td>
+            <td></td>
+            <td valign="bottom" style="padding-bottom:5px;">
+                <p>..................................................</p>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <p><strong>{{NAMA_WAKIL_SYARIKAT}}</strong></p>
                 <p>Pengarah / Setiausaha Syarikat</p>
-                <p>Untuk dan bagi pihak:</p>
+                <p style="margin-top:5px;">Untuk dan bagi pihak:</p>
                 <p><strong>{{NAMA_SYARIKAT}}</strong></p>
             </td>
-            <!-- Ruang Kosong (Spacer) -->
-            <td width="10%"></td>
-            <!-- Saksi 3 -->
-            <td width="45%">
-                <p style="font-weight:bold; margin-bottom:50px;">Di hadapan (Saksi):</p>
-                <p>Tandatangan : ............................................</p>
-                <p style="margin-top:5px;">Nama Saksi : </p>
+            <td></td>
+            <td valign="top">
+                <p>Nama Saksi : </p>
                 <p>No. K/P &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
             </td>
         </tr>
