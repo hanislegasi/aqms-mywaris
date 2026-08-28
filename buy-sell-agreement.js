@@ -134,6 +134,23 @@ const buySellAgreementContent = `
         <tr valign="top"><td width="30">6.2</td><td style="padding-bottom:8px;">Perjanjian ini hendaklah ditafsirkan, dikawal selia, dan dikuatkuasakan selaras dengan Undang-Undang Malaysia dan, tertakluk kepada bidang kuasa khusus, Hukum Syarak yang terpakai di Malaysia.</td></tr>
     </table>
 
+<div
+style="
+margin-top:60px;
+border-top:1px solid #000;
+width:100%;
+">
+</div>
+
+<p
+style="
+text-align:center;
+margin-top:10px;
+font-style:italic;
+">
+(Ruangan ini sengaja dibiarkan kosong)
+</p>
+
     <div class="pdf-footer">
         <span class="footer-docref"></span>
         <span class="page-number"></span>
