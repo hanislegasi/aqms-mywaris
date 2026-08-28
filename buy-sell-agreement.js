@@ -99,7 +99,7 @@ const buySellAgreementContent = `
         <tr valign="top"><td width="30">3.</td><td style="padding-bottom:8px;">Sebarang ganti rugi lewat bayaran (jika ada) hendaklah berbentuk <em>Ta'widh</em> (ganti rugi kos sebenar) dan bukan faedah kompaun, selaras garis panduan Majlis Penasihat Syariah Bank Negara Malaysia.</td></tr>
     </table>
 
-div class="pdf-footer">
+<div class="pdf-footer">
         <span class="footer-docref"></span>
         <span class="page-number"></span>
     </div>
