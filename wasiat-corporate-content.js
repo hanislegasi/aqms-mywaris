@@ -174,6 +174,15 @@ Sebarang hibah bersyarat (<em>"hibah ruqba"</em> atau hibah yang berkuat kuasa s
 </td>
 </tr>
 </table>
+
+<div class="pdf-footer">
+<span class="footer-docref"></span>
+<span class="page-number"></span>
+</div>
+ 
+</div>
+ 
+<div class="a4-page p-[18mm]">
  
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>FASAL 4: {{TAJUK_FASAL_4}}</strong>
