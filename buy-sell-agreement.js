@@ -66,7 +66,7 @@ const buySellAgreementContent = `
 
 <div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:14px; line-height:1.6; text-align:justify; color:#222;">
 
-    <p style="font-weight:bold; margin-bottom:20px; text-align:center; background-color:#f3f4f6; padding:10px;">
+    <p style="font-weight:bold; margin-bottom:20px; text-align:right; background-color:#f3f4f6; padding:10px;">
         MAKA DENGAN INI, ADALAH DIPERSETUJUI SEPERTI BERIKUT:
     </p>
 
