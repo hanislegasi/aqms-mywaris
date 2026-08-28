@@ -99,13 +99,13 @@
             </select>
         </div>
 
-        <!-- KOTAK A: BUY-SELL AGREEMENT (RAKAN KONGSI) -->
+       <!-- KOTAK A: BUY-SELL AGREEMENT (RAKAN KONGSI) -->
         <div id="buySellSection" class="hidden mb-3 p-5 border border-blue-200 bg-blue-50 rounded-xl space-y-4">
-            <p class="text-sm font-bold text-blue-800 mb-3 border-b border-blue-200 pb-2">Maklumat Rakan Kongsi (Pemegang Saham B)</p>
-            <input type="text" id="namaPartner" placeholder="Nama Rakan Kongsi" class="w-full border rounded-lg p-3">
-            <input type="text" id="icPartner" placeholder="No IC Rakan Kongsi" class="w-full border rounded-lg p-3">
-            <textarea id="alamatPartner" rows="2" placeholder="Alamat Rakan Kongsi" class="w-full border rounded-lg p-3"></textarea>
-            <input type="text" id="sahamPartner" placeholder="Bilangan Saham Milik Rakan Kongsi (Unit)" class="w-full border rounded-lg p-3" oninput="formatSaham(this)">
+            <p class="text-sm font-bold text-blue-800 border-b border-blue-200 pb-2">Maklumat Rakan Kongsi (Pemegang Saham Syarikat)</p>
+            
+            <div id="rakanKongsiContainer"></div>
+            
+            <button type="button" id="addRakanKongsiBtn" class="w-full bg-blue-600 hover:bg-blue-700 transition text-white px-3 py-2 rounded-lg mt-2">+ Tambah Rakan Kongsi</button>
         </div>
 
         <!-- KOTAK B: HIBAH SAHAM -->
@@ -326,11 +326,21 @@
         
         document.getElementById("statusPemilikan").value = data.statusPemilikan || "";
         
-        // Data Rakan Kongsi
-        document.getElementById("namaPartner").value = data.namaPartner || "";
-        document.getElementById("icPartner").value = data.icPartner || "";
-        document.getElementById("alamatPartner").value = data.alamatPartner || "";
-        document.getElementById("sahamPartner").value = data.sahamPartner || "";
+        // LOAD DATA RAKAN KONGSI
+        document.getElementById("rakanKongsiContainer").innerHTML = "";
+        if (data.rakanKongsiList && data.rakanKongsiList.length > 0) {
+            data.rakanKongsiList.forEach(item => addRakanKongsiToDOM(item));
+        } else if (data.namaPartner) {
+            // Sokongan untuk data lama (jika user dah pernah isi sebelum sistem diubah)
+            addRakanKongsiToDOM({
+                nama: data.namaPartner,
+                ic: data.icPartner,
+                alamat: data.alamatPartner,
+                saham: data.sahamPartner
+            });
+        } else {
+            addRakanKongsiToDOM(); // Keluarkan 1 kotak default
+        }
         
         // --- LOGIK MUAT TURUN WASI 1 ---
         if (data.pilihanWasi1 === "manual") {
@@ -448,6 +458,27 @@
       }
     }); // <-- Ini penutup asal untuk onAuthStateChanged
 
+// --- FUNGSI RAKAN KONGSI ---
+    function addRakanKongsiToDOM(item = {}) {
+        const html = `
+        <div class="border border-blue-300 bg-white rounded-xl p-4 space-y-3 mb-3 rakanKongsiRow">
+            <input type="text" class="w-full border rounded-lg p-3 namaPartnerRow" placeholder="Nama Rakan Kongsi" value="${item.nama || ''}">
+            <input type="text" class="w-full border rounded-lg p-3 icPartnerRow" placeholder="No IC Rakan Kongsi" value="${item.ic || ''}">
+            <textarea rows="2" class="w-full border rounded-lg p-3 alamatPartnerRow" placeholder="Alamat Rakan Kongsi">${item.alamat || ''}</textarea>
+            <input type="text" class="w-full border rounded-lg p-3 sahamPartnerRow" placeholder="Bilangan Saham Milik Rakan Kongsi (Unit)" value="${item.saham || ''}" oninput="formatSaham(this)">
+            <button type="button" class="deleteRakanKongsiBtn bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-sm mt-1">Padam</button>
+        </div>`;
+        document.getElementById("rakanKongsiContainer").insertAdjacentHTML("beforeend", html);
+    }
+
+    document.getElementById("addRakanKongsiBtn").addEventListener("click", () => addRakanKongsiToDOM());
+
+    document.addEventListener("click", function(e){
+        if(e.target.classList.contains("deleteRakanKongsiBtn")){
+            e.target.closest(".rakanKongsiRow").remove();
+        }
+    });
+    
     // --- LOGIK STATUS PEMILIKAN & MEKANISME ---
     const statusPemilikanSelect = document.getElementById("statusPemilikan");
     const mekanismeSection = document.getElementById("mekanismeSection");
@@ -827,6 +858,17 @@
             const poskod = document.getElementById("poskod").value.trim();
             const bandar = document.getElementById("bandar").value.trim();
             const negeri = document.getElementById("negeri").value.trim();
+
+          // Kutip Rakan Kongsi
+            const rakanKongsiList = [];
+            document.querySelectorAll(".rakanKongsiRow").forEach(row => {
+                rakanKongsiList.push({
+                    nama: row.querySelector(".namaPartnerRow").value,
+                    ic: row.querySelector(".icPartnerRow").value,
+                    alamat: row.querySelector(".alamatPartnerRow").value,
+                    saham: row.querySelector(".sahamPartnerRow").value
+                });
+            });
           
             // 3. BARU SIMPAN KE FIREBASE
             await setDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"), {
@@ -847,10 +889,13 @@
                 
                 // DATA BUY-SELL AGREEMENT
                 sahamPewasiat: document.getElementById("sahamPewasiat").value,
-                namaPartner: document.getElementById("namaPartner").value,
-                icPartner: document.getElementById("icPartner").value,
-                alamatPartner: document.getElementById("alamatPartner").value,
-                sahamPartner: document.getElementById("sahamPartner").value,
+
+                rakanKongsiList: rakanKongsiList, // Simpan senarai penuh
+              
+                namaPartner: rakanKongsiList.length > 0 ? rakanKongsiList[0].nama : "",
+                icPartner: rakanKongsiList.length > 0 ? rakanKongsiList[0].ic : "",
+                alamatPartner: rakanKongsiList.length > 0 ? rakanKongsiList[0].alamat : "",
+                sahamPartner: rakanKongsiList.length > 0 ? rakanKongsiList[0].saham : "",
                 
                 penerimaHibahSaham: penerimaHibahSaham,
                 penerimaWakafZurri: penerimaWakafZurri,
