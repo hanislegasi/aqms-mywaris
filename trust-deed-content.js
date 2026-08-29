@@ -58,7 +58,7 @@ const trustDeedContent = `
 <!-- ================= PAGE 2 ================= -->
 <div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
 
-    <p style="font-weight:bold; margin-bottom:20px; padding:10px;">
+    <p style="font-weight:bold; margin-bottom:20px; text-align:left;">
         MAKA DENGAN INI ADALAH DIPERSETUJUI SEPERTI BERIKUT:
     </p>
 
