@@ -63,20 +63,14 @@ const trustDeedContent = `
     </p>
 
     <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 1: PENGISYTIHARAN AMANAH</h3>
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top">
-            <td width="30">1.</td>
-            <td style="padding-bottom:8px; text-align:justify;">Pembuat Amanah dengan ini mengisytiharkan secara mutlak bahawa bermula dari tarikh Surat Ikatan ini, Saham Amanah hendaklah dipegang di bawah suatu <strong>Amanah (Trust)</strong> oleh Pemegang Amanah, dan Pembuat Amanah melepaskan semua hak milik benefisial ke atas saham tersebut untuk manfaat Penerima Manfaat yang dinamakan, melainkan Pembuat Amanah masih hidup dan mengekalkan hak mengundi dan dividen semasa hayatnya.</td>
-        </tr>
-    </table>
+    <p style="text-align:justify; margin-bottom:15px;">
+        Pembuat Amanah dengan ini mengisytiharkan secara mutlak bahawa bermula dari tarikh Surat Ikatan ini, Saham Amanah hendaklah dipegang di bawah suatu <strong>Amanah (Trust)</strong> oleh Pemegang Amanah, dan Pembuat Amanah melepaskan semua hak milik benefisial ke atas saham tersebut untuk manfaat Penerima Manfaat yang dinamakan, melainkan Pembuat Amanah masih hidup dan mengekalkan hak mengundi dan dividen semasa hayatnya.
+    </p>
 
     <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 2: MEKANISME PELAKSANAAN DAN PENGAGIHAN AMANAH</h3>
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top">
-            <td width="30">2.</td>
-            <td style="padding-bottom:8px; text-align:justify;">Sekiranya berlaku kematian atau Keilatan Kekal Menyeluruh (TPD) ke atas Pembuat Amanah, Pemegang Amanah hendaklah mentadbir Saham Amanah berpandukan arahan mandatori berikut:</td>
-        </tr>
-    </table>
+    <p style="text-align:justify; margin-bottom:15px;">
+        Sekiranya berlaku kematian atau Keilatan Kekal Menyeluruh (TPD) ke atas Pembuat Amanah, Pemegang Amanah hendaklah mentadbir Saham Amanah berpandukan arahan mandatori berikut:
+    </p>
     
     <!-- BAHAGIAN DINAMIK: HIBAH / BUY-SELL -->
     <div style="margin-left:30px; margin-bottom:20px; padding:15px; border-left:3px solid #153638; background-color:#fafafa;">
