@@ -7,7 +7,7 @@ const trustDeedContent = `
         SURAT IKATAN AMANAH KORPORAT
     </h2>
     <p style="text-align:center; margin-bottom:30px; font-weight:bold; font-size:20px;">
-        (CORPORATE TRUST DEED)
+        <em>(CORPORATE TRUST DEED)</em>
     </p>
 
     <p style="margin-bottom:20px;">
