@@ -111,7 +111,7 @@ const buySellAgreementContent = `
     <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
         <tr valign="top">
             <td width="30">1.</td>
-            <td>Tertakluk kepada terma-terma di sini, apabila berlakunya Kejadian Pemicu ke atas mana-mana Pemegang Saham Terjejas:
+            <td style="padding-bottom:20px; text-align:justify;">Tertakluk kepada terma-terma di sini, apabila berlakunya Kejadian Pemicu ke atas mana-mana Pemegang Saham Terjejas:
                 <ul style="margin-top:5px; padding-left:20px; list-style-type:lower-alpha;">
                     <li style="margin-bottom:8px;">Wasi/Pentadbir bagi pusaka Pemegang Saham Terjejas adalah <strong>TERIKAT SECARA MUTLAK</strong> untuk menjual, memindah milik, dan melepaskan kesemua hak ke atas pegangan saham Pemegang Saham Terjejas di dalam Syarikat.</li>
                     <li>Pemegang Saham yang Masih Hidup <em>(Surviving Shareholder)</em> adalah <strong>DIWAJIBKAN</strong> untuk membeli kesemua saham tersebut, yang mana bahagian pembelian tersebut hendaklah berkadar (pro-rata) mengikut nisbah pegangan saham semasa.</li>
@@ -128,7 +128,7 @@ const buySellAgreementContent = `
     <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
         <tr valign="top">
             <td width="30">1.</td>
-            <td>Selain Kematian dan TPD, Pihak-Pihak juga bersetuju bahawa peristiwa-peristiwa berikut boleh mencetuskan hak/kewajipan jual-beli di bawah Perjanjian ini, tertakluk kepada terma yang dipersetujui berasingan:
+            <td style="padding-bottom:20px; text-align:justify;">Selain Kematian dan TPD, Pihak-Pihak juga bersetuju bahawa peristiwa-peristiwa berikut boleh mencetuskan hak/kewajipan jual-beli di bawah Perjanjian ini, tertakluk kepada terma yang dipersetujui berasingan:
                 <ul style="margin-top:5px; padding-left:20px; list-style-type:lower-alpha;">
                     <li style="margin-bottom:6px;">Persaraan sukarela atau perletakan jawatan Pemegang Saham daripada Syarikat;</li>
                     <li style="margin-bottom:6px;">Kebankrapan/kemuflisan Pemegang Saham;</li>
@@ -156,7 +156,7 @@ const buySellAgreementContent = `
     <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
         <tr valign="top">
             <td width="30">1.</td>
-            <td>Pihak-Pihak dengan ini bersetuju bahawa nilai balasan bagi setiap unit saham Syarikat di bawah Perjanjian ini hendaklah ditentukan secara muktamad melalui salah satu kaedah berikut:
+            <td style="padding-bottom:20px; text-align:justify;">Pihak-Pihak dengan ini bersetuju bahawa nilai balasan bagi setiap unit saham Syarikat di bawah Perjanjian ini hendaklah ditentukan secara muktamad melalui salah satu kaedah berikut:
                 <ul style="margin-top:5px; padding-left:20px; list-style-type:lower-alpha;">
                     <li style="margin-bottom:8px;">Formula Nilai Aset Bersih <em>(Net Asset Value - NAV)</em> sepertimana yang disahkan di dalam Laporan Kewangan Beraudit Syarikat bagi tahun kewangan yang terakhir sebelum berlakunya Kejadian Pemicu; ATAU</li>
                     <li>Harga persetujuan bersama <em>(Fixed Agreed Value)</em> yang ditetapkan secara bertulis dari semasa ke semasa. Jika tiada persetujuan bertulis baharu dikemaskini dalam tempoh dua belas (12) bulan sebelum Kejadian Pemicu, nilai di bawah Fasal 3.1(a) hendaklah diguna pakai.</li>
@@ -174,7 +174,7 @@ const buySellAgreementContent = `
     <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
         <tr valign="top">
             <td width="30">1.</td>
-            <td>Pembelian Saham-Saham Tersebut di bawah Perjanjian ini hendaklah dilaksanakan menggunakan salah satu struktur berikut, sebagaimana dipersetujui oleh Pihak-Pihak:
+            <td style="padding-bottom:20px; text-align:justify;">Pembelian Saham-Saham Tersebut di bawah Perjanjian ini hendaklah dilaksanakan menggunakan salah satu struktur berikut, sebagaimana dipersetujui oleh Pihak-Pihak:
                 <ul style="margin-top:5px; padding-left:20px; list-style-type:lower-alpha;">
                     <li style="margin-bottom:8px;"><strong>Cross-Purchase</strong> — Pemegang Saham yang Masih Hidup membeli terus saham Pemegang Saham Terjejas secara berkadar mengikut pegangan sedia ada; ATAU</li>
                     <li><strong>Entity/Redemption Purchase</strong> — Syarikat sendiri membeli balik <em>(redeem)</em> saham tersebut menggunakan dana Syarikat atau hasil Polisi Takaful di Fasal 4, tertakluk kepada Akta Syarikat 2016 dan Perlembagaan Syarikat berkaitan pembelian balik saham sendiri.</li>
