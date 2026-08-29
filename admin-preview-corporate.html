@@ -188,6 +188,7 @@
     <script src="hibah-content.js"></script>
     <script src="pemegang-amanah.js"></script>
     <script src="buy-sell-agreement.js"></script>
+    <script src="trust-deed-content.js"></script> ```
 
     <!-- FIREBASE LOGIC -->
     <script type="module">
@@ -566,6 +567,52 @@
                         
                         document.getElementById("sectionMekanisme").innerHTML = mekanismeHTML;
 
+// ==========================================
+                        // 2.5 GENERATE SURAT IKATAN AMANAH (TRUST DEED)
+                        // ==========================================
+                        if (typeof trustDeedContent !== 'undefined') {
+                            let klausaAmanah = "";
+
+                            if (data.statusPemilikan === 'rakankongsi' && data.mekanismeAgihan === 'buysell') {
+                                klausaAmanah = `
+                                    <p style="font-weight:bold; margin-bottom:8px;">Pelaksanaan Perjanjian Jual Beli Saham (Buy-Sell Agreement)</p>
+                                    <p style="text-align:justify; margin-bottom:8px;">Pemegang Amanah dengan ini diberi kuasa mutlak untuk bekerjasama dengan mana-mana rakan kongsi syarikat Pembuat Amanah bagi memastikan <strong>Perjanjian Jual Beli Saham dan Pewarisan Korporat</strong> dikuatkuasakan dengan serta-merta.</p>
+                                    <p style="text-align:justify; margin-bottom:0;">Pemegang Amanah hendaklah memindahkan semua Saham Amanah kepada rakan kongsi syarikat, setelah Pemegang Amanah menerima pampasan kewangan secara penuh (contohnya melalui polisi Takaful Keyman). Pampasan yang diterima itu hendaklah dipegang amanah dan diagihkan kepada waris Pembuat Amanah selaras dengan peruntukan Hukum Faraid atau arahan wasiat (jika ada).</p>
+                                `;
+                            } else if (data.statusPemilikan === 'tunggal' && data.mekanismeAgihan === 'hibah') {
+                                klausaAmanah = `
+                                    <p style="font-weight:bold; margin-bottom:8px;">Penguatkuasaan Deklarasi Hibah Saham Mutlak</p>
+                                    <p style="text-align:justify; margin-bottom:8px;">Berdasarkan Surat Pengisytiharan Hibah Saham Mutlak yang dipersetujui secara berasingan, Pembuat Amanah mengarahkan Pemegang Amanah untuk bertindak sepenuhnya sebagai wasi dan pemindah milik.</p>
+                                    <p style="text-align:justify; margin-bottom:0;">Pemegang Amanah hendaklah dengan seberapa segera memindahkan Saham Amanah tersebut secara terus (tanpa melepasi tapisan pentadbiran Faraid) kepada penama-penama Hibah mengikut peratusan pegangan yang telah ditetapkan di dalam Rekod Syarikat dan Sistem Pewarisan, bagi memastikan perniagaan dapat diteruskan oleh pewaris yang sah secara operasi tanpa sebarang gangguan.</p>
+                                `;
+                            } else {
+                                klausaAmanah = `
+                                    <p style="font-weight:bold; margin-bottom:8px;">Penguatkuasaan Arahan Pewarisan Semasa</p>
+                                    <p style="text-align:justify; margin-bottom:0;">Pemegang Amanah hendaklah mentadbir Saham Amanah tersebut dan memindahkan hak milik serta faedahnya kepada penama, pemegang wakaf, atau waris yang sah berpandukan arahan instrumen perancangan harta pusaka utama Pembuat Amanah yang terpakai pada masa pemicuan insiden.</p>
+                                `;
+                            }
+
+                            let trustHTML = trustDeedContent
+                                .replaceAll("{{TARIKH_PERJANJIAN}}", formatDateMY(data.tarikhPerjanjian) || "___ haribulan ___")
+                                .replaceAll("{{NAMA_PEWASIAT}}", data.nama || "-")
+                                .replaceAll("{{NO_IC_PEWASIAT}}", data.ic || "-")
+                                .replaceAll("{{ALAMAT_PEWASIAT}}", alamatPenuh || "-")
+                                .replaceAll("{{NAMA_WASI1}}", data.namaWasi1 || "-")
+                                .replaceAll("{{NO_IC_WASI1}}", data.icWasi1 || "-")
+                                .replaceAll("{{ALAMAT_WASI1}}", data.alamatWasi1 || "-")
+                                .replaceAll("{{NAMA_SYARIKAT}}", data.namaSyarikat || "-")
+                                .replaceAll("{{NO_SSM}}", data.noSsm || "-")
+                                .replaceAll("{{SAHAM_PEWASIAT}}", fSaham(data.sahamPewasiat))
+                                .replaceAll("{{KLAUSA_MEKANISME_AMANAH}}", klausaAmanah);
+                            
+                            // Masukkan ke dalam DOM
+                            document.getElementById("sectionAmanah").innerHTML = trustHTML;
+                            
+                            // Tambah ke dalam menu Isi Kandungan (TOC)
+                            tocMekList.innerHTML += `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Surat Ikatan Amanah Korporat</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocAmanahNum" class="text-[14px] font-bold">-</span></div>`;
+                        }
+
+                        
                         // ==========================================
                         // 3. GENERATE LAMPIRAN DOKUMEN FIZIKAL
                         // ==========================================
@@ -606,6 +653,11 @@
                                     }
                                 }
 
+                                if (page.closest("#sectionAmanah")) {
+                                    const tocAmanahNum = document.getElementById("tocAmanahNum");
+                                    if (tocAmanahNum && tocAmanahNum.innerText === "-") tocAmanahNum.innerText = pageNum;
+                                }
+                                
                                 if (page.closest("#sectionLampiran")) {
                                     const tocLampiran = document.getElementById("tocLampiran");
                                     if (tocLampiran && tocLampiran.innerText === "-") tocLampiran.innerText = pageNum;
