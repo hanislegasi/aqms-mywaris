@@ -65,7 +65,7 @@ const trustDeedContent = `
     <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 1: PENGISYTIHARAN AMANAH</h3>
     <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
         <tr valign="top">
-            <td width="30">1.1</td>
+            <td width="30">1.</td>
             <td style="padding-bottom:8px; text-align:justify;">Pembuat Amanah dengan ini mengisytiharkan secara mutlak bahawa bermula dari tarikh Surat Ikatan ini, Saham Amanah hendaklah dipegang di bawah suatu <strong>Amanah (Trust)</strong> oleh Pemegang Amanah, dan Pembuat Amanah melepaskan semua hak milik benefisial ke atas saham tersebut untuk manfaat Penerima Manfaat yang dinamakan, melainkan Pembuat Amanah masih hidup dan mengekalkan hak mengundi dan dividen semasa hayatnya.</td>
         </tr>
     </table>
@@ -73,7 +73,7 @@ const trustDeedContent = `
     <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 2: MEKANISME PELAKSANAAN DAN PENGAGIHAN AMANAH</h3>
     <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
         <tr valign="top">
-            <td width="30">2.1</td>
+            <td width="30">2.</td>
             <td style="padding-bottom:8px; text-align:justify;">Sekiranya berlaku kematian atau Keilatan Kekal Menyeluruh (TPD) ke atas Pembuat Amanah, Pemegang Amanah hendaklah mentadbir Saham Amanah berpandukan arahan mandatori berikut:</td>
         </tr>
     </table>
@@ -86,11 +86,11 @@ const trustDeedContent = `
     <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 3: KUASA-KUASA PEMEGANG AMANAH</h3>
     <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
         <tr valign="top">
-            <td width="30">3.1</td>
+            <td width="30">1.</td>
             <td style="padding-bottom:8px; text-align:justify;">Tertakluk kepada <strong>Akta Pemegang Amanah 1949</strong>, Pemegang Amanah diberi kuasa mutlak untuk memindah milik saham, menandatangani resolusi syarikat mewakili saham amanah, memfailkan tuntutan pampasan Takaful, dan mencairkan aset (jika diarahkan melalui Fasal 2) tanpa perlu merujuk kepada Mahkamah atau waris Faraid.</td>
         </tr>
         <tr valign="top">
-            <td width="30">3.2</td>
+            <td width="30">2.</td>
             <td style="padding-bottom:8px; text-align:justify;">Sekiranya Penerima Manfaat adalah kanak-kanak di bawah umur lapan belas (18) tahun atau Orang Kurang Upaya (OKU), Pemegang Amanah berhak untuk memegang saham/wang tunai tersebut dalam satu akaun amanah berasingan dan menggunakan hasilnya bagi tujuan penyelenggaraan, pendidikan, dan kebajikan mereka.</td>
         </tr>
     </table>
@@ -107,11 +107,11 @@ const trustDeedContent = `
     <h3 style="font-size:16px; font-weight:bold; margin-top:0px; margin-bottom:10px; color:#153638;">FASAL 4: PERLINDUNGAN & IMBUHAN PEMEGANG AMANAH</h3>
     <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
         <tr valign="top">
-            <td width="30">4.1</td>
+            <td width="30">1.</td>
             <td style="padding-bottom:8px; text-align:justify;">Pemegang Amanah (terutamanya jika Syarikat Amanah) berhak untuk menuntut dan dibayar fi pentadbiran yang munasabah daripada dana atau hasil jualan Saham Amanah mengikut jadual fi <em>(fee schedule)</em> rasmi mereka pada waktu pentadbiran.</td>
         </tr>
         <tr valign="top">
-            <td width="30">4.2</td>
+            <td width="30">2.</td>
             <td style="padding-bottom:8px; text-align:justify;">Pemegang Amanah tidak boleh dipertanggungjawabkan atas sebarang kerugian modal ke atas Saham Amanah melainkan kerugian tersebut berpunca daripada penipuan <em>(fraud)</em> atau kecuaian kasar <em>(gross negligence)</em> Pemegang Amanah.</td>
         </tr>
     </table>
@@ -119,7 +119,7 @@ const trustDeedContent = `
     <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 5: UNDANG-UNDANG TERPAKAI</h3>
     <table width="100%" style="margin-bottom:30px; border-collapse:collapse;">
         <tr valign="top">
-            <td width="30">5.1</td>
+            <td width="30">1.</td>
             <td style="padding-bottom:8px; text-align:justify;">Surat Ikatan Amanah ini hendaklah ditafsir mengikut peruntukan undang-undang Malaysia dan prinsip-prinsip Syariah (jika berkaitan). Sebarang pertikaian tidak membatalkan niat asal pewarisan korporat yang terkandung di sini.</td>
         </tr>
     </table>
