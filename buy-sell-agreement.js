@@ -389,9 +389,7 @@ font-style:italic;
         </tr>
     </table>
  
-    <p style="margin-top:20px; font-size:12px; font-style:italic; color:#555;">
-        Dokumen ini dijana melalui sistem eWasiat berdasarkan maklumat yang dimasukkan oleh pengguna. Adalah dinasihatkan supaya dokumen ini disemak oleh Peguam Korporat dan Penasihat Syariah bertauliah sebelum ditandatangani dan digunakan sebagai perjanjian mengikat.
-    </p>
+    
  
     <div class="pdf-footer">
         <span class="footer-docref"></span>
