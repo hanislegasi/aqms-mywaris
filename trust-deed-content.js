@@ -112,7 +112,7 @@ const trustDeedContent = `
         </tr>
         <tr valign="top">
             <td width="30">4.2</td>
-            <td style="padding-bottom:8px; text-align:justify;">Pemegang Amanah tidak boleh dipertanggungjawabkan atas sebarang kerugian modal ke atas Saham Amanah melainkan kerugian tersebut berpunca daripada penipuan (fraud) atau kecuaian kasar (gross negligence) Pemegang Amanah.</td>
+            <td style="padding-bottom:8px; text-align:justify;">Pemegang Amanah tidak boleh dipertanggungjawabkan atas sebarang kerugian modal ke atas Saham Amanah melainkan kerugian tersebut berpunca daripada penipuan <em>(fraud)</em> atau kecuaian kasar <em>(gross negligence)</em> Pemegang Amanah.</td>
         </tr>
     </table>
 
