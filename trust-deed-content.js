@@ -111,12 +111,9 @@ const trustDeedContent = `
     </table>
 
     <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 5: UNDANG-UNDANG TERPAKAI</h3>
-    <table width="100%" style="margin-bottom:30px; border-collapse:collapse;">
-        <tr valign="top">
-            <td width="30">1.</td>
-            <td style="padding-bottom:8px; text-align:justify;">Surat Ikatan Amanah ini hendaklah ditafsir mengikut peruntukan undang-undang Malaysia dan prinsip-prinsip Syariah (jika berkaitan). Sebarang pertikaian tidak membatalkan niat asal pewarisan korporat yang terkandung di sini.</td>
-        </tr>
-    </table>
+    <p style="text-align:justify; margin-bottom:30px;">
+        Surat Ikatan Amanah ini hendaklah ditafsir mengikut peruntukan undang-undang Malaysia dan prinsip-prinsip Syariah (jika berkaitan). Sebarang pertikaian tidak membatalkan niat asal pewarisan korporat yang terkandung di sini.
+    </p>
 
 
 <div
