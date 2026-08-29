@@ -567,7 +567,7 @@
                         
                         document.getElementById("sectionMekanisme").innerHTML = mekanismeHTML;
 
-// ==========================================
+                        // ==========================================
                         // 2.5 GENERATE SURAT IKATAN AMANAH (TRUST DEED)
                         // ==========================================
                         if (typeof trustDeedContent !== 'undefined') {
@@ -613,29 +613,32 @@
                         }
 
                         
-                        // ==========================================
+                       // ==========================================
                         // 3. GENERATE LAMPIRAN DOKUMEN FIZIKAL
                         // ==========================================
                         const lampiranSnap = await getDocs(collection(db, "users", userId, "corporateDocuments"));
                         let lampiranHTML = "";
                         let hurufLampiran = "C".charCodeAt(0); 
+
                         for(const doc of lampiranSnap.docs){
                             const file = doc.data();
                             
-                            // TUKAR DI SINI: Semak fileName, bukan fileURL
-                            if(file.fileName && file.fileName.match(/\.(jpeg|jpg|gif|png)$/i) != null) {
-                                try {
-                                    const base64Image = await imageToBase64(file.fileURL);
-                                    lampiranHTML += `<div class="a4-page p-[18mm]"><h2 style="font-family:'Times New Roman', serif; font-size:28px; margin-top:30px; margin-bottom:20px; color:#153638;">LAMPIRAN ${String.fromCharCode(hurufLampiran)}: ${(file.namaLampiran || file.fileName).toUpperCase()}</h2><img src="${base64Image}" style="display:block; max-width:170mm; max-height:220mm; margin:20px auto; border:1px solid #ccc; object-fit:contain;"><div class="pdf-footer"></div></div>`;
-                                    hurufLampiran++;
-                                } catch (err) {
-                                    console.log("Gagal convert gambar ke Base64:", err);
-                                    // Fallback: Jika gagal convert base64 (mungkin sebab CORS), guna URL asal terus
-                                    lampiranHTML += `<div class="a4-page p-[18mm]"><h2 style="font-family:'Times New Roman', serif; font-size:28px; margin-top:30px; margin-bottom:20px; color:#153638;">LAMPIRAN ${String.fromCharCode(hurufLampiran)}: ${(file.namaLampiran || file.fileName).toUpperCase()}</h2><img src="${file.fileURL}" crossorigin="anonymous" style="display:block; max-width:170mm; max-height:220mm; margin:20px auto; border:1px solid #ccc; object-fit:contain;"><div class="pdf-footer"></div></div>`;
-                                    hurufLampiran++;
-                                }
-                            }
+                            // Terus convert semua fail ke Base64 (Tiru format Wasiat)
+                            const base64Image = await imageToBase64(file.fileURL);
+
+                            lampiranHTML += `
+                            <div class="a4-page p-[18mm]">
+                                <h2 style="font-family:'Times New Roman', serif; font-size:28px; font-weight:400; margin-top:30px; margin-bottom:20px; color:#153638; text-transform:uppercase;">
+                                    LAMPIRAN ${String.fromCharCode(hurufLampiran)}: ${(file.namaLampiran || file.fileName).toUpperCase()}
+                                </h2>
+                                <img src="${base64Image}" style="display:block; max-width:170mm; max-height:220mm; width:auto; height:auto; margin:20px auto; border:1px solid #ccc; object-fit:contain;">
+                                <div class="pdf-footer"></div>
+                            </div>
+                            `;
+
+                            hurufLampiran++;
                         }
+                        
                         document.getElementById("sectionLampiran").innerHTML = lampiranHTML;
 
                         // ==========================================
