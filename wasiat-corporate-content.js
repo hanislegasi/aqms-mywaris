@@ -381,9 +381,7 @@ Pewasiat berada dalam keadaan waras serta membuat Wasiat ini secara sukarela.
     </tr>
 </table>
  
-<p style="margin-top:40px; font-size:12px; font-style:italic; color:#555;">
-Dokumen ini dijana melalui sistem eWasiat berdasarkan maklumat yang dimasukkan oleh pengguna. Adalah dinasihatkan supaya dokumen ini disemak oleh Peguam Syarie bertauliah sebelum ditandatangani dan digunakan sebagai dokumen mengikat.
-</p>
+
  
 <div class="pdf-footer">
 <span class="footer-docref"></span>
