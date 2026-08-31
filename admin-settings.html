@@ -72,10 +72,10 @@ Admin Settings
             </div>
         </div>
 
-        <!-- ================= PRODUCT ================= -->
+      <!-- ================= PRODUCT ================= -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Harga Produk</h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-5">
+            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Harga Produk & Caj Tambahan</h2>
+            <div class="grid md:grid-cols-3 xl:grid-cols-6 gap-5">
                 <div>
                     <label class="font-medium text-sm text-gray-600 block mb-1">Wasiat (RM)</label>
                     <input id="wasiatPrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
@@ -95,6 +95,11 @@ Admin Settings
                 <div>
                     <label class="font-medium text-sm text-gray-600 block mb-1">Mawaris Korporat (RM)</label>
                     <input id="corporatePrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <!-- TAMBAHAN CAJ RTB -->
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Caj RTB (RM)</label>
+                    <input id="cajRTB" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 100">
                 </div>
             </div>
         </div>
@@ -562,7 +567,7 @@ Admin Settings
         };
 
         const defaultCompensationSettings = {
-            wasiatPrice: 350, hibahPrice: 2500, sepencarianPrice: 800, mawarisPrice: 3000, corporatePrice: 6000,
+            wasiatPrice: 350, hibahPrice: 2500, sepencarianPrice: 800, mawarisPrice: 3000, corporatePrice: 6000, cajRTB: 100, // <-- Tambah cajRTB di sini
             wasiatRenewal: 50, hibahRenewal: 50, sepencarianRenewal: 50, mawarisRenewal: 80, corporateRenewal: 200,
             commissionAQC: 35, commissionAQCAS: 38, commissionAQCUM: 40, commissionMGAM: 45,
             overrideAQC: 0, overrideAQCAS: 3, overrideAQCUM: 4, overrideMGAM: 5,
@@ -581,7 +586,7 @@ Admin Settings
         const companyFields = ["companyName", "registrationNo", "companyEmail", "companyAddress"];
         
         const compensationFields = [
-            "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice", "corporatePrice",
+            "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice", "corporatePrice", "cajRTB", // <-- Tambah cajRTB di sini
             "wasiatRenewal", "hibahRenewal", "sepencarianRenewal", "mawarisRenewal", "corporateRenewal", 
             "commissionAQC", "commissionAQCAS", "commissionAQCUM", "commissionMGAM",
             "overrideAQC", "overrideAQCAS", "overrideAQCUM", "overrideMGAM",
