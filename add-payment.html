@@ -9,14 +9,14 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
     </style>
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
 
     <div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
         <!-- HEADER -->
         <div class="bg-[#153638] p-6 text-center text-white">
-            <h1 class="text-2xl font-bold tracking-wide">Invois Pembayaran</h1>
+            <h1 class="text-2xl font-bold tracking-wide" id="headerTitle">Invois Pembayaran</h1>
             <p class="text-sm text-gray-300 mt-1" id="invRef">Menyemak butiran...</p>
         </div>
 
@@ -31,15 +31,16 @@
             <!-- ITEM BREAKDOWN -->
             <div class="border-t border-b border-gray-200 py-4 space-y-3 mb-6">
                 
-                <div class="flex justify-between items-start">
+                <!-- ROW JIKA TIADA CAJ RTB (MANUAL) -->
+                <div id="tiadaCajRow" class="flex justify-between items-start">
                     <div>
-                        <p class="font-semibold text-gray-800">Pakej Wasiat Korporat</p>
-                        <p class="text-xs text-gray-500">Penyediaan Draf & Dokumen Perundangan</p>
+                        <p class="font-semibold text-gray-800">Penyediaan Dokumen Wasiat</p>
+                        <p class="text-xs text-gray-500">Tiada caj tambahan dikenakan</p>
                     </div>
-                    <p class="font-semibold text-gray-800" id="hargaAsas">RM 0.00</p>
+                    <p class="font-semibold text-gray-800">RM 0.00</p>
                 </div>
 
-                <!-- HIDDEN BY DEFAULT, MUNCUL JIKA RTB -->
+                <!-- ROW MUNCUL JIKA PILIH RTB -->
                 <div id="cajRTBRow" class="flex justify-between items-start hidden">
                     <div>
                         <p class="font-semibold text-gray-800">Caj Pelantikan Syarikat Amanah</p>
@@ -58,12 +59,12 @@
 
             <!-- BUTTON -->
             <button id="payBtn" class="w-full bg-[#153638] hover:bg-[#0f2729] text-white font-bold py-4 rounded-xl shadow-lg transition duration-200 flex justify-center items-center gap-2">
-                <span>Teruskan Pembayaran</span>
+                <span id="btnText">Teruskan</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                 </svg>
             </button>
-            <p class="text-center text-xs text-gray-400 mt-4">Transaksi diproses secara selamat melalui perbankan FPX.</p>
+            <p class="text-center text-xs text-gray-400 mt-4" id="footerNote">Transaksi diproses secara selamat melalui perbankan FPX.</p>
         </div>
     </div>
 
@@ -73,7 +74,6 @@
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // Ambil ID dari URL (Cth: add-payment.html?id=USER_ID&type=corporate)
         const params = new URLSearchParams(window.location.search);
         let userId = params.get("id");
         const docType = params.get("type") || "corporate";
@@ -84,21 +84,17 @@
                 return;
             }
 
-            if (!userId) userId = user.uid; // Jika tiada ID di URL, guna ID user yang login
+            if (!userId) userId = user.uid; 
 
             try {
                 // 1. TARIK DATA TETAPAN DARI ADMIN SETTING
-                // Anggapan awak ada collection "system" dan dokumen "settings"
                 const settingsRef = doc(db, "system", "settings");
                 const settingsSnap = await getDoc(settingsRef);
                 
-                // Set default harga jika admin belum set dalam DB
-                let basePrice = 1500; 
-                let rtbFee = 100;
+                let rtbFee = 100; // Harga default RTB
 
                 if (settingsSnap.exists()) {
                     const settingData = settingsSnap.data();
-                    if (settingData.hargaAsasCorporate) basePrice = parseFloat(settingData.hargaAsasCorporate);
                     if (settingData.cajRTB) rtbFee = parseFloat(settingData.cajRTB);
                 }
 
@@ -114,35 +110,45 @@
                     document.getElementById("icKlien").innerText = data.ic || "-";
                     document.getElementById("invRef").innerText = `Ref: ${data.docRef || "DRAF-" + Date.now().toString().slice(-6)}`;
 
-                    // 3. KIRA TOTAL
-                    let finalTotal = basePrice;
+                    // 3. KIRA TOTAL (Tiada harga asas, base = 0)
+                    let finalTotal = 0;
 
-                    // Masukkan ke UI
-                    document.getElementById("hargaAsas").innerText = `RM ${basePrice.toFixed(2)}`;
-
-                    // Jika klien pilih RTB, tambah caj dan tunjuk baris RTB
+                    // Jika klien pilih RTB
                     if (data.pilihanWasi1 === "rtb") {
+                        document.getElementById("tiadaCajRow").classList.add("hidden");
                         document.getElementById("cajRTBRow").classList.remove("hidden");
                         document.getElementById("hargaRTB").innerText = `RM ${rtbFee.toFixed(2)}`;
-                        finalTotal += rtbFee;
+                        finalTotal = rtbFee;
+                        
+                        document.getElementById("btnText").innerText = "Teruskan Pembayaran";
+                        document.getElementById("headerTitle").innerText = "Invois Pembayaran";
+                    } else {
+                        // Jika manual / tiada caj
+                        document.getElementById("btnText").innerText = "Sahkan Permohonan";
+                        document.getElementById("headerTitle").innerText = "Pengesahan Permohonan";
+                        document.getElementById("footerNote").innerText = "Dokumen anda akan dihantar kepada Admin untuk semakan.";
                     }
 
                     document.getElementById("totalHarga").innerText = `RM ${finalTotal.toFixed(2)}`;
 
-                    // 4. LOGIK BUTANG BAYAR
+                    // 4. LOGIK BUTANG BAYAR / SAH
                     document.getElementById("payBtn").addEventListener("click", async () => {
                         
-                        // Set status dokumen kepada menunggu bayaran (jika perlu)
+                        // Set status dokumen
                         await updateDoc(docRef, {
-                            status: "PENDING_PAYMENT",
+                            status: finalTotal > 0 ? "PENDING_PAYMENT" : "PENDING_APPROVAL",
                             jumlahPerluBayar: finalTotal
                         });
 
-                        // GANTIKAN DENGAN LOGIK PAYMENT GATEWAY AWAK
-                        // Cth: window.location.href = `https://toyyibpay.com/namabill?amount=${finalTotal}&name=${data.nama}`;
-                        // Cth OnPay: window.location.href = `https://alqawthar.onpay.my/order/form/1?name=${data.nama}`;
-                        
-                        alert(`Akan redirect ke Payment Gateway untuk bayaran RM ${finalTotal.toFixed(2)}`);
+                        if (finalTotal > 0) {
+                            // GANTIKAN DENGAN LOGIK PAYMENT GATEWAY (Jika ada RM100)
+                            // Cth: window.location.href = `https://toyyibpay.com/namabill?amount=${finalTotal}&name=${data.nama}`;
+                            alert(`Akan redirect ke Payment Gateway untuk bayaran RM ${finalTotal.toFixed(2)}`);
+                        } else {
+                            // SKIP PAYMENT (Sebab RM0), terus pergi dashboard
+                            alert("Permohonan anda berjaya dihantar untuk semakan pengurusan.");
+                            window.location.href = "dashboard.html"; // Atau page success
+                        }
                     });
 
                 } else {
@@ -150,8 +156,8 @@
                 }
 
             } catch (error) {
-                console.error("Ralat memuatkan invois:", error);
-                alert("Gagal memuatkan data invois.");
+                console.error("Ralat memuatkan halaman:", error);
+                alert("Gagal memuatkan data.");
             }
         });
     </script>
