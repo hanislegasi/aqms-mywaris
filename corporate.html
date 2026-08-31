@@ -130,25 +130,26 @@
 
         <hr class="my-6 border-gray-200">
 
-        <!-- MAKLUMAT WASI PERTAMA (DENGAN PILIHAN RTB) -->
+      <!-- MAKLUMAT WASI PERTAMA (DENGAN PILIHAN RTB) -->
         <h3 class="font-semibold mb-3 text-[#153638] text-lg">Maklumat Wasi Pertama</h3>
         
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
-            <label class="block font-semibold text-blue-900 mb-2">Lantik Rakyat Trustee Berhad sebagai Wasi?</label>
+            <label class="block font-semibold text-blue-900 mb-2">Pilih Wasi / Pentadbir Pertama</label>
             <select id="pilihanWasi1" class="w-full border rounded-lg p-3 bg-white font-semibold text-[#153638]">
-                <option value="rtb">Ya, Lantik Rakyat Trustee Berhad (Disyorkan)</option>
-                <option value="manual">Tidak, Lantik Individu/Syarikat Lain</option>
+                <option value="">-- Sila Pilih --</option>
+                <option value="rtb">Syarikat Amanah (Rakyat Trustee Berhad) - Disyorkan</option>
+                <option value="manual">Individu / Syarikat Lain</option>
             </select>
         </div>
 
         <!-- PAPARAN INFO RTB (Muncul jika pilih RTB) -->
-        <div id="wasi1RTBSection" class="border border-gray-200 bg-gray-50 rounded-xl p-5 mb-4 space-y-2">
+        <div id="wasi1RTBSection" class="hidden border border-gray-200 bg-gray-50 rounded-xl p-5 mb-4 space-y-2">
             <p class="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Maklumat Syarikat Amanah</p>
             <p class="text-sm"><strong>Nama:</strong> Rakyat Trustee Berhad</p>
             <p class="text-sm"><strong>No. Pendaftaran:</strong> 1462142-U</p>
             <p class="text-sm"><strong>Alamat:</strong> Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 KL</p>
             <p class="text-sm"><strong>Telefon:</strong> +603 2602 2722</p>
-            <p class="text-xs text-blue-600 mt-2 italic">*Maklumat ini akan dimasukkan secara automatik ke dalam dokumen anda.</p>
+            <p class="text-xs text-red-600 mt-3 font-semibold">*Nota: Kos pelantikan tambahan sebanyak RM100 akan dikenakan. Maklumat RTB akan dimasukkan secara automatik ke dalam dokumen anda.</p>
         </div>
 
         <!-- KOTAK MANUAL (Muncul jika pilih Tidak) -->
@@ -359,32 +360,49 @@
         const pilihanWasi1 = document.getElementById("pilihanWasi1");
         const wasi1RTBSection = document.getElementById("wasi1RTBSection");
         const wasi1ManualSection = document.getElementById("wasi1ManualSection");
-        const wasi2Section = document.getElementById("wasi2Section"); // Tambah ini
+        const wasi2Section = document.getElementById("wasi2Section"); // Pastikan id ini wujud dalam HTML awak
 
         function toggleWasi1() {
+            wasi1RTBSection.classList.add("hidden");
+            wasi1ManualSection.classList.add("hidden");
+            if(wasi2Section) wasi2Section.classList.add("hidden");
+
             if (pilihanWasi1.value === "rtb") {
-                // Jika RTB: Tunjuk info RTB, tutup Manual Wasi 1, tutup Wasi 2
                 wasi1RTBSection.classList.remove("hidden");
-                wasi1ManualSection.classList.add("hidden");
-                wasi2Section.classList.add("hidden");
                 
-                // Kosongkan data Wasi 2 supaya tak masuk database jika user tukar fikiran
-                document.getElementById("namaWasi2").value = "";
-                document.getElementById("icWasi2").value = "";
-                document.getElementById("hubunganWasi2").value = "";
-                document.getElementById("alamatWasi2").value = "";
-                document.getElementById("telefonWasi2").value = "";
-            } else {
-                // Jika Manual: Tutup info RTB, tunjuk Manual Wasi 1, tunjuk Wasi 2
-                wasi1RTBSection.classList.add("hidden");
+                // Kosongkan form manual supaya tak masuk DB
+                document.getElementById("namaWasi1").value = "";
+                document.getElementById("icWasi1").value = "";
+                document.getElementById("hubunganWasi1").value = "";
+                document.getElementById("alamatWasi1").value = "";
+                document.getElementById("telefonWasi1").value = "";
+                
+            } else if (pilihanWasi1.value === "manual") {
                 wasi1ManualSection.classList.remove("hidden");
-                wasi2Section.classList.remove("hidden");
+                if(wasi2Section) wasi2Section.classList.remove("hidden");
             }
         }
-        pilihanWasi1.addEventListener("change", toggleWasi1);
-        toggleWasi1(); // Jalankan sekali masa load
-        // ------------------------------------
 
+        pilihanWasi1.addEventListener("change", function() {
+            if (this.value === "rtb") {
+                const setuju = confirm(
+                    "NOTIS PELANTIKAN RAKYAT TRUSTEE BERHAD (RTB)\n\n" +
+                    "Adakah anda bersetuju dengan terma berikut?\n\n" +
+                    "1. Caj pelantikan tambahan sebanyak RM100 akan dikenakan.\n" +
+                    "2. Kos pentadbiran pusaka akan dikenakan oleh pihak RTB berdasarkan peratusan nilai harta pada waktu urusan tuntutan pusaka kelak.\n\n" +
+                    "Klik 'OK' untuk bersetuju atau 'Cancel' untuk batal."
+                );
+                
+                if (!setuju) {
+                    this.value = ""; // Reset balik ke '-- Sila Pilih --' kalau cancel
+                }
+            }
+            toggleWasi1();
+        });
+
+        // Jalankan sekali masa load untuk susun UI
+        toggleWasi1();
+        
         document.getElementById("namaWasi2").value = data.namaWasi2 || "";
         document.getElementById("icWasi2").value = data.icWasi2 || "";
         document.getElementById("hubunganWasi2").value = data.hubunganWasi2 || "";
