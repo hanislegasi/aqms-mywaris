@@ -53,16 +53,14 @@
         </div>
       </div>
 
-      <!-- SECTION 2: SENARAI WARIS (Diubah ke atas) -->
+      <!-- SECTION 2: SENARAI WARIS -->
       <div>
         <h2 class="font-bold text-xl mb-4">Section 2 : Senarai Waris</h2>
-        <div id="warisContainer">
-          <!-- Item Waris dimasukkan oleh JS -->
-        </div>
+        <div id="warisContainer"></div>
         <button type="button" id="addWarisBtn" class="bg-[#153638] text-white px-4 py-2 rounded-lg">+ Tambah Waris</button>
       </div>
 
-      <!-- SECTION 3: MAKLUMAT KORPORAT & WASI (Diubah ke bawah) -->
+      <!-- SECTION 3: MAKLUMAT KORPORAT & WASI -->
       <div>
         <h2 class="font-bold text-xl mb-4">Section 3 : Maklumat Korporat & Pelantikan Wasi</h2>
         
@@ -356,51 +354,7 @@
             document.getElementById("pilihanWasi1").value = "rtb";
         }
         
-       // --- LOGIK BUKA/TUTUP KOTAK WASI 1 & 2 ---
-        const pilihanWasi1 = document.getElementById("pilihanWasi1");
-        const wasi1RTBSection = document.getElementById("wasi1RTBSection");
-        const wasi1ManualSection = document.getElementById("wasi1ManualSection");
-        const wasi2Section = document.getElementById("wasi2Section"); // Pastikan id ini wujud dalam HTML awak
-
-        function toggleWasi1() {
-            wasi1RTBSection.classList.add("hidden");
-            wasi1ManualSection.classList.add("hidden");
-            if(wasi2Section) wasi2Section.classList.add("hidden");
-
-            if (pilihanWasi1.value === "rtb") {
-                wasi1RTBSection.classList.remove("hidden");
-                
-                // Kosongkan form manual supaya tak masuk DB
-                document.getElementById("namaWasi1").value = "";
-                document.getElementById("icWasi1").value = "";
-                document.getElementById("hubunganWasi1").value = "";
-                document.getElementById("alamatWasi1").value = "";
-                document.getElementById("telefonWasi1").value = "";
-                
-            } else if (pilihanWasi1.value === "manual") {
-                wasi1ManualSection.classList.remove("hidden");
-                if(wasi2Section) wasi2Section.classList.remove("hidden");
-            }
-        }
-
-        pilihanWasi1.addEventListener("change", function() {
-            if (this.value === "rtb") {
-                const setuju = confirm(
-                    "NOTIS PELANTIKAN RAKYAT TRUSTEE BERHAD (RTB)\n\n" +
-                    "Adakah anda bersetuju dengan terma berikut?\n\n" +
-                    "1. Caj pelantikan tambahan sebanyak RM100 akan dikenakan.\n" +
-                    "2. Kos pentadbiran pusaka akan dikenakan oleh pihak RTB berdasarkan peratusan nilai harta pada waktu urusan tuntutan pusaka kelak.\n\n" +
-                    "Klik 'OK' untuk bersetuju atau 'Cancel' untuk batal."
-                );
-                
-                if (!setuju) {
-                    this.value = ""; // Reset balik ke '-- Sila Pilih --' kalau cancel
-                }
-            }
-            toggleWasi1();
-        });
-
-        // Jalankan sekali masa load untuk susun UI
+        // --- LOGIK BUKA/TUTUP KOTAK WASI 1 & 2 DIBUAT DENGAN FUNCTION DI BAWAH ---
         toggleWasi1();
         
         document.getElementById("namaWasi2").value = data.namaWasi2 || "";
@@ -473,8 +427,53 @@
         // Sistem akan automatik sediakan 1 kotak kosong
         addWarisToDOM(); 
         addWasiatToDOM(); // <-- Tambah baris ini
+        toggleWasi1(); // Menetapkan borang pada keadaan awal (kosong)
       }
     }); // <-- Ini penutup asal untuk onAuthStateChanged
+
+    // --- LOGIK BUKA/TUTUP KOTAK WASI 1 & 2 DIPINDAHKAN KE SINI ---
+    const pilihanWasi1 = document.getElementById("pilihanWasi1");
+    const wasi1RTBSection = document.getElementById("wasi1RTBSection");
+    const wasi1ManualSection = document.getElementById("wasi1ManualSection");
+    const wasi2Section = document.getElementById("wasi2Section"); // Pastikan id ini wujud dalam HTML awak
+
+    function toggleWasi1() {
+        wasi1RTBSection.classList.add("hidden");
+        wasi1ManualSection.classList.add("hidden");
+        if(wasi2Section) wasi2Section.classList.add("hidden");
+
+        if (pilihanWasi1.value === "rtb") {
+            wasi1RTBSection.classList.remove("hidden");
+            
+            // Kosongkan form manual supaya tak masuk DB
+            document.getElementById("namaWasi1").value = "";
+            document.getElementById("icWasi1").value = "";
+            document.getElementById("hubunganWasi1").value = "";
+            document.getElementById("alamatWasi1").value = "";
+            document.getElementById("telefonWasi1").value = "";
+            
+        } else if (pilihanWasi1.value === "manual") {
+            wasi1ManualSection.classList.remove("hidden");
+            if(wasi2Section) wasi2Section.classList.remove("hidden");
+        }
+    }
+
+    pilihanWasi1.addEventListener("change", function() {
+        if (this.value === "rtb") {
+            const setuju = confirm(
+                "NOTIS PELANTIKAN RAKYAT TRUSTEE BERHAD (RTB)\n\n" +
+                "Adakah anda bersetuju dengan terma berikut?\n\n" +
+                "1. Caj pelantikan tambahan sebanyak RM100 akan dikenakan.\n" +
+                "2. Kos pentadbiran pusaka akan dikenakan oleh pihak RTB berdasarkan peratusan nilai harta pada waktu urusan tuntutan pusaka kelak.\n\n" +
+                "Klik 'OK' untuk bersetuju atau 'Cancel' untuk batal."
+            );
+            
+            if (!setuju) {
+                this.value = ""; // Reset balik ke '-- Sila Pilih --' kalau cancel
+            }
+        }
+        toggleWasi1();
+    });
 
 // --- FUNGSI RAKAN KONGSI ---
     function addRakanKongsiToDOM(item = {}) {
@@ -736,7 +735,7 @@
         document.getElementById("icPemegangAmanah").value = document.querySelectorAll(".icWaris")[index]?.value || "";
         document.getElementById("hubunganPemegangAmanah").value = document.querySelectorAll(".hubunganWaris")[index]?.value || "";
         document.getElementById("telefonPemegangAmanah").value = document.querySelectorAll(".telefonWaris")[index]?.value || "";
-    });    
+    });   
 
     // FILES (UPLOAD & DELETE)
     async function loadFiles(){
@@ -950,14 +949,19 @@
                 updatedAt: new Date()
             }, { merge: true });
 
-           // Selepas butang 'Hantar Borang' ditekan dan data diselamatkan di DB...
-setTimeout(() => {
-  alert("Borang berjaya disimpan. Sila teruskan dengan pembayaran.");
-window.location.href = `add-payment.html?id=${user.uid}&type=corporate`;
-        }, 1000);
+            document.getElementById("status").innerHTML = "Maklumat berjaya disimpan. Sila tunggu sebentar...";
+            
+            // Beri sedikit masa (delay) untuk user baca mesej sebelum redirect
+            setTimeout(() => {
+                alert("Borang Korporat berjaya disimpan! Sila teruskan ke halaman pembayaran.");
+                // Redirect ke add-payment.html dengan membawa userId dan jenis dokumen
+                window.location.href = `add-payment.html?id=${currentUser.uid}&type=corporate`;
+            }, 1000); 
+
         }
         catch(error){
-            document.getElementById("status").innerHTML = error.message;
+            document.getElementById("status").innerHTML = `<span class="text-red-500">Ralat: ${error.message}</span>`;
+            console.error("Ralat Submit:", error);
         }
     });
     
