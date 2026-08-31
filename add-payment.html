@@ -72,7 +72,8 @@
     <script type="module">
         import { db, auth } from './firebase.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        // PASTIKAN SEMUA FUNGSI INI DI-IMPORT
+        import { doc, getDoc, setDoc, updateDoc, addDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const params = new URLSearchParams(window.location.search);
         let userId = params.get("id");
@@ -131,23 +132,75 @@
 
                     document.getElementById("totalHarga").innerText = `RM ${finalTotal.toFixed(2)}`;
 
-                    // 4. LOGIK BUTANG BAYAR / SAH
+                    // 4. LOGIK BUTANG BAYAR / SAH (DENGAN ACCOUNTING JURNAL & DOUBLE ENTRY)
                     document.getElementById("payBtn").addEventListener("click", async () => {
                         
-                        // Set status dokumen
-                        await updateDoc(docRef, {
-                            status: finalTotal > 0 ? "PENDING_PAYMENT" : "PENDING_APPROVAL",
-                            jumlahPerluBayar: finalTotal
-                        });
+                        // Disable butang elak double click
+                        document.getElementById("payBtn").disabled = true;
+                        document.getElementById("btnText").innerText = "Memproses...";
 
-                        if (finalTotal > 0) {
-                            // GANTIKAN DENGAN LOGIK PAYMENT GATEWAY (Jika ada RM100)
-                            // Cth: window.location.href = `https://toyyibpay.com/namabill?amount=${finalTotal}&name=${data.nama}`;
-                            alert(`Akan redirect ke Payment Gateway untuk bayaran RM ${finalTotal.toFixed(2)}`);
-                        } else {
-                            // SKIP PAYMENT (Sebab RM0), terus pergi dashboard
-                            alert("Permohonan anda berjaya dihantar untuk semakan pengurusan.");
-                            window.location.href = "dashboard.html"; // Atau page success
+                        const statusBaru = finalTotal > 0 ? "PENDING_PAYMENT" : "PENDING_APPROVAL";
+                        const refNo = data.docRef || "DRAF-" + Date.now().toString().slice(-6);
+                        
+                        const payloadUpdate = {
+                            status: statusBaru,
+                            jumlahPerluBayar: finalTotal,
+                            updatedAt: new Date().toISOString() 
+                        };
+
+                        try {
+                            // [ENTRY 1]: Update profil User
+                            await updateDoc(docRef, payloadUpdate);
+
+                            // [ENTRY 2]: Double Entry ke Submissions (Untuk Admin)
+                            const submissionRef = doc(db, "submissions", `${userId}_${docType}`);
+                            await setDoc(submissionRef, {
+                                ...data,              
+                                ...payloadUpdate,     
+                                userId: userId,
+                                jenisDokumen: docType,
+                                submittedAt: payloadUpdate.updatedAt 
+                            }, { merge: true });
+
+                            if (finalTotal > 0) {
+                                // [ENTRY 3]: ACCOUNTING TREATMENT (JURNAL LEJAR)
+                                const ledgerRef = collection(db, "accounting_ledger");
+                                await addDoc(ledgerRef, {
+                                    tarikhTransaksi: new Date().toISOString(),
+                                    rujukanDokumen: refNo,
+                                    deskripsi: `Bayaran Caj RTB Korporat - ${data.nama}`,
+                                    jumlahKeseluruhan: finalTotal,
+                                    status: "PENDING_GATEWAY", // Tukar ke PAID lepas payment success
+                                    transaksi: [
+                                        {
+                                            kodAkaun: "1000",
+                                            namaAkaun: "Bank",
+                                            jenis: "DEBIT",
+                                            jumlah: finalTotal
+                                        },
+                                        {
+                                            kodAkaun: "4140",
+                                            namaAkaun: "Profesional Fee",
+                                            jenis: "CREDIT",
+                                            jumlah: finalTotal
+                                        }
+                                    ],
+                                    userId: userId
+                                });
+
+                                // REDIRECT KE PAYMENT GATEWAY
+                                alert(`Data direkodkan.\nAkan redirect ke Payment Gateway untuk bayaran RM ${finalTotal.toFixed(2)}`);
+                                // window.location.href = `https://toyyibpay.com/namabill?amount=${finalTotal}&name=${data.nama}`;
+                            } else {
+                                // SKIP PAYMENT JIKA RM0
+                                alert("Permohonan anda berjaya dihantar untuk semakan pengurusan.");
+                                window.location.href = "dashboard.html"; 
+                            }
+                        } catch (err) {
+                            console.error("Ralat menyimpan pangkalan data:", err);
+                            alert("Terdapat ralat teknikal. Sila cuba lagi.");
+                            document.getElementById("payBtn").disabled = false;
+                            document.getElementById("btnText").innerText = "Teruskan";
                         }
                     });
 
