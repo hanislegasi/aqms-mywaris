@@ -950,8 +950,11 @@
                 updatedAt: new Date()
             }, { merge: true });
 
-            document.getElementById("status").innerHTML = "Maklumat berjaya disimpan.";
-            setTimeout(()=> document.getElementById("status").innerHTML="", 3000);
+           // Selepas butang 'Hantar Borang' ditekan dan data diselamatkan di DB...
+setTimeout(() => {
+  alert("Borang berjaya disimpan. Sila teruskan dengan pembayaran.");
+window.location.href = `add-payment.html?id=${user.uid}&type=corporate`;
+        }, 1000);
         }
         catch(error){
             document.getElementById("status").innerHTML = error.message;
