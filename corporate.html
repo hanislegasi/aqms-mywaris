@@ -128,38 +128,44 @@
 
         <hr class="my-6 border-gray-200">
 
-      <!-- MAKLUMAT WASI PERTAMA (DENGAN PILIHAN RTB) -->
-        <h3 class="font-semibold mb-3 text-[#153638] text-lg">Maklumat Wasi Pertama</h3>
-        
-        <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
-            <label class="block font-semibold text-blue-900 mb-2">Pilih Wasi / Pentadbir Pertama</label>
-            <select id="pilihanWasi1" class="w-full border rounded-lg p-3 bg-white font-semibold text-[#153638]">
-                <option value="">-- Sila Pilih --</option>
-                <option value="rtb">Syarikat Amanah (Rakyat Trustee Berhad) - Disyorkan</option>
-                <option value="manual">Individu / Syarikat Lain</option>
-            </select>
-        </div>
+     <!-- MAKLUMAT WASI PERTAMA (DENGAN PILIHAN RTB) -->
+      <h3 class="font-semibold mb-3 text-[#153638] text-lg">Maklumat Wasi Pertama</h3>
+      
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+          <label class="block font-semibold text-blue-900 mb-2">Pilih Wasi / Pentadbir Pertama</label>
+          <select id="pilihanWasi1" class="w-full border rounded-lg p-3 bg-white font-semibold text-[#153638]">
+              <option value="">-- Sila Pilih --</option>
+              <option value="rtb">Syarikat Amanah (Rakyat Trustee Berhad) - Disyorkan</option>
+              <option value="manual">Individu / Syarikat Lain</option>
+          </select>
+      </div>
 
-        <!-- PAPARAN INFO RTB (Muncul jika pilih RTB) -->
-        <div id="wasi1RTBSection" class="hidden border border-gray-200 bg-gray-50 rounded-xl p-5 mb-4 space-y-2">
-            <p class="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Maklumat Syarikat Amanah</p>
-            <p class="text-sm"><strong>Nama:</strong> Rakyat Trustee Berhad</p>
-            <p class="text-sm"><strong>No. Pendaftaran:</strong> 1462142-U</p>
-            <p class="text-sm"><strong>Alamat:</strong> Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 KL</p>
-            <p class="text-sm"><strong>Telefon:</strong> +603 2602 2722</p>
-            <p class="text-xs text-red-600 mt-3 font-semibold">*Nota: Kos pelantikan tambahan sebanyak RM100 akan dikenakan. Maklumat RTB akan dimasukkan secara automatik ke dalam dokumen anda.</p>
-        </div>
+      <!-- PAPARAN INFO RTB (KOTAK HIJAU KORPORAT - MENONJOL) -->
+      <div id="wasi1RTBSection" class="hidden bg-[#153638] text-white border border-[#0f2729] rounded-xl p-6 mb-4 shadow-lg">
+          <p class="text-sm font-bold text-[#a6c4c5] border-b border-[#2a5a5d] pb-2 mb-4 uppercase tracking-wider">Maklumat Syarikat Amanah</p>
+          
+          <div class="space-y-3 text-base">
+              <p><strong>Nama:</strong> Rakyat Trustee Berhad</p>
+              <p><strong>No. Pendaftaran:</strong> 1462142-U</p>
+              <p><strong>Alamat:</strong> Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur</p>
+              <p><strong>Telefon:</strong> +603 2602 2722</p>
+          </div>
 
-        <!-- KOTAK MANUAL (Muncul jika pilih Tidak) -->
-        <div id="wasi1ManualSection" class="hidden space-y-3 mb-4">
-            <input type="text" id="namaWasi1" placeholder="Nama Wasi / Syarikat Amanah" class="w-full border rounded-lg p-3">
-            <input type="text" id="icWasi1" placeholder="No IC / No Pendaftaran Syarikat" class="w-full border rounded-lg p-3">
-            <input type="text" id="hubunganWasi1" placeholder="Hubungan" class="w-full border rounded-lg p-3">
-            <textarea id="alamatWasi1" rows="2" placeholder="Alamat" class="w-full border rounded-lg p-3"></textarea>
-            <input type="text" id="telefonWasi1" placeholder="No Telefon" class="w-full border rounded-lg p-3">
-        </div>
+          <div class="mt-5 bg-white text-red-600 rounded-lg p-4 border-l-4 border-red-600 shadow-sm">
+              <p class="text-base font-bold leading-relaxed">*NOTA PENTING: Kos pelantikan tambahan sebanyak RM100 akan dikenakan. Maklumat RTB akan dimasukkan secara automatik ke dalam dokumen anda.</p>
+          </div>
+      </div>
 
-        <hr class="my-6 border-gray-200">
+      <!-- KOTAK MANUAL (Muncul jika pilih Tidak) -->
+      <div id="wasi1ManualSection" class="hidden space-y-3 mb-4">
+          <input type="text" id="namaWasi1" placeholder="Nama Wasi / Syarikat Amanah" class="w-full border rounded-lg p-3">
+          <input type="text" id="icWasi1" placeholder="No IC / No Pendaftaran Syarikat" class="w-full border rounded-lg p-3">
+          <input type="text" id="hubunganWasi1" placeholder="Hubungan" class="w-full border rounded-lg p-3">
+          <textarea id="alamatWasi1" rows="2" placeholder="Alamat" class="w-full border rounded-lg p-3"></textarea>
+          <input type="text" id="telefonWasi1" placeholder="No Telefon" class="w-full border rounded-lg p-3">
+      </div>
+
+      <hr class="my-6 border-gray-200">
 
         <!-- MAKLUMAT WASI KEDUA (Wasi Gantian) -->
         <div id="wasi2Section" class="hidden">
@@ -431,7 +437,7 @@
       }
     }); // <-- Ini penutup asal untuk onAuthStateChanged
 
-    // --- LOGIK BUKA/TUTUP KOTAK WASI 1 & 2 DIPINDAHKAN KE SINI ---
+   // --- LOGIK BUKA/TUTUP KOTAK WASI 1 & 2 DIPINDAHKAN KE SINI ---
     const pilihanWasi1 = document.getElementById("pilihanWasi1");
     const wasi1RTBSection = document.getElementById("wasi1RTBSection");
     const wasi1ManualSection = document.getElementById("wasi1ManualSection");
@@ -460,21 +466,17 @@
 
     pilihanWasi1.addEventListener("change", function() {
         if (this.value === "rtb") {
-            const setuju = confirm(
+            // Tukar dari confirm() kepada alert() biasa supaya tiada butang Cancel
+            alert(
                 "NOTIS PELANTIKAN RAKYAT TRUSTEE BERHAD (RTB)\n\n" +
-                "Adakah anda bersetuju dengan terma berikut?\n\n" +
+                "Harap maklum dengan terma berikut:\n\n" +
                 "1. Caj pelantikan tambahan sebanyak RM100 akan dikenakan.\n" +
-                "2. Kos pentadbiran pusaka akan dikenakan oleh pihak RTB berdasarkan peratusan nilai harta pada waktu urusan tuntutan pusaka kelak.\n\n" +
-                "Klik 'OK' untuk bersetuju atau 'Cancel' untuk batal."
+                "2. Kos pentadbiran pusaka akan dikenakan oleh pihak RTB berdasarkan peratusan nilai harta pada waktu urusan tuntutan pusaka kelak."
             );
-            
-            if (!setuju) {
-                this.value = ""; // Reset balik ke '-- Sila Pilih --' kalau cancel
-            }
         }
         toggleWasi1();
     });
-
+    
 // --- FUNGSI RAKAN KONGSI ---
     function addRakanKongsiToDOM(item = {}) {
         const html = `
