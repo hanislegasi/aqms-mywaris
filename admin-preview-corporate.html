@@ -18,6 +18,7 @@
             background-color: #f3f4f6;
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
         }
 
         #pdfContent {
@@ -92,7 +93,7 @@
     </div>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-grow flex flex-col items-center pt-8 pb-4 overflow-auto">
+    <main class="flex-grow flex flex-col items-center pt-8 pb-4 overflow-y-auto overflow-x-hidden">
         <div id="scale-wrapper" class="drop-shadow-2xl">
             <div id="pdfContent">
 
@@ -245,11 +246,6 @@
             return (p / divisor) + "/" + (100 / divisor) + " Bahagian";
         }
 
-        // Format jumlah saham untuk semua blok dokumen korporat
-        const fSaham = (val) => val
-            ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            : "0";
-
         // Generate Jadual Saham (Untuk template Hibah)
         function generateSahamTable(data, p){
             return `
@@ -305,45 +301,29 @@
                             if (!querySnapshot.empty) consultantData = querySnapshot.docs[0].data();
                         }
 
-                        // Nilai asas dokumen / cover
-                        const currentDocRef = data.docRef || "-";
-                        const refYearMatch = String(currentDocRef).match(/(20\d{2})/);
-                        const documentYear = refYearMatch ? refYearMatch[1] : new Date().getFullYear();
+                        // ==========================================
+                        // UPDATE UI - MAKLUMAT PELANGGAN (BUG FIX: blok ni hilang
+                        // sebelum ni, jadi cover page & maklumat pelanggan kekal
+                        // placeholder walaupun data dah load)
+                        // ==========================================
+                        const currentDocRef = data.docRef || data.docRefNo || "-";
 
-                        const setText = (id, value) => {
-                            const el = document.getElementById(id);
-                            if (el) el.textContent = value ?? "-";
-                        };
+                        document.getElementById("docRef").innerHTML = currentDocRef;
+                        document.getElementById("docRefTOC").innerHTML = `DOC REF: ${currentDocRef}`;
+                        document.getElementById("docRef2").innerHTML = `DOC REF: ${currentDocRef}`;
 
-                        setText("docRef", currentDocRef);
-                        setText("docRefTOC", `DOC REF: ${currentDocRef}`);
-                        setText("docRef2", `DOC REF: ${currentDocRef}`);
-                        setText("tahun", documentYear);
-                        setText("namaCover", data.nama || "-");
-                        setText("icCover", data.ic || "-");
+                        const approvedDate = data.approvedAt ? new Date(data.approvedAt) : null;
+                        document.getElementById("tahun").innerHTML = approvedDate ? approvedDate.getFullYear() : new Date().getFullYear();
 
-                        setText("namaTable", data.nama || "-");
-                        setText("icTable", data.ic || "-");
-                        setText("telefonTable", data.telefon || "-");
-                        setText("alamatTable", alamatPenuh || "-");
-                        setText("kodTable", consultantData?.consultantNo || consultantCode || "-");
-                        setText(
-                            "telefonPerundingTable",
-                            consultantData?.telefon ||
-                            consultantData?.phone ||
-                            consultantData?.phoneNo ||
-                            "-"
-                        );
+                        document.getElementById("namaCover").innerHTML = (data.nama || "-").toUpperCase();
+                        document.getElementById("icCover").innerHTML = data.ic || "-";
 
-                        // Kandungan optional daripada template luar.
-                        // Jika fail template tidak menyediakan variable ini,
-                        // biarkan kosong supaya preview tidak crash.
-                        const lampiranWarisSafe =
-                            (typeof lampiranWaris !== "undefined") ? lampiranWaris : "";
-                        const lampiranPemegangAmanahSafe =
-                            (typeof lampiranPemegangAmanah !== "undefined") ? lampiranPemegangAmanah : "";
-                        const pesananHTMLSafe =
-                            (typeof pesananHTML !== "undefined") ? pesananHTML : "";
+                        document.getElementById("namaTable").innerHTML = data.nama || "-";
+                        document.getElementById("icTable").innerHTML = data.ic || "-";
+                        document.getElementById("telefonTable").innerHTML = data.telefon || "-";
+                        document.getElementById("alamatTable").innerHTML = alamatPenuh || "-";
+                        document.getElementById("kodTable").innerHTML = userData?.referral || "-";
+                        document.getElementById("telefonPerundingTable").innerHTML = consultantData.telefon || "-";
 
                         // ==========================================
                         // A. LOGIK WASIAT 1/3
@@ -431,6 +411,7 @@
 
                         if(senaraiSyarikat.length > 0) {
                             senaraiSyarikat.forEach((syarikat, sIndex) => {
+                                let fSaham = (val) => val ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";
                                 
                                 // 1. BINA FASAL 1 (TAKRIFAN ASET)
                                 takrifanAsetHTML += `<p><strong>${sIndex+1}. Nama Syarikat:</strong> ${syarikat.namaSyarikat || "-"}<br><strong>No. Pendaftaran (SSM):</strong> ${syarikat.noSsm || "-"}</p>`;
@@ -584,9 +565,9 @@
                             let wContent = wasiatCorporateContent
                                 .replaceAll("{{SENARAI_SYARIKAT_FASAL_1}}", takrifanAsetHTML) // <-- MASUKKAN FASAL 1
                                 .replaceAll("{{LAMPIRAN_KORPORAT}}", lampiranKorporatHTML)
-                                .replaceAll("{{LAMPIRAN_WARIS}}", lampiranWarisSafe)  
-                                .replaceAll("{{LAMPIRAN_PEMEGANG_AMANAH}}", lampiranPemegangAmanahSafe)
-                                .replaceAll("{{PESANAN_WASIAT}}", pesananHTMLSafe)
+                                .replaceAll("{{LAMPIRAN_WARIS}}", lampiranWaris)  
+                                .replaceAll("{{LAMPIRAN_PEMEGANG_AMANAH}}", lampiranPemegangAmanah)
+                                .replaceAll("{{PESANAN_WASIAT}}", pesananHTML)
                                 .replaceAll("{{NAMA_PEWASIAT}}", data.nama || "-")
                                 .replaceAll("{{NO_IC_PEWASIAT}}", data.ic || "-")
                                 .replaceAll("{{ALAMAT_PEWASIAT}}", alamatPenuh || "-")
@@ -821,6 +802,12 @@
                                     if (tocLampiran && tocLampiran.innerText === "-") tocLampiran.innerText = pageNum;
                                 }
                             });
+
+                            // FIX: kira semula scale/marginBottom sekarang semua a4-page
+                            // dinamik dah settle -- panggilan asal (100ms lepas DOMContentLoaded)
+                            // guna ketinggian skeleton je, bukan ketinggian sebenar lepas
+                            // wasiat/mekanisme/amanah/lampiran digenerate.
+                            updateScale();
                         }, 500);
 
                     }
