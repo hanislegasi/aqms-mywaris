@@ -699,115 +699,13 @@
                             document.getElementById("sectionWasiat").innerHTML = wContent;
                         }
                         
-                        // ==========================================
-                        // 2. GENERATE MEKANISME KORPORAT (BUY-SELL / HIBAH)
-                        // ==========================================
-                            if (data.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !== 'undefined') {
-                            mekanismeHTML = buySellAgreementContent
-                                .replaceAll("{{TARIKH_PERJANJIAN}}", formatDateMY(data.tarikhPerjanjian))
-                                .replaceAll("{{NAMA_PEWASIAT}}", data.nama || "-")
-                                .replaceAll("{{NO_IC_PEWASIAT}}", data.ic || "-")
-                                .replaceAll("{{ALAMAT_PEWASIAT}}", alamatPenuh || "-")
-                                .replaceAll("{{NAMA_PARTNER}}", data.namaPartner || "-")
-                                .replaceAll("{{NO_IC_PARTNER}}", data.icPartner || "-")
-                                .replaceAll("{{ALAMAT_PARTNER}}", data.alamatPartner || "-")
-                                .replaceAll("{{NAMA_SYARIKAT}}", data.namaSyarikat || "-")
-                                .replaceAll("{{NO_SSM}}", data.noSsm || "-")
-                                .replaceAll("{{ALAMAT_SYARIKAT}}", data.alamatSyarikat || "-")
-                                .replaceAll("{{NAMA_WAKIL_SYARIKAT}}", (data.namaWakilSyarikat || "-").toUpperCase()) // <-- TAMBAH INI
-                                .replaceAll("{{JUMLAH_SAHAM}}", fSaham(data.jumlahSaham))
-                                .replaceAll("{{SAHAM_PEWASIAT}}", fSaham(data.sahamPewasiat))
-                                .replaceAll("{{SAHAM_PARTNER}}", fSaham(data.sahamPartner));
-                            
-                            mekanismeHTML = mekanismeHTML.replace(/class="a4-page/i, `data-target="tocMek_0" class="a4-page`);
-                            tocMekList.innerHTML = `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Perjanjian Jual Beli Saham (Buy-Sell)</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_0" class="text-[14px] font-bold">-</span></div>`;
-                        
-                       } else if (data.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefined') {
-                            (data.penerimaHibahSaham || []).forEach((p, index) => {
-                                
-                                // A: Dapatkan Maklumat Waris Sebenar dari senarai Waris
-                                const warisDetail = (data.waris || []).find(w => w.nama === p.nama) || {};
-                                
-                                // B: Logik Pemegang Amanah
-                                let amanahContent = "";
-                                let introPenerima = `(selepas ini disebut sebagai <strong>"Penerima Hibah Saham"</strong>)`;
-                                let labelPenerima = "Penerima Hibah";
-                                let namaPenerimaSbnr = p.nama || "-";
-                                let icPenerimaSbnr = warisDetail.ic || "-";
-                                let alamatPenerimaSbnr = warisDetail.alamat || "-";
-                                let tarikhLahirPenerima = formatDateMY(warisDetail.tarikhLahir);
-
-                                if (warisDetail.status === "bawah18" || warisDetail.status === "oku") {
-                                    let actualAmanah = null;
-                                    
-                                    if (data.pemegangAmanah && data.pemegangAmanah.pilihan === "tidak") {
-                                        actualAmanah = {
-                                            pilihan: "ya", 
-                                            nama: data.namaWasi1 || "-",
-                                            ic: data.icWasi1 || "-",
-                                            hubungan: data.hubunganWasi1 || "-",
-                                            telefon: data.telefonWasi1 || "-",
-                                            alamat: data.alamatWasi1 || "-"
-                                        };
-                                    } else if (data.pemegangAmanah && data.pemegangAmanah.pilihan === "ya") {
-                                        actualAmanah = data.pemegangAmanah;
-                                    }
-
-                                    if (actualAmanah) {
-                                        let mockItem = {
-                                            ...warisDetail,
-                                            pemegangAmanah: actualAmanah 
-                                        };
-                                        
-                                        if (typeof window.generatePemegangAmanah === "function") {
-                                            amanahContent = window.generatePemegangAmanah(mockItem, data)
-                                                .replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
-                                                .replaceAll("{{IC_PEMBERI}}", data.ic || "-")
-                                                .replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-");
-                                        }
-                                        
-                                        if(actualAmanah.nama) {
-                                            introPenerima = `selaku <strong>"Pemegang Amanah"</strong> bagi pihak <strong>${p.nama}</strong> (Penerima Hibah Saham)`;
-                                            labelPenerima = "Pemegang Amanah";
-                                            namaPenerimaSbnr = actualAmanah.nama;
-                                            icPenerimaSbnr = actualAmanah.ic;
-                                            alamatPenerimaSbnr = actualAmanah.alamat || alamatPenuh;
-                                        }
-                                    }
-                                }
-                                
-                                // C: Masukkan data ke dalam templat Hibah
-                                let hContent = hibahContent
-                                    .replaceAll("{{PEMEGANG_AMANAH}}", amanahContent)
-                                    .replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
-                                    .replaceAll("{{IC_PEMBERI}}", data.ic || "-")
-                                    .replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-")
-                                    .replaceAll("{{TELEFON_PEMBERI}}", data.telefon || "-")
-                                    .replaceAll("{{NAMA_PENERIMA}}", namaPenerimaSbnr)
-                                    .replaceAll("{{IC_PENERIMA}}", icPenerimaSbnr)
-                                    .replaceAll("{{HUBUNGAN}}", warisDetail.hubungan || "-")
-                                    .replaceAll("{{ALAMAT_PENERIMA}}", alamatPenerimaSbnr)
-                                    .replaceAll("{{TARIKH_LAHIR}}", tarikhLahirPenerima)
-                                    .replaceAll("{{PERATUS}}", p.peratus || "-")
-                                    .replaceAll("{{TARIKH_DOKUMEN}}", formatDateMY(data.approvedAt))
-                                    .replaceAll("{{TABLE_ALIH}}", generateSahamTable(data, p))
-                                    .replaceAll("{{TABLE_TAK_ALIH}}", "") // Kosongkan Table Tak Alih
-                                    .replaceAll("{{LABEL_PENERIMA}}", labelPenerima)
-                                    .replaceAll("{{INTRO_PENERIMA}}", introPenerima)
-                                    .replaceAll("{{BENEFISIARI}}", p.nama || "-");
-                                
-                                // FORMAT KHUSUS KORPORAT: Buang dan Ganti Tajuk Standard
-                                hContent = hContent.replace("JADUAL 1 - SENARAI HARTA ALIH YANG DIHIBAHKAN", "JADUAL 1 - SENARAI SAHAM SYARIKAT YANG DIHIBAHKAN");
-                                hContent = hContent.replace("JADUAL 2 - SENARAI HARTA TAK ALIH YANG DIHIBAHKAN", "");
-
-                                hContent = hContent.replace(/class="a4-page/i, `data-target="tocMek_${index}" class="a4-page`);
-                                mekanismeHTML += hContent;
-                                
-                                tocMekList.innerHTML += `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Hibah Saham: ${p.nama}</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_${index}" class="text-[14px] font-bold">-</span></div>`;
-                            });
-                        }
-                        
-                        document.getElementById("sectionMekanisme").innerHTML = mekanismeHTML;
+// ==========================================
+// 2. RENDER MEKANISME KORPORAT
+// (mekanismeHTML & tocMekList dah dibina sepenuhnya oleh loop
+// senaraiSyarikat + hibahGroupMap di atas -- tak perlu laluan
+// legacy top-level lagi, sebab itu punca dokumen berganda)
+// ==========================================
+document.getElementById("sectionMekanisme").innerHTML = mekanismeHTML;
 
                         // ==========================================
                         // 2.5 GENERATE SURAT IKATAN AMANAH (TRUST DEED)
