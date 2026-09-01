@@ -234,22 +234,38 @@
             return new Date(dateStr).toLocaleDateString("ms-MY");
         }
 
+       // Fungsi tukar Peratus (50%) kepada Pecahan (1/2 Bahagian)
+        function getPecahan(peratus) {
+            let p = parseFloat(peratus);
+            if (isNaN(p) || p <= 0) return "-";
+            if (!Number.isInteger(p)) return p + "%"; // Jika nombor perpuluhan, kekalkan peratus
+            
+            let gcd = function(a, b) { return !b ? a : gcd(b, a % b); };
+            let divisor = gcd(p, 100);
+            return (p / divisor) + "/" + (100 / divisor) + " Bahagian";
+        }
+
         // Generate Jadual Saham (Untuk template Hibah)
         function generateSahamTable(data, p){
             return `
-            <table style="width:100%; border-collapse:collapse; font-size:14px; margin-top:10px;">
-                <tr>
-                    <th style="border:1px solid #000;padding:8px;">Nama Syarikat</th>
-                    <th style="border:1px solid #000;padding:8px;">No SSM</th>
-                    <th style="border:1px solid #000;padding:8px;">Pegangan Saham Pewasiat</th>
-                    <th style="border:1px solid #000;padding:8px;">Bahagian Diserahkan</th> 
-                </tr>
-                <tr>
-                   <td style="border:1px solid #000;padding:8px;text-align:center;">${data.namaSyarikat || "-"}</td>
-                   <td style="border:1px solid #000;padding:8px;text-align:center;">${data.noSsm || "-"}</td>
-                   <td style="border:1px solid #000;padding:8px;text-align:center;">${data.sahamPewasiat || "0"} Unit</td>
-                   <td style="border:1px solid #000;padding:8px;text-align:center;">${p.peratus || "-"}%</td>
-                </tr>
+            <table style="width:100%; border-collapse:collapse; font-size:14px; margin-top:10px; page-break-inside:auto;">
+                <thead>
+                    <tr>
+                        <th style="border:1px solid #000;padding:8px; background-color:#f9fafb;">Nama Syarikat</th>
+                        <th style="border:1px solid #000;padding:8px; background-color:#f9fafb;">No SSM</th>
+                        <th style="border:1px solid #000;padding:8px; background-color:#f9fafb;">Pegangan Saham Pewasiat</th>
+                        <th style="border:1px solid #000;padding:8px; background-color:#f9fafb;">Bahagian Diserahkan</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- TR ini disetkan 'avoid' supaya tak terpotong separuh jika bersambung ke page baru -->
+                    <tr style="page-break-inside:avoid; page-break-after:auto;">
+                       <td style="border:1px solid #000;padding:8px;text-align:center;">${data.namaSyarikat || "-"}</td>
+                       <td style="border:1px solid #000;padding:8px;text-align:center;">${data.noSsm || "-"}</td>
+                       <td style="border:1px solid #000;padding:8px;text-align:center;">${data.sahamPewasiat || "0"} Unit</td>
+                       <td style="border:1px solid #000;padding:8px;text-align:center;font-weight:bold;">${getPecahan(p.peratus)}</td>
+                    </tr>
+                </tbody>
             </table>`;
         }
 
@@ -501,13 +517,13 @@
                             mekanismeHTML = mekanismeHTML.replace(/class="a4-page/i, `data-target="tocMek_0" class="a4-page`);
                             tocMekList.innerHTML = `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Perjanjian Jual Beli Saham (Buy-Sell)</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_0" class="text-[14px] font-bold">-</span></div>`;
                         
-                        } else if (data.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefined') {
+                       } else if (data.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefined') {
                             (data.penerimaHibahSaham || []).forEach((p, index) => {
                                 
                                 // A: Dapatkan Maklumat Waris Sebenar dari senarai Waris
                                 const warisDetail = (data.waris || []).find(w => w.nama === p.nama) || {};
                                 
-                               // B: Logik Pemegang Amanah
+                                // B: Logik Pemegang Amanah
                                 let amanahContent = "";
                                 let introPenerima = `(selepas ini disebut sebagai <strong>"Penerima Hibah Saham"</strong>)`;
                                 let labelPenerima = "Penerima Hibah";
@@ -517,12 +533,9 @@
                                 let tarikhLahirPenerima = formatDateMY(warisDetail.tarikhLahir);
 
                                 if (warisDetail.status === "bawah18" || warisDetail.status === "oku") {
-                                    
-                                    // Bina data Pemegang Amanah sebenar berdasarkan pilihan
                                     let actualAmanah = null;
                                     
                                     if (data.pemegangAmanah && data.pemegangAmanah.pilihan === "tidak") {
-                                        // Jika "Sama seperti Wasi", kita salin data Wasi 1 dan paksa pilihan jadi "ya"
                                         actualAmanah = {
                                             pilihan: "ya", 
                                             nama: data.namaWasi1 || "-",
@@ -532,12 +545,10 @@
                                             alamat: data.alamatWasi1 || "-"
                                         };
                                     } else if (data.pemegangAmanah && data.pemegangAmanah.pilihan === "ya") {
-                                        // Jika lantik berbeza, guna data yang diisi
                                         actualAmanah = data.pemegangAmanah;
                                     }
 
                                     if (actualAmanah) {
-                                        // Pakej data untuk generatePemegangAmanah()
                                         let mockItem = {
                                             ...warisDetail,
                                             pemegangAmanah: actualAmanah 
@@ -550,7 +561,6 @@
                                                 .replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-");
                                         }
                                         
-                                        // Wakil (Pemegang Amanah) menanggung tanggungjawab rasmi dalam dokumen
                                         if(actualAmanah.nama) {
                                             introPenerima = `selaku <strong>"Pemegang Amanah"</strong> bagi pihak <strong>${p.nama}</strong> (Penerima Hibah Saham)`;
                                             labelPenerima = "Pemegang Amanah";
@@ -560,6 +570,7 @@
                                         }
                                     }
                                 }
+                                
                                 // C: Masukkan data ke dalam templat Hibah
                                 let hContent = hibahContent
                                     .replaceAll("{{PEMEGANG_AMANAH}}", amanahContent)
@@ -575,11 +586,15 @@
                                     .replaceAll("{{PERATUS}}", p.peratus || "-")
                                     .replaceAll("{{TARIKH_DOKUMEN}}", formatDateMY(data.approvedAt))
                                     .replaceAll("{{TABLE_ALIH}}", generateSahamTable(data, p))
-                                    .replaceAll("{{TABLE_TAK_ALIH}}", "<p>Tiada Harta Tak Alih Terlibat.</p>")
+                                    .replaceAll("{{TABLE_TAK_ALIH}}", "") // Kosongkan Table Tak Alih
                                     .replaceAll("{{LABEL_PENERIMA}}", labelPenerima)
                                     .replaceAll("{{INTRO_PENERIMA}}", introPenerima)
                                     .replaceAll("{{BENEFISIARI}}", p.nama || "-");
                                 
+                                // FORMAT KHUSUS KORPORAT: Buang dan Ganti Tajuk Standard
+                                hContent = hContent.replace("JADUAL 1 - SENARAI HARTA ALIH YANG DIHIBAHKAN", "JADUAL 1 - SENARAI SAHAM SYARIKAT YANG DIHIBAHKAN");
+                                hContent = hContent.replace("JADUAL 2 - SENARAI HARTA TAK ALIH YANG DIHIBAHKAN", "");
+
                                 hContent = hContent.replace(/class="a4-page/i, `data-target="tocMek_${index}" class="a4-page`);
                                 mekanismeHTML += hContent;
                                 
