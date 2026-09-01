@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
 <title>Settings</title>
-
 <script src="https://cdn.tailwindcss.com"></script>
-
 <style>
 body{
 font-family: Inter, sans-serif;
@@ -20,20 +16,13 @@ font-family: Inter, sans-serif;
 <body class="bg-gray-100">
 
 <div class="bg-[#153638] text-white p-5">
-
-<h1 class="text-2xl font-bold">
-
-Admin Settings
-
-</h1>
-
+    <h1 class="text-2xl font-bold">Admin Settings</h1>
 </div>
 
 <div class="p-5">
 
     <!-- Container Flexbox untuk tolak butang ke kiri dan kanan -->
     <div class="flex justify-between items-center mb-5">
-        
         <!-- Butang Kiri (Back) -->
         <a href="admin-dashboard.html" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-5 py-2.5 rounded-xl transition duration-150 font-medium">
             ← Dashboard
@@ -46,7 +35,6 @@ Admin Settings
             </svg>
             Tambah Admin
         </a>
-
     </div>
   
         <!-- ================= COMPANY ================= -->
@@ -72,10 +60,37 @@ Admin Settings
             </div>
         </div>
 
+        <!-- ================= SYARIKAT AMANAH (TRUSTEE) ================= -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Maklumat Syarikat Amanah (Trustee)</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-5">
+                <div class="lg:col-span-2">
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Nama Syarikat Amanah</label>
+                    <input id="namaSyarikatAmanah" type="text" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: Rakyat Trustee Berhad">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">No. Pendaftaran</label>
+                    <input id="noSyarikatAmanah" type="text" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 1462142-U">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">No. Telefon</label>
+                    <input id="telefonSyarikatAmanah" type="text" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: +603 2602 2722">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Caj Pelantikan (RM)</label>
+                    <input id="cajRTB" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all text-red-600 font-bold bg-red-50" placeholder="Contoh: 100">
+                </div>
+                <div class="md:col-span-2 lg:col-span-5">
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Alamat Penuh</label>
+                    <input id="alamatSyarikatAmanah" type="text" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Alamat lengkap ibu pejabat">
+                </div>
+            </div>
+        </div>
+
       <!-- ================= PRODUCT ================= -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Harga Produk & Caj Tambahan</h2>
-            <div class="grid md:grid-cols-3 xl:grid-cols-6 gap-5">
+            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Harga Produk</h2>
+            <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-5">
                 <div>
                     <label class="font-medium text-sm text-gray-600 block mb-1">Wasiat (RM)</label>
                     <input id="wasiatPrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
@@ -95,11 +110,6 @@ Admin Settings
                 <div>
                     <label class="font-medium text-sm text-gray-600 block mb-1">Mawaris Korporat (RM)</label>
                     <input id="corporatePrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
-                </div>
-                <!-- TAMBAHAN CAJ RTB -->
-                <div>
-                    <label class="font-medium text-sm text-gray-600 block mb-1">Caj RTB (RM)</label>
-                    <input id="cajRTB" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all" placeholder="Contoh: 100">
                 </div>
             </div>
         </div>
@@ -567,7 +577,8 @@ Admin Settings
         };
 
         const defaultCompensationSettings = {
-            wasiatPrice: 350, hibahPrice: 2500, sepencarianPrice: 800, mawarisPrice: 3000, corporatePrice: 6000, cajRTB: 100, // <-- Tambah cajRTB di sini
+            wasiatPrice: 350, hibahPrice: 2500, sepencarianPrice: 800, mawarisPrice: 3000, corporatePrice: 6000, cajRTB: 100, 
+            namaSyarikatAmanah: "Rakyat Trustee Berhad", noSyarikatAmanah: "1462142-U", telefonSyarikatAmanah: "+603 2602 2722", alamatSyarikatAmanah: "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur",
             wasiatRenewal: 50, hibahRenewal: 50, sepencarianRenewal: 50, mawarisRenewal: 80, corporateRenewal: 200,
             commissionAQC: 35, commissionAQCAS: 38, commissionAQCUM: 40, commissionMGAM: 45,
             overrideAQC: 0, overrideAQCAS: 3, overrideAQCUM: 4, overrideMGAM: 5,
@@ -586,7 +597,7 @@ Admin Settings
         const companyFields = ["companyName", "registrationNo", "companyEmail", "companyAddress"];
         
         const compensationFields = [
-            "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice", "corporatePrice", "cajRTB", // <-- Tambah cajRTB di sini
+            "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice", "corporatePrice", "cajRTB", 
             "wasiatRenewal", "hibahRenewal", "sepencarianRenewal", "mawarisRenewal", "corporateRenewal", 
             "commissionAQC", "commissionAQCAS", "commissionAQCUM", "commissionMGAM",
             "overrideAQC", "overrideAQCAS", "overrideAQCUM", "overrideMGAM",
@@ -600,9 +611,11 @@ Admin Settings
             "companyPool", "commissionPool", "overridePool",
             "adminOperation", "allowance", "royalty"
         ];
+        
+        const trusteeFieldsString = ["namaSyarikatAmanah", "noSyarikatAmanah", "telefonSyarikatAmanah", "alamatSyarikatAmanah"];
 
             
-      
+        
         // ================= LOAD SETTINGS =================
         async function loadSettings() {
             const companyRef = doc(db, "settings", "company");
@@ -623,6 +636,9 @@ Admin Settings
                 if (el(field)) el(field).value = companyData[field] ?? "";
             });
             compensationFields.forEach(field => {
+                if (el(field)) el(field).value = compensationData[field] ?? "";
+            });
+            trusteeFieldsString.forEach(field => {
                 if (el(field)) el(field).value = compensationData[field] ?? "";
             });
 
@@ -679,13 +695,13 @@ function calculateSimulation() {
     const prcHibah = getVal("hibahPrice");
     const prcSepencarian = getVal("sepencarianPrice");
     const prcMawaris = getVal("mawarisPrice");
-    const prcCorporate = getVal("corporatePrice"); // <-- 1. Tambah ini
+    const prcCorporate = getVal("corporatePrice"); 
 
     const qtyWasiat = getVal("simWasiat");
     const qtyHibah = getVal("simHibah");
     const qtySepencarian = getVal("simSepencarian");
     const qtyMawaris = getVal("simMawaris");
-    const qtyCorporate = getVal("simCorporate"); // <-- 2. Tambah ini
+    const qtyCorporate = getVal("simCorporate"); 
 
     // 2. Ambil Peratusan Pool & Syarikat
     const pctCommPool = getVal("commissionPool") / 100;   // 35%
@@ -715,7 +731,7 @@ function calculateSimulation() {
         (qtyHibah * prcHibah) +
         (qtySepencarian * prcSepencarian) +
         (qtyMawaris * prcMawaris) +
-        (qtyCorporate * prcCorporate); // <-- 3. Tambah ini
+        (qtyCorporate * prcCorporate); 
 
     // Pengiraan Pool (Daripada Total Sales)
     const commissionAmount = sales * pctCommPool; // RM 350 * 35% = RM 122.50
@@ -796,8 +812,8 @@ function calculateSimulation() {
       // ================= EVENT LISTENERS =================
         // Input Triggers for Simulation
        const simTriggers = [
-            "simWasiat", "simHibah", "simSepencarian", "simMawaris", "simCorporate", // <-- Tambah simCorporate
-            "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice", "corporatePrice", // <-- Tambah corporatePrice
+            "simWasiat", "simHibah", "simSepencarian", "simMawaris", "simCorporate", 
+            "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice", "corporatePrice", 
            "bilAqc", "bilAqcas", "bilAqcum", "bilMgam"
         ];
         simTriggers.forEach(id => {
@@ -833,6 +849,7 @@ function calculateSimulation() {
 
                 let compensationData = {};
                 compensationFields.forEach(field => { compensationData[field] = getVal(field); });
+                trusteeFieldsString.forEach(field => { compensationData[field] = el(field) ? el(field).value : ""; });
 
                 await setDoc(doc(db, "settings", "company"), companyData, { merge: true });
                await setDoc(doc(db, "settings", "compensation"), compensationData, { merge: true });
@@ -868,6 +885,9 @@ function calculateSimulation() {
             });
 
             compensationFields.forEach(field => {
+                if (el(field)) el(field).value = defaultCompensationSettings[field];
+            });
+            trusteeFieldsString.forEach(field => {
                 if (el(field)) el(field).value = defaultCompensationSettings[field];
             });
 
