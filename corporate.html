@@ -137,19 +137,19 @@
           </select>
       </div>
 
-      <!-- PAPARAN INFO RTB (KOTAK HIJAU KORPORAT - MENONJOL) -->
+      <!-- PAPARAN INFO SYARIKAT AMANAH (MENONJOL) -->
       <div id="wasi1RTBSection" class="hidden bg-[#153638] text-white border border-[#0f2729] rounded-xl p-6 mb-4 shadow-lg">
           <p class="text-sm font-bold text-[#a6c4c5] border-b border-[#2a5a5d] pb-2 mb-4 uppercase tracking-wider">Maklumat Syarikat Amanah</p>
           
           <div class="space-y-3 text-base">
-              <p><strong>Nama:</strong> <span id="paparNamaRTB">Rakyat Trustee Berhad</span></p>
-              <p><strong>No. Pendaftaran:</strong> <span id="paparNoRTB">1462142-U</span></p>
-              <p><strong>Alamat:</strong> <span id="paparAlamatRTB">Memuatkan alamat...</span></p>
-              <p><strong>Telefon:</strong> <span id="paparTelefonRTB">Memuatkan telefon...</span></p>
+              <p><strong>Nama:</strong> <span id="paparNamaWasi">Rakyat Trustee Berhad</span></p>
+              <p><strong>No. Pendaftaran:</strong> <span id="paparNoWasi">1462142-U</span></p>
+              <p><strong>Alamat:</strong> <span id="paparAlamatWasi">Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur</span></p>
+              <p><strong>Telefon:</strong> <span id="paparTelefonWasi">+603 2602 2722</span></p>
           </div>
 
           <div class="mt-5 bg-white text-red-600 rounded-lg p-4 border-l-4 border-red-600 shadow-sm">
-              <p class="text-base font-bold leading-relaxed" id="paparNotaRTB">*NOTA PENTING: Kos pelantikan tambahan akan dikenakan. Maklumat RTB akan dimasukkan secara automatik ke dalam dokumen anda.</p>
+              <p class="text-base font-bold leading-relaxed" id="paparNotaWasi">*NOTA PENTING: Kos pelantikan tambahan akan dikenakan. Maklumat akan dimasukkan secara automatik ke dalam dokumen anda.</p>
           </div>
       </div>
 
@@ -252,44 +252,50 @@
     let currentUser = null;
     let documentStatus = null;
 
-// -- SETTING LALAI (DEFAULT) CAWANGAN RTB --
-    let cajRTBServer = 100; // Harga lalai jika DB gagal
-    let rtbBranches = {
-        "default": { // Ibu Pejabat (Digunakan jika negeri tiada cawangan spesifik)
-            nama: "Rakyat Trustee Berhad",
-            noPendaftaran: "1462142-U",
-            alamat: "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur",
-            telefon: "+603 2602 2722"
-        },
-        "Pahang": { // Contoh cawangan spesifik
-            nama: "Rakyat Trustee Berhad (Cawangan Pantai Timur)",
-            noPendaftaran: "1462142-U",
-            alamat: "A-15, Tingkat 1, Jalan Tun Ismail 1, 25000 Kuantan, Pahang", // Masukkan alamat sebenar
-            telefon: "+609-510 0000"
-        },
-        "Johor": {
-            nama: "Rakyat Trustee Berhad (Cawangan Selatan)",
-            noPendaftaran: "1462142-U",
-            alamat: "Bandar Baru Uda, 81200 Johor Bahru, Johor", // Masukkan alamat sebenar
-            telefon: "+607-230 0000"
-        }
-        // Boleh tambah negeri-negeri lain mengikut ejaan sebenar dalam dropdown <select id="negeri">
-    };
+// -- SETTING LALAI SYARIKAT AMANAH --
+      let cajRTBServer = 100; 
+      let syarikatAmanahDetails = {
+          nama: "Rakyat Trustee Berhad",
+          noPendaftaran: "1462142-U",
+          alamat: "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur",
+          telefon: "+603 2602 2722"
+      };
 
-    // Fungsi automatik tukar paparan RTB bila negeri dipilih
-    function updateRTBDisplay() {
-        const negeriPilihan = document.getElementById("negeri").value;
-        const branchInfo = rtbBranches[negeriPilihan] || rtbBranches["default"]; // Guna default jika tiada
+      // ====================================================================
+      // 1. TARIK MAKLUMAT SYARIKAT AMANAH DARI ADMIN SETTING
+      // ====================================================================
+      try {
+          // Boleh tukar laluan doc ini jika awak simpan maklumat ini di tempat lain (cth: "system", "admin")
+          const settingsSnap = await getDoc(doc(db, "settings", "compensation")); 
+          if(settingsSnap.exists()) {
+              const sData = settingsSnap.data();
+              if(sData.cajRTB) cajRTBServer = sData.cajRTB;
+              
+              // Tarik maklumat Syarikat Amanah dinamik
+              if(sData.namaSyarikatAmanah) syarikatAmanahDetails.nama = sData.namaSyarikatAmanah;
+              if(sData.noSyarikatAmanah) syarikatAmanahDetails.noPendaftaran = sData.noSyarikatAmanah;
+              if(sData.alamatSyarikatAmanah) syarikatAmanahDetails.alamat = sData.alamatSyarikatAmanah;
+              if(sData.telefonSyarikatAmanah) syarikatAmanahDetails.telefon = sData.telefonSyarikatAmanah;
+          }
+      } catch (err) {
+          console.log("Gagal muat turun setting Syarikat Amanah, guna data lalai.");
+      }
 
-        document.getElementById("paparNamaRTB").innerText = branchInfo.nama;
-        document.getElementById("paparNoRTB").innerText = branchInfo.noPendaftaran;
-        document.getElementById("paparAlamatRTB").innerText = branchInfo.alamat;
-        document.getElementById("paparTelefonRTB").innerText = branchInfo.telefon;
-    }
-
-    // Pasang 'listener' supaya setiap kali user tukar Negeri, alamat RTB bertukar!
-    document.getElementById("negeri").addEventListener("change", updateRTBDisplay);
-
+      // Kemaskini Paparan UI secara Automatik
+      const paparNamaWasi = document.getElementById("paparNamaWasi");
+      if(paparNamaWasi) {
+          paparNamaWasi.innerText = syarikatAmanahDetails.nama;
+          document.getElementById("paparNoWasi").innerText = syarikatAmanahDetails.noPendaftaran;
+          document.getElementById("paparAlamatWasi").innerText = syarikatAmanahDetails.alamat;
+          document.getElementById("paparTelefonWasi").innerText = syarikatAmanahDetails.telefon;
+          
+          document.getElementById("paparNotaWasi").innerText = `*NOTA PENTING: Kos pelantikan tambahan sebanyak RM${cajRTBServer} akan dikenakan. Maklumat ${syarikatAmanahDetails.nama} akan dimasukkan secara automatik ke dalam dokumen anda.`;
+          
+          // Ubah nama dalam dropdown select juga supaya sentiasa sekata!
+          const optionRtb = document.querySelector("#pilihanWasi1 option[value='rtb']");
+          if(optionRtb) optionRtb.innerText = `Syarikat Amanah (${syarikatAmanahDetails.nama}) - Disyorkan`;
+      }
+      // ====================================================================
     
     window.formatRM = function(input) {
         let val = input.value;
@@ -325,29 +331,53 @@
       currentUser = user;
       loadFiles();
       
+     // -- SETTING LALAI SYARIKAT AMANAH --
+      let cajRTBServer = 100; 
+      let syarikatAmanahDetails = {
+          nama: "Rakyat Trustee Berhad",
+          noPendaftaran: "1462142-U",
+          alamat: "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur",
+          telefon: "+603 2602 2722"
+      };
+
       // ====================================================================
-      // PASTE LANGKAH 3 DI SINI (SEBELUM TARIK DATA BORANG KLIEN)
+      // TARIK MAKLUMAT SYARIKAT AMANAH & HARGA DARI ADMIN SETTING
       // ====================================================================
-      
-try {
+      try {
           const settingsSnap = await getDoc(doc(db, "settings", "compensation")); 
-          if(settingsSnap.exists() && settingsSnap.data().cajRTB) {
-              cajRTBServer = settingsSnap.data().cajRTB;
+          if(settingsSnap.exists()) {
+              const sData = settingsSnap.data();
+              
+              // Tarik harga
+              if(sData.cajRTB) cajRTBServer = sData.cajRTB;
+              
+              // Tarik maklumat syarikat dinamik
+              if(sData.namaSyarikatAmanah) syarikatAmanahDetails.nama = sData.namaSyarikatAmanah;
+              if(sData.noSyarikatAmanah) syarikatAmanahDetails.noPendaftaran = sData.noSyarikatAmanah;
+              if(sData.alamatSyarikatAmanah) syarikatAmanahDetails.alamat = sData.alamatSyarikatAmanah;
+              if(sData.telefonSyarikatAmanah) syarikatAmanahDetails.telefon = sData.telefonSyarikatAmanah;
           }
       } catch (err) {
-          console.log("Gagal muat turun setting RTB, guna harga lalai.");
+          console.log("Gagal muat turun setting Syarikat Amanah, guna data lalai.");
       }
 
-      // Update harga dinamik pada Nota Merah RTB di HTML
-      const notaRTB = document.getElementById("paparNotaRTB");
-      if(notaRTB) {
-          notaRTB.innerText = `*NOTA PENTING: Kos pelantikan tambahan sebanyak RM${cajRTBServer} akan dikenakan. Maklumat RTB cawangan berkaitan akan dimasukkan secara automatik ke dalam dokumen anda.`;
+      // Kemaskini Paparan UI secara Automatik
+      const paparNamaWasi = document.getElementById("paparNamaWasi");
+      if(paparNamaWasi) {
+          paparNamaWasi.innerText = syarikatAmanahDetails.nama;
+          document.getElementById("paparNoWasi").innerText = syarikatAmanahDetails.noPendaftaran;
+          document.getElementById("paparAlamatWasi").innerText = syarikatAmanahDetails.alamat;
+          document.getElementById("paparTelefonWasi").innerText = syarikatAmanahDetails.telefon;
+          
+          const notaWasi = document.getElementById("paparNotaWasi");
+          if(notaWasi) {
+              notaWasi.innerText = `*NOTA PENTING: Kos pelantikan tambahan sebanyak RM${cajRTBServer} akan dikenakan. Maklumat ${syarikatAmanahDetails.nama} akan dimasukkan secara automatik ke dalam dokumen anda.`;
+          }
+          
+          const optionRtb = document.querySelector("#pilihanWasi1 option[value='rtb']");
+          if(optionRtb) optionRtb.innerText = `Syarikat Amanah (${syarikatAmanahDetails.nama}) - Disyorkan`;
       }
-
-      // Kemaskini paparan cawangan awal-awal (jika user pernah pilih negeri sebelum ni)
-      updateRTBDisplay();
       // ====================================================================
-
       
       const docSnap = await getDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"));
       if(docSnap.exists()){
@@ -504,8 +534,21 @@ try {
         }
     }
 
-    // TOGGLE TANPA SEBARANG POPUP
     pilihanWasi1.addEventListener("change", function() {
+        // JANGAN KELUARKAN POP-UP JIKA FORM SUDAH DIKUNCI/DIHANTAR
+        if (documentStatus === "PENDING_APPROVAL" || documentStatus === "PAID" || documentStatus === "COMPLETED") {
+            toggleWasi1();
+            return; 
+        }
+        
+        if (this.value === "rtb") {
+            alert(
+                `NOTIS PELANTIKAN ${syarikatAmanahDetails.nama.toUpperCase()}\n\n` +
+                "Harap maklum dengan terma berikut:\n\n" +
+                `1. Caj pelantikan tambahan sebanyak RM${cajRTBServer} akan dikenakan.\n` +
+                `2. Kos pentadbiran pusaka akan dikenakan oleh pihak Syarikat Amanah berdasarkan peratusan nilai harta pada waktu urusan tuntutan pusaka kelak.`
+            );
+        }
         toggleWasi1();
     });
     
@@ -874,19 +917,16 @@ try {
                 });
             }
 
-            const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
+           const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
             let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
 
             if (pilihanWasi1Val === "rtb") {
-                // Tarik maklumat cawangan yang BETUL mengikut negeri semasa disimpan
-                const negeriSemasa = document.getElementById("negeri").value;
-                const rtbTerpilih = rtbBranches[negeriSemasa] || rtbBranches["default"];
-
-                finalNamaWasi1 = rtbTerpilih.nama;
-                finalIcWasi1 = rtbTerpilih.noPendaftaran;
+                // Simpan data Syarikat Amanah dinamik ke dalam DB klien
+                finalNamaWasi1 = syarikatAmanahDetails.nama;
+                finalIcWasi1 = syarikatAmanahDetails.noPendaftaran;
                 finalHubunganWasi1 = "Syarikat Amanah";
-                finalAlamatWasi1 = rtbTerpilih.alamat;
-                finalTelefonWasi1 = rtbTerpilih.telefon;
+                finalAlamatWasi1 = syarikatAmanahDetails.alamat;
+                finalTelefonWasi1 = syarikatAmanahDetails.telefon;
             } else {
                 finalNamaWasi1 = document.getElementById("namaWasi1").value;
                 finalIcWasi1 = document.getElementById("icWasi1").value;
