@@ -28,11 +28,6 @@
   <div class="max-w-3xl mx-auto p-5">
     <form id="wasiatForm" class="bg-white p-6 rounded-2xl shadow space-y-6">
 
-      <!-- PENGUMUMAN STATUS JIKA SUDAH HANTAR -->
-      <div id="statusNotice" class="hidden bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-lg text-yellow-800 text-sm font-semibold mb-4">
-        Borang ini telah dihantar dan dibayar.
-      </div>
-
       <!-- SECTION 1: BUTIRAN PEWASIAT -->
       <div>
         <h2 class="font-bold text-xl mb-4">Section 1 : Butiran Pewasiat</h2>
@@ -132,20 +127,20 @@
           <label class="block font-semibold text-blue-900 mb-2">Pilih Wasi / Pentadbir Pertama</label>
           <select id="pilihanWasi1" class="w-full border rounded-lg p-3 bg-white font-semibold text-[#153638]">
               <option value="">-- Sila Pilih --</option>
-              <option value="rtb">Syarikat Amanah (Rakyat Trustee Berhad) - Disyorkan</option>
+              <option value="rtb">Syarikat Amanah (Disyorkan)</option>
               <option value="manual">Individu / Syarikat Lain</option>
           </select>
       </div>
 
-      <!-- PAPARAN INFO SYARIKAT AMANAH (MENONJOL) -->
+      <!-- PAPARAN INFO SYARIKAT AMANAH -->
       <div id="wasi1RTBSection" class="hidden bg-[#153638] text-white border border-[#0f2729] rounded-xl p-6 mb-4 shadow-lg">
           <p class="text-sm font-bold text-[#a6c4c5] border-b border-[#2a5a5d] pb-2 mb-4 uppercase tracking-wider">Maklumat Syarikat Amanah</p>
           
           <div class="space-y-3 text-base">
-              <p><strong>Nama:</strong> <span id="paparNamaWasi">Rakyat Trustee Berhad</span></p>
-              <p><strong>No. Pendaftaran:</strong> <span id="paparNoWasi">1462142-U</span></p>
-              <p><strong>Alamat:</strong> <span id="paparAlamatWasi">Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur</span></p>
-              <p><strong>Telefon:</strong> <span id="paparTelefonWasi">+603 2602 2722</span></p>
+              <p><strong>Nama:</strong> <span id="paparNamaWasi">Memuatkan...</span></p>
+              <p><strong>No. Pendaftaran:</strong> <span id="paparNoWasi">Memuatkan...</span></p>
+              <p><strong>Alamat:</strong> <span id="paparAlamatWasi">Memuatkan...</span></p>
+              <p><strong>Telefon:</strong> <span id="paparTelefonWasi">Memuatkan...</span></p>
           </div>
 
           <div class="mt-5 bg-white text-red-600 rounded-lg p-4 border-l-4 border-red-600 shadow-sm">
@@ -155,7 +150,7 @@
 
       <!-- KOTAK MANUAL -->
       <div id="wasi1ManualSection" class="hidden space-y-3 mb-4">
-          <input type="text" id="namaWasi1" placeholder="Nama Wasi / Syarikat Amanah" class="w-full border rounded-lg p-3">
+          <input type="text" id="namaWasi1" placeholder="Nama Wasi / Syarikat Lain" class="w-full border rounded-lg p-3">
           <input type="text" id="icWasi1" placeholder="No IC / No Pendaftaran Syarikat" class="w-full border rounded-lg p-3">
           <input type="text" id="hubunganWasi1" placeholder="Hubungan" class="w-full border rounded-lg p-3">
           <textarea id="alamatWasi1" rows="2" placeholder="Alamat" class="w-full border rounded-lg p-3"></textarea>
@@ -252,51 +247,15 @@
     let currentUser = null;
     let documentStatus = null;
 
-// -- SETTING LALAI SYARIKAT AMANAH --
-      let cajRTBServer = 100; 
-      let syarikatAmanahDetails = {
-          nama: "Rakyat Trustee Berhad",
-          noPendaftaran: "1462142-U",
-          alamat: "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur",
-          telefon: "+603 2602 2722"
-      };
+    // -- SETTING LALAI SYARIKAT AMANAH --
+    let cajRTBServer = 100; 
+    let syarikatAmanahDetails = {
+        nama: "Rakyat Trustee Berhad",
+        noPendaftaran: "1462142-U",
+        alamat: "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur",
+        telefon: "+603 2602 2722"
+    };
 
-      // ====================================================================
-      // 1. TARIK MAKLUMAT SYARIKAT AMANAH DARI ADMIN SETTING
-      // ====================================================================
-      try {
-          // Boleh tukar laluan doc ini jika awak simpan maklumat ini di tempat lain (cth: "system", "admin")
-          const settingsSnap = await getDoc(doc(db, "settings", "compensation")); 
-          if(settingsSnap.exists()) {
-              const sData = settingsSnap.data();
-              if(sData.cajRTB) cajRTBServer = sData.cajRTB;
-              
-              // Tarik maklumat Syarikat Amanah dinamik
-              if(sData.namaSyarikatAmanah) syarikatAmanahDetails.nama = sData.namaSyarikatAmanah;
-              if(sData.noSyarikatAmanah) syarikatAmanahDetails.noPendaftaran = sData.noSyarikatAmanah;
-              if(sData.alamatSyarikatAmanah) syarikatAmanahDetails.alamat = sData.alamatSyarikatAmanah;
-              if(sData.telefonSyarikatAmanah) syarikatAmanahDetails.telefon = sData.telefonSyarikatAmanah;
-          }
-      } catch (err) {
-          console.log("Gagal muat turun setting Syarikat Amanah, guna data lalai.");
-      }
-
-      // Kemaskini Paparan UI secara Automatik
-      const paparNamaWasi = document.getElementById("paparNamaWasi");
-      if(paparNamaWasi) {
-          paparNamaWasi.innerText = syarikatAmanahDetails.nama;
-          document.getElementById("paparNoWasi").innerText = syarikatAmanahDetails.noPendaftaran;
-          document.getElementById("paparAlamatWasi").innerText = syarikatAmanahDetails.alamat;
-          document.getElementById("paparTelefonWasi").innerText = syarikatAmanahDetails.telefon;
-          
-          document.getElementById("paparNotaWasi").innerText = `*NOTA PENTING: Kos pelantikan tambahan sebanyak RM${cajRTBServer} akan dikenakan. Maklumat ${syarikatAmanahDetails.nama} akan dimasukkan secara automatik ke dalam dokumen anda.`;
-          
-          // Ubah nama dalam dropdown select juga supaya sentiasa sekata!
-          const optionRtb = document.querySelector("#pilihanWasi1 option[value='rtb']");
-          if(optionRtb) optionRtb.innerText = `Syarikat Amanah (${syarikatAmanahDetails.nama}) - Disyorkan`;
-      }
-      // ====================================================================
-    
     window.formatRM = function(input) {
         let val = input.value;
         if (val.trim() === "") return;
@@ -330,15 +289,6 @@
       }
       currentUser = user;
       loadFiles();
-      
-     // -- SETTING LALAI SYARIKAT AMANAH --
-      let cajRTBServer = 100; 
-      let syarikatAmanahDetails = {
-          nama: "Rakyat Trustee Berhad",
-          noPendaftaran: "1462142-U",
-          alamat: "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur",
-          telefon: "+603 2602 2722"
-      };
 
       // ====================================================================
       // TARIK MAKLUMAT SYARIKAT AMANAH & HARGA DARI ADMIN SETTING
@@ -347,11 +297,7 @@
           const settingsSnap = await getDoc(doc(db, "settings", "compensation")); 
           if(settingsSnap.exists()) {
               const sData = settingsSnap.data();
-              
-              // Tarik harga
               if(sData.cajRTB) cajRTBServer = sData.cajRTB;
-              
-              // Tarik maklumat syarikat dinamik
               if(sData.namaSyarikatAmanah) syarikatAmanahDetails.nama = sData.namaSyarikatAmanah;
               if(sData.noSyarikatAmanah) syarikatAmanahDetails.noPendaftaran = sData.noSyarikatAmanah;
               if(sData.alamatSyarikatAmanah) syarikatAmanahDetails.alamat = sData.alamatSyarikatAmanah;
@@ -378,7 +324,7 @@
           if(optionRtb) optionRtb.innerText = `Syarikat Amanah (${syarikatAmanahDetails.nama}) - Disyorkan`;
       }
       // ====================================================================
-      
+
       const docSnap = await getDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"));
       if(docSnap.exists()){
         const data = docSnap.data();
@@ -494,15 +440,8 @@
           document.getElementById("telefonPemegangAmanah").value = data.pemegangAmanah.telefon || "";
         }
         
-        // DISABLE BUTANG JIKA SUDAH HANTAR / BAYAR
-        if (documentStatus === "PENDING_APPROVAL" || documentStatus === "PAID" || documentStatus === "COMPLETED") {
-            const submitBtn = document.getElementById("submitBtn");
-            submitBtn.innerText = "Borang Telah Dihantar / Dibayar";
-            submitBtn.disabled = true;
-            submitBtn.classList.remove("bg-[#153638]", "hover:bg-[#1d4a4d]");
-            submitBtn.classList.add("bg-gray-400", "cursor-not-allowed");
-            document.getElementById("statusNotice").classList.remove("hidden");
-        }
+        // FUNGSI DISABLE TELAH DIBUANG DARI SINI
+        // PENGGUNA BEBAS MENGEDIT DAN MENYIMPAN BORANG BILA-BILA MASA
         
       } else {
         addWarisToDOM(); 
@@ -535,12 +474,6 @@
     }
 
     pilihanWasi1.addEventListener("change", function() {
-        // JANGAN KELUARKAN POP-UP JIKA FORM SUDAH DIKUNCI/DIHANTAR
-        if (documentStatus === "PENDING_APPROVAL" || documentStatus === "PAID" || documentStatus === "COMPLETED") {
-            toggleWasi1();
-            return; 
-        }
-        
         if (this.value === "rtb") {
             alert(
                 `NOTIS PELANTIKAN ${syarikatAmanahDetails.nama.toUpperCase()}\n\n` +
@@ -862,13 +795,13 @@
       }
     });
 
-    // SUBMIT FORM (TERUS REDIRECT KE ADD-PAYMENT TANPA POPUP)
+    // SIMPAN DRAF ACTION
     document.getElementById("wasiatForm").addEventListener("submit", async(e)=>{
         e.preventDefault();
         
-        if (documentStatus === "PENDING_APPROVAL" || documentStatus === "PAID" || documentStatus === "COMPLETED") {
-            return;
-        }
+        const submitBtn = document.getElementById("submitBtn");
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Menyimpan Maklumat...";
 
         try{
             const wasiatSatuPerTiga = [];
@@ -917,11 +850,10 @@
                 });
             }
 
-           const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
+            const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
             let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
 
             if (pilihanWasi1Val === "rtb") {
-                // Simpan data Syarikat Amanah dinamik ke dalam DB klien
                 finalNamaWasi1 = syarikatAmanahDetails.nama;
                 finalIcWasi1 = syarikatAmanahDetails.noPendaftaran;
                 finalHubunganWasi1 = "Syarikat Amanah";
@@ -1003,13 +935,18 @@
                 updatedAt: new Date()
             }, { merge: true });
 
-           document.getElementById("status").innerHTML = "Maklumat berjaya disimpan.";
+            document.getElementById("status").innerHTML = "Maklumat berjaya disimpan sebagai Draf.";
+            submitBtn.innerText = "Simpan Draf";
+            submitBtn.disabled = false;
+            
             setTimeout(() => { document.getElementById("status").innerHTML = ""; }, 3000);
 
         }
         catch(error){
             console.error("Ralat Submit:", error);
             alert("Ralat semasa menyimpan: " + error.message);
+            submitBtn.innerText = "Simpan Draf";
+            submitBtn.disabled = false;
         }
     });
     
