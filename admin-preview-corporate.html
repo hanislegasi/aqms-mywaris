@@ -234,6 +234,10 @@
             return new Date(dateStr).toLocaleDateString("ms-MY");
         }
 
+    function fSaham(val) {
+            return val ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";
+        }
+        
        // Fungsi tukar Peratus (50%) kepada Pecahan (1/2 Bahagian)
         function getPecahan(peratus) {
             let p = parseFloat(peratus);
@@ -384,10 +388,7 @@
                             });
                         }
 
-                        if(senaraiSyarikat.length > 0) {
-                            senaraiSyarikat.forEach((syarikat, sIndex) => {
-                                let fSaham = (val) => val ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";
-                                
+                                                        
                                 // 1. BINA FASAL 1 (TAKRIFAN ASET)
                                 takrifanAsetHTML += `<p><strong>${sIndex+1}. Nama Syarikat:</strong> ${syarikat.namaSyarikat || "-"}<br><strong>No. Pendaftaran (SSM):</strong> ${syarikat.noSsm || "-"}</p>`;
 
