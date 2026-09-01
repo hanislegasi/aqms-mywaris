@@ -562,10 +562,7 @@
                         // ==========================================
                         // 2. GENERATE MEKANISME KORPORAT (BUY-SELL / HIBAH)
                         // ==========================================
-                        const tocMekList = document.getElementById("tocMekanismeList");
-                        tocMekList.innerHTML = "";
-
-                        if (data.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !== 'undefined') {
+                            if (data.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !== 'undefined') {
                             mekanismeHTML = buySellAgreementContent
                                 .replaceAll("{{TARIKH_PERJANJIAN}}", formatDateMY(data.tarikhPerjanjian))
                                 .replaceAll("{{NAMA_PEWASIAT}}", data.nama || "-")
