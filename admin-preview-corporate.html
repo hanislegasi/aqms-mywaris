@@ -235,6 +235,14 @@
             return new Date(dateStr).toLocaleDateString("ms-MY");
         }
 
+        // Fungsi format nombor saham dengan koma (cth: 10000 -> 10,000)
+        // (BUG FIX: dulu function ni cuma wujud dalam scope senaraiSyarikat.forEach(),
+        // tapi dipanggil juga di bahagian legacy single-company & trust deed yang
+        // di luar scope tu -- punca ReferenceError)
+        function fSaham(val) {
+            return val ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";
+        }
+
        // Fungsi tukar Peratus (50%) kepada Pecahan (1/2 Bahagian)
         function getPecahan(peratus) {
             let p = parseFloat(peratus);
@@ -411,7 +419,7 @@
 
                         if(senaraiSyarikat.length > 0) {
                             senaraiSyarikat.forEach((syarikat, sIndex) => {
-                                let fSaham = (val) => val ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";
+                                // fSaham() dipanggil dari shared scope function di atas
                                 
                                 // 1. BINA FASAL 1 (TAKRIFAN ASET)
                                 takrifanAsetHTML += `<p><strong>${sIndex+1}. Nama Syarikat:</strong> ${syarikat.namaSyarikat || "-"}<br><strong>No. Pendaftaran (SSM):</strong> ${syarikat.noSsm || "-"}</p>`;
