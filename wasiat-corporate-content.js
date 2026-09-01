@@ -89,6 +89,15 @@ sama ada yang wujud kini atau pada masa hadapan, di dalam syarikat:
 {{SENARAI_SYARIKAT_FASAL_1}}
 </div>
 <p>(selepas ini dirujuk secara kolektif sebagai "Saham Syarikat")</p>
+
+<div class="pdf-footer">
+<span class="footer-docref"></span>
+<span class="page-number"></span>
+</div>
+ 
+</div>
+ 
+<div class="a4-page p-[18mm]">
  
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>FASAL 2: PELANTIKAN WASI DAN PEMEGANG AMANAH (PIHAK KETIGA)</strong>
