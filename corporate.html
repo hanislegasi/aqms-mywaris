@@ -28,6 +28,11 @@
   <div class="max-w-3xl mx-auto p-5">
     <form id="wasiatForm" class="bg-white p-6 rounded-2xl shadow space-y-6">
 
+      <!-- PENGUMUMAN STATUS -->
+      <div id="statusNotice" class="hidden bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-lg text-yellow-800 text-sm font-semibold mb-4">
+        Borang ini telah dihantar/dibayar tetapi anda masih boleh mengemaskini maklumat Draf.
+      </div>
+
       <!-- SECTION 1: BUTIRAN PEWASIAT -->
       <div>
         <h2 class="font-bold text-xl mb-4">Section 1 : Butiran Pewasiat</h2>
@@ -60,65 +65,14 @@
         <button type="button" id="addWarisBtn" class="bg-[#153638] text-white px-4 py-2 rounded-lg">+ Tambah Waris</button>
       </div>
 
-      <!-- SECTION 3: MAKLUMAT KORPORAT & WASI -->
+      <!-- SECTION 3: MAKLUMAT KORPORAT DINAMIK -->
       <div>
-        <h2 class="font-bold text-xl mb-4">Section 3 : Maklumat Korporat & Pelantikan Wasi</h2>
-        
-        <h3 class="font-semibold mb-2 text-[#153638]">Maklumat Syarikat Korporat</h3>
-        <input type="text" id="namaSyarikat" placeholder="Nama Syarikat (Sdn Bhd)" class="w-full border rounded-lg p-3 mb-3">
-        <input type="text" id="noSsm" placeholder="No. Pendaftaran Syarikat (SSM)" class="w-full border rounded-lg p-3 mb-3">
-        
-        <textarea id="alamatSyarikat" rows="2" placeholder="Alamat Berdaftar Syarikat" class="w-full border rounded-lg p-3 mb-3"></textarea>
-        <input type="text" id="namaWakilSyarikat" placeholder="Nama Pengarah / Setiausaha Syarikat (Wakil Tandatangan)" class="w-full border rounded-lg p-3 mb-3">
-        
-        <div class="grid grid-cols-2 gap-4 mb-5">
-            <div>
-                <label class="text-xs font-semibold text-gray-500 ml-1 block mb-1">Jumlah Keseluruhan Saham Syarikat</label>
-                <input type="text" id="jumlahSaham" placeholder="Cth: 100,000" class="w-full border rounded-lg p-3" oninput="formatSaham(this)">
-            </div>
-            <div>
-                <label class="text-xs font-semibold text-gray-500 ml-1 block mb-1">Saham Milik Pewasiat</label>
-                <input type="text" id="sahamPewasiat" placeholder="Cth: 50,000" class="w-full border rounded-lg p-3" oninput="formatSaham(this)">
-            </div>
-        </div>
+        <h2 class="font-bold text-xl mb-4">Section 3 : Maklumat Syarikat (Boleh lebih dari 1)</h2>
+        <div id="syarikatUtamaContainer" class="space-y-6"></div>
+        <button type="button" id="addSyarikatUtamaBtn" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 transition text-white px-4 py-3 rounded-xl font-bold">+ Tambah Syarikat Baru</button>
+      </div>
 
-        <select id="statusPemilikan" class="w-full border rounded-lg p-3 mb-3 font-semibold text-[#153638] bg-gray-50">
-            <option value="">Pilih Status Pemilikan Syarikat</option>
-            <option value="rakankongsi">Dimiliki Bersama Rakan Kongsi</option>
-            <option value="tunggal">Dimiliki Oleh Saya Seorang (Pemilik Tunggal)</option>
-        </select>
-
-        <div id="mekanismeSection" class="hidden mb-3">
-            <select id="mekanismeAgihan" class="w-full border rounded-lg p-3 font-semibold text-orange-700 bg-orange-50">
-                <option value="">Pilih Mekanisme Pewarisan Saham</option>
-            </select>
-        </div>
-
-        <div id="buySellSection" class="hidden mb-3 p-5 border border-blue-200 bg-blue-50 rounded-xl space-y-4">
-            <p class="text-sm font-bold text-blue-800 border-b border-blue-200 pb-2">Maklumat Rakan Kongsi (Pemegang Saham Syarikat)</p>
-            <div id="rakanKongsiContainer"></div>
-            <button type="button" id="addRakanKongsiBtn" class="w-full bg-blue-600 hover:bg-blue-700 transition text-white px-3 py-2 rounded-lg mt-2">+ Tambah Rakan Kongsi</button>
-        </div>
-
-        <div id="hibahSahamSection" class="hidden mb-3 p-4 border border-green-200 bg-green-50 rounded-xl">
-            <label class="text-sm font-bold text-green-800 mb-3 block border-b border-green-200 pb-2">Senarai Penerima Hibah Saham Syarikat</label>
-            <div id="hibahSahamContainer"></div>
-            <div class="flex gap-2 mt-3">
-                <button type="button" id="addPenerimaHibahSahamBtn" class="bg-green-600 hover:bg-green-700 transition text-white px-3 py-2 rounded-lg flex-1">+ Tambah Penerima Hibah</button>
-                <button type="button" id="deletePenerimaHibahSahamBtn" class="bg-red-600 hover:bg-red-700 transition text-white px-3 py-2 rounded-lg">Padam Penerima</button>
-            </div>
-        </div>
-
-        <div id="wakafZurriSection" class="hidden mb-3 p-4 border border-purple-200 bg-purple-50 rounded-xl">
-            <label class="text-sm font-bold text-purple-800 mb-3 block border-b border-purple-200 pb-2">Senarai Penerima Manfaat Wakaf Saham Zurri (Keturunan)</label>
-            <div id="wakafZurriContainer"></div>
-            <div class="flex gap-2 mt-3">
-                <button type="button" id="addPenerimaWakafZurriBtn" class="bg-purple-600 hover:bg-purple-700 transition text-white px-3 py-2 rounded-lg flex-1">+ Tambah Penerima Manfaat</button>
-                <button type="button" id="deletePenerimaWakafZurriBtn" class="bg-red-600 hover:bg-red-700 transition text-white px-3 py-2 rounded-lg">Padam Penerima</button>
-            </div>
-        </div>
-
-        <hr class="my-6 border-gray-200">
+      <hr class="my-6 border-gray-200">
 
       <!-- MAKLUMAT WASI PERTAMA -->
       <h3 class="font-semibold mb-3 text-[#153638] text-lg">Maklumat Wasi Pertama</h3>
@@ -135,14 +89,12 @@
       <!-- PAPARAN INFO SYARIKAT AMANAH -->
       <div id="wasi1RTBSection" class="hidden bg-[#153638] text-white border border-[#0f2729] rounded-xl p-6 mb-4 shadow-lg">
           <p class="text-sm font-bold text-[#a6c4c5] border-b border-[#2a5a5d] pb-2 mb-4 uppercase tracking-wider">Maklumat Syarikat Amanah</p>
-          
           <div class="space-y-3 text-base">
               <p><strong>Nama:</strong> <span id="paparNamaWasi">Memuatkan...</span></p>
               <p><strong>No. Pendaftaran:</strong> <span id="paparNoWasi">Memuatkan...</span></p>
               <p><strong>Alamat:</strong> <span id="paparAlamatWasi">Memuatkan...</span></p>
               <p><strong>Telefon:</strong> <span id="paparTelefonWasi">Memuatkan...</span></p>
           </div>
-
           <div class="mt-5 bg-white text-red-600 rounded-lg p-4 border-l-4 border-red-600 shadow-sm">
               <p class="text-base font-bold leading-relaxed" id="paparNotaWasi">*NOTA PENTING: Kos pelantikan tambahan akan dikenakan. Maklumat akan dimasukkan secara automatik ke dalam dokumen anda.</p>
           </div>
@@ -159,16 +111,16 @@
 
       <hr class="my-6 border-gray-200">
 
-        <!-- MAKLUMAT WASI KEDUA -->
-        <div id="wasi2Section" class="hidden">
-            <h3 class="font-semibold mb-2">Maklumat Wasi Kedua (Wasi Gantian)</h3>
-            <p class="text-xs text-gray-500 mb-3">Sila lantik individu lain sebagai ganti sekiranya Wasi Pertama gagal/tidak dapat bertindak.</p>
-            <input type="text" id="namaWasi2" placeholder="Nama Wasi Kedua" class="w-full border rounded-lg p-3 mb-3">
-            <input type="text" id="icWasi2" placeholder="No IC" class="w-full border rounded-lg p-3 mb-3">
-            <input type="text" id="hubunganWasi2" placeholder="Hubungan" class="w-full border rounded-lg p-3 mb-3">
-            <textarea id="alamatWasi2" rows="2" placeholder="Alamat" class="w-full border rounded-lg p-3 mb-3"></textarea>
-            <input type="text" id="telefonWasi2" placeholder="No Telefon" class="w-full border rounded-lg p-3 mb-4">
-        </div>
+      <!-- MAKLUMAT WASI KEDUA -->
+      <div id="wasi2Section" class="hidden">
+          <h3 class="font-semibold mb-2">Maklumat Wasi Kedua (Wasi Gantian)</h3>
+          <p class="text-xs text-gray-500 mb-3">Sila lantik individu lain sebagai ganti sekiranya Wasi Pertama gagal/tidak dapat bertindak.</p>
+          <input type="text" id="namaWasi2" placeholder="Nama Wasi Kedua" class="w-full border rounded-lg p-3 mb-3">
+          <input type="text" id="icWasi2" placeholder="No IC" class="w-full border rounded-lg p-3 mb-3">
+          <input type="text" id="hubunganWasi2" placeholder="Hubungan" class="w-full border rounded-lg p-3 mb-3">
+          <textarea id="alamatWasi2" rows="2" placeholder="Alamat" class="w-full border rounded-lg p-3 mb-3"></textarea>
+          <input type="text" id="telefonWasi2" placeholder="No Telefon" class="w-full border rounded-lg p-3 mb-4">
+      </div>
 
       <!-- SECTION 4: WASIAT 1/3 -->
       <div>
@@ -228,8 +180,8 @@
             
       <!-- BUTTONS -->
       <div class="space-y-4 pt-6">
-        <button type="submit" id="submitBtn" class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-lg font-semibold">Simpan Draf</button>
-        <a href="preview-draf-corporate.html" class="block text-center bg-gray-800 hover:bg-gray-900 transition text-white py-3 rounded-lg font-semibold">Preview Draf →</a>
+        <button type="submit" id="submitBtn" class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-lg font-semibold shadow-lg">Simpan Draf</button>
+        <a href="preview-draf-corporate.html" class="block text-center bg-gray-800 hover:bg-gray-900 transition text-white py-3 rounded-lg font-semibold shadow-lg">Preview Draf →</a>
       </div>   
       
       <!-- STATUS -->
@@ -247,7 +199,6 @@
     let currentUser = null;
     let documentStatus = null;
 
-    // -- SETTING LALAI SYARIKAT AMANAH --
     let cajRTBServer = 100; 
     let syarikatAmanahDetails = {
         nama: "Rakyat Trustee Berhad",
@@ -282,6 +233,229 @@
         }
     };
     
+    // =====================================
+    // FUNGSI DINAMIK SYARIKAT (MULTI-COMPANY)
+    // =====================================
+    function addSyarikatToDOM(item = {}) {
+        const syarikatHTML = `
+        <div class="syarikat-item bg-gray-50 border-2 border-gray-200 rounded-xl p-5 relative">
+            <button type="button" class="padamSyarikatBtn absolute top-3 right-3 bg-red-100 hover:bg-red-200 text-red-700 text-xs px-3 py-1 rounded-md transition font-bold">X Padam Syarikat</button>
+            <h3 class="font-bold mb-3 text-[#153638] text-lg">Maklumat Syarikat Korporat</h3>
+            
+            <input type="text" class="namaSyarikat w-full border rounded-lg p-3 mb-3 bg-white" placeholder="Nama Syarikat (Sdn Bhd)" value="${item.namaSyarikat || ''}">
+            <input type="text" class="noSsm w-full border rounded-lg p-3 mb-3 bg-white" placeholder="No. Pendaftaran Syarikat (SSM)" value="${item.noSsm || ''}">
+            <textarea class="alamatSyarikat w-full border rounded-lg p-3 mb-3 bg-white" rows="2" placeholder="Alamat Berdaftar Syarikat">${item.alamatSyarikat || ''}</textarea>
+            <input type="text" class="namaWakilSyarikat w-full border rounded-lg p-3 mb-3 bg-white" placeholder="Nama Pengarah / Setiausaha Syarikat (Wakil Tandatangan)" value="${item.namaWakilSyarikat || ''}">
+            
+            <div class="grid grid-cols-2 gap-4 mb-5">
+                <div>
+                    <label class="text-xs font-semibold text-gray-500 ml-1 block mb-1">Jumlah Saham Syarikat</label>
+                    <input type="text" class="jumlahSaham w-full border rounded-lg p-3 bg-white" placeholder="Cth: 100,000" oninput="formatSaham(this)" value="${item.jumlahSaham || ''}">
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-gray-500 ml-1 block mb-1">Saham Milik Pewasiat</label>
+                    <input type="text" class="sahamPewasiat w-full border rounded-lg p-3 bg-white" placeholder="Cth: 50,000" oninput="formatSaham(this)" value="${item.sahamPewasiat || ''}">
+                </div>
+            </div>
+
+            <select class="statusPemilikan w-full border rounded-lg p-3 mb-3 font-semibold text-[#153638] bg-blue-50">
+                <option value="">Pilih Status Pemilikan Syarikat</option>
+                <option value="rakankongsi" ${item.statusPemilikan === 'rakankongsi' ? 'selected' : ''}>Dimiliki Bersama Rakan Kongsi</option>
+                <option value="tunggal" ${item.statusPemilikan === 'tunggal' ? 'selected' : ''}>Dimiliki Oleh Saya Seorang (Pemilik Tunggal)</option>
+            </select>
+
+            <div class="mekanismeSection hidden mb-3">
+                <select class="mekanismeAgihan w-full border rounded-lg p-3 font-semibold text-orange-700 bg-orange-50">
+                    <option value="">Pilih Mekanisme Pewarisan Saham</option>
+                </select>
+            </div>
+
+            <div class="buySellSection hidden mb-3 p-5 border border-blue-200 bg-blue-50 rounded-xl space-y-4">
+                <p class="text-sm font-bold text-blue-800 border-b border-blue-200 pb-2">Maklumat Rakan Kongsi</p>
+                <div class="rakanKongsiContainer"></div>
+                <button type="button" class="addRakanKongsiBtn w-full bg-blue-600 hover:bg-blue-700 transition text-white px-3 py-2 rounded-lg mt-2">+ Tambah Rakan Kongsi</button>
+            </div>
+
+            <div class="hibahSahamSection hidden mb-3 p-4 border border-green-200 bg-green-50 rounded-xl">
+                <label class="text-sm font-bold text-green-800 mb-3 block border-b border-green-200 pb-2">Senarai Penerima Hibah Saham Syarikat</label>
+                <div class="hibahSahamContainer"></div>
+                <div class="flex gap-2 mt-3">
+                    <button type="button" class="addPenerimaHibahSahamBtn bg-green-600 hover:bg-green-700 transition text-white px-3 py-2 rounded-lg flex-1">+ Tambah Penerima Hibah</button>
+                    <button type="button" class="deletePenerimaHibahSahamBtn bg-red-600 hover:bg-red-700 transition text-white px-3 py-2 rounded-lg">Padam Penerima</button>
+                </div>
+            </div>
+
+            <div class="wakafZurriSection hidden mb-3 p-4 border border-purple-200 bg-purple-50 rounded-xl">
+                <label class="text-sm font-bold text-purple-800 mb-3 block border-b border-purple-200 pb-2">Senarai Penerima Manfaat Wakaf Saham Zurri</label>
+                <div class="wakafZurriContainer"></div>
+                <div class="flex gap-2 mt-3">
+                    <button type="button" class="addPenerimaWakafZurriBtn bg-purple-600 hover:bg-purple-700 transition text-white px-3 py-2 rounded-lg flex-1">+ Tambah Penerima Manfaat</button>
+                    <button type="button" class="deletePenerimaWakafZurriBtn bg-red-600 hover:bg-red-700 transition text-white px-3 py-2 rounded-lg">Padam Penerima</button>
+                </div>
+            </div>
+        </div>`;
+        
+        document.getElementById("syarikatUtamaContainer").insertAdjacentHTML("beforeend", syarikatHTML);
+        const newBlock = document.getElementById("syarikatUtamaContainer").lastElementChild;
+
+        // Auto Populate nested data if exists
+        if(item.rakanKongsiList && item.rakanKongsiList.length > 0) {
+            item.rakanKongsiList.forEach(rk => addRakanKongsiToContainer(newBlock.querySelector('.rakanKongsiContainer'), rk));
+        } else if (item.namaPartner) {
+             addRakanKongsiToContainer(newBlock.querySelector('.rakanKongsiContainer'), {nama: item.namaPartner, ic: item.icPartner, alamat: item.alamatPartner, saham: item.sahamPartner});
+        }
+        if(item.penerimaHibahSaham && item.penerimaHibahSaham.length > 0) {
+            item.penerimaHibahSaham.forEach(ph => addHibahSahamToContainer(newBlock.querySelector('.hibahSahamContainer'), ph));
+        }
+        if(item.penerimaWakafZurri && item.penerimaWakafZurri.length > 0) {
+            item.penerimaWakafZurri.forEach(pw => addWakafZurriToContainer(newBlock.querySelector('.wakafZurriContainer'), pw));
+        }
+
+        // Trigger change to load dropdown mechanisms
+        const statusSelect = newBlock.querySelector('.statusPemilikan');
+        if(statusSelect.value) {
+            statusSelect.dispatchEvent(new Event('change', {bubbles:true}));
+            setTimeout(() => {
+                const mekSelect = newBlock.querySelector('.mekanismeAgihan');
+                mekSelect.value = item.mekanismeAgihan || '';
+                mekSelect.dispatchEvent(new Event('change', {bubbles:true}));
+            }, 50);
+        }
+    }
+
+    document.getElementById("addSyarikatUtamaBtn").addEventListener("click", () => addSyarikatToDOM());
+
+    // NESTED COMPONENTS FUNCTIONS
+    function addRakanKongsiToContainer(container, item = {}) {
+        const html = `
+        <div class="border border-blue-300 bg-white rounded-xl p-4 space-y-3 mb-3 rakanKongsiRow">
+            <input type="text" class="w-full border rounded-lg p-3 namaPartnerRow" placeholder="Nama Rakan Kongsi" value="${item.nama || ''}">
+            <input type="text" class="w-full border rounded-lg p-3 icPartnerRow" placeholder="No IC Rakan Kongsi" value="${item.ic || ''}">
+            <textarea rows="2" class="w-full border rounded-lg p-3 alamatPartnerRow" placeholder="Alamat Rakan Kongsi">${item.alamat || ''}</textarea>
+            <input type="text" class="w-full border rounded-lg p-3 sahamPartnerRow" placeholder="Bilangan Saham Milik Rakan Kongsi" value="${item.saham || ''}" oninput="formatSaham(this)">
+            <button type="button" class="deleteRakanKongsiBtn bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-sm mt-1">Padam</button>
+        </div>`;
+        container.insertAdjacentHTML("beforeend", html);
+    }
+
+    function addHibahSahamToContainer(container, item = {}) {
+        const html = `
+        <div class="grid grid-cols-12 gap-3 mb-3 penerimaHibahSahamRow">
+            <select class="col-span-9 w-full border rounded-lg p-3 namaPenerimaHibahSaham" data-selected="${item.nama || ''}">
+                <option value="">Pilih Waris</option>
+            </select>
+            <input type="number" class="col-span-3 w-full border rounded-lg p-3 peratusHibahSaham" placeholder="%" value="${item.peratus || ''}">
+        </div>`;
+        container.insertAdjacentHTML("beforeend", html);
+        populateWarisDropdowns();
+    }
+
+    function addWakafZurriToContainer(container, item = {}) {
+        const html = `
+        <div class="grid grid-cols-12 gap-3 mb-3 penerimaWakafZurriRow">
+            <select class="col-span-9 w-full border rounded-lg p-3 namaPenerimaWakafZurri" data-selected="${item.nama || ''}">
+                <option value="">Pilih Waris</option>
+            </select>
+            <input type="number" class="col-span-3 w-full border rounded-lg p-3 peratusWakafZurri" placeholder="%" value="${item.peratus || ''}">
+        </div>`;
+        container.insertAdjacentHTML("beforeend", html);
+        populateWarisDropdowns();
+    }
+
+    // DELEGATED EVENT LISTENERS FOR DYNAMIC COMPANY BLOCK
+    document.addEventListener("change", function(e){
+        // Logic for Dropdown Status Pemilikan
+        if(e.target.classList.contains("statusPemilikan")) {
+            const block = e.target.closest('.syarikat-item');
+            const mekSect = block.querySelector(".mekanismeSection");
+            const mekSel = block.querySelector(".mekanismeAgihan");
+            
+            mekSel.innerHTML = '<option value="">Pilih Mekanisme Pewarisan Saham</option>';
+            mekSect.classList.add("hidden");
+            block.querySelector(".buySellSection").classList.add("hidden");
+            block.querySelector(".hibahSahamSection").classList.add("hidden");
+            block.querySelector(".wakafZurriSection").classList.add("hidden");
+
+            if(e.target.value === "rakankongsi"){
+                mekSect.classList.remove("hidden");
+                mekSel.innerHTML += '<option value="buysell">Buy-Sell Agreement (Jual Beli Saham)</option>';
+                mekSel.innerHTML += '<option value="wakafzurri">Wakaf Saham Zurri (Bahagian Pewasiat Sahaja)</option>';
+            } else if (e.target.value === "tunggal"){
+                mekSect.classList.remove("hidden");
+                mekSel.innerHTML += '<option value="hibah">Hibah Saham Mutlak (Kepada Waris)</option>';
+                mekSel.innerHTML += '<option value="wakafzurri">Wakaf Saham Zurri (Keseluruhan Saham)</option>';
+            }
+        }
+        
+        // Logic for Dropdown Mekanisme
+        if(e.target.classList.contains("mekanismeAgihan")) {
+            const block = e.target.closest('.syarikat-item');
+            block.querySelector(".buySellSection").classList.add("hidden");
+            block.querySelector(".hibahSahamSection").classList.add("hidden");
+            block.querySelector(".wakafZurriSection").classList.add("hidden");
+
+            if(e.target.value === "buysell"){
+                block.querySelector(".buySellSection").classList.remove("hidden");
+                if(block.querySelector(".rakanKongsiContainer").children.length === 0) {
+                    addRakanKongsiToContainer(block.querySelector(".rakanKongsiContainer"));
+                }
+            } else if(e.target.value === "hibah"){
+                block.querySelector(".hibahSahamSection").classList.remove("hidden");
+                if(block.querySelector(".hibahSahamContainer").children.length === 0) {
+                    addHibahSahamToContainer(block.querySelector(".hibahSahamContainer"));
+                }
+            } else if(e.target.value === "wakafzurri"){
+                block.querySelector(".wakafZurriSection").classList.remove("hidden");
+                if(block.querySelector(".wakafZurriContainer").children.length === 0) {
+                    addWakafZurriToContainer(block.querySelector(".wakafZurriContainer"));
+                }
+            }
+        }
+
+        // Logic for Waris Changes
+        if(e.target.classList.contains("statusWaris")) checkPemegangAmanah();
+        if(e.target.classList.contains("nacorporate") || e.target.classList.contains("hubunganWaris")){
+            populateWarisDropdowns();
+        }
+    });
+
+    document.addEventListener("click", function(e){
+        // Butang Padam Syarikat
+        if(e.target.classList.contains("padamSyarikatBtn")){
+            if(confirm("Padam syarikat ini?")) e.target.closest(".syarikat-item").remove();
+        }
+        // Butang Tambah/Padam dalam Syarikat
+        if(e.target.classList.contains("addRakanKongsiBtn")){
+            addRakanKongsiToContainer(e.target.closest('.syarikat-item').querySelector('.rakanKongsiContainer'));
+        }
+        if(e.target.classList.contains("deleteRakanKongsiBtn")){
+            e.target.closest(".rakanKongsiRow").remove();
+        }
+        if(e.target.classList.contains("addPenerimaHibahSahamBtn")){
+            addHibahSahamToContainer(e.target.closest('.syarikat-item').querySelector('.hibahSahamContainer'));
+        }
+        if(e.target.classList.contains("deletePenerimaHibahSahamBtn")){
+            const c = e.target.closest('.syarikat-item').querySelector('.hibahSahamContainer');
+            if(c.lastElementChild) c.lastElementChild.remove();
+        }
+        if(e.target.classList.contains("addPenerimaWakafZurriBtn")){
+            addWakafZurriToContainer(e.target.closest('.syarikat-item').querySelector('.wakafZurriContainer'));
+        }
+        if(e.target.classList.contains("deletePenerimaWakafZurriBtn")){
+            const c = e.target.closest('.syarikat-item').querySelector('.wakafZurriContainer');
+            if(c.lastElementChild) c.lastElementChild.remove();
+        }
+        // Wasiat Row
+        if(e.target.classList.contains("deleteRowBtn")){
+            e.target.closest(".border").remove();
+            populateWarisDropdowns();
+            checkPemegangAmanah();
+        }
+    });
+
+    // =====================================
+    // ON AUTH STATE CHANGED (LOAD DATA)
+    // =====================================
     onAuthStateChanged(auth, async(user)=>{
       if(!user){
         window.location.href = "login.html";
@@ -290,9 +464,6 @@
       currentUser = user;
       loadFiles();
 
-      // ====================================================================
-      // TARIK MAKLUMAT SYARIKAT AMANAH & HARGA DARI ADMIN SETTING
-      // ====================================================================
       try {
           const settingsSnap = await getDoc(doc(db, "settings", "compensation")); 
           if(settingsSnap.exists()) {
@@ -303,33 +474,29 @@
               if(sData.alamatSyarikatAmanah) syarikatAmanahDetails.alamat = sData.alamatSyarikatAmanah;
               if(sData.telefonSyarikatAmanah) syarikatAmanahDetails.telefon = sData.telefonSyarikatAmanah;
           }
-      } catch (err) {
-          console.log("Gagal muat turun setting Syarikat Amanah, guna data lalai.");
-      }
+      } catch (err) {}
 
-      // Kemaskini Paparan UI secara Automatik
       const paparNamaWasi = document.getElementById("paparNamaWasi");
       if(paparNamaWasi) {
           paparNamaWasi.innerText = syarikatAmanahDetails.nama;
           document.getElementById("paparNoWasi").innerText = syarikatAmanahDetails.noPendaftaran;
           document.getElementById("paparAlamatWasi").innerText = syarikatAmanahDetails.alamat;
           document.getElementById("paparTelefonWasi").innerText = syarikatAmanahDetails.telefon;
-          
           const notaWasi = document.getElementById("paparNotaWasi");
-          if(notaWasi) {
-              notaWasi.innerText = `*NOTA PENTING: Kos pelantikan tambahan sebanyak RM${cajRTBServer} akan dikenakan. Maklumat ${syarikatAmanahDetails.nama} akan dimasukkan secara automatik ke dalam dokumen anda.`;
-          }
-          
+          if(notaWasi) notaWasi.innerText = `*NOTA PENTING: Kos pelantikan tambahan sebanyak RM${cajRTBServer} akan dikenakan. Maklumat ${syarikatAmanahDetails.nama} akan dimasukkan secara automatik ke dalam dokumen anda.`;
           const optionRtb = document.querySelector("#pilihanWasi1 option[value='rtb']");
           if(optionRtb) optionRtb.innerText = `Syarikat Amanah (${syarikatAmanahDetails.nama}) - Disyorkan`;
       }
-      // ====================================================================
 
       const docSnap = await getDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"));
       if(docSnap.exists()){
         const data = docSnap.data();
         documentStatus = data.status || null;
         
+        if (documentStatus === "PENDING_APPROVAL" || documentStatus === "PAID" || documentStatus === "COMPLETED") {
+            document.getElementById("statusNotice").classList.remove("hidden");
+        }
+
         document.getElementById("nama").value = data.nama || "";
         document.getElementById("ic").value = data.ic || "";
         document.getElementById("alamat1").value = data.alamat1 || "";
@@ -341,33 +508,28 @@
         
         document.getElementById("warisContainer").innerHTML = "";
         if(data.waris && data.waris.length > 0){
-          data.waris.forEach(item=>{
-            addWarisToDOM(item);
-          });
+          data.waris.forEach(item => addWarisToDOM(item));
         } else {
           addWarisToDOM(); 
         }
-        populateWarisDropdowns();
 
-        document.getElementById("namaSyarikat").value = data.namaSyarikat || "";
-        document.getElementById("noSsm").value = data.noSsm || "";
-        document.getElementById("alamatSyarikat").value = data.alamatSyarikat || "";
-        document.getElementById("namaWakilSyarikat").value = data.namaWakilSyarikat || ""; 
-        document.getElementById("jumlahSaham").value = data.jumlahSaham || "";
-        document.getElementById("sahamPewasiat").value = data.sahamPewasiat || "";
-        
-        document.getElementById("statusPemilikan").value = data.statusPemilikan || "";
-        
-        document.getElementById("rakanKongsiContainer").innerHTML = "";
-        if (data.rakanKongsiList && data.rakanKongsiList.length > 0) {
-            data.rakanKongsiList.forEach(item => addRakanKongsiToDOM(item));
-        } else if (data.namaPartner) {
-            addRakanKongsiToDOM({
-                nama: data.namaPartner, ic: data.icPartner, alamat: data.alamatPartner, saham: data.sahamPartner
+        // MUAT NAIK SYARIKAT
+        document.getElementById("syarikatUtamaContainer").innerHTML = "";
+        if(data.senaraiSyarikat && data.senaraiSyarikat.length > 0){
+            data.senaraiSyarikat.forEach(sykt => addSyarikatToDOM(sykt));
+        } else if (data.namaSyarikat) {
+            // Sokongan utk data lama (Single Company)
+            addSyarikatToDOM({
+                namaSyarikat: data.namaSyarikat, noSsm: data.noSsm, alamatSyarikat: data.alamatSyarikat, namaWakilSyarikat: data.namaWakilSyarikat,
+                jumlahSaham: data.jumlahSaham, sahamPewasiat: data.sahamPewasiat, statusPemilikan: data.statusPemilikan, mekanismeAgihan: data.mekanismeAgihan,
+                rakanKongsiList: data.rakanKongsiList, namaPartner: data.namaPartner, icPartner: data.icPartner, alamatPartner: data.alamatPartner, sahamPartner: data.sahamPartner,
+                penerimaHibahSaham: data.penerimaHibahSaham, penerimaWakafZurri: data.penerimaWakafZurri
             });
         } else {
-            addRakanKongsiToDOM();
+            addSyarikatToDOM();
         }
+        
+        populateWarisDropdowns();
         
         if (data.pilihanWasi1 === "manual") {
             document.getElementById("pilihanWasi1").value = "manual";
@@ -390,49 +552,16 @@
 
         document.getElementById("pesananWasiat").value = data.pesananWasiat || "";
         
-        document.getElementById("statusPemilikan").dispatchEvent(new Event("change"));
-
-        setTimeout(() => {
-            document.getElementById("mekanismeAgihan").value = data.mekanismeAgihan || "";
-            document.getElementById("mekanismeAgihan").dispatchEvent(new Event("change"));
-
-            if(data.mekanismeAgihan === "hibah" && data.penerimaHibahSaham){
-                const container = document.getElementById("hibahSahamContainer");
-                container.innerHTML = "";
-                data.penerimaHibahSaham.forEach(p => {
-                    addPenerimaHibahSaham(container);
-                    const lastRow = container.lastElementChild;
-                    lastRow.querySelector(".namaPenerimaHibahSaham").value = p.nama || "";
-                    lastRow.querySelector(".peratusHibahSaham").value = p.peratus || "";
-                });
-            }
-
-            if(data.mekanismeAgihan === "wakafzurri" && data.penerimaWakafZurri){
-                const container = document.getElementById("wakafZurriContainer");
-                container.innerHTML = "";
-                data.penerimaWakafZurri.forEach(p => {
-                    addPenerimaWakafZurri(container);
-                    const lastRow = container.lastElementChild;
-                    lastRow.querySelector(".namaPenerimaWakafZurri").value = p.nama || "";
-                    lastRow.querySelector(".peratusWakafZurri").value = p.peratus || "";
-                });
-            }
-        }, 50);
-        
         document.getElementById("wasiatContainer").innerHTML = "";
         if(data.wasiatSatuPerTiga && data.wasiatSatuPerTiga.length > 0){
-          data.wasiatSatuPerTiga.forEach(item=>{
-            addWasiatToDOM(item);
-          });
+          data.wasiatSatuPerTiga.forEach(item=>addWasiatToDOM(item));
         }
 
         if(data.pemegangAmanah){
           document.getElementById("pilihanPemegangAmanah").value = data.pemegangAmanah.pilihan || "";
           document.getElementById("pilihanPemegangAmanah").dispatchEvent(new Event("change"));
-          
           document.getElementById("jenisPemegangAmanah").value = data.pemegangAmanah.jenis || "";
           document.getElementById("jenisPemegangAmanah").dispatchEvent(new Event("change"));
-
           document.getElementById("namaPemegangAmanahPasangan").value = data.pemegangAmanah.nama || "";
           document.getElementById("namaPemegangAmanah").value = data.pemegangAmanah.nama || "";
           document.getElementById("icPemegangAmanah").value = data.pemegangAmanah.ic || "";
@@ -440,16 +569,15 @@
           document.getElementById("telefonPemegangAmanah").value = data.pemegangAmanah.telefon || "";
         }
         
-        // FUNGSI DISABLE TELAH DIBUANG DARI SINI
-        // PENGGUNA BEBAS MENGEDIT DAN MENYIMPAN BORANG BILA-BILA MASA
-        
       } else {
         addWarisToDOM(); 
         addWasiatToDOM();
+        addSyarikatToDOM();
         toggleWasi1(); 
       }
     }); 
 
+    // WASI TOGGLE LOGIC
     const pilihanWasi1 = document.getElementById("pilihanWasi1");
     const wasi1RTBSection = document.getElementById("wasi1RTBSection");
     const wasi1ManualSection = document.getElementById("wasi1ManualSection");
@@ -475,129 +603,19 @@
 
     pilihanWasi1.addEventListener("change", function() {
         if (this.value === "rtb") {
-            alert(
-                `NOTIS PELANTIKAN ${syarikatAmanahDetails.nama.toUpperCase()}\n\n` +
-                "Harap maklum dengan terma berikut:\n\n" +
-                `1. Caj pelantikan tambahan sebanyak RM${cajRTBServer} akan dikenakan.\n` +
-                `2. Kos pentadbiran pusaka akan dikenakan oleh pihak Syarikat Amanah berdasarkan peratusan nilai harta pada waktu urusan tuntutan pusaka kelak.`
-            );
+            alert(`NOTIS PELANTIKAN ${syarikatAmanahDetails.nama.toUpperCase()}\n\nHarap maklum dengan terma berikut:\n\n1. Caj pelantikan tambahan sebanyak RM${cajRTBServer} akan dikenakan.\n2. Kos pentadbiran pusaka akan dikenakan oleh pihak Syarikat Amanah berdasarkan peratusan nilai harta pada waktu urusan tuntutan pusaka kelak.`);
         }
         toggleWasi1();
     });
-    
-    function addRakanKongsiToDOM(item = {}) {
-        const html = `
-        <div class="border border-blue-300 bg-white rounded-xl p-4 space-y-3 mb-3 rakanKongsiRow">
-            <input type="text" class="w-full border rounded-lg p-3 namaPartnerRow" placeholder="Nama Rakan Kongsi" value="${item.nama || ''}">
-            <input type="text" class="w-full border rounded-lg p-3 icPartnerRow" placeholder="No IC Rakan Kongsi" value="${item.ic || ''}">
-            <textarea rows="2" class="w-full border rounded-lg p-3 alamatPartnerRow" placeholder="Alamat Rakan Kongsi">${item.alamat || ''}</textarea>
-            <input type="text" class="w-full border rounded-lg p-3 sahamPartnerRow" placeholder="Bilangan Saham Milik Rakan Kongsi (Unit)" value="${item.saham || ''}" oninput="formatSaham(this)">
-            <button type="button" class="deleteRakanKongsiBtn bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-sm mt-1">Padam</button>
-        </div>`;
-        document.getElementById("rakanKongsiContainer").insertAdjacentHTML("beforeend", html);
-    }
 
-    document.getElementById("addRakanKongsiBtn").addEventListener("click", () => addRakanKongsiToDOM());
-
-    document.addEventListener("click", function(e){
-        if(e.target.classList.contains("deleteRakanKongsiBtn")){
-            e.target.closest(".rakanKongsiRow").remove();
-        }
-    });
-    
-    const statusPemilikanSelect = document.getElementById("statusPemilikan");
-    const mekanismeSection = document.getElementById("mekanismeSection");
-    const mekanismeAgihanSelect = document.getElementById("mekanismeAgihan");
-
-    const buySellSect = document.getElementById("buySellSection");
-    const hibahSect = document.getElementById("hibahSahamSection");
-    const wakafSect = document.getElementById("wakafZurriSection");
-
-    statusPemilikanSelect.addEventListener("change", function(){
-        mekanismeAgihanSelect.innerHTML = '<option value="">Pilih Mekanisme Pewarisan Saham</option>';
-        mekanismeSection.classList.add("hidden");
-        buySellSect.classList.add("hidden");
-        hibahSect.classList.add("hidden");
-        wakafSect.classList.add("hidden");
-
-        if(this.value === "rakankongsi"){
-            mekanismeSection.classList.remove("hidden");
-            mekanismeAgihanSelect.innerHTML += '<option value="buysell">Buy-Sell Agreement (Jual Beli Saham)</option>';
-            mekanismeAgihanSelect.innerHTML += '<option value="wakafzurri">Wakaf Saham Zurri (Bahagian Pewasiat Sahaja)</option>';
-        } else if (this.value === "tunggal"){
-            mekanismeSection.classList.remove("hidden");
-            mekanismeAgihanSelect.innerHTML += '<option value="hibah">Hibah Saham Mutlak (Kepada Waris)</option>';
-            mekanismeAgihanSelect.innerHTML += '<option value="wakafzurri">Wakaf Saham Zurri (Keseluruhan Saham)</option>';
-        }
-    });
-
-    mekanismeAgihanSelect.addEventListener("change", function(){
-        buySellSect.classList.add("hidden");
-        hibahSect.classList.add("hidden");
-        wakafSect.classList.add("hidden");
-
-        if(this.value === "buysell"){
-            buySellSect.classList.remove("hidden");
-        } else if(this.value === "hibah"){
-            hibahSect.classList.remove("hidden");
-            if(document.getElementById("hibahSahamContainer").children.length === 0) addPenerimaHibahSaham(document.getElementById("hibahSahamContainer"));
-        } else if(this.value === "wakafzurri"){
-            wakafSect.classList.remove("hidden");
-            if(document.getElementById("wakafZurriContainer").children.length === 0) addPenerimaWakafZurri(document.getElementById("wakafZurriContainer"));
-        }
-    });
-
-    document.getElementById("addPenerimaHibahSahamBtn").addEventListener("click", () => {
-        addPenerimaHibahSaham(document.getElementById("hibahSahamContainer"));
-    });
-    document.getElementById("deletePenerimaHibahSahamBtn").addEventListener("click", () => {
-        const container = document.getElementById("hibahSahamContainer");
-        if(container.lastElementChild){
-            container.lastElementChild.remove();
-        }
-    });
-
-    function addPenerimaHibahSaham(container){
-        const html = `
-        <div class="grid grid-cols-12 gap-3 mb-3 penerimaHibahSahamRow">
-            <select class="col-span-9 w-full border rounded-lg p-3 namaPenerimaHibahSaham">
-                <option value="">Pilih Waris</option>
-            </select>
-            <input type="number" class="col-span-3 w-full border rounded-lg p-3 peratusHibahSaham" placeholder="%">
-        </div>`;
-        container.insertAdjacentHTML("beforeend", html);
-        populateWarisDropdowns();
-    }
-
-    document.getElementById("addPenerimaWakafZurriBtn").addEventListener("click", () => {
-        addPenerimaWakafZurri(document.getElementById("wakafZurriContainer"));
-    });
-    document.getElementById("deletePenerimaWakafZurriBtn").addEventListener("click", () => {
-        const container = document.getElementById("wakafZurriContainer");
-        if(container.lastElementChild){
-            container.lastElementChild.remove();
-        }
-    });
-
-    function addPenerimaWakafZurri(container){
-        const html = `
-        <div class="grid grid-cols-12 gap-3 mb-3 penerimaWakafZurriRow">
-            <select class="col-span-9 w-full border rounded-lg p-3 namaPenerimaWakafZurri">
-                <option value="">Pilih Waris</option>
-            </select>
-            <input type="number" class="col-span-3 w-full border rounded-lg p-3 peratusWakafZurri" placeholder="%">
-        </div>`;
-        container.insertAdjacentHTML("beforeend", html);
-        populateWarisDropdowns();
-    }
-
+    // WASIAT 1/3 & WARIS FUNCTIONS
     function addWasiatToDOM(item = {}){
         const html = `
         <div class="border rounded-xl p-4 space-y-3 mb-4">
-            <input type="text" class="w-full border rounded-lg p-3 hartaWasiat" placeholder="Butiran Harta" value="${item.harta || ''}">
-            <input type="text" class="w-full border rounded-lg p-3 bahagianWasiat" placeholder="Bahagian (RM atau %)" value="${item.bahagian || ''}" oninput="formatRM(this)">
-            <input type="text" class="w-full border rounded-lg p-3 penerimaWasiat" placeholder="Penerima" value="${item.penerima || ''}">
-            <textarea class="w-full border rounded-lg p-3 notaWasiat" placeholder="Nota">${item.nota || ''}</textarea>
+            <input type="text" class="hartaWasiat w-full border rounded-lg p-3" placeholder="Butiran Harta" value="${item.harta || ''}">
+            <input type="text" class="bahagianWasiat w-full border rounded-lg p-3" placeholder="Bahagian (RM atau %)" value="${item.bahagian || ''}" oninput="formatRM(this)">
+            <input type="text" class="penerimaWasiat w-full border rounded-lg p-3" placeholder="Penerima" value="${item.penerima || ''}">
+            <textarea class="notaWasiat w-full border rounded-lg p-3" placeholder="Nota">${item.nota || ''}</textarea>
             <button type="button" class="deleteRowBtn bg-red-600 text-white px-3 py-2 rounded-lg mt-3">Padam Wasiat</button>
         </div>`;
         document.getElementById("wasiatContainer").insertAdjacentHTML("beforeend", html);
@@ -606,16 +624,16 @@
     function addWarisToDOM(item = {}){
         const html = `
         <div class="border rounded-xl p-4 space-y-3 mb-4">
-            <input type="text" class="w-full border rounded-lg p-3 nacorporate" placeholder="Nama Waris" value="${item.nama || ''}">
-            <input type="text" class="w-full border rounded-lg p-3 icWaris" placeholder="No IC" value="${item.ic || ''}">
-            <input type="text" class="w-full border rounded-lg p-3 hubunganWaris" placeholder="Hubungan" value="${item.hubungan || ''}">
-            <input type="text" class="w-full border rounded-lg p-3 telefonWaris" placeholder="No Telefon" value="${item.telefon || ''}">
+            <input type="text" class="nacorporate w-full border rounded-lg p-3" placeholder="Nama Waris" value="${item.nama || ''}">
+            <input type="text" class="icWaris w-full border rounded-lg p-3" placeholder="No IC" value="${item.ic || ''}">
+            <input type="text" class="hubunganWaris w-full border rounded-lg p-3" placeholder="Hubungan" value="${item.hubungan || ''}">
+            <input type="text" class="telefonWaris w-full border rounded-lg p-3" placeholder="No Telefon" value="${item.telefon || ''}">
             <div class="flex items-center gap-3">
                 <label class="w-32 font-medium text-gray-700">Tarikh Lahir</label>
-                <input type="date" class="flex-1 border rounded-lg p-3 tarikhLahirWaris" value="${item.tarikhLahir || ''}">
+                <input type="date" class="tarikhLahirWaris flex-1 border rounded-lg p-3" value="${item.tarikhLahir || ''}">
             </div>
-            <textarea class="w-full border rounded-lg p-3 alamatWaris" placeholder="Alamat">${item.alamat || ''}</textarea>
-            <select class="w-full border rounded-lg p-3 statusWaris">
+            <textarea class="alamatWaris w-full border rounded-lg p-3" placeholder="Alamat">${item.alamat || ''}</textarea>
+            <select class="statusWaris w-full border rounded-lg p-3">
                 <option value="">Status Waris</option>
                 <option value="dewasa" ${item.status==="dewasa"?"selected":""}>Dewasa</option>
                 <option value="bawah18" ${item.status==="bawah18"?"selected":""}>Bawah 18 Tahun</option>
@@ -628,31 +646,19 @@
         checkPemegangAmanah();
     }
 
+    document.getElementById("addWasiatBtn").addEventListener("click", () => addWasiatToDOM());
+    document.getElementById("addWarisBtn").addEventListener("click", () => addWarisToDOM());
+
     function populateWarisDropdowns(){
         const waris = [];
         document.querySelectorAll(".nacorporate").forEach((item,index)=>{
-            waris.push({
-                nama: item.value,
-                hubungan: document.querySelectorAll(".hubunganWaris")[index].value
-            });
+            waris.push({ nama: item.value, hubungan: document.querySelectorAll(".hubunganWaris")[index].value });
         });
 
-        document.querySelectorAll(".namaPenerimaHibahSaham").forEach(select=>{
-            const currentVal = select.value;
+        document.querySelectorAll(".namaPenerimaHibahSaham, .namaPenerimaWakafZurri").forEach(select => {
+            const currentVal = select.getAttribute("data-selected") || select.value;
             select.innerHTML = `<option value="">Pilih Waris</option>`;
-            waris.forEach(w=>{
-                if(w.nama) select.innerHTML += `<option value="${w.nama}">${w.nama} (${w.hubungan})</option>`;
-            });
-            select.value = currentVal;
-        });
-
-        document.querySelectorAll(".namaPenerimaWakafZurri").forEach(select=>{
-            const currentVal = select.value;
-            select.innerHTML = `<option value="">Pilih Waris</option>`;
-            waris.forEach(w=>{
-                if(w.nama) select.innerHTML += `<option value="${w.nama}">${w.nama} (${w.hubungan})</option>`;
-            });
-            select.value = currentVal;
+            waris.forEach(w => { if(w.nama) select.innerHTML += `<option value="${w.nama}" ${currentVal===w.nama?'selected':''}>${w.nama} (${w.hubungan})</option>`; });
         });
 
         const selectPasangan = document.getElementById("namaPemegangAmanahPasangan");
@@ -670,30 +676,10 @@
 
     function checkPemegangAmanah(){
         let perluAmanah = false;
-        document.querySelectorAll(".statusWaris").forEach(select=>{
-            if(select.value === "bawah18" || select.value === "oku") perluAmanah = true;
-        });
+        document.querySelectorAll(".statusWaris").forEach(select => { if(select.value === "bawah18" || select.value === "oku") perluAmanah = true; });
         const section = document.getElementById("sectionPemegangAmanah");
         perluAmanah ? section.classList.remove("hidden") : section.classList.add("hidden");
     }
-
-    document.getElementById("addWasiatBtn").addEventListener("click", () => addWasiatToDOM());
-    document.getElementById("addWarisBtn").addEventListener("click", () => addWarisToDOM());
-
-    document.addEventListener("click", function(e){
-        if(e.target.classList.contains("deleteRowBtn")){
-            e.target.closest(".border").remove();
-            populateWarisDropdowns();
-            checkPemegangAmanah();
-        }
-    });
-
-    document.addEventListener("change", function(e){
-        if(e.target.classList.contains("statusWaris")) checkPemegangAmanah();
-        if(e.target.classList.contains("nacorporate") || e.target.classList.contains("hubunganWaris")){
-            populateWarisDropdowns();
-        }
-    });
 
     document.getElementById("pilihanPemegangAmanah").addEventListener("change",function(){
         this.value === "ya" ? document.getElementById("pemegangAmanahDetail").classList.remove("hidden") : document.getElementById("pemegangAmanahDetail").classList.add("hidden");
@@ -704,7 +690,6 @@
         document.getElementById("icPemegangAmanah").value = "";
         document.getElementById("hubunganPemegangAmanah").value = "";
         document.getElementById("telefonPemegangAmanah").value = "";  
-
         if(this.value==="lain"){
             document.getElementById("namaPemegangAmanah").readOnly = false;
             document.getElementById("icPemegangAmanah").readOnly = false;
@@ -735,6 +720,7 @@
         document.getElementById("telefonPemegangAmanah").value = document.querySelectorAll(".telefonWaris")[index]?.value || "";
     });   
 
+    // FILES (UPLOAD & DELETE)
     async function loadFiles(){
       const snapshot = await getDocs(collection(db, "users", currentUser.uid, "corporateDocuments"));
       let html = "";
@@ -760,19 +746,15 @@
       const namaLampiranInput = document.getElementById("namaLampiran");
       const file = fileInput.files[0];
       const namaLampiran = namaLampiranInput.value.trim();
-
       if(!namaLampiran) return alert("Sila masukkan Nama Lampiran.");
       if(!file) return alert("Sila pilih fail.");
-
       try{
         const storageRef = ref(storage, "corporate/" + currentUser.uid + "/" + file.name);
         await uploadBytes(storageRef, file);
         const downloadURL = await getDownloadURL(storageRef);
-
         await addDoc(collection(db, "users", currentUser.uid, "corporateDocuments"), {
             fileName: file.name, namaLampiran: namaLampiran || file.name, fileURL: downloadURL, createdAt: new Date()
         });
-
         namaLampiranInput.value = ""; fileInput.value = "";
         await loadFiles();
       } catch(error){
@@ -804,6 +786,7 @@
         submitBtn.innerText = "Menyimpan Maklumat...";
 
         try{
+            // Kutip Wasiat 1/3
             const wasiatSatuPerTiga = [];
             document.querySelectorAll(".hartaWasiat").forEach((item,index)=>{
                 wasiatSatuPerTiga.push({
@@ -814,6 +797,7 @@
                 });
             });
 
+            // Kutip Waris
             const warisList = [];
             document.querySelectorAll(".nacorporate").forEach((item,index)=>{
                 warisList.push({
@@ -827,32 +811,52 @@
                 });
             });          
 
-            const statusPemilikan = document.getElementById("statusPemilikan").value;
-            const mekanismeAgihan = document.getElementById("mekanismeAgihan").value;
-            
-            const penerimaHibahSaham = [];
-            if(mekanismeAgihan === "hibah"){
-                document.querySelectorAll(".penerimaHibahSahamRow").forEach(row => {
+            // KUTIP SENARAI SYARIKAT (ARRAY)
+            const senaraiSyarikat = [];
+            document.querySelectorAll(".syarikat-item").forEach(block => {
+                const rakanKongsiList = [];
+                block.querySelectorAll(".rakanKongsiRow").forEach(row => {
+                    rakanKongsiList.push({
+                        nama: row.querySelector(".namaPartnerRow").value,
+                        ic: row.querySelector(".icPartnerRow").value,
+                        alamat: row.querySelector(".alamatPartnerRow").value,
+                        saham: row.querySelector(".sahamPartnerRow").value
+                    });
+                });
+
+                const penerimaHibahSaham = [];
+                block.querySelectorAll(".penerimaHibahSahamRow").forEach(row => {
                     penerimaHibahSaham.push({
                         nama: row.querySelector(".namaPenerimaHibahSaham").value,
                         peratus: row.querySelector(".peratusHibahSaham").value
                     });
                 });
-            }
 
-            const penerimaWakafZurri = [];
-            if(mekanismeAgihan === "wakafzurri"){
-                document.querySelectorAll(".penerimaWakafZurriRow").forEach(row => {
+                const penerimaWakafZurri = [];
+                block.querySelectorAll(".penerimaWakafZurriRow").forEach(row => {
                     penerimaWakafZurri.push({
                         nama: row.querySelector(".namaPenerimaWakafZurri").value,
                         peratus: row.querySelector(".peratusWakafZurri").value
                     });
                 });
-            }
+
+                senaraiSyarikat.push({
+                    namaSyarikat: block.querySelector(".namaSyarikat").value,
+                    noSsm: block.querySelector(".noSsm").value,
+                    alamatSyarikat: block.querySelector(".alamatSyarikat").value,
+                    namaWakilSyarikat: block.querySelector(".namaWakilSyarikat").value,
+                    jumlahSaham: block.querySelector(".jumlahSaham").value,
+                    sahamPewasiat: block.querySelector(".sahamPewasiat").value,
+                    statusPemilikan: block.querySelector(".statusPemilikan").value,
+                    mekanismeAgihan: block.querySelector(".mekanismeAgihan").value,
+                    rakanKongsiList: rakanKongsiList,
+                    penerimaHibahSaham: penerimaHibahSaham,
+                    penerimaWakafZurri: penerimaWakafZurri
+                });
+            });
 
             const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
             let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
-
             if (pilihanWasi1Val === "rtb") {
                 finalNamaWasi1 = syarikatAmanahDetails.nama;
                 finalIcWasi1 = syarikatAmanahDetails.noPendaftaran;
@@ -872,16 +876,6 @@
             const poskod = document.getElementById("poskod").value.trim();
             const bandar = document.getElementById("bandar").value.trim();
             const negeri = document.getElementById("negeri").value.trim();
-
-            const rakanKongsiList = [];
-            document.querySelectorAll(".rakanKongsiRow").forEach(row => {
-                rakanKongsiList.push({
-                    nama: row.querySelector(".namaPartnerRow").value,
-                    ic: row.querySelector(".icPartnerRow").value,
-                    alamat: row.querySelector(".alamatPartnerRow").value,
-                    saham: row.querySelector(".sahamPartnerRow").value
-                });
-            });
           
             await setDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"), {
                 nama: document.getElementById("nama").value,
@@ -890,21 +884,7 @@
                 alamat: [alamat1, alamat2, `${poskod} ${bandar}`.trim(), negeri].filter(Boolean).join(", "),
                 telefon: document.getElementById("telefon").value,
                 
-                namaSyarikat: document.getElementById("namaSyarikat").value,
-                noSsm: document.getElementById("noSsm").value,
-                alamatSyarikat: document.getElementById("alamatSyarikat").value,
-                namaWakilSyarikat: document.getElementById("namaWakilSyarikat").value, 
-                jumlahSaham: document.getElementById("jumlahSaham").value,
-                statusPemilikan: statusPemilikan,
-                mekanismeAgihan: mekanismeAgihan,
-                sahamPewasiat: document.getElementById("sahamPewasiat").value,
-                rakanKongsiList: rakanKongsiList, 
-                namaPartner: rakanKongsiList.length > 0 ? rakanKongsiList[0].nama : "",
-                icPartner: rakanKongsiList.length > 0 ? rakanKongsiList[0].ic : "",
-                alamatPartner: rakanKongsiList.length > 0 ? rakanKongsiList[0].alamat : "",
-                sahamPartner: rakanKongsiList.length > 0 ? rakanKongsiList[0].saham : "",
-                penerimaHibahSaham: penerimaHibahSaham,
-                penerimaWakafZurri: penerimaWakafZurri,
+                senaraiSyarikat: senaraiSyarikat, // SIMPAN SEBAGAI ARRAY
                 
                 pilihanWasi1: pilihanWasi1Val,
                 namaWasi1: finalNamaWasi1,
@@ -935,7 +915,7 @@
                 updatedAt: new Date()
             }, { merge: true });
 
-            document.getElementById("status").innerHTML = "Maklumat berjaya disimpan.";
+            document.getElementById("status").innerHTML = "Maklumat berjaya disimpan sebagai Draf.";
             submitBtn.innerText = "Simpan Draf";
             submitBtn.disabled = false;
             
@@ -954,9 +934,9 @@
         let target = e.target;
         if (target.tagName !== 'INPUT') return;
         let val = target.value;
-        let identifier = (target.id + " " + target.className + " " + target.name + " " + target.placeholder).toLowerCase();
+        let identifier = (target.id || target.className).toLowerCase();
 
-        if (target.id === 'namaSyarikat') {
+        if (target.classList.contains('namaSyarikat') || target.id === 'namaSyarikat') {
             target.value = val.toUpperCase();
         } else if (identifier.includes('nama') || identifier.includes('penama')) {
             target.value = val.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
