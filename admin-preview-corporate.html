@@ -355,119 +355,190 @@
                             nomborWasiKuasa = "3"; // Tolak nombor kuasa ke point ke-3
                         }
 
+// ==========================================
+                        // C. LOGIK SYARIKAT (MULTI-COMPANY LOOP)
                         // ==========================================
-                        // C. LOGIK FASAL 3 & 4 (MILIKAN TUNGGAL vs RAKAN KONGSI)
-                        // ==========================================
-                        let tajukFasal3, kandunganFasal3, tajukFasal4, kandunganFasal4;
+                        let takrifanAsetHTML = "";
+                        let fasal3_KandunganHTML = "";
+                        let fasal4_KandunganHTML = "";
+                        let lampiranKorporatHTML = "";
+                        let mekanismeHTML = "";
+                        const tocMekList = document.getElementById("tocMekanismeList");
+                        tocMekList.innerHTML = "";
 
-                        if (data.statusPemilikan === 'rakankongsi') {
-                            // --- KES: RAKAN KONGSI ---
-                            tajukFasal3 = "ARAHAN PEMATUHAN PERJANJIAN JUAL BELI SAHAM (BUY-SELL COMPLIANCE)";
-                            kandunganFasal3 = `
-                                <p>Sekiranya berlaku kematian saya, saya mengarahkan Wasi saya untuk dengan serta-merta:</p>
-                                <table width="100%" style="border-collapse:collapse;">
-                                <tr valign="top"><td width="30">1.</td><td style="padding-bottom:12px; text-align:justify;">Mematuhi dan menguatkuasakan segala terma yang terkandung di dalam <strong>Perjanjian Jual Beli Saham & Pewarisan <em>(Buy-Sell Agreement)</em></strong> bertarikh <strong>${data.mekanismeAgihan === 'buysell' ? formatDateMY(data.tarikhPerjanjian) : "(Rujuk Arahan Hibah)"}</strong> yang telah ditandatangani antara saya, rakan kongsi, dan Syarikat.</td></tr>
-                                <tr valign="top"><td>2.</td><td style="padding-bottom:12px; text-align:justify;">Menjual dan memindahkan kesemua Saham Syarikat saya kepada rakan-rakan kongsi saya yang masih hidup atau penama mereka, seperti yang ditetapkan dalam Perjanjian tersebut.</td></tr>
-                                <tr valign="top"><td>3.</td><td style="padding-bottom:12px; text-align:justify;">Menerima, mengutip, dan memegang hasil wang tunai jualan saham <em>(Sale Proceeds)</em> yang dibayar oleh rakan kongsi saya atau daripada serahan pampasan <strong>Keyman Takaful</strong>.</td></tr>
-                                </table>
-                            `;
-                            
-                            tajukFasal4 = "AGIHAN HASIL WANG TUNAI JUALAN SAHAM";
-                            
-                            // Logik Susunan
-                            let wasiatStr = bahagianWasiat13HTML ? bahagianWasiat13HTML.replace("{{TURUTAN_WASIAT}}", "Kedua") : "";
-                            let faraidTurutan = wasiatSah.length > 0 ? "Ketiga" : "Kedua";
-                            
-                            kandunganFasal4 = `
-                                <p>Selepas Wasi menerima wang tunai hasil jualan Saham Syarikat, wang tersebut hendaklah diurus dan diagihkan mengikut turutan keutamaan berikut:</p>
-                                <p><strong>Pertama: Penyelesaian Kos dan Hutang</strong></p>
-                                <p>Membayar sebarang kos pentadbiran Wasi, duti setem, kos guaman peribadi, cukai LHDN, dan hutang-hutang peribadi saya (jika ada tuntutan).</p>
-                                ${wasiatStr}
-                                <p style="margin-top:15px;"><strong>${faraidTurutan}: Agihan Faraid Kepada Waris</strong></p>
-                                <p>Baki keseluruhan wang tunai tersebut hendaklah diagihkan kepada waris-waris saya yang sah dan berhak pada tarikh kematian saya, mengikut <strong>Hukum Faraid (Sijil Faraid yang dikeluarkan oleh Mahkamah Syariah yang berbidang kuasa)</strong>.</p>
-                            `;
-                        } else {
-                            // --- KES: MILIKAN TUNGGAL ---
-                            tajukFasal3 = "PENGURUSAN DAN PENTADBIRAN SAHAM SYARIKAT";
-                            kandunganFasal3 = `
-                                <p>Sekiranya berlaku kematian saya, saya mengarahkan Wasi saya untuk dengan serta-merta mengambil alih pentadbiran kesemua Saham Syarikat saya bagi memastikan kelangsungan perniagaan syarikat tidak terjejas.</p>
-                                <p>Wasi diberi kuasa penuh untuk memindahkan nama saham tersebut, menandatangani resolusi, melantik pengarah baharu (jika perlu) selaras dengan ketetapan <strong>Akta Syarikat 2016</strong>, sementara menunggu agihan kepada waris atau penerima hibah yang sah.</p>
-                            `;
-                            
-                            tajukFasal4 = "AGIHAN SAHAM SYARIKAT";
-                            
-                            // Logik Susunan
-                            let wasiatStr = bahagianWasiat13HTML ? bahagianWasiat13HTML.replace("{{TURUTAN_WASIAT}}", "Ketiga") : "";
-                            let faraidTurutan = wasiatSah.length > 0 ? "Keempat" : "Ketiga";
-                            
-                            kandunganFasal4 = `
-                                <p>Saham Syarikat saya hendaklah diurus dan diagihkan mengikut turutan keutamaan berikut:</p>
-                                <p><strong>Pertama: Penyelesaian Kos dan Hutang</strong></p>
-                                <p>Menyelesaikan sebarang kos pentadbiran Wasi, duti setem, kos guaman, dan hutang syarikat/peribadi yang wajib dibayar mengikut tuntutan undang-undang.</p>
-                                <p style="margin-top:15px;"><strong>Kedua: Pelaksanaan Pengisytiharan Hibah/Wakaf (Jika Ada)</strong></p>
-                                <p>Sekiranya terdapat Dokumen Pengisytiharan Hibah Saham Mutlak atau Wakaf Saham Zurri yang sah di sisi undang-undang dan syarak ke atas saham syarikat ini, Wasi hendaklah menguatkuasakan dokumen tersebut terlebih dahulu dan memindahkan saham kepada penama yang telah ditetapkan.</p>
-                                ${wasiatStr}
-                                <p style="margin-top:15px;"><strong>${faraidTurutan}: Agihan Faraid Kepada Waris</strong></p>
-                                <p>Sekiranya tiada Dokumen Hibah/Wakaf dibuat, atau masih terdapat baki saham/tunai jualan yang tidak dihibahkan/diwasiatkan, baki tersebut hendaklah diagihkan kepada waris-waris saya yang sah dan berhak pada tarikh kematian saya, mengikut Hukum Faraid.</p>
-                            `;
+                        // Pastikan data lama tetap dibaca jika klien belum update (Backward Compatibility)
+                        let senaraiSyarikat = data.senaraiSyarikat || [];
+                        if(senaraiSyarikat.length === 0 && data.namaSyarikat) {
+                            senaraiSyarikat.push({
+                                namaSyarikat: data.namaSyarikat,
+                                noSsm: data.noSsm,
+                                alamatSyarikat: data.alamatSyarikat,
+                                namaWakilSyarikat: data.namaWakilSyarikat,
+                                jumlahSaham: data.jumlahSaham,
+                                sahamPewasiat: data.sahamPewasiat,
+                                statusPemilikan: data.statusPemilikan,
+                                mekanismeAgihan: data.mekanismeAgihan,
+                                rakanKongsiList: data.rakanKongsiList && data.rakanKongsiList.length > 0 ? data.rakanKongsiList : [{nama: data.namaPartner, ic: data.icPartner, alamat: data.alamatPartner, saham: data.sahamPartner}],
+                                penerimaHibahSaham: data.penerimaHibahSaham,
+                                penerimaWakafZurri: data.penerimaWakafZurri
+                            });
                         }
 
-                        // D. Pesanan Logic
-                        const pesananText = data.pesananWasiat || "Tiada pesanan khusus.";
-                        const paragraphs = pesananText.split("\n\n").filter(p => p.trim() !== "");
-                        let pesananHTML = "";
-                        paragraphs.forEach(p => { pesananHTML += `<p style="margin-bottom:12px; line-height:1.6; text-align:justify;">${p}</p>`; });
+                        if(senaraiSyarikat.length > 0) {
+                            senaraiSyarikat.forEach((syarikat, sIndex) => {
+                                let fSaham = (val) => val ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";
+                                
+                                // 1. BINA FASAL 1 (TAKRIFAN ASET)
+                                takrifanAsetHTML += `<p><strong>${sIndex+1}. Nama Syarikat:</strong> ${syarikat.namaSyarikat || "-"}<br><strong>No. Pendaftaran (SSM):</strong> ${syarikat.noSsm || "-"}</p>`;
 
-                        // Lampiran Korporat Logic
-                        let fSaham = (val) => val ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";
-                        let lampiranKorporatHTML = `
-                            <table style="width:100%; border-collapse:collapse; font-size:14px; margin-bottom: 20px;">
-                                <tr><td style="border:1px solid #000; padding:8px; width:30%;"><strong>Nama Syarikat</strong></td><td style="border:1px solid #000; padding:8px;">${data.namaSyarikat || "-"}</td></tr>
-                                <tr><td style="border:1px solid #000; padding:8px;"><strong>No Pendaftaran SSM</strong></td><td style="border:1px solid #000; padding:8px;">${data.noSsm || "-"}</td></tr>
-                                <tr><td style="border:1px solid #000; padding:8px;"><strong>Alamat Berdaftar</strong></td><td style="border:1px solid #000; padding:8px;">${data.alamatSyarikat || "-"}</td></tr>
-                                <tr><td style="border:1px solid #000; padding:8px;"><strong>Jumlah Keseluruhan Saham</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(data.jumlahSaham)} Unit</td></tr>
-                                <tr><td style="border:1px solid #000; padding:8px;"><strong>Saham Milik Pewasiat</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(data.sahamPewasiat)} Unit</td></tr>
-                                <tr><td style="border:1px solid #000; padding:8px;"><strong>Status Pemilikan</strong></td><td style="border:1px solid #000; padding:8px;">${data.statusPemilikan === 'rakankongsi' ? 'Dimiliki Bersama Rakan Kongsi' : 'Pemilik Tunggal'}</td></tr>
-                            </table>
-                        `;
+                                // 2. BINA LAMPIRAN KORPORAT
+                                lampiranKorporatHTML += `
+                                    <table style="width:100%; border-collapse:collapse; font-size:14px; margin-bottom: 30px;">
+                                        <tr style="background-color:#f9fafb;"><td colspan="2" style="border:1px solid #000; padding:10px; text-align:center;"><strong>SYARIKAT KORPORAT ${sIndex+1}</strong></td></tr>
+                                        <tr><td style="border:1px solid #000; padding:8px; width:35%;"><strong>Nama Syarikat</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.namaSyarikat || "-"}</td></tr>
+                                        <tr><td style="border:1px solid #000; padding:8px;"><strong>No Pendaftaran SSM</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.noSsm || "-"}</td></tr>
+                                        <tr><td style="border:1px solid #000; padding:8px;"><strong>Alamat Berdaftar</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.alamatSyarikat || "-"}</td></tr>
+                                        <tr><td style="border:1px solid #000; padding:8px;"><strong>Jumlah Keseluruhan Saham</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(syarikat.jumlahSaham)} Unit</td></tr>
+                                        <tr><td style="border:1px solid #000; padding:8px;"><strong>Saham Milik Pewasiat</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(syarikat.sahamPewasiat)} Unit</td></tr>
+                                        <tr><td style="border:1px solid #000; padding:8px;"><strong>Status Pemilikan</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.statusPemilikan === 'rakankongsi' ? 'Dimiliki Bersama Rakan Kongsi' : 'Pemilik Tunggal'}</td></tr>
+                                    </table>
+                                `;
 
-                        // Lampiran Waris 
-                        let lampiranWaris = `<table style="width:100%; border-collapse:collapse; font-size:14px;"><tr><th style="border:1px solid #000;padding:8px;">Nama</th><th style="border:1px solid #000;padding:8px;">No K/P</th><th style="border:1px solid #000;padding:8px;">Hubungan</th><th style="border:1px solid #000;padding:8px;">Status</th></tr>`;
-                        (data.waris || []).forEach(w => {
-                            let statusText = w.status === "bawah18" ? "Bawah 18 Tahun" : w.status === "oku" ? "OKU" : "Dewasa";
-                            lampiranWaris += `<tr><td style="border:1px solid #000;padding:8px;">${w.nama||"-"}</td><td style="border:1px solid #000;padding:8px;text-align:center;">${w.ic||"-"}</td><td style="border:1px solid #000;padding:8px;text-align:center;">${w.hubungan||"-"}</td><td style="border:1px solid #000;padding:8px;text-align:center;">${statusText}</td></tr>`;
-                        }); lampiranWaris += `</table>`;
+                                // 3. BINA FASAL 3 & 4 MENGIKUT MEKANISME SETIAP SYARIKAT
+                                let wasiatStr = bahagianWasiat13HTML ? bahagianWasiat13HTML.replace("{{TURUTAN_WASIAT}}", "Kedua") : "";
+                                let faraidTurutan = wasiatSah.length > 0 ? "Ketiga" : "Kedua";
 
-                        let lampiranPemegangAmanah = "<p>Tiada Pemegang Amanah berasingan dilantik.</p>";
-                        if(data.pemegangAmanah && data.pemegangAmanah.pilihan === "ya"){
-                            lampiranPemegangAmanah = `<table style="width:100%; border-collapse:collapse; font-size:14px;"><tr><td style="border:1px solid #000;padding:8px;width:30%;"><strong>Nama</strong></td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.nama||"-"}</td></tr><tr><td style="border:1px solid #000;padding:8px;"><strong>No IC</strong></td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.ic||"-"}</td></tr><tr><td style="border:1px solid #000;padding:8px;"><strong>Hubungan</strong></td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.hubungan||"-"}</td></tr><tr><td style="border:1px solid #000;padding:8px;"><strong>Telefon</strong></td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.telefon||"-"}</td></tr></table>`;
-                        } else if(data.pemegangAmanah && data.pemegangAmanah.pilihan === "tidak"){
-                            // Paparkan Maklumat Wasi 1 jika pilih Sama Seperti Wasi
-                            lampiranPemegangAmanah = `<p>Sama seperti Wasi Pertama.</p><table style="width:100%; border-collapse:collapse; font-size:14px; margin-top:10px;"><tr><td style="border:1px solid #000;padding:8px;width:30%;"><strong>Nama</strong></td><td style="border:1px solid #000;padding:8px;">${data.namaWasi1||"-"}</td></tr><tr><td style="border:1px solid #000;padding:8px;"><strong>No IC</strong></td><td style="border:1px solid #000;padding:8px;">${data.icWasi1||"-"}</td></tr><tr><td style="border:1px solid #000;padding:8px;"><strong>Hubungan</strong></td><td style="border:1px solid #000;padding:8px;">${data.hubunganWasi1||"-"}</td></tr><tr><td style="border:1px solid #000;padding:8px;"><strong>Telefon</strong></td><td style="border:1px solid #000;padding:8px;">${data.telefonWasi1||"-"}</td></tr></table>`;
+                                if (syarikat.statusPemilikan === 'rakankongsi') {
+                                    fasal3_KandunganHTML += `<div style="margin-bottom:20px; padding:15px; border-left:3px solid #153638; background-color:#fafafa;">
+                                        <p style="font-weight:bold; margin-bottom:10px;">Bagi ${syarikat.namaSyarikat} (Arahan Pematuhan Buy-Sell):</p>
+                                        <table width="100%" style="border-collapse:collapse;">
+                                        <tr valign="top"><td width="30">1.</td><td style="padding-bottom:12px; text-align:justify;">Mematuhi dan menguatkuasakan segala terma di dalam Perjanjian Jual Beli Saham.</td></tr>
+                                        <tr valign="top"><td>2.</td><td style="padding-bottom:12px; text-align:justify;">Menjual dan memindahkan Saham Syarikat kepada rakan kongsi.</td></tr>
+                                        <tr valign="top"><td>3.</td><td style="padding-bottom:12px; text-align:justify;">Menerima, mengutip, dan memegang hasil wang tunai jualan saham.</td></tr>
+                                        </table></div>`;
+                                    
+                                    fasal4_KandunganHTML += `<div style="margin-bottom:20px; padding:15px; border-left:3px solid #153638; background-color:#fafafa;">
+                                        <p style="font-weight:bold; margin-bottom:10px;">Bagi Hasil Jualan Saham ${syarikat.namaSyarikat}:</p>
+                                        <p><strong>Pertama: Penyelesaian Kos dan Hutang.</strong></p>
+                                        ${wasiatStr}
+                                        <p style="margin-top:15px;"><strong>${faraidTurutan}: Agihan Faraid Kepada Waris.</strong></p></div>`;
+                                } else {
+                                    wasiatStr = bahagianWasiat13HTML ? bahagianWasiat13HTML.replace("{{TURUTAN_WASIAT}}", "Ketiga") : "";
+                                    faraidTurutan = wasiatSah.length > 0 ? "Keempat" : "Ketiga";
+                                    
+                                    fasal3_KandunganHTML += `<div style="margin-bottom:20px; padding:15px; border-left:3px solid #153638; background-color:#fafafa;">
+                                        <p style="font-weight:bold; margin-bottom:10px;">Bagi ${syarikat.namaSyarikat} (Pengurusan Pemilik Tunggal):</p>
+                                        <p>Wasi diberi kuasa penuh untuk memindahkan nama saham tersebut, menandatangani resolusi, melantik pengarah baharu (jika perlu) selaras dengan ketetapan Akta Syarikat 2016.</p></div>`;
+                                    
+                                    fasal4_KandunganHTML += `<div style="margin-bottom:20px; padding:15px; border-left:3px solid #153638; background-color:#fafafa;">
+                                        <p style="font-weight:bold; margin-bottom:10px;">Bagi Pengagihan Saham ${syarikat.namaSyarikat}:</p>
+                                        <p><strong>Pertama: Penyelesaian Kos dan Hutang.</strong></p>
+                                        <p style="margin-top:15px;"><strong>Kedua: Pelaksanaan Pengisytiharan Hibah/Wakaf (Jika Ada).</strong></p>
+                                        ${wasiatStr}
+                                        <p style="margin-top:15px;"><strong>${faraidTurutan}: Agihan Faraid Kepada Waris.</strong></p></div>`;
+                                }
+
+                                // 4. JANA DOKUMEN MEKANISME (HIBAH / BUY-SELL) UNTUK SYARIKAT INI
+                                if (syarikat.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !== 'undefined') {
+                                    // Tarik rakan kongsi khas untuk syarikat ini
+                                    let rakanKongsi = syarikat.rakanKongsiList && syarikat.rakanKongsiList.length > 0 ? syarikat.rakanKongsiList[0] : {};
+                                    
+                                    let htmlMek = buySellAgreementContent
+                                        .replaceAll("{{TARIKH_PERJANJIAN}}", formatDateMY(data.tarikhPerjanjian))
+                                        .replaceAll("{{NAMA_PEWASIAT}}", data.nama || "-")
+                                        .replaceAll("{{NO_IC_PEWASIAT}}", data.ic || "-")
+                                        .replaceAll("{{ALAMAT_PEWASIAT}}", alamatPenuh || "-")
+                                        .replaceAll("{{NAMA_PARTNER}}", rakanKongsi.nama || "-")
+                                        .replaceAll("{{NO_IC_PARTNER}}", rakanKongsi.ic || "-")
+                                        .replaceAll("{{ALAMAT_PARTNER}}", rakanKongsi.alamat || "-")
+                                        .replaceAll("{{NAMA_SYARIKAT}}", syarikat.namaSyarikat || "-")
+                                        .replaceAll("{{NO_SSM}}", syarikat.noSsm || "-")
+                                        .replaceAll("{{ALAMAT_SYARIKAT}}", syarikat.alamatSyarikat || "-")
+                                        .replaceAll("{{NAMA_WAKIL_SYARIKAT}}", (syarikat.namaWakilSyarikat || "-").toUpperCase())
+                                        .replaceAll("{{JUMLAH_SAHAM}}", fSaham(syarikat.jumlahSaham))
+                                        .replaceAll("{{SAHAM_PEWASIAT}}", fSaham(syarikat.sahamPewasiat))
+                                        .replaceAll("{{SAHAM_PARTNER}}", fSaham(rakanKongsi.saham));
+                                    
+                                    htmlMek = htmlMek.replace(/class="a4-page/i, `data-target="tocMek_${sIndex}" class="a4-page`);
+                                    mekanismeHTML += htmlMek;
+                                    tocMekList.innerHTML += `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Perjanjian Buy-Sell (${syarikat.namaSyarikat})</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_${sIndex}" class="text-[14px] font-bold">-</span></div>`;
+                                
+                                } else if (syarikat.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefined') {
+                                    (syarikat.penerimaHibahSaham || []).forEach((p, pIndex) => {
+                                        
+                                        // Logik Hibah Saham (Tarik dari senarai waris global dan Jana Pemegang Amanah)
+                                        const warisDetail = (data.waris || []).find(w => w.nama === p.nama) || {};
+                                        let amanahContent = "";
+                                        let introPenerima = `(selepas ini disebut sebagai <strong>"Penerima Hibah Saham"</strong>)`;
+                                        let labelPenerima = "Penerima Hibah";
+                                        let namaPenerimaSbnr = p.nama || "-";
+                                        let icPenerimaSbnr = warisDetail.ic || "-";
+                                        let alamatPenerimaSbnr = warisDetail.alamat || "-";
+                                        let tarikhLahirPenerima = formatDateMY(warisDetail.tarikhLahir);
+
+                                        if (warisDetail.status === "bawah18" || warisDetail.status === "oku") {
+                                            let actualAmanah = null;
+                                            if (data.pemegangAmanah && data.pemegangAmanah.pilihan === "tidak") {
+                                                actualAmanah = { pilihan: "ya", nama: data.namaWasi1 || "-", ic: data.icWasi1 || "-", hubungan: data.hubunganWasi1 || "-", telefon: data.telefonWasi1 || "-", alamat: data.alamatWasi1 || "-" };
+                                            } else if (data.pemegangAmanah && data.pemegangAmanah.pilihan === "ya") {
+                                                actualAmanah = data.pemegangAmanah;
+                                            }
+
+                                            if (actualAmanah) {
+                                                let mockItem = { ...warisDetail, pemegangAmanah: actualAmanah };
+                                                if (typeof window.generatePemegangAmanah === "function") {
+                                                    amanahContent = window.generatePemegangAmanah(mockItem, data)
+                                                        .replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
+                                                        .replaceAll("{{IC_PEMBERI}}", data.ic || "-")
+                                                        .replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-");
+                                                }
+                                                if(actualAmanah.nama) {
+                                                    introPenerima = `selaku <strong>"Pemegang Amanah"</strong> bagi pihak <strong>${p.nama}</strong> (Penerima Hibah Saham)`;
+                                                    labelPenerima = "Pemegang Amanah";
+                                                    namaPenerimaSbnr = actualAmanah.nama;
+                                                    icPenerimaSbnr = actualAmanah.ic;
+                                                    alamatPenerimaSbnr = actualAmanah.alamat || alamatPenuh;
+                                                }
+                                            }
+                                        }
+
+                                        let hContent = hibahContent
+                                            .replaceAll("{{PEMEGANG_AMANAH}}", amanahContent)
+                                            .replaceAll("{{NAMA_PEMBERI}}", data.nama || "-")
+                                            .replaceAll("{{IC_PEMBERI}}", data.ic || "-")
+                                            .replaceAll("{{ALAMAT_PEMBERI}}", alamatPenuh || "-")
+                                            .replaceAll("{{TELEFON_PEMBERI}}", data.telefon || "-")
+                                            .replaceAll("{{NAMA_PENERIMA}}", namaPenerimaSbnr)
+                                            .replaceAll("{{IC_PENERIMA}}", icPenerimaSbnr)
+                                            .replaceAll("{{HUBUNGAN}}", warisDetail.hubungan || "-")
+                                            .replaceAll("{{ALAMAT_PENERIMA}}", alamatPenerimaSbnr)
+                                            .replaceAll("{{TARIKH_LAHIR}}", tarikhLahirPenerima)
+                                            .replaceAll("{{PERATUS}}", p.peratus || "-")
+                                            .replaceAll("{{TARIKH_DOKUMEN}}", formatDateMY(data.approvedAt))
+                                            .replaceAll("{{TABLE_ALIH}}", generateSahamTable(syarikat, p)) // JANA JADUAL HARTA ALIH
+                                            .replaceAll("{{TABLE_TAK_ALIH}}", "") // PADAM JADUAL HARTA TAK ALIH
+                                            .replaceAll("{{LABEL_PENERIMA}}", labelPenerima)
+                                            .replaceAll("{{INTRO_PENERIMA}}", introPenerima)
+                                            .replaceAll("{{BENEFISIARI}}", p.nama || "-");
+                                        
+                                        // FORMAT KHUSUS KORPORAT: GANTI TAJUK
+                                        hContent = hContent.replace("JADUAL 1 - SENARAI HARTA ALIH YANG DIHIBAHKAN", "JADUAL 1 - SENARAI SAHAM SYARIKAT YANG DIHIBAHKAN");
+                                        hContent = hContent.replace("JADUAL 2 - SENARAI HARTA TAK ALIH YANG DIHIBAHKAN", "");
+
+                                        hContent = hContent.replace(/class="a4-page/i, `data-target="tocMek_${sIndex}_${pIndex}" class="a4-page`);
+                                        mekanismeHTML += hContent;
+                                        tocMekList.innerHTML += `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Hibah Saham (${syarikat.namaSyarikat}): ${p.nama}</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_${sIndex}_${pIndex}" class="text-[14px] font-bold">-</span></div>`;
+                                    });
+                                }
+                            });
                         }
 
-                        const approvedDate = data.approvedAt ? new Date(data.approvedAt) : null;
-                        const currentDocRef = data.docRef || "-";
-
-                        // UPDATE UI COVER & TABLE
-                        document.getElementById("docRef").innerHTML = currentDocRef;
-                        document.getElementById("docRef2").innerHTML = `DOC REF: ${currentDocRef}`;
-                        document.getElementById("tahun").innerHTML = approvedDate ? approvedDate.getFullYear() : new Date().getFullYear();
-                        document.getElementById("namaCover").innerHTML = (data.nama || "-").toUpperCase();
-                        document.getElementById("icCover").innerHTML = data.ic || "-";
-                        
-                        document.getElementById("namaTable").innerHTML = data.nama || "-";
-                        document.getElementById("icTable").innerHTML = data.ic || "-";
-                        document.getElementById("telefonTable").innerHTML = data.telefon || "-";
-                        document.getElementById("alamatTable").innerHTML = alamatPenuh || "-";
-                        document.getElementById("kodTable").innerHTML = userData?.referral || "-";
-                        document.getElementById("telefonPerundingTable").innerHTML = consultantData.telefon || "-";
-
                         // ==========================================
-                        // 1. GENERATE WASIAT KORPORAT CONTENT
+                        // 1. GENERATE WASIAT KORPORAT CONTENT (TERKEMASKINI)
                         // ==========================================
                         if (typeof wasiatCorporateContent !== 'undefined') {
                             let wContent = wasiatCorporateContent
+                                .replaceAll("{{SENARAI_SYARIKAT_FASAL_1}}", takrifanAsetHTML) // <-- MASUKKAN FASAL 1
                                 .replaceAll("{{LAMPIRAN_KORPORAT}}", lampiranKorporatHTML)
                                 .replaceAll("{{LAMPIRAN_WARIS}}", lampiranWaris)  
                                 .replaceAll("{{LAMPIRAN_PEMEGANG_AMANAH}}", lampiranPemegangAmanah)
@@ -475,21 +546,19 @@
                                 .replaceAll("{{NAMA_PEWASIAT}}", data.nama || "-")
                                 .replaceAll("{{NO_IC_PEWASIAT}}", data.ic || "-")
                                 .replaceAll("{{ALAMAT_PEWASIAT}}", alamatPenuh || "-")
-                                .replaceAll("{{NAMA_SYARIKAT}}", data.namaSyarikat || "-")
-                                .replaceAll("{{NO_SSM}}", data.noSsm || "-")
                                 .replaceAll("{{NAMA_WASI1}}", data.namaWasi1 || "-")
                                 .replaceAll("{{NO_IC_WASI1}}", data.icWasi1 || "-")
                                 .replaceAll("{{ALAMAT_WASI1}}", data.alamatWasi1 || "-")
                                 .replaceAll("{{WASI_KEDUA_TEXT}}", wasiKeduaText)
                                 .replaceAll("{{NOMBOR_WASI_KUASA}}", nomborWasiKuasa)
-                                .replaceAll("{{TAJUK_FASAL_3}}", tajukFasal3)
-                                .replaceAll("{{KANDUNGAN_FASAL_3}}", kandunganFasal3)
-                                .replaceAll("{{TAJUK_FASAL_4}}", tajukFasal4)
-                                .replaceAll("{{KANDUNGAN_FASAL_4}}", kandunganFasal4);
+                                .replaceAll("{{TAJUK_FASAL_3}}", "ARAHAN KHUSUS PENGURUSAN SYARIKAT")
+                                .replaceAll("{{KANDUNGAN_FASAL_3}}", fasal3_KandunganHTML)
+                                .replaceAll("{{TAJUK_FASAL_4}}", "ARAHAN KHUSUS PENGAGIHAN HASIL SAHAM")
+                                .replaceAll("{{KANDUNGAN_FASAL_4}}", fasal4_KandunganHTML);
                                 
                             document.getElementById("sectionWasiat").innerHTML = wContent;
                         }
-
+                        
                         // ==========================================
                         // 2. GENERATE MEKANISME KORPORAT (BUY-SELL / HIBAH)
                         // ==========================================
