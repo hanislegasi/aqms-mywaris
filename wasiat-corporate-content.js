@@ -85,10 +85,10 @@ Dokumen ini berkuatkuasa secara eksklusif ke atas kesemua pegangan unit saham bi
 sama ada yang wujud kini atau pada masa hadapan, di dalam syarikat:
 </p>
  
-<p>
-•	Nama Syarikat: <strong>{{NAMA_SYARIKAT}}</strong><br>
-•	No. Pendaftaran Syarikat (SSM): <strong>{{NO_SSM}}</strong> (selepas ini dirujuk sebagai "Saham Syarikat")
-</p>
+<div style="margin-top:15px; margin-bottom:15px; padding-left:15px; border-left:3px solid #153638;">
+{{SENARAI_SYARIKAT_FASAL_1}}
+</div>
+<p>(selepas ini dirujuk secara kolektif sebagai "Saham Syarikat")</p>
  
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>FASAL 2: PELANTIKAN WASI DAN PEMEGANG AMANAH (PIHAK KETIGA)</strong>
