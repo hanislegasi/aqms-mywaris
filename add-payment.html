@@ -27,7 +27,7 @@
         <div>
             <span class="text-xs text-gray-500 block uppercase tracking-wider font-semibold">Produk / Servis</span>
             <p class="font-bold text-gray-800 text-base">Caj Pelantikan Syarikat Amanah</p>
-            <p class="text-lg font-extrabold text-[#153638]">Rakyat Trustee Berhad (RTB)</p>
+            <p class="text-lg font-extrabold text-[#153638]" id="displayNamaAmanah">Memuatkan...</p>
         </div>
 
         <hr class="border-gray-200">
@@ -55,8 +55,8 @@
                 <h2 class="text-xl sm:text-2xl font-bold text-[#153638]">Terma, Syarat & Akad Perkhidmatan</h2>
                 <p class="text-xs sm:text-sm text-gray-500 mt-0.5">Sila baca dan fahami akad perkhidmatan sebelum meneruskan pembayaran</p>
             </div>
-            <span class="bg-[#153638]/10 text-[#153638] text-xs font-semibold px-3 py-1 rounded-full hidden sm:inline-block">
-                Akad Perkhidmatan RTB
+            <span id="displayTagAkad" class="bg-[#153638]/10 text-[#153638] text-xs font-semibold px-3 py-1 rounded-full hidden sm:inline-block">
+                Akad Perkhidmatan
             </span>
         </div>
         
@@ -69,14 +69,14 @@
                     Lafaz Akad Perkhidmatan Pelantikan Wasi Amanah:
                 </p>
                 <p class="italic font-serif">
-                    "Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang. Saya dengan ini bersetuju melanggan perkhidmatan pelantikan Rakyat Trustee Berhad (RTB) sebagai Wasi Utama bagi dokumen Korporat saya mengikut kadar yuran yang ditetapkan. Saya faham kos pentadbiran pusaka tertakluk kepada kadar yang ditetapkan oleh pihak RTB ketika proses tuntutan kelak."
+                    "Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang. Saya dengan ini bersetuju melanggan perkhidmatan pelantikan <span id="lafazNama1" class="font-bold">Syarikat Amanah</span> sebagai Wasi Utama bagi dokumen Korporat saya mengikut kadar yuran yang ditetapkan. Saya faham kos pentadbiran pusaka tertakluk kepada kadar yang ditetapkan oleh pihak <span id="lafazNama2" class="font-bold">Syarikat Amanah</span> ketika proses tuntutan kelak."
                 </p>
             </div>
 
             <div>
                 <p class="font-bold text-[#153638] mb-1">1. Pengenalan & Persetujuan Akad</p>
                 <p class="text-gray-600 text-xs sm:text-sm leading-relaxed">
-                    Dengan meneruskan pembayaran ini, anda secara rasminya melantik Rakyat Trustee Berhad sebagai Wasi dokumen Korporat anda.
+                    Dengan meneruskan pembayaran ini, anda secara rasminya melantik <span id="pengenalanNama" class="font-bold">Syarikat Amanah</span> sebagai Wasi dokumen Korporat anda.
                 </p>
             </div>
 
@@ -113,7 +113,8 @@ let userId = params.get("id");
 const docType = params.get("type") || "corporate";
 
 let currentUser = null;
-let saleAmount = 100; // Default Caj RTB
+let saleAmount = 100; // Harga Lalai
+let namaAmanahServer = "Syarikat Amanah"; // Nama Lalai
 let corporateFormData = {};
 
 onAuthStateChanged(auth, async (user) => {
@@ -125,12 +126,20 @@ onAuthStateChanged(auth, async (user) => {
     if(!userId) userId = user.uid;
 
     try {
-        // Tarik Tetapan Caj RTB dari Admin Setting
-        const settingsSnap = await getDoc(doc(db, "system", "settings"));
+        // Tarik Tetapan Harga & Nama Syarikat Amanah dari Admin Setting
+        const settingsSnap = await getDoc(doc(db, "settings", "compensation"));
         if (settingsSnap.exists()) {
             const sData = settingsSnap.data();
             if (sData.cajRTB) saleAmount = parseFloat(sData.cajRTB);
+            if (sData.namaSyarikatAmanah) namaAmanahServer = sData.namaSyarikatAmanah;
         }
+
+        // Kemaskini Paparan HTML Secara Dinamik
+        document.getElementById("displayNamaAmanah").innerText = namaAmanahServer;
+        document.getElementById("displayTagAkad").innerText = "Akad " + namaAmanahServer;
+        document.getElementById("lafazNama1").innerText = namaAmanahServer;
+        document.getElementById("lafazNama2").innerText = namaAmanahServer;
+        document.getElementById("pengenalanNama").innerText = namaAmanahServer;
 
         // Tarik Data Borang Klien
         const formRef = doc(db, "users", userId, docType, "maklumat");
@@ -178,7 +187,7 @@ agreeBtn.addEventListener("click", async () => {
 
     try {
         const txnDate = new Date();
-        const refNo = corporateFormData.docRef || "RTB-" + Date.now().toString().slice(-6);
+        const refNo = corporateFormData.docRef || "CORP-" + Date.now().toString().slice(-6);
 
         // 1. UPDATE STATUS DI USERS
         const userDocRef = doc(db, "users", userId, docType, "maklumat");
@@ -205,7 +214,7 @@ agreeBtn.addEventListener("click", async () => {
             accountCode: "1000",
             account: "Bank",
             category: "asset",
-            description: `Caj RTB - ${corporateFormData.nama}`,
+            description: `Caj Pelantikan ${namaAmanahServer} - ${corporateFormData.nama}`,
             debit: saleAmount,
             credit: 0,
             paymentType: "ToyyibPay",
@@ -217,7 +226,7 @@ agreeBtn.addEventListener("click", async () => {
             accountCode: "4140",
             account: "Profesional Fee",
             category: "income",
-            description: `Caj RTB - ${corporateFormData.nama}`,
+            description: `Caj Pelantikan ${namaAmanahServer} - ${corporateFormData.nama}`,
             debit: 0,
             credit: saleAmount,
             paymentType: "ToyyibPay",
@@ -229,15 +238,15 @@ agreeBtn.addEventListener("click", async () => {
             receiptNo: "REC-" + Date.now(),
             uid: userId,
             payerName: corporateFormData.nama,
-            serviceCode: "RTB_FEE",
-            serviceName: "Caj Pelantikan Rakyat Trustee Berhad",
+            serviceCode: "TRUSTEE_FEE",
+            serviceName: `Caj Pelantikan ${namaAmanahServer}`,
             amount: saleAmount,
             paymentMethod: "ToyyibPay",
             status: "PAID",
             paymentDate: txnDate
         });
 
-        alert("Pembayaran Caj RTB berjaya direkodkan!");
+        alert(`Pembayaran Caj ${namaAmanahServer} berjaya direkodkan!`);
         window.location.href = "corporate-page.html";
 
     } catch (error) {
