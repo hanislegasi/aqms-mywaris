@@ -896,8 +896,8 @@
                 updatedAt: new Date()
             }, { merge: true });
 
-            // TERUS PERGI KE ADD-PAYMENT TANPA POPUP
-            window.location.href = `add-payment.html?id=${currentUser.uid}&type=corporate`;
+           document.getElementById("status").innerHTML = "Maklumat berjaya disimpan.";
+            setTimeout(() => { document.getElementById("status").innerHTML = ""; }, 3000);
 
         }
         catch(error){
