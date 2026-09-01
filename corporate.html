@@ -137,19 +137,19 @@
           </select>
       </div>
 
-      <!-- PAPARAN INFO RTB -->
+      <!-- PAPARAN INFO RTB (KOTAK HIJAU KORPORAT - MENONJOL) -->
       <div id="wasi1RTBSection" class="hidden bg-[#153638] text-white border border-[#0f2729] rounded-xl p-6 mb-4 shadow-lg">
           <p class="text-sm font-bold text-[#a6c4c5] border-b border-[#2a5a5d] pb-2 mb-4 uppercase tracking-wider">Maklumat Syarikat Amanah</p>
           
           <div class="space-y-3 text-base">
-              <p><strong>Nama:</strong> Rakyat Trustee Berhad</p>
-              <p><strong>No. Pendaftaran:</strong> 1462142-U</p>
-              <p><strong>Alamat:</strong> Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur</p>
-              <p><strong>Telefon:</strong> +603 2602 2722</p>
+              <p><strong>Nama:</strong> <span id="paparNamaRTB">Rakyat Trustee Berhad</span></p>
+              <p><strong>No. Pendaftaran:</strong> <span id="paparNoRTB">1462142-U</span></p>
+              <p><strong>Alamat:</strong> <span id="paparAlamatRTB">Memuatkan alamat...</span></p>
+              <p><strong>Telefon:</strong> <span id="paparTelefonRTB">Memuatkan telefon...</span></p>
           </div>
 
           <div class="mt-5 bg-white text-red-600 rounded-lg p-4 border-l-4 border-red-600 shadow-sm">
-              <p class="text-base font-bold leading-relaxed">*NOTA PENTING: Kos pelantikan tambahan sebanyak RM100 akan dikenakan. Maklumat RTB akan dimasukkan secara automatik ke dalam dokumen anda.</p>
+              <p class="text-base font-bold leading-relaxed" id="paparNotaRTB">*NOTA PENTING: Kos pelantikan tambahan akan dikenakan. Maklumat RTB akan dimasukkan secara automatik ke dalam dokumen anda.</p>
           </div>
       </div>
 
@@ -252,6 +252,45 @@
     let currentUser = null;
     let documentStatus = null;
 
+// -- SETTING LALAI (DEFAULT) CAWANGAN RTB --
+    let cajRTBServer = 100; // Harga lalai jika DB gagal
+    let rtbBranches = {
+        "default": { // Ibu Pejabat (Digunakan jika negeri tiada cawangan spesifik)
+            nama: "Rakyat Trustee Berhad",
+            noPendaftaran: "1462142-U",
+            alamat: "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur",
+            telefon: "+603 2602 2722"
+        },
+        "Pahang": { // Contoh cawangan spesifik
+            nama: "Rakyat Trustee Berhad (Cawangan Pantai Timur)",
+            noPendaftaran: "1462142-U",
+            alamat: "A-15, Tingkat 1, Jalan Tun Ismail 1, 25000 Kuantan, Pahang", // Masukkan alamat sebenar
+            telefon: "+609-510 0000"
+        },
+        "Johor": {
+            nama: "Rakyat Trustee Berhad (Cawangan Selatan)",
+            noPendaftaran: "1462142-U",
+            alamat: "Bandar Baru Uda, 81200 Johor Bahru, Johor", // Masukkan alamat sebenar
+            telefon: "+607-230 0000"
+        }
+        // Boleh tambah negeri-negeri lain mengikut ejaan sebenar dalam dropdown <select id="negeri">
+    };
+
+    // Fungsi automatik tukar paparan RTB bila negeri dipilih
+    function updateRTBDisplay() {
+        const negeriPilihan = document.getElementById("negeri").value;
+        const branchInfo = rtbBranches[negeriPilihan] || rtbBranches["default"]; // Guna default jika tiada
+
+        document.getElementById("paparNamaRTB").innerText = branchInfo.nama;
+        document.getElementById("paparNoRTB").innerText = branchInfo.noPendaftaran;
+        document.getElementById("paparAlamatRTB").innerText = branchInfo.alamat;
+        document.getElementById("paparTelefonRTB").innerText = branchInfo.telefon;
+    }
+
+    // Pasang 'listener' supaya setiap kali user tukar Negeri, alamat RTB bertukar!
+    document.getElementById("negeri").addEventListener("change", updateRTBDisplay);
+
+    
     window.formatRM = function(input) {
         let val = input.value;
         if (val.trim() === "") return;
@@ -285,7 +324,31 @@
       }
       currentUser = user;
       loadFiles();
+      
+      // ====================================================================
+      // PASTE LANGKAH 3 DI SINI (SEBELUM TARIK DATA BORANG KLIEN)
+      // ====================================================================
+      
+try {
+          const settingsSnap = await getDoc(doc(db, "settings", "compensation")); 
+          if(settingsSnap.exists() && settingsSnap.data().cajRTB) {
+              cajRTBServer = settingsSnap.data().cajRTB;
+          }
+      } catch (err) {
+          console.log("Gagal muat turun setting RTB, guna harga lalai.");
+      }
 
+      // Update harga dinamik pada Nota Merah RTB di HTML
+      const notaRTB = document.getElementById("paparNotaRTB");
+      if(notaRTB) {
+          notaRTB.innerText = `*NOTA PENTING: Kos pelantikan tambahan sebanyak RM${cajRTBServer} akan dikenakan. Maklumat RTB cawangan berkaitan akan dimasukkan secara automatik ke dalam dokumen anda.`;
+      }
+
+      // Kemaskini paparan cawangan awal-awal (jika user pernah pilih negeri sebelum ni)
+      updateRTBDisplay();
+      // ====================================================================
+
+      
       const docSnap = await getDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"));
       if(docSnap.exists()){
         const data = docSnap.data();
@@ -815,11 +878,15 @@
             let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
 
             if (pilihanWasi1Val === "rtb") {
-                finalNamaWasi1 = "Rakyat Trustee Berhad";
-                finalIcWasi1 = "1462142-U";
+                // Tarik maklumat cawangan yang BETUL mengikut negeri semasa disimpan
+                const negeriSemasa = document.getElementById("negeri").value;
+                const rtbTerpilih = rtbBranches[negeriSemasa] || rtbBranches["default"];
+
+                finalNamaWasi1 = rtbTerpilih.nama;
+                finalIcWasi1 = rtbTerpilih.noPendaftaran;
                 finalHubunganWasi1 = "Syarikat Amanah";
-                finalAlamatWasi1 = "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 KL";
-                finalTelefonWasi1 = "+603 2602 2722";
+                finalAlamatWasi1 = rtbTerpilih.alamat;
+                finalTelefonWasi1 = rtbTerpilih.telefon;
             } else {
                 finalNamaWasi1 = document.getElementById("namaWasi1").value;
                 finalIcWasi1 = document.getElementById("icWasi1").value;
