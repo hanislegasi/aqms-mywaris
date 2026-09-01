@@ -37,13 +37,13 @@
         <p><strong>Alamat:</strong> <span id="alamat"></span></p>
       </div>
 
-      <!-- SECTION 2 (Waris dinaikkan) -->
+      <!-- SECTION 2 -->
       <div class="bg-gray-50 rounded-xl p-5 border">
         <h2 class="text-xl font-bold text-[#153638] mb-3">2. Senarai Waris</h2>
         <div id="warisList"></div>
       </div>
 
-      <!-- SECTION 3 (Korporat diturunkan & dikemaskini) -->
+      <!-- SECTION 3 -->
       <div class="bg-gray-50 rounded-xl p-5 border">
         <h2 class="text-xl font-bold text-[#153638] mb-3">3. Maklumat Korporat & Pelantikan Wasi</h2>
         <div id="korporatInfo"></div>
@@ -92,7 +92,8 @@
   <script type="module">
     import { db, auth } from './firebase.js';
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { doc, getDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    // PASTIKAN SETDOC DI-IMPORT DI SINI
+    import { doc, getDoc, updateDoc, collection, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     let currentUser = null;
 
@@ -122,6 +123,15 @@
 
       if(docSnap.exists()){
         const data = docSnap.data();
+        
+        // Kunci Butang Hantar Jika Sudah Dihantar/Dibayar
+        if(data.status === "PENDING_APPROVAL" || data.status === "PAID" || data.status === "COMPLETED") {
+            const btn = document.getElementById("submitBtn");
+            btn.disabled = true;
+            btn.innerText = "Permohonan Telah Dihantar";
+            btn.classList.replace("bg-[#153638]", "bg-gray-400");
+            btn.classList.remove("hover:bg-[#1d4a4d]");
+        }
 
         // SECTION 1: PEWASIAT
         document.getElementById("nama").innerHTML = data.nama || "-";
@@ -286,16 +296,52 @@
         
       }
       
-      // SUBMIT ACTION
+      // ==========================================
+      // SUBMIT ACTION & KAWALAN BAYARAN
+      // ==========================================
       document.getElementById("submitBtn").addEventListener("click", async()=>{
+        const btn = document.getElementById("submitBtn");
+        btn.disabled = true;
+        btn.innerText = "Memproses...";
+
         try{
-          await updateDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"), {
-              status: "UNDER_REVIEW",
-              submittedAt: new Date().toISOString()
-          });
-          document.getElementById("status").innerHTML = "Permohonan wasiat berjaya dihantar.";
+            const docRef = doc(db, "users", currentUser.uid, "corporate", "maklumat");
+            const docSnap = await getDoc(docRef);
+            
+            if(docSnap.exists()){
+                const data = docSnap.data();
+
+                // 1. JIKA KLIEN PILIH RTB (PERLU BAYAR RM100)
+                if(data.pilihanWasi1 === "rtb"){
+                    // Redirect klien ke muka surat bayaran
+                    window.location.href = `add-payment.html?id=${currentUser.uid}&type=corporate`;
+                } 
+                // 2. JIKA KLIEN PILIH MANUAL (PERCUMA / TIADA CAJ RTB)
+                else {
+                    const submitData = {
+                        status: "PENDING_APPROVAL",
+                        submittedAt: new Date().toISOString()
+                    };
+                    
+                    // Update rekod profil klien
+                    await updateDoc(docRef, submitData);
+                    
+                    // Double Entry terus ke Submissions (Untuk Admin Semak)
+                    await setDoc(doc(db, "submissions", `${currentUser.uid}_corporate`), {
+                        ...data,
+                        ...submitData,
+                        userId: currentUser.uid,
+                        jenisDokumen: "corporate"
+                    }, { merge: true });
+                    
+                    alert("Permohonan berjaya dihantar untuk semakan Pengurusan.");
+                    window.location.href = "dashboard.html";
+                }
+            }
         } catch(error){
-          document.getElementById("status").innerHTML = error.message;
+            document.getElementById("status").innerHTML = `<span class="text-red-500">Ralat: ${error.message}</span>`;
+            btn.disabled = false;
+            btn.innerText = "Hantar Permohonan";
         }
       });
 
