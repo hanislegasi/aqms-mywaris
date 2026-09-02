@@ -74,7 +74,7 @@ Dokumen ini sama sekali tidak membatalkan wasiat peribadi saya ke atas aset-aset
  
 </div>
  
-<div class="a4-page p-[18mm]">
+<div class="a4-page p-[18mm] dynamic-page">
    <h3 style="margin-top:30px; margin-bottom:15px; font-weight:bold; font-size: 16px;">
         FASAL 1: TAKRIFAN ASET
     </h3>
@@ -113,7 +113,7 @@ Dokumen ini sama sekali tidak membatalkan wasiat peribadi saya ke atas aset-aset
     </div>
 </div>
 
-<div class="a4-page p-[18mm]">
+<div class="a4-page p-[18mm] dynamic-page">
     <h3 style="margin-top:30px; margin-bottom:15px; font-weight:bold; font-size: 16px;">
         FASAL 3: {{TAJUK_FASAL_3}}
     </h3>
@@ -126,7 +126,7 @@ Dokumen ini sama sekali tidak membatalkan wasiat peribadi saya ke atas aset-aset
     </div>
 </div>
 
-<div class="a4-page p-[18mm]">
+<div class="a4-page p-[18mm] dynamic-page">
     <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold; font-size: 16px;">
         FASAL 4: {{TAJUK_FASAL_4}}
     </h3>
@@ -335,7 +335,7 @@ Pewasiat berada dalam keadaan waras serta membuat Wasiat ini secara sukarela.
  
 </div>
  
-<div class="a4-page p-[18mm]">
+<div class="a4-page p-[18mm] dynamic-page">
 <h2 style="font-family:'Times New Roman', serif; font-size:28px; margin-top:30px; margin-bottom:20px; color:#153638;">
 LAMPIRAN : MAKLUMAT SYARIKAT & SAHAM
 </h2>
