@@ -375,11 +375,11 @@
                             tableWasiat += `</tbody></table>`;
                             
                             bahagianWasiat13HTML = `
-                                <p style="margin-top:15px;"><strong>{{TURUTAN_WASIAT}}: Wasiat 1/3 Kepada Bukan Waris</strong></p>
-                                <p>Baki bersih nilai Saham Syarikat atau hasil jualan saham tersebut (selepas ditolak kos pentadbiran dan hutang) hendaklah diagihkan mengikut jadual Wasiat 1/3 di bawah terlebih dahulu kepada penerima yang dinamakan.</p>
-                                <p>Adalah ditegaskan bahawa <strong>sekiranya nilai bahagian yang dinyatakan di bawah didapati melebihi kadar satu pertiga (1/3) daripada jumlah sebenar Harta Pusaka (Saham Syarikat) saya, maka perlaksanaannya hendaklah dihadkan setakat maksimum 1/3 sahaja menurut Hukum Syarak</strong>, melainkan mendapat persetujuan waris-waris.</p>
-                                ${tableWasiat}
-                            `;
+    <strong>Pelaksanaan Wasiat Korporat (Bukan Waris):</strong> Melaksanakan arahan wasiat melalui pegangan saham berkenaan (atau nilai terbitannya) terhad kepada satu pertiga (1/3) kadar maksimum tertakluk kepada Hukum Syarak, kepada penama di bawah:
+    <div style="margin-top:10px; margin-bottom:10px;">
+        ${tableWasiat}
+    </div>
+`;
                         }
 
                         // ==========================================
@@ -439,7 +439,13 @@
                                 // fSaham() dipanggil dari shared scope function di atas
                                 
                                 // 1. BINA FASAL 1 (TAKRIFAN ASET)
-                                takrifanAsetHTML += `<p><strong>${sIndex+1}. Nama Syarikat:</strong> ${syarikat.namaSyarikat || "-"}<br><strong>No. Pendaftaran (SSM):</strong> ${syarikat.noSsm || "-"}</p>`;
+                               takrifanAsetHTML += `
+<table width="100%" style="margin-bottom:8px; border-collapse:collapse;">
+    <tr valign="top">
+        <td width="30" style="padding-bottom:5px;">1.${sIndex+1}</td>
+        <td style="padding-bottom:5px;"><strong>${syarikat.namaSyarikat || "-"}</strong> (No. Pendaftaran SSM: ${syarikat.noSsm || "-"})</td>
+    </tr>
+</table>`;
 
                                 // 2. BINA LAMPIRAN KORPORAT
                                 lampiranKorporatHTML += `
@@ -454,39 +460,52 @@
                                     </table>
                                 `;
 
-                                // 3. BINA FASAL 3 & 4 MENGIKUT MEKANISME SETIAP SYARIKAT
-                                let wasiatStr = bahagianWasiat13HTML ? bahagianWasiat13HTML.replace("{{TURUTAN_WASIAT}}", "Kedua") : "";
-                                let faraidTurutan = wasiatSah.length > 0 ? "Ketiga" : "Kedua";
-
+                               // 3. BINA FASAL 3 & 4 MENGIKUT MEKANISME SETIAP SYARIKAT
+let wasiatStr = bahagianWasiat13HTML ? bahagianWasiat13HTML.replace("{{TURUTAN_WASIAT}}", "Pelaksanaan Wasiat") : "";
+                                
                                 if (syarikat.statusPemilikan === 'rakankongsi') {
-                                    fasal3_KandunganHTML += `<div style="margin-bottom:20px; padding:15px; border-left:3px solid #153638; background-color:#fafafa;">
-                                        <p style="font-weight:bold; margin-bottom:10px;">Bagi ${syarikat.namaSyarikat} (Arahan Pematuhan Buy-Sell):</p>
-                                        <table width="100%" style="border-collapse:collapse;">
-                                        <tr valign="top"><td width="30">1.</td><td style="padding-bottom:12px; text-align:justify;">Mematuhi dan menguatkuasakan segala terma di dalam Perjanjian Jual Beli Saham.</td></tr>
-                                        <tr valign="top"><td>2.</td><td style="padding-bottom:12px; text-align:justify;">Menjual dan memindahkan Saham Syarikat kepada rakan kongsi.</td></tr>
-                                        <tr valign="top"><td>3.</td><td style="padding-bottom:12px; text-align:justify;">Menerima, mengutip, dan memegang hasil wang tunai jualan saham.</td></tr>
-                                        </table></div>`;
+                                    fasal3_KandunganHTML += `
+    <div style="margin-bottom:20px;">
+        <p style="font-weight:bold; margin-bottom:10px;">3.${sIndex+1} Berkaitan Syarikat ${syarikat.namaSyarikat} (Arahan Pematuhan Perjanjian Beli-Jual):</p>
+        <table width="100%" style="border-collapse:collapse;">
+            <tr valign="top"><td width="40">3.${sIndex+1}.1</td><td style="padding-bottom:8px; text-align:justify;">Wasi hendaklah mematuhi, memantau dan menguatkuasakan segala terma yang termaktub di dalam Perjanjian Jual Beli Saham (Buy-Sell Agreement) di antara Pewasiat dan rakan kongsi syarikat.</td></tr>
+            <tr valign="top"><td>3.${sIndex+1}.2</td><td style="padding-bottom:8px; text-align:justify;">Wasi diberi bidang kuasa untuk menandatangani resolusi bagi menjual dan menyempurnakan pindah milik Saham Syarikat kepada pemegang saham yang masih hidup.</td></tr>
+            <tr valign="top"><td>3.${sIndex+1}.3</td><td style="padding-bottom:8px; text-align:justify;">Wasi hendaklah menuntut, menerima, dan memegang hasil wang tunai jualan saham mahupun pampasan (seperti polisi Takaful Keyman) sebelum diagihkan.</td></tr>
+        </table>
+    </div>`;
                                     
-                                    fasal4_KandunganHTML += `<div style="margin-bottom:20px; padding:15px; border-left:3px solid #153638; background-color:#fafafa;">
-                                        <p style="font-weight:bold; margin-bottom:10px;">Bagi Hasil Jualan Saham ${syarikat.namaSyarikat}:</p>
-                                        <p><strong>Pertama: Penyelesaian Kos dan Hutang.</strong></p>
-                                        ${wasiatStr}
-                                        <p style="margin-top:15px;"><strong>${faraidTurutan}: Agihan Faraid Kepada Waris.</strong></p></div>`;
+                                    fasal4_KandunganHTML += `
+    <div style="margin-bottom:20px;">
+        <p style="font-weight:bold; margin-bottom:10px;">4.${sIndex+1} Pengagihan Hasil Tunai Jualan Saham ${syarikat.namaSyarikat}:</p>
+        <table width="100%" style="border-collapse:collapse;">
+            <tr valign="top"><td width="40">(a)</td><td style="padding-bottom:8px; text-align:justify;"><strong>Penyelesaian Hutang Korporat:</strong> Melunaskan kos pentadbiran pusaka korporat dan liabiliti hutang yang sah yang berkait terus dengan pegangan ekuiti Pewasiat.</td></tr>
+            ${wasiatStr ? `<tr valign="top"><td width="40">(b)</td><td style="padding-bottom:8px; text-align:justify;">${wasiatStr}</td></tr>` : ""}
+            <tr valign="top"><td width="40">(${wasiatStr ? "c" : "b"})</td><td style="padding-bottom:8px; text-align:justify;"><strong>Pengagihan Faraid:</strong> Baki mutlak aset tunai diagihkan secara adil kepada waris-waris yang berhak mengikut peruntukan Hukum Faraid.</td></tr>
+        </table>
+    </div>`;
                                 } else {
                                     wasiatStr = bahagianWasiat13HTML ? bahagianWasiat13HTML.replace("{{TURUTAN_WASIAT}}", "Ketiga") : "";
                                     faraidTurutan = wasiatSah.length > 0 ? "Keempat" : "Ketiga";
                                     
-                                    fasal3_KandunganHTML += `<div style="margin-bottom:20px; padding:15px; border-left:3px solid #153638; background-color:#fafafa;">
-                                        <p style="font-weight:bold; margin-bottom:10px;">Bagi ${syarikat.namaSyarikat} (Pengurusan Pemilik Tunggal):</p>
-                                        <p>Wasi diberi kuasa penuh untuk memindahkan nama saham tersebut, menandatangani resolusi, melantik pengarah baharu (jika perlu) selaras dengan ketetapan Akta Syarikat 2016.</p></div>`;
-                                    
-                                    fasal4_KandunganHTML += `<div style="margin-bottom:20px; padding:15px; border-left:3px solid #153638; background-color:#fafafa;">
-                                        <p style="font-weight:bold; margin-bottom:10px;">Bagi Pengagihan Saham ${syarikat.namaSyarikat}:</p>
-                                        <p><strong>Pertama: Penyelesaian Kos dan Hutang.</strong></p>
-                                        <p style="margin-top:15px;"><strong>Kedua: Pelaksanaan Pengisytiharan Hibah/Wakaf (Jika Ada).</strong></p>
-                                        ${wasiatStr}
-                                        <p style="margin-top:15px;"><strong>${faraidTurutan}: Agihan Faraid Kepada Waris.</strong></p></div>`;
-                                }
+                                    fasal3_KandunganHTML += `
+    <div style="margin-bottom:20px;">
+        <p style="font-weight:bold; margin-bottom:10px;">3.${sIndex+1} Berkaitan Syarikat ${syarikat.namaSyarikat} (Pengurusan Pemilik Tunggal):</p>
+        <table width="100%" style="border-collapse:collapse;">
+            <tr valign="top"><td width="40">3.${sIndex+1}.1</td><td style="padding-bottom:8px; text-align:justify;">Oleh kerana entiti ini dimiliki secara tunggal, Wasi diberi kuasa eksekutif di sisi undang-undang untuk menyempurnakan surat cara pindah milik saham dan menandatangani resolusi penggantian ahli lembaga pengarah.</td></tr>
+            <tr valign="top"><td width="40">3.${sIndex+1}.2</td><td style="padding-bottom:8px; text-align:justify;">Tindakan pemindahan ini hendaklah dilunaskan selaras dengan tatacara Akta Syarikat 2016 bagi mengelakkan pembatalan dan menjamin kelangsungan operasi perniagaan.</td></tr>
+        </table>
+    </div>`;
+
+    fasal4_KandunganHTML += `
+    <div style="margin-bottom:20px;">
+        <p style="font-weight:bold; margin-bottom:10px;">4.${sIndex+1} Pemindahan Milik Fizikal Saham ${syarikat.namaSyarikat}:</p>
+        <table width="100%" style="border-collapse:collapse;">
+            <tr valign="top"><td width="40">(a)</td><td style="padding-bottom:8px; text-align:justify;"><strong>Penguatkuasaan Instrumen Hibah/Wakaf (Jika Ada):</strong> Menyempurnakan pemindahan saham secara mutlak sekiranya instrumen Hibah semasa hayat telah dilaksanakan, dan dikeluarkan daripada jadual pentadbiran harta ini.</td></tr>
+            ${wasiatStr ? `<tr valign="top"><td width="40">(b)</td><td style="padding-bottom:8px; text-align:justify;">${wasiatStr}</td></tr>` : ""}
+            <tr valign="top"><td width="40">(${wasiatStr ? "c" : "b"})</td><td style="padding-bottom:8px; text-align:justify;"><strong>Pewarisan Faraid:</strong> Memindahkan pegangan saham secara langsung, tanpa pembubaran, kepada waris-waris Faraid yang selayaknya mengikut persetujuan permuafakatan dan hukum syarak.</td></tr>
+        </table>
+    </div>`;
+}
 
                                 // 4. JANA DOKUMEN MEKANISME (HIBAH / BUY-SELL) UNTUK SYARIKAT INI
                                 if (syarikat.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !== 'undefined') {
