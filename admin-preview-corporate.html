@@ -298,7 +298,7 @@
 function autoPaginate() {
     // HANYA cari page yang kita benarkan untuk dipotong
     const pages = document.querySelectorAll('.dynamic-page');
-    const safeHeight = 920; 
+    const safeHeight = 800; 
 
     let pageArray = Array.from(pages);
 
@@ -520,18 +520,20 @@ takrifanAsetHTML += `
     </tr>
 </table>`;
 
-                                // 2. BINA LAMPIRAN KORPORAT
-                                lampiranKorporatHTML += `
-                                    <table style="width:100%; border-collapse:collapse; font-size:15px; margin-bottom: 30px;">
-                                        <tr style="background-color:#f9fafb;"><td colspan="2" style="border:1px solid #000; padding:10px; text-align:center;"><strong>SYARIKAT KORPORAT ${sIndex+1}</strong></td></tr>
-                                        <tr><td style="border:1px solid #000; padding:8px; width:35%;"><strong>Nama Syarikat</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.namaSyarikat || "-"}</td></tr>
-                                        <tr><td style="border:1px solid #000; padding:8px;"><strong>No Pendaftaran SSM</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.noSsm || "-"}</td></tr>
-                                        <tr><td style="border:1px solid #000; padding:8px;"><strong>Alamat Berdaftar</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.alamatSyarikat || "-"}</td></tr>
-                                        <tr><td style="border:1px solid #000; padding:8px;"><strong>Jumlah Keseluruhan Saham</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(syarikat.jumlahSaham)} Unit</td></tr>
-                                        <tr><td style="border:1px solid #000; padding:8px;"><strong>Saham Milik Pewasiat</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(syarikat.sahamPewasiat)} Unit</td></tr>
-                                        <tr><td style="border:1px solid #000; padding:8px;"><strong>Status Pemilikan</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.statusPemilikan === 'rakankongsi' ? 'Dimiliki Bersama Rakan Kongsi' : 'Pemilik Tunggal'}</td></tr>
-                                    </table>
-                                `;
+                               // 2. BINA LAMPIRAN KORPORAT
+lampiranKorporatHTML += `
+    <div style="margin-bottom: 30px; width: 100%; page-break-inside: avoid;">
+        <table style="width:100%; border-collapse:collapse; font-size:14px;">
+            <tr style="background-color:#f9fafb;"><td colspan="2" style="border:1px solid #000; padding:10px; text-align:center;"><strong>SYARIKAT KORPORAT ${sIndex+1}</strong></td></tr>
+            <tr><td style="border:1px solid #000; padding:8px; width:35%;"><strong>Nama Syarikat</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.namaSyarikat || "-"}</td></tr>
+            <tr><td style="border:1px solid #000; padding:8px;"><strong>No Pendaftaran SSM</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.noSsm || "-"}</td></tr>
+            <tr><td style="border:1px solid #000; padding:8px;"><strong>Alamat Berdaftar</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.alamatSyarikat || "-"}</td></tr>
+            <tr><td style="border:1px solid #000; padding:8px;"><strong>Jumlah Keseluruhan Saham</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(syarikat.jumlahSaham)} Unit</td></tr>
+            <tr><td style="border:1px solid #000; padding:8px;"><strong>Saham Milik Pewasiat</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(syarikat.sahamPewasiat)} Unit</td></tr>
+            <tr><td style="border:1px solid #000; padding:8px;"><strong>Status Pemilikan</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.statusPemilikan === 'rakankongsi' ? 'Dimiliki Bersama Rakan Kongsi' : 'Pemilik Tunggal'}</td></tr>
+        </table>
+    </div>
+`;
 
                                // 3. BINA FASAL 3 & 4 MENGIKUT MEKANISME SETIAP SYARIKAT
 let wasiatStr = bahagianWasiat13HTML ? bahagianWasiat13HTML.replace("{{TURUTAN_WASIAT}}", "Pelaksanaan Wasiat") : "";
