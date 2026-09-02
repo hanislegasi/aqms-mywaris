@@ -15,32 +15,29 @@ const buySellAgreementContent = `
  
     <p style="font-weight:bold; margin-bottom:10px;">ANTARA:</p>
  
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top">
-            <td width="40">(1)</td>
-            <td><strong>{{NAMA_PEWASIAT}}</strong> (No. K/P: <strong>{{NO_IC_PEWASIAT}}</strong>), warganegara Malaysia yang beralamat di <strong>{{ALAMAT_PEWASIAT}}</strong> (selepas ini secara berasingan dirujuk sebagai "Pemegang Saham A");</td>
-        </tr>
-    </table>
- 
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top">
-            <td width="40">(2)</td>
-            <td><strong>{{NAMA_PARTNER}}</strong> (No. K/P: <strong>{{NO_IC_PARTNER}}</strong>), warganegara Malaysia yang beralamat di <strong>{{ALAMAT_PARTNER}}</strong> (selepas ini secara berasingan dirujuk sebagai "Pemegang Saham B");</td>
-        </tr>
-    </table>
- 
-    <p style="margin-left:40px; margin-bottom:15px; font-style:italic;">
-        (Pemegang Saham A dan Pemegang Saham B selepas ini boleh dirujuk secara bersama sebagai "Pihak-Pihak" atau secara berasingan sebagai "Pihak")
-    </p>
+<table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+    <tr valign="top">
+        <td width="30">(1)</td>
+        <td style="text-align:justify;">
+            <strong>{{NAMA_PEWASIAT}}</strong> (No. K/P: <strong>{{NO_IC_PEWASIAT}}</strong>), warganegara Malaysia yang beralamat di <strong>{{ALAMAT_PEWASIAT}}</strong> (selepas ini secara berasingan dirujuk sebagai "Pemegang Saham A");
+        </td>
+    </tr>
+</table>
+
+{{SENARAI_RAKAN_KONGSI_DINAMIK}}
+
+<p style="margin-bottom:15px;">{{KLAUSA_PIHAK_PIHAK}}</p>
  
     <p style="font-weight:bold; margin-bottom:10px;">DAN</p>
  
-    <table width="100%" style="margin-bottom:30px; border-collapse:collapse;">
-        <tr valign="top">
-            <td width="40">(3)</td>
-            <td><strong>{{NAMA_SYARIKAT}}</strong> (No. Pendaftaran Syarikat: <strong>{{NO_SSM}}</strong>), sebuah syarikat yang diperbadankan di bawah undang-undang Malaysia dan mempunyai alamat berdaftar di <strong>{{ALAMAT_SYARIKAT}}</strong> (selepas ini dirujuk sebagai "Syarikat").</td>
-        </tr>
-    </table>
+   <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+    <tr valign="top">
+        <td width="30">({{INDEX_SYARIKAT}})</td>
+        <td style="text-align:justify;">
+            <strong>{{NAMA_SYARIKAT}}</strong> (No. Pendaftaran Syarikat: <strong>{{NO_SSM}}</strong>), sebuah syarikat yang diperbadankan di bawah undang-undang Malaysia dan mempunyai alamat berdaftar di <strong>{{ALAMAT_SYARIKAT}}</strong> (selepas ini dirujuk sebagai "Syarikat").
+        </td>
+    </tr>
+</table>
 
 <div class="pdf-footer">
         <span class="footer-docref"></span>
