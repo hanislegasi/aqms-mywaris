@@ -501,7 +501,10 @@ if(senaraiSyarikat.length === 0 && data.namaSyarikat) {
     });
 }
 
-// (BUG FIX PENAMA): Kumpul dulu semua penerima hibah ikut NAMA
+// (BUG FIX PENAMA): kumpul dulu semua penerima hibah ikut NAMA merentasi
+// semua syarikat -- supaya 1 penama yang terima saham dari >1 syarikat
+// cuma dapat SATU dokumen hibah (jadual gabung), bukan dokumen berasingan
+// setiap syarikat.
 const hibahGroupMap = {};
 
 if(senaraiSyarikat.length > 0) {
@@ -664,7 +667,7 @@ if(senaraiSyarikat.length > 0) {
     }
 
 } // <-- TUTUP IF (senaraiSyarikat.length > 0)
-
+                        
 // 4. JANA DOKUMEN MEKANISME (HIBAH / BUY-SELL) UNTUK SYARIKAT INI
 if (syarikat.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !== 'undefined') {
     
