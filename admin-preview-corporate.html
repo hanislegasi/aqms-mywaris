@@ -472,145 +472,198 @@ function autoPaginate() {
                             nomborWasiKuasa = "3"; // Tolak nombor kuasa ke point ke-3
                         }
 
-                        // ==========================================
-                        // C. LOGIK SYARIKAT (MULTI-COMPANY LOOP)
-                        // ==========================================
-                        let takrifanAsetHTML = "";
-                        let fasal3_KandunganHTML = "";
-                        let fasal4_KandunganHTML = "";
-                        let lampiranKorporatHTML = "";
-                        let mekanismeHTML = "";
-                        const tocMekList = document.getElementById("tocMekanismeList");
-                        tocMekList.innerHTML = "";
-
-                        // Pastikan data lama tetap dibaca jika klien belum update (Backward Compatibility)
-                        let senaraiSyarikat = data.senaraiSyarikat || [];
-                        if(senaraiSyarikat.length === 0 && data.namaSyarikat) {
-                            senaraiSyarikat.push({
-                                namaSyarikat: data.namaSyarikat,
-                                noSsm: data.noSsm,
-                                alamatSyarikat: data.alamatSyarikat,
-                                namaWakilSyarikat: data.namaWakilSyarikat,
-                                jumlahSaham: data.jumlahSaham,
-                                sahamPewasiat: data.sahamPewasiat,
-                                statusPemilikan: data.statusPemilikan,
-                                mekanismeAgihan: data.mekanismeAgihan,
-                                rakanKongsiList: data.rakanKongsiList && data.rakanKongsiList.length > 0 ? data.rakanKongsiList : [{nama: data.namaPartner, ic: data.icPartner, alamat: data.alamatPartner, saham: data.sahamPartner}],
-                                penerimaHibahSaham: data.penerimaHibahSaham,
-                                penerimaWakafZurri: data.penerimaWakafZurri
-                            });
-                        }
-
-                        // (BUG FIX PENAMA): kumpul dulu semua penerima hibah ikut NAMA merentasi
-                        // semua syarikat -- supaya 1 penama yang terima saham dari >1 syarikat
-                        // cuma dapat SATU dokumen hibah (jadual gabung), bukan dokumen berasingan
-                        // setiap syarikat.
-                        const hibahGroupMap = {};
-
-                        if(senaraiSyarikat.length > 0) {
-                            senaraiSyarikat.forEach((syarikat, sIndex) => {
-                                // fSaham() dipanggil dari shared scope function di atas
-                                
-// 1. BINA FASAL 1 (TAKRIFAN ASET)
-takrifanAsetHTML += `
-<table width="100%" style="border-collapse:collapse;">
-    <tr valign="top">
-        <td width="30" style="padding-bottom:12px;">1.${sIndex+1}</td>
-        <td style="padding-bottom:12px; text-align:justify;"><strong>${syarikat.namaSyarikat || "-"}</strong> (No. Pendaftaran SSM: ${syarikat.noSsm || "-"})</td>
-    </tr>
-</table>`;
-
-// 2. BINA LAMPIRAN KORPORAT
-lampiranKorporatHTML += `
-    <div style="margin-bottom: 30px; width: 100%; page-break-inside: avoid;">
-        <table style="width:100%; border-collapse:collapse; font-size:14px;">
-            <tr style="background-color:#f9fafb;"><td colspan="2" style="border:1px solid #000; padding:10px; text-align:center;"><strong>SYARIKAT KORPORAT ${sIndex+1}</strong></td></tr>
-            <tr><td style="border:1px solid #000; padding:8px; width:35%;"><strong>Nama Syarikat</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.namaSyarikat || "-"}</td></tr>
-            <tr><td style="border:1px solid #000; padding:8px;"><strong>No Pendaftaran SSM</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.noSsm || "-"}</td></tr>
-            <tr><td style="border:1px solid #000; padding:8px;"><strong>Alamat Berdaftar</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.alamatSyarikat || "-"}</td></tr>
-            <tr><td style="border:1px solid #000; padding:8px;"><strong>Jumlah Keseluruhan Saham</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(syarikat.jumlahSaham)} Unit</td></tr>
-            <tr><td style="border:1px solid #000; padding:8px;"><strong>Saham Milik Pewasiat</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(syarikat.sahamPewasiat)} Unit</td></tr>
-            <tr><td style="border:1px solid #000; padding:8px;"><strong>Status Pemilikan</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.statusPemilikan === 'rakankongsi' ? 'Dimiliki Bersama Rakan Kongsi' : 'Pemilik Tunggal'}</td></tr>
-        </table>
-    </div>
-`;
-
-});
-                            
+                    // ==========================================
+// C. LOGIK SYARIKAT (MULTI-COMPANY LOOP)
 // ==========================================
-// 3. BINA FASAL 3 & 4 (DENGAN PENGGABUNGAN KLAUSA REDUNDANT)
-// ==========================================
-let wasiatStr = bahagianWasiat13HTML ? bahagianWasiat13HTML.replace("{{TURUTAN_WASIAT}}", "Pelaksanaan Wasiat") : "";
+let takrifanAsetHTML = "";
+let fasal3_KandunganHTML = "";
+let fasal4_KandunganHTML = "";
+let lampiranKorporatHTML = "";
+let mekanismeHTML = "";
+const tocMekList = document.getElementById("tocMekanismeList");
+tocMekList.innerHTML = "";
 
-let syarikatTunggal = [];
-let syarikatRakanKongsi = [];
+// Pastikan data lama tetap dibaca jika klien belum update (Backward Compatibility)
+let senaraiSyarikat = data.senaraiSyarikat || [];
+if(senaraiSyarikat.length === 0 && data.namaSyarikat) {
+    senaraiSyarikat.push({
+        namaSyarikat: data.namaSyarikat,
+        noSsm: data.noSsm,
+        alamatSyarikat: data.alamatSyarikat,
+        namaWakilSyarikat: data.namaWakilSyarikat,
+        jumlahSaham: data.jumlahSaham,
+        sahamPewasiat: data.sahamPewasiat,
+        statusPemilikan: data.statusPemilikan,
+        mekanismeAgihan: data.mekanismeAgihan,
+        rakanKongsiList: data.rakanKongsiList && data.rakanKongsiList.length > 0 ? data.rakanKongsiList : [{nama: data.namaPartner, ic: data.icPartner, alamat: data.alamatPartner, saham: data.sahamPartner}],
+        penerimaHibahSaham: data.penerimaHibahSaham,
+        penerimaWakafZurri: data.penerimaWakafZurri
+    });
+}
 
-// Asingkan syarikat mengikut kategori pemilikan
-senaraiSyarikat.forEach((syarikat) => {
-    if (syarikat.statusPemilikan === 'rakankongsi') {
-        syarikatRakanKongsi.push(syarikat.namaSyarikat);
-    } else {
-        syarikatTunggal.push(syarikat.namaSyarikat);
+// (BUG FIX PENAMA): Kumpul dulu semua penerima hibah ikut NAMA
+const hibahGroupMap = {};
+
+if(senaraiSyarikat.length > 0) {
+
+    // ---------------------------------------------------------
+    // GELUNG PERTAMA: FASAL 1, LAMPIRAN & MEKANISME
+    // ---------------------------------------------------------
+    senaraiSyarikat.forEach((syarikat, sIndex) => {
+        
+        // 1. BINA FASAL 1 (TAKRIFAN ASET)
+        takrifanAsetHTML += `
+        <table width="100%" style="border-collapse:collapse;">
+            <tr valign="top">
+                <td width="30" style="padding-bottom:12px;">1.${sIndex+1}</td>
+                <td style="padding-bottom:12px; text-align:justify;"><strong>${syarikat.namaSyarikat || "-"}</strong> (No. Pendaftaran SSM: ${syarikat.noSsm || "-"})</td>
+            </tr>
+        </table>`;
+
+        // 2. BINA LAMPIRAN KORPORAT
+        lampiranKorporatHTML += `
+            <div style="margin-bottom: 30px; width: 100%; page-break-inside: avoid;">
+                <table style="width:100%; border-collapse:collapse; font-size:14px;">
+                    <tr style="background-color:#f9fafb;"><td colspan="2" style="border:1px solid #000; padding:10px; text-align:center;"><strong>SYARIKAT KORPORAT ${sIndex+1}</strong></td></tr>
+                    <tr><td style="border:1px solid #000; padding:8px; width:35%;"><strong>Nama Syarikat</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.namaSyarikat || "-"}</td></tr>
+                    <tr><td style="border:1px solid #000; padding:8px;"><strong>No Pendaftaran SSM</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.noSsm || "-"}</td></tr>
+                    <tr><td style="border:1px solid #000; padding:8px;"><strong>Alamat Berdaftar</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.alamatSyarikat || "-"}</td></tr>
+                    <tr><td style="border:1px solid #000; padding:8px;"><strong>Jumlah Keseluruhan Saham</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(syarikat.jumlahSaham)} Unit</td></tr>
+                    <tr><td style="border:1px solid #000; padding:8px;"><strong>Saham Milik Pewasiat</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(syarikat.sahamPewasiat)} Unit</td></tr>
+                    <tr><td style="border:1px solid #000; padding:8px;"><strong>Status Pemilikan</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.statusPemilikan === 'rakankongsi' ? 'Dimiliki Bersama Rakan Kongsi' : 'Pemilik Tunggal'}</td></tr>
+                </table>
+            </div>
+        `;
+
+        // 4. JANA DOKUMEN MEKANISME (HIBAH / BUY-SELL) UNTUK SYARIKAT INI
+        if (syarikat.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !== 'undefined') {
+            
+            let senaraiRakanKongsiHTML = "";
+            let pihakPihakLabel = ["Pemegang Saham A"];
+            let abjad = 'B';
+            let indexParti = 2;
+
+            // Loop semua rakan kongsi untuk jana Pemegang Saham B, C, D...
+            if (syarikat.rakanKongsiList && syarikat.rakanKongsiList.length > 0) {
+                syarikat.rakanKongsiList.forEach((partner) => {
+                    senaraiRakanKongsiHTML += `
+                    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+                        <tr valign="top">
+                            <td width="30">(${indexParti})</td>
+                            <td style="text-align:justify;">
+                                <strong>${partner.nama || "-"}</strong> (No. K/P: <strong>${partner.ic || "-"}</strong>), warganegara Malaysia yang beralamat di <strong>${partner.alamat || "-"}</strong> (selepas ini secara berasingan dirujuk sebagai "Pemegang Saham ${abjad}");
+                            </td>
+                        </tr>
+                    </table>`;
+                    pihakPihakLabel.push(`Pemegang Saham ${abjad}`);
+                    abjad = String.fromCharCode(abjad.charCodeAt(0) + 1);
+                    indexParti++;
+                });
+            }
+
+            let pihakPihakGabung = pihakPihakLabel.join(", ").replace(/,([^,]*)$/, ' dan$1');
+            let klausaPihak = `<i>(${pihakPihakGabung} selepas ini boleh dirujuk secara bersama sebagai "Pihak-Pihak" atau secara berasingan sebagai "Pihak")</i>`;
+
+            let htmlMek = buySellAgreementContent
+                .replaceAll("{{TARIKH_PERJANJIAN}}", formatDateMY(data.tarikhPerjanjian))
+                .replaceAll("{{NAMA_PEWASIAT}}", data.nama || "-")
+                .replaceAll("{{NO_IC_PEWASIAT}}", data.ic || "-")
+                .replaceAll("{{ALAMAT_PEWASIAT}}", alamatPenuh || "-")
+                .replaceAll("{{SENARAI_RAKAN_KONGSI_DINAMIK}}", senaraiRakanKongsiHTML)
+                .replaceAll("{{KLAUSA_PIHAK_PIHAK}}", klausaPihak)
+                .replaceAll("{{INDEX_SYARIKAT}}", indexParti) 
+                .replaceAll("{{NAMA_SYARIKAT}}", syarikat.namaSyarikat || "-")
+                .replaceAll("{{NO_SSM}}", syarikat.noSsm || "-")
+                .replaceAll("{{ALAMAT_SYARIKAT}}", syarikat.alamatSyarikat || "-")
+                .replaceAll("{{NAMA_WAKIL_SYARIKAT}}", (syarikat.namaWakilSyarikat || "-").toUpperCase())
+                .replaceAll("{{JUMLAH_SAHAM}}", fSaham(syarikat.jumlahSaham))
+                .replaceAll("{{SAHAM_PEWASIAT}}", fSaham(syarikat.sahamPewasiat));
+
+            htmlMek = htmlMek.replace(/class="a4-page/i, `data-target="tocMek_${sIndex}" class="a4-page`);
+            mekanismeHTML += htmlMek;
+            tocMekList.innerHTML += `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Perjanjian Buy-Sell (${syarikat.namaSyarikat})</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_${sIndex}" class="text-[14px] font-bold">-</span></div>`;
+        
+        } else if (syarikat.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefined') {
+            (syarikat.penerimaHibahSaham || []).forEach((p) => {
+                const namaPenerima = (p.nama || "-").trim();
+                if (!hibahGroupMap[namaPenerima]) hibahGroupMap[namaPenerima] = [];
+                hibahGroupMap[namaPenerima].push({ syarikat, p });
+            });
+        }
+    }); // <-- TUTUP GELUNG PERTAMA SYARIKAT DI SINI
+
+
+    // ---------------------------------------------------------
+    // BINA FASAL 3 & 4 (DI LUAR GELUNG SYARIKAT)
+    // ---------------------------------------------------------
+    let wasiatStr = bahagianWasiat13HTML ? bahagianWasiat13HTML.replace("{{TURUTAN_WASIAT}}", "Pelaksanaan Wasiat") : "";
+
+    let syarikatTunggal = [];
+    let syarikatRakanKongsi = [];
+
+    // Asingkan syarikat mengikut kategori pemilikan
+    senaraiSyarikat.forEach((syarikat) => {
+        if (syarikat.statusPemilikan === 'rakankongsi') {
+            syarikatRakanKongsi.push(syarikat.namaSyarikat);
+        } else {
+            syarikatTunggal.push(syarikat.namaSyarikat);
+        }
+    });
+
+    let indexFasal34 = 1;
+
+    // 3A/4A: BINA KLAUSA UNTUK SYARIKAT PEMILIK TUNGGAL (GABUNG)
+    if (syarikatTunggal.length > 0) {
+        let namaSyarikatGabung = syarikatTunggal.join(", ").replace(/,([^,]*)$/, ' dan$1'); 
+
+        fasal3_KandunganHTML += `
+        <div style="margin-bottom:20px;">
+            <p style="font-weight:bold; margin-bottom:10px;">3.${indexFasal34} Berkaitan Syarikat ${namaSyarikatGabung} (Pengurusan Pemilik Tunggal):</p>
+            <table width="100%" style="border-collapse:collapse;">
+                <tr valign="top"><td width="40">(a)</td><td style="padding-bottom:8px; text-align:justify;">Oleh kerana entiti ini dimiliki secara tunggal, Wasi diberi kuasa eksekutif di sisi undang-undang untuk menyempurnakan surat cara pindah milik saham dan menandatangani resolusi penggantian ahli lembaga pengarah.</td></tr>
+                <tr valign="top"><td width="40">(b)</td><td style="padding-bottom:8px; text-align:justify;">Tindakan pemindahan ini hendaklah dilunaskan selaras dengan tatacara Akta Syarikat 2016 bagi mengelakkan pembatalan dan menjamin kelangsungan operasi perniagaan.</td></tr>
+            </table>
+        </div>`;
+
+        fasal4_KandunganHTML += `
+        <div style="margin-bottom:20px;">
+            <p style="font-weight:bold; margin-bottom:10px;">4.${indexFasal34} Pemindahan Milik Fizikal Saham ${namaSyarikatGabung}:</p>
+            <table width="100%" style="border-collapse:collapse;">
+                <tr valign="top"><td width="40">(a)</td><td style="padding-bottom:8px; text-align:justify;"><strong>Penguatkuasaan Instrumen Hibah/Wakaf (Jika Ada):</strong> Menyempurnakan pemindahan saham secara mutlak sekiranya instrumen Hibah semasa hayat telah dilaksanakan, dan dikeluarkan daripada jadual pentadbiran harta ini.</td></tr>
+                ${wasiatStr ? `<tr valign="top"><td width="40">(b)</td><td style="padding-bottom:8px; text-align:justify;">${wasiatStr}</td></tr>` : ""}
+                <tr valign="top"><td width="40">(${wasiatStr ? "c" : "b"})</td><td style="padding-bottom:8px; text-align:justify;"><strong>Pewarisan Faraid:</strong> Memindahkan pegangan saham secara langsung, tanpa pembubaran, kepada waris-waris Faraid yang selayaknya mengikut persetujuan permuafakatan dan hukum syarak.</td></tr>
+            </table>
+        </div>`;
+        
+        indexFasal34++;
     }
-});
 
-let indexFasal34 = 1;
+    // 3B/4B: BINA KLAUSA UNTUK SYARIKAT RAKAN KONGSI (GABUNG)
+    if (syarikatRakanKongsi.length > 0) {
+        let namaSyarikatGabung = syarikatRakanKongsi.join(", ").replace(/,([^,]*)$/, ' dan$1');
 
-// ---------------------------------------------------------
-// 3A/4A: BINA KLAUSA UNTUK SYARIKAT PEMILIK TUNGGAL (GABUNG)
-// ---------------------------------------------------------
-if (syarikatTunggal.length > 0) {
-    let namaSyarikatGabung = syarikatTunggal.join(", ").replace(/,([^,]*)$/, ' dan$1'); // Format "A, B dan C"
+        fasal3_KandunganHTML += `
+        <div style="margin-bottom:20px;">
+            <p style="font-weight:bold; margin-bottom:10px;">3.${indexFasal34} Berkaitan Syarikat ${namaSyarikatGabung} (Arahan Pematuhan Perjanjian Beli-Jual):</p>
+            <table width="100%" style="border-collapse:collapse;">
+                <tr valign="top"><td width="40">(a)</td><td style="padding-bottom:8px; text-align:justify;">Wasi hendaklah mematuhi, memantau dan menguatkuasakan segala terma yang termaktub di dalam Perjanjian Jual Beli Saham (Buy-Sell Agreement) di antara Pewasiat dan rakan kongsi syarikat.</td></tr>
+                <tr valign="top"><td width="40">(b)</td><td style="padding-bottom:8px; text-align:justify;">Wasi diberi bidang kuasa untuk menandatangani resolusi bagi menjual dan menyempurnakan pindah milik Saham Syarikat kepada pemegang saham yang masih hidup.</td></tr>
+                <tr valign="top"><td width="40">(c)</td><td style="padding-bottom:8px; text-align:justify;">Wasi hendaklah menuntut, menerima, dan memegang hasil wang tunai jualan saham mahupun pampasan (seperti polisi Takaful Keyman) sebelum diagihkan.</td></tr>
+            </table>
+        </div>`;
 
-    fasal3_KandunganHTML += `
-    <div style="margin-bottom:20px;">
-        <p style="font-weight:bold; margin-bottom:10px;">3.${indexFasal34} Berkaitan Syarikat ${namaSyarikatGabung} (Pengurusan Pemilik Tunggal):</p>
-        <table width="100%" style="border-collapse:collapse;">
-            <tr valign="top"><td width="40">(a)</td><td style="padding-bottom:8px; text-align:justify;">Oleh kerana entiti ini dimiliki secara tunggal, Wasi diberi kuasa eksekutif di sisi undang-undang untuk menyempurnakan surat cara pindah milik saham dan menandatangani resolusi penggantian ahli lembaga pengarah.</td></tr>
-            <tr valign="top"><td width="40">(b)</td><td style="padding-bottom:8px; text-align:justify;">Tindakan pemindahan ini hendaklah dilunaskan selaras dengan tatacara Akta Syarikat 2016 bagi mengelakkan pembatalan dan menjamin kelangsungan operasi perniagaan.</td></tr>
-        </table>
-    </div>`;
+        fasal4_KandunganHTML += `
+        <div style="margin-bottom:20px;">
+            <p style="font-weight:bold; margin-bottom:10px;">4.${indexFasal34} Pengagihan Hasil Tunai Jualan Saham ${namaSyarikatGabung}:</p>
+            <table width="100%" style="border-collapse:collapse;">
+                <tr valign="top"><td width="40">(a)</td><td style="padding-bottom:8px; text-align:justify;"><strong>Penyelesaian Hutang Korporat:</strong> Melunaskan kos pentadbiran pusaka korporat dan liabiliti hutang yang sah yang berkait terus dengan pegangan ekuiti Pewasiat.</td></tr>
+                ${wasiatStr ? `<tr valign="top"><td width="40">(b)</td><td style="padding-bottom:8px; text-align:justify;">${wasiatStr}</td></tr>` : ""}
+                <tr valign="top"><td width="40">(${wasiatStr ? "c" : "b"})</td><td style="padding-bottom:8px; text-align:justify;"><strong>Pengagihan Faraid:</strong> Baki mutlak aset tunai diagihkan secara adil kepada waris-waris yang berhak mengikut peruntukan Hukum Faraid.</td></tr>
+            </table>
+        </div>`;
+    }
 
-    fasal4_KandunganHTML += `
-    <div style="margin-bottom:20px;">
-        <p style="font-weight:bold; margin-bottom:10px;">4.${indexFasal34} Pemindahan Milik Fizikal Saham ${namaSyarikatGabung}:</p>
-        <table width="100%" style="border-collapse:collapse;">
-            <tr valign="top"><td width="40">(a)</td><td style="padding-bottom:8px; text-align:justify;"><strong>Penguatkuasaan Instrumen Hibah/Wakaf (Jika Ada):</strong> Menyempurnakan pemindahan saham secara mutlak sekiranya instrumen Hibah semasa hayat telah dilaksanakan, dan dikeluarkan daripada jadual pentadbiran harta ini.</td></tr>
-            ${wasiatStr ? `<tr valign="top"><td width="40">(b)</td><td style="padding-bottom:8px; text-align:justify;">${wasiatStr}</td></tr>` : ""}
-            <tr valign="top"><td width="40">(${wasiatStr ? "c" : "b"})</td><td style="padding-bottom:8px; text-align:justify;"><strong>Pewarisan Faraid:</strong> Memindahkan pegangan saham secara langsung, tanpa pembubaran, kepada waris-waris Faraid yang selayaknya mengikut persetujuan permuafakatan dan hukum syarak.</td></tr>
-        </table>
-    </div>`;
-    
-    indexFasal34++;
-}
-
-// ---------------------------------------------------------
-// 3B/4B: BINA KLAUSA UNTUK SYARIKAT RAKAN KONGSI (GABUNG)
-// ---------------------------------------------------------
-if (syarikatRakanKongsi.length > 0) {
-    let namaSyarikatGabung = syarikatRakanKongsi.join(", ").replace(/,([^,]*)$/, ' dan$1');
-
-    fasal3_KandunganHTML += `
-    <div style="margin-bottom:20px;">
-        <p style="font-weight:bold; margin-bottom:10px;">3.${indexFasal34} Berkaitan Syarikat ${namaSyarikatGabung} (Arahan Pematuhan Perjanjian Beli-Jual):</p>
-        <table width="100%" style="border-collapse:collapse;">
-            <tr valign="top"><td width="40">(a)</td><td style="padding-bottom:8px; text-align:justify;">Wasi hendaklah mematuhi, memantau dan menguatkuasakan segala terma yang termaktub di dalam Perjanjian Jual Beli Saham (Buy-Sell Agreement) di antara Pewasiat dan rakan kongsi syarikat.</td></tr>
-            <tr valign="top"><td width="40">(b)</td><td style="padding-bottom:8px; text-align:justify;">Wasi diberi bidang kuasa untuk menandatangani resolusi bagi menjual dan menyempurnakan pindah milik Saham Syarikat kepada pemegang saham yang masih hidup.</td></tr>
-            <tr valign="top"><td width="40">(c)</td><td style="padding-bottom:8px; text-align:justify;">Wasi hendaklah menuntut, menerima, dan memegang hasil wang tunai jualan saham mahupun pampasan (seperti polisi Takaful Keyman) sebelum diagihkan.</td></tr>
-        </table>
-    </div>`;
-
-    fasal4_KandunganHTML += `
-    <div style="margin-bottom:20px;">
-        <p style="font-weight:bold; margin-bottom:10px;">4.${indexFasal34} Pengagihan Hasil Tunai Jualan Saham ${namaSyarikatGabung}:</p>
-        <table width="100%" style="border-collapse:collapse;">
-            <tr valign="top"><td width="40">(a)</td><td style="padding-bottom:8px; text-align:justify;"><strong>Penyelesaian Hutang Korporat:</strong> Melunaskan kos pentadbiran pusaka korporat dan liabiliti hutang yang sah yang berkait terus dengan pegangan ekuiti Pewasiat.</td></tr>
-            ${wasiatStr ? `<tr valign="top"><td width="40">(b)</td><td style="padding-bottom:8px; text-align:justify;">${wasiatStr}</td></tr>` : ""}
-            <tr valign="top"><td width="40">(${wasiatStr ? "c" : "b"})</td><td style="padding-bottom:8px; text-align:justify;"><strong>Pengagihan Faraid:</strong> Baki mutlak aset tunai diagihkan secara adil kepada waris-waris yang berhak mengikut peruntukan Hukum Faraid.</td></tr>
-        </table>
-    </div>`;
-}
-}
+} // <-- TUTUP IF (senaraiSyarikat.length > 0)
 
 // 4. JANA DOKUMEN MEKANISME (HIBAH / BUY-SELL) UNTUK SYARIKAT INI
 if (syarikat.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !== 'undefined') {
@@ -668,7 +721,7 @@ else if (syarikat.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefi
                                         hibahGroupMap[namaPenerima].push({ syarikat, p });
                                     });
                                 }
-                            };
+                            });
                         }
 
                         // ==========================================
