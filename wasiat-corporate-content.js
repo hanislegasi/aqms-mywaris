@@ -120,6 +120,13 @@ Dokumen ini sama sekali tidak membatalkan wasiat peribadi saya ke atas aset-aset
     
     {{KANDUNGAN_FASAL_3}}
 
+<div class="pdf-footer">
+        <span class="footer-docref"></span>
+        <span class="page-number"></span>
+    </div>
+</div>
+
+<div class="a4-page p-[18mm]">
     <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold; font-size: 16px;">
         FASAL 4: {{TAJUK_FASAL_4}}
     </h3>
