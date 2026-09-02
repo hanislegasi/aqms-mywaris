@@ -730,24 +730,39 @@ document.getElementById("sectionMekanisme").innerHTML = mekanismeHTML;
                         if (typeof trustDeedContent !== 'undefined') {
                             let klausaAmanah = "";
 
-                            if (data.statusPemilikan === 'rakankongsi' && data.mekanismeAgihan === 'buysell') {
-                                klausaAmanah = `
-                                    <p style="font-weight:bold; margin-bottom:8px;">Pelaksanaan Perjanjian Jual Beli Saham (Buy-Sell Agreement)</p>
-                                    <p style="text-align:justify; margin-bottom:8px;">Pemegang Amanah dengan ini diberi kuasa mutlak untuk bekerjasama dengan mana-mana rakan kongsi syarikat Pembuat Amanah bagi memastikan <strong>Perjanjian Jual Beli Saham dan Pewarisan Korporat</strong> dikuatkuasakan dengan serta-merta.</p>
-                                    <p style="text-align:justify; margin-bottom:0;">Pemegang Amanah hendaklah memindahkan semua Saham Amanah kepada rakan kongsi syarikat, setelah Pemegang Amanah menerima pampasan kewangan secara penuh (contohnya melalui polisi Takaful Keyman). Pampasan yang diterima itu hendaklah dipegang amanah dan diagihkan kepada waris Pembuat Amanah selaras dengan peruntukan Hukum Faraid atau arahan wasiat (jika ada).</p>
-                                `;
-                            } else if (data.statusPemilikan === 'tunggal' && data.mekanismeAgihan === 'hibah') {
-                                klausaAmanah = `
-                                    <p style="font-weight:bold; margin-bottom:8px;">Penguatkuasaan Deklarasi Hibah Saham Mutlak</p>
-                                    <p style="text-align:justify; margin-bottom:8px;">Berdasarkan Surat Pengisytiharan Hibah Saham Mutlak yang dipersetujui secara berasingan, Pembuat Amanah mengarahkan Pemegang Amanah untuk bertindak sepenuhnya sebagai wasi dan pemindah milik.</p>
-                                    <p style="text-align:justify; margin-bottom:0;">Pemegang Amanah hendaklah dengan seberapa segera memindahkan Saham Amanah tersebut secara terus (tanpa melepasi tapisan pentadbiran Faraid) kepada penama-penama Hibah mengikut peratusan pegangan yang telah ditetapkan di dalam Rekod Syarikat dan Sistem Pewarisan, bagi memastikan perniagaan dapat diteruskan oleh pewaris yang sah secara operasi tanpa sebarang gangguan.</p>
-                                `;
-                            } else {
-                                klausaAmanah = `
-                                    <p style="font-weight:bold; margin-bottom:8px;">Penguatkuasaan Arahan Pewarisan Semasa</p>
-                                    <p style="text-align:justify; margin-bottom:0;">Pemegang Amanah hendaklah mentadbir Saham Amanah tersebut dan memindahkan hak milik serta faedahnya kepada penama, pemegang wakaf, atau waris yang sah berpandukan arahan instrumen perancangan harta pusaka utama Pembuat Amanah yang terpakai pada masa pemicuan insiden.</p>
-                                `;
-                            }
+                           if (data.statusPemilikan === 'rakankongsi' && data.mekanismeAgihan === 'buysell') {
+        klausaAmanah = `
+        <table width="100%" style="border-collapse:collapse; margin-top:10px;">
+            <tr valign="top">
+                <td width="30">1.</td>
+                <td style="padding-bottom:12px; text-align:justify;"><strong>Pelaksanaan Perjanjian Jual Beli Saham (Buy-Sell Agreement):</strong> Pemegang Amanah dengan ini diberi kuasa mutlak untuk bekerjasama dengan mana-mana rakan kongsi syarikat Pembuat Amanah bagi memastikan Perjanjian Jual Beli Saham dan Pewarisan Korporat dikuatkuasakan dengan serta-merta.</td>
+            </tr>
+            <tr valign="top">
+                <td width="30">2.</td>
+                <td style="padding-bottom:12px; text-align:justify;">Pemegang Amanah hendaklah memindahkan semua Saham Amanah kepada rakan kongsi syarikat, setelah Pemegang Amanah menerima pampasan kewangan secara penuh (contohnya melalui polisi <strong>Takaful Keyman</strong>). Pampasan yang diterima itu hendaklah dipegang amanah dan diagihkan kepada waris Pembuat Amanah selaras dengan peruntukan Hukum Faraid atau arahan wasiat (jika ada).</td>
+            </tr>
+        </table>`;
+    } else if (data.statusPemilikan === 'tunggal' && data.mekanismeAgihan === 'hibah') {
+        klausaAmanah = `
+        <table width="100%" style="border-collapse:collapse; margin-top:10px;">
+            <tr valign="top">
+                <td width="30">1.</td>
+                <td style="padding-bottom:12px; text-align:justify;"><strong>Penguatkuasaan Deklarasi Hibah Saham Mutlak:</strong> Berdasarkan Surat Pengisytiharan Hibah Saham Mutlak yang dipersetujui secara berasingan, Pembuat Amanah mengarahkan Pemegang Amanah untuk bertindak sepenuhnya sebagai wasi dan pemindah milik.</td>
+            </tr>
+            <tr valign="top">
+                <td width="30">2.</td>
+                <td style="padding-bottom:12px; text-align:justify;">Pemegang Amanah hendaklah dengan seberapa segera memindahkan Saham Amanah tersebut secara terus (tanpa melepasi tapisan pentadbiran Faraid) kepada penama-penama Hibah mengikut peratusan pegangan yang telah ditetapkan di dalam Rekod Syarikat dan Sistem Pewarisan, bagi memastikan perniagaan dapat diteruskan oleh pewaris yang sah secara operasi tanpa sebarang gangguan.</td>
+            </tr>
+        </table>`;
+    } else {
+        klausaAmanah = `
+        <table width="100%" style="border-collapse:collapse; margin-top:10px;">
+            <tr valign="top">
+                <td width="30">1.</td>
+                <td style="padding-bottom:12px; text-align:justify;"><strong>Penguatkuasaan Arahan Pewarisan Semasa:</strong> Pemegang Amanah hendaklah mentadbir Saham Amanah tersebut dan memindahkan hak milik serta faedahnya kepada penama, pemegang wakaf, atau waris yang sah berpandukan arahan instrumen perancangan harta pusaka utama Pembuat Amanah yang terpakai pada masa pemicuan insiden.</td>
+            </tr>
+        </table>`;
+    }
 
                             let trustHTML = trustDeedContent
                                 .replaceAll("{{TARIKH_PERJANJIAN}}", formatDateMY(data.tarikhPerjanjian) || "___ haribulan ___")
