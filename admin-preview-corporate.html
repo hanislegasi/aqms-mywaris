@@ -292,6 +292,91 @@
         const params = new URLSearchParams(window.location.search);
         const userId = params.get("id");
 
+// ==========================================
+// FUNGSI AUTO-PAGINATION (SPLIT PAGE JIKA OVERFLOW)
+// ==========================================
+function autoPaginate() {
+    const pages = document.querySelectorAll('.a4-page');
+    // Had maksimum selamat (pixel) sebelum dipotong ke page baru
+    // A4 = ~1120px tinggi. Tolak padding margin atas/bawah 18mm (~136px) & ruang footer.
+    const safeHeight = 920; 
+
+    // Gunakan Array.from supaya loop mengambil kira page baru yang akan ditambah
+    let pageArray = Array.from(pages);
+
+    for (let i = 0; i < pageArray.length; i++) {
+        let page = pageArray[i];
+
+        // Kumpulkan semua elemen secara teratur, kecuali footer
+        let children = Array.from(page.childNodes).filter(node => {
+            if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() === "") return false;
+            if (node.classList && node.classList.contains('pdf-footer')) return false;
+            return true;
+        });
+
+        // Bungkus dalam div sementara untuk mengukur ketinggian sebenar kandungan
+        let measureDiv = document.createElement('div');
+        measureDiv.style.width = '100%';
+        children.forEach(child => measureDiv.appendChild(child));
+        page.insertBefore(measureDiv, page.firstChild);
+
+        // Periksa jika tinggi melebihi had selamat (overflow)
+        if (measureDiv.scrollHeight > safeHeight) {
+            // Cipta page baharu
+            let newPage = document.createElement('div');
+            newPage.className = "a4-page p-[18mm]";
+            
+            let newMeasureDiv = document.createElement('div');
+            newPage.appendChild(newMeasureDiv);
+            
+            let newFooter = document.createElement('div');
+            newFooter.className = "pdf-footer";
+            newPage.appendChild(newFooter);
+
+            // Sisipkan page baharu ini tepat di bawah page yang penuh
+            page.parentNode.insertBefore(newPage, page.nextSibling);
+            pageArray.splice(i + 1, 0, newPage); // Tambah ke loop (jika baki pun panjang, ia split lagi)
+
+            // Keluarkan elemen satu per satu dan masukkan semula untuk check bila ia cecah limit
+            let allItems = Array.from(measureDiv.childNodes);
+            measureDiv.innerHTML = ''; 
+            let overflowStarted = false;
+
+            allItems.forEach((item) => {
+                if (!overflowStarted) {
+                    measureDiv.appendChild(item);
+                    if (measureDiv.scrollHeight > safeHeight) {
+                        // Jika elemen terlalu besar tapi ia adalah elemen pertama di page tersebut,
+                        // kita biarkan sahaja bagi mengelakkan infinite loop.
+                        if (measureDiv.childNodes.length === 1) {
+                            // Biarkan.
+                        } else {
+                            overflowStarted = true;
+                            measureDiv.removeChild(item); // Keluarkan dari page asal
+                            newMeasureDiv.appendChild(item); // Pindah ke page baru
+                        }
+                    }
+                } else {
+                    newMeasureDiv.appendChild(item);
+                }
+            });
+
+            // Lepaskan balutan div dari page baharu
+            while (newMeasureDiv.firstChild) {
+                newPage.insertBefore(newMeasureDiv.firstChild, newMeasureDiv);
+            }
+            newPage.removeChild(newMeasureDiv);
+        }
+
+        // Lepaskan balutan div dari page semasa
+        while (measureDiv.firstChild) {
+            page.insertBefore(measureDiv.firstChild, measureDiv);
+        }
+        page.removeChild(measureDiv);
+    }
+}
+
+        
         onAuthStateChanged(auth, async (user) => {
             if (!user) return;
             try {
@@ -813,6 +898,8 @@ document.getElementById("sectionMekanisme").innerHTML = mekanismeHTML;
                         
                         document.getElementById("sectionLampiran").innerHTML = lampiranHTML;
 
+                        autoPaginate();
+                        
                         // ==========================================
                         // 4. UPDATE TABLE OF CONTENTS (TOC) PAGINATION
                         // ==========================================
