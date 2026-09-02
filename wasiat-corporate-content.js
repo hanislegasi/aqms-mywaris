@@ -335,7 +335,7 @@ Pewasiat berada dalam keadaan waras serta membuat Wasiat ini secara sukarela.
  
 </div>
  
-<div class="a4-page p-[18mm]">
+<div class="a4-page p-[18mm] dynamic-page">
 <h2 style="font-family:'Times New Roman', serif; font-size:28px; margin-top:30px; margin-bottom:20px; color:#153638;">
 LAMPIRAN : MAKLUMAT SYARIKAT & SAHAM
 </h2>
