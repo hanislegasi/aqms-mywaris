@@ -73,9 +73,7 @@ const trustDeedContent = `
     </p>
     
     <!-- BAHAGIAN DINAMIK: HIBAH / BUY-SELL -->
-    <div style="margin-left:30px; margin-bottom:20px; padding:15px; border-left:3px solid #153638; background-color:#fafafa;">
-        {{KLAUSA_MEKANISME_AMANAH}}
-    </div>
+    {{KLAUSA_MEKANISME_AMANAH}}
 
     <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 3: KUASA-KUASA PEMEGANG AMANAH</h3>
     <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
