@@ -332,9 +332,9 @@ Pewasiat berada dalam keadaan waras serta membuat Wasiat ini secara sukarela.
 <h2 style="font-family:'Times New Roman', serif; font-size:28px; margin-top:30px; margin-bottom:20px; color:#153638;">
 LAMPIRAN : MAKLUMAT SYARIKAT & SAHAM
 </h2>
-<div id="lampiranKorporat">
+
 {{LAMPIRAN_KORPORAT}}
-</div>
+
 <div class="pdf-footer">
 <span class="footer-docref"></span>
 <span class="page-number"></span>
@@ -354,9 +354,9 @@ color:#153638;
 LAMPIRAN A : SENARAI WARIS
 </h2>
  
-<div id="lampiranWaris">
+
 {{LAMPIRAN_WARIS}}
-</div>
+
  
 <div class="pdf-footer">
  
@@ -381,9 +381,9 @@ color:#153638;
 LAMPIRAN B : PEMEGANG AMANAH
 </h2>
  
-<div>
+
 {{LAMPIRAN_PEMEGANG_AMANAH}}
-</div>
+
  
 <div class="pdf-footer">
  
