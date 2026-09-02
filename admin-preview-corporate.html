@@ -668,64 +668,6 @@ if(senaraiSyarikat.length > 0) {
 
 } // <-- TUTUP IF (senaraiSyarikat.length > 0)
                         
-// 4. JANA DOKUMEN MEKANISME (HIBAH / BUY-SELL) UNTUK SYARIKAT INI
-if (syarikat.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !== 'undefined') {
-    
-    let senaraiRakanKongsiHTML = "";
-    let pihakPihakLabel = ["Pemegang Saham A"];
-    let abjad = 'B';
-    let indexParti = 2;
-
-    // Loop semua rakan kongsi untuk jana Pemegang Saham B, C, D...
-    if (syarikat.rakanKongsiList && syarikat.rakanKongsiList.length > 0) {
-        syarikat.rakanKongsiList.forEach((partner) => {
-            senaraiRakanKongsiHTML += `
-            <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-                <tr valign="top">
-                    <td width="30">(${indexParti})</td>
-                    <td style="text-align:justify;">
-                        <strong>${partner.nama || "-"}</strong> (No. K/P: <strong>${partner.ic || "-"}</strong>), warganegara Malaysia yang beralamat di <strong>${partner.alamat || "-"}</strong> (selepas ini secara berasingan dirujuk sebagai "Pemegang Saham ${abjad}");
-                    </td>
-                </tr>
-            </table>`;
-            pihakPihakLabel.push(`Pemegang Saham ${abjad}`);
-            abjad = String.fromCharCode(abjad.charCodeAt(0) + 1); // Tambah abjad B -> C -> D
-            indexParti++; // Tambah nombor (2) -> (3) -> (4)
-        });
-    }
-
-    // Gabungkan label menjadi: "Pemegang Saham A, Pemegang Saham B dan Pemegang Saham C"
-    let pihakPihakGabung = pihakPihakLabel.join(", ").replace(/,([^,]*)$/, ' dan$1');
-    let klausaPihak = `<i>(${pihakPihakGabung} selepas ini boleh dirujuk secara bersama sebagai "Pihak-Pihak" atau secara berasingan sebagai "Pihak")</i>`;
-
-    let htmlMek = buySellAgreementContent
-        .replaceAll("{{TARIKH_PERJANJIAN}}", formatDateMY(data.tarikhPerjanjian))
-        .replaceAll("{{NAMA_PEWASIAT}}", data.nama || "-")
-        .replaceAll("{{NO_IC_PEWASIAT}}", data.ic || "-")
-        .replaceAll("{{ALAMAT_PEWASIAT}}", alamatPenuh || "-")
-        .replaceAll("{{SENARAI_RAKAN_KONGSI_DINAMIK}}", senaraiRakanKongsiHTML)
-        .replaceAll("{{KLAUSA_PIHAK_PIHAK}}", klausaPihak)
-        .replaceAll("{{INDEX_SYARIKAT}}", indexParti) // Nombor giliran untuk Syarikat
-        .replaceAll("{{NAMA_SYARIKAT}}", syarikat.namaSyarikat || "-")
-        .replaceAll("{{NO_SSM}}", syarikat.noSsm || "-")
-        .replaceAll("{{ALAMAT_SYARIKAT}}", syarikat.alamatSyarikat || "-")
-        .replaceAll("{{NAMA_WAKIL_SYARIKAT}}", (syarikat.namaWakilSyarikat || "-").toUpperCase())
-        .replaceAll("{{JUMLAH_SAHAM}}", fSaham(syarikat.jumlahSaham))
-        .replaceAll("{{SAHAM_PEWASIAT}}", fSaham(syarikat.sahamPewasiat));
-
-    htmlMek = htmlMek.replace(/class="a4-page/i, `data-target="tocMek_${sIndex}" class="a4-page`);
-    mekanismeHTML += htmlMek;
-    tocMekList.innerHTML += `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Perjanjian Buy-Sell (${syarikat.namaSyarikat})</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_${sIndex}" class="text-[14px] font-bold">-</span></div>`;
-} 
-else if (syarikat.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefined') {
-                                    (syarikat.penerimaHibahSaham || []).forEach((p) => {
-                                        const namaPenerima = (p.nama || "-").trim();
-                                        if (!hibahGroupMap[namaPenerima]) hibahGroupMap[namaPenerima] = [];
-                                        hibahGroupMap[namaPenerima].push({ syarikat, p });
-                                    });
-                                }
-                            };
-                        }
 
                         // ==========================================
                         // C2. JANA SATU DOKUMEN HIBAH SETIAP PENAMA
