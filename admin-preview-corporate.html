@@ -273,7 +273,7 @@
                     </tr>`).join("");
 
             return `
-            <table style="width:100%; border-collapse:collapse; font-size:14px; margin-top:10px; page-break-inside:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:15px; margin-top:10px; page-break-inside:auto;">
                 <thead>
                     <tr>
                         <th style="border:1px solid #000;padding:8px; background-color:#f9fafb;">Nama Syarikat</th>
@@ -511,7 +511,7 @@ function autoPaginate() {
                             senaraiSyarikat.forEach((syarikat, sIndex) => {
                                 // fSaham() dipanggil dari shared scope function di atas
                                 
-                                // 1. BINA FASAL 1 (TAKRIFAN ASET)
+// 1. BINA FASAL 1 (TAKRIFAN ASET)
 takrifanAsetHTML += `
 <table width="100%" style="border-collapse:collapse;">
     <tr valign="top">
@@ -520,7 +520,7 @@ takrifanAsetHTML += `
     </tr>
 </table>`;
 
-                               // 2. BINA LAMPIRAN KORPORAT
+// 2. BINA LAMPIRAN KORPORAT
 lampiranKorporatHTML += `
     <div style="margin-bottom: 30px; width: 100%; page-break-inside: avoid;">
         <table style="width:100%; border-collapse:collapse; font-size:14px;">
@@ -535,7 +535,9 @@ lampiranKorporatHTML += `
     </div>
 `;
 
-                               // ==========================================
+});
+                            
+// ==========================================
 // 3. BINA FASAL 3 & 4 (DENGAN PENGGABUNGAN KLAUSA REDUNDANT)
 // ==========================================
 let wasiatStr = bahagianWasiat13HTML ? bahagianWasiat13HTML.replace("{{TURUTAN_WASIAT}}", "Pelaksanaan Wasiat") : "";
@@ -608,7 +610,9 @@ if (syarikatRakanKongsi.length > 0) {
         </table>
     </div>`;
 }
-                                // 4. JANA DOKUMEN MEKANISME (HIBAH / BUY-SELL) UNTUK SYARIKAT INI
+}
+
+// 4. JANA DOKUMEN MEKANISME (HIBAH / BUY-SELL) UNTUK SYARIKAT INI
 if (syarikat.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !== 'undefined') {
     
     let senaraiRakanKongsiHTML = "";
