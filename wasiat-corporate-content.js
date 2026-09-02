@@ -75,7 +75,7 @@ Dokumen ini sama sekali tidak membatalkan wasiat peribadi saya ke atas aset-aset
 </div>
  
 <div class="a4-page p-[18mm]">
-    <h3 style="margin-top:30px; margin-bottom:15px; font-weight:bold; font-size: 16px;">
+   <h3 style="margin-top:30px; margin-bottom:15px; font-weight:bold; font-size: 16px;">
         FASAL 1: TAKRIFAN ASET
     </h3>
 
@@ -83,7 +83,7 @@ Dokumen ini sama sekali tidak membatalkan wasiat peribadi saya ke atas aset-aset
         Bagi maksud penguatkuasaan instrumen ini, melainkan konteks ayat menghendaki makna yang lain, terma <strong>"Saham Syarikat"</strong> hendaklah ditafsirkan sebagai merangkumi kesemua pegangan unit saham biasa (<i>ordinary shares</i>), hak milik, kepentingan, dan dividen yang belum dijelaskan, sama ada yang wujud pada tarikh dokumen ini atau yang terakru pada masa hadapan, milik saya di dalam entiti korporat berikut:
     </p>
 
-    <div style="margin-bottom:20px; padding-left:10px;">
+    <div style="margin-bottom:20px;">
         {{SENARAI_SYARIKAT_FASAL_1}}
     </div>
 
@@ -102,7 +102,7 @@ Dokumen ini sama sekali tidak membatalkan wasiat peribadi saya ke atas aset-aset
         <tr valign="top">
             <td>2.{{NOMBOR_WASI_KUASA}}</td>
             <td style="padding-bottom:12px; text-align:justify;">
-                Wasi diberi kuasa mutlak untuk memohon Surat Kuasa Mentadbir Wasiat (<i>Grant of Probate</i>), menandatangani dokumen penyerahan hak, resolusi lembaga pengarah, dan instrumen pindah milik saham bagi pihak saya untuk menguatkuasakan arahan di dalam dokumen ini.
+                Wasi diberi kuasa mutlak untuk memohon <strong>Surat Kuasa Mentadbir Wasiat (<i>Grant of Probate</i>)</strong>, menandatangani dokumen penyerahan hak, resolusi lembaga pengarah, dan instrumen pindah milik saham bagi pihak saya untuk menguatkuasakan arahan di dalam dokumen ini.
             </td>
         </tr>
     </table>
