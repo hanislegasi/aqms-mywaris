@@ -1002,7 +1002,7 @@ document.getElementById("sectionMekanisme").innerHTML = mekanismeHTML;
 
                         autoPaginate();
                         
-                        // ==========================================
+                       // ==========================================
                         // 4. UPDATE TABLE OF CONTENTS (TOC) PAGINATION
                         // ==========================================
                         setTimeout(() => {
@@ -1040,20 +1040,19 @@ document.getElementById("sectionMekanisme").innerHTML = mekanismeHTML;
                             updateScale();
                         }, 500);
 
-                    } // <-- PENUTUP: if (docSnap.exists())
-                } // <-- PENUTUP: if (userId)
+                    } // <-- 1. INI PENUTUP UNTUK: if (docSnap.exists()) {
+                } // <-- 2. INI PENUTUP UNTUK: if (userId) {
 
-            } catch (error) { // <-- MESTI BERADA DI SINI, SELEPAS PENUTUP IF
+            } catch (error) { // <-- 3. INI MESTI BERSAMBUNG DENGAN TRY DI ATAS
                 console.error("Error fetching data:", error);
-                alert("Ralat semasa memuatkan data: " + error.message);
+                alert("Ralat memuatkan dokumen: " + error.message);
             }
-        }); // <-- PENUTUP: onAuthStateChanged(auth, async (user) => {
+        }); // <-- 4. INI PENUTUP KESELURUHAN: onAuthStateChanged
 
         // ==========================================
         // BUTANG CETAK (PDF) & LULUS/TOLAK
         // ==========================================
         document.getElementById("printBtn").onclick = () => window.open(`print-corporate.html?id=${userId}`, "_blank");
-
        
         document.getElementById("downloadBtn").addEventListener("click", async () => {
              let wrapper = document.getElementById('scale-wrapper');
