@@ -1037,25 +1037,24 @@ document.getElementById("sectionMekanisme").innerHTML = mekanismeHTML;
                                 }
                             });
 
-                            // FIX: kira semula scale/marginBottom sekarang semua a4-page
-                            // dinamik dah settle -- panggilan asal (100ms lepas DOMContentLoaded)
-                            // guna ketinggian skeleton je, bukan ketinggian sebenar lepas
-                            // wasiat/mekanisme/amanah/lampiran digenerate.
                             updateScale();
                         }, 500);
 
-                    }
-                }
-            } catch (error) {
+                    } // <-- PENUTUP: if (docSnap.exists())
+                } // <-- PENUTUP: if (userId)
+
+            } catch (error) { // <-- MESTI BERADA DI SINI, SELEPAS PENUTUP IF
                 console.error("Error fetching data:", error);
+                alert("Ralat semasa memuatkan data: " + error.message);
             }
-        });
+        }); // <-- PENUTUP: onAuthStateChanged(auth, async (user) => {
 
         // ==========================================
         // BUTANG CETAK (PDF) & LULUS/TOLAK
         // ==========================================
         document.getElementById("printBtn").onclick = () => window.open(`print-corporate.html?id=${userId}`, "_blank");
 
+       
         document.getElementById("downloadBtn").addEventListener("click", async () => {
              let wrapper = document.getElementById('scale-wrapper');
              let element = document.getElementById("pdfContent");
