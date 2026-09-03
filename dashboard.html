@@ -364,10 +364,15 @@ import {
 
       document.getElementById("namaUser").innerHTML = "Selamat datang, " + userData.nama;
 
-      // PAPARKAN BUTANG MYINTRODUCER JIKA AKTIF
-      if (userData.isIntroducer === true) {
-          document.getElementById("btnMyIntroducer").classList.remove("hidden");
-      }
+// ==========================================
+// SEMAK STATUS MYINTRODUCER KLIEN
+// ==========================================
+if (userData.isIntroducer === true) {
+    const btnMyIntroducer = document.getElementById("btnMyIntroducer");
+    if (btnMyIntroducer) {
+        btnMyIntroducer.classList.remove("hidden"); // Buang hidden, jadikan butang wujud!
+    }
+}
 
         const hasPaidProduct = 
         userData.wasiatPaymentStatus === "paid" || 
