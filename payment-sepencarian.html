@@ -415,7 +415,27 @@ agreeBtn.addEventListener("click", async () => {
                 careerSales: increment(saleAmount),
                 totalCommission: increment(commissionAmount),
             });
-        }
+            
+            // B. Rekod Pendapatan Introducer (HANYA UNTUK NOTA/RUJUKAN AQC SAHAJA)
+            if (customer.introducerUid && customer.introducerComm) {
+                const introducerAmt = saleAmount * (Number(customer.introducerComm) / 100);
+                
+                if (introducerAmt > 0) {
+                    await addDoc(collection(db, "introducerEarnings"), {
+                        createdAt: txnDate,
+                        introducerUid: customer.introducerUid, // UID AQM
+                        aqcNo: directConsultant.consultantNo,  // No AQC
+                        customerMemberNo: memberNo,            
+                        customerName: customer.nama,
+                        product: "Sepencarian",
+                        saleAmount: saleAmount,
+                        commPercent: customer.introducerComm,
+                        earnedAmount: introducerAmt,
+                        status: "UNPAID" // AQC belum transfer duit ke AQM
+                    });
+                } // Penutup if (introducerAmt > 0)
+            } // <--- ANDA TERTINGGAL KURUNGAN INI: Penutup if (customer.introducerUid...)
+        } // Penutup if (directConsultant)
 
         // ALLOCATION EXPENSES & PAYABLES
         await addDoc(collection(db, "ledger"), {
