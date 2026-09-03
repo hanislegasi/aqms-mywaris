@@ -57,13 +57,15 @@ required>
 id="referral"
 type="text"
 placeholder="Kod Referral AQC"
-class="w-full border p-3 rounded-lg"
+class="w-full border p-3 rounded-lg bg-gray-50"
 required>
 
-<p
-id="referralName"
-class="text-sm text-green-600 font-semibold mb-2">
-</p>
+<p id="referralName" class="text-sm text-green-600 font-semibold mb-2"></p>
+
+<!-- PAPARAN INFO INTRODUCER (JIKA ADA) -->
+<div id="introducerInfo" class="hidden bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm p-3 rounded-lg mb-2 leading-snug">
+    <!-- Diisi oleh Javascript -->
+</div>
 
 <!-- KOTAK KONSEN PDPA (WAJIB) -->
 <div class="flex items-start mt-2">
@@ -82,6 +84,7 @@ class="text-sm text-green-600 font-semibold mb-2">
 </div>
 
 <button
+id="btnRegister"
 type="submit"
 class="w-full bg-[#153638] text-white py-3 rounded-lg font-bold hover:opacity-90 transition mt-4">
 Daftar Akaun
@@ -98,52 +101,79 @@ Sudah ada akaun? Log Masuk
 </div>
 
 <script type="module">
-
 // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
 import { db, auth } from './firebase.js';
 
 // 2. Tarik fungsi Auth yang berkaitan sahaja
-import {
-    createUserWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// 3. Tarik fungsi Firestore yang berkaitan sahaja
-import {
-    doc,
-    setDoc,
-    getDocs,
-    collection
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+// 3. Tarik fungsi Firestore (TAMBAH getDoc untuk semak Introducer)
+import { doc, setDoc, getDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const params = new URLSearchParams(window.location.search);
 const ref = params.get("ref");
+const introUid = params.get("intro"); // Tangkap UID AQM dari URL
 
+let validIntroducer = false;
+let introducerCommPercent = 0;
+
+// SEMAK REFERRAL AQC DARI URL
 if(ref){
   document.getElementById("referral").value = ref;
   document.getElementById("referral").readOnly = true;
+  // Trigger semakan nama AQC
+  semakAQC(ref);
 }
 
-document.getElementById("referral").addEventListener("blur", async()=>{
-  const referral = document.getElementById("referral").value.trim();
-  if(!referral) return;
+// SEMAK INTRODUCER (AQM) DARI URL
+if (introUid) {
+    (async () => {
+        try {
+            const introDoc = await getDoc(doc(db, "users", introUid));
+            if (introDoc.exists()) {
+                const introData = introDoc.data();
+                if (introData.isIntroducer) {
+                    validIntroducer = true;
+                    introducerCommPercent = introData.introducerComm || 3;
+                    
+                    const infoBox = document.getElementById("introducerInfo");
+                    infoBox.classList.remove("hidden");
+                    infoBox.innerHTML = `👋 Diperkenalkan oleh Rakan AQM:<br><b>${introData.nama}</b>`;
+                }
+            }
+        } catch (e) {
+            console.error("Ralat semak introducer:", e);
+        }
+    })();
+}
 
-  const usersSnap = await getDocs(collection(db,"consultants"));
-  let sponsor = null;
+async function semakAQC(referralCode) {
+    if(!referralCode) return;
+    const usersSnap = await getDocs(collection(db,"consultants"));
+    let sponsor = null;
 
-  usersSnap.forEach((d)=>{
-    const u = d.data();
-    if(u.consultantNo === referral){
-      sponsor = u.nama;
-    }
-  });
+    usersSnap.forEach((d)=>{
+        const u = d.data();
+        if(u.consultantNo === referralCode){
+            sponsor = u.nama;
+        }
+    });
 
-  document.getElementById("referralName").innerHTML = sponsor
-    ? "✓ Perunding: " + sponsor
-    : "❌ No Konsultan tidak sah";
+    document.getElementById("referralName").innerHTML = sponsor
+        ? "✓ Perunding: " + sponsor
+        : "❌ No Konsultan tidak sah";
+}
+
+document.getElementById("referral").addEventListener("blur", () => {
+    semakAQC(document.getElementById("referral").value.trim());
 });
 
 document.getElementById("registerForm").addEventListener("submit", async (e)=>{
   e.preventDefault();
+
+  const btn = document.getElementById("btnRegister");
+  btn.innerText = "Mendaftar...";
+  btn.disabled = true;
 
   const nama = document.getElementById("nama").value;
   const ic = document.getElementById("ic").value;
@@ -158,6 +188,8 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
 
   if(!referral){
     alert("Sila masukkan Kod Referral");
+    btn.innerText = "Daftar Akaun";
+    btn.disabled = false;
     return;
   }
 
@@ -172,7 +204,9 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
   });
 
   if(!validReferral){
-    alert("Referral tidak sah");
+    alert("Referral (AQC) tidak sah. Sila semak semula kod.");
+    btn.innerText = "Daftar Akaun";
+    btn.disabled = false;
     return;
   }  
 
@@ -185,8 +219,8 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
     
     const uid = userCredential.user.uid;
 
-    // Simpan terus ke collection 'users' beserta rekod PDPA
-    await setDoc(doc(db, "users", uid), {
+    // DATA ASAS KLIEN BARU
+    let payloadData = {
       nama,
       ic,
       email,
@@ -205,15 +239,25 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
           agreedAt: new Date().toISOString(),
           version: "1.0"
       },
-
       createdAt: new Date()
-    });
+    };
 
-    alert("Pendaftaran AQM berjaya!");
+    // JIKA ADA INTRODUCER YANG SAH, TAMBAH DATA INI
+    if (validIntroducer && introUid) {
+        payloadData.introducerUid = introUid;
+        payloadData.introducerComm = introducerCommPercent;
+    }
+
+    // Simpan terus ke collection 'users'
+    await setDoc(doc(db, "users", uid), payloadData);
+
+    alert("Pendaftaran berjaya!");
     window.location.href = "login.html";
 
   } catch (error) {
-    alert(error.message);
+    alert("Gagal Mendaftar: " + error.message);
+    btn.innerText = "Daftar Akaun";
+    btn.disabled = false;
   }
 }); 
 
