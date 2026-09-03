@@ -243,7 +243,7 @@
     
     <!-- BUTANG MYINTRODUCER (BELAH KIRI - HIDDEN LALAI) -->
     <a href="introducer.html" id="btnMyIntroducer" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold transition flex items-center gap-2 shadow-md">
-      Menu myIntroducer
+      🚀 Menu myIntroducer
     </a>
 
     <!-- BUTANG LOGOUT (BELAH KANAN) -->
@@ -364,7 +364,12 @@ import {
 
       document.getElementById("namaUser").innerHTML = "Selamat datang, " + userData.nama;
 
-      const hasPaidProduct = 
+      // PAPARKAN BUTANG MYINTRODUCER JIKA AKTIF
+      if (userData.isIntroducer === true) {
+          document.getElementById("btnMyIntroducer").classList.remove("hidden");
+      }
+
+        const hasPaidProduct = 
         userData.wasiatPaymentStatus === "paid" || 
         userData.hibahPaymentStatus === "paid" || 
         userData.sepencarianPaymentStatus === "paid" || 
