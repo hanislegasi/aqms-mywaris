@@ -544,18 +544,40 @@ if (syarikat.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !==
     let senaraiRakanKongsiHTML = "";
     let pihakPihakLabel = ["Pemegang Saham A"];
     let senaraiRecitalSaham = []; // <-- Tambahan untuk jana ayat pemilikan B, C, D
+    let senaraiTandatanganHTML = ""; // <-- TAMBAHAN BARU
     let abjad = 'B';
     let indexParti = 2;
 
     // Loop semua rakan kongsi untuk jana Pemegang Saham B, C, D...
     if (syarikat.rakanKongsiList && syarikat.rakanKongsiList.length > 0) {
         syarikat.rakanKongsiList.forEach((partner) => {
+            
             senaraiRakanKongsiHTML += `
             <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
                 <tr valign="top">
                     <td width="30">(${indexParti})</td>
                     <td style="text-align:justify;">
                         <strong>${partner.nama || "-"}</strong> (No. K/P: <strong>${partner.ic || "-"}</strong>), warganegara Malaysia yang beralamat di <strong>${partner.alamat || "-"}</strong> (selepas ini secara berasingan dirujuk sebagai "Pemegang Saham ${abjad}");
+                    </td>
+                </tr>
+            </table>`;
+
+           // 2. Bina HTML untuk ruangan TANDATANGAN (TAMBAHAN BARU)
+            senaraiTandatanganHTML += `
+            <table width="100%" style="margin-bottom:40px; border-collapse:collapse; font-size:15px;">
+                <tr valign="top">
+                    <td width="50%">
+                        <strong>DITANDATANGANI OLEH</strong><br>
+                        PEMEGANG SAHAM ${abjad}:<br><br><br><br>
+                        .........................................................<br>
+                        <strong>${partner.nama || "-"}</strong><br>
+                        No. K/P: ${partner.ic || "-"}
+                    </td>
+                    <td width="50%">
+                        <strong>Di hadapan (Saksi):</strong><br><br><br><br><br>
+                        .........................................................<br>
+                        Nama Saksi :<br><br>
+                        No. K/P &nbsp;&nbsp;&nbsp;:
                     </td>
                 </tr>
             </table>`;
@@ -582,6 +604,7 @@ if (syarikat.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !==
         .replaceAll("{{NO_IC_PEWASIAT}}", data.ic || "-")
         .replaceAll("{{ALAMAT_PEWASIAT}}", alamatPenuh || "-")
         .replaceAll("{{SENARAI_RAKAN_KONGSI_DINAMIK}}", senaraiRakanKongsiHTML)
+        .replaceAll("{{TANDATANGAN_RAKAN_KONGSI_DINAMIK}}", senaraiTandatanganHTML) // <-- TAMBAHAN BARU
         .replaceAll("{{KLAUSA_PIHAK_PIHAK}}", klausaPihak)
         .replaceAll("{{INDEX_SYARIKAT}}", indexParti)
         .replaceAll("{{NAMA_SYARIKAT}}", syarikat.namaSyarikat || "-")
