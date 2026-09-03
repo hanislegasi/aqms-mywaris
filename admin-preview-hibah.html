@@ -1706,7 +1706,7 @@ Object.values(groupedHibah).forEach((item, index) => {
     // TEKNIK KEBAL: Kita 'cop' ID pada setiap helai kertas
     // Walaupun HTML berterabur, kertas ini tetap tahu ia milik siapa!
     // =======================================================
-   contentForThisRecipient = contentForThisRecipient.replaceAll('class="a4-page', `data-target="tocHibah_${index}" class="a4-page dynamic-page`);
+   contentForThisRecipient = contentForThisRecipient.replaceAll('class="a4-page', `data-target="tocHibah_${index}" class="a4-page`);
 
     hibahHTML += contentForThisRecipient;
 });
