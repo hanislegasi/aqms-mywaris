@@ -192,6 +192,15 @@ const buySellAgreementContent = `
         </table>
     </div>
 
+
+    <div style="page-break-inside: avoid;">
+        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 4A: PROSES PEMINDAHAN SAHAM & SETEM HASIL</h3>
+        <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+            <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Setelah harga dan struktur belian dipersetujui/ditentukan, Pihak-Pihak hendaklah melaksanakan Borang Pemindahan Saham dan mengemukakan dokumen berkaitan kepada Suruhanjaya Syarikat Malaysia (SSM) dalam tempoh tiga puluh (30) hari, termasuk kelulusan lembaga pengarah dan pematuhan Perlembagaan Syarikat.</td></tr>
+            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Setem hasil <em>(stamp duty)</em> ke atas pemindahan saham hendaklah dijelaskan mengikut Akta Setem 1949 sebelum pendaftaran pemindahan diiktiraf sah di sisi undang-undang.</td></tr>
+        </table>
+    </div>
+
 <div class="pdf-footer">
         <span class="footer-docref"></span>
         <span class="page-number"></span>
@@ -200,14 +209,7 @@ const buySellAgreementContent = `
 </div>
  
 <div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
- 
-    <div style="page-break-inside: avoid;">
-        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 4A: PROSES PEMINDAHAN SAHAM & SETEM HASIL</h3>
-        <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-            <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Setelah harga dan struktur belian dipersetujui/ditentukan, Pihak-Pihak hendaklah melaksanakan Borang Pemindahan Saham dan mengemukakan dokumen berkaitan kepada Suruhanjaya Syarikat Malaysia (SSM) dalam tempoh tiga puluh (30) hari, termasuk kelulusan lembaga pengarah dan pematuhan Perlembagaan Syarikat.</td></tr>
-            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Setem hasil <em>(stamp duty)</em> ke atas pemindahan saham hendaklah dijelaskan mengikut Akta Setem 1949 sebelum pendaftaran pemindahan diiktiraf sah di sisi undang-undang.</td></tr>
-        </table>
-    </div>
+
 
     <div style="page-break-inside: avoid;">
         <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 5: PEMATUHAN DOKUMEN WASIAT KORPORAT</h3>
@@ -224,6 +226,16 @@ const buySellAgreementContent = `
             <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Sekiranya dipersetujui, sekatan larangan bersaing <em>(non-compete)</em> ke atas Pemegang Saham Terjejas selepas jualan sahamnya hendaklah terhad dari segi tempoh (tidak melebihi dua (2) tahun), kawasan geografi dan skop perniagaan yang munasabah, bagi mengelakkan sekatan yang tidak sah di sisi undang-undang kontrak Malaysia.</td></tr>
         </table>
     </div>
+
+<div class="pdf-footer">
+        <span class="footer-docref"></span>
+        <span class="page-number"></span>
+    </div>
+ 
+</div>
+ 
+<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
+
 
     <div style="page-break-inside: avoid;">
         <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 6: KESAN MENGIKAT & UNDANG-UNDANG GUNA PAKAI</h3>
