@@ -1766,8 +1766,6 @@ Object.values(groupedHibah).forEach((item, index) => {
     hibahHTML += contentForThisRecipient;
 });
 
-document.getElementById("sectionHibah").innerHTML = hibahHTML;     
-                        
                 
 let sepencarianHTML = "";
 
@@ -1785,9 +1783,9 @@ Object.values(groupedSepencarian).forEach((item, index) => {
     // 2. Suntik penanda data-target ke muka surat pertama untuk penerima ini
     let templateKandungan = sepencarianContent.replace(
         /class="a4-page/i, 
-        `data-target="tocSepencarian_${index}" class="a4-page`
+        `data-target="tocSepencarian_${index}" class="a4-page dynamic-page`
     );
-
+    
     // 3. Gunakan pembolehubah templateKandungan yang telah ditandai
     sepencarianHTML += templateKandungan
     .replaceAll("{{TABLE_ALIH}}", generateAlihTable(item.hartaAlih))
@@ -1804,7 +1802,13 @@ Object.values(groupedSepencarian).forEach((item, index) => {
 
 });
 
+finalContent = finalContent.replaceAll('class="a4-page', 'class="a4-page dynamic-page');
+
+// KUMPULKAN SEMUA SUNTIKAN DOM DI SINI SECARA BERURUTAN
+document.getElementById("sectionWasiat").innerHTML = finalContent;
 document.getElementById("sectionSepencarian").innerHTML = sepencarianHTML;
+document.getElementById("sectionHibah").innerHTML = hibahHTML;
+document.getElementById("sectionLampiran").innerHTML = lampiranHTML;
 
 autoPaginate();
                         
