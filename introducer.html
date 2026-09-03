@@ -14,7 +14,8 @@
         <div class="max-w-3xl mx-auto flex justify-between items-center">
             <div>
                 <h1 class="text-2xl font-bold">myIntroducer</h1>
-                <p class="text-gray-200 text-sm mt-1">Kongsi Manfaat, Jana Pendapatan (Komisen 3%)</p>
+                <!-- Komisen % akan dipaparkan secara dinamik di sini -->
+                <p id="subTitleComm" class="text-gray-200 text-sm mt-1">Kongsi Manfaat, Jana Pendapatan (Komisen ...%)</p>
             </div>
             <a href="dashboard.html" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
                 Kembali ke Dashboard
@@ -96,6 +97,10 @@
                 return;
             }
 
+            // Paparkan peratusan komisen dinamik pada header
+            const commPercent = userData.introducerComm || 3;
+            document.getElementById("subTitleComm").innerText = `Kongsi Manfaat, Jana Pendapatan (Komisen ${commPercent}%)`;
+
             // Fungsi Hantar Form
             document.getElementById("prospectForm").addEventListener("submit", async (e) => {
                 e.preventDefault();
@@ -112,6 +117,7 @@
                         introducerUid: user.uid, // UID Klien (AQM)
                         introducerNama: userData.nama, 
                         introducerPhone: userData.telefon,
+                        introducerCommPercent: commPercent, // Simpan sekali peratusan komisen semasa hantar
                         status: "Menunggu Tindakan AQC",
                         tarikhHantar: serverTimestamp()
                     });
