@@ -632,7 +632,7 @@ if (syarikat.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !==
         .replaceAll("{{SAHAM_PARTNER}}", fSaham(totalSahamPartner)) // <-- FIX: Jika guna template lama
         .replaceAll("{{RECITAL_SAHAM_PARTNER}}", klausaRecitalB);   // <-- FIX: Untuk upgrade template dinamik
 
-    htmlMek = htmlMek.replace(/class="a4-page/i, `data-target="tocMek_${sIndex}" class="a4-page p-[18mm] dynamic-page"`);
+    htmlMek = htmlMek.replaceAll('class="a4-page p-[18mm]"', `data-target="tocMek_${sIndex}" class="a4-page p-[18mm] dynamic-page"`);
     mekanismeHTML += htmlMek;
     tocMekList.innerHTML += `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Perjanjian Buy-Sell (${syarikat.namaSyarikat})</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_${sIndex}" class="text-[14px] font-bold">-</span></div>`;
 } 
