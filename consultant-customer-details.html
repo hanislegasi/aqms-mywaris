@@ -553,42 +553,34 @@ document.getElementById(
 
 <!-- CUSTOMER PROFILE -->
 <div class="bg-white rounded-2xl shadow p-5 h-full flex flex-col">
-
     <h2 class="text-3xl font-bold text-[#153638]">
         ${user.nama || "-"}
     </h2>
-
     <p class="text-gray-500 mb-5">
         ${user.email || "-"}
     </p>
 
     <div class="space-y-3 text-sm flex-grow">
-
         <div class="flex justify-between">
             <span class="text-gray-500">No Ahli</span>
             <span id="memberNo"></span>
         </div>
-        
         <div class="flex justify-between">
             <span class="text-gray-500">Ahli Sejak</span>
             <span id="memberSince"></span>
         </div>
-
         <div class="flex justify-between">
             <span class="text-gray-500">Telefon</span>
             <span id="telefon"></span>
         </div>
-
         <div class="flex justify-between">
             <span class="text-gray-500">Referral</span>
             <span id="referral"></span>
         </div>
-
         <div class="flex justify-between">
             <span class="text-gray-500">Status</span>
             <span id="memberStatus"></span>
         </div>
-
     </div>
 
     <!-- BUTANG MYINTRODUCER (BOLEH UBAH KOMISEN %) -->
@@ -596,7 +588,6 @@ document.getElementById(
         <label class="text-xs text-gray-500 mb-2 font-semibold block">Tetapan myIntroducer (Komisen)</label>
         
         <div class="flex gap-2 items-center">
-            <!-- KOTAK INPUT PERATUSAN -->
             <input type="number" id="introducerPercent" 
                    value="${user.introducerComm || 3}" 
                    min="1" max="100" 
@@ -604,17 +595,15 @@ document.getElementById(
                    ${user.isIntroducer ? 'disabled' : ''}> 
             <span class="text-gray-500 font-bold mr-1">%</span>
 
-            <!-- BUTANG AKTIF / NYAHAKTIF -->
             <button id="btnToggleIntroducer" class="flex-1 ${user.isIntroducer ? 'bg-red-500 hover:bg-red-600' : 'bg-indigo-600 hover:bg-indigo-700'} text-white py-2.5 rounded-xl font-semibold transition text-sm">
                 ${user.isIntroducer ? '✖ Nyahaktifkan' : '🚀 Aktifkan'}
             </button>
         </div>
         
         <p class="text-[10px] text-gray-400 mt-2 leading-relaxed">
-            *Tetapkan % komisen sebelum mengaktifkan. Jika anda ingin menukar peratusan untuk klien yang sedang aktif, sila klik Nyahaktifkan dahulu.
+            *Tetapkan % komisen sebelum mengaktifkan. Jika ingin tukar %, nyahaktifkan dahulu.
         </p>
     </div>
-
 </div>
 
 <!-- TIMELINE -->
@@ -830,26 +819,42 @@ renderTimeline(currentStatus);
 
 document.getElementById("saveAkad").onclick = async()=>{
 
-document.getElementById("btnToggleIntroducer").onclick = async () => {
-    const isCurrentlyIntroducer = user.isIntroducer || false;
-    
-    // Tarik nilai peratusan dari kotak input
-    const percentVal = document.getElementById("introducerPercent").value || 3; 
+// ==========================================
+// FUNGSI AKTIFKAN MYINTRODUCER
+// ==========================================
+const btnToggleIntroducer = document.getElementById("btnToggleIntroducer");
+if (btnToggleIntroducer) {
+    btnToggleIntroducer.onclick = async () => {
+        try {
+            const isCurrentlyIntroducer = user.isIntroducer || false;
+            const percentVal = document.getElementById("introducerPercent").value || 3; 
 
-    // Ayat pengesahan dinamik mengikut status dan nilai %
-    const confirmMsg = isCurrentlyIntroducer
-        ? "Adakah anda pasti mahu nyahaktifkan fungsi myIntroducer untuk klien ini?"
-        : `Anda pasti mahu aktifkan fungsi myIntroducer dengan komisen sebanyak ${percentVal}%? Klien akan nampak kadar ini di Dashboard mereka.`;
+            const confirmMsg = isCurrentlyIntroducer
+                ? "Adakah anda pasti mahu nyahaktifkan fungsi myIntroducer untuk klien ini?"
+                : `Anda pasti mahu aktifkan fungsi myIntroducer dengan komisen sebanyak ${percentVal}%?`;
 
-    if (confirm(confirmMsg)) {
-        await updateDoc(doc(db, "users", userId), {
-            isIntroducer: !isCurrentlyIntroducer,
-            introducerComm: Number(percentVal) // Simpan nilai % ke dalam database (Firebase)
-        });
-        alert("Status dan komisen myIntroducer berjaya dikemaskini.");
-        location.reload();
-    }
-};
+            if (confirm(confirmMsg)) {
+                // Tukar butang jadi 'loading'
+                btnToggleIntroducer.innerText = "Memproses...";
+                btnToggleIntroducer.disabled = true;
+
+                // Update Firestore database
+                await updateDoc(doc(db, "users", userId), {
+                    isIntroducer: !isCurrentlyIntroducer,
+                    introducerComm: Number(percentVal)
+                });
+
+                alert("Berjaya! Status myIntroducer telah dikemaskini.");
+                location.reload();
+            }
+        } catch (error) {
+            console.error("Ralat MyIntroducer:", error);
+            alert("Gagal mengemaskini: " + error.message);
+            btnToggleIntroducer.innerText = "Cuba Lagi";
+            btnToggleIntroducer.disabled = false;
+        }
+    };
+}
   
 const akadDate =
 document.getElementById("akadDate").value;
