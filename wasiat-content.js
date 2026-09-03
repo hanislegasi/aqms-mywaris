@@ -2,8 +2,6 @@ const wasiatContent = `
 
 <div class="a4-page p-[18mm]">
 
-
-
 <h2
 style="
 font-family:'Times New Roman', serif;
@@ -22,20 +20,11 @@ DOKUMEN WASIAT
 style="
 text-align:center;
 font-size:30px;
-margin-bottom:10;
+margin-bottom:10px;
 font-family:'Amiri', serif;
 ">
 بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
 </div>
-
-<div
-style="
-font-family:'Times New Roman', serif;
-font-size:15px;
-line-height:1.6;
-text-align:justify;
-color:#222;
-">
 
 <p style="text-align:center; margin-bottom:20px;">
 <strong>Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani</strong>
@@ -66,10 +55,6 @@ Saya memahami sepenuhnya dokumen ini serta kesannya menurut hukum syarak dan und
 <span class="footer-docref"></span>
 
 <span class="page-number"></span>
-
-</div>
-
-</div>
 
 </div>
 
@@ -263,7 +248,7 @@ line-height:1.6;
 vertical-align:top;
 padding-top:1px;
 ">
-3.10.1
+3.10.2
 </td>
 
 <td
@@ -410,12 +395,10 @@ font-style:italic;
 
 </div>
 
-</div>
-
-
-
    
 <div class="a4-page p-[18mm]">
+
+<!-- PEWASIAT DIBUNGKUS BERASINGAN -->
 <div style="page-break-inside: avoid; break-inside: avoid; width: 100%;">
 <div class="mt-8">
 
@@ -425,226 +408,91 @@ Saya dengan ini mengaku bahawa segala maklumat yang dinyatakan dalam dokumen Was
 </p>
 <br>
 
-
 <p>.......................................</p>
+<p>(Tandatangan Pewasiat)</p>
 
-<p>
-(Tandatangan Pewasiat)
-</p>
-
-<table
-style="
-margin-top:30px;
-font-size:14px;
-">
-
+<table style="margin-top:30px; font-size:14px;">
 <tr>
-<td width="100">
-Nama
-</td>
-
-<td width="20">
-:
-</td>
-
-<td>
-<strong>{{NAMA_PEWASIAT}}</strong>
-</td>
+<td width="100">Nama</td>
+<td width="20">:</td>
+<td><strong>{{NAMA_PEWASIAT}}</strong></td>
 </tr>
-
 <tr>
-<td>
-No. K/P
-</td>
-
-<td>
-:
-</td>
-
-<td>
-<strong>{{NO_IC_PEWASIAT}}</strong>
-</td>
+<td>No. K/P</td>
+<td>:</td>
+<td><strong>{{NO_IC_PEWASIAT}}</strong></td>
 </tr>
-
 <tr>
-<td>
-Tarikh
-</td>
-
-<td>
-:
-</td>
-
-<td>
-</td>
+<td>Tarikh</td>
+<td>:</td>
+<td></td>
 </tr>
-
 </table>
-
 </div>
-<br>
+</div>
+<!-- TAMAT BUNGKUSAN PEWASIAT -->
+
+<br><br>
+
+<!-- SAKSI DIBUNGKUS BERASINGAN -->
+<div style="page-break-inside: avoid; break-inside: avoid; width: 100%;">
 <strong>PENGESAHAN SAKSI</strong>
 <p>
 Kami yang bertandatangan di bawah mengesahkan bahawa Pewasiat telah menandatangani dokumen ini di hadapan kami dan pada pemerhatian kami, 
 Pewasiat berada dalam keadaan waras serta membuat Wasiat ini secara sukarela.
 </p>
 
-<table
-style="
-width:100%;
-margin-top:50px;
-">
-
+<table style="width:100%; margin-top:50px;">
 <tr valign="top">
-
 <td width="45%">
-
 <p>.......................................</p>
-
 <p>Tandatangan saksi 1</p>
-
 <table style="margin-top:15px;">
-
-<tr>
-<td width="80">Nama</td>
-<td width="20">:</td>
-<td></td>
-</tr>
-
-<tr>
-<td>No. K/P</td>
-<td>:</td>
-<td></td>
-</tr>
-
-<tr>
-<td>Tarikh</td>
-<td>:</td>
-<td></td>
-</tr>
-
+<tr><td width="80">Nama</td><td width="20">:</td><td></td></tr>
+<tr><td>No. K/P</td><td>:</td><td></td></tr>
+<tr><td>Tarikh</td><td>:</td><td></td></tr>
 </table>
-
 </td>
-
 <td width="10%"></td>
-
 <td width="45%">
-
 <p>.......................................</p>
-
 <p>Tandatangan saksi 2</p>
-
 <table style="margin-top:15px;">
-
-<tr>
-<td width="80">Nama</td>
-<td width="20">:</td>
-<td></td>
-</tr>
-
-<tr>
-<td>No. K/P</td>
-<td>:</td>
-<td></td>
-</tr>
-
-<tr>
-<td>Tarikh</td>
-<td>:</td>
-<td></td>
-</tr>
-
+<tr><td width="80">Nama</td><td width="20">:</td><td></td></tr>
+<tr><td>No. K/P</td><td>:</td><td></td></tr>
+<tr><td>Tarikh</td><td>:</td><td></td></tr>
 </table>
-
 </td>
-
 </tr>
-
-<tr>
-<td colspan="3" height="60"></td>
-</tr>
-
+<tr><td colspan="3" height="60"></td></tr>
 <tr valign="top">
-
 <td>
-
 <p>.......................................</p>
-
 <p>Tandatangan saksi 3</p>
-
 <table style="margin-top:15px;">
-
-<tr>
-<td width="80">Nama</td>
-<td width="20">:</td>
-<td></td>
-</tr>
-
-<tr>
-<td>No. K/P</td>
-<td>:</td>
-<td></td>
-</tr>
-
-<tr>
-<td>Tarikh</td>
-<td>:</td>
-<td></td>
-</tr>
-
+<tr><td width="80">Nama</td><td width="20">:</td><td></td></tr>
+<tr><td>No. K/P</td><td>:</td><td></td></tr>
+<tr><td>Tarikh</td><td>:</td><td></td></tr>
 </table>
-
 </td>
-
 <td></td>
-
 <td>
-
 <p>.......................................</p>
-
 <p>Tandatangan saksi 4</p>
-
 <table style="margin-top:15px;">
-
-<tr>
-<td width="80">Nama</td>
-<td width="20">:</td>
-<td></td>
-</tr>
-
-<tr>
-<td>No. K/P</td>
-<td>:</td>
-<td></td>
-</tr>
-
-<tr>
-<td>Tarikh</td>
-<td>:</td>
-<td></td>
-</tr>
-
+<tr><td width="80">Nama</td><td width="20">:</td><td></td></tr>
+<tr><td>No. K/P</td><td>:</td><td></td></tr>
+<tr><td>Tarikh</td><td>:</td><td></td></tr>
 </table>
-
 </td>
-
 </tr>
-
 </table>
-
 </div>
-
-
+<!-- TAMAT BUNGKUSAN SAKSI -->
 
 <div class="pdf-footer">
-
 <span class="docRef"></span>
-
 <span class="page-number"></span>
-
-</div>
-
 </div>
 
 </div>
