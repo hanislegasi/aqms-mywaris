@@ -1664,10 +1664,10 @@ Object.values(groupedSepencarian).forEach((item, index) => {
     
     console.log("PIHAK:", pihak);
 
-    // 2. Suntik penanda data-target ke muka surat pertama untuk penerima ini
+   // 2. Suntik penanda data-target ke muka surat pertama untuk penerima ini
     let templateKandungan = sepencarianContent.replace(
         /class="a4-page/i, 
-        `data-target="tocSepencarian_${index}" class="a4-page`
+        `data-target="tocSepencarian_${index}" class="a4-page dynamic-page`
     );
 
     // 3. Gunakan pembolehubah templateKandungan yang telah ditandai
