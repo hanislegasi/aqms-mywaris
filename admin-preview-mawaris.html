@@ -1072,133 +1072,125 @@ ${data.pemegangAmanah?.telefon || "-"}
 </table>
 `;
 
-let lampiranHartaAlih = `
-<table
-style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid;">
+// ==========================================
+                        // LOGIK PECAHAN JADUAL HARTA ALIH (PAGINATION)
+                        // ==========================================
+                        let lampiranHartaAlih = "";
+                        const hartaAlihArray = data.hartaAlih || [];
+                        const maxRowsPerHartaAlih = 18; // Had maksimum baris sebelum muka surat baru
 
-<tr>
-<th style="border:1px solid #000;padding:8px;">Nama Harta</th>
-<th style="border:1px solid #000;padding:8px;">Rujukan</th>
-<th style="border:1px solid #000;padding:8px;">Nilai</th>
-<th style="border:1px solid #000;padding:8px;">Pemilikan</th>
+                        if (hartaAlihArray.length === 0) {
+                            lampiranHartaAlih = "<p>Tiada maklumat Harta Alih direkodkan.</p>";
+                        } else {
+                            for (let i = 0; i < hartaAlihArray.length; i += maxRowsPerHartaAlih) {
+                                let chunk = hartaAlihArray.slice(i, i + maxRowsPerHartaAlih);
+                                
+                                let tableHTML = `
+                                <table style="width:100%; border-collapse:collapse; font-size:14px; margin-bottom:20px;">
+                                    <thead>
+                                        <tr style="background-color:#f9fafb;">
+                                            <th style="border:1px solid #000;padding:8px;">Nama Harta</th>
+                                            <th style="border:1px solid #000;padding:8px;">Rujukan</th>
+                                            <th style="border:1px solid #000;padding:8px;">Nilai</th>
+                                            <th style="border:1px solid #000;padding:8px;">Pemilikan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                `;
+                                
+                                chunk.forEach(item => {
+                                    let pemilikanText = "-";
+                                    if(item.pemilikan === "milikPenuh"){ pemilikanText = "Milik Penuh"; }
+                                    if(item.pemilikan === "perkongsian"){ pemilikanText = "Perkongsian Nama"; }
 
-</tr>
-`;
-                        
- data.hartaAlih?.forEach(item=>{
+                                    tableHTML += `
+                                    <tr>
+                                        <td style="border:1px solid #000;padding:8px;">${item.nama || "-"}</td>
+                                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.rujukan || "-"}</td>
+                                        <td style="border:1px solid #000;padding:8px;text-align:right !important;">${item.nilai || "-"}</td>
+                                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${pemilikanText}</td>
+                                    </tr>
+                                    `;
+                                });
+                                tableHTML += `</tbody></table>`;
 
-let pemilikanText = "-";
+                                if (i === 0) {
+                                    lampiranHartaAlih += tableHTML;
+                                } else {
+                                    lampiranHartaAlih += `
+                                        </div> <!-- Tutup div penyimpan jadual -->
+                                        <div class="pdf-footer"></div>
+                                    </div> <!-- Tutup .a4-page -->
 
-if(item.pemilikan==="milikPenuh"){
-pemilikanText = "Milik Penuh";
-}
+                                    <div class="a4-page p-[18mm] dynamic-page">
+                                        <h2 style="font-family:'Times New Roman', serif; font-size:28px; margin-top:30px; margin-bottom:20px; color:#153638; text-transform:uppercase;">
+                                            LAMPIRAN : SENARAI HARTA ALIH (SAMBUNGAN)
+                                        </h2>
+                                        <div>
+                                            ${tableHTML}
+                                    `;
+                                }
+                            }
+                        }
 
-if(item.pemilikan==="perkongsian"){
-pemilikanText = "Perkongsian Nama";
-}
+                        // ==========================================
+                        // LOGIK PECAHAN JADUAL HARTA TAK ALIH (PAGINATION)
+                        // ==========================================
+                        let lampiranHartaTakAlih = "";
+                        const hartaTakAlihArray = data.hartaTakAlih || [];
+                        const maxRowsPerHartaTakAlih = 18; 
 
-let kategoriText = item.kategori;
+                        if (hartaTakAlihArray.length === 0) {
+                            lampiranHartaTakAlih = "<p>Tiada maklumat Harta Tak Alih direkodkan.</p>";
+                        } else {
+                            for (let i = 0; i < hartaTakAlihArray.length; i += maxRowsPerHartaTakAlih) {
+                                let chunk = hartaTakAlihArray.slice(i, i + maxRowsPerHartaTakAlih);
+                                
+                                let tableHTML = `
+                                <table style="width:100%; border-collapse:collapse; font-size:14px; margin-bottom:20px;">
+                                    <thead>
+                                        <tr style="background-color:#f9fafb;">
+                                            <th style="border:1px solid #000;padding:8px;">Nama Harta</th>
+                                            <th style="border:1px solid #000;padding:8px;">No Geran</th>
+                                            <th style="border:1px solid #000;padding:8px;">Nilai</th>
+                                            <th style="border:1px solid #000;padding:8px;">Pemilikan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                `;
+                                
+                                chunk.forEach(item => {
+                                    let pemilikanText = item.pemilikan === "perkongsian" ? "Perkongsian Nama" : "Milik Penuh";
 
-if(item.kategori==="hibah"){
-kategoriText = "Hibah";
-}
+                                    tableHTML += `
+                                    <tr>
+                                        <td style="border:1px solid #000;padding:8px;">${item.nama || "-"}</td>
+                                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.rujukan || "-"}</td>
+                                        <td style="border:1px solid #000;padding:8px;text-align:right !important;">${item.nilai || "-"}</td>
+                                        <td style="border:1px solid #000;padding:8px;text-align:center !important;">${pemilikanText}</td>
+                                    </tr>
+                                    `;
+                                });
+                                tableHTML += `</tbody></table>`;
 
-if(item.kategori==="sepencarian"){
-kategoriText = "Harta Sepencarian";
-}
+                                if (i === 0) {
+                                    lampiranHartaTakAlih += tableHTML;
+                                } else {
+                                    lampiranHartaTakAlih += `
+                                        </div> <!-- Tutup div penyimpan jadual -->
+                                        <div class="pdf-footer"></div>
+                                    </div> <!-- Tutup .a4-page -->
 
-
-
-lampiranHartaAlih += `
-
-<tr>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.nama || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${item.rujukan || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:right !important;">
-${item.nilai || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${pemilikanText}
-</td>
-
-
-
-</tr>
-
-`;
-
-});
-
-lampiranHartaAlih += `
-</table>
-`;
-
-let lampiranHartaTakAlih = `
-<table
-style="width:100%; border-collapse:collapse; font-size:14px; page-break-inside: avoid;">
-
-<tr>
-<th style="border:1px solid #000;padding:8px;">Nama Harta</th>
-<th style="border:1px solid #000;padding:8px;">No Geran</th>
-<th style="border:1px solid #000;padding:8px;">Nilai</th>
-<th style="border:1px solid #000;padding:8px;">Pemilikan</th>
-
-</tr>
-`;
-
- data.hartaTakAlih?.forEach(item=>{
-
-let pemilikanText =
-item.pemilikan==="perkongsian"
-? "Perkongsian Nama"
-: "Milik Penuh";
-
-let kategoriText =
-item.kategori==="sepencarian"
-? "Harta Sepencarian"
-:
-item.kategori==="hibah"
-? "Hibah"
-:
-"Faraid";
-
-lampiranHartaTakAlih += `
-<tr>
-
-<td style="border:1px solid #000;padding:8px;">
-${item.nama || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${item.rujukan || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:right !important;">
-${item.nilai || "-"}
-</td>
-
-<td style="border:1px solid #000;padding:8px;text-align:center !important;">
-${pemilikanText}
-</td>
-
-
-
-</tr>
-`;
-
-});
-
-lampiranHartaTakAlih += `
-</table>
-`;
+                                    <div class="a4-page p-[18mm] dynamic-page">
+                                        <h2 style="font-family:'Times New Roman', serif; font-size:28px; margin-top:30px; margin-bottom:20px; color:#153638; text-transform:uppercase;">
+                                            LAMPIRAN : SENARAI HARTA TAK ALIH (SAMBUNGAN)
+                                        </h2>
+                                        <div>
+                                            ${tableHTML}
+                                    `;
+                                }
+                            }
+                        }
 
 // 1. Letak fungsi convertToFraction di bahagian paling atas
 function convertToFraction(percentage) {
