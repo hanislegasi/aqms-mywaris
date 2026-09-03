@@ -562,25 +562,41 @@ if (syarikat.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !==
                 </tr>
             </table>`;
 
-           // 2. Bina HTML untuk ruangan TANDATANGAN (TAMBAHAN BARU)
+           // 2. Bina HTML untuk ruangan TANDATANGAN dinamik
             senaraiTandatanganHTML += `
-            <table width="100%" style="margin-bottom:40px; border-collapse:collapse; font-size:15px;">
-                <tr valign="top">
-                    <td width="50%">
-                        <strong>DITANDATANGANI OLEH</strong><br>
-                        PEMEGANG SAHAM ${abjad}:<br><br><br><br>
-                        .........................................................<br>
-                        <strong>${partner.nama || "-"}</strong><br>
-                        No. K/P: ${partner.ic || "-"}
-                    </td>
-                    <td width="50%">
-                        <strong>Di hadapan (Saksi):</strong><br><br><br><br><br>
-                        .........................................................<br>
-                        Nama Saksi :<br><br>
-                        No. K/P &nbsp;&nbsp;&nbsp;:
-                    </td>
-                </tr>
-            </table>`;
+            <div style="page-break-inside: avoid; width: 100%;">
+                <table style="width:100%; margin-bottom:40px; border-collapse:collapse;">
+                    <tr>
+                        <td width="45%" valign="top" style="height:45px;">
+                            <p style="font-weight:bold;">DITANDATANGANI OLEH PEMEGANG SAHAM ${abjad}:</p>
+                        </td>
+                        <td width="10%"></td>
+                        <td width="45%" valign="top">
+                            <p style="font-weight:bold;">Di hadapan (Saksi):</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="bottom" style="padding-bottom:5px;">
+                            <p>..................................................</p>
+                        </td>
+                        <td></td>
+                        <td valign="bottom" style="padding-bottom:5px;">
+                            <p>..................................................</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <p><strong>${partner.nama || "-"}</strong></p>
+                            <p>No. K/P: ${partner.ic || "-"}</p>
+                        </td>
+                        <td></td>
+                        <td valign="top">
+                            <p>Nama Saksi : </p>
+                            <p>No. K/P &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
+                        </td>
+                    </tr>
+                </table>
+            </div>`;
             
             pihakPihakLabel.push(`Pemegang Saham ${abjad}`);
             // Bina ayat pemilikan saham untuk setiap rakan kongsi
@@ -616,7 +632,7 @@ if (syarikat.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !==
         .replaceAll("{{SAHAM_PARTNER}}", fSaham(totalSahamPartner)) // <-- FIX: Jika guna template lama
         .replaceAll("{{RECITAL_SAHAM_PARTNER}}", klausaRecitalB);   // <-- FIX: Untuk upgrade template dinamik
 
-    htmlMek = htmlMek.replace(/class="a4-page/i, `data-target="tocMek_${sIndex}" class="a4-page`);
+    htmlMek = htmlMek.replace(/class="a4-page/i, `data-target="tocMek_${sIndex}" class="a4-page p-[18mm] dynamic-page"`);
     mekanismeHTML += htmlMek;
     tocMekList.innerHTML += `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Perjanjian Buy-Sell (${syarikat.namaSyarikat})</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_${sIndex}" class="text-[14px] font-bold">-</span></div>`;
 } 
