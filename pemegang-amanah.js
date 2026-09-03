@@ -152,15 +152,15 @@ Umur
 ${item.nama}
 </td>
 
-<td style="border:1px solid #000;padding:8px;text-align:center;">
+<td style="border:1px solid #000;padding:8px;text-align:center !important;">
 ${item.ic}
 </td>
 
-<td style="border:1px solid #000;padding:8px;text-align:center;">
+<td style="border:1px solid #000;padding:8px;text-align:center !important;">
 ${item.hubungan}
 </td>
 
-<td style="border:1px solid #000;padding:8px;text-align:center;">
+<td style="border:1px solid #000;padding:8px;text-align:center !important;">
     ${kiraUmur(item.tarikhLahir)} 
 </td>
 
