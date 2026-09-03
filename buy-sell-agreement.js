@@ -318,38 +318,8 @@ font-style:italic;
         </tr>
     </table>
 
-    <!-- SIGNATURE 2: PEMEGANG SAHAM B -->
-    <table style="width:100%; margin-bottom:40px; border-collapse:collapse;">
-        <tr>
-            <td width="45%" valign="top" style="height:45px;">
-                <p style="font-weight:bold;">DITANDATANGANI OLEH PEMEGANG SAHAM B:</p>
-            </td>
-            <td width="10%"></td>
-            <td width="45%" valign="top">
-                <p style="font-weight:bold;">Di hadapan (Saksi):</p>
-            </td>
-        </tr>
-        <tr>
-            <td valign="bottom" style="padding-bottom:5px;">
-                <p>..................................................</p>
-            </td>
-            <td></td>
-            <td valign="bottom" style="padding-bottom:5px;">
-                <p>..................................................</p>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
-                <p><strong>{{NAMA_PARTNER}}</strong></p>
-                <p>No. K/P: {{NO_IC_PARTNER}}</p>
-            </td>
-            <td></td>
-            <td valign="top">
-                <p>Nama Saksi : </p>
-                <p>No. K/P &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
-            </td>
-        </tr>
-    </table>
+<!-- Letak tag dinamik di sini (ia akan panggil B, C, D automatik) -->
+{{TANDATANGAN_RAKAN_KONGSI_DINAMIK}}
 
     <!-- SIGNATURE 3: SYARIKAT -->
     <table style="width:100%; margin-bottom:30px; border-collapse:collapse;">
