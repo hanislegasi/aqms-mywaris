@@ -1761,33 +1761,36 @@ Object.values(groupedHibah).forEach((item, index) => {
     // TEKNIK KEBAL: Kita 'cop' ID pada setiap helai kertas
     // Walaupun HTML berterabur, kertas ini tetap tahu ia milik siapa!
     // =======================================================
-    contentForThisRecipient = contentForThisRecipient.replaceAll('class="a4-page', `data-target="tocHibah_${index}" class="a4-page dynamic-page`);
-    
-    hibahHTML += contentForThisRecipient;
-});
+    // 1. Letak data-target pada muka surat PERTAMA sahaja
+contentForThisRecipient = contentForThisRecipient.replace(
+    /class="a4-page/i, 
+    `data-target="tocHibah_${index}" class="a4-page`
+);
+
+// 2. Kemudian baru letak 'dynamic-page' pada SEMUA muka surat penerima ini
+contentForThisRecipient = contentForThisRecipient.replaceAll('class="a4-page', 'class="a4-page dynamic-page');
+
+hibahHTML += contentForThisRecipient;
 
                 
 let sepencarianHTML = "";
 
 // 1. Tambah parameter 'index' di sini
 Object.values(groupedSepencarian).forEach((item, index) => { 
-
     const pihak = {
         nama: item.nama,
         ic: item.ic,
         alamat: item.alamat
     };
     
-    console.log("PIHAK:", pihak);
-
-    // 2. Suntik penanda data-target ke muka surat pertama untuk penerima ini
+    // 1. Suntik penanda data-target ke muka surat PERTAMA sahaja
     let templateKandungan = sepencarianContent.replace(
         /class="a4-page/i, 
-        `data-target="tocSepencarian_${index}" class="a4-page dynamic-page`
+        `data-target="tocSepencarian_${index}" class="a4-page`
     );
     
-    // 3. Gunakan pembolehubah templateKandungan yang telah ditandai
-    sepencarianHTML += templateKandungan
+    // 2. Isi semua data pembolehubah
+    templateKandungan = templateKandungan
     .replaceAll("{{TABLE_ALIH}}", generateAlihTable(item.hartaAlih))
     .replaceAll("{{TABLE_TAK_ALIH}}", generateTakAlihTable(item.hartaTakAlih))
     .replaceAll("{{NAMA_PEMILIK}}", data.nama || "-")
@@ -1800,10 +1803,12 @@ Object.values(groupedSepencarian).forEach((item, index) => {
     .replaceAll("{{HUBUNGAN}}", item.hubungan)
     .replaceAll("{{PERATUS}}", item.peratus);
 
+    // 3. Suntik 'dynamic-page' ke SEMUA muka surat dalam dokumen sepencarian ini
+    templateKandungan = templateKandungan.replaceAll('class="a4-page', 'class="a4-page dynamic-page');
+
+    sepencarianHTML += templateKandungan;
 });
-
-finalContent = finalContent.replaceAll('class="a4-page', 'class="a4-page dynamic-page');
-
+    
 // KUMPULKAN SEMUA SUNTIKAN DOM DI SINI SECARA BERURUTAN
 document.getElementById("sectionWasiat").innerHTML = finalContent;
 document.getElementById("sectionSepencarian").innerHTML = sepencarianHTML;
