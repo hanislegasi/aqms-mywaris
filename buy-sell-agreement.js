@@ -286,6 +286,7 @@ font-style:italic;
     </p>
 
     <!-- SIGNATURE 1: PEMEGANG SAHAM A -->
+<div style="page-break-inside: avoid; width: 100%;">
     <table style="width:100%; margin-bottom:40px; border-collapse:collapse;">
         <tr>
             <td width="45%" valign="top" style="height:45px;">
@@ -317,12 +318,12 @@ font-style:italic;
             </td>
         </tr>
     </table>
+</div>
 
-<!-- Letak tag dinamik di sini (ia akan panggil B, C, D automatik) -->
 {{TANDATANGAN_RAKAN_KONGSI_DINAMIK}}
 
-    <!-- SIGNATURE 3: SYARIKAT -->
-    <table style="width:100%; margin-bottom:30px; border-collapse:collapse;">
+<div style="page-break-inside: avoid; width: 100%;">
+    <table style="width:100%; margin-bottom:40px; border-collapse:collapse;">
         <tr>
             <td width="45%" valign="top" style="height:45px;">
                 <p style="font-weight:bold;">DITANDATANGANI BAGI PIHAK SYARIKAT:</p>
@@ -344,8 +345,8 @@ font-style:italic;
         <tr>
             <td valign="top">
                 <p><strong>{{NAMA_WAKIL_SYARIKAT}}</strong></p>
-                <p>Pengarah / Setiausaha Syarikat</p>
-                <p style="margin-top:5px;">Untuk dan bagi pihak:</p>
+                <p>Pengarah / Setiausaha Syarikat</p><br>
+                <p>Untuk dan bagi pihak:</p>
                 <p><strong>{{NAMA_SYARIKAT}}</strong></p>
             </td>
             <td></td>
@@ -355,6 +356,7 @@ font-style:italic;
             </td>
         </tr>
     </table>
+</div>
  
     
  
