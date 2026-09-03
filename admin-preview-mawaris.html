@@ -1833,10 +1833,9 @@ Object.values(groupedHibah).forEach((item, index) => {
     // Walaupun HTML berterabur, kertas ini tetap tahu ia milik siapa!
     // =======================================================
     // 1. Letak data-target pada muka surat PERTAMA sahaja
-contentForThisRecipient = contentForThisRecipient.replace(
+contentForThisRecipient = contentForThisRecipient.replaceAll(
     /class="a4-page/i, 
-    `data-target="tocHibah_${index}" class="a4-page`
-);
+    `data-target="tocHibah_${index}" class="a4-page`);
 
 hibahHTML += contentForThisRecipient;
 
