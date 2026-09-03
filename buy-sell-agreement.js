@@ -49,24 +49,24 @@ const buySellAgreementContent = `
  
     <p style="font-weight:bold; margin-bottom:10px;">BAHAWASANYA (RECITALS):</p>
  
-    <table width="100%" style="margin-bottom:30px; border-collapse:collapse;">
-        <tr valign="top">
-            <td width="40">A.</td>
-            <td style="padding-bottom:10px;">Syarikat merupakan sebuah entiti perniagaan yang sah yang mempunyai modal syer terbitan keseluruhan sebanyak <strong>{{JUMLAH_SAHAM}}</strong> unit saham biasa.</td>
-        </tr>
-        <tr valign="top">
-            <td width="40">B.</td>
-            <td style="padding-bottom:10px;">Pada tarikh Perjanjian ini, Pemegang Saham A merupakan pemilik benefisial dan berdaftar ke atas <strong>{{SAHAM_PEWASIAT}}</strong> unit saham, manakala Pemegang Saham B merupakan pemilik benefisial dan berdaftar ke atas <strong>{{SAHAM_PARTNER}}</strong> unit saham di dalam Syarikat (selepas ini dirujuk secara kolektif sebagai "Saham-Saham Tersebut").</td>
-        </tr>
-        <tr valign="top">
-            <td width="40">C.</td>
-            <td style="padding-bottom:10px;">Pihak-Pihak berhasrat untuk mengikat suatu perjanjian bagi mengatur kelangsungan perniagaan serta menetapkan suatu mekanisme mandatori bagi jualan dan pembelian Saham-Saham Tersebut sekiranya berlaku Kematian atau Keilatan Kekal Menyeluruh (TPD) ke atas mana-mana Pemegang Saham, yang disokong oleh pembiayaan tunai melalui Polisi Takaful Korporat (Keyman).</td>
-        </tr>
-        <tr valign="top">
-            <td width="40">D.</td>
-            <td style="padding-bottom:10px;">Pihak-Pihak juga berhasrat supaya kesemua urus niaga di bawah Perjanjian ini dilaksanakan mengikut prinsip Syariah, bebas daripada unsur riba (faedah), gharar (ketidakpastian melampau) dan maysir (perjudian/spekulasi).</td>
-        </tr>
-    </table>
+   <table width="100%" style="margin-bottom:30px; border-collapse:collapse; text-align:justify;">
+    <tr valign="top">
+        <td width="40">A.</td>
+        <td style="padding-bottom:10px;">Syarikat merupakan sebuah entiti perniagaan yang sah yang mempunyai modal syer terbitan keseluruhan sebanyak <strong>{{JUMLAH_SAHAM}}</strong> unit saham biasa.</td>
+    </tr>
+    <tr valign="top">
+        <td width="40">B.</td>
+        <td style="padding-bottom:10px;">Pada tarikh Perjanjian ini, Pemegang Saham A merupakan pemilik benefisial dan berdaftar ke atas <strong>{{SAHAM_PEWASIAT}}</strong> unit saham, manakala {{RECITAL_SAHAM_PARTNER}} di dalam Syarikat (selepas ini dirujuk secara kolektif sebagai "Saham-Saham Tersebut").</td>
+    </tr>
+    <tr valign="top">
+        <td width="40">C.</td>
+        <td style="padding-bottom:10px;">Pihak-Pihak berhasrat untuk mengikat suatu perjanjian bagi mengatur kelangsungan perniagaan serta menetapkan suatu mekanisme mandatori bagi jualan dan pembelian Saham-Saham Tersebut sekiranya berlaku Kematian atau Keilatan Kekal Menyeluruh (TPD) ke atas mana-mana Pemegang Saham, yang disokong oleh pembiayaan tunai melalui Polisi Takaful Korporat (Keyman).</td>
+    </tr>
+    <tr valign="top">
+        <td width="40">D.</td>
+        <td style="padding-bottom:10px;">Pihak-Pihak juga berhasrat supaya kesemua urus niaga di bawah Perjanjian ini dilaksanakan mengikut prinsip Syariah, bebas daripada unsur riba (faedah), gharar (ketidakpastian melampau) dan maysir (perjudian/spekulasi).</td>
+    </tr>
+</table>
  
 <div class="pdf-footer">
         <span class="footer-docref"></span>
