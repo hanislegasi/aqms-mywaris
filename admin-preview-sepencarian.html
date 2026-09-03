@@ -1451,7 +1451,7 @@ for(const doc of lampiranSnap.docs){
 
     lampiranHTML += `
 
-<div class="a4-page p-[18mm]">
+<div class="a4-page p-[18mm] dynamic-page">
 
 <h2
 style="
@@ -1619,6 +1619,8 @@ Object.values(groupedSepencarian).forEach((item, index) => {
 });
 
 document.getElementById("sectionSepencarian").innerHTML = sepencarianHTML;
+
+autoPaginate();
                         
 try {
     const currentDocRef = data.docRef || data.docRefNo || "-";
