@@ -262,12 +262,16 @@
     <button id="renewalBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">Annual Consultant Renewal</button>  
     <button id="marketingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">Marketing Kit</button>
 
-    <!-- Baris 3: Dibahagi dua sama rata (col-span-2) -->
-    <button onclick="window.location.href='my-statement.html'" class="md:col-span-2 bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md">
+    <!-- Baris 3: -->
+    <!-- BUTANG BARU: myIntroducer -->
+    <button id="introducerBtn" class="md:col-span-2 bg-indigo-600 hover:bg-indigo-700 transition text-white p-5 rounded-xl font-bold shadow-md flex items-center justify-center gap-2">
+        <span>🚀 myIntroducer</span>
+    </button>
+    <button onclick="window.location.href='my-statement.html'" class="md:col-span-1 bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md">
         My Statement
     </button>
-    <button id="copyReferralBtn" class="md:col-span-2 bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md">
-        Copy Referral Link
+    <button id="copyReferralBtn" class="md:col-span-1 bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md">
+        Copy Referral
     </button>
 </div>
 
@@ -754,6 +758,9 @@ onAuthStateChanged(auth, async(user)=>{
         document.getElementById("trainingBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-training.html"; });
         document.getElementById("marketingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-marketing.html"; });
         document.getElementById("claimsBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-claims.html"; });
+        // FUNGSI KLIK BUTANG BARU: myIntroducer
+        document.getElementById("introducerBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-introducer.html"; })
+      
         document.getElementById("copyReferralBtn").addEventListener("click", async()=>{
             try{
                 await navigator.clipboard.writeText(window.location.origin + window.location.pathname.replace("consultant-dashboard.html", "register.html") + "?ref=" + consultantData.consultantNo);
