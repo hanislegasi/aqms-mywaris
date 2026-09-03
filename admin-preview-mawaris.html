@@ -1871,9 +1871,7 @@ Object.values(groupedSepencarian).forEach((item, index) => {
     .replaceAll("{{HUBUNGAN}}", item.hubungan)
     .replaceAll("{{PERATUS}}", item.peratus);
 
-    // 3. Suntik 'dynamic-page' ke SEMUA muka surat dalam dokumen sepencarian ini
-    templateKandungan = templateKandungan.replaceAll('class="a4-page', 'class="a4-page dynamic-page');
-
+    
     sepencarianHTML += templateKandungan;
 });
     
