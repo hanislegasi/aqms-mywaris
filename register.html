@@ -251,6 +251,33 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
     // Simpan terus ke collection 'users'
     await setDoc(doc(db, "users", uid), payloadData);
 
+    // =====================================================================
+    // 2. FUNGSI AUTO-UPDATE STATUS PROSPEK KE "Didaftarkan"
+    // =====================================================================
+    if (validIntroducer && introUid) {
+        try {
+            // Cari prospek yang mempunyai UID Introducer & No Telefon yang sepadan
+            const prosQuery = query(
+                collection(db, "prospects"), 
+                where("introducerUid", "==", introUid),
+                where("telefonProspek", "==", telefon)
+            );
+            const prosSnap = await getDocs(prosQuery);
+
+            if (!prosSnap.empty) {
+                // Jika jumpa, tukar status prospek tersebut
+                const prosDocId = prosSnap.docs[0].id;
+                await updateDoc(doc(db, "prospects", prosDocId), {
+                    status: "Didaftarkan"
+                });
+            }
+        } catch (err) {
+            console.error("Gagal auto-update status prospek:", err);
+        }
+    }
+    // =====================================================================
+
+       
     alert("Pendaftaran berjaya!");
     window.location.href = "login.html";
 
