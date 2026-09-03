@@ -417,22 +417,25 @@ agreeBtn.addEventListener("click", async () => {
                 totalCommission: increment(commissionAmount),
             });
 
-            // B. JIKA ADA INTRODUCER, REKOD JUGA BAHAGIAN UNTUK INTRODUCER TERSEBUT
-            if (customer.introducerUid && introducerAmt > 0) {
-                // Simpan rekod komisen untuk introducer (anda boleh simpan dalam koleksi 'introducerEarnings' atau ledger khas)
-                await addDoc(collection(db, "introducerEarnings"), {
-                    createdAt: txnDate,
-                    introducerUid: customer.introducerUid,
-                    customerMemberNo: memberNo,
-                    customerName: customer.nama,
-                    product: "Wasiat",
-                    saleAmount: saleAmount,
-                    commPercent: customer.introducerComm,
-                    earnedAmount: introducerAmt,
-                    status: "Pending Payout"
-                });
+            // B. Rekod Pendapatan Introducer (HANYA UNTUK NOTA/RUJUKAN AQC SAHAJA)
+            if (customer.introducerUid && customer.introducerComm) {
+                const introducerAmt = saleAmount * (Number(customer.introducerComm) / 100);
+                
+                if (introducerAmt > 0) {
+                    await addDoc(collection(db, "introducerEarnings"), {
+                        createdAt: txnDate,
+                        introducerUid: customer.introducerUid, // UID AQM
+                        aqcNo: directConsultant.consultantNo,  // No AQC
+                        customerMemberNo: memberNo,            
+                        customerName: customer.nama,
+                        product: "Wasiat",
+                        saleAmount: saleAmount,
+                        commPercent: customer.introducerComm,
+                        earnedAmount: introducerAmt,
+                        status: "UNPAID" // AQC belum transfer duit ke AQM
+                    });
             }
-            
+            }
         }
 
         // ALLOCATION EXPENSES & PAYABLES
