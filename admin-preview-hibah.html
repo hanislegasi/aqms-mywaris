@@ -1449,7 +1449,7 @@ for(const doc of lampiranSnap.docs){
 
     lampiranHTML += `
 
-<div class="a4-page p-[18mm]">
+<div class="a4-page p-[18mm] dynamic-page">
 
 <h2
 style="
@@ -1493,8 +1493,6 @@ document.getElementById("sectionWasiat").innerHTML = finalContent;
 
 document.getElementById("sectionLampiran").innerHTML = lampiranHTML;
                         
-
-
 // 2. Fungsi Harta Alih
 function generateAlihTable(list){
     if(!list.length){
@@ -1637,13 +1635,15 @@ Object.values(groupedHibah).forEach((item, index) => {
     // TEKNIK KEBAL: Kita 'cop' ID pada setiap helai kertas
     // Walaupun HTML berterabur, kertas ini tetap tahu ia milik siapa!
     // =======================================================
-    contentForThisRecipient = contentForThisRecipient.replaceAll('class="a4-page', `data-target="tocHibah_${index}" class="a4-page`);
+   contentForThisRecipient = contentForThisRecipient.replaceAll('class="a4-page', `data-target="tocHibah_${index}" class="a4-page dynamic-page`);
 
     hibahHTML += contentForThisRecipient;
 });
 
 document.getElementById("sectionHibah").innerHTML = hibahHTML;            
 
+autoPaginate();
+                        
 try {
     const currentDocRef = data.docRef || data.docRefNo || "-";
 
