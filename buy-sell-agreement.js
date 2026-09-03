@@ -80,105 +80,65 @@ const buySellAgreementContent = `
         MAKA DENGAN INI, ADALAH DIPERSETUJUI SEPERTI BERIKUT:
     </p>
  
-    <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 1: TAFSIRAN & INTERPRETASI</h3>
-    <p style="margin-bottom:10px;">Dalam Perjanjian ini, melainkan jika konteksnya menghendaki makna yang sebaliknya:</p>
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;"><strong>"Kejadian Pemicu <em>(Trigger Event)</em></strong>" ertinya insiden Kematian, Keilatan Kekal Menyeluruh (TPD) yang disahkan secara perubatan, atau mana-mana peristiwa tambahan yang disenaraikan di Fasal 2A, yang berlaku ke atas mana-mana Pemegang Saham.</td></tr>
-        <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;"><strong>"Pemegang Saham Terjejas"</strong> ertinya Pemegang Saham yang telah mengalami Kejadian Pemicu tersebut.</td></tr>
-        <tr valign="top"><td width="30">3.</td><td style="padding-bottom:8px;"><strong>"Wasi/Pentadbir"</strong> ertinya pihak, waris, penama, atau institusi yang dilantik secara sah mengikut perundangan Syariah mahupun Sivil untuk mentadbir harta pusaka Pemegang Saham Terjejas.</td></tr>
-        <tr valign="top"><td width="30">4.</td><td style="padding-bottom:8px;"><strong>"Nilai Saksama"</strong> ertinya nilai balasan bagi Saham-Saham Tersebut sebagaimana ditentukan mengikut Fasal 3.</td></tr>
-    </table>
- 
-    <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 1A: PRINSIP SYARIAH YANG TERPAKAI</h3>
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Urus niaga jual beli Saham-Saham Tersebut di bawah Perjanjian ini adalah berasaskan akad <em>Bai' al-Musawamah</em> (jual beli tawar-menawar terbuka) di mana harga dipersetujui secara telus berdasarkan Nilai Saksama, dan bukan berasaskan riba atau anuiti tetap yang menyerupai faedah.</td></tr>
-        <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Sebarang pembiayaan bagi tujuan pembelian Saham-Saham Tersebut (termasuk melalui Polisi Takaful di Fasal 4 atau kemudahan pembiayaan lain) hendaklah menggunakan produk yang disahkan patuh Syariah oleh Jawatankuasa Syariah institusi berkenaan.</td></tr>
-        <tr valign="top"><td width="30">3.</td><td style="padding-bottom:8px;">Sebarang ganti rugi lewat bayaran (jika ada) hendaklah berbentuk <em>Ta'widh</em> (ganti rugi kos sebenar) dan bukan faedah kompaun, selaras garis panduan Majlis Penasihat Syariah Bank Negara Malaysia.</td></tr>
-    </table>
-
-<div class="pdf-footer">
-        <span class="footer-docref"></span>
-        <span class="page-number"></span>
-    </div>
-</div>
- 
-<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
- 
-    <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 2: KEWAJIPAN JUALAN DAN BELIAN SAHAM (MANDATORY BUY-SELL OBLIGATION)</h3>
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top">
-            <td width="30">1.</td>
-            <td style="padding-bottom:20px; text-align:justify;">Tertakluk kepada terma-terma di sini, apabila berlakunya Kejadian Pemicu ke atas mana-mana Pemegang Saham Terjejas:
-                <ul style="margin-top:5px; padding-left:20px; list-style-type:lower-alpha;">
-                    <li style="margin-bottom:8px;">Wasi/Pentadbir bagi pusaka Pemegang Saham Terjejas adalah <strong>TERIKAT SECARA MUTLAK</strong> untuk menjual, memindah milik, dan melepaskan kesemua hak ke atas pegangan saham Pemegang Saham Terjejas di dalam Syarikat.</li>
-                    <li>Pemegang Saham yang Masih Hidup <em>(Surviving Shareholder)</em> adalah <strong>DIWAJIBKAN</strong> untuk membeli kesemua saham tersebut, yang mana bahagian pembelian tersebut hendaklah berkadar (pro-rata) mengikut nisbah pegangan saham semasa.</li>
-                </ul>
-            </td>
-        </tr>
-        <tr valign="top">
-            <td width="30">2.</td>
-            <td style="padding-bottom:8px;">Wasi/Pentadbir Pemegang Saham Terjejas hendaklah memberi notis bertulis mengenai berlakunya Kejadian Pemicu kepada Syarikat dan Pemegang Saham yang lain dalam tempoh tiga puluh (30) hari daripada tarikh Kejadian Pemicu tersebut.</td>
-        </tr>
-    </table>
- 
-    <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 2A: PERISTIWA PENCETUS TAMBAHAN & HAK PILIHAN PERTAMA</h3>
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top">
-            <td width="30">1.</td>
-            <td style="padding-bottom:20px; text-align:justify;">Selain Kematian dan TPD, Pihak-Pihak juga bersetuju bahawa peristiwa-peristiwa berikut boleh mencetuskan hak/kewajipan jual-beli di bawah Perjanjian ini, tertakluk kepada terma yang dipersetujui berasingan:
-                <ul style="margin-top:5px; padding-left:20px; list-style-type:lower-alpha;">
-                    <li style="margin-bottom:6px;">Persaraan sukarela atau perletakan jawatan Pemegang Saham daripada Syarikat;</li>
-                    <li style="margin-bottom:6px;">Kebankrapan/kemuflisan Pemegang Saham;</li>
-                    <li style="margin-bottom:6px;">Pertikaian kekal <em>(deadlock)</em> antara Pemegang Saham yang tidak dapat diselesaikan melalui Fasal 6A dalam tempoh yang dipersetujui; dan/atau</li>
-                    <li>Hasrat sukarela seseorang Pemegang Saham untuk menjual sebahagian atau kesemua sahamnya kepada pihak ketiga.</li>
-                </ul>
-            </td>
-        </tr>
-        <tr valign="top">
-            <td width="30">2.</td>
-            <td style="padding-bottom:8px;">Bagi peristiwa jualan sukarela kepada pihak ketiga di Fasal 2A.1(d), Pemegang Saham yang berhasrat menjual hendaklah terlebih dahulu menawarkan sahamnya kepada Pemegang Saham sedia ada pada Nilai Saksama atau harga yang ditawarkan pihak ketiga (mengikut mana yang lebih rendah) ("Hak Pilihan Pertama"), dan Pemegang Saham sedia ada mempunyai tempoh tiga puluh (30) hari untuk melaksanakan hak tersebut secara berkadar mengikut pegangan sedia ada sebelum saham boleh ditawarkan kepada pihak luar.</td>
-        </tr>
-    </table>
-
-<div class="pdf-footer">
-        <span class="footer-docref"></span>
-        <span class="page-number"></span>
+    <div style="page-break-inside: avoid;">
+        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 1: TAFSIRAN & INTERPRETASI</h3>
+        <p style="margin-bottom:10px;">Dalam Perjanjian ini, melainkan jika konteksnya menghendaki makna yang sebaliknya:</p>
+        <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+            <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;"><strong>"Kejadian Pemicu <em>(Trigger Event)</em></strong>" ertinya insiden Kematian, Keilatan Kekal Menyeluruh (TPD) yang disahkan secara perubatan, atau mana-mana peristiwa tambahan yang disenaraikan di Fasal 2A, yang berlaku ke atas mana-mana Pemegang Saham.</td></tr>
+            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;"><strong>"Pemegang Saham Terjejas"</strong> ertinya Pemegang Saham yang telah mengalami Kejadian Pemicu tersebut.</td></tr>
+            <tr valign="top"><td width="30">3.</td><td style="padding-bottom:8px;"><strong>"Wasi/Pentadbir"</strong> ertinya pihak, waris, penama, atau institusi yang dilantik secara sah mengikut perundangan Syariah mahupun Sivil untuk mentadbir harta pusaka Pemegang Saham Terjejas.</td></tr>
+            <tr valign="top"><td width="30">4.</td><td style="padding-bottom:8px;"><strong>"Nilai Saksama"</strong> ertinya nilai balasan bagi Saham-Saham Tersebut sebagaimana ditentukan mengikut Fasal 3.</td></tr>
+        </table>
     </div>
  
-</div>
+    <div style="page-break-inside: avoid;">
+        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 1A: PRINSIP SYARIAH YANG TERPAKAI</h3>
+        <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+            <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Urus niaga jual beli Saham-Saham Tersebut di bawah Perjanjian ini adalah berasaskan akad <em>Bai' al-Musawamah</em> (jual beli tawar-menawar terbuka) di mana harga dipersetujui secara telus berdasarkan Nilai Saksama, dan bukan berasaskan riba atau anuiti tetap yang menyerupai faedah.</td></tr>
+            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Sebarang pembiayaan bagi tujuan pembelian Saham-Saham Tersebut (termasuk melalui Polisi Takaful di Fasal 4 atau kemudahan pembiayaan lain) hendaklah menggunakan produk yang disahkan patuh Syariah oleh Jawatankuasa Syariah institusi berkenaan.</td></tr>
+            <tr valign="top"><td width="30">3.</td><td style="padding-bottom:8px;">Sebarang ganti rugi lewat bayaran (jika ada) hendaklah berbentuk <em>Ta'widh</em> (ganti rugi kos sebenar) dan bukan faedah kompaun, selaras garis panduan Majlis Penasihat Syariah Bank Negara Malaysia.</td></tr>
+        </table>
+    </div>
+
+    <div style="page-break-inside: avoid;">
+        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 2: KEWAJIPAN JUALAN DAN BELIAN SAHAM (MANDATORY BUY-SELL OBLIGATION)</h3>
+        <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+            <tr valign="top">
+                <td width="30">1.</td>
+                <td style="padding-bottom:20px; text-align:justify;">Tertakluk kepada terma-terma di sini, apabila berlakunya Kejadian Pemicu ke atas mana-mana Pemegang Saham Terjejas:
+                    <ul style="margin-top:5px; padding-left:20px; list-style-type:lower-alpha;">
+                        <li style="margin-bottom:8px;">Wasi/Pentadbir bagi pusaka Pemegang Saham Terjejas adalah <strong>TERIKAT SECARA MUTLAK</strong> untuk menjual, memindah milik, dan melepaskan kesemua hak ke atas pegangan saham Pemegang Saham Terjejas di dalam Syarikat.</li>
+                        <li>Pemegang Saham yang Masih Hidup <em>(Surviving Shareholder)</em> adalah <strong>DIWAJIBKAN</strong> untuk membeli kesemua saham tersebut, yang mana bahagian pembelian tersebut hendaklah berkadar (pro-rata) mengikut nisbah pegangan saham semasa.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr valign="top">
+                <td width="30">2.</td>
+                <td style="padding-bottom:8px;">Wasi/Pentadbir Pemegang Saham Terjejas hendaklah memberi notis bertulis mengenai berlakunya Kejadian Pemicu kepada Syarikat dan Pemegang Saham yang lain dalam tempoh tiga puluh (30) hari daripada tarikh Kejadian Pemicu tersebut.</td>
+            </tr>
+        </table>
+    </div>
  
-<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
- 
-    <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 3: MEKANISME PENILAIAN HARGA SAHAM</h3>
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top">
-            <td width="30">1.</td>
-            <td style="padding-bottom:20px; text-align:justify;">Pihak-Pihak dengan ini bersetuju bahawa nilai balasan bagi setiap unit saham Syarikat di bawah Perjanjian ini hendaklah ditentukan secara muktamad melalui salah satu kaedah berikut:
-                <ul style="margin-top:5px; padding-left:20px; list-style-type:lower-alpha;">
-                    <li style="margin-bottom:8px;">Formula Nilai Aset Bersih <em>(Net Asset Value - NAV)</em> sepertimana yang disahkan di dalam Laporan Kewangan Beraudit Syarikat bagi tahun kewangan yang terakhir sebelum berlakunya Kejadian Pemicu; ATAU</li>
-                    <li>Harga persetujuan bersama <em>(Fixed Agreed Value)</em> yang ditetapkan secara bertulis dari semasa ke semasa. Jika tiada persetujuan bertulis baharu dikemaskini dalam tempoh dua belas (12) bulan sebelum Kejadian Pemicu, nilai di bawah Fasal 3.1(a) hendaklah diguna pakai.</li>
-                </ul>
-            </td>
-        </tr>
-        <tr valign="top">
-            <td width="30">2.</td>
-            <td style="padding-bottom:8px;">Sekiranya Pihak-Pihak tidak dapat bersetuju dengan nilai di bawah Fasal 3.1, penilaian hendaklah dijalankan oleh juruaudit/penilai bebas bertauliah yang dilantik bersama, dengan kos ditanggung secara berkadar mengikut pegangan saham melainkan dipersetujui sebaliknya.</td>
-        </tr>
-    </table>
- 
-     
-    <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 3A: STRUKTUR PELAKSANAAN BELIAN</h3>
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top">
-            <td width="30">1.</td>
-            <td style="padding-bottom:20px; text-align:justify;">Pembelian Saham-Saham Tersebut di bawah Perjanjian ini hendaklah dilaksanakan menggunakan salah satu struktur berikut, sebagaimana dipersetujui oleh Pihak-Pihak:
-                <ul style="margin-top:5px; padding-left:20px; list-style-type:lower-alpha;">
-                    <li style="margin-bottom:8px;"><strong>Cross-Purchase</strong> — Pemegang Saham yang Masih Hidup membeli terus saham Pemegang Saham Terjejas secara berkadar mengikut pegangan sedia ada; ATAU</li>
-                    <li><strong>Entity/Redemption Purchase</strong> — Syarikat sendiri membeli balik <em>(redeem)</em> saham tersebut menggunakan dana Syarikat atau hasil Polisi Takaful di Fasal 4, tertakluk kepada Akta Syarikat 2016 dan Perlembagaan Syarikat berkaitan pembelian balik saham sendiri.</li>
-                </ul>
-            </td>
-        </tr>
-    </table>
+    <div style="page-break-inside: avoid;">
+        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 2A: PERISTIWA PENCETUS TAMBAHAN & HAK PILIHAN PERTAMA</h3>
+        <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+            <tr valign="top">
+                <td width="30">1.</td>
+                <td style="padding-bottom:20px; text-align:justify;">Selain Kematian dan TPD, Pihak-Pihak juga bersetuju bahawa peristiwa-peristiwa berikut boleh mencetuskan hak/kewajipan jual-beli di bawah Perjanjian ini, tertakluk kepada terma yang dipersetujui berasingan:
+                    <ul style="margin-top:5px; padding-left:20px; list-style-type:lower-alpha;">
+                        <li style="margin-bottom:6px;">Persaraan sukarela atau perletakan jawatan Pemegang Saham daripada Syarikat;</li>
+                        <li style="margin-bottom:6px;">Kebankrapan/kemuflisan Pemegang Saham;</li>
+                        <li style="margin-bottom:6px;">Pertikaian kekal <em>(deadlock)</em> antara Pemegang Saham yang tidak dapat diselesaikan melalui Fasal 6A dalam tempoh yang dipersetujui; dan/atau</li>
+                        <li>Hasrat sukarela seseorang Pemegang Saham untuk menjual sebahagian atau kesemua sahamnya kepada pihak ketiga.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr valign="top">
+                <td width="30">2.</td>
+                <td style="padding-bottom:8px;">Bagi peristiwa jualan sukarela kepada pihak ketiga di Fasal 2A.1(d), Pemegang Saham yang berhasrat menjual hendaklah terlebih dahulu menawarkan sahamnya kepada Pemegang Saham sedia ada pada Nilai Saksama atau harga yang ditawarkan pihak ketiga (mengikut mana yang lebih rendah) ("Hak Pilihan Pertama"), dan Pemegang Saham sedia ada mempunyai tempoh tiga puluh (30) hari untuk melaksanakan hak tersebut secara berkadar mengikut pegangan sedia ada sebelum saham boleh ditawarkan kepada pihak luar.</td>
+            </tr>
+        </table>
+    </div>
 
 <div class="pdf-footer">
         <span class="footer-docref"></span>
@@ -189,18 +149,48 @@ const buySellAgreementContent = `
  
 <div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
  
-    <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 4: PEMBIAYAAN KORPORAT MELALUI TAKAFUL</h3>
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Bagi memastikan kelancaran dan ketersediaan dana untuk melaksanakan obligasi belian saham di bawah Fasal 2, Syarikat dan/atau Pihak-Pihak hendaklah mengambil, mencarum, dan mengekalkan <strong>Polisi Takaful (Keyman)</strong> ke atas hayat setiap Pemegang Saham, dengan jumlah perlindungan yang sekurang-kurangnya menyamai anggaran nilai pasaran pegangan saham masing-masing.</td></tr>
-        <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Apabila berlakunya Kejadian Pemicu, apa-apa pampasan dan/atau hasil tuntutan yang dibayar di bawah Polisi Takaful tersebut hendaklah dipegang amanah semata-mata bagi tujuan melunaskan balasan belian saham kepada Wasi/Pentadbir Pemegang Saham Terjejas.</td></tr>
-        <tr valign="top"><td width="30">3.</td><td style="padding-bottom:8px;">Sekiranya hasil Polisi Takaful tidak mencukupi untuk melunaskan sepenuhnya Nilai Saksama, baki boleh dibayar secara ansuran munasabah tanpa faedah dalam tempoh tidak melebihi tiga puluh enam (36) bulan, dengan Ta'widh (jika berlaku lewat bayar) mengikut Fasal 1A.3.</td></tr>
-    </table>
-
-     <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 4A: PROSES PEMINDAHAN SAHAM & SETEM HASIL</h3>
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Setelah harga dan struktur belian dipersetujui/ditentukan, Pihak-Pihak hendaklah melaksanakan Borang Pemindahan Saham dan mengemukakan dokumen berkaitan kepada Suruhanjaya Syarikat Malaysia (SSM) dalam tempoh tiga puluh (30) hari, termasuk kelulusan lembaga pengarah dan pematuhan Perlembagaan Syarikat.</td></tr>
-        <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Setem hasil <em>(stamp duty)</em> ke atas pemindahan saham hendaklah dijelaskan mengikut Akta Setem 1949 sebelum pendaftaran pemindahan diiktiraf sah di sisi undang-undang.</td></tr>
-    </table>
+    <div style="page-break-inside: avoid;">
+        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 3: MEKANISME PENILAIAN HARGA SAHAM</h3>
+        <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+            <tr valign="top">
+                <td width="30">1.</td>
+                <td style="padding-bottom:20px; text-align:justify;">Pihak-Pihak dengan ini bersetuju bahawa nilai balasan bagi setiap unit saham Syarikat di bawah Perjanjian ini hendaklah ditentukan secara muktamad melalui salah satu kaedah berikut:
+                    <ul style="margin-top:5px; padding-left:20px; list-style-type:lower-alpha;">
+                        <li style="margin-bottom:8px;">Formula Nilai Aset Bersih <em>(Net Asset Value - NAV)</em> sepertimana yang disahkan di dalam Laporan Kewangan Beraudit Syarikat bagi tahun kewangan yang terakhir sebelum berlakunya Kejadian Pemicu; ATAU</li>
+                        <li>Harga persetujuan bersama <em>(Fixed Agreed Value)</em> yang ditetapkan secara bertulis dari semasa ke semasa. Jika tiada persetujuan bertulis baharu dikemaskini dalam tempoh dua belas (12) bulan sebelum Kejadian Pemicu, nilai di bawah Fasal 3.1(a) hendaklah diguna pakai.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr valign="top">
+                <td width="30">2.</td>
+                <td style="padding-bottom:8px;">Sekiranya Pihak-Pihak tidak dapat bersetuju dengan nilai di bawah Fasal 3.1, penilaian hendaklah dijalankan oleh juruaudit/penilai bebas bertauliah yang dilantik bersama, dengan kos ditanggung secara berkadar mengikut pegangan saham melainkan dipersetujui sebaliknya.</td>
+            </tr>
+        </table>
+    </div>
+ 
+    <div style="page-break-inside: avoid;">
+        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 3A: STRUKTUR PELAKSANAAN BELIAN</h3>
+        <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+            <tr valign="top">
+                <td width="30">1.</td>
+                <td style="padding-bottom:20px; text-align:justify;">Pembelian Saham-Saham Tersebut di bawah Perjanjian ini hendaklah dilaksanakan menggunakan salah satu struktur berikut, sebagaimana dipersetujui oleh Pihak-Pihak:
+                    <ul style="margin-top:5px; padding-left:20px; list-style-type:lower-alpha;">
+                        <li style="margin-bottom:8px;"><strong>Cross-Purchase</strong> — Pemegang Saham yang Masih Hidup membeli terus saham Pemegang Saham Terjejas secara berkadar mengikut pegangan sedia ada; ATAU</li>
+                        <li><strong>Entity/Redemption Purchase</strong> — Syarikat sendiri membeli balik <em>(redeem)</em> saham tersebut menggunakan dana Syarikat atau hasil Polisi Takaful di Fasal 4, tertakluk kepada Akta Syarikat 2016 dan Perlembagaan Syarikat berkaitan pembelian balik saham sendiri.</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+ 
+    <div style="page-break-inside: avoid;">
+        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 4: PEMBIAYAAN KORPORAT MELALUI TAKAFUL</h3>
+        <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+            <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Bagi memastikan kelancaran dan ketersediaan dana untuk melaksanakan obligasi belian saham di bawah Fasal 2, Syarikat dan/atau Pihak-Pihak hendaklah mengambil, mencarum, dan mengekalkan <strong>Polisi Takaful (Keyman)</strong> ke atas hayat setiap Pemegang Saham, dengan jumlah perlindungan yang sekurang-kurangnya menyamai anggaran nilai pasaran pegangan saham masing-masing.</td></tr>
+            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Apabila berlakunya Kejadian Pemicu, apa-apa pampasan dan/atau hasil tuntutan yang dibayar di bawah Polisi Takaful tersebut hendaklah dipegang amanah semata-mata bagi tujuan melunaskan balasan belian saham kepada Wasi/Pentadbir Pemegang Saham Terjejas.</td></tr>
+            <tr valign="top"><td width="30">3.</td><td style="padding-bottom:8px;">Sekiranya hasil Polisi Takaful tidak mencukupi untuk melunaskan sepenuhnya Nilai Saksama, baki boleh dibayar secara ansuran munasabah tanpa faedah dalam tempoh tidak melebihi tiga puluh enam (36) bulan, dengan Ta'widh (jika berlaku lewat bayar) mengikut Fasal 1A.3.</td></tr>
+        </table>
+    </div>
 
 <div class="pdf-footer">
         <span class="footer-docref"></span>
@@ -211,48 +201,59 @@ const buySellAgreementContent = `
  
 <div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
  
-    <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 5: PEMATUHAN DOKUMEN WASIAT KORPORAT</h3>
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Sebagai balasan kepada kewajipan-kewajipan di bawah Perjanjian ini, setiap Pemegang Saham bersetuju dan berjanji untuk menyempurnakan suatu Deklarasi Wasiat Korporat yang selari dengan Perjanjian ini.</td></tr>
-        <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Wasiat Korporat tersebut hendaklah memuatkan arahan mandatori yang jelas kepada Wasi/Pentadbir untuk menguatkuasakan pindah milik saham kepada Pemegang Saham yang Masih Hidup tanpa kelewatan dan tanpa membenarkan sebarang bantahan daripada waris-waris Faraid/benefisiari yang lain, tertakluk sepenuhnya kepada had 1/3 dan prinsip Faraid yang dinyatakan di dalam Wasiat Korporat tersebut.</td></tr>
-    </table>
- 
-    <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 5A: KERAHSIAAN DAN SEKATAN MUNASABAH</h3>
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Setiap Pihak bersetuju menjaga kerahsiaan maklumat perniagaan sensitif Syarikat dan tidak boleh mendedahkannya kepada pihak ketiga tanpa kebenaran, kecuali dikehendaki oleh undang-undang.</td></tr>
-        <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Sekiranya dipersetujui, sekatan larangan bersaing <em>(non-compete)</em> ke atas Pemegang Saham Terjejas selepas jualan sahamnya hendaklah terhad dari segi tempoh (tidak melebihi dua (2) tahun), kawasan geografi dan skop perniagaan yang munasabah, bagi mengelakkan sekatan yang tidak sah di sisi undang-undang kontrak Malaysia.</td></tr>
-    </table>
- 
-    <div class="pdf-footer">
-        <span class="footer-docref"></span>
-        <span class="page-number"></span>
+    <div style="page-break-inside: avoid;">
+        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 4A: PROSES PEMINDAHAN SAHAM & SETEM HASIL</h3>
+        <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+            <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Setelah harga dan struktur belian dipersetujui/ditentukan, Pihak-Pihak hendaklah melaksanakan Borang Pemindahan Saham dan mengemukakan dokumen berkaitan kepada Suruhanjaya Syarikat Malaysia (SSM) dalam tempoh tiga puluh (30) hari, termasuk kelulusan lembaga pengarah dan pematuhan Perlembagaan Syarikat.</td></tr>
+            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Setem hasil <em>(stamp duty)</em> ke atas pemindahan saham hendaklah dijelaskan mengikut Akta Setem 1949 sebelum pendaftaran pemindahan diiktiraf sah di sisi undang-undang.</td></tr>
+        </table>
     </div>
- 
-</div>
- 
-<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
- 
-    <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 6: KESAN MENGIKAT & UNDANG-UNDANG GUNA PAKAI</h3>
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Perjanjian ini adalah mengikat ke atas waris, pentadbir, wasi, pewaris, dan wakil peribadi yang sah di sisi undang-undang bagi setiap Pihak di sini.</td></tr>
-        <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Perjanjian ini hendaklah ditafsirkan, dikawal selia, dan dikuatkuasakan selaras dengan Undang-Undang Malaysia, termasuk Akta Kontrak 1950 dan Akta Syarikat 2016, dan tertakluk kepada bidang kuasa khusus, Hukum Syarak yang terpakai di Malaysia.</td></tr>
-    </table>
- 
-    <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 6A: PENYELESAIAN PERTIKAIAN</h3>
-    <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-        <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Sebarang pertikaian yang berbangkit daripada atau berkaitan dengan Perjanjian ini hendaklah cuba diselesaikan terlebih dahulu secara <em>Sulh</em> (mediasi/rundingan baik) dalam tempoh tiga puluh (30) hari daripada notis pertikaian diberikan.</td></tr>
-        <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Sekiranya tidak berjaya diselesaikan melalui Sulh, pertikaian tersebut hendaklah dirujuk kepada dan diselesaikan secara muktamad melalui timbang tara mengikut Akta Timbang Tara 2005 dan/atau peraturan timbang tara patuh Syariah (i-Arbitration) Pusat Timbang Tara Antarabangsa Kuala Lumpur (AIAC), dan keputusan timbang tara tersebut adalah muktamad serta mengikat kesemua Pihak.</td></tr>
-    </table>
- 
-    <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 6B: FORCE MAJEURE</h3>
-    <p style="margin-bottom:15px;">
-        Mana-mana Pihak tidak dianggap mungkir kontrak di bawah Perjanjian ini sekiranya kegagalan melaksanakan kewajipannya adalah disebabkan oleh peristiwa di luar kawalan munasabah pihak tersebut (termasuk bencana alam, wabak, atau perubahan undang-undang), dengan syarat notis segera diberikan kepada Pihak yang lain sebaik sahaja praktik.
-    </p>
- 
-    <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 6C: KEBOLEHASINGAN</h3>
-    <p style="margin-bottom:30px;">
-        Sekiranya mana-mana fasal di dalam Perjanjian ini didapati tidak sah atau tidak berkuat kuasa oleh mana-mana pihak berkuasa yang berwibawa, fasal tersebut hendaklah diasingkan dan fasal-fasal lain yang selebihnya hendaklah kekal berkuat kuasa sepenuhnya.
-    </p>
+
+    <div style="page-break-inside: avoid;">
+        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 5: PEMATUHAN DOKUMEN WASIAT KORPORAT</h3>
+        <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+            <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Sebagai balasan kepada kewajipan-kewajipan di bawah Perjanjian ini, setiap Pemegang Saham bersetuju dan berjanji untuk menyempurnakan suatu Deklarasi Wasiat Korporat yang selari dengan Perjanjian ini.</td></tr>
+            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Wasiat Korporat tersebut hendaklah memuatkan arahan mandatori yang jelas kepada Wasi/Pentadbir untuk menguatkuasakan pindah milik saham kepada Pemegang Saham yang Masih Hidup tanpa kelewatan dan tanpa membenarkan sebarang bantahan daripada waris-waris Faraid/benefisiari yang lain, tertakluk sepenuhnya kepada had 1/3 dan prinsip Faraid yang dinyatakan di dalam Wasiat Korporat tersebut.</td></tr>
+        </table>
+    </div>
+
+    <div style="page-break-inside: avoid;">
+        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 5A: KERAHSIAAN DAN SEKATAN MUNASABAH</h3>
+        <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+            <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Setiap Pihak bersetuju menjaga kerahsiaan maklumat perniagaan sensitif Syarikat dan tidak boleh mendedahkannya kepada pihak ketiga tanpa kebenaran, kecuali dikehendaki oleh undang-undang.</td></tr>
+            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Sekiranya dipersetujui, sekatan larangan bersaing <em>(non-compete)</em> ke atas Pemegang Saham Terjejas selepas jualan sahamnya hendaklah terhad dari segi tempoh (tidak melebihi dua (2) tahun), kawasan geografi dan skop perniagaan yang munasabah, bagi mengelakkan sekatan yang tidak sah di sisi undang-undang kontrak Malaysia.</td></tr>
+        </table>
+    </div>
+
+    <div style="page-break-inside: avoid;">
+        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 6: KESAN MENGIKAT & UNDANG-UNDANG GUNA PAKAI</h3>
+        <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+            <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Perjanjian ini adalah mengikat ke atas waris, pentadbir, wasi, pewaris, dan wakil peribadi yang sah di sisi undang-undang bagi setiap Pihak di sini.</td></tr>
+            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Perjanjian ini hendaklah ditafsirkan, dikawal selia, dan dikuatkuasakan selaras dengan Undang-Undang Malaysia, termasuk Akta Kontrak 1950 dan Akta Syarikat 2016, dan tertakluk kepada bidang kuasa khusus, Hukum Syarak yang terpakai di Malaysia.</td></tr>
+        </table>
+    </div>
+
+    <div style="page-break-inside: avoid;">
+        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 6A: PENYELESAIAN PERTIKAIAN</h3>
+        <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+            <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Sebarang pertikaian yang berbangkit daripada atau berkaitan dengan Perjanjian ini hendaklah cuba diselesaikan terlebih dahulu secara <em>Sulh</em> (mediasi/rundingan baik) dalam tempoh tiga puluh (30) hari daripada notis pertikaian diberikan.</td></tr>
+            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Sekiranya tidak berjaya diselesaikan melalui Sulh, pertikaian tersebut hendaklah dirujuk kepada dan diselesaikan secara muktamad melalui timbang tara mengikut Akta Timbang Tara 2005 dan/atau peraturan timbang tara patuh Syariah (i-Arbitration) Pusat Timbang Tara Antarabangsa Kuala Lumpur (AIAC), dan keputusan timbang tara tersebut adalah muktamad serta mengikat kesemua Pihak.</td></tr>
+        </table>
+    </div>
+
+    <div style="page-break-inside: avoid;">
+        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 6B: FORCE MAJEURE</h3>
+        <p style="margin-bottom:15px;">
+            Mana-mana Pihak tidak dianggap mungkir kontrak di bawah Perjanjian ini sekiranya kegagalan melaksanakan kewajipannya adalah disebabkan oleh peristiwa di luar kawalan munasabah pihak tersebut (termasuk bencana alam, wabak, atau perubahan undang-undang), dengan syarat notis segera diberikan kepada Pihak yang lain sebaik sahaja praktik.
+        </p>
+    </div>
+
+    <div style="page-break-inside: avoid;">
+        <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 6C: KEBOLEHASINGAN</h3>
+        <p style="margin-bottom:30px;">
+            Sekiranya mana-mana fasal di dalam Perjanjian ini didapati tidak sah atau tidak berkuat kuasa oleh mana-mana pihak berkuasa yang berwibawa, fasal tersebut hendaklah diasingkan dan fasal-fasal lain yang selebihnya hendaklah kekal berkuat kuasa sepenuhnya.
+        </p>
+    </div>
  
 <div
 style="
@@ -278,7 +279,7 @@ font-style:italic;
  
 </div>
  
-<!-- ================= PAGE 4 ================= -->
+<!-- ================= PAGE 5 ================= -->
 <div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
 
     <p style="margin-bottom:40px;">
