@@ -30,15 +30,6 @@ margin-bottom:8px;
 بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
 </div>
 
-<div
-style="
-font-family:'Times New Roman', serif;
-font-size:15px;
-line-height:1.6;
-text-align:justify;
-color:#222;
-">
-
 <p style="text-align:center; margin-bottom:20px;">
 <strong>Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani</strong>
 </p>
@@ -70,18 +61,12 @@ Walaupun begitu, sekiranya wujud keperluan di mana suatu Perintah Pengesahan Hib
 Bahawasanya Dokumen Pengisytiharan Hibah ini adalah pengisytiharan terakhir dan mana-mana pengisytiharan hibah yang telah dinyatakan terdahulu ke atas harta hibah ini adalah terbatal.
 </p>
 
-
 <div class="pdf-footer">
 <span class="footer-docref"></span>
 <span class="page-number"></span>
 </div>
 
 </div>
-
-</div>
-
-</div>
-
 
 <div class="a4-page p-[18mm]">
 
@@ -569,8 +554,6 @@ font-style:italic;
 
 </div>
 
-</div>
-
    
 <div class="a4-page p-[18mm]">
 
@@ -800,7 +783,6 @@ margin-top:50px;
 
 </div>
 
-</div>
 
 <div class="a4-page p-[18mm]">
 
@@ -878,15 +860,6 @@ margin-bottom:8px;
 بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
 </div>
 
-<div
-style="
-font-family:'Times New Roman', serif;
-font-size:15px;
-line-height:1.6;
-text-align:justify;
-color:#222;
-">
-
 <p style="text-align:center; margin-bottom:20px;">
 <strong>Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani</strong>
 </p>
@@ -919,8 +892,6 @@ font-style:italic;
 <span class="docRef"></span>
 
 <span class="page-number"></span>
-
-</div>
 
 </div>
 
@@ -1155,8 +1126,6 @@ margin-top:50px;
 
 </div>
 
-</div>
-
 
 <div class="a4-page p-[18mm]">
 
@@ -1179,15 +1148,6 @@ margin-bottom:8px;
 ">
 بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
 </div>
-
-<div
-style="
-font-family:'Times New Roman', serif;
-font-size:15px;
-line-height:1.6;
-text-align:justify;
-color:#222;
-">
 
 <p style="text-align:center; margin-bottom:20px;">
 <strong>Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani</strong>
@@ -1363,7 +1323,6 @@ Pemberi Hibah faham dengan jelas mengenai konsep di atas dan mengisytiharkan bah
 <div class="pdf-footer">
 <span class="footer-docref"></span>
 <span class="page-number"></span>
-</div>
 </div>
 </div>
 
@@ -1646,9 +1605,6 @@ font-style:italic;
 
 </div>
 
-</div>
-
-
    
 <div class="a4-page p-[18mm]">
 
@@ -1897,8 +1853,4 @@ margin-top:50px;
 
 </div>
 
-</div>
-
-
 `;
-
