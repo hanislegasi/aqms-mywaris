@@ -1018,9 +1018,7 @@
                             hurufLampiran++;
                         }
 
-                        // 3. Masukkan dynamic-page untuk Wasiat
-                        finalContent = finalContent.replaceAll('class="a4-page', 'class="a4-page dynamic-page');
-                                                
+                                                                       
                         // 4. Masukkan ke dalam DOM
                         document.getElementById("sectionWasiat").innerHTML = finalContent;
                         document.getElementById("sectionLampiran").innerHTML = lampiranHTML;
