@@ -249,30 +249,33 @@
 </div>
  
 <!-- MENU -->
-<div class="grid md:grid-cols-4 gap-4">
-    <!-- Baris 1 -->
-    <button id="clientsBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">myClients</button>
-    <button id="overridingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">myTeam</button>
-    <button onclick="window.location.href='consultant-usb.html'" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">myUSB</button>
-    <button onclick="window.location.href='consultant-claims.html'" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">myClaims</button>
-    
-    <!-- Baris 2 -->
-    <button id="careerBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">Career Path</button>
-    <button id="trainingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition text-sm">Continuous Professional Development</button>
-    <button id="renewalBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">Annual Consultant Renewal</button>  
-    <button id="marketingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">Marketing Kit</button>
+<div class="flex flex-col gap-4">
+    <!-- Baris 1 & 2 (Grid 4 Kotak) -->
+    <div class="grid md:grid-cols-4 gap-4">
+        <button id="clientsBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">myClients</button>
+        <button id="overridingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">myTeam</button>
+        <button onclick="window.location.href='consultant-usb.html'" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">myUSB</button>
+        <button onclick="window.location.href='consultant-claims.html'" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">myClaims</button>
+        
+        <button id="careerBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">Career Path</button>
+        <button id="trainingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition text-sm">Continuous Professional Development</button>
+        <button id="renewalBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">Annual Consultant Renewal</button>  
+        <button id="marketingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">Marketing Kit</button>
+    </div>
 
-    <!-- Baris 3: -->
-    <!-- BUTANG BARU: myIntroducer -->
-    <button id="introducerBtn" class="md:col-span-2 bg-indigo-600 hover:bg-indigo-700 transition text-white p-5 rounded-xl font-bold shadow-md flex items-center justify-center gap-2">
-        <span>🚀 myIntroducer</span>
-    </button>
-    <button onclick="window.location.href='my-statement.html'" class="md:col-span-1 bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md">
-        My Statement
-    </button>
-    <button id="copyReferralBtn" class="md:col-span-1 bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md">
-        Copy Referral
-    </button>
+    <!-- Baris 3 (Grid 3 Kotak Sama Saiz) -->
+    <div class="grid md:grid-cols-3 gap-4">
+        <!-- BUTANG myIntroducer -->
+        <button id="introducerBtn" class="bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md flex items-center justify-center gap-2">
+            <span>🚀 myIntroducer</span>
+        </button>
+        <button onclick="window.location.href='my-statement.html'" class="bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md">
+            My Statement
+        </button>
+        <button id="copyReferralBtn" class="bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md">
+            Copy Referral
+        </button>
+    </div>
 </div>
 
 <script type="module">
