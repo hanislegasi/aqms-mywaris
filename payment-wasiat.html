@@ -416,6 +416,23 @@ agreeBtn.addEventListener("click", async () => {
                 careerSales: increment(saleAmount),
                 totalCommission: increment(commissionAmount),
             });
+
+            // B. JIKA ADA INTRODUCER, REKOD JUGA BAHAGIAN UNTUK INTRODUCER TERSEBUT
+            if (customer.introducerUid && introducerAmt > 0) {
+                // Simpan rekod komisen untuk introducer (anda boleh simpan dalam koleksi 'introducerEarnings' atau ledger khas)
+                await addDoc(collection(db, "introducerEarnings"), {
+                    createdAt: txnDate,
+                    introducerUid: customer.introducerUid,
+                    customerMemberNo: memberNo,
+                    customerName: customer.nama,
+                    product: "Wasiat",
+                    saleAmount: saleAmount,
+                    commPercent: customer.introducerComm,
+                    earnedAmount: introducerAmt,
+                    status: "Pending Payout"
+                });
+            }
+            
         }
 
         // ALLOCATION EXPENSES & PAYABLES
