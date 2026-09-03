@@ -416,7 +416,7 @@ font-style:italic;
 
    
 <div class="a4-page p-[18mm]">
-
+<div style="page-break-inside: avoid; break-inside: avoid; width: 100%;">
 <div class="mt-8">
 
 <strong>PENGAKUAN PEWASIAT</strong>
@@ -632,6 +632,10 @@ margin-top:50px;
 </tr>
 
 </table>
+
+</div>
+
+</div>
 
 <div class="pdf-footer">
 
