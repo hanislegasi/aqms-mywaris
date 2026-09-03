@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myIntroducer Leads - AQC Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen" style="font-family: Inter, sans-serif;">
+
+    <!-- HEADER -->
+    <div class="bg-[#153638] text-white p-5 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">Pengurusan myIntroducer</h1>
+                <p class="text-gray-300 text-sm mt-1">Senarai Prospek dari Rakan Introducer (AQM)</p>
+            </div>
+            <a href="consultant-dashboard.html" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+                ← Kembali ke Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="p-5 max-w-7xl mx-auto mt-5">
+        
+        <!-- KAD STATISTIK -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-sm font-semibold text-gray-500">Jumlah Prospek Diterima</p>
+                <p id="statTotal" class="text-3xl font-bold text-[#153638] mt-2">0</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-sm font-semibold text-gray-500">Menunggu Tindakan (Pending)</p>
+                <p id="statPending" class="text-3xl font-bold text-orange-500 mt-2">0</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-sm font-semibold text-gray-500">Berjaya Didaftarkan</p>
+                <p id="statSuccess" class="text-3xl font-bold text-green-600 mt-2">0</p>
+            </div>
+        </div>
+
+        <!-- JADUAL PROSPEK -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                <h2 class="text-lg font-bold text-gray-800">Senarai Leads (Prospek)</h2>
+                <button onclick="location.reload()" class="text-sm bg-white border border-gray-300 px-3 py-1.5 rounded-lg hover:bg-gray-50 font-medium">
+                    🔄 Refresh
+                </button>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-gray-100/50 text-gray-600 font-semibold border-b">
+                        <tr>
+                            <th class="p-4">Tarikh</th>
+                            <th class="p-4">Maklumat Prospek</th>
+                            <th class="p-4">Introducer (AQM)</th>
+                            <th class="p-4">Status</th>
+                            <th class="p-4 text-center">Tindakan / Link Daftar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="prospectsTable" class="divide-y divide-gray-100">
+                        <tr>
+                            <td colspan="5" class="p-8 text-center text-gray-500">Memuatkan data prospek...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPT FIREBASE -->
+    <script type="module">
+        import { db, auth } from './firebase.js';
+        import { doc, getDoc, getDocs, collection, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        let aqcNo = "";
+
+        // Fungsi Tukar Status
+        window.updateStatus = async (docId, statusBaru) => {
+            if(confirm(`Anda pasti mahu tukar status prospek ini kepada "${statusBaru}"?`)) {
+                try {
+                    await updateDoc(doc(db, "prospects", docId), { status: statusBaru });
+                    alert("Status berjaya dikemaskini.");
+                    location.reload();
+                } catch (error) {
+                    alert("Ralat kemaskini: " + error.message);
+                }
+            }
+        };
+
+        // Fungsi Copy Link
+        window.copyRegisterLink = async (aqmUid) => {
+            const baseUrl = window.location.origin + window.location.pathname.replace("consultant-introducer.html", "register.html");
+            // Link ini mengandungi No AQC dan UID AQM
+            const registerLink = `${baseUrl}?ref=${aqcNo}&intro=${aqmUid}`;
+            
+            try {
+                await navigator.clipboard.writeText(registerLink);
+                alert("Link Pendaftaran berjaya disalin!\n\n" + registerLink + "\n\nAnda boleh hantar link ini kepada prospek untuk mereka mendaftar.");
+            } catch (err) {
+                alert("Gagal menyalin link. Sila copy secara manual:\n" + registerLink);
+            }
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            try {
+                // 1. Dapatkan Profil AQC
+                const aqcDoc = await getDoc(doc(db, "consultants", user.uid));
+                if (!aqcDoc.exists()) {
+                    alert("Hanya Consultant dibenarkan.");
+                    window.location.href = "index.html";
+                    return;
+                }
+                aqcNo = aqcDoc.data().consultantNo;
+
+                // 2. Cari semua Klien (AQM) di bawah AQC ini
+                const clientsQuery = query(collection(db, "users"), where("referral", "==", aqcNo));
+                const clientsSnap = await getDocs(clientsQuery);
+                const myAqmUids = [];
+                clientsSnap.forEach(d => myAqmUids.push(d.id));
+
+                if (myAqmUids.length === 0) {
+                    document.getElementById("prospectsTable").innerHTML = `<tr><td colspan="5" class="p-8 text-center text-gray-500">Anda belum mempunyai klien (AQM).</td></tr>`;
+                    return;
+                }
+
+                // 3. Tarik data dari koleksi 'prospects' dan tapis (Filter)
+                const prosSnap = await getDocs(collection(db, "prospects"));
+                const prospects = [];
+                let countPending = 0;
+                let countSuccess = 0;
+
+                prosSnap.forEach(d => {
+                    const p = d.data();
+                    // Jika prospek ini dihantar oleh salah seorang AQM di bawah AQC ini
+                    if (myAqmUids.includes(p.introducerUid)) {
+                        prospects.push({ id: d.id, ...p });
+                        
+                        if(p.status === "Menunggu Tindakan AQC") countPending++;
+                        if(p.status === "Didaftarkan") countSuccess++;
+                    }
+                });
+
+                // Update Kad Statistik
+                document.getElementById("statTotal").innerText = prospects.length;
+                document.getElementById("statPending").innerText = countPending;
+                document.getElementById("statSuccess").innerText = countSuccess;
+
+                // 4. Render Jadual
+                const tbody = document.getElementById("prospectsTable");
+                tbody.innerHTML = "";
+
+                if (prospects.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-gray-500">Belum ada prospek dihantar oleh klien anda.</td></tr>`;
+                    return;
+                }
+
+                // Susun dari terbaru ke lama
+                prospects.sort((a, b) => b.tarikhHantar?.toMillis() - a.tarikhHantar?.toMillis());
+
+                prospects.forEach(p => {
+                    const tarikh = p.tarikhHantar ? new Date(p.tarikhHantar.toDate()).toLocaleDateString('ms-MY') : "-";
+                    
+                    // Warna badge status
+                    let statusColor = "bg-gray-100 text-gray-700";
+                    if (p.status === "Menunggu Tindakan AQC") statusColor = "bg-orange-100 text-orange-700";
+                    if (p.status === "Sedang Dihubungi") statusColor = "bg-blue-100 text-blue-700";
+                    if (p.status === "Didaftarkan") statusColor = "bg-green-100 text-green-700";
+                    if (p.status === "KIV / Tolak") statusColor = "bg-red-100 text-red-700";
+
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="p-4 align-top text-gray-500 whitespace-nowrap">${tarikh}</td>
+                            <td class="p-4 align-top">
+                                <p class="font-bold text-gray-800 text-base">${p.namaProspek}</p>
+                                <p class="text-indigo-600 font-semibold mb-1">📞 ${p.telefonProspek}</p>
+                                <p class="text-gray-500 text-xs">💼 ${p.pekerjaanProspek}</p>
+                                ${p.nota ? `<p class="text-gray-400 text-xs mt-2 italic border-l-2 border-gray-200 pl-2">${p.nota}</p>` : ''}
+                            </td>
+                            <td class="p-4 align-top">
+                                <p class="font-semibold text-gray-800">${p.introducerNama}</p>
+                                <p class="text-gray-500 text-xs mt-1">📞 ${p.introducerPhone}</p>
+                                <span class="inline-block mt-2 bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] px-2 py-1 rounded font-bold">
+                                    💰 Komisen: ${p.introducerCommPercent}%
+                                </span>
+                            </td>
+                            <td class="p-4 align-top">
+                                <select onchange="updateStatus('${p.id}', this.value)" class="text-xs font-semibold px-3 py-1.5 rounded-lg border-0 ring-1 ring-inset ring-gray-200 cursor-pointer outline-none ${statusColor}">
+                                    <option value="Menunggu Tindakan AQC" ${p.status === "Menunggu Tindakan AQC" ? "selected" : ""}>Pending</option>
+                                    <option value="Sedang Dihubungi" ${p.status === "Sedang Dihubungi" ? "selected" : ""}>Sedang Dihubungi</option>
+                                    <option value="Didaftarkan" ${p.status === "Didaftarkan" ? "selected" : ""}>Didaftarkan</option>
+                                    <option value="KIV / Tolak" ${p.status === "KIV / Tolak" ? "selected" : ""}>KIV / Tolak</option>
+                                </select>
+                            </td>
+                            <td class="p-4 align-top text-center">
+                                <button onclick="copyRegisterLink('${p.introducerUid}')" class="bg-[#153638] hover:bg-[#1d4a4d] text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow-md w-full mb-2 flex items-center justify-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                                    Copy Link Daftar
+                                </button>
+                                <p class="text-[10px] text-gray-400 leading-tight">Link ini mengandungi ID anda & AQM secara automatik.</p>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById("prospectsTable").innerHTML = `<tr><td colspan="5" class="p-8 text-center text-red-500">Gagal memuatkan data: ${error.message}</td></tr>`;
+            }
+        });
+    </script>
+</body>
+</html>
