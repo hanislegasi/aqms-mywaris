@@ -553,14 +553,16 @@ if (syarikat.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !==
         syarikat.rakanKongsiList.forEach((partner) => {
             
             senaraiRakanKongsiHTML += `
-            <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-                <tr valign="top">
-                    <td width="30">(${indexParti})</td>
-                    <td style="text-align:justify;">
-                        <strong>${partner.nama || "-"}</strong> (No. K/P: <strong>${partner.ic || "-"}</strong>), warganegara Malaysia yang beralamat di <strong>${partner.alamat || "-"}</strong> (selepas ini secara berasingan dirujuk sebagai "Pemegang Saham ${abjad}");
-                    </td>
-                </tr>
-            </table>`;
+            <div style="page-break-inside: avoid; width: 100%;">
+                <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+                    <tr valign="top">
+                        <td width="30">(${indexParti})</td>
+                        <td style="text-align:justify;">
+                            <strong>${partner.nama || "-"}</strong> (No. K/P: <strong>${partner.ic || "-"}</strong>), warganegara Malaysia yang beralamat di <strong>${partner.alamat || "-"}</strong> (selepas ini secara berasingan dirujuk sebagai "Pemegang Saham ${abjad}");
+                        </td>
+                    </tr>
+                </table>
+            </div>`;
 
            // 2. Bina HTML untuk ruangan TANDATANGAN dinamik
             senaraiTandatanganHTML += `
