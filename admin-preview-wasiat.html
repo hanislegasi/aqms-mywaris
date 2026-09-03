@@ -1367,63 +1367,37 @@ data.icWasi2 || "-"
 
 .replaceAll("{{SEKSYEN_WASIAT_13}}", bahagianWasiat13);
 
+// 1. Wujudkan pembolehubah lampiranHTML
+let lampiranHTML = ""; 
 let hurufLampiran = "I".charCodeAt(0);
                        
 for(const doc of lampiranSnap.docs){
 
-const file = doc.data();
-
-const base64Image =
-await imageToBase64(file.fileURL);
+    const file = doc.data();
+    const base64Image = await imageToBase64(file.fileURL);
     
-finalContent += `
+    // 2. Tukar finalContent kepada lampiranHTML dan tambah 'dynamic-page'
+    lampiranHTML += `
+    <div class="a4-page p-[18mm] dynamic-page">
+        <h2 style="font-family:'Times New Roman', serif; font-size:28px; font-weight:400; margin-top:30px; margin-bottom:20px; color:#153638; text-transform:uppercase;">
+            LAMPIRAN ${String.fromCharCode(hurufLampiran)}: ${(file.namaLampiran || file.fileName).toUpperCase()}
+        </h2>
+        <img src="${base64Image}" style="display:block; max-width:170mm; max-height:220mm; width:auto; height:auto; margin:20px auto; border:1px solid #ccc; object-fit:contain;">
+        <div class="pdf-footer"></div>
+    </div>
+    `;
 
-<div class="a4-page p-[18mm]">
-
-<h2
-style="
-font-family:'Times New Roman', serif;
-font-size:28px;
-font-weight:400;
-margin-top:30px;
-margin-bottom:20px;
-color:#153638;
-text-transform:uppercase;
-">
-LAMPIRAN ${String.fromCharCode(hurufLampiran)}
-:
-${(file.namaLampiran || file.fileName).toUpperCase()}
-</h2>
-
-<img
-src="${base64Image}"
-style="
-display:block;
-max-width:170mm;
-max-height:220mm;
-width:auto;
-height:auto;
-margin:20px auto;
-border:1px solid #ccc;
-object-fit:contain;
-">
-
-<div class="pdf-footer"></div>
-
-</div>
-
-`;
-
-hurufLampiran++;
-
+    hurufLampiran++;
 }
 
+// 3. Masukkan dynamic-page untuk Wasiat
 finalContent = finalContent.replaceAll('class="a4-page', 'class="a4-page dynamic-page');
                         
+// 4. Masukkan ke dalam DOM
 document.getElementById("sectionWasiat").innerHTML = finalContent;
 document.getElementById("sectionLampiran").innerHTML = lampiranHTML;
                         
-autoPaginate(); // <-- PANGGIL DI SINI
+autoPaginate();
           
 try {
     const currentDocRef = data.docRef || data.docRefNo || "-";
