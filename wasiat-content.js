@@ -635,7 +635,7 @@ margin-top:50px;
 
 </div>
 
-</div>
+
 
 <div class="pdf-footer">
 
