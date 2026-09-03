@@ -1590,9 +1590,9 @@ function generateAlihTable(list){
         html += `
         <tr>
            <td style="border:1px solid #000;padding:8px;">${item.namaHarta}</td>
-            <td style="border:1px solid #000;padding:8px;text-align:center;">${item.rujukan}</td>
-            <td style="border:1px solid #000;padding:8px;text-align:right;">${item.nilai}</td>
-            <td style="border:1px solid #000;padding:8px;text-align:center;">
+            <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.rujukan}</td>
+            <td style="border:1px solid #000;padding:8px;text-align:right !important;">${item.nilai}</td>
+            <td style="border:1px solid #000;padding:8px;text-align:center !important;">
                 ${convertToFraction(item.peratus)}
             </td>
         </tr>
@@ -1628,9 +1628,9 @@ function generateTakAlihTable(list){
         html += `
         <tr>
             <td style="border:1px solid #000;padding:8px;">${item.namaHarta}</td>
-            <td style="border:1px solid #000;padding:8px;text-align:center;">${item.rujukan}</td>
+            <td style="border:1px solid #000;padding:8px;text-align:center !important;">${item.rujukan}</td>
             <td style="border:1px solid #000;padding:8px;">${item.alamat}</td>
-            <td style="border:1px solid #000;padding:8px;text-align:center;">
+            <td style="border:1px solid #000;padding:8px;text-align:center !important;">
                 ${convertToFraction(item.peratus)}
             </td>
         </tr>
