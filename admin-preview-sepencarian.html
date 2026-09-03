@@ -984,11 +984,6 @@ ${data.pemegangAmanah?.telefon || "-"}
                                     if(item.pemilikan === "milikPenuh"){ pemilikanText = "Milik Penuh"; }
                                     if(item.pemilikan === "perkongsian"){ pemilikanText = "Perkongsian Nama"; }
 
-                                    // Mengekalkan variabel kategoriText dari kod asal anda
-                                    let kategoriText = item.kategori;
-                                    if(item.kategori === "hibah"){ kategoriText = "Hibah"; }
-                                    if(item.kategori === "sepencarian"){ kategoriText = "Harta Sepencarian"; }
-
                                     tableHTML += `
                                     <tr>
                                         <td style="border:1px solid #000;padding:8px;">${item.nama || "-"}</td>
@@ -1047,9 +1042,6 @@ ${data.pemegangAmanah?.telefon || "-"}
                                 
                                 chunk.forEach(item => {
                                     let pemilikanText = item.pemilikan === "perkongsian" ? "Perkongsian Nama" : "Milik Penuh";
-                                    
-                                    // Mengekalkan variabel kategoriText dari kod asal anda
-                                    let kategoriText = item.kategori === "sepencarian" ? "Harta Sepencarian" : item.kategori === "hibah" ? "Hibah" : "Faraid";
 
                                     tableHTML += `
                                     <tr>
@@ -1080,7 +1072,7 @@ ${data.pemegangAmanah?.telefon || "-"}
                                 }
                             }
                         }
-
+                        
 // 1. Letak fungsi convertToFraction di bahagian paling atas
 function convertToFraction(percentage) {
     if (!percentage || percentage === 0) return "0 Bahagian";
