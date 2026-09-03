@@ -1070,6 +1070,14 @@
                                         tocPesanan.innerText = pageNum;
                                     }
                                 }
+                                
+                                // LOGIK BARU UNTUK KESAN MUKA SURAT LAMPIRAN
+                                if (page.closest("#sectionLampiran")) {
+                                    const tocLampiran = document.getElementById("tocLampiran");
+                                    if (tocLampiran && tocLampiran.innerText === "-") {
+                                        tocLampiran.innerText = pageNum;
+                                    }
+                                }
                             });
 
                         } catch (e) {
