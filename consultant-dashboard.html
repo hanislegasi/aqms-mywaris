@@ -717,14 +717,14 @@ onAuthStateChanged(auth, async(user)=>{
         // KUNCI BUTANG JIKA EXPIRED (trainingBtn DIBUANG DARI SENARAI INI)
         const buttonsToDisable = [
             "clientsBtn", "overridingBtn", "careerBtn", 
-            "marketingBtn", "copyReferralBtn"
+            "marketingBtn", "copyReferralBtn", "introducerBtn"
         ];
         
         buttonsToDisable.forEach(id => {
             const btn = document.getElementById(id);
             if(btn) {
                 btn.disabled = true;
-                btn.classList.remove("bg-[#153638]", "hover:bg-[#1e4d50]");
+                btn.classList.remove("bg-[#153638]", "hover:bg-[#1e4d50]", "bg-indigo-600", "hover:bg-indigo-700");
                 btn.classList.add("bg-gray-400", "cursor-not-allowed");
             }
         });
