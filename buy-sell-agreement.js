@@ -100,6 +100,15 @@ const buySellAgreementContent = `
         </table>
     </div>
 
+<div class="pdf-footer">
+        <span class="footer-docref"></span>
+        <span class="page-number"></span>
+    </div>
+ 
+</div>
+ 
+<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
+
     <div style="page-break-inside: avoid;">
         <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 2: KEWAJIPAN JUALAN DAN BELIAN SAHAM (MANDATORY BUY-SELL OBLIGATION)</h3>
         <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
@@ -182,6 +191,16 @@ const buySellAgreementContent = `
             </tr>
         </table>
     </div>
+
+<div class="pdf-footer">
+        <span class="footer-docref"></span>
+        <span class="page-number"></span>
+    </div>
+ 
+</div>
+ 
+<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
+    
  
     <div style="page-break-inside: avoid;">
         <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 4: PEMBIAYAAN KORPORAT MELALUI TAKAFUL</h3>
