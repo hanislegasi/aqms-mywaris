@@ -25,11 +25,11 @@
     </div>
 
     <!-- MAIN CONTENT -->
-    <div class="p-5">
+    <div class="p-5 max-w-3xl mx-auto mt-5">
         
         <!-- INTRO CARD -->
         <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 mb-6">
-            <h2 class="font-bold text-indigo-800 text-lg mb-2">👋 Selamat Datang Rakan myIntroducer!</h2>
+            <h2 class="font-bold text-indigo-800 text-lg mb-2">Selamat Datang Rakan myIntroducer!</h2>
             <p class="text-indigo-600 text-sm leading-relaxed">
                 Terima kasih kerana sudi berkongsi manfaat pengurusan pusaka. Masukkan butiran kenalan anda yang berminat di bawah. Perunding AQC kami akan menghubungi mereka. <strong>Pastikan prospek telah bersetuju untuk dihubungi.</strong>
             </p>
@@ -66,9 +66,17 @@
                               class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"></textarea>
                 </div>
 
+                <!-- KOTAK KONSEN PDPA (WAJIB) -->
+                <div class="flex items-start pt-2">
+                    <input id="pdpaConsent" type="checkbox" required class="w-5 h-5 text-indigo-600 bg-white border-gray-300 rounded focus:ring-indigo-500 mt-0.5 cursor-pointer">
+                    <label for="pdpaConsent" class="ml-3 text-xs text-gray-600 cursor-pointer leading-relaxed">
+                        Saya mengesahkan bahawa saya telah mendapat <strong>kebenaran (consent)</strong> daripada prospek ini untuk berkongsi maklumat peribadi mereka kepada pihak syarikat (AQMS) dan Perunding (AQC) bagi tujuan dihubungi selaras dengan Akta Perlindungan Data Peribadi 2010 (PDPA).
+                    </label>
+                </div>
+
                 <div class="pt-4">
                     <button type="submit" id="btnSubmit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3.5 rounded-xl font-bold text-lg transition shadow-md">
-                        Hantar Prospek 🚀
+                        Hantar Prospek 
                     </button>
                 </div>
             </form>
@@ -120,6 +128,10 @@
                         introducerPhone: userData.telefon,
                         introducerCommPercent: commPercent, // Simpan sekali peratusan komisen semasa hantar
                         status: "Menunggu Tindakan AQC",
+                        
+                        // REKOD PDPA
+                        pdpaAgreed: document.getElementById("pdpaConsent").checked,
+                        
                         tarikhHantar: serverTimestamp()
                     });
 
