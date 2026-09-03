@@ -591,12 +591,28 @@ document.getElementById(
 
     </div>
 
-    <!-- BUTANG MYINTRODUCER (BARU) -->
+    <!-- BUTANG MYINTRODUCER (BOLEH UBAH KOMISEN %) -->
     <div class="mt-5 pt-4 border-t border-gray-100">
-        <p class="text-xs text-gray-500 mb-2 font-semibold">Program myIntroducer (Komisen 3%)</p>
-        <button id="btnToggleIntroducer" class="w-full ${user.isIntroducer ? 'bg-red-500 hover:bg-red-600' : 'bg-indigo-600 hover:bg-indigo-700'} text-white py-2.5 rounded-xl font-semibold transition text-sm">
-            ${user.isIntroducer ? '✖ Nyahaktifkan myIntroducer' : '🚀 Aktifkan myIntroducer'}
-        </button>
+        <label class="text-xs text-gray-500 mb-2 font-semibold block">Tetapan myIntroducer (Komisen)</label>
+        
+        <div class="flex gap-2 items-center">
+            <!-- KOTAK INPUT PERATUSAN -->
+            <input type="number" id="introducerPercent" 
+                   value="${user.introducerComm || 3}" 
+                   min="1" max="100" 
+                   class="w-20 border border-gray-300 rounded-xl p-2.5 text-center font-bold text-gray-700 focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-50" 
+                   ${user.isIntroducer ? 'disabled' : ''}> 
+            <span class="text-gray-500 font-bold mr-1">%</span>
+
+            <!-- BUTANG AKTIF / NYAHAKTIF -->
+            <button id="btnToggleIntroducer" class="flex-1 ${user.isIntroducer ? 'bg-red-500 hover:bg-red-600' : 'bg-indigo-600 hover:bg-indigo-700'} text-white py-2.5 rounded-xl font-semibold transition text-sm">
+                ${user.isIntroducer ? '✖ Nyahaktifkan' : '🚀 Aktifkan'}
+            </button>
+        </div>
+        
+        <p class="text-[10px] text-gray-400 mt-2 leading-relaxed">
+            *Tetapkan % komisen sebelum mengaktifkan. Jika anda ingin menukar peratusan untuk klien yang sedang aktif, sila klik Nyahaktifkan dahulu.
+        </p>
     </div>
 
 </div>
@@ -816,15 +832,21 @@ document.getElementById("saveAkad").onclick = async()=>{
 
 document.getElementById("btnToggleIntroducer").onclick = async () => {
     const isCurrentlyIntroducer = user.isIntroducer || false;
+    
+    // Tarik nilai peratusan dari kotak input
+    const percentVal = document.getElementById("introducerPercent").value || 3; 
+
+    // Ayat pengesahan dinamik mengikut status dan nilai %
     const confirmMsg = isCurrentlyIntroducer
         ? "Adakah anda pasti mahu nyahaktifkan fungsi myIntroducer untuk klien ini?"
-        : "Aktifkan fungsi myIntroducer untuk klien ini? Klien akan dapat lihat borang hantar prospek di Dashboard mereka.";
+        : `Anda pasti mahu aktifkan fungsi myIntroducer dengan komisen sebanyak ${percentVal}%? Klien akan nampak kadar ini di Dashboard mereka.`;
 
     if (confirm(confirmMsg)) {
         await updateDoc(doc(db, "users", userId), {
-            isIntroducer: !isCurrentlyIntroducer
+            isIntroducer: !isCurrentlyIntroducer,
+            introducerComm: Number(percentVal) // Simpan nilai % ke dalam database (Firebase)
         });
-        alert("Status myIntroducer berjaya dikemaskini.");
+        alert("Status dan komisen myIntroducer berjaya dikemaskini.");
         location.reload();
     }
 };
