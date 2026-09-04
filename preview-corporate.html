@@ -586,6 +586,14 @@ window.open(
                 if (docSnap.exists()) {
                     const data = docSnap.data();
 
+                   // TAMBAH BLOK ALAMAT INI DI SINI
+                    const alamatPenuh = [
+                        data.alamat1,
+                        data.alamat2,
+                        `${data.poskod || ""} ${data.bandar || ""}`.trim(),
+                        data.negeri
+                    ].filter(Boolean).join(", ");
+                    
                     // ==========================================
                     // SEKATAN / PAPARAN STATUS PENGESAHAN
                     // ==========================================
