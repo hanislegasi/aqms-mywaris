@@ -461,12 +461,6 @@ Pihak Kedua memahami bahawa penentuan hak sebenar terhadap Harta Sepencarian ada
 
 </table>
 
-<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
-<strong>5. TIADA PAKSAAN</strong>
-</h3>
-
-<p>Pihak Pertama mengesahkan bahawa dokumen ini dibuat secara sukarela tanpa sebarang ugutan, paksaan, tekanan atau salah nyata daripada mana-mana pihak.</p>
-
 <div class="pdf-footer">
 <span class="footer-docref"></span>
 <span class="page-number"></span>
@@ -474,6 +468,13 @@ Pihak Kedua memahami bahawa penentuan hak sebenar terhadap Harta Sepencarian ada
 </div>
 
 <div class="a4-page p-[18mm]">
+
+<h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
+<strong>5. TIADA PAKSAAN</strong>
+</h3>
+
+<p>Pihak Pertama mengesahkan bahawa dokumen ini dibuat secara sukarela tanpa sebarang ugutan, paksaan, tekanan atau salah nyata daripada mana-mana pihak.</p>
+
 
 <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;">
 <strong>6.	PINDAAN</strong>
