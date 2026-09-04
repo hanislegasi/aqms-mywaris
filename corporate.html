@@ -938,7 +938,7 @@
 
         if (target.classList.contains('namaSyarikat') || target.id === 'namaSyarikat') {
             target.value = val.toUpperCase();
-        } else if (identifier.includes('nama') || identifier.includes('penama')) {
+        } else if (identifier.includes('nama') || identifier.includes('penama') || identifier.includes('nacorporate')) {
             target.value = val.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
         }
 
