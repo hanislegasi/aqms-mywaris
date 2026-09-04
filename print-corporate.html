@@ -74,12 +74,32 @@
             transition: transform 0.2s ease, margin-bottom 0.2s ease;
         }
 
-        @page { size: A4 portrait; margin: 10mm; }
-        @media print {
-            body { background: white !important; }
-            .no-print { display: none !important; }
-            #scale-wrapper { transform: none !important; margin: 0 !important; }
-        }
+         @page{
+
+size:A4;
+
+margin:0;
+
+}
+
+@media print{
+
+html,
+body{
+
+width:210mm;
+margin:0;
+padding:0;
+
+}
+
+main{
+
+    display:block !important;
+    padding:0 !important;
+    margin:0 !important;
+
+}
 
 #scale-wrapper{
     
