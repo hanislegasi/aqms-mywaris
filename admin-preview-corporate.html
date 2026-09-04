@@ -814,7 +814,7 @@ else if (syarikat.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefi
                         // ==========================================
                         let lampiranWaris = "";
                         const warisArray = data.waris || [];
-                        const maxRowsPerWarisPage = 14; // Kurangkan sikit supaya muat cantik di page pertama
+                        const maxRowsPerWarisPage = 18; // Kurangkan sikit supaya muat cantik di page pertama
 
                         if (warisArray.length === 0) {
                             lampiranWaris = "<p>Tiada maklumat waris direkodkan.</p>";
@@ -861,7 +861,7 @@ else if (syarikat.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefi
 
                                 lampiranWaris += tableHTML;
                             }
-                        }  
+                        }
                         
                         let lampiranPemegangAmanah = `
                         <table style="width:100%; border-collapse:collapse; font-size:15px; page-break-inside: avoid;">
