@@ -629,7 +629,10 @@ if (!data.firstViewedAt) {
     data.firstViewedAt = new Date().toISOString();
 }
                         
-                        
+                        // Dapatkan data profil user (untuk referral code)
+                        const userDoc = await getDoc(doc(db, "users", userId));
+                        const userData = userDoc.exists() ? userDoc.data() : {};
+
                         // Perunding
                         const consultantCode = userData?.referral || data.consultantCode;
                         let consultantData = {};
