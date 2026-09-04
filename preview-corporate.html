@@ -178,11 +178,7 @@
             <button id="printBtn" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold shadow-lg text-lg transition">🖨️ Cetak / Save as PDF (Disyorkan)</button>
             <button id="downloadBtn" class="w-full bg-black hover:bg-gray-800 text-white py-4 rounded-xl font-semibold shadow-lg text-lg transition">📥 Download PDF (Legacy)</button>
         </div>
-        <div class="grid grid-cols-2 gap-4 mt-4">
-            <button id="approveBtn" class="bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold shadow-lg transition">✅ Approve Permohonan</button>
-            <button id="rejectBtn" class="bg-red-600 hover:bg-red-700 text-white py-4 rounded-xl font-semibold shadow-lg transition">❌ Reject Permohonan</button>
-        </div>
-    </div>
+        
         
     <!-- TEMPLATES -->
     <script src="wasiat-corporate-content.js"></script>
@@ -235,6 +231,51 @@
             return new Date(dateStr).toLocaleDateString("ms-MY");
         }
 
+// Download Logik PDF
+document.getElementById("downloadBtn").addEventListener("click", async () => {
+    const wrapper = document.getElementById('scale-wrapper');
+    const element = document.getElementById("pdfContent");
+
+    // 1. Simpan tetapan skala dan margin asal
+    const originalTransform = wrapper.style.transform;
+    const originalMarginBottom = wrapper.style.marginBottom;
+    const originalMargin = element.style.margin;
+
+    // 2. Buang skala sementara & paksa kedudukan paksi kiri (PUNCA ruang kosong)
+    wrapper.style.transform = 'scale(1)';
+    wrapper.style.marginBottom = '0px';
+    wrapper.style.transformOrigin = 'top left'; 
+    element.style.margin = '0'; // Buang margin auto sementara
+
+    // 3. Beri masa kepada browser untuk kemaskini DOM
+    await new Promise(r => setTimeout(r,150));
+    await document.fonts.ready;
+    
+    const options = {
+        margin: 0,
+        filename: "Mawaris.pdf",
+        image: { type: "jpeg", quality: 0.92 },
+        html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            scrollY: 0,
+            scrollX: 0, // Set koordinat X ke 0
+            windowWidth: document.documentElement.offsetWidth
+        },                
+        pagebreak: { mode: ['css'] }, // Pastikan html2pdf__page-break berfungsi
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait", compress: true }
+    };
+
+    // 4. Proses render PDF
+    html2pdf().set(options).from(element).save().then(() => {
+        // 5. Kembalikan semua tetapan asal
+        wrapper.style.transform = originalTransform;
+        wrapper.style.marginBottom = originalMarginBottom;
+        wrapper.style.transformOrigin = 'top center';
+        element.style.margin = originalMargin || '0 auto';
+    });
+});
+        
         // Fungsi format nombor saham dengan koma (cth: 10000 -> 10,000)
         // (BUG FIX: dulu function ni cuma wujud dalam scope senaraiSyarikat.forEach(),
         // tapi dipanggil juga di bahagian legacy single-company & trust deed yang
@@ -365,14 +406,133 @@ function autoPaginate() {
     }
 }
         
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) return;
+                onAuthStateChanged(auth, async(user)=>{
+
+   if(!user){
+      location.href="login.html";
+      return;
+   }
+
+  const loginDoc = await getDoc(
+    doc(db,"users",user.uid)
+);
+
+const loginUser = loginDoc.data();
+            
+   const params = new URLSearchParams(window.location.search);
+
+const previewUid =
+params.get("uid");
+
+const userId =
+previewUid || user.uid;
+
+if(previewUid){
+
+    if(
+        loginUser.role !== "admin" &&
+        loginUser.role !== "consultant"
+    ){
+
+        alert("Akses ditolak.");
+
+        location.href="dashboard.html";
+
+        return;
+
+    }
+
+}
+
+document
+.getElementById("printBtn")
+.onclick=()=>{
+
+window.open(
+
+`print-corporate.html?id=${userId}`,
+
+"_blank"
+
+);
+
+};
+
+        const agreeVerify = document.getElementById("agreeVerify");
+        const verifyBtn = document.getElementById("verifyBtn");
+        
+        // Panggil elemen butang radio dan kotak alamat
+        const deliveryRadios = document.querySelectorAll('.delivery-radio');
+        const newDeliveryAddress = document.getElementById("newDeliveryAddress");
+
+        // Fungsi untuk semak borang dan tunjuk/sorok kotak
+        function checkFormValidity() {
+            let isDeliverySelected = false;
+            let deliveryValue = "";
+            
+            // Periksa pilihan mana yang ditekan
+            for (const radio of deliveryRadios) {
+                if (radio.checked) {
+                    isDeliverySelected = true;
+                    deliveryValue = radio.value;
+                    break;
+                }
+            }
+
+            // Tunjuk (remove hidden) atau Sembunyikan (add hidden) kotak alamat
+            if (deliveryValue === "new") {
+                newDeliveryAddress.classList.remove("hidden");
+            } else {
+                newDeliveryAddress.classList.add("hidden");
+            }
+
+            // Semak adakah kotak alamat sudah diisi jika "new" dipilih
+            const isAddressValid = deliveryValue === "new" ? newDeliveryAddress.value.trim() !== "" : true;
+
+            // Buka butang sahkan jika semua syarat dipenuhi
+            verifyBtn.disabled = !(agreeVerify.checked && isDeliverySelected && isAddressValid);
+        }
+
+        // Dengar sebarang klik atau taip dari user
+        agreeVerify.addEventListener("change", checkFormValidity);
+        deliveryRadios.forEach(radio => radio.addEventListener("change", checkFormValidity));
+        newDeliveryAddress.addEventListener("input", checkFormValidity);
+
+        // Apabila butang ditekan
+        verifyBtn.addEventListener("click", async () => {
+            if (verifyBtn.disabled) return;
+            if (!confirm("Adakah anda pasti semua maklumat adalah betul?")) return;
+
             try {
-                const adminDoc = await getDoc(doc(db, "users", user.uid));
-                if (adminDoc.data()?.role !== "admin") {
-                    alert("Akses ditolak"); window.location.href = "dashboard.html"; return;
+                let selectedDelivery = "";
+                for (const radio of deliveryRadios) {
+                    if (radio.checked) selectedDelivery = radio.value;
                 }
 
+                // Ganti "hibah" ikut kesesuaian fail (jika wasiat, letak "wasiat")
+                const docRef = doc(db, "users", userId, "corporate", "maklumat");
+
+                await updateDoc(docRef, {
+                    status: "VERIFIED",
+                    verified: true,
+                    verifiedAt: new Date().toISOString(),
+                    verifiedBy: user.uid,
+                    deliveryChoice: selectedDelivery,
+                    deliveryAddress: selectedDelivery === "new" ? newDeliveryAddress.value.trim() : ""
+                });
+
+                alert("Terima kasih. Pengesahan anda telah berjaya direkodkan.");
+                location.reload();
+
+            } catch (err) {
+                console.error(err);
+                alert("Gagal menyimpan pengesahan.");
+            }
+        }); 
+            
+            try {
+
+                // LOAD CUSTOMER DATA
                 if (userId) {
                     const docRef = doc(db, "users", userId, "corporate", "maklumat");
                     const docSnap = await getDoc(docRef);
@@ -383,6 +543,94 @@ function autoPaginate() {
                         const userData = userDoc.data();
 
                         const alamatPenuh = [data.alamat1, data.alamat2, `${data.poskod || ""} ${data.bandar || ""}`.trim(), data.negeri].filter(Boolean).join(", ");
+
+// Senaraikan semua status selepas dokumen disahkan
+const statusSelepasSah = ["VERIFIED", "PRINTED", "SENT", "AKAD", "STAMPING", "HANDOVER", "RECEIVED", "COMPLETED"];
+
+if (data.verified === true || statusSelepasSah.includes(data.status)) {
+
+    document.getElementById("verificationSection").innerHTML = `
+        <div class="bg-green-50 border border-green-300 rounded-xl p-5 text-center">
+            <h3 class="text-lg font-bold text-green-700">
+                ✅ Maklumat Telah Disahkan
+            </h3>
+
+            <p class="mt-2 text-gray-700">
+                Terima kasih. Pengesahan anda telah direkodkan.
+                Dokumen akan diproses untuk percetakan.
+            </p>
+        </div>
+    `;
+
+}
+                        
+window.wasiatData = data;
+
+if (
+    ![
+        "APPROVED",
+        "VERIFIED",
+        "PRINTED",
+        "SENT",
+        "AKAD",
+        "STAMPING",
+        "HANDOVER",
+        "RECEIVED",
+        "COMPLETED"
+    ].includes(data.status)
+) {
+
+   document.body.innerHTML = `
+      <div style="
+         max-width:700px;
+         margin:120px auto;
+         text-align:center;
+         font-family:Arial,sans-serif;
+         padding:30px;
+      ">
+         <h2>
+            Dokumen Wasiat Masih Dalam Semakan
+         </h2>
+
+         <p>
+            Dokumen Wasiat anda masih belum
+            diluluskan oleh pihak admin.
+         </p>
+
+         <a href="dashboard.html"
+            style="
+               display:inline-block;
+               margin-top:20px;
+               padding:12px 24px;
+               background:#153638;
+               color:white;
+               text-decoration:none;
+               border-radius:8px;
+            ">
+            Kembali ke Dashboard
+         </a>
+      </div>
+   `;
+
+   return;
+}
+
+
+                      
+if (!data.firstViewedAt) {
+
+    await updateDoc(docRef, {
+        firstViewedAt: new Date().toISOString()
+    });
+
+    data.firstViewedAt = new Date().toISOString();
+}
+                        
+const userDoc = await getDoc(
+    doc(db, "users", userId)
+);
+
+const userData = userDoc.data();
                         
                         // Perunding
                         const consultantCode = userData?.referral || data.consultantCode;
@@ -417,7 +665,7 @@ function autoPaginate() {
                         document.getElementById("kodTable").innerHTML = userData?.referral || "-";
                         document.getElementById("telefonPerundingTable").innerHTML = consultantData.telefon || "-";
 
-// ==========================================
+                        // ==========================================
                         // A. LOGIK WASIAT 1/3
                         // ==========================================
                         const wasiatSah = (data.wasiatSatuPerTiga || []).filter(item => item.harta && item.harta.trim() !== "");
@@ -1123,64 +1371,7 @@ document.getElementById("sectionMekanisme").innerHTML = mekanismeHTML;
             });
         });
 
-        document.getElementById("approveBtn").addEventListener("click", async () => {
-            if(!userId) return alert("User ID tidak sah!");
-            try {
-                 const today = new Date();
-                 const year = today.getFullYear();
-                 const expiry = new Date(today);
-                 expiry.setFullYear(expiry.getFullYear() + 1);
-                
-                const corporateRef = doc(db, "users", userId, "corporate", "maklumat");
-                const corporateSnap = await getDoc(corporateRef);
-                const corporateData = corporateSnap.data();
-                
-                 let docRefNo = corporateData?.docRef;
-                 let currentNumber = corporateData?.docNumber;
-
-                if (!docRefNo) {
-                    const counterRef = doc(db, "system", "counter");
-                    const counterSnap = await getDoc(counterRef);
-                    currentNumber = counterSnap.exists() ? (counterSnap.data().corporateCounter || 0) + 1 : 1;
-                    docRefNo = `AQMS-MCO-${year}-${String(currentNumber).padStart(3,"0")}`;
-                    await setDoc(counterRef, { corporateCounter: currentNumber }, { merge: true });
-                }
-
-                await updateDoc(corporateRef, {
-                    status: "APPROVED",
-                    approvedAt: today.toISOString(),
-                    expiryDate: expiry.toISOString(),
-                    docRef: docRefNo,
-                    docNumber: currentNumber
-                });
-
-                await addDoc(collection(db, "users", userId, "notifications"), {
-                    title: "Dokumen Wasiat Korporat Diluluskan",
-                    message: `Dokumen Korporat anda (${docRefNo}) telah diluluskan dan sedia untuk dicetak.`,
-                    type: "CORPORATE_APPROVED",
-                    read: false,
-                    createdAt: today.toISOString()
-                });
-                
-                alert("Dokumen berjaya diluluskan");
-                location.reload();
-            } catch (error) {
-                console.log(error);
-                alert("Ralat semasa meluluskan: " + error.message);
-            }
-        });
-
-        document.getElementById("rejectBtn").addEventListener("click", async () => {
-            if(!userId) return alert("User ID tidak sah!");
-            try {
-                await updateDoc(doc(db, "users", userId, "corporate", "maklumat"), { status: "REJECTED" });
-                alert("Permohonan berjaya ditolak.");
-                location.reload();
-            } catch (error) {
-                console.log(error);
-                alert("Ralat semasa menolak: " + error.message);
-            }
-        });
+        
     </script>
 </body>
 </html>
