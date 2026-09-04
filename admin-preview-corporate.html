@@ -809,12 +809,12 @@ else if (syarikat.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefi
                         // pernah dijana -- punca ReferenceError. Logic sama
                         // macam admin-preview-hibah.html)
                         // ==========================================
-// ==========================================
+ // ==========================================
                         // LOGIK PECAHAN JADUAL WARIS (PAGINATION)
                         // ==========================================
                         let lampiranWaris = "";
                         const warisArray = data.waris || [];
-                        const maxRowsPerWarisPage = 18; 
+                        const maxRowsPerWarisPage = 18; // Had maksimum baris waris untuk 1 muka surat
 
                         if (warisArray.length === 0) {
                             lampiranWaris = "<p>Tiada maklumat waris direkodkan.</p>";
@@ -822,18 +822,8 @@ else if (syarikat.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefi
                             for (let i = 0; i < warisArray.length; i += maxRowsPerWarisPage) {
                                 let chunk = warisArray.slice(i, i + maxRowsPerWarisPage);
                                 
-                                let tableHTML = "";
-                                
-                                // Letak tajuk SAMBUNGAN untuk jadual pecahan kedua dan seterusnya
-                                if (i > 0) {
-                                    tableHTML += `
-                                    <h2 style="font-family:'Times New Roman', serif; font-size:28px; margin-top:30px; margin-bottom:20px; color:#153638; text-transform:uppercase;">
-                                        LAMPIRAN A : SENARAI WARIS (SAMBUNGAN)
-                                    </h2>`;
-                                }
-                                
-                                tableHTML += `
-                                <table style="width:100%; border-collapse:collapse; font-size:14px; margin-bottom:20px; page-break-inside: avoid;">
+                                let tableHTML = `
+                                <table style="width:100%; border-collapse:collapse; font-size:14px; margin-bottom:20px;">
                                     <thead>
                                         <tr style="background-color:#f9fafb;">
                                             <th style="border:1px solid #000;padding:8px;">Nama</th>
@@ -858,10 +848,26 @@ else if (syarikat.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefi
                                 });
                                 tableHTML += `</tbody></table>`;
 
-                                lampiranWaris += tableHTML;
+                                if (i === 0) {
+                                    lampiranWaris += tableHTML;
+                                } else {
+                                    lampiranWaris += `
+                                        </div> <!-- Tutup div #lampiranWaris -->
+                                        <div class="pdf-footer"></div>
+                                    </div> <!-- Tutup .a4-page -->
+
+                                    <div class="a4-page p-[18mm] dynamic-page">
+                                        <h2 style="font-family:'Times New Roman', serif; font-size:28px; margin-top:30px; margin-bottom:20px; color:#153638; text-transform:uppercase;">
+                                            LAMPIRAN A : SENARAI WARIS (SAMBUNGAN)
+                                        </h2>
+                                        <div>
+                                            ${tableHTML}
+                                    `;
+                                }
                             }
                         }
-
+                        // ==========================================      
+                        
                         let lampiranPemegangAmanah = `
                         <table style="width:100%; border-collapse:collapse; font-size:15px; page-break-inside: avoid;">
                         <tr>
