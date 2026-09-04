@@ -561,27 +561,42 @@
                             `;
                         } else {
                             let tableWasiat = `
-    <table style="width:100%; border-collapse:collapse; font-size:15px; margin-top:10px; page-break-inside:avoid;">
-        <thead>
-            <tr>
-                <th style="border:1px solid #000; padding:8px; text-align:center; width:10%;">No.</th>
-                <th style="border:1px solid #000; padding:8px; text-align:center; width:35%;">Jenis Harta</th>
-                <th style="border:1px solid #000; padding:8px; text-align:center; width:25%;">Nilai / Bahagian</th>
-                <th style="border:1px solid #000; padding:8px; text-align:center; width:30%;">Penerima</th>
-            </tr>
-        </thead>
-        <tbody>
-            ${data.wasiatSatuPerTiga.map((item, index) => `
-                <tr>
-                    <td style="border:1px solid #000; padding:8px; text-align:center !important;">${index + 1}</td>
-                    <td style="border:1px solid #000; padding:8px;">${item.harta || "-"}</td>
-                    <td style="border:1px solid #000; padding:8px; text-align:right !important;">${item.bahagian || "-"}</td>
-                    <td style="border:1px solid #000; padding:8px; text-align:center !important;">${item.penerima || "-"}</td>
-                </tr>
-            `).join("")}
-        </tbody>
-    </table>
-    `;
+                            <div style="page-break-inside:avoid;">
+                                <table style="width:100%; border-collapse:collapse; font-size:15px; margin-top:10px;">
+                                    <thead>
+                                        <tr>
+                                            <th style="border:1px solid #000; padding:8px; text-align:center; width:10%;">No.</th>
+                                            <th style="border:1px solid #000; padding:8px; text-align:center; width:35%;">Jenis Harta</th>
+                                            <th style="border:1px solid #000; padding:8px; text-align:center; width:25%;">Nilai / Bahagian</th>
+                                            <th style="border:1px solid #000; padding:8px; text-align:center; width:30%;">Penerima</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>`;
+                            
+                            let senaraiNotaHTML = "";
+                            
+                            (data.wasiatSatuPerTiga || []).forEach((item, index) => {
+                                let num = index + 1;
+                                
+                                tableWasiat += `
+                                        <tr>
+                                            <td style="border:1px solid #000; padding:8px; text-align:center !important;">${num}</td>
+                                            <td style="border:1px solid #000; padding:8px;">${item.harta || "-"}</td>
+                                            <td style="border:1px solid #000; padding:8px; text-align:right !important;">${item.bahagian || "-"}</td>
+                                            <td style="border:1px solid #000; padding:8px; text-align:center !important;">${item.penerima || "-"}</td>
+                                        </tr>`;
+                                
+                                // Kutip nota jika ada
+                                if (item.nota && item.nota.trim() !== "") {
+                                    senaraiNotaHTML += `<p style="font-size:15px; margin-top:8px; margin-bottom:4px; text-align:justify;"><strong>Nota ${num}:</strong> ${item.nota}</p>`;
+                                }
+                            });
+
+                            tableWasiat += `
+                                    </tbody>
+                                </table>
+                                ${senaraiNotaHTML !== "" ? `<div style="margin-top:10px; margin-bottom:15px; padding-left:5px;">${senaraiNotaHTML}</div>` : ""}
+                            </div>`;
 
                             bahagianWasiat13 = `
                             <p>
