@@ -626,10 +626,6 @@ if (!data.firstViewedAt) {
     data.firstViewedAt = new Date().toISOString();
 }
                         
-const userDoc = await getDoc(
-    doc(db, "users", userId)
-);
-
 const userData = userDoc.data();
                         
                         // Perunding
