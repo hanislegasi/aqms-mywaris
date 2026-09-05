@@ -475,7 +475,7 @@ agreeBtn.addEventListener("click", async () => {
                 console.error("Ralat mengira komisen introducer:", error);
             }
         } // Penutup if (customer.introducerUid)
-
+        }
         // ALLOCATION EXPENSES & PAYABLES
         await addDoc(collection(db, "ledger"), {
             date: txnDate, accountCode: "5200", account: "Allowance Expense",
