@@ -104,7 +104,8 @@
 
     </div>
 
-    <!-- SCRIPT FIREBASE -->
+    
+<!-- SCRIPT FIREBASE -->
     <script type="module">
         import { db, auth } from './firebase.js';
         import { doc, getDoc, getDocs, collection, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -112,7 +113,7 @@
 
         let aqcNo = "";
 
-        // Fungsi Tukar Status Prospek
+        // Fungsi Tukar Status Prospek (Manual)
         window.updateStatus = async (docId, statusBaru) => {
             if(confirm(`Anda pasti mahu tukar status prospek ini kepada "${statusBaru}"?`)) {
                 try {
@@ -209,12 +210,22 @@
                 }
 
                 // -------------------------------------------------------------
-                // 2. TARIK DATA PROSPEK (LEADS)
+                // 2. TARIK DATA PROSPEK & AUTO-SYNC PENDAFTARAN
                 // -------------------------------------------------------------
                 const clientsQuery = query(collection(db, "users"), where("referral", "==", aqcNo));
                 const clientsSnap = await getDocs(clientsQuery);
+                
                 const myAqmUids = [];
-                clientsSnap.forEach(d => myAqmUids.push(d.id));
+                const registeredPhones = []; // Untuk simpan nombor telefon klien berdaftar
+
+                clientsSnap.forEach(d => {
+                    myAqmUids.push(d.id);
+                    const data = d.data();
+                    if(data.telefon) {
+                        // Bersihkan nombor fon (buang jarak, sengkang, kod negara jika perlu) untuk padanan tepat
+                        registeredPhones.push(data.telefon.replace(/\D/g, ''));
+                    }
+                });
 
                 if (myAqmUids.length === 0) {
                     document.getElementById("prospectsTable").innerHTML = `<tr><td colspan="5" class="p-8 text-center text-gray-500">Anda belum mempunyai klien (AQM).</td></tr>`;
@@ -226,9 +237,20 @@
                 let countPending = 0, countSuccess = 0;
 
                 prosSnap.forEach(d => {
-                    const p = d.data();
+                    let p = d.data();
                     if (myAqmUids.includes(p.introducerUid)) {
+                        
+                        // AUTO-SYNC: Semak adakah nombor telefon prospek wujud dalam senarai berdaftar
+                        const cleanProsPhone = p.telefonProspek ? p.telefonProspek.replace(/\D/g, '') : "";
+                        
+                        if (cleanProsPhone && registeredPhones.includes(cleanProsPhone) && p.status !== "Didaftarkan") {
+                            // Tukar status secara automatik di pangkalan data
+                            updateDoc(doc(db, "prospects", d.id), { status: "Didaftarkan" });
+                            p.status = "Didaftarkan"; // Kemaskini untuk paparan semasa
+                        }
+
                         prospects.push({ id: d.id, ...p });
+                        
                         if(p.status === "Menunggu Tindakan AQC") countPending++;
                         if(p.status === "Didaftarkan") countSuccess++;
                     }
