@@ -385,7 +385,7 @@ margin-top:30px;
 margin-bottom:20px;
 color:#153638;
 ">
-LAMPIRAN B : PEMEGANG AMANAH
+
 </h2>
  
 
