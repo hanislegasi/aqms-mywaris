@@ -417,43 +417,65 @@ agreeBtn.addEventListener("click", async () => {
                 totalCommission: increment(commissionAmount),
             });
 
-           // B. Rekod Pendapatan Introducer (HANYA UNTUK NOTA/RUJUKAN AQC SAHAJA)
-        if (customer.introducerUid && customer.introducerComm) {
-            
-            // 1. Tarik peratusan komisen dinamik dari collection 'settings'
-            const settingSnap = await getDoc(doc(db, "settings", "komisen")); 
-            let aqcRate = 30; // Default fallback jika gagal baca
-            
-            if (settingSnap.exists()) {
-                const settingData = settingSnap.data();
-                const levelAqc = directConsultant.level || "AQC";
+          // B. Rekod Pendapatan Introducer (HANYA UNTUK NOTA/RUJUKAN AQC SAHAJA)
+        if (customer.introducerUid) {
+            try {
+                // 1. Tarik peratus komisen Introducer dari profil 'users' AQM
+                const introducerDoc = await getDoc(doc(db, "users", customer.introducerUid));
+                let introducerCommRate = 0;
                 
-                // Sistem akan baca peratusan ikut level dari setting 
-                // Pastikan dalam dokumen setting ada field cth: { "AQC-UM": 40, "AQC-AM": 35 }
-                aqcRate = Number(settingData[levelAqc]) || 30; 
+                if (introducerDoc.exists()) {
+                    introducerCommRate = Number(introducerDoc.data().introducerComm) || 0;
+                }
+
+                // Teruskan pengiraan hanya jika introducer mempunyai peratusan komisen
+                if (introducerCommRate > 0) {
+                    
+                    // 2. Tarik peratus komisen dinamik AQC dari 'settings/compensation'
+                    const compSnap = await getDoc(doc(db, "settings", "compensation"));
+                    let aqcRate = 35; // Nilai lalai (Default AQC)
+                    
+                    if (compSnap.exists()) {
+                        const compData = compSnap.data();
+                        const levelAqc = directConsultant.level || "AQC";
+                        
+                        // Padankan level AQC dengan field dalam database compensation
+                        if (levelAqc === "AQC-UM") {
+                            aqcRate = Number(compData.commissionAQCUM) || 40;
+                        } else if (levelAqc === "AQC-AS") {
+                            aqcRate = Number(compData.commissionAQCAS) || 38;
+                        } else if (levelAqc === "MG-AM") {
+                            aqcRate = Number(compData.commissionMGAM) || 45;
+                        } else {
+                            aqcRate = Number(compData.commissionAQC) || 35;
+                        }
+                    }
+                    
+                    // 3. Kira nilai komisen (Contoh: AQC-UM rate 40%, Introducer rate 5%, Jualan 350)
+                    // Komisen Bersih AQC = 350 * (40 / 100) = RM 140
+                    const aqcCommAmount = saleAmount * (aqcRate / 100);
+                    
+                    // Komisen AQM = 140 * (5 / 100) = RM 7
+                    const introducerAmt = aqcCommAmount * (introducerCommRate / 100);
+                    
+                    if (introducerAmt > 0) {
+                        await addDoc(collection(db, "introducerEarnings"), {
+                            createdAt: txnDate,
+                            introducerUid: customer.introducerUid, // UID AQM
+                            aqcNo: directConsultant.consultantNo,  // No AQC
+                            customerMemberNo: memberNo,            
+                            customerName: customer.nama,
+                            product: "Wasiat",
+                            saleAmount: saleAmount, 
+                            commPercent: introducerCommRate, // Rekodkan 5% dari profil
+                            earnedAmount: introducerAmt, // Akan jadi RM 7
+                            status: "UNPAID" 
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error("Ralat mengira komisen introducer:", error);
             }
-            
-            // 2. Kira nilai komisen bersih yang AQC dapat (Cth: 350 * 40% = RM 140)
-            const aqcCommAmount = saleAmount * (aqcRate / 100);
-            
-            // 3. Kira komisen Introducer (AQM) daripada komisen AQC (Cth: 140 * 5% = RM 7)
-            const introducerAmt = aqcCommAmount * (Number(customer.introducerComm) / 100);
-            
-            if (introducerAmt > 0) {
-                await addDoc(collection(db, "introducerEarnings"), {
-                    createdAt: txnDate,
-                    introducerUid: customer.introducerUid, 
-                    aqcNo: directConsultant.consultantNo,  
-                    customerMemberNo: memberNo,            
-                    customerName: customer.nama,
-                    product: "Wasiat",
-                    saleAmount: saleAmount, 
-                    commPercent: customer.introducerComm, 
-                    earnedAmount: introducerAmt, 
-                    status: "UNPAID" 
-                });
-            }
-        }
         }
 
         // ALLOCATION EXPENSES & PAYABLES
