@@ -26,52 +26,33 @@
 
     <!-- MAIN CONTENT -->
     <div class="p-5">
-        
-        <!-- PENDAPATAN KOMISEN (BARU) -->
-        <div class="bg-white rounded-2xl shadow-sm border border-green-100 overflow-hidden">
+               
+        <!-- PENDAPATAN KOMISEN -->
+        <div class="bg-white rounded-2xl shadow-sm border border-green-100 overflow-hidden mb-6">
             <div class="p-5 bg-green-50/50 border-b border-green-100">
                 <h2 class="text-lg font-bold text-green-900">Prestasi Pendapatan Anda</h2>
-                <p class="text-xs text-green-700 mt-1">Komisen dikira apabila prospek anda berjaya membuat pendaftaran penuh.</p>
+                <p class="text-xs text-green-700 mt-1">Komisen dikira apabila prospek anda berjaya membuat belian produk.</p>
             </div>
             <div class="p-5">
-                <div class="grid grid-cols-3 gap-4 mb-5 text-center">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
                         <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Terkumpul</p>
-                        <p id="earnTerkumpul" class="text-2xl font-bold text-[#153638] mt-1">RM 0.00</p>
+                        <p id="earnTerkumpul" class="text-3xl font-bold text-[#153638] mt-1">RM 0.00</p>
                     </div>
                     <div class="bg-green-50 p-4 rounded-xl border border-green-100">
                         <p class="text-xs font-semibold text-green-700 uppercase tracking-wide">Dibayar</p>
-                        <p id="earnDibayar" class="text-2xl font-bold text-green-600 mt-1">RM 0.00</p>
+                        <p id="earnDibayar" class="text-3xl font-bold text-green-600 mt-1">RM 0.00</p>
                     </div>
                     <div class="bg-orange-50 p-4 rounded-xl border border-orange-100">
                         <p class="text-xs font-semibold text-orange-700 uppercase tracking-wide">Baki (Pending)</p>
-                        <p id="earnBaki" class="text-2xl font-bold text-orange-600 mt-1">RM 0.00</p>
+                        <p id="earnBaki" class="text-3xl font-bold text-orange-600 mt-1">RM 0.00</p>
                     </div>
-                </div>
-
-                <!-- JADUAL KOMISEN -->
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
-                        <thead class="text-gray-500 font-medium border-b">
-                            <tr>
-                                <th class="pb-3 pr-4">Tarikh Selesai</th>
-                                <th class="pb-3 pr-4">Nama Klien</th>
-                                <th class="pb-3 pr-4 text-right">Komisen Anda</th>
-                                <th class="pb-3 text-center">Status Bayaran</th>
-                            </tr>
-                        </thead>
-                        <tbody id="myEarningsTable" class="divide-y divide-gray-50">
-                            <tr>
-                                <td colspan="4" class="py-6 text-center text-gray-400">Belum ada pendapatan direkodkan.</td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
 
         <!-- FORM CARD -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 mb-6">
             <h3 class="text-xl font-bold text-gray-800 mb-6 border-b pb-4">Borang Maklumat Prospek Baru</h3>
             
             <form id="prospectForm" class="space-y-5">
@@ -116,6 +97,35 @@
             </form>
         </div>
 
+        <!-- JADUAL GABUNGAN (LEADS + PAYOUT) -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/80">
+                <div>
+                    <h2 class="text-lg font-bold text-gray-800">Senarai Prospek & Rekod Komisen</h2>
+                    <p class="text-xs text-gray-500 mt-1">Jejak status prospek anda dan komisen yang telah berjaya direkodkan.</p>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-gray-100 text-gray-600 font-semibold border-b border-gray-200">
+                        <tr>
+                            <th class="p-4">Tarikh</th>
+                            <th class="p-4">Maklumat Prospek</th>
+                            <th class="p-4">Status Leads</th>
+                            <th class="p-4 bg-green-50/50">Komisen (RM)</th>
+                            <th class="p-4 text-center">Status Bayaran</th>
+                        </tr>
+                    </thead>
+                    <tbody id="unifiedTable" class="divide-y divide-gray-100">
+                        <tr>
+                            <td colspan="5" class="p-10 text-center text-gray-500">Memuatkan data sistem...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
     <!-- SCRIPT FIREBASE -->
@@ -143,7 +153,7 @@
             document.getElementById("subTitleComm").innerText = `Kongsi Manfaat, Jana Pendapatan (Komisen ${commPercent}%)`;
 
             // -------------------------------------------------------------
-            // 1. TARIK DATA KOMISEN (EARNINGS) AQM
+            // 1. TARIK DATA KOMISEN (EARNINGS)
             // -------------------------------------------------------------
             try {
                 const earnQuery = query(collection(db, "introducerEarnings"), where("introducerUid", "==", user.uid));
@@ -155,7 +165,7 @@
 
                 earnSnap.forEach(d => {
                     const e = d.data();
-                    earnings.push(e);
+                    earnings.push({ id: d.id, ...e });
                     totalTerkumpul += Number(e.earnedAmount || 0);
                     if (e.status === "PAID") {
                         totalDibayar += Number(e.earnedAmount || 0);
@@ -163,41 +173,128 @@
                 });
 
                 const totalBaki = totalTerkumpul - totalDibayar;
-
                 document.getElementById("earnTerkumpul").innerText = "RM " + totalTerkumpul.toLocaleString('en-MY', { minimumFractionDigits: 2 });
                 document.getElementById("earnDibayar").innerText = "RM " + totalDibayar.toLocaleString('en-MY', { minimumFractionDigits: 2 });
                 document.getElementById("earnBaki").innerText = "RM " + totalBaki.toLocaleString('en-MY', { minimumFractionDigits: 2 });
 
-                const tbody = document.getElementById("myEarningsTable");
-                
-                if (earnings.length > 0) {
-                    tbody.innerHTML = "";
-                    earnings.sort((a, b) => b.createdAt?.toMillis() - a.createdAt?.toMillis());
+                // -------------------------------------------------------------
+                // 2. TARIK DATA PROSPEK (LEADS)
+                // -------------------------------------------------------------
+                const prosQuery = query(collection(db, "prospects"), where("introducerUid", "==", user.uid));
+                const prosSnap = await getDocs(prosQuery);
+                const prospects = [];
+                prosSnap.forEach(d => prospects.push({ id: d.id, ...d.data() }));
 
-                    earnings.forEach(e => {
-                        const tarikh = e.createdAt ? new Date(e.createdAt.toDate()).toLocaleDateString('ms-MY') : "-";
-                        const amt = Number(e.earnedAmount).toLocaleString('en-MY', { minimumFractionDigits: 2 });
+                // -------------------------------------------------------------
+                // 3. GABUNGKAN PROSPEK & KOMISEN
+                // -------------------------------------------------------------
+                const combinedList = [];
+
+                // Padankan Prospek dengan Komisen
+                prospects.forEach(p => {
+                    // Cari jika ada komisen atas nama prospek ini
+                    const earningIdx = earnings.findIndex(e => e.customerName.toLowerCase() === p.namaProspek.toLowerCase());
+                    let earning = null;
+                    if (earningIdx > -1) {
+                        earning = earnings[earningIdx];
+                        earnings.splice(earningIdx, 1); // Keluarkan dari array supaya tak berulang
+                    }
+
+                    combinedList.push({
+                        type: 'prospect',
+                        date: p.tarikhHantar,
+                        name: p.namaProspek,
+                        phone: p.telefonProspek,
+                        job: p.pekerjaanProspek,
+                        leadStatus: p.status,
+                        nota: p.nota,
+                        earning: earning
+                    });
+                });
+
+                // Masukkan Baki Komisen (Klien yang daftar guna link direct tanpa isi borang leads)
+                earnings.forEach(e => {
+                    combinedList.push({
+                        type: 'direct_earning',
+                        date: e.createdAt,
+                        name: e.customerName,
+                        phone: "-",
+                        job: "-",
+                        leadStatus: "Didaftarkan (Link Terus)",
+                        nota: "Mendaftar menggunakan pautan rujukan terus.",
+                        earning: e
+                    });
+                });
+
+                // Susun ikut tarikh terkini
+                combinedList.sort((a, b) => b.date?.toMillis() - a.date?.toMillis());
+
+                const tbody = document.getElementById("unifiedTable");
+                tbody.innerHTML = "";
+
+                if (combinedList.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="p-10 text-center text-gray-500 font-medium bg-gray-50/50">Tiada prospek dihantar setakat ini.</td></tr>`;
+                } else {
+                    combinedList.forEach(item => {
+                        const tarikh = item.date ? new Date(item.date.toDate()).toLocaleDateString('ms-MY') : "-";
                         
-                        let badge = e.status === "PAID" 
-                            ? `<span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold">✓ DIBAYAR</span>`
-                            : `<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-[10px] font-bold">PENDING</span>`;
+                        // Tentukan Warna Status Leads
+                        let statusColor = "bg-gray-100 text-gray-700 border-gray-200";
+                        if (item.leadStatus === "Menunggu Tindakan AQC") statusColor = "bg-orange-50 text-orange-700 border-orange-200";
+                        if (item.leadStatus === "Sedang Dihubungi") statusColor = "bg-blue-50 text-blue-700 border-blue-200";
+                        if (item.leadStatus.includes("Didaftarkan")) statusColor = "bg-green-50 text-green-700 border-green-200";
+                        if (item.leadStatus === "KIV / Tolak") statusColor = "bg-red-50 text-red-700 border-red-200";
+
+                        let leadStatusUI = `<span class="px-3 py-1.5 rounded-full text-xs font-bold border inline-block ${statusColor}">${item.leadStatus}</span>`;
+
+                        // Tentukan UI Komisen & Pembayaran
+                        let earningUI = `<span class="text-gray-400 text-xs italic">Menunggu Jualan</span>`;
+                        let payStatusUI = `<span class="text-gray-300">-</span>`;
+
+                        if (item.earning) {
+                            const rmAmount = Number(item.earning.earnedAmount).toLocaleString('en-MY', { minimumFractionDigits: 2 });
+                            const saleAmount = Number(item.earning.saleAmount).toLocaleString('en-MY', { minimumFractionDigits: 2 });
+                            
+                            earningUI = `
+                                <p class="font-bold text-green-700">RM ${rmAmount}</p>
+                                <p class="text-xs text-gray-500 mt-1">${item.earning.product} (RM${saleAmount})</p>
+                            `;
+
+                            if (item.earning.status === "PAID") {
+                                payStatusUI = `<span class="bg-green-100 text-green-700 border border-green-200 px-3 py-1.5 rounded-full text-[11px] font-bold">✓ DIBAYAR</span>`;
+                            } else {
+                                payStatusUI = `<span class="bg-orange-100 text-orange-700 border border-orange-200 px-3 py-1.5 rounded-full text-[11px] font-bold">PENDING</span>`;
+                            }
+                        }
 
                         tbody.innerHTML += `
-                            <tr>
-                                <td class="py-3 pr-4 text-gray-500">${tarikh}</td>
-                                <td class="py-3 pr-4 font-semibold text-gray-800">${e.customerName}</td>
-                                <td class="py-3 pr-4 text-right font-bold text-[#153638]">RM ${amt}</td>
-                                <td class="py-3 text-center">${badge}</td>
+                            <tr class="hover:bg-gray-50/80 transition border-b border-gray-50 last:border-0">
+                                <td class="p-4 align-top text-gray-500 whitespace-nowrap">${tarikh}</td>
+                                <td class="p-4 align-top">
+                                    <p class="font-bold text-gray-800 text-base">${item.name}</p>
+                                    <p class="text-indigo-600 font-semibold mb-1">📞 ${item.phone}</p>
+                                    ${item.job !== "-" ? `<p class="text-gray-500 text-xs">💼 ${item.job}</p>` : ""}
+                                </td>
+                                <td class="p-4 align-top">
+                                    ${leadStatusUI}
+                                    ${item.nota ? `<p class="text-gray-400 text-[11px] mt-2 italic border-l-2 border-gray-200 pl-2 line-clamp-2" title="${item.nota}">${item.nota}</p>` : ''}
+                                </td>
+                                <td class="p-4 align-top bg-green-50/30">
+                                    ${earningUI}
+                                </td>
+                                <td class="p-4 align-top text-center">
+                                    ${payStatusUI}
+                                </td>
                             </tr>
                         `;
                     });
                 }
             } catch(e) {
-                console.error("Gagal muat komisen:", e);
+                console.error("Gagal muat data pengurusan introducer:", e);
             }
 
             // -------------------------------------------------------------
-            // 2. FUNGSI HANTAR BORANG LEADS
+            // 4. FUNGSI HANTAR BORANG LEADS
             // -------------------------------------------------------------
             document.getElementById("prospectForm").addEventListener("submit", async (e) => {
                 e.preventDefault();
@@ -221,7 +318,7 @@
                     });
 
                     alert("Tahniah! Prospek berjaya dihantar kepada perunding anda.");
-                    document.getElementById("prospectForm").reset();
+                    location.reload(); // Refresh untuk papar dalam jadual gabungan terus
                     
                 } catch (error) {
                     alert("Ralat semasa menghantar borang.");
