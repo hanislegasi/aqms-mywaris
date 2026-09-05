@@ -26,6 +26,7 @@
     <!-- MAIN CONTENT -->
     <div class="p-5">
         
+        
         <!-- KAD STATISTIK KESELURUHAN -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
@@ -81,6 +82,32 @@
 
     </div>
 
+    <!-- MODAL PEMBAYARAN KOMISEN -->
+    <div id="paymentModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl transform transition-all">
+            <h3 class="text-lg font-bold text-gray-800 mb-1">Pengesahan Bayaran Komisen</h3>
+            <p class="text-sm text-gray-500 mb-5">Sila masukkan butiran bayaran untuk rujukan masa hadapan.</p>
+
+            <form id="paymentForm" onsubmit="submitPayment(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Tarikh Pemindahan</label>
+                        <input type="date" id="payDate" required class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-[#153638] outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Cara Bayaran / No Rujukan</label>
+                        <input type="text" id="payMethod" required placeholder="Contoh: Transfer Maybank, Tunai, DuitNow" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-[#153638] outline-none">
+                    </div>
+                </div>
+
+                <div class="mt-6 flex gap-3">
+                    <button type="button" onclick="closePaymentModal()" class="w-1/2 bg-gray-100 text-gray-700 hover:bg-gray-200 py-2.5 rounded-lg font-semibold transition">Batal</button>
+                    <button type="submit" id="confirmPayBtn" class="w-1/2 bg-[#153638] text-white hover:bg-[#1d4a4d] py-2.5 rounded-lg font-semibold transition">Simpan Rekod</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- SCRIPT FIREBASE -->
     <script type="module">
         import { db, auth } from './firebase.js';
@@ -88,27 +115,54 @@
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
         let aqcNo = "";
+        window.currentEarningId = null;
+
+        // FUNGSI KAWALAN MODAL PEMBAYARAN
+        window.openPaymentModal = (earningId) => {
+            window.currentEarningId = earningId;
+            document.getElementById('payDate').valueAsDate = new Date(); // Default kepada tarikh harini
+            document.getElementById('payMethod').value = '';
+            document.getElementById('paymentModal').classList.remove('hidden');
+            document.getElementById('paymentModal').classList.add('flex');
+        };
+
+        window.closePaymentModal = () => {
+            window.currentEarningId = null;
+            document.getElementById('paymentModal').classList.add('hidden');
+            document.getElementById('paymentModal').classList.remove('flex');
+        };
+
+        window.submitPayment = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('confirmPayBtn');
+            const payDate = document.getElementById('payDate').value;
+            const payMethod = document.getElementById('payMethod').value;
+
+            if (!window.currentEarningId || !payDate || !payMethod) return;
+
+            btn.disabled = true;
+            btn.innerText = "Menyimpan...";
+
+            try {
+                // Simpan Tarikh dan Cara Bayaran dalam Firestore
+                await updateDoc(doc(db, "introducerEarnings", window.currentEarningId), {
+                    status: "PAID",
+                    paidAt: new Date(payDate), 
+                    paymentMethod: payMethod
+                });
+                location.reload();
+            } catch (error) {
+                alert("Ralat kemaskini: " + error.message);
+                btn.disabled = false;
+                btn.innerText = "Simpan Rekod";
+            }
+        };
 
         // Fungsi Manual Tukar Status (Hanya untuk prospek yang belum daftar)
         window.updateStatus = async (docId, statusBaru) => {
             if(confirm(`Anda pasti mahu tukar status prospek ini kepada "${statusBaru}"?`)) {
                 try {
                     await updateDoc(doc(db, "prospects", docId), { status: statusBaru });
-                    location.reload();
-                } catch (error) {
-                    alert("Ralat kemaskini: " + error.message);
-                }
-            }
-        };
-
-        // Fungsi Tandakan Komisen Sudah Dibayar
-        window.markAsPaid = async (earningId) => {
-            if(confirm("Adakah anda pasti telah membuat pemindahan komisen kepada Introducer ini?")) {
-                try {
-                    await updateDoc(doc(db, "introducerEarnings", earningId), { 
-                        status: "PAID",
-                        paidAt: new Date()
-                    });
                     location.reload();
                 } catch (error) {
                     alert("Ralat kemaskini: " + error.message);
@@ -245,11 +299,29 @@
                         `;
 
                         if (p.earning.status === "PAID") {
-                            statusUI = `<span class="bg-green-100 text-green-700 border border-green-200 px-3 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1">✓ Komisen Selesai</span>`;
-                            actionUI = `<span class="text-gray-400 text-xs font-medium">- Selesai -</span>`;
+                            // Convert Firestore Timestamp ke Tarikh Biasa
+                            let paidDateStr = "-";
+                            if (p.earning.paidAt) {
+                                const paidDateObj = p.earning.paidAt.toDate ? p.earning.paidAt.toDate() : new Date(p.earning.paidAt);
+                                paidDateStr = paidDateObj.toLocaleDateString('ms-MY');
+                            }
+                            const methodStr = p.earning.paymentMethod || "Tidak dinyatakan";
+
+                            statusUI = `
+                                <div class="flex flex-col gap-1 items-start">
+                                    <span class="bg-green-100 text-green-700 border border-green-200 px-3 py-1 rounded-full text-[11px] font-bold inline-flex items-center gap-1">✓ Komisen Selesai</span>
+                                    <span class="text-xs text-gray-500 font-medium ml-1">Pada: ${paidDateStr}</span>
+                                </div>
+                            `;
+                            actionUI = `
+                                <div class="text-left bg-gray-50 p-2 rounded-lg border border-gray-100">
+                                    <p class="text-gray-400 text-[10px] font-semibold uppercase">Cara Bayaran</p>
+                                    <p class="text-gray-800 text-xs font-medium">${methodStr}</p>
+                                </div>
+                            `;
                         } else {
                             statusUI = `<span class="bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1">Menunggu Payout</span>`;
-                            actionUI = `<button onclick="markAsPaid('${p.earning.id}')" class="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-lg text-xs font-bold transition shadow-sm w-full">Tanda Dibayar</button>`;
+                            actionUI = `<button onclick="openPaymentModal('${p.earning.id}')" class="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-lg text-xs font-bold transition shadow-sm w-full">Tanda Dibayar</button>`;
                         }
                     } 
                     // FASA 2: DIDAFTARKAN TETAPI BELUM BELI
@@ -297,7 +369,7 @@
                             <td class="p-4 align-top">
                                 ${statusUI}
                             </td>
-                            <td class="p-4 align-top text-center w-32">
+                            <td class="p-4 align-top text-center w-40">
                                 ${actionUI}
                             </td>
                         </tr>
