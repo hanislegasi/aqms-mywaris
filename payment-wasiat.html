@@ -437,7 +437,7 @@ agreeBtn.addEventListener("click", async () => {
                     
                     if (compSnap.exists()) {
                         const compData = compSnap.data();
-                        const levelAqc = directConsultant.level || "AQC";
+                        const levelAqc = directConsultant.consultantLevel || "AQC";
                         
                         // Padankan level AQC dengan field dalam database compensation
                         if (levelAqc === "AQC-UM") {
