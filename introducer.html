@@ -26,7 +26,7 @@
 
     <!-- MAIN CONTENT -->
     <div class="p-5">
-               
+                      
         <!-- PENDAPATAN KOMISEN -->
         <div class="bg-white rounded-2xl shadow-sm border border-green-100 overflow-hidden mb-6">
             <div class="p-5 bg-green-50/50 border-b border-green-100">
@@ -51,8 +51,37 @@
             </div>
         </div>
 
+        <!-- JADUAL GABUNGAN (LEADS + PAYOUT) -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/80">
+                <div>
+                    <h2 class="text-lg font-bold text-gray-800">Senarai Prospek & Rekod Komisen</h2>
+                    <p class="text-xs text-gray-500 mt-1">Jejak status prospek anda dan komisen yang telah berjaya direkodkan.</p>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-gray-100 text-gray-600 font-semibold border-b border-gray-200">
+                        <tr>
+                            <th class="p-4">Tarikh</th>
+                            <th class="p-4">Maklumat Prospek</th>
+                            <th class="p-4">Status Leads</th>
+                            <th class="p-4 bg-green-50/50">Komisen (RM)</th>
+                            <th class="p-4 text-center">Status Bayaran</th>
+                        </tr>
+                    </thead>
+                    <tbody id="unifiedTable" class="divide-y divide-gray-100">
+                        <tr>
+                            <td colspan="5" class="p-10 text-center text-gray-500">Memuatkan data sistem...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- FORM CARD -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 mb-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
             <h3 class="text-xl font-bold text-gray-800 mb-6 border-b pb-4">Borang Maklumat Prospek Baru</h3>
             
             <form id="prospectForm" class="space-y-5">
@@ -95,35 +124,6 @@
                     </button>
                 </div>
             </form>
-        </div>
-
-        <!-- JADUAL GABUNGAN (LEADS + PAYOUT) -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/80">
-                <div>
-                    <h2 class="text-lg font-bold text-gray-800">Senarai Prospek & Rekod Komisen</h2>
-                    <p class="text-xs text-gray-500 mt-1">Jejak status prospek anda dan komisen yang telah berjaya direkodkan.</p>
-                </div>
-            </div>
-            
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm">
-                    <thead class="bg-gray-100 text-gray-600 font-semibold border-b border-gray-200">
-                        <tr>
-                            <th class="p-4">Tarikh</th>
-                            <th class="p-4">Maklumat Prospek</th>
-                            <th class="p-4">Status Leads</th>
-                            <th class="p-4 bg-green-50/50">Komisen (RM)</th>
-                            <th class="p-4 text-center">Status Bayaran</th>
-                        </tr>
-                    </thead>
-                    <tbody id="unifiedTable" class="divide-y divide-gray-100">
-                        <tr>
-                            <td colspan="5" class="p-10 text-center text-gray-500">Memuatkan data sistem...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
 
     </div>
@@ -318,7 +318,7 @@
                     });
 
                     alert("Tahniah! Prospek berjaya dihantar kepada perunding anda.");
-                    location.reload(); // Refresh untuk papar dalam jadual gabungan terus
+                    location.reload(); 
                     
                 } catch (error) {
                     alert("Ralat semasa menghantar borang.");
