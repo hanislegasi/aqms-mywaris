@@ -315,7 +315,7 @@ filter:none !important;
         }
 
         const params = new URLSearchParams(window.location.search);
-        const userId = params.get("id");
+        let userId = params.get("id");
 
 // ==========================================
 // FUNGSI AUTO-PAGINATION (HANYA TARGET .dynamic-page)
@@ -1160,9 +1160,12 @@ console.log(
         // ==========================================
         // BUTANG CETAK (PDF) & LULUS/TOLAK
         // ==========================================
-        document.getElementById("printBtn").onclick = () => window.open(`print-corporate.html?id=${userId}`, "_blank");
-       
-        document.getElementById("downloadBtn").addEventListener("click", async () => {
+        const btnCetak = document.getElementById("printBtn");
+        if (btnCetak) btnCetak.onclick = () => window.open(`print-corporate.html?id=${userId}`, "_blank");
+        
+        const btnDownload = document.getElementById("downloadBtn");
+        if (btnDownload) {
+             btnDownload.addEventListener("click", async () => {
              let wrapper = document.getElementById('scale-wrapper');
              let element = document.getElementById("pdfContent");
              let originalTransform = wrapper.style.transform;
