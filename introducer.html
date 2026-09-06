@@ -318,11 +318,23 @@
                 btn.disabled = true;
 
                 try {
+                    // 1. FORMAT NAMA (Huruf Besar Awal Perkataan)
+                    let rawNama = document.getElementById("p_nama").value.trim();
+                    let namaProspekFormatted = rawNama.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+
+                    // 2. FORMAT TELEFON (Bentuk 000-00000000)
+                    let rawTel = document.getElementById("p_tel").value.replace(/\D/g, ""); // Buang semua huruf/simbol
+                    let telProspekFormatted = rawTel;
+                    if (rawTel.length > 3) {
+                        // Letak sengkang (-) selepas 3 digit pertama
+                        telProspekFormatted = rawTel.substring(0, 3) + "-" + rawTel.substring(3);
+                    }
+
+                    // Hantar ke Database
                     await addDoc(collection(db, "prospects"), {
-                        namaProspek: document.getElementById("p_nama").value,
-                        telefonProspek: document.getElementById("p_tel").value,
+                        namaProspek: namaProspekFormatted,
+                        telefonProspek: telProspekFormatted,
                         pekerjaanProspek: document.getElementById("p_kerja").value,
-                        // TUKAR: Simpan pilihan produk ke dalam field nota
                         nota: "Berminat: " + document.getElementById("p_produk").value,
                         introducerUid: user.uid,
                         introducerNama: userData.nama, 
@@ -339,7 +351,7 @@
                 } catch (error) {
                     alert("Ralat semasa menghantar borang.");
                 } finally {
-                    btn.innerText = "Hantar Prospek 🚀";
+                    btn.innerText = "Hantar Prospek";
                     btn.disabled = false;
                 }
             });
