@@ -56,15 +56,15 @@ const buySellAgreementContent = `
     </tr>
     <tr valign="top">
         <td width="40">B.</td>
-        <td style="padding-bottom:10px;">Pada tarikh Perjanjian ini, Pemegang Saham A merupakan pemilik benefisial dan berdaftar ke atas <strong>{{SAHAM_PEWASIAT}}</strong> unit saham, manakala {{RECITAL_SAHAM_PARTNER}} di dalam Syarikat (selepas ini dirujuk secara kolektif sebagai "Saham-Saham Tersebut").</td>
+        <td style="padding-bottom:10px;">Pada tarikh Perjanjian ini, Pemegang Saham A merupakan pemilik benefisial dan berdaftar ke atas <strong>{{SAHAM_PEWASIAT}}</strong> unit saham, manakala {{RECITAL_SAHAM_PARTNER}} di dalam Syarikat (selepas ini dirujuk secara kolektif sebagai <strong>"Saham-Saham Tersebut"</strong>).</td>
     </tr>
     <tr valign="top">
         <td width="40">C.</td>
-        <td style="padding-bottom:10px;">Pihak-Pihak berhasrat untuk mengikat suatu perjanjian bagi mengatur kelangsungan perniagaan serta menetapkan suatu mekanisme mandatori bagi jualan dan pembelian Saham-Saham Tersebut sekiranya berlaku Kematian atau Keilatan Kekal Menyeluruh (TPD) ke atas mana-mana Pemegang Saham, yang disokong oleh pembiayaan tunai melalui Polisi Takaful Korporat (Keyman).</td>
+        <td style="padding-bottom:10px;">Pihak-Pihak berhasrat untuk mengikat suatu perjanjian bagi mengatur kelangsungan perniagaan serta menetapkan suatu mekanisme mandatori bagi jualan dan pembelian Saham-Saham Tersebut sekiranya berlaku <strong>Kematian atau Keilatan Kekal Menyeluruh (TPD)</strong> ke atas mana-mana Pemegang Saham, yang disokong oleh pembiayaan tunai melalui <strong>Polisi Takaful Korporat <em>(Keyman)</em></strong>.</td>
     </tr>
     <tr valign="top">
         <td width="40">D.</td>
-        <td style="padding-bottom:10px;">Pihak-Pihak juga berhasrat supaya kesemua urus niaga di bawah Perjanjian ini dilaksanakan mengikut prinsip Syariah, bebas daripada unsur riba (faedah), gharar (ketidakpastian melampau) dan maysir (perjudian/spekulasi).</td>
+        <td style="padding-bottom:10px;">Pihak-Pihak juga berhasrat supaya kesemua urus niaga di bawah Perjanjian ini dilaksanakan mengikut prinsip Syariah, bebas daripada unsur <em>riba</em> (faedah), <em>gharar</em> (ketidakpastian melampau) dan <em>maysir</em> (perjudian/spekulasi).</td>
     </tr>
 </table>
  
@@ -165,8 +165,8 @@ const buySellAgreementContent = `
                 <td width="30">1.</td>
                 <td style="padding-bottom:20px; text-align:justify;">Pihak-Pihak dengan ini bersetuju bahawa nilai balasan bagi setiap unit saham Syarikat di bawah Perjanjian ini hendaklah ditentukan secara muktamad melalui salah satu kaedah berikut:
                     <ul style="margin-top:5px; padding-left:20px; list-style-type:lower-alpha;">
-                        <li style="margin-bottom:8px;">Formula Nilai Aset Bersih <em>(Net Asset Value - NAV)</em> sepertimana yang disahkan di dalam Laporan Kewangan Beraudit Syarikat bagi tahun kewangan yang terakhir sebelum berlakunya Kejadian Pemicu; ATAU</li>
-                        <li>Harga persetujuan bersama <em>(Fixed Agreed Value)</em> yang ditetapkan secara bertulis dari semasa ke semasa. Jika tiada persetujuan bertulis baharu dikemaskini dalam tempoh dua belas (12) bulan sebelum Kejadian Pemicu, nilai di bawah Fasal 3.1(a) hendaklah diguna pakai.</li>
+                        <li style="margin-bottom:8px;">Formula <strong>Nilai Aset Bersih <em>(Net Asset Value - NAV)</em></strong> sepertimana yang disahkan di dalam Laporan Kewangan Beraudit Syarikat bagi tahun kewangan yang terakhir sebelum berlakunya Kejadian Pemicu; ATAU</li>
+                        <li>Harga <strong>persetujuan bersama <em>(Fixed Agreed Value)</em></strong> yang ditetapkan secara bertulis dari semasa ke semasa. Jika tiada persetujuan bertulis baharu dikemaskini dalam tempoh dua belas (12) bulan sebelum Kejadian Pemicu, nilai di bawah Fasal 3.1(a) hendaklah diguna pakai.</li>
                     </ul>
                 </td>
             </tr>
@@ -184,8 +184,8 @@ const buySellAgreementContent = `
                 <td width="30">1.</td>
                 <td style="padding-bottom:20px; text-align:justify;">Pembelian Saham-Saham Tersebut di bawah Perjanjian ini hendaklah dilaksanakan menggunakan salah satu struktur berikut, sebagaimana dipersetujui oleh Pihak-Pihak:
                     <ul style="margin-top:5px; padding-left:20px; list-style-type:lower-alpha;">
-                        <li style="margin-bottom:8px;"><strong>Cross-Purchase</strong> — Pemegang Saham yang Masih Hidup membeli terus saham Pemegang Saham Terjejas secara berkadar mengikut pegangan sedia ada; ATAU</li>
-                        <li><strong>Entity/Redemption Purchase</strong> — Syarikat sendiri membeli balik <em>(redeem)</em> saham tersebut menggunakan dana Syarikat atau hasil Polisi Takaful di Fasal 4, tertakluk kepada Akta Syarikat 2016 dan Perlembagaan Syarikat berkaitan pembelian balik saham sendiri.</li>
+                        <li style="margin-bottom:8px;"><strong><em>Cross-Purchase</em></strong> — Pemegang Saham yang Masih Hidup membeli terus saham Pemegang Saham Terjejas secara berkadar mengikut pegangan sedia ada; ATAU</li>
+                        <li><strong><em>Entity/Redemption Purchase</em></strong> — Syarikat sendiri membeli balik <em>(redeem)</em> saham tersebut menggunakan dana Syarikat atau hasil <strong>Polisi Takaful di Fasal 4</strong>, tertakluk kepada <strong>Akta Syarikat 2016</strong> dan Perlembagaan Syarikat berkaitan pembelian balik saham sendiri.</li>
                     </ul>
                 </td>
             </tr>
@@ -207,7 +207,7 @@ const buySellAgreementContent = `
         <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
             <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Bagi memastikan kelancaran dan ketersediaan dana untuk melaksanakan obligasi belian saham di bawah Fasal 2, Syarikat dan/atau Pihak-Pihak hendaklah mengambil, mencarum, dan mengekalkan <strong>Polisi Takaful (Keyman)</strong> (No. Polisi: ........................................................) ke atas hayat setiap Pemegang Saham, dengan jumlah perlindungan yang sekurang-kurangnya menyamai anggaran nilai pasaran pegangan saham masing-masing.</td></tr>
             <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Apabila berlakunya Kejadian Pemicu, apa-apa pampasan dan/atau hasil tuntutan yang dibayar di bawah Polisi Takaful tersebut hendaklah dipegang amanah semata-mata bagi tujuan melunaskan balasan belian saham kepada Wasi/Pentadbir Pemegang Saham Terjejas.</td></tr>
-            <tr valign="top"><td width="30">3.</td><td style="padding-bottom:8px;">Sekiranya hasil Polisi Takaful tidak mencukupi untuk melunaskan sepenuhnya Nilai Saksama, baki boleh dibayar secara ansuran munasabah tanpa faedah dalam tempoh tidak melebihi tiga puluh enam (36) bulan, dengan Ta'widh (jika berlaku lewat bayar) mengikut Fasal 1A.3.</td></tr>
+            <tr valign="top"><td width="30">3.</td><td style="padding-bottom:8px;">Sekiranya hasil Polisi Takaful tidak mencukupi untuk melunaskan sepenuhnya Nilai Saksama, baki boleh dibayar secara ansuran munasabah tanpa faedah dalam tempoh tidak melebihi tiga puluh enam (36) bulan, dengan ,<em>Ta'widh</em> (jika berlaku lewat bayar) mengikut Fasal 1A.3.</td></tr>
         </table>
     </div>
 
@@ -215,8 +215,8 @@ const buySellAgreementContent = `
     <div style="page-break-inside: avoid;">
         <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 4A: PROSES PEMINDAHAN SAHAM & SETEM HASIL</h3>
         <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-            <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Setelah harga dan struktur belian dipersetujui/ditentukan, Pihak-Pihak hendaklah melaksanakan Borang Pemindahan Saham dan mengemukakan dokumen berkaitan kepada Suruhanjaya Syarikat Malaysia (SSM) dalam tempoh tiga puluh (30) hari, termasuk kelulusan lembaga pengarah dan pematuhan Perlembagaan Syarikat.</td></tr>
-            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Setem hasil <em>(stamp duty)</em> ke atas pemindahan saham hendaklah dijelaskan mengikut Akta Setem 1949 sebelum pendaftaran pemindahan diiktiraf sah di sisi undang-undang.</td></tr>
+            <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Setelah harga dan struktur belian dipersetujui/ditentukan, Pihak-Pihak hendaklah melaksanakan Borang Pemindahan Saham dan mengemukakan dokumen berkaitan kepada <strong>Suruhanjaya Syarikat Malaysia (SSM)</strong> dalam tempoh tiga puluh (30) hari, termasuk kelulusan lembaga pengarah dan pematuhan Perlembagaan Syarikat.</td></tr>
+            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Setem hasil <em>(stamp duty)</em> ke atas pemindahan saham hendaklah dijelaskan mengikut <strong>Akta Setem 1949</strong> sebelum pendaftaran pemindahan diiktiraf sah di sisi undang-undang.</td></tr>
         </table>
     </div>
 
@@ -233,7 +233,7 @@ const buySellAgreementContent = `
     <div style="page-break-inside: avoid;">
         <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 5: PEMATUHAN DOKUMEN WASIAT KORPORAT</h3>
         <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
-            <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Sebagai balasan kepada kewajipan-kewajipan di bawah Perjanjian ini, setiap Pemegang Saham bersetuju dan berjanji untuk menyempurnakan suatu Deklarasi Wasiat Korporat yang selari dengan Perjanjian ini.</td></tr>
+            <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Sebagai balasan kepada kewajipan-kewajipan di bawah Perjanjian ini, setiap Pemegang Saham bersetuju dan berjanji untuk menyempurnakan suatu <strong>Dokumen Wasiat Korporat</strong> yang selari dengan Perjanjian ini.</td></tr>
             <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Wasiat Korporat tersebut hendaklah memuatkan arahan mandatori yang jelas kepada Wasi/Pentadbir untuk menguatkuasakan pindah milik saham kepada Pemegang Saham yang Masih Hidup tanpa kelewatan dan tanpa membenarkan sebarang bantahan daripada waris-waris Faraid/benefisiari yang lain, tertakluk sepenuhnya kepada had 1/3 dan prinsip Faraid yang dinyatakan di dalam Wasiat Korporat tersebut.</td></tr>
         </table>
     </div>
@@ -260,7 +260,7 @@ const buySellAgreementContent = `
         <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 6: KESAN MENGIKAT & UNDANG-UNDANG GUNA PAKAI</h3>
         <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
             <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Perjanjian ini adalah mengikat ke atas waris, pentadbir, wasi, pewaris, dan wakil peribadi yang sah di sisi undang-undang bagi setiap Pihak di sini.</td></tr>
-            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Perjanjian ini hendaklah ditafsirkan, dikawal selia, dan dikuatkuasakan selaras dengan Undang-Undang Malaysia, termasuk Akta Kontrak 1950 dan Akta Syarikat 2016, dan tertakluk kepada bidang kuasa khusus, Hukum Syarak yang terpakai di Malaysia.</td></tr>
+            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Perjanjian ini hendaklah ditafsirkan, dikawal selia, dan dikuatkuasakan selaras dengan ,<strong>Undang-Undang Malaysia, termasuk Akta Kontrak 1950 dan Akta Syarikat 2016</strong>, dan tertakluk kepada bidang kuasa khusus, Hukum Syarak yang terpakai di Malaysia.</td></tr>
         </table>
     </div>
 
@@ -268,7 +268,7 @@ const buySellAgreementContent = `
         <h3 style="font-size:16px; font-weight:bold; margin-top:20px; margin-bottom:10px; color:#153638;">FASAL 6A: PENYELESAIAN PERTIKAIAN</h3>
         <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
             <tr valign="top"><td width="30">1.</td><td style="padding-bottom:8px;">Sebarang pertikaian yang berbangkit daripada atau berkaitan dengan Perjanjian ini hendaklah cuba diselesaikan terlebih dahulu secara <em>Sulh</em> (mediasi/rundingan baik) dalam tempoh tiga puluh (30) hari daripada notis pertikaian diberikan.</td></tr>
-            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Sekiranya tidak berjaya diselesaikan melalui Sulh, pertikaian tersebut hendaklah dirujuk kepada dan diselesaikan secara muktamad melalui timbang tara mengikut Akta Timbang Tara 2005 dan/atau peraturan timbang tara patuh Syariah (i-Arbitration) Pusat Timbang Tara Antarabangsa Kuala Lumpur (AIAC), dan keputusan timbang tara tersebut adalah muktamad serta mengikat kesemua Pihak.</td></tr>
+            <tr valign="top"><td width="30">2.</td><td style="padding-bottom:8px;">Sekiranya tidak berjaya diselesaikan melalui <em>Sulh</em>, pertikaian tersebut hendaklah dirujuk kepada dan diselesaikan secara muktamad melalui timbang tara mengikut <strong>Akta Timbang Tara 2005</strong> dan/atau peraturan <strong>timbang tara patuh Syariah (i-Arbitration) Pusat Timbang Tara Antarabangsa Kuala Lumpur (AIAC)</strong>, dan keputusan timbang tara tersebut adalah muktamad serta mengikat kesemua Pihak.</td></tr>
         </table>
     </div>
 
