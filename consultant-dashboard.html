@@ -323,6 +323,7 @@ onAuthStateChanged(auth, async(user)=>{
     const priceHibah = Number(comp.hibahPrice || 2500);
     const priceSepencarian = Number(comp.sepencarianPrice || 800);
     const priceMawaris = Number(comp.mawarisPrice || 3000);
+    const priceCorporate = Number(comp.corporatePrice || 6000);
 
    // 2. SEMAKAN BANNER RENEWAL & EXPIRY
     const renewalDate = data.renewalDate?.toDate ? data.renewalDate.toDate() : new Date(data.renewalDate);
@@ -356,7 +357,7 @@ onAuthStateChanged(auth, async(user)=>{
     const monthlySales = { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0 };
     let activeClients = 0;
     let totalSales = 0; // Jualan Peribadi
-    let wasiatSales = 0, hibahSales = 0, sepencarianSales = 0, mawarisSales = 0;
+    let wasiatSales = 0, hibahSales = 0, sepencarianSales = 0, mawarisSales = 0, corporateSales = 0;
 
     const usersSnap = await getDocs(collection(db,"users"));
     usersSnap.forEach((d)=>{
@@ -367,6 +368,7 @@ onAuthStateChanged(auth, async(user)=>{
             if(u.hibahPaymentStatus === "paid"){ hibahSales++; totalSales += priceHibah; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceHibah; }
             if(u.sepencarianPaymentStatus === "paid"){ sepencarianSales++; totalSales += priceSepencarian; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceSepencarian; }
             if(u.mawarisPaymentStatus === "paid"){ mawarisSales++; totalSales += priceMawaris; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceMawaris; }
+            if(u.corporatePaymentStatus === "paid"){ corporateSales++; totalSales += priceCorporate; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceCorporate; }
         }
     });
 
@@ -391,6 +393,7 @@ onAuthStateChanged(auth, async(user)=>{
         timelinePromises.push(getDoc(doc(db, "users", uid, "hibah", "maklumat")));
         timelinePromises.push(getDoc(doc(db, "users", uid, "sepencarian", "maklumat")));
         timelinePromises.push(getDoc(doc(db, "users", uid, "mawaris", "maklumat")));
+        timelinePromises.push(getDoc(doc(db, "users", uid, "corporate", "maklumat")));
     });
 
     const timelineSnaps = await Promise.all(timelinePromises);
@@ -665,10 +668,10 @@ onAuthStateChanged(auth, async(user)=>{
     new Chart(document.getElementById("productChart"), {
         type: "pie",
         data: {
-            labels: ["Wasiat", "Hibah", "Sepencarian", "Mawaris"],
+            labels: ["Wasiat", "Hibah", "Sepencarian", "Mawaris", "Korporat"],
             datasets: [{
-                data: [wasiatSales, hibahSales, sepencarianSales, mawarisSales],
-                backgroundColor: ["#3B82F6", "#F43F5E", "#F59E0B", "#FACC15"]
+                data: [wasiatSales, hibahSales, sepencarianSales, mawarisSales, corporateSales],
+                backgroundColor: ["#3B82F6", "#F43F5E", "#F59E0B", "#FACC15", "#10B981"]
             }]
         },
         options: {
@@ -763,7 +766,7 @@ onAuthStateChanged(auth, async(user)=>{
         document.getElementById("claimsBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-claims.html"; });
         // FUNGSI KLIK BUTANG BARU: myIntroducer
         document.getElementById("introducerBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-introducer.html"; })
-      
+       
         document.getElementById("copyReferralBtn").addEventListener("click", async()=>{
             try{
                 await navigator.clipboard.writeText(window.location.origin + window.location.pathname.replace("consultant-dashboard.html", "register.html") + "?ref=" + consultantData.consultantNo);
