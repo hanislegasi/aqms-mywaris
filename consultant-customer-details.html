@@ -378,7 +378,65 @@ mawarisHandoverRemarks = mawarisData.handoverRemarks || "";
 
 }
   
+// ======================
+// CORPORATE
+// ======================
 
+const corporateSnap = await getDoc(
+    doc(db, "users", userId, "corporate", "maklumat")
+);
+
+let corporateStatus = "BELUM DIISI";
+let corporateDocRef = "-";
+let corporateApprovedDate = "-";
+let corporateExpiryDate = "-";
+let corporateBakiHari = 0;
+
+let corporateAkadDate = "";
+let corporateAkadTime = "";
+
+let corporateData = {};
+  
+let corporateStampDate = "";
+let corporateStampRef = "";
+
+let corporateHandoverDate = "";
+let corporateHandoverRemarks = "";
+  
+if (corporateSnap.exists()) {
+
+    corporateData = corporateSnap.data();
+
+corporateAkadDate = corporateData.akadDate || "";
+corporateAkadTime = corporateData.akadTime || "";
+
+corporateStampDate = corporateData.stampingDate || "";
+corporateStampRef = corporateData.stampingRef || "";
+
+corporateHandoverDate = corporateData.handoverDate || "";
+corporateHandoverRemarks = corporateData.handoverRemarks || "";
+  
+    corporateStatus = corporateData.status || "DRAFT";
+    corporateDocRef = corporateData.docRef || "-";
+
+    corporateApprovedDate = corporateData.approvedAt
+        ? new Date(corporateData.approvedAt).toLocaleDateString("ms-MY")
+        : "-";
+
+    corporateExpiryDate = corporateData.expiryDate
+        ? new Date(corporateData.expiryDate).toLocaleDateString("ms-MY")
+        : "-";
+
+    corporateBakiHari = corporateData.expiryDate
+        ? Math.ceil(
+            (new Date(corporateData.expiryDate) - new Date())
+            / (1000 * 60 * 60 * 24)
+        )
+        : 0;
+
+}
+
+  
 const products = [
 
 {
@@ -413,6 +471,14 @@ docRef:mawarisDocRef,
 preview:"preview-mawaris.html"
 }
 
+{
+name:"Mawaris Korporat",
+snap:corporateSnap,
+status:corporateStatus,
+docRef:corporateDocRef,
+preview:"preview-corporate.html"
+}
+  
 ];
 
 const activeProduct =
@@ -432,6 +498,8 @@ activeProduct.name === "Wasiat"
 ? "hibah"
 : activeProduct.name === "Harta Sepencarian"
 ? "sepencarian"
+: activeProduct.name === "Mawaris Korporat"
+? "corporate"
 : "mawaris"
 )
 : "wasiat";
@@ -445,6 +513,8 @@ currentCollection === "wasiat"
 ? hibahData
 : currentCollection === "sepencarian"
 ? sepencarianData
+: currentCollection === "corporate"
+? corporateData
 : mawarisData
 )
 : {};
@@ -810,7 +880,8 @@ user.paymentStatus === "paid" ||
 user.wasiatPaymentStatus === "paid" ||
 user.hibahPaymentStatus === "paid" ||
 user.sepencarianPaymentStatus === "paid" ||
-user.mawarisPaymentStatus === "paid"
+user.mawarisPaymentStatus === "paid" ||
+user.corporatePaymentStatus === "paid" 
 )
 ? "AHLI AKTIF"
 : "PROSPEK";
