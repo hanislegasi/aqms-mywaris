@@ -114,7 +114,7 @@ class="overflow-x-auto">
 <tbody id="tableBody">
 
 <tr>
-<td colspan="8" class="p-5 text-center">
+<td colspan="11" class="p-5 text-center">
 Memuatkan...
 </td>
 </tr>
@@ -186,6 +186,7 @@ const priceWasiat = Number(comp.wasiatPrice || 350);
 const priceHibah = Number(comp.hibahPrice || 2500);
 const priceSepencarian = Number(comp.sepencarianPrice || 800);
 const priceMawaris = Number(comp.mawarisPrice || 3000);
+const priceCorporate = Number(comp.corporatePrice || 2500);
 
 let commissionRate = 0;
 const lvl = consultantData.consultantLevel;
@@ -215,14 +216,6 @@ for (const docSnap of snap.docs){
 
 const client =
 docSnap.data();
-
-console.log({
-nama: client.nama,
-role: client.role,
-memberNo: client.memberNo,
-referral: client.referral,
-consultantNo: consultantNo
-});
   
 // SYARAT BARU: Benarkan klien yang belum ada memberNo (Prospek) masuk senarai
 if(
@@ -252,6 +245,10 @@ if(client.mawarisPaymentStatus === "paid"){
     clientSales += priceMawaris;
 }
 
+if(client.corporatePaymentStatus === "paid"){
+    clientSales += priceCorporate;
+}
+
 // Komisen paparan jadual (Anggaran kasar ikut level terkini)
 commission = clientSales * (commissionRate / 100);
 
@@ -266,22 +263,22 @@ client.expiryDate
 : "-";
 
 const modules = [
-
+{
+key:"corporate",
+label:"KORPORAT"
+},
 {
 key:"hibah",
 label:"HIBAH"
 },
-
 {
 key:"wasiat",
 label:"WASIAT"
 },
-
 {
 key:"sepencarian",
 label:"SEPENCARIAN"
 },
-
 {
 key:"mawaris",
 label:"MAWARIS"
@@ -327,9 +324,6 @@ const registerDate =
 client.createdAt
 ? client.createdAt.toDate().toLocaleDateString("ms-MY")
 : "-";
-
-
-
 
   
 html += `
@@ -382,7 +376,8 @@ ${
 client.wasiatPaymentStatus==="paid" ||
 client.hibahPaymentStatus==="paid" ||
 client.sepencarianPaymentStatus==="paid" ||
-client.mawarisPaymentStatus==="paid"
+client.mawarisPaymentStatus==="paid" ||
+client.corporatePaymentStatus==="paid"
 ? "bg-green-100 text-green-700"
 : "bg-yellow-100 text-yellow-700"}">
 
@@ -391,7 +386,8 @@ ${
 client.wasiatPaymentStatus==="paid" ||
 client.hibahPaymentStatus==="paid" ||
 client.sepencarianPaymentStatus==="paid" ||
-client.mawarisPaymentStatus==="paid"
+client.mawarisPaymentStatus==="paid" ||
+client.corporatePaymentStatus==="paid"
 ? "AHLI AKTIF"
 : "PROSPEK"
 }
@@ -476,7 +472,7 @@ document.getElementById(
 ).innerHTML =
 html || `
 <tr>
-<td colspan="9" class="p-5 text-center">
+<td colspan="11" class="p-5 text-center">
 Tiada client.
 </td>
 </tr>
