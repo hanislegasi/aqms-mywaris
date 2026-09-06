@@ -604,56 +604,51 @@ function autoPaginate() {
        
         onAuthStateChanged(auth, async(user)=>{
 
-   if(!user){
-      location.href="login.html";
-      return;
-   }
+           if(!user){
+              location.href="login.html";
+              return;
+           }
 
-   const loginDoc = await getDoc(
-    doc(db,"users",user.uid)
-);
+            const loginDoc = await getDoc(
+                doc(db,"users",user.uid)
+            );
 
-const loginUser = loginDoc.data();
+            const loginUser = loginDoc.data();
+                        
+            const params = new URLSearchParams(window.location.search);
+            const previewUid = params.get("uid");
+            const userId = previewUid || user.uid;
+
+            if(previewUid){
+                if(
+                    loginUser.role !== "admin" &&
+                    loginUser.role !== "consultant"
+                ){
+                    alert("Akses ditolak.");
+                    location.href="dashboard.html";
+                    return;
+                }
+            }
             
-   const params = new URLSearchParams(window.location.search);
+            // ==========================================
+            // KAWALAN PAPARAN AQC (HANYA VIEW)
+            // ==========================================
+            if (loginUser.role === "consultant") {
+                // Sembunyikan semua butang tindakan dan kotak pengesahan
+                const printBtn = document.getElementById("printBtn");
+                const downloadBtn = document.getElementById("downloadBtn");
+                const verifySec = document.getElementById("verificationSection");
+                
+                if (printBtn) printBtn.classList.add("hidden");
+                if (downloadBtn) downloadBtn.classList.add("hidden");
+                if (verifySec) verifySec.classList.add("hidden");
+            }
+            // ==========================================
 
-const previewUid =
-params.get("uid");
-
-const userId =
-previewUid || user.uid;
-
-if(previewUid){
-
-    if(
-        loginUser.role !== "admin" &&
-        loginUser.role !== "consultant"
-    ){
-
-        alert("Akses ditolak.");
-
-        location.href="dashboard.html";
-
-        return;
-
-    }
-
-}
-
-document
-.getElementById("printBtn")
-.onclick=()=>{
-
-window.open(
-
-`print-hibah.html?id=${userId}`,
-
-"_blank"
-
-);
-
-};
-
+            document.getElementById("printBtn").onclick=()=>{
+                window.open(`print-hibah.html?id=${userId}`, "_blank");
+            };
+            
 const agreeVerify = document.getElementById("agreeVerify");
         const verifyBtn = document.getElementById("verifyBtn");
         
