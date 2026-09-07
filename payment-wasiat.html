@@ -225,7 +225,7 @@ agreeBtn.addEventListener("click", async () => {
         };
 
         // Panggil fungsi Cloud Function yang kita buat tadi
-        const functions = getFunctions();
+        const functions = getFunctions(auth.app);
         const createToyyibpayBill = httpsCallable(functions, 'createToyyibpayBill');
         const result = await createToyyibpayBill(dataPelanggan);
                 
