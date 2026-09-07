@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <title>Status Pembayaran</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-5">
+
+    <div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl text-center">
+        <h1 id="statusTajuk" class="text-2xl font-bold text-[#153638] mb-4">Menyemak Pembayaran...</h1>
+        <p id="statusMesej" class="text-gray-500">Sila tunggu sebentar. Jangan tutup skrin ini.</p>
+    </div>
+
+<script type="module">
+    import { db, auth } from './firebase.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { doc, getDoc, updateDoc, increment, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // 1. Tangkap jawapan dari URL ToyyibPay
+    // Contoh URL yang Toyyibpay bagi: payment-success.html?status_id=1&billcode=WST123...
+    const urlParams = new URLSearchParams(window.location.search);
+    const status_id = urlParams.get('status_id'); 
+    
+    // Toyyibpay Code: 1 = Berjaya, 2 = Pending, 3 = Gagal
+    if (status_id === "1") {
+        document.getElementById('statusTajuk').innerText = "Pembayaran Berjaya!";
+        document.getElementById('statusMesej').innerText = "Sistem sedang merekodkan resit dan komisen anda...";
+        
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const currentUser = user;
+                const txnDate = new Date(); // Tarikh transaksi berjaya
+                
+                try {
+                    // =========================================================================
+                    // PASTE KOD ASAL AWAK DI SINI
+                    // Mula dari baris: const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+                    // Sehinggalah bahagian: await addDoc(collection(db, "receipts"), {...});
+                    // =========================================================================
+
+                    // Selepas semua rekod komisen dan lejar selesai:
+                    alert("Pendaftaran Wasiat selesai sepenuhnya!");
+                    window.location.href = "wasiat-page.html"; // Bawa ke dashboard pelanggan
+
+                } catch (error) {
+                    console.error("Ralat merekod data:", error);
+                    document.getElementById('statusMesej').innerText = "Ralat merekod data. Sila hubungi admin.";
+                }
+            }
+        });
+
+    } else {
+        // Jika status_id bukan 1 (Gagal atau Dibatalkan)
+        document.getElementById('statusTajuk').innerText = "Pembayaran Gagal/Batal";
+        document.getElementById('statusMesej').innerText = "Sila cuba sebentar lagi.";
+        document.getElementById('statusTajuk').classList.add("text-red-600");
+        
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 3000);
+    }
+</script>
+</body>
+</html>
