@@ -214,13 +214,21 @@ agreeBtn.addEventListener("click", async () => {
             return;
         }
 
-        // Susun data untuk dihantar ke backend ToyyibPay
+        // 1. Bersihkan nilai harga (buang huruf "RM", koma, atau jarak jika ada di database)
+        let hargaBersih = parseFloat(String(saleAmount).replace(/[^0-9.]/g, ''));
+        
+        // 2. Kawalan keselamatan: Jika data dari database rosak atau 0, guna harga lalai
+        if (isNaN(hargaBersih) || hargaBersih < 1) {
+            hargaBersih = 350; 
+        }
+
+        // 3. Susun data untuk dihantar ke backend ToyyibPay
         const dataPelanggan = {
             nama: userData.nama || "Pelanggan AQMS", 
             email: userData.email || "tiada@email.com",
-            telefon: userData.telefon || "0000000000",
+            telefon: userData.telefon || "0100000000", // Toyyibpay lebih suka format 01X...
             pakej: "Wasiat",
-            harga: saleAmount, // Harga ditarik secara dinamik dari atas
+            harga: hargaBersih, // <--- Gunakan harga yang telah dibersihkan
             uid: currentUser.uid
         };
 
