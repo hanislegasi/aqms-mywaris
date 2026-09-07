@@ -108,8 +108,8 @@ import { db, auth } from './firebase.js';
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 // 3. Tarik fungsi Firestore (TAMBAH getDoc untuk semak Introducer)
-import { doc, setDoc, getDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+import { doc, setDoc, getDoc, getDocs, collection, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+     
 const params = new URLSearchParams(window.location.search);
 const ref = params.get("ref");
 const introUid = params.get("intro"); // Tangkap UID AQM dari URL
@@ -277,16 +277,20 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
     }
     // =====================================================================
 
-       
-    alert("Pendaftaran berjaya!");
-    window.location.href = "login.html";
+    alert("Pendaftaran berjaya! Anda akan dibawa ke sistem utama.");
+    
+    // TUNGGU 1.5 SAAT SUPAYA TOKEN FIREBASE AUTH BETUL-BETUL MELEKAT DI BROWSER
+    setTimeout(() => {
+        // Awak boleh arahkan mereka ke dashboard dahulu, ATAU terus ke payment
+        window.location.href = "dashboard.html"; 
+    }, 1500);
 
   } catch (error) {
     alert("Gagal Mendaftar: " + error.message);
     btn.innerText = "Daftar Akaun";
     btn.disabled = false;
   }
-}); 
+});
 
 </script>
   
