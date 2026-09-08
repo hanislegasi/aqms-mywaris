@@ -14,21 +14,19 @@
             <svg class="w-16 h-16 mx-auto animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
         </div>
         <h1 id="statusTajuk" class="text-2xl font-bold text-[#153638] mb-4">Mengesahkan Pembayaran...</h1>
-        <p id="statusMesej" class="text-gray-500">Sila tunggu. Sistem sedang mengemaskini akaun dan lejar perakaunan anda.</p>
+        <p id="statusMesej" class="text-gray-500">Sila tunggu. Sistem sedang mengemaskini lejar perakaunan dan akaun upline anda.</p>
     </div>
 
     <script type="module">
         import { db, auth } from './firebase.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { doc, getDoc, updateDoc, increment, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { doc, getDoc, updateDoc, setDoc, increment, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const urlParams = new URLSearchParams(window.location.search);
         const status_id = urlParams.get('status_id');
         const namaPakej = urlParams.get('pakej') || "";
 
         if (status_id === "1") {
-            document.getElementById('statusTajuk').innerText = "Pembayaran Berjaya!";
-            
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     const txnDate = new Date();
@@ -38,98 +36,141 @@
                         const consSnap = await getDoc(doc(db, "consultants", user.uid));
                         const consData = consSnap.data();
 
-                        // Cegah kemaskini berganda jika refresh
+                        // Halang double-entry jika user refresh page
                         const timeSinceLastUpdate = consData.lastRenewalDate ? (txnDate.getTime() - consData.lastRenewalDate.toDate().getTime()) : 999999;
-                        if (timeSinceLastUpdate < 60000) { // Jika baru diupdate dalam masa 1 minit
+                        if (timeSinceLastUpdate < 60000) { 
                             window.location.href = "consultant-dashboard.html";
                             return;
                         }
 
-                        // Tentukan Tarikh Luput (Setahun dari sekarang)
+                        // Tetapkan Tarikh Luput
                         const currentExpiry = consData?.renewalDate?.toDate ? consData.renewalDate.toDate() : new Date();
                         const newExpiry = new Date(isRenewal ? currentExpiry : txnDate);
                         newExpiry.setFullYear(newExpiry.getFullYear() + 1);
 
-                        // Jana Nombor Konsultan Jika Pendaftaran Baru
-                        let newConsultantNo = consData.consultantNo;
-                        if (!isRenewal && !newConsultantNo) {
+                        // ==========================================
+                        // A. LOGIK JIKA PENDAFTARAN BARU (BUKAN RENEWAL)
+                        // ==========================================
+                        if (!isRenewal) {
                             const counterRef = doc(db, "system", "counter");
                             const counterSnap = await getDoc(counterRef);
                             const currentNo = counterSnap.exists() ? (counterSnap.data().consultantCounter || 0) : 0;
-                            newConsultantNo = "AQC" + String(currentNo + 1).padStart(4, "0");
+                            const consultantNo = "AQC" + String(currentNo + 1).padStart(4, "0");
+
+                            const compSnap = await getDoc(doc(db, "settings", "compensation"));
+                            const compensation = compSnap.exists() ? compSnap.data() : {};
+                            
+                            const registrationFee = Number(urlParams.get('amount') || compensation.consultantRegistrationFee || 200);
+                            const usbAmount = Number(compensation.usbRegistrationAmount || 50);
+                            const companyRevenue = registrationFee - usbAmount;
+                            const uplineCode = consData.upline ? consData.upline.trim() : "-";
+
+                            // 1. Kemaskini Profil Sendiri
+                            await updateDoc(doc(db, "consultants", user.uid), {
+                                consultantNo: consultantNo, consultantLevel: "AQC", consultantPaymentStatus: "paid",
+                                joinDate: txnDate, renewalDate: newExpiry, lastRenewalDate: txnDate,
+                                downlineCount: 0, activeClients: 0, careerSales: 0, totalSales: 0, totalCommission: 0, 
+                                totalUSB: 0, totalOverriding: 0, lifetimeCommission: 0, lifetimeUSB: 0, lifetimeOverride: 0
+                            });
+
+                            // 2. Tukar peranan di koleksi 'users'
+                            await setDoc(doc(db, "users", user.uid), { role: "consultant" }, { merge: true });
+
+                            // 3. Jurnal Perakaunan (Pendaftaran Baru Split)
+                            await addDoc(collection(db, "ledger"), {
+                                date: txnDate, accountCode: "1000", account: "Bank", category: "asset",
+                                description: consultantNo + " Registration", debit: registrationFee, credit: 0,
+                                paymentType: "CONSULTANT", sourceAccount: "4120", transactionGroup: consultantNo
+                            });
+                            await addDoc(collection(db, "ledger"), {
+                                date: txnDate, accountCode: "4120", account: "Registration AQC", category: "income",
+                                description: consultantNo + " Registration", debit: 0, credit: companyRevenue,
+                                paymentType: "CONSULTANT", sourceAccount: "4120", transactionGroup: consultantNo
+                            });
+                            await addDoc(collection(db, "ledger"), {
+                                date: txnDate, accountCode: "2150", account: "USB Payable", category: "liability",
+                                description: consultantNo + " Registration - Upline Supporting Benefit",
+                                debit: 0, credit: usbAmount, paymentType: "CONSULTANT", sourceAccount: "4120",
+                                transactionGroup: consultantNo, consultantNo: uplineCode, fromConsultant: consultantNo
+                            });
+
+                            // 4. Proses USB Kepada Upline
+                            if (uplineCode !== "-") {
+                                const uplineQuery = query(collection(db, "consultants"), where("consultantNo", "==", uplineCode));
+                                const uplineSnap = await getDocs(uplineQuery);
+                                
+                                if (!uplineSnap.empty) {
+                                    const uplineDoc = uplineSnap.docs[0];
+                                    
+                                    await updateDoc(uplineDoc.ref, {
+                                        totalUSB: increment(usbAmount),
+                                        lifetimeUSB: increment(usbAmount),
+                                        downlineCount: increment(1)
+                                    });
+
+                                    await addDoc(collection(db, "overrideHistory"), {
+                                        uplineId: uplineDoc.id, uplineNo: uplineDoc.data().consultantNo,
+                                        downlineId: user.uid, downlineNo: consultantNo, downlineName: consData.nama || "-",
+                                        type: "USB_REGISTRATION", amount: usbAmount, status: "PENDING", date: txnDate
+                                    });
+                                }
+                            }
+
+                            // 5. Update Kaunter & Resit
                             await updateDoc(counterRef, { consultantCounter: increment(1) });
+                            await addDoc(collection(db, "receipts"), {
+                                receiptNo: "REG-" + Date.now(), uid: user.uid, consultantNo, payerName: consData.nama || "-",
+                                serviceCode: "REGISTRATION", serviceName: "Consultant Registration Fee", amount: registrationFee,
+                                paymentMethod: "ToyyibPay", status: "PAID", paymentDate: txnDate, referenceNo: consultantNo
+                            });
+
+                        } 
+                        // ==========================================
+                        // B. LOGIK JIKA PEMBAHARUAN SAHAJA (RENEWAL)
+                        // ==========================================
+                        else {
+                            const amount = Number(urlParams.get('amount') || 100);
+                            
+                            await updateDoc(doc(db, "consultants", user.uid), {
+                                consultantPaymentStatus: "paid", renewalDate: newExpiry, lastRenewalDate: txnDate,
+                                "training.wasiat.status": "pending", "training.wasiat.bestScore": 0,
+                                "training.hibah.status": "pending", "training.hibah.bestScore": 0,
+                                "training.faraid.status": "pending", "training.faraid.bestScore": 0,
+                                "training.amla.status": "pending", "training.amla.bestScore": 0
+                            });
+
+                            await addDoc(collection(db, "ledger"), {
+                                date: txnDate, accountCode: "1000", account: "Bank", category: "asset",
+                                description: `${consData.consultantNo} - Renewal AQC`, debit: amount, credit: 0,
+                                paymentType: "CUSTOMER", transactionGroup: consData.consultantNo
+                            });
+                            await addDoc(collection(db, "ledger"), {
+                                date: txnDate, accountCode: "4310", account: "Renewal AQC", category: "income",
+                                description: `${consData.consultantNo} - Renewal AQC`, debit: 0, credit: amount,
+                                paymentType: "CUSTOMER", transactionGroup: consData.consultantNo
+                            });
+
+                            await addDoc(collection(db, "receipts"), {
+                                receiptNo: "REN-" + Date.now(), uid: user.uid, consultantNo: consData.consultantNo, payerName: consData.nama,
+                                serviceCode: "RENEWAL", serviceName: "Consultant Renewal Fee", amount: amount,
+                                paymentMethod: "ToyyibPay", status: "PAID", paymentDate: txnDate, referenceNo: consData.consultantNo
+                            });
                         }
 
-                        // Sediakan Data Untuk Dikemaskini
-                        const updateData = {
-                            consultantPaymentStatus: "paid",
-                            renewalDate: newExpiry,
-                            lastRenewalDate: txnDate
-                        };
-
-                        if (!isRenewal) {
-                            updateData.consultantNo = newConsultantNo;
-                            updateData.joinDate = txnDate;
-                        } else {
-                            // Reset Exam jika Pembaharuan
-                            updateData["training.wasiat.status"] = "pending";
-                            updateData["training.wasiat.bestScore"] = 0;
-                            updateData["training.hibah.status"] = "pending";
-                            updateData["training.hibah.bestScore"] = 0;
-                            updateData["training.faraid.status"] = "pending";
-                            updateData["training.faraid.bestScore"] = 0;
-                            updateData["training.amla.status"] = "pending";
-                            updateData["training.amla.bestScore"] = 0;
-                        }
-
-                        // Kemaskini Firestore
-                        await updateDoc(doc(db, "consultants", user.uid), updateData);
-
-                        // Jurnal Perakaunan (Lejar)
-                        const accountCode = isRenewal ? "4310" : "4300";
-                        const accountName = isRenewal ? "Renewal AQC" : "Pendaftaran AQC";
-                        const amount = urlParams.get('amount') || (isRenewal ? 100 : 250); // Boleh pass dari URL jika ada, atau fallback
-
-                        // Debit Bank (1000)
-                        await addDoc(collection(db, "ledger"), {
-                            date: txnDate, accountCode: "1000", account: "Bank", category: "asset",
-                            description: `${newConsultantNo} - ${accountName}`,
-                            debit: Number(amount), credit: 0, paymentType: "CUSTOMER", transactionGroup: newConsultantNo
-                        });
-
-                        // Credit Income (4300 / 4310)
-                        await addDoc(collection(db, "ledger"), {
-                            date: txnDate, accountCode: accountCode, account: accountName, category: "income",
-                            description: `${newConsultantNo} - ${accountName}`,
-                            debit: 0, credit: Number(amount), paymentType: "CUSTOMER", transactionGroup: newConsultantNo
-                        });
-
-                        // Resit
-                        await addDoc(collection(db, "receipts"), {
-                            receiptNo: (isRenewal ? "REN-" : "REG-") + Date.now(),
-                            uid: user.uid, consultantNo: newConsultantNo, payerName: consData.nama,
-                            serviceCode: isRenewal ? "RENEWAL" : "REGISTRATION",
-                            serviceName: accountName, amount: Number(amount),
-                            paymentMethod: "ToyyibPay", status: "PAID", paymentDate: txnDate,
-                            referenceNo: newConsultantNo
-                        });
-
-                        document.getElementById('statusMesej').innerText = "Akaun dikemaskini! Anda akan dibawa ke dashboard.";
+                        // PENUTUP UI
+                        document.getElementById('statusMesej').innerText = "Akaun dikemaskini berjaya! Memuatkan portal...";
                         document.getElementById('loadingIcon').innerHTML = `<svg class="w-16 h-16 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
-                        
                         setTimeout(() => { window.location.href = "consultant-dashboard.html"; }, 2500);
 
                     } catch (error) {
                         console.error(error);
-                        document.getElementById('statusMesej').innerText = "Ralat merekod data. Sila hubungi admin.";
-                        document.getElementById('statusMesej').classList.add("text-red-600");
+                        document.getElementById('statusMesej').innerText = "Ralat memproses data. Sila hubungi admin.";
                     }
                 }
             });
         } else {
-            document.getElementById('statusTajuk').innerText = "Pembayaran Gagal/Batal";
-            document.getElementById('statusMesej').innerText = "Sila cuba sebentar lagi.";
-            document.getElementById('statusTajuk').classList.add("text-red-600");
+            document.getElementById('statusTajuk').innerText = "Pembayaran Gagal";
+            document.getElementById('statusMesej').innerText = "Transaksi dibatalkan. Mengembalikan anda...";
             setTimeout(() => { window.location.href = "consultant-dashboard.html"; }, 3000);
         }
     </script>
