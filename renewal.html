@@ -83,125 +83,82 @@
     </div>
   </div>
 
-  <script type="module">
-// 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
+<script type="module">
 import { db, auth } from './firebase.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
 
-// 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
-import { 
-    onAuthStateChanged 
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+let currentUser = null;
+let ownedProducts = [];
+let compSettings = {};
 
-// 3. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
-import { 
-    doc, 
-    updateDoc, 
-    getDoc, 
-    addDoc, 
-    collection 
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const productConfig = {
+    wasiat: { name: "Wasiat", code: "WASIAT_RENEWAL", prefix: "WAS", feeField: "wasiatRenewal", accountCode: "4210" },
+    hibah: { name: "Hibah", code: "HIBAH_RENEWAL", prefix: "HIB", feeField: "hibahRenewal", accountCode: "4220" },
+    sepencarian: { name: "Harta Sepencarian", code: "SEPENCARIAN_RENEWAL", prefix: "SEP", feeField: "sepencarianRenewal", accountCode: "4230" },
+    mawaris: { name: "Mawaris", code: "MAWARIS_RENEWAL", prefix: "MAW", feeField: "mawarisRenewal", accountCode: "4240" },
+    corporate: { name: "Mawaris Korporat", code: "CORPORATE_RENEWAL", prefix: "MCO", feeField: "corporateRenewal", accountCode: "4250" }
+};
 
-    let currentUser = null;
-    let ownedProducts = [];
-    let compSettings = {};
+const loadingBox = document.getElementById("loadingBox");
+const mainContent = document.getElementById("mainContent");
+const noProductBox = document.getElementById("noProductBox");
+const multiProductBox = document.getElementById("multiProductBox");
+const productSelect = document.getElementById("productSelect");
+const displayProductName = document.getElementById("displayProductName");
+const displayProductFee = document.getElementById("displayProductFee");
+const payBtn = document.getElementById("payBtn");
 
-    // Konfigurasi 4 Produk AQMS dipadankan dengan Code COA & Field Settings
-    const productConfig = {
-      wasiat: {
-        name: "Wasiat",
-        code: "WASIAT_RENEWAL",
-        prefix: "WAS",
-        feeField: "wasiatRenewal",
-        accountCode: "4210" // Selaras dengan doc 4210 dalam chartOfAccounts
-      },
-      hibah: {
-        name: "Hibah",
-        code: "HIBAH_RENEWAL",
-        prefix: "HIB",
-        feeField: "hibahRenewal",
-        accountCode: "4220"
-      },
-      sepencarian: {
-        name: "Harta Sepencarian",
-        code: "SEPENCARIAN_RENEWAL",
-        prefix: "SEP",
-        feeField: "sepencarianRenewal",
-        accountCode: "4230"
-      },
-      mawaris: {
-        name: "Mawaris",
-        code: "MAWARIS_RENEWAL",
-        prefix: "MAW",
-        feeField: "mawarisRenewal",
-        accountCode: "4240"
-      },
-       corporate: {
-        name: "Mawaris Korporat",
-        code: "CORPORATE_RENEWAL",
-        prefix: "MCO",
-        feeField: "corporateRenewal",
-        accountCode: "4250"
-      }
-    };
+function getProductFee(key) {
+    const fieldName = productConfig[key].feeField;
+    return compSettings[fieldName] || 0;
+}
 
-    const loadingBox = document.getElementById("loadingBox");
-    const mainContent = document.getElementById("mainContent");
-    const noProductBox = document.getElementById("noProductBox");
-    const multiProductBox = document.getElementById("multiProductBox");
-    const productSelect = document.getElementById("productSelect");
-    const displayProductName = document.getElementById("displayProductName");
-    const displayProductFee = document.getElementById("displayProductFee");
-    const payBtn = document.getElementById("payBtn");
+function updateDisplay(key) {
+    const selected = productConfig[key];
+    const fee = getProductFee(key);
+    displayProductName.textContent = `${selected.name} Renewal`;
+    displayProductFee.textContent = `RM${fee}`;
+}
 
-    function getProductFee(key) {
-      const fieldName = productConfig[key].feeField;
-      return compSettings[fieldName] || 0;
-    }
+productSelect.addEventListener("change", (e) => {
+    updateDisplay(e.target.value);
+});
 
-    function updateDisplay(key) {
-      const selected = productConfig[key];
-      const fee = getProductFee(key);
-      displayProductName.textContent = `${selected.name} Renewal`;
-      displayProductFee.textContent = `RM${fee}`;
-    }
-
-    productSelect.addEventListener("change", (e) => {
-      updateDisplay(e.target.value);
-    });
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
         window.location.href = "login.html";
         return;
-      }
-      currentUser = user;
-      await initPageData();
-    });
+    }
+    currentUser = user;
+    await initPageData();
+});
 
-    async function initPageData() {
-      try {
+async function initPageData() {
+    try {
         const compSnap = await getDoc(doc(db, "settings", "compensation"));
         if (compSnap.exists()) {
-          compSettings = compSnap.data();
+            compSettings = compSnap.data();
         }
 
         const keys = Object.keys(productConfig);
         const checks = await Promise.all(
-          keys.map(key => getDoc(doc(db, "users", currentUser.uid, key, "maklumat")))
+            keys.map(key => getDoc(doc(db, "users", currentUser.uid, key, "maklumat")))
         );
 
         ownedProducts = [];
         checks.forEach((snap, idx) => {
-          if (snap.exists()) {
-            ownedProducts.push(keys[idx]);
-          }
+            if (snap.exists()) {
+                ownedProducts.push(keys[idx]);
+            }
         });
 
         loadingBox.classList.add("hidden");
 
         if (ownedProducts.length === 0) {
-          noProductBox.classList.remove("hidden");
-          return;
+            noProductBox.classList.remove("hidden");
+            return;
         }
 
         mainContent.classList.remove("hidden");
@@ -211,130 +168,68 @@ import {
         let defaultKey = ownedProducts[0];
 
         if (urlParamProduct && ownedProducts.includes(urlParamProduct)) {
-          defaultKey = urlParamProduct;
+            defaultKey = urlParamProduct;
         }
 
         if (ownedProducts.length === 1) {
-          multiProductBox.classList.add("hidden");
-          updateDisplay(defaultKey);
-          productSelect.innerHTML = `<option value="${defaultKey}" selected>${productConfig[defaultKey].name}</option>`;
+            multiProductBox.classList.add("hidden");
+            updateDisplay(defaultKey);
+            productSelect.innerHTML = `<option value="${defaultKey}" selected>${productConfig[defaultKey].name}</option>`;
         } else {
-          multiProductBox.classList.remove("hidden");
-          productSelect.innerHTML = ownedProducts.map(key => 
-            `<option value="${key}" ${key === defaultKey ? 'selected' : ''}>${productConfig[key].name}</option>`
-          ).join("");
-          updateDisplay(defaultKey);
+            multiProductBox.classList.remove("hidden");
+            productSelect.innerHTML = ownedProducts.map(key => 
+                `<option value="${key}" ${key === defaultKey ? 'selected' : ''}>${productConfig[key].name}</option>`
+            ).join("");
+            updateDisplay(defaultKey);
         }
-      } catch (error) {
+    } catch (error) {
         console.error("Ralat memuatkan data:", error);
         loadingBox.innerText = "Gagal memuatkan data. Sila refresh halaman.";
-      }
     }
+}
 
-    // 3. Proses Pembaharuan & Rekod Ledger Mengikut COA Firestore
-    payBtn.addEventListener("click", async () => {
-      if (!currentUser) return;
+payBtn.addEventListener("click", async () => {
+    if (!currentUser) return;
 
-      const selectedKey = productSelect.value;
-      const config = productConfig[selectedKey];
-      const renewalFee = getProductFee(selectedKey);
+    const selectedKey = productSelect.value;
+    const config = productConfig[selectedKey];
+    const renewalFee = getProductFee(selectedKey);
 
-      if (renewalFee <= 0) {
+    if (renewalFee <= 0) {
         alert("Ralat pada nilai pembaharuan. Sila hubungi pihak admin.");
         return;
-      }
+    }
 
-      try {
+    try {
         payBtn.disabled = true;
-        payBtn.textContent = "Memproses...";
+        payBtn.textContent = "Menjana Invois ToyyibPay...";
 
-        // 1. Tarik maklumat Pengguna
         const userSnap = await getDoc(doc(db, "users", currentUser.uid));
         const userData = userSnap.exists() ? userSnap.data() : {};
 
-        // 2. Tarik spesifikasi COA untuk Akaun Income (contoh: 4210) & Bank (1000)
-        const [incomeCoaSnap, bankCoaSnap] = await Promise.all([
-          getDoc(doc(db, "chartOfAccounts", config.accountCode)),
-          getDoc(doc(db, "chartOfAccounts", "1000"))
-        ]);
-
-        const incomeCoa = incomeCoaSnap.exists() ? incomeCoaSnap.data() : {
-          name: `${config.name} Renewal`,
-          category: "Service Revenue",
-          type: "Income"
+        // Hantar ke ToyyibPay
+        const dataPelanggan = {
+            nama: userData.nama || "Pelanggan AQM",
+            email: userData.email || "tiada@email.com",
+            telefon: userData.telefon || "0100000000",
+            pakej: `${config.name} Renewal`, // Contoh: "Wasiat Renewal" - Sangat penting untuk routing
+            harga: renewalFee,
+            uid: currentUser.uid
         };
 
-        const bankCoa = bankCoaSnap.exists() ? bankCoaSnap.data() : {
-          name: "Bank",
-          category: "Current Asset",
-          type: "Asset"
-        };
+        const functions = getFunctions(auth.app);
+        const createToyyibpayBill = httpsCallable(functions, 'createToyyibpayBill');
+        const result = await createToyyibpayBill(dataPelanggan);
 
-        const productDocRef = doc(db, "users", currentUser.uid, selectedKey, "maklumat");
+        window.location.href = result.data.paymentUrl;
 
-        const validityDays = compSettings.memberValidity || 365;
-        let expiryDate = new Date();
-        expiryDate.setDate(expiryDate.getDate() + validityDays);
-
-        // 3. Update tarikh luput pada subcollection produk[cite: 1]
-        await updateDoc(productDocRef, {
-          expiryDate: expiryDate.toISOString(),
-          renewedAt: new Date().toISOString()
-        });
-
-        // 4. Rekod Ledger: Kredit (Income selaras dengan COA)
-        await addDoc(collection(db, "ledger"), {
-          date: new Date(),
-          accountCode: config.accountCode, // 4210 / 4220 / 4230 / 4240
-          account: incomeCoa.name,         // Contoh: "Renewal Wasiat" dari Firestore
-          category: incomeCoa.category,    // Contoh: "Service Revenue" dari Firestore
-          description: `${config.name} Membership Renewal`,
-          debit: 0,
-          credit: renewalFee,
-          paymentType: "CUSTOMER",
-          sourceAccount: config.accountCode,
-          transactionGroup: currentUser.uid
-        });
-
-        // 5. Rekod Ledger: Debit (Bank selaras dengan COA)
-        await addDoc(collection(db, "ledger"), {
-          date: new Date(),
-          accountCode: "1000",
-          account: bankCoa.name,           // "Bank" dari Firestore
-          category: bankCoa.category,      // Kategori tepat dari Firestore
-          description: `${config.name} Membership Renewal`,
-          debit: renewalFee,
-          credit: 0,
-          paymentType: "CUSTOMER",
-          sourceAccount: config.accountCode,
-          transactionGroup: currentUser.uid
-        });
-
-        // 6. Rekod Resit[cite: 1]
-        await addDoc(collection(db, "receipts"), {
-          receiptNo: `${config.prefix}-REN-${Date.now()}`,
-          uid: currentUser.uid,
-          payerName: userData.nama || "-",
-          customerPhone: userData.telefon || "",
-          serviceCode: config.code,
-          serviceName: `${config.name} Membership Renewal`,
-          amount: renewalFee,
-          paymentMethod: "ToyyibPay",
-          status: "PAID",
-          paymentDate: new Date()
-        });
-
-        alert(`Keahlian ${config.name} berjaya diperbaharui sehingga ${expiryDate.toLocaleDateString("ms-MY")}`);
-        window.location.href = "dashboard.html";
-
-      } catch (error) {
-        console.error("Ralat pembaharuan:", error);
-        alert("Berlaku ralat semasa memproses data. Sila cuba lagi.");
-      } finally {
+    } catch (error) {
+        console.error("Ralat pembayaran:", error);
+        alert("Gagal menghubungi server pembayaran. Sila cuba lagi.");
         payBtn.disabled = false;
         payBtn.textContent = "Bayar Sekarang";
-      }
-    });
-  </script>
+    }
+});
+</script>
 </body>
 </html>
