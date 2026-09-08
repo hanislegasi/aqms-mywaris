@@ -18,9 +18,46 @@
     import { doc, getDoc, updateDoc, increment, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     // Tangkap jawapan dari URL ToyyibPay
-    const urlParams = new URLSearchParams(window.location.search);
-    const status_id = urlParams.get('status_id'); 
-    
+const urlParams = new URLSearchParams(window.location.search);
+const status_id = urlParams.get('status_id'); 
+const namaPakej = urlParams.get('pakej'); // Ini akan baca "Wasiat", "Hibah", dsb.
+
+// 1. Sediakan pembolehubah dinamik
+let dbStatusField = "";
+let redirectPage = "";
+let lejarAkaun = "";
+let receiptPrefix = ""; // Tambah ini untuk kod resit
+
+// 2. Tentukan laluan data mengikut jenis pakej
+if (namaPakej === "Wasiat") {
+    dbStatusField = "wasiatPaymentStatus";
+    redirectPage = "wasiat-page.html";
+    lejarAkaun = "Sales - Wasiat";
+    receiptPrefix = "WST";
+} else if (namaPakej === "Hibah") {
+    dbStatusField = "hibahPaymentStatus";
+    redirectPage = "hibah-page.html";
+    lejarAkaun = "Sales - Hibah";
+    receiptPrefix = "HBH";
+} else if (namaPakej === "Sepencarian") {
+    dbStatusField = "sepencarianPaymentStatus";
+    redirectPage = "sepencarian-page.html";
+    lejarAkaun = "Sales - Sepencarian";
+    receiptPrefix = "HSP";
+} else if (namaPakej === "Mawaris") {
+    dbStatusField = "mawarisPaymentStatus";
+    redirectPage = "mawaris-page.html";
+    lejarAkaun = "Sales - Mawaris";
+    receiptPrefix = "MAW";
+} else if (namaPakej === "Mawaris Korporat") {
+    dbStatusField = "corporatePaymentStatus";
+    redirectPage = "corporate-page.html";
+    lejarAkaun = "Sales - Mawaris Korporat";
+    receiptPrefix = "MCO";
+} // <-- INI KURUNGAN YANG TERTINGGAL SEBELUM INI!
+
+
+
     // Toyyibpay Code: 1 = Berjaya
     if (status_id === "1") {
         document.getElementById('statusTajuk').innerText = "Pembayaran Berjaya!";
@@ -35,19 +72,30 @@
                     const userData = userSnap.data();
 
                     // Elak rekod dua kali jika pelanggan refresh page
-                    if (userData.wasiatPaymentStatus === "paid") {
-                        window.location.href = "wasiat-page.html";
-                        return;
+                    if (userData[dbStatusField] === "paid") {
+                    window.location.href = redirectPage;
+                    return;
                     }
 
                     // Ambil harga terkini dari settings
                     const compensationSnap = await getDoc(doc(db, "settings", "compensation"));
                     let compData = {};
-                    let saleAmount = 350; // Fallback
+                    let saleAmount = 350; // Fallback lalai
+                    
                     if (compensationSnap.exists()) {
                         compData = compensationSnap.data();
-                        if (compData.wasiatPrice !== undefined) {
+                        
+                        // Semak harga mengikut pakej yang dibeli secara dinamik
+                        if (namaPakej === "Wasiat" && compData.wasiatPrice !== undefined) {
                             saleAmount = Number(compData.wasiatPrice);
+                        } else if (namaPakej === "Hibah" && compData.hibahPrice !== undefined) {
+                            saleAmount = Number(compData.hibahPrice);
+                        } else if (namaPakej === "Sepencarian" && compData.sepencarianPrice !== undefined) {
+                            saleAmount = Number(compData.sepencarianPrice);
+                        } else if (namaPakej === "Mawaris" && compData.mawarisPrice !== undefined) {
+                            saleAmount = Number(compData.mawarisPrice);
+                        } else if (namaPakej === "Mawaris Korporat" && compData.corporatePrice !== undefined) {
+                            saleAmount = Number(compData.corporatePrice);
                         }
                     }
 
@@ -62,16 +110,17 @@
                         await updateDoc(counterRef, { memberCounter: increment(1) });
                     }
 
-                    // Update Status Pelanggan
+                    // Update Status Pelanggan secara dinamik
                     const updateData = {
-                        wasiatPaymentStatus: "paid",
-                        memberSince: txnDate.toISOString(),
-                        expiryDate: (() => {
-                            const d = new Date(txnDate);
-                            d.setFullYear(d.getFullYear() + 1);
-                            return d.toISOString();
-                        })()
+                    [dbStatusField]: "paid", 
+                    memberSince: txnDate.toISOString(),
+                    expiryDate: (() => {
+                        const d = new Date(txnDate);
+                        d.setFullYear(d.getFullYear() + 1);
+                         return d.toISOString();
+                    })()
                     };
+
                     if (!userData.memberNo) {
                         updateData.memberNo = memberNo;
                     }
@@ -81,10 +130,10 @@
                     
                     // Ledger: Credit Sales
                     await addDoc(collection(db, "ledger"), {
-                        date: txnDate, accountCode: "4010", account: "Sales - Wasiat",
+                        date: txnDate, accountCode: "4010", account: lejarAkaun, // Dinamik
                         category: "income", description: memberNo + " " + customer.nama,
                         debit: 0, credit: saleAmount, transactionGroup: memberNo,
-                        paymentType: "CUSTOMER", sourceAccount: "4010"
+                        paymentType: "CUSTOMER", sourceAccount: "4010", product: namaPakej // Dinamik
                     });
 
                     // Ledger: Debit Bank
@@ -104,8 +153,9 @@
 
                     // Company Allocation
                     await addDoc(collection(db, "companyAllocation"), {
-                        createdAt: txnDate, memberNo, customerName: customer.nama,
-                        product: "Wasiat", sale: saleAmount, company, allowance, adminOperation, royalty
+                    createdAt: txnDate, memberNo, customerName: customer.nama,
+                    product: namaPakej, // <-- TUKAR DI SINI
+                    sale: saleAmount, company, allowance, adminOperation, royalty
                     });
 
                     const consultantSnap = await getDocs(collection(db, "consultants"));
@@ -185,10 +235,11 @@
                                     
                                     if (introducerAmt > 0) {
                                         await addDoc(collection(db, "introducerEarnings"), {
-                                            createdAt: txnDate, introducerUid: customer.introducerUid, aqcNo: directConsultant.consultantNo,  
-                                            customerMemberNo: memberNo, customerName: customer.nama, product: "Wasiat",
-                                            saleAmount: saleAmount, commPercent: introducerCommRate, earnedAmount: introducerAmt, status: "UNPAID" 
-                                        });
+                                        createdAt: txnDate, introducerUid: customer.introducerUid, aqcNo: directConsultant.consultantNo,  
+                                        customerMemberNo: memberNo, customerName: customer.nama, 
+                                        product: namaPakej, // <-- TUKAR DI SINI
+                                        saleAmount: saleAmount, commPercent: introducerCommRate, earnedAmount: introducerAmt, status: "UNPAID" 
+                                    });
                                     }
                                 }
                             } catch (error) { console.error("Ralat komisen introducer:", error); }
@@ -242,13 +293,16 @@
 
                     // CREATE RECEIPT
                     await addDoc(collection(db, "receipts"), {
-                        receiptNo: "WST-" + Date.now(), uid: currentUser.uid, memberNo: memberNo, payerName: customer.nama,
-                        serviceCode: "WASIAT", serviceName: "Wasiat Registration", amount: saleAmount, paymentMethod: "ToyyibPay",
-                        status: "PAID", paymentDate: txnDate
+                    receiptNo: receiptPrefix + "-" + Date.now(), // <-- Guna prefix dinamik
+                    uid: currentUser.uid, memberNo: memberNo, payerName: customer.nama,
+                    serviceCode: namaPakej.toUpperCase(), // <-- Tukar jadi dinamik (contoh: HIBAH, SEPENCARIAN)
+                    serviceName: "Pendaftaran " + namaPakej, // <-- Tukar jadi dinamik
+                    amount: saleAmount, paymentMethod: "ToyyibPay",
+                    status: "PAID", paymentDate: txnDate
                     });
                     
                     document.getElementById('statusMesej').innerText = "Selesai! Anda akan dibawa ke dashboard.";
-                    setTimeout(() => { window.location.href = "wasiat-page.html"; }, 2000);
+                    setTimeout(() => { window.location.href = redirectPage; }, 2000); // Dinamik
 
                 } catch (error) {
                     console.error("Ralat merekod data:", error);
