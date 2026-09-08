@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <title>Status Pembayaran Konsultan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: Inter, sans-serif; }</style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-5">
+
+    <div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl text-center">
+        <div id="loadingIcon" class="mb-4 text-[#153638]">
+            <svg class="w-16 h-16 mx-auto animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        </div>
+        <h1 id="statusTajuk" class="text-2xl font-bold text-[#153638] mb-4">Mengesahkan Pembayaran...</h1>
+        <p id="statusMesej" class="text-gray-500">Sila tunggu. Sistem sedang mengemaskini akaun dan lejar perakaunan anda.</p>
+    </div>
+
+    <script type="module">
+        import { db, auth } from './firebase.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { doc, getDoc, updateDoc, increment, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const status_id = urlParams.get('status_id');
+        const namaPakej = urlParams.get('pakej') || "";
+
+        if (status_id === "1") {
+            document.getElementById('statusTajuk').innerText = "Pembayaran Berjaya!";
+            
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    const txnDate = new Date();
+                    const isRenewal = namaPakej.includes("Pembaharuan");
+                    
+                    try {
+                        const consSnap = await getDoc(doc(db, "consultants", user.uid));
+                        const consData = consSnap.data();
+
+                        // Cegah kemaskini berganda jika refresh
+                        const timeSinceLastUpdate = consData.lastRenewalDate ? (txnDate.getTime() - consData.lastRenewalDate.toDate().getTime()) : 999999;
+                        if (timeSinceLastUpdate < 60000) { // Jika baru diupdate dalam masa 1 minit
+                            window.location.href = "consultant-dashboard.html";
+                            return;
+                        }
+
+                        // Tentukan Tarikh Luput (Setahun dari sekarang)
+                        const currentExpiry = consData?.renewalDate?.toDate ? consData.renewalDate.toDate() : new Date();
+                        const newExpiry = new Date(isRenewal ? currentExpiry : txnDate);
+                        newExpiry.setFullYear(newExpiry.getFullYear() + 1);
+
+                        // Jana Nombor Konsultan Jika Pendaftaran Baru
+                        let newConsultantNo = consData.consultantNo;
+                        if (!isRenewal && !newConsultantNo) {
+                            const counterRef = doc(db, "system", "counter");
+                            const counterSnap = await getDoc(counterRef);
+                            const currentNo = counterSnap.exists() ? (counterSnap.data().consultantCounter || 0) : 0;
+                            newConsultantNo = "AQC" + String(currentNo + 1).padStart(4, "0");
+                            await updateDoc(counterRef, { consultantCounter: increment(1) });
+                        }
+
+                        // Sediakan Data Untuk Dikemaskini
+                        const updateData = {
+                            consultantPaymentStatus: "paid",
+                            renewalDate: newExpiry,
+                            lastRenewalDate: txnDate
+                        };
+
+                        if (!isRenewal) {
+                            updateData.consultantNo = newConsultantNo;
+                            updateData.joinDate = txnDate;
+                        } else {
+                            // Reset Exam jika Pembaharuan
+                            updateData["training.wasiat.status"] = "pending";
+                            updateData["training.wasiat.bestScore"] = 0;
+                            updateData["training.hibah.status"] = "pending";
+                            updateData["training.hibah.bestScore"] = 0;
+                            updateData["training.faraid.status"] = "pending";
+                            updateData["training.faraid.bestScore"] = 0;
+                            updateData["training.amla.status"] = "pending";
+                            updateData["training.amla.bestScore"] = 0;
+                        }
+
+                        // Kemaskini Firestore
+                        await updateDoc(doc(db, "consultants", user.uid), updateData);
+
+                        // Jurnal Perakaunan (Lejar)
+                        const accountCode = isRenewal ? "4310" : "4300";
+                        const accountName = isRenewal ? "Renewal AQC" : "Pendaftaran AQC";
+                        const amount = urlParams.get('amount') || (isRenewal ? 100 : 250); // Boleh pass dari URL jika ada, atau fallback
+
+                        // Debit Bank (1000)
+                        await addDoc(collection(db, "ledger"), {
+                            date: txnDate, accountCode: "1000", account: "Bank", category: "asset",
+                            description: `${newConsultantNo} - ${accountName}`,
+                            debit: Number(amount), credit: 0, paymentType: "CUSTOMER", transactionGroup: newConsultantNo
+                        });
+
+                        // Credit Income (4300 / 4310)
+                        await addDoc(collection(db, "ledger"), {
+                            date: txnDate, accountCode: accountCode, account: accountName, category: "income",
+                            description: `${newConsultantNo} - ${accountName}`,
+                            debit: 0, credit: Number(amount), paymentType: "CUSTOMER", transactionGroup: newConsultantNo
+                        });
+
+                        // Resit
+                        await addDoc(collection(db, "receipts"), {
+                            receiptNo: (isRenewal ? "REN-" : "REG-") + Date.now(),
+                            uid: user.uid, consultantNo: newConsultantNo, payerName: consData.nama,
+                            serviceCode: isRenewal ? "RENEWAL" : "REGISTRATION",
+                            serviceName: accountName, amount: Number(amount),
+                            paymentMethod: "ToyyibPay", status: "PAID", paymentDate: txnDate,
+                            referenceNo: newConsultantNo
+                        });
+
+                        document.getElementById('statusMesej').innerText = "Akaun dikemaskini! Anda akan dibawa ke dashboard.";
+                        document.getElementById('loadingIcon').innerHTML = `<svg class="w-16 h-16 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+                        
+                        setTimeout(() => { window.location.href = "consultant-dashboard.html"; }, 2500);
+
+                    } catch (error) {
+                        console.error(error);
+                        document.getElementById('statusMesej').innerText = "Ralat merekod data. Sila hubungi admin.";
+                        document.getElementById('statusMesej').classList.add("text-red-600");
+                    }
+                }
+            });
+        } else {
+            document.getElementById('statusTajuk').innerText = "Pembayaran Gagal/Batal";
+            document.getElementById('statusMesej').innerText = "Sila cuba sebentar lagi.";
+            document.getElementById('statusTajuk').classList.add("text-red-600");
+            setTimeout(() => { window.location.href = "consultant-dashboard.html"; }, 3000);
+        }
+    </script>
+</body>
+</html>
