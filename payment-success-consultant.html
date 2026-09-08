@@ -48,6 +48,11 @@
                         const newExpiry = new Date(isRenewal ? currentExpiry : txnDate);
                         newExpiry.setFullYear(newExpiry.getFullYear() + 1);
 
+                        // Tarik Data Settings (Compensation) untuk digunakan oleh Daftar & Renewal
+                        const compSnap = await getDoc(doc(db, "settings", "compensation"));
+                        const compensation = compSnap.exists() ? compSnap.data() : {};
+                        const levelKey = (consData.consultantLevel || "AQC").replace(/[^a-zA-Z0-9]/g, "");
+
                         // ==========================================
                         // A. LOGIK JIKA PENDAFTARAN BARU (BUKAN RENEWAL)
                         // ==========================================
@@ -56,11 +61,8 @@
                             const counterSnap = await getDoc(counterRef);
                             const currentNo = counterSnap.exists() ? (counterSnap.data().consultantCounter || 0) : 0;
                             const consultantNo = "AQC" + String(currentNo + 1).padStart(4, "0");
-
-                            const compSnap = await getDoc(doc(db, "settings", "compensation"));
-                            const compensation = compSnap.exists() ? compSnap.data() : {};
                             
-                            const registrationFee = Number(urlParams.get('amount') || compensation.consultantRegistrationFee || 200);
+                            const registrationFee = Number(compensation[`registration${levelKey}`] || compensation.consultantRegistrationFee || 200);
                             const usbAmount = Number(compensation.usbRegistrationAmount || 50);
                             const companyRevenue = registrationFee - usbAmount;
                             const uplineCode = consData.upline ? consData.upline.trim() : "-";
@@ -129,7 +131,8 @@
                         // B. LOGIK JIKA PEMBAHARUAN SAHAJA (RENEWAL)
                         // ==========================================
                         else {
-                            const amount = Number(urlParams.get('amount') || 100);
+                            // Harga ditarik dari database mengikut level konsultan semasa
+                            const amount = Number(compensation[`renewal${levelKey}`] || 100);
                             
                             await updateDoc(doc(db, "consultants", user.uid), {
                                 consultantPaymentStatus: "paid", renewalDate: newExpiry, lastRenewalDate: txnDate,
