@@ -133,12 +133,12 @@ body {
 // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
 import { db, auth } from './firebase.js';
 
-// 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
+// 2. Tarik fungsi Auth yang berkaitan sahaja
 import { 
     onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// 3. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
+// 3. Tarik fungsi Firestore yang berkaitan sahaja
 import { 
     doc, 
     updateDoc, 
@@ -149,6 +149,12 @@ import {
     addDoc 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// 4. TAMBAH INI: Tarik fungsi Cloud Functions
+import { 
+    getFunctions, 
+    httpsCallable 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+    
 let currentUser = null;
 let saleAmount = 800; // Fallback jika DB tiada
 let compData = null; // Simpan data compensation daripada Firestore
