@@ -134,12 +134,12 @@ body {
 // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
 import { db, auth } from './firebase.js';
 
-// 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
+// 2. Tarik fungsi Auth yang berkaitan sahaja
 import { 
     onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// 3. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
+// 3. Tarik fungsi Firestore yang berkaitan sahaja
 import { 
     doc, 
     updateDoc, 
@@ -150,11 +150,19 @@ import {
     addDoc 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// 4. TAMBAH INI: Tarik fungsi Cloud Functions
+import { 
+    getFunctions, 
+    httpsCallable 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+
 let currentUser = null;
-let saleAmount = 350; // Fallback jika DB tiada
+let saleAmount = 3000; // Fallback jika DB tiada
 let compData = null; // Simpan data compensation daripada Firestore
 
-// 1. TUNGGU USER LOG IN DAN AMBIL HARGA SEBENAR DARI FIREBASE
+// =====================================================================
+// A. TUNGGU USER LOG IN DAN AMBIL HARGA SEBENAR DARI FIREBASE
+// =====================================================================
 onAuthStateChanged(auth, async (user) => {
     if(!user){
         window.location.href = "login.html";
@@ -166,14 +174,13 @@ onAuthStateChanged(auth, async (user) => {
         const compensationSnap = await getDoc(doc(db, "settings", "compensation"));
         
         if (compensationSnap.exists()) {
-            compData = compensationSnap.data();
-            
+            const compData = compensationSnap.data();
             if (compData.mawarisPrice !== undefined) {
                 saleAmount = compData.mawarisPrice;
             }
         }
         
-        // Format nombor jadi cantik: RM 3,000.00
+        // Format nombor jadi cantik: RM 3000.00
         const formattedPrice = Number(saleAmount).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         document.getElementById("displayAmount").innerText = "RM " + formattedPrice;
         
@@ -184,7 +191,9 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// 2. KAWALAN MODAL POP-UP T&C
+// =====================================================================
+// B. KAWALAN MODAL POP-UP T&C
+// =====================================================================
 const payBtn = document.getElementById("payBtn");
 const tncModal = document.getElementById("tncModal");
 const cancelTncBtn = document.getElementById("cancelTncBtn");
@@ -200,13 +209,16 @@ cancelTncBtn.addEventListener("click", () => {
     tncModal.classList.remove("flex");
 });
 
-// 3. LOGIK PEMBAYARAN SEBENAR (DINAMIK BERSAMPUND UNTUK SETTINGS FIREBASE)
+// =====================================================================
+// C. HANTAR DATA KE TOYYIBPAY BILA SETUJU AKAD
+// =====================================================================
 agreeBtn.addEventListener("click", async () => {
     agreeBtn.disabled = true;
-    agreeBtn.innerHTML = "Memproses...";
+    agreeBtn.innerHTML = "Menjana Invois ToyyibPay...";
     cancelTncBtn.disabled = true;
 
     try {
+        // Semak status pelanggan dahulu (jangan benar bayar dua kali)
         const userSnap = await getDoc(doc(db, "users", currentUser.uid));
         const userData = userSnap.data();
 
@@ -216,371 +228,42 @@ agreeBtn.addEventListener("click", async () => {
             return;
         }
 
-        const counterRef = doc(db, "system", "counter");
-        const counterSnap = await getDoc(counterRef);
-        const txnDate = new Date();
+        // 1. Bersihkan nilai harga (buang huruf "RM", koma, atau jarak jika ada di database)
+        let hargaBersih = parseFloat(String(saleAmount).replace(/[^0-9.]/g, ''));
         
-        let memberNo = userData.memberNo;
-        if (!memberNo) {
-            const currentNo = counterSnap.data().memberCounter || 0;
-            const newNo = currentNo + 1;
-            memberNo = "AQM" + String(newNo).padStart(4, "0");
-            await updateDoc(counterRef, { memberCounter: increment(1) });
+        // 2. Kawalan keselamatan: Jika data dari database rosak atau 0, guna harga lalai
+        if (isNaN(hargaBersih) || hargaBersih < 1) {
+            hargaBersih = 3000; 
         }
 
-        const updateData = {
-            mawarisPaymentStatus: "paid",
-            memberSince: txnDate.toISOString(),
-            expiryDate: (() => {
-                const d = new Date(txnDate);
-                d.setFullYear(d.getFullYear() + 1);
-                return d.toISOString();
-            })()
+        // 3. Susun data untuk dihantar ke backend ToyyibPay
+        const dataPelanggan = {
+            nama: userData.nama || "Pelanggan AQMS", 
+            email: userData.email || "tiada@email.com",
+            telefon: userData.telefon || "0100000000", // Toyyibpay lebih suka format 01X...
+            pakej: "Mawaris",
+            harga: hargaBersih, // <--- Gunakan harga yang telah dibersihkan
+            uid: currentUser.uid
         };
 
-        if (!userData.memberNo) {
-            updateData.memberNo = memberNo;
-        }
-
-        await updateDoc(doc(db, "users", currentUser.uid), updateData);
-        
-        const customerSnap = await getDoc(doc(db, "users", currentUser.uid));
-        const customer = customerSnap.data();
-        
-        // Ledger: Credit Sales
-        await addDoc(collection(db, "ledger"), {
-            date: txnDate,
-            accountCode: "4040",
-            account: "Sales - Mawaris",
-            category: "income",
-            description: memberNo + " " + customer.nama,
-            debit: 0,
-            credit: saleAmount,
-            transactionGroup: memberNo,
-            paymentType: "CUSTOMER",
-            sourceAccount: "4040",
-        });
-
-        // Ledger: Debit Bank
-        await addDoc(collection(db, "ledger"), {
-            date: txnDate,
-            accountCode: "1000",
-            account: "Bank",
-            category: "asset",
-            description: memberNo + " " + customer.nama,
-            debit: saleAmount,
-            credit: 0,
-            paymentType: "CUSTOMER",
-            sourceAccount: "4040",
-            transactionGroup: memberNo
-        });
-        
-        // Ambil tetapan terus dari compData Firestore
-        const comp = compData || {};
-
-        const company = saleAmount * ((comp.companyPool || 0) / 100);
-        const allowance = saleAmount * ((comp.allowance || 0) / 100);
-        const adminOperation = saleAmount * ((comp.adminOperation || 0) / 100);
-        const royalty = saleAmount * ((comp.royalty || 0) / 100);
-        const usbAmount = saleAmount * ((comp.usb || 0) / 100);
-
-        // Company Allocation
-        await addDoc(collection(db, "companyAllocation"), {
-            createdAt: txnDate,
-            memberNo,
-            customerName: customer.nama,
-            product: "Mawaris",
-            sale: saleAmount,
-            company,
-            allowance,
-            adminOperation,
-            royalty
-        });
-
-        const consultantSnap = await getDocs(collection(db, "consultants"));
-        const allConsultants = [];
-        consultantSnap.forEach((d) => {
-            allConsultants.push({ id: d.id, ...d.data() });
-        });
-        
-        // ==========================================
-        // FUNGSI RATE DINAMIK DARI FIREBASE SETTINGS
-        // ==========================================
-        function getCleanLevelKey(level) {
-            // Tukar contoh: "AQC-AS" -> "AQCAS", "AQC-UM" -> "AQCUM"
-            return (level || "AQC").replace(/[^a-zA-Z0-9]/g, "");
-        }
-
-        function getCommissionRate(level) {
-            const key = "commission" + getCleanLevelKey(level);
-            // Mengambil field cth: comp.commissionAQC, comp.commissionAQCAS, dll.
-            return comp[key] !== undefined ? comp[key] : 35; 
-        }
-
-        function getOverrideRate(level) {
-            const key = "override" + getCleanLevelKey(level);
-            // Mengambil field cth: comp.overrideAQC, comp.overrideAQCAS, comp.overrideAQCUM, comp.overrideMGAM
-            return comp[key] !== undefined ? comp[key] : 0;
-        }
-        
-        function findConsultant(no) {
-            return allConsultants.find(u => u.consultantNo === no);
-        }
-
-        const directConsultant = findConsultant(customer.referral);
-        let currentConsultant = findConsultant(customer.referral);
-
-        // UPLINE SPONSOR BENEFIT
-        const sponsor = directConsultant ? findConsultant(directConsultant.upline) : null;
-
-        if (sponsor) {
-            // 1. Rekod Debit (5150)
-            await addDoc(collection(db, "ledger"), {
-                date: txnDate,
-                accountCode: "5150",
-                account: "Upline Sponsor Benefit",
-                category: "expense",
-                consultantNo: sponsor.consultantNo,
-                consultantName: sponsor.nama,
+        // Panggil fungsi Cloud Function yang kita buat tadi
+        const functions = getFunctions(auth.app);
+        const createToyyibpayBill = httpsCallable(functions, 'createToyyibpayBill');
+        const result = await createToyyibpayBill(dataPelanggan);
                 
-                // 🔥 KEMAS KINI 1: Tukar description letak nama Downline
-                description: directConsultant.consultantNo + " USB", 
-                
-                debit: usbAmount,
-                credit: 0,
-                transactionGroup: memberNo,
-                paymentType: "USB",
-                
-                // 🔥 KEMAS KINI 2: Wajib tambah 'fromConsultant'
-                fromConsultant: directConsultant.consultantNo 
-            });
-
-            // 2. Rekod Credit (2150) - INI PALING PENTING UNTUK DASHBOARD
-            await addDoc(collection(db, "ledger"), {
-                date: txnDate,
-                accountCode: "2150",
-                account: "USB Payable",
-                category: "liability",
-                consultantNo: sponsor.consultantNo,
-                consultantName: sponsor.nama,
-                
-                // 🔥 KEMAS KINI 1: Tukar description letak nama Downline
-                description: directConsultant.consultantNo + " USB", 
-                
-                debit: 0,
-                credit: usbAmount,
-                transactionGroup: memberNo,
-                paymentType: "USB",
-                
-                // 🔥 KEMAS KINI 2: Wajib tambah 'fromConsultant'
-                fromConsultant: directConsultant.consultantNo 
-            });
-
-            await updateDoc(doc(db, "consultants", sponsor.id), {
-                totalUSB: increment(usbAmount)
-            });
-        }
-
-        // DIRECT COMMISSION (DINAMIK DARI DB)
-        if (directConsultant) {
-            const commissionRate = getCommissionRate(directConsultant.consultantLevel);
-            const commissionAmount = saleAmount * commissionRate / 100;
-
-            await addDoc(collection(db, "ledger"), {
-                date: txnDate,
-                accountCode: "5000",
-                account: "Consultant Commission",
-                category: "expense",
-                consultantNo: directConsultant.consultantNo,
-                consultantName: directConsultant.nama,
-                description: directConsultant.consultantNo + " " + directConsultant.nama,
-                debit: commissionAmount,
-                credit: 0
-            });
-
-            await addDoc(collection(db, "ledger"), {
-                date: txnDate,
-                accountCode: "2000",
-                account: "Commission Payable",
-                consultantNo: directConsultant.consultantNo,
-                consultantName: directConsultant.nama,
-                category: "liability",
-                description: directConsultant.consultantNo + " " + directConsultant.nama,
-                debit: 0,
-                credit: commissionAmount
-            });
-
-            await updateDoc(doc(db, "consultants", directConsultant.id), {
-                activeClients: increment(1),
-                totalSales: increment(saleAmount),
-                careerSales: increment(saleAmount),
-                totalCommission: increment(commissionAmount),
-            });
-           
-            // B. Rekod Pendapatan Introducer (HANYA UNTUK NOTA/RUJUKAN AQC SAHAJA)
-        if (customer.introducerUid) {
-            try {
-                // 1. Tarik peratus komisen Introducer dari profil 'users' AQM
-                const introducerDoc = await getDoc(doc(db, "users", customer.introducerUid));
-                let introducerCommRate = 0;
-                
-                if (introducerDoc.exists()) {
-                    introducerCommRate = Number(introducerDoc.data().introducerComm) || 0;
-                }
-
-                // Teruskan pengiraan hanya jika introducer mempunyai peratusan komisen
-                if (introducerCommRate > 0) {
-                    
-                    // 2. Tarik peratus komisen dinamik AQC dari 'settings/compensation'
-                    const compSnap = await getDoc(doc(db, "settings", "compensation"));
-                    let aqcRate = 35; // Nilai lalai (Default AQC)
-                    
-                    if (compSnap.exists()) {
-                        const compData = compSnap.data();
-                        const levelAqc = directConsultant.consultantLevel || "AQC";
-                        
-                        // Padankan level AQC dengan field dalam database compensation
-                        if (levelAqc === "AQC-UM") {
-                            aqcRate = Number(compData.commissionAQCUM) || 40;
-                        } else if (levelAqc === "AQC-AS") {
-                            aqcRate = Number(compData.commissionAQCAS) || 38;
-                        } else if (levelAqc === "MG-AM") {
-                            aqcRate = Number(compData.commissionMGAM) || 45;
-                        } else {
-                            aqcRate = Number(compData.commissionAQC) || 35;
-                        }
-                    }
-                    
-                    // 3. Kira nilai komisen
-                    const aqcCommAmount = saleAmount * (aqcRate / 100);
-                    const introducerAmt = aqcCommAmount * (introducerCommRate / 100);
-                    
-                    if (introducerAmt > 0) {
-                        await addDoc(collection(db, "introducerEarnings"), {
-                            createdAt: txnDate,
-                            introducerUid: customer.introducerUid, 
-                            aqcNo: directConsultant.consultantNo,  
-                            customerMemberNo: memberNo,            
-                            customerName: customer.nama,
-                            product: "Mawaris",
-                            saleAmount: saleAmount, 
-                            commPercent: introducerCommRate, 
-                            earnedAmount: introducerAmt, 
-                            status: "UNPAID" 
-                        });
-                    } // Penutup if (introducerAmt > 0)
-                } // Penutup if (introducerCommRate > 0)
-                
-            } catch (error) {
-                console.error("Ralat mengira komisen introducer:", error);
-            }
-        } // Penutup if (customer.introducerUid)
-        }
-
-        // ALLOCATION EXPENSES & PAYABLES
-        await addDoc(collection(db, "ledger"), {
-            date: txnDate, accountCode: "5200", account: "Allowance Expense",
-            category: "expense", description: "Allowance Allocation", debit: allowance, credit: 0
-        });
-        await addDoc(collection(db, "ledger"), {
-            date: txnDate, accountCode: "2200", account: "Allowance Payable",
-            category: "liability", description: "Allowance Allocation", debit: 0, credit: allowance
-        });
-        await addDoc(collection(db, "ledger"), {
-            date: txnDate, accountCode: "5300", account: "Royalty Expense",
-            category: "expense", description: "Royalty Allocation", debit: royalty, credit: 0
-        });
-        await addDoc(collection(db, "ledger"), {
-            date: txnDate, accountCode: "2300", account: "Royalty Payable",
-            category: "liability", description: "Royalty Allocation", debit: 0, credit: royalty
-        });
-
-        // OVERRIDING LOGIC (DINAMIK DARI DB)
-        while (currentConsultant) {
-            const upline = findConsultant(currentConsultant.upline);
-            if (!upline) break;
-
-            const diffRate = Math.max(0, getOverrideRate(upline.consultantLevel) - getOverrideRate(currentConsultant.consultantLevel));
-            const overrideAmount = saleAmount * diffRate / 100;
-
-            if (overrideAmount <= 0) {
-                currentConsultant = upline;
-                continue;
-            }
-
-            await addDoc(collection(db, "ledger"), {
-                date: txnDate,
-                accountCode: "5100",
-                account: "Consultant Override",
-                category: "expense",
-                consultantNo: upline.consultantNo,
-                consultantName: upline.nama,
-                description: upline.consultantNo + " " + upline.nama,
-                debit: overrideAmount,
-                credit: 0
-            });
-
-            await addDoc(collection(db, "ledger"), {
-                date: txnDate,
-                accountCode: "2100",
-                account: "Override Payable",
-                consultantNo: upline.consultantNo,
-                consultantName: upline.nama,
-                category: "liability",
-                description: upline.consultantNo + " " + upline.nama,
-                debit: 0,
-                credit: overrideAmount
-            });
-
-            await updateDoc(doc(db, "consultants", upline.id), {
-                careerSales: increment(saleAmount),
-                totalOverriding: increment(overrideAmount)
-            });
-
-            await addDoc(collection(db, "overrideHistory"), {
-                createdAt: txnDate,
-                customerNo: memberNo,
-                customerName: customer.nama,
-                fromConsultant: currentConsultant.consultantNo,
-                fromName: currentConsultant.nama,
-                fromLevel: currentConsultant.consultantLevel,
-                receiver: upline.consultantNo,
-                receiverName: upline.nama,
-                receiverLevel: upline.consultantLevel,
-                sales: saleAmount,
-                diffRate: diffRate,
-                override: overrideAmount
-            });
-
-            currentConsultant = upline;
-        }
-
-        // CREATE PAYMENT RECEIPT
-        await addDoc(collection(db, "receipts"), {
-            receiptNo: "MAW-" + Date.now(),
-            uid: currentUser.uid,
-            memberNo: memberNo,
-            payerName: customer.nama,
-            serviceCode: "MAWARIS",
-            serviceName: "Mawaris Registration",
-            amount: saleAmount,
-            paymentMethod: "ToyyibPay",
-            status: "PAID",
-            paymentDate: txnDate
-        });
-        
-        alert("Pembayaran berjaya");
-        window.location.href = "mawaris-page.html";
+        // Terima link invois rasmi dan bawa pelanggan ke ToyyibPay
+        window.location.href = result.data.paymentUrl;
 
     } catch (error) {
         agreeBtn.disabled = false;
         agreeBtn.innerHTML = "Saya Faham & Bersetuju dengan Akad";
         cancelTncBtn.disabled = false;
         console.error(error);
-        alert("Ralat: " + error.message);
+        alert("Sistem sedang sibuk. Sila cuba sebentar lagi.");
     }
 });
 </script>
 
 </body>
 </html>
+
