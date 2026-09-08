@@ -1,420 +1,185 @@
 <!DOCTYPE html>
 <html lang="ms">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
-
-<title>Payment Receipts</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Payment Receipts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
     </style>
-  <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="bg-gray-100">
 
 <div class="max-w-7xl mx-auto p-6">
 
-<a
-href="dashboard.html"
-class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-6">
-
-← Dashboard
-
-</a>
-
-<h1
-class="text-3xl font-bold text-[#153638]">
-
-Payment Receipts
-
-</h1>
-
-<p class="text-gray-500 mt-2 mb-6">
-
-Registration, Renewal & Product Payment Receipt
-
-</p>
-
-<div
-class="bg-white rounded-2xl shadow p-5 mb-6">
-
-<div
-class="grid md:grid-cols-4 gap-4">
-
-<select
-id="yearFilter"
-class="border rounded-xl p-3">
-
-<option>2026</option>
-
-<option>2027</option>
-
-<option>2028</option>
-
-</select>
-
-<select
-id="monthFilter"
-class="border rounded-xl p-3">
-
-<option value="">All Month</option>
-
-<option value="0">January</option>
-
-<option value="1">February</option>
-
-<option value="2">March</option>
-
-<option value="3">April</option>
-
-<option value="4">May</option>
-
-<option value="5">June</option>
-
-<option value="6">July</option>
-
-<option value="7">August</option>
-
-<option value="8">September</option>
-
-<option value="9">October</option>
-
-<option value="10">November</option>
-
-<option value="11">December</option>
-
-</select>
-
-<select
-id="typeFilter"
-class="border rounded-xl p-3">
-
-<option value="">
-All Category
-</option>
-
-<option value="REGISTRATION">
-Registration Fee
-</option>
-
-<option value="RENEWAL">
-Annual Renewal
-</option>
-
-<option value="WASIAT">
-Wasiat
-</option>
-        
-<option value="WASIAT_RENEWAL">
-Wasiat Renewal
-</option>
-
-<option value="HIBAH">
-Hibah
-</option>
-        
-<option value="HIBAH_RENEWAL">
-Hibah Renewal
-</option>
-
-<option value="HARTA">
-Harta Sepencarian
-</option>
-        
-<option value="HARTA_RENEWAL">
-Harta Sepencarian Renewal
-</option>
-
-<option value="MAWARIS">
-Mawaris
-</option>
-        
-<option value="MAWARIS_RENEWAL">
-Mawaris Renewal
-</option>
-
-<option value="MAWARIS_KORPORAT">
-Mawaris Korporat
-</option>
-        
-<option value="CORPORATE_RENEWAL">
-Mawaris Korporat Renewal
-</option>
-        
-</select>
-
-<button
-id="searchBtn"
-class="bg-[#153638] text-white rounded-xl">
-
-Search
-
-</button>
-
-</div>
-
-</div>
-
-<div
-class="bg-white rounded-2xl shadow overflow-hidden">
-
-<table class="w-full">
-
-<thead
-class="bg-gray-50 border-b">
-
-<tr>
-
-<th class="p-4 text-left">
-
-Receipt No
-
-</th>
-
-<th class="p-4 text-left">
-
-Date
-
-</th>
-
-<th class="p-4 text-left">
-
-Description
-
-</th>
-
-<th class="p-4 text-right">
-
-Amount
-
-</th>
-
-<th class="p-4 text-center">
-
-Status
-
-</th>
-
-<th class="p-4 text-center">
-
-Action
-
-</th>
-
-</tr>
-
-</thead>
-
-<tbody
-id="receiptTable">
-
-<tr>
-
-<td
-colspan="6"
-class="text-center py-10 text-gray-400">
-
-No receipt found.
-
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
+    <a href="dashboard.html" class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-6 hover:bg-gray-300 transition">
+        ← Dashboard
+    </a>
+
+    <h1 class="text-3xl font-bold text-[#153638]">Payment Receipts</h1>
+    <p class="text-gray-500 mt-2 mb-6">Registration, Renewal & Product Payment Receipt</p>
+
+    <div class="bg-white rounded-2xl shadow p-5 mb-6">
+        <div class="grid md:grid-cols-4 gap-4">
+            
+            <select id="yearFilter" class="border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none">
+                <option>2026</option>
+                <option>2027</option>
+                <option>2028</option>
+            </select>
+
+            <select id="monthFilter" class="border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none">
+                <option value="">All Month</option>
+                <option value="0">January</option>
+                <option value="1">February</option>
+                <option value="2">March</option>
+                <option value="3">April</option>
+                <option value="4">May</option>
+                <option value="5">June</option>
+                <option value="6">July</option>
+                <option value="7">August</option>
+                <option value="8">September</option>
+                <option value="9">October</option>
+                <option value="10">November</option>
+                <option value="11">December</option>
+            </select>
+
+            <!-- TUKAR VALUE DI SINI SUPAYA SAMA DENGAN DATABASE -->
+            <select id="typeFilter" class="border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none">
+                <option value="">All Category</option>
+                <option value="REGISTRATION">Registration Fee</option>
+                <option value="RENEWAL">Annual Renewal</option>
+                <option value="WASIAT">Wasiat</option>
+                <option value="WASIAT_RENEWAL">Wasiat Renewal</option>
+                <option value="HIBAH">Hibah</option>
+                <option value="HIBAH_RENEWAL">Hibah Renewal</option>
+                
+                <!-- HARTA ditukar kepada SEPENCARIAN -->
+                <option value="SEPENCARIAN">Harta Sepencarian</option>
+                <option value="SEPENCARIAN_RENEWAL">Harta Sepencarian Renewal</option>
+                
+                <option value="MAWARIS">Mawaris</option>
+                <option value="MAWARIS_RENEWAL">Mawaris Renewal</option>
+                
+                <!-- Underscore dibuang, guna jarak supaya sama dengan toUpperCase() -->
+                <option value="MAWARIS KORPORAT">Mawaris Korporat</option>
+                <option value="CORPORATE_RENEWAL">Mawaris Korporat Renewal</option>
+            </select>
+
+            <button id="searchBtn" class="bg-[#153638] hover:bg-[#1d4a4d] transition text-white rounded-xl font-semibold">
+                Search
+            </button>
+
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow overflow-hidden">
+        <table class="w-full">
+            <thead class="bg-gray-50 border-b">
+                <tr>
+                    <th class="p-4 text-left">Receipt No</th>
+                    <th class="p-4 text-left">Date</th>
+                    <th class="p-4 text-left">Description</th>
+                    <th class="p-4 text-right">Amount</th>
+                    <th class="p-4 text-center">Status</th>
+                    <th class="p-4 text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody id="receiptTable">
+                <tr>
+                    <td colspan="6" class="text-center py-10 text-gray-400">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
 </div>
 
 <script type="module">
-
-// 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
 import { db, auth } from './firebase.js';
+import { collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// 2. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
-import {
-    collection,
-    getDocs,
-    query,
-    where
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-// 3. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
-import {
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+// Simpan currentUser global supaya tidak perlu panggil auth berulang kali
+let currentUser = null;
         
-async function loadReceipts(user){
+async function loadReceipts(user) {
+    document.getElementById("receiptTable").innerHTML = `<tr><td colspan="6" class="text-center py-10 text-gray-400">Loading receipts...</td></tr>`;
+    
+    const year = Number(document.getElementById("yearFilter").value);
+    const month = document.getElementById("monthFilter").value;
+    const type = document.getElementById("typeFilter").value;
 
-const year =
-Number(
-document.getElementById("yearFilter").value
-);
-
-const month =
-document.getElementById("monthFilter").value;
-
-const type =
-document.getElementById("typeFilter").value;
-
-const receiptSnap = await getDocs(
-query(
-collection(db,"receipts"),
-where("uid","==",user.uid),
-
-)
-);
-
-let html = "";
-
-receiptSnap.forEach((d)=>{
-
-const r = d.data();
-
-const payDate =
-r.paymentDate.toDate();
-
-if(payDate.getFullYear() !== year)
-return;
-
-if(
-month !== "" &&
-payDate.getMonth() !== Number(month)
-)
-return;
-
-if(
-type !== "" &&
-r.serviceCode !== type
-)
-return;
-
+    try {
+        const receiptSnap = await getDocs(query(collection(db, "receipts"), where("uid", "==", user.uid)));
         
-html += `
+        // Kumpulkan data dalam array supaya boleh di-sort ikut tarikh terkini (optional tapi digalakkan)
+        let receiptsArray = [];
+        receiptSnap.forEach((d) => receiptsArray.push({ id: d.id, ...d.data() }));
+        
+        // Sort dari yang paling baru ke lama
+        receiptsArray.sort((a, b) => b.paymentDate.toDate() - a.paymentDate.toDate());
 
-<tr class="border-b">
+        let html = "";
 
-<td class="p-4">
-${r.receiptNo}
-</td>
+        receiptsArray.forEach((r) => {
+            const payDate = r.paymentDate.toDate();
 
-<td class="p-4">
-${payDate.toLocaleDateString("ms-MY")}
-</td>
+            // Penapis Tahun, Bulan & Jenis
+            if (payDate.getFullYear() !== year) return;
+            if (month !== "" && payDate.getMonth() !== Number(month)) return;
+            if (type !== "" && r.serviceCode !== type) return;
 
-<td class="p-4">
-${r.serviceName}
-</td>
+            html += `
+            <tr class="border-b hover:bg-gray-50 transition">
+                <td class="p-4 font-medium text-gray-800">${r.receiptNo}</td>
+                <td class="p-4 text-gray-600">${payDate.toLocaleDateString("ms-MY")}</td>
+                <td class="p-4 text-gray-600">${r.serviceName}</td>
+                <td class="p-4 text-right font-semibold text-[#153638]">RM${Number(r.amount).toFixed(2)}</td>
+                <td class="p-4 text-center">
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold uppercase">${r.status}</span>
+                </td>
+                <td class="p-4 text-center">
+                    <button onclick="window.location.href='receipt-aqm-view.html?id=${r.id}'" class="bg-gray-100 hover:bg-gray-200 text-[#153638] px-4 py-2 rounded-lg text-sm font-semibold transition">
+                        View
+                    </button>
+                </td>
+            </tr>`;
+        });
 
-<td class="p-4 text-right">
-RM${Number(r.amount).toFixed(2)}
-</td>
+        if (html === "") {
+            html = `<tr><td colspan="6" class="text-center py-10 text-gray-400">No receipt found matching your criteria.</td></tr>`;
+        }
 
-<td class="p-4 text-center">
-
-<span class="text-green-600 font-semibold">
-${r.status}
-</span>
-
-</td>
-
-<td class="p-4 text-center">
-
-<button
-onclick="window.location.href='receipt-aqm-view.html?id=${d.id}'"
-class="bg-[#153638] text-white px-4 py-2 rounded-lg">
-
-View
-
-</button>
-
-</td>
-
-</tr>
-
-`;
-});
-
-if(html===""){
-
-html=`
-
-<tr>
-
-<td
-colspan="6"
-class="text-center py-10 text-gray-400">
-
-No receipt found.
-
-</td>
-
-</tr>
-
-`;
-
+        document.getElementById("receiptTable").innerHTML = html;
+        
+    } catch (error) {
+        console.error("Gagal menarik rekod resit:", error);
+        document.getElementById("receiptTable").innerHTML = `<tr><td colspan="6" class="text-center py-10 text-red-500">Failed to load data.</td></tr>`;
+    }
 }
 
-document.getElementById(
-"receiptTable"
-).innerHTML = html;
-
-}
-
-onAuthStateChanged(auth,(user)=>{
-
-if(!user){
-
-window.location.href =
-"login.html";
-
-return;
-
-}
-
-
-        
-loadReceipts(user);
-
+// Hanya panggil sekali apabila halaman dimuatkan
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        window.location.href = "login.html";
+        return;
+    }
+    currentUser = user; // Simpan rujukan ke user
+    loadReceipts(user);
 });
 
-document
-.getElementById("searchBtn")
-.addEventListener("click",()=>{
-
-onAuthStateChanged(auth,(user)=>{
-
-if(user){
-
-loadReceipts(user);
-
-}
-
+// Butang carian kini hanya panggil loadReceipts tanpa panggil auth semula
+document.getElementById("searchBtn").addEventListener("click", () => {
+    if (currentUser) {
+        loadReceipts(currentUser);
+    }
 });
-
-});
-
-
-        
-        
 </script>
-
-
-        
 </body>
-
 </html>
 
 
