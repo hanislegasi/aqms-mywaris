@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <title>Status Pembaharuan Produk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: Inter, sans-serif; }</style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-5">
+
+    <div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl text-center">
+        <div id="loadingIcon" class="mb-4 text-[#153638]">
+            <svg class="w-16 h-16 mx-auto animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        </div>
+        <h1 id="statusTajuk" class="text-2xl font-bold text-[#153638] mb-4">Mengesahkan Pembayaran...</h1>
+        <p id="statusMesej" class="text-gray-500">Sila tunggu. Sistem sedang memanjangkan tarikh luput dokumen anda.</p>
+    </div>
+
+    <script type="module">
+        import { db, auth } from './firebase.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { doc, getDoc, updateDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const status_id = urlParams.get('status_id');
+        const namaPakej = urlParams.get('pakej') || ""; 
+        const amountPaid = Number(urlParams.get('amount') || 0);
+
+        // Peta Konfigurasi untuk menukar Nama Pakej ke format Database & Perakaunan
+        const configMap = {
+            "Wasiat Renewal": { key: "wasiat", code: "WASIAT_RENEWAL", prefix: "WST", accountCode: "4210" },
+            "Hibah Renewal": { key: "hibah", code: "HIBAH_RENEWAL", prefix: "HIB", accountCode: "4220" },
+            "Harta Sepencarian Renewal": { key: "sepencarian", code: "SEPENCARIAN_RENEWAL", prefix: "HSP", accountCode: "4230" },
+            "Mawaris Renewal": { key: "mawaris", code: "MAWARIS_RENEWAL", prefix: "MAW", accountCode: "4240" },
+            "Mawaris Korporat Renewal": { key: "corporate", code: "CORPORATE_RENEWAL", prefix: "MCO", accountCode: "4250" }
+        };
+
+        if (status_id === "1" && configMap[namaPakej]) {
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    const txnDate = new Date();
+                    const config = configMap[namaPakej];
+                    
+                    try {
+                        // 1. Tarik Data User & Tetapan Sistem
+                        const [userSnap, compSnap] = await Promise.all([
+                            getDoc(doc(db, "users", user.uid)),
+                            getDoc(doc(db, "settings", "compensation"))
+                        ]);
+                        
+                        const userData = userSnap.exists() ? userSnap.data() : {};
+                        const compSettings = compSnap.exists() ? compSnap.data() : {};
+                        
+                        // 2. Tarik Data Dokumen Spesifik (Contoh: wasiat/maklumat)
+                        const productRef = doc(db, "users", user.uid, config.key, "maklumat");
+                        const productSnap = await getDoc(productRef);
+                        
+                        if (!productSnap.exists()) {
+                            throw new Error("Dokumen tidak dijumpai.");
+                        }
+                        
+                        const productData = productSnap.data();
+
+                        // Halang double-entry jika pengguna 'refresh' skrin ini
+                        const timeSinceLastUpdate = productData.renewedAt ? (txnDate.getTime() - new Date(productData.renewedAt).getTime()) : 999999;
+                        if (timeSinceLastUpdate < 60000) { 
+                            window.location.href = "dashboard.html";
+                            return;
+                        }
+
+                        // 3. Tambah Masa Luput (Default: 365 hari)
+                        const validityDays = compSettings.memberValidity || 365;
+                        let currentExpiry = new Date();
+                        if (productData.expiryDate) {
+                            const parsedExpiry = new Date(productData.expiryDate);
+                            if (parsedExpiry > currentExpiry) {
+                                currentExpiry = parsedExpiry; // Jika belum luput, tambah dari baki tarikh luput sedia ada
+                            }
+                        }
+                        currentExpiry.setDate(currentExpiry.getDate() + validityDays);
+
+                        // 4. Update Tarikh di Firestore
+                        await updateDoc(productRef, {
+                            expiryDate: currentExpiry.toISOString(),
+                            renewedAt: txnDate.toISOString()
+                        });
+
+                        // 5. Rekod Jurnal Perakaunan (Debit Bank, Kredit Income Produk)
+                        await addDoc(collection(db, "ledger"), {
+                            date: txnDate, accountCode: "1000", account: "Bank", category: "asset",
+                            description: `${namaPakej} - ${userData.nama || "Pelanggan"}`,
+                            debit: amountPaid, credit: 0, paymentType: "CUSTOMER", transactionGroup: user.uid
+                        });
+                        
+                        await addDoc(collection(db, "ledger"), {
+                            date: txnDate, accountCode: config.accountCode, account: namaPakej, category: "income",
+                            description: `${namaPakej} - ${userData.nama || "Pelanggan"}`,
+                            debit: 0, credit: amountPaid, paymentType: "CUSTOMER", transactionGroup: user.uid
+                        });
+
+                        // 6. Cipta Resit Pembayaran
+                        await addDoc(collection(db, "receipts"), {
+                            receiptNo: `${config.prefix}-REN-${Date.now()}`, uid: user.uid, payerName: userData.nama || "-",
+                            customerPhone: userData.telefon || "", serviceCode: config.code, serviceName: namaPakej,
+                            amount: amountPaid, paymentMethod: "ToyyibPay", status: "PAID", paymentDate: txnDate, referenceNo: user.uid
+                        });
+
+                        // 7. Kemaskini UI Selesai
+                        document.getElementById('statusMesej').innerText = `Tarikh luput baharu anda: ${currentExpiry.toLocaleDateString("ms-MY")}. Memuatkan dashboard...`;
+                        document.getElementById('loadingIcon').innerHTML = `<svg class="w-16 h-16 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+                        
+                        setTimeout(() => { window.location.href = "dashboard.html"; }, 3000);
+
+                    } catch (error) {
+                        console.error(error);
+                        document.getElementById('statusMesej').innerText = "Ralat memproses data pembaharuan. Sila hubungi admin.";
+                        document.getElementById('statusMesej').classList.add("text-red-600");
+                    }
+                }
+            });
+        } else {
+            document.getElementById('statusTajuk').innerText = "Pembayaran Gagal";
+            document.getElementById('statusMesej').innerText = "Transaksi dibatalkan atau pakej tidak sah. Mengembalikan anda...";
+            document.getElementById('statusTajuk').classList.add("text-red-600");
+            setTimeout(() => { window.location.href = "dashboard.html"; }, 3000);
+        }
+    </script>
+</body>
+</html>
