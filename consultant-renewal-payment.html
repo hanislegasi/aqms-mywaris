@@ -64,7 +64,9 @@ import {
     addDoc,
     collection
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-  
+
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+    
 // FIX 1: Tambah helper formatRM supaya tidak ReferenceError
     const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2 });
   
@@ -161,147 +163,36 @@ Pay Renewal Fee
 
 
   
-document
-.getElementById("payRenewalBtn")
-?.addEventListener("click", async()=>{
+document.getElementById("payRenewalBtn")?.addEventListener("click", async () => {
+    const btn = document.getElementById("payRenewalBtn");
+    btn.disabled = true;
+    btn.innerText = "Menjana Invois ToyyibPay...";
 
-// Semak sama ada renewalDate wujud dan tukar format Timestamp ke Date dengan betul
-const currentExpiry = data?.renewalDate?.toDate 
-    ? data.renewalDate.toDate() 
-    : (data?.renewalDate ? new Date(data.renewalDate) : new Date());
+    try {
+        // Susun data untuk ToyyibPay
+        const dataPelanggan = {
+            nama: data.nama || "Konsultan AQM",
+            email: data.email || "tiada@email.com",
+            telefon: data.telefon || "0100000000",
+            pakej: "Pembaharuan Konsultan", // Penting: Fail success akan baca nama pakej ini
+            harga: renewalFee,
+            uid: user.uid
+        };
 
-const newExpiry =
-new Date(currentExpiry);
+        // Panggil fungsi Cloud Function
+        const functions = getFunctions(auth.app);
+        const createToyyibpayBill = httpsCallable(functions, 'createToyyibpayBill');
+        const result = await createToyyibpayBill(dataPelanggan);
 
-newExpiry.setFullYear(
-newExpiry.getFullYear() + 1
-);
+        // Bawa konsultan ke laman pembayaran ToyyibPay
+        window.location.href = result.data.paymentUrl;
 
-await updateDoc(
-doc(db,"consultants",user.uid),
-{
-consultantPaymentStatus:"paid",
-renewalDate:newExpiry,
-lastRenewalDate:new Date(),
-renewalFeePaid:renewalFee,
-
-// --- TAMBAH KOD RESET EXAM DI SINI ---
-"training.wasiat.status": "pending",
-"training.wasiat.bestScore": 0,
-
-"training.hibah.status": "pending",
-"training.hibah.bestScore": 0,
-
-"training.faraid.status": "pending",
-"training.faraid.bestScore": 0,
-
-"training.amla.status": "pending",
-"training.amla.bestScore": 0
-// -------------------------------------
-}
-);
-
-// ===============================
-// ACCOUNTING ENTRY
-// Dr Bank
-// Cr Consultant Renewal Fee
-// ===============================
-
-await addDoc(collection(db,"ledger"),{
-
-date:new Date(),
-
-accountCode:"4310",
-account:"Renewal AQC",
-
-category:"income",
-
-description:
-data.consultantNo + " Renewal",
-
-debit:0,
-
-credit:renewalFee,
-
-paymentType:"CUSTOMER",
-
-sourceAccount:"4250",
-
-transactionGroup:data.consultantNo
-
-});
-
-
-await addDoc(collection(db,"ledger"),{
-
-date:new Date(),
-
-accountCode:"1000",
-account:"Bank",
-
-category:"asset",
-
-description:
-data.consultantNo + " Renewal",
-
-debit:renewalFee,
-
-credit:0,
-
-paymentType:"CUSTOMER",
-
-sourceAccount:"4250",
-
-transactionGroup:data.consultantNo
-
-});
-
-  
-await addDoc(
-collection(db,"receipts"),
-{
-
-receiptNo:
-"REN-" + Date.now(),
-
-uid:user.uid,
-
-consultantNo:data.consultantNo,
-
-payerName:data.nama,
-
-serviceCode:"RENEWAL",
-
-serviceName:"Consultant Renewal Fee",
-
-amount:renewalFee,
-
-paymentMethod:"ToyyibPay",
-
-status:"PAID",
-
-paymentDate:new Date(),
-
-consultantLevel:data.consultantLevel,
-
-referenceNo:data.consultantNo
-
-}
-);
-
-  
-alert(
-`Renewal Berjaya!
-
-Tarikh Tamat Baru:
-${newExpiry.toLocaleDateString("ms-MY")}`
-);
-
-window.location.href =
-"consultant-dashboard.html";
-
-});
-  
+    } catch (error) {
+        console.error(error);
+        alert("Gagal menghubungi server pembayaran. Sila cuba lagi.");
+        btn.disabled = false;
+        btn.innerText = "Pay Renewal Fee";
+    }
 });
   
 </script>
