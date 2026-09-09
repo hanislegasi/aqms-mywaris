@@ -870,11 +870,14 @@
                 
                 const penerimaWakafZurri = [];
                 block.querySelectorAll(".penerimaWakafZurriRow").forEach(row => {
+                    const selectEl = row.querySelector(".namaPenerimaWakafZurri");
+                    const selectedText = selectEl.options[selectEl.selectedIndex]?.text || "";
+                    const matchHubungan = selectedText.match(/\(([^)]+)\)/);
+                    
                     penerimaWakafZurri.push({
-                        nama: row.querySelector(".namaPenerimaWakafZurri").value,
-                        generasi: row.querySelector(".generasiWakafZurri").value, // Kutip generasi
-                        // Tarik maklumat hubungan automatik dari dropdown waris
-                        hubungan: row.querySelector(".namaPenerimaWakafZurri").options[row.querySelector(".namaPenerimaWakafZurri").selectedIndex].text.match(/\(([^)]+)\)/)?.[1] || "" 
+                        nama: selectEl.value,
+                        generasi: row.querySelector(".generasiWakafZurri").value,
+                        hubungan: matchHubungan ? matchHubungan[1] : ""
                     });
                 });
 
