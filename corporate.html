@@ -879,20 +879,7 @@
                 });
 
                 senaraiSyarikat.push({
-                    // ... (data sedia ada) ...
-                    
-                    // Kutipan tambahan untuk Wakaf
-                    jenisWakafZurri: block.querySelector(".jenisWakafZurri")?.value || "",
-                    jenisHartaWakafZurri: block.querySelector(".jenisHartaWakafZurri")?.value || "",
-                    nazir: {
-                        nama: block.querySelector(".namaNazir")?.value || "",
-                        ic: block.querySelector(".icNazir")?.value || "",
-                        alamat: block.querySelector(".alamatNazir")?.value || ""
-                    },
-                    penerimaWakafZurri: penerimaWakafZurri
-                });
-
-                senaraiSyarikat.push({
+                    // --- DATA ASAL SYARIKAT ---
                     namaSyarikat: block.querySelector(".namaSyarikat").value,
                     noSsm: block.querySelector(".noSsm").value,
                     alamatSyarikat: block.querySelector(".alamatSyarikat").value,
@@ -903,9 +890,17 @@
                     mekanismeAgihan: block.querySelector(".mekanismeAgihan").value,
                     rakanKongsiList: rakanKongsiList,
                     penerimaHibahSaham: penerimaHibahSaham,
-                    penerimaWakafZurri: penerimaWakafZurri
+                    penerimaWakafZurri: penerimaWakafZurri,
+                    
+                    // --- DATA BARU WAKAF ZURRI ---
+                    jenisWakafZurri: block.querySelector(".jenisWakafZurri")?.value || "",
+                    jenisHartaWakafZurri: block.querySelector(".jenisHartaWakafZurri")?.value || "",
+                    nazir: {
+                        nama: block.querySelector(".namaNazir")?.value || "",
+                        ic: block.querySelector(".icNazir")?.value || "",
+                        alamat: block.querySelector(".alamatNazir")?.value || ""
+                    }
                 });
-            });
 
             const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
             let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
