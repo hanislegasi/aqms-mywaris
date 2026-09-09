@@ -92,7 +92,6 @@
   <script type="module">
     import { db, auth } from './firebase.js';
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    // PASTIKAN SETDOC DI-IMPORT DI SINI
     import { doc, getDoc, updateDoc, collection, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     let currentUser = null;
@@ -157,7 +156,7 @@
         }
         document.getElementById("warisList").innerHTML = warisHTML;
 
-        // SECTION 3: KORPORAT & WASI
+        // SECTION 3: KORPORAT & WASI (MULTI-COMPANY SUPPORT)
         let getMekanismeName = (kod) => {
             if(kod === 'buysell') return 'Buy-Sell Agreement (Perjanjian Jual Beli Saham)';
             if(kod === 'hibah') return 'Hibah Saham Mutlak';
@@ -165,78 +164,107 @@
             return '-';
         };
 
-        // Format Saham Number Helper
         let fSaham = (val) => val ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "-";
-
-        let korporatHTML = `
-            <p><strong>Syarikat:</strong> ${data.namaSyarikat || "-"}</p>
-            <p><strong>No. Pendaftaran (SSM):</strong> ${data.noSsm || "-"}</p>
-            <p><strong>Alamat Berdaftar:</strong> ${data.alamatSyarikat || "-"}</p>
-            <p><strong>Jumlah Keseluruhan Saham:</strong> ${fSaham(data.jumlahSaham)} Unit</p>
-            <p><strong>Saham Milik Pewasiat:</strong> ${fSaham(data.sahamPewasiat)} Unit</p>
-            
-            <hr class="my-4 border-gray-200">
-            
-            <p><strong>Status Pemilikan:</strong> ${data.statusPemilikan === 'rakankongsi' ? 'Dimiliki Bersama Rakan Kongsi' : 'Pemilik Tunggal'}</p>
-            <p><strong>Mekanisme Agihan:</strong> ${getMekanismeName(data.mekanismeAgihan)}</p>
-        `;
-
-        // Kotak Dinamik Mengikut Mekanisme
-        if (data.mekanismeAgihan === 'buysell') {
-            korporatHTML += `
-                <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                    <p class="font-bold text-blue-800 border-b border-blue-200 pb-2 mb-2">Maklumat Rakan Kongsi</p>
-                    <p><strong>Nama:</strong> ${data.namaPartner || "-"}</p>
-                    <p><strong>No IC:</strong> ${data.icPartner || "-"}</p>
-                    <p><strong>Alamat:</strong> ${data.alamatPartner || "-"}</p>
-                    <p><strong>Jumlah Saham:</strong> ${fSaham(data.sahamPartner)} Unit</p>
-                </div>
-            `;
-        } else if (data.mekanismeAgihan === 'hibah') {
-            korporatHTML += `
-                <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded-xl">
-                    <p class="font-bold text-green-800 border-b border-green-200 pb-2 mb-2">Penerima Hibah Saham</p>`;
-            if(data.penerimaHibahSaham && data.penerimaHibahSaham.length > 0) {
-                data.penerimaHibahSaham.forEach((p, i) => {
-                    korporatHTML += `<p>${i+1}. <strong>${p.nama}</strong> (${p.peratus}%)</p>`;
-                });
-            } else {
-                korporatHTML += `<p class="text-sm">Tiada penerima dimasukkan.</p>`;
-            }
-            korporatHTML += `</div>`;
-        } else if (data.mekanismeAgihan === 'wakafzurri') {
-            korporatHTML += `
-                <div class="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-xl">
-                    <p class="font-bold text-purple-800 border-b border-purple-200 pb-2 mb-2">Penerima Manfaat Wakaf Saham Zurri</p>`;
-            if(data.penerimaWakafZurri && data.penerimaWakafZurri.length > 0) {
-                data.penerimaWakafZurri.forEach((p, i) => {
-                    korporatHTML += `<p>${i+1}. <strong>${p.nama}</strong> (${p.peratus}%)</p>`;
-                });
-            } else {
-                korporatHTML += `<p class="text-sm">Tiada penerima dimasukkan.</p>`;
-            }
-            korporatHTML += `</div>`;
+        
+        let korporatHTML = "";
+        let senaraiSyarikat = data.senaraiSyarikat || [];
+        
+        // Backward compatibility: If no array, build one from old single-data structure
+        if (senaraiSyarikat.length === 0 && data.namaSyarikat) {
+            senaraiSyarikat.push(data);
         }
 
-        // Info Wasi
+        if (senaraiSyarikat.length > 0) {
+            senaraiSyarikat.forEach((syarikat, sIndex) => {
+                korporatHTML += `
+                <div class="mb-5 p-5 bg-white border border-gray-200 rounded-xl shadow-sm">
+                    <h4 class="font-bold text-[#153638] text-lg border-b pb-2 mb-3">Syarikat ${sIndex + 1}: ${syarikat.namaSyarikat || "-"}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-2 text-sm mb-4">
+                        <p><strong>No. Pendaftaran (SSM):</strong> ${syarikat.noSsm || "-"}</p>
+                        <p><strong>Jumlah Saham Keseluruhan:</strong> ${fSaham(syarikat.jumlahSaham)} Unit</p>
+                        <p class="md:col-span-2"><strong>Alamat Berdaftar:</strong> ${syarikat.alamatSyarikat || "-"}</p>
+                        <p><strong>Saham Milik Pewasiat:</strong> ${fSaham(syarikat.sahamPewasiat)} Unit</p>
+                        <p><strong>Status Pemilikan:</strong> ${syarikat.statusPemilikan === 'rakankongsi' ? 'Dimiliki Bersama Rakan Kongsi' : 'Pemilik Tunggal'}</p>
+                        <p class="md:col-span-2 text-blue-700 mt-2"><strong>Mekanisme Agihan:</strong> ${getMekanismeName(syarikat.mekanismeAgihan)}</p>
+                    </div>`;
+
+                // Sub-Section Mekanisme
+                if (syarikat.mekanismeAgihan === 'buysell') {
+                    korporatHTML += `
+                    <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                        <p class="font-bold text-blue-800 border-b border-blue-200 pb-2 mb-2">Maklumat Rakan Kongsi</p>`;
+                    if (syarikat.rakanKongsiList && syarikat.rakanKongsiList.length > 0) {
+                        syarikat.rakanKongsiList.forEach((rk, i) => {
+                            korporatHTML += `<p class="text-sm mb-1">${i+1}. <strong>${rk.nama}</strong> (${rk.ic}) - ${fSaham(rk.saham)} Unit</p>`;
+                        });
+                    } else if (syarikat.namaPartner) {
+                        korporatHTML += `<p class="text-sm mb-1">1. <strong>${syarikat.namaPartner}</strong> (${syarikat.icPartner}) - ${fSaham(syarikat.sahamPartner)} Unit</p>`;
+                    } else {
+                        korporatHTML += `<p class="text-sm text-gray-500 italic">Tiada rakan kongsi dimasukkan.</p>`;
+                    }
+                    korporatHTML += `</div>`;
+                } 
+                else if (syarikat.mekanismeAgihan === 'hibah') {
+                    korporatHTML += `
+                    <div class="p-4 bg-green-50 border border-green-200 rounded-xl">
+                        <p class="font-bold text-green-800 border-b border-green-200 pb-2 mb-2">Penerima Hibah Saham</p>`;
+                    if (syarikat.penerimaHibahSaham && syarikat.penerimaHibahSaham.length > 0) {
+                        syarikat.penerimaHibahSaham.forEach((p, i) => {
+                            korporatHTML += `<p class="text-sm mb-1">${i+1}. <strong>${p.nama}</strong> (${p.peratus}%)</p>`;
+                        });
+                    } else {
+                        korporatHTML += `<p class="text-sm text-gray-500 italic">Tiada penerima dimasukkan.</p>`;
+                    }
+                    korporatHTML += `</div>`;
+                } 
+                else if (syarikat.mekanismeAgihan === 'wakafzurri') {
+                    let jWakaf = syarikat.jenisWakafZurri === 'munjiz' ? 'Wakaf Serta-Merta (Munjiz)' : (syarikat.jenisWakafZurri === 'muallaq' ? "Wakaf Selepas Kematian (Mu'allaq)" : "-");
+                    let jHarta = syarikat.jenisHartaWakafZurri === 'ain' ? "Wakaf Saham Penuh ('Ain)" : (syarikat.jenisHartaWakafZurri === 'manfaah' ? "Wakaf Hasil/Dividen Sahaja (Manfaah)" : "-");
+                    
+                    korporatHTML += `
+                    <div class="p-4 bg-purple-50 border border-purple-200 rounded-xl">
+                        <p class="font-bold text-purple-800 border-b border-purple-200 pb-2 mb-2">Maklumat Wakaf Zurri</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-4">
+                            <p><strong>Kuat Kuasa:</strong> ${jWakaf}</p>
+                            <p><strong>Jenis Harta:</strong> ${jHarta}</p>
+                            <p class="md:col-span-2"><strong>Nazir Dicadangkan:</strong> ${syarikat.nazir?.nama || "-"} (${syarikat.nazir?.ic || "-"})</p>
+                        </div>
+                        <p class="font-bold text-purple-800 border-b border-purple-200 pb-2 mb-2">Penerima Manfaat Wakaf Saham Zurri</p>`;
+                    if (syarikat.penerimaWakafZurri && syarikat.penerimaWakafZurri.length > 0) {
+                        syarikat.penerimaWakafZurri.forEach((p, i) => {
+                            korporatHTML += `<p class="text-sm mb-1">${i+1}. <strong>${p.nama}</strong> (${p.generasi || p.peratus || "-"})</p>`;
+                        });
+                    } else {
+                        korporatHTML += `<p class="text-sm text-gray-500 italic">Tiada penerima dimasukkan.</p>`;
+                    }
+                    korporatHTML += `</div>`;
+                }
+
+                korporatHTML += `</div>`; // Tutup syarikat-item block
+            });
+        } else {
+            korporatHTML += `<p class='text-gray-500 text-sm'>Tiada syarikat direkodkan.</p>`;
+        }
+
+        // Info Wasi (Sentiasa wujud 1 kali sahaja di bawah senarai syarikat)
         korporatHTML += `
             <hr class="my-6 border-gray-300">
-            <h3 class="font-semibold text-lg text-[#153638] mb-2">Pelantikan Wasi</h3>
-            <div class="border rounded-lg p-4 bg-white mb-3">
-                <p class="text-sm font-bold text-gray-500 mb-1">WASI PERTAMA</p>
-                <p><strong>Nama:</strong> ${data.namaWasi1 || "-"}</p>
-                <p><strong>No IC / Pendaftaran:</strong> ${data.icWasi1 || "-"}</p>
-                <p><strong>Hubungan:</strong> ${data.hubunganWasi1 || "-"}</p>
-                <p><strong>Alamat:</strong> ${data.alamatWasi1 || "-"}</p>
-                <p><strong>Telefon:</strong> ${data.telefonWasi1 || "-"}</p>
-            </div>
-            <div class="border rounded-lg p-4 bg-white">
-                <p class="text-sm font-bold text-gray-500 mb-1">WASI KEDUA (GANTIAN)</p>
-                <p><strong>Nama:</strong> ${data.namaWasi2 || "-"}</p>
-                <p><strong>No IC:</strong> ${data.icWasi2 || "-"}</p>
-                <p><strong>Hubungan:</strong> ${data.hubunganWasi2 || "-"}</p>
-                <p><strong>Alamat:</strong> ${data.alamatWasi2 || "-"}</p>
-                <p><strong>Telefon:</strong> ${data.telefonWasi2 || "-"}</p>
+            <h3 class="font-semibold text-lg text-[#153638] mb-3">Pelantikan Wasi / Pentadbir</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="border rounded-xl p-4 bg-white shadow-sm">
+                    <p class="text-xs font-bold text-gray-400 mb-2 tracking-wider">WASI PERTAMA</p>
+                    <p class="text-sm"><strong>Nama:</strong> ${data.namaWasi1 || "-"}</p>
+                    <p class="text-sm"><strong>No IC / SSM:</strong> ${data.icWasi1 || "-"}</p>
+                    <p class="text-sm"><strong>Hubungan:</strong> ${data.hubunganWasi1 || "-"}</p>
+                    <p class="text-sm"><strong>Telefon:</strong> ${data.telefonWasi1 || "-"}</p>
+                </div>
+                <div class="border rounded-xl p-4 bg-white shadow-sm">
+                    <p class="text-xs font-bold text-gray-400 mb-2 tracking-wider">WASI KEDUA (GANTIAN)</p>
+                    <p class="text-sm"><strong>Nama:</strong> ${data.namaWasi2 || "-"}</p>
+                    <p class="text-sm"><strong>No IC:</strong> ${data.icWasi2 || "-"}</p>
+                    <p class="text-sm"><strong>Hubungan:</strong> ${data.hubunganWasi2 || "-"}</p>
+                    <p class="text-sm"><strong>Telefon:</strong> ${data.telefonWasi2 || "-"}</p>
+                </div>
             </div>
         `;
         document.getElementById("korporatInfo").innerHTML = korporatHTML;
