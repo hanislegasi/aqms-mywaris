@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <title>Status Pembayaran Korporat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-5">
+
+    <div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl text-center">
+        <h1 id="statusTajuk" class="text-2xl font-bold text-[#153638] mb-4">Menyemak Pembayaran...</h1>
+        <p id="statusMesej" class="text-gray-500">Sila tunggu sebentar. Sistem sedang mengemas kini rekod pelantikan. Jangan tutup skrin ini.</p>
+    </div>
+
+<script type="module">
+    import { db, auth } from './firebase.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { doc, getDoc, updateDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // Tangkap jawapan dari URL ToyyibPay
+    const urlParams = new URLSearchParams(window.location.search);
+    const status_id = urlParams.get('status_id'); 
+    
+    // Toyyibpay Code: 1 = Berjaya
+    if (status_id === "1") {
+        document.getElementById('statusTajuk').innerText = "Pembayaran Berjaya!";
+        
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const currentUser = user;
+                const userId = currentUser.uid;
+                const docType = "corporate"; // Default, atau tangkap dari parameter jika ada
+                const txnDate = new Date(); 
+                
+                try {
+                    // Tarik Tetapan Harga & Nama Syarikat Amanah dari Admin Setting
+                    let saleAmount = 100;
+                    let namaAmanahServer = "Syarikat Amanah";
+                    const settingsSnap = await getDoc(doc(db, "settings", "compensation"));
+                    if (settingsSnap.exists()) {
+                        const sData = settingsSnap.data();
+                        if (sData.cajRTB) saleAmount = parseFloat(sData.cajRTB);
+                        if (sData.namaSyarikatAmanah) namaAmanahServer = sData.namaSyarikatAmanah;
+                    }
+
+                    // Tarik Data Borang Klien
+                    const formRef = doc(db, "users", userId, docType, "maklumat");
+                    const formSnap = await getDoc(formRef);
+                    let corporateFormData = {};
+
+                    if (formSnap.exists()) {
+                        corporateFormData = formSnap.data();
+                        
+                        // Elak rekod dua kali
+                        if (corporateFormData.status === "PAID") {
+                            window.location.href = "corporate-page.html";
+                            return;
+                        }
+
+                        const refNo = corporateFormData.docRef || "CORP-" + Date.now().toString().slice(-6);
+
+                        // 1. UPDATE STATUS DI USERS
+                        await updateDoc(formRef, {
+                            status: "PAID",
+                            jumlahBayaran: saleAmount,
+                            tarikhBayaran: txnDate.toISOString()
+                        });
+
+                        // 2. DOUBLE ENTRY KE SUBMISSIONS (UNTUK ADMIN)
+                        const submissionRef = doc(db, "submissions", `${userId}_${docType}`);
+                        await setDoc(submissionRef, {
+                            ...corporateFormData,
+                            status: "PAID",
+                            jumlahBayaran: saleAmount,
+                            userId: userId,
+                            jenisDokumen: docType,
+                            tarikhBayaran: txnDate.toISOString()
+                        }, { merge: true });
+
+                        // 3. REKOD JURNAL PERAKAUNAN
+                        // Debit 1000 Bank
+                        await addDoc(collection(db, "ledger"), {
+                            date: txnDate,
+                            accountCode: "1000",
+                            account: "Bank",
+                            category: "asset",
+                            description: `Caj Pelantikan ${namaAmanahServer} - ${corporateFormData.nama}`,
+                            debit: saleAmount,
+                            credit: 0,
+                            paymentType: "ToyyibPay",
+                            transactionGroup: refNo
+                        });
+
+                        // Kredit 4140 Profesional Fee
+                        await addDoc(collection(db, "ledger"), {
+                            date: txnDate,
+                            accountCode: "4140",
+                            account: "Profesional Fee",
+                            category: "income",
+                            description: `Caj Pelantikan ${namaAmanahServer} - ${corporateFormData.nama}`,
+                            debit: 0,
+                            credit: saleAmount,
+                            paymentType: "ToyyibPay",
+                            transactionGroup: refNo
+                        });
+
+                        // 4. CIPTA RESIT PEMBAYARAN TOYYIBPAY
+                        await addDoc(collection(db, "receipts"), {
+                            receiptNo: "MCO-" + Date.now(), // Guna prefix MCO untuk Mawaris Korporat
+                            uid: userId,
+                            payerName: corporateFormData.nama,
+                            serviceCode: "TRUSTEE_FEE",
+                            serviceName: `Caj Pelantikan ${namaAmanahServer}`,
+                            amount: saleAmount,
+                            paymentMethod: "ToyyibPay",
+                            status: "PAID",
+                            paymentDate: txnDate
+                        });
+                        
+                        document.getElementById('statusMesej').innerText = "Selesai! Anda akan dibawa ke dashboard.";
+                        setTimeout(() => { window.location.href = "corporate-page.html"; }, 2000);
+
+                    } else {
+                        throw new Error("Data pelanggan tidak dijumpai di pangkalan data.");
+                    }
+
+                } catch (error) {
+                    console.error("Ralat merekod data korporat:", error);
+                    document.getElementById('statusMesej').innerText = "Ralat merekod data. Sila hubungi admin.";
+                    document.getElementById('statusMesej').classList.add("text-red-600");
+                }
+            }
+        });
+
+    } else {
+        document.getElementById('statusTajuk').innerText = "Pembayaran Gagal/Batal";
+        document.getElementById('statusMesej').innerText = "Sila cuba sebentar lagi.";
+        document.getElementById('statusTajuk').classList.add("text-red-600");
+        
+        setTimeout(() => { window.location.href = "corporate-page.html"; }, 3000);
+    }
+</script>
+</body>
+</html>
