@@ -809,7 +809,7 @@
       }
     });
 
-    // SIMPAN DRAF ACTION
+// SIMPAN DRAF ACTION
     document.getElementById("wasiatForm").addEventListener("submit", async(e)=>{
         e.preventDefault();
         
@@ -817,8 +817,8 @@
         submitBtn.disabled = true;
         submitBtn.innerText = "Menyimpan Maklumat...";
 
-        try{
-            // Kutip Wasiat 1/3
+        try {
+            // 1. Kutip Wasiat 1/3
             const wasiatSatuPerTiga = [];
             document.querySelectorAll(".hartaWasiat").forEach((item,index)=>{
                 wasiatSatuPerTiga.push({
@@ -829,7 +829,7 @@
                 });
             });
 
-            // Kutip Waris
+            // 2. Kutip Waris
             const warisList = [];
             document.querySelectorAll(".nacorporate").forEach((item,index)=>{
                 warisList.push({
@@ -843,7 +843,7 @@
                 });
             });          
 
-            // KUTIP SENARAI SYARIKAT (ARRAY)
+            // 3. KUTIP SENARAI SYARIKAT (ARRAY)
             const senaraiSyarikat = [];
             document.querySelectorAll(".syarikat-item").forEach(block => {
                 const rakanKongsiList = [];
@@ -863,10 +863,6 @@
                         peratus: row.querySelector(".peratusHibahSaham").value
                     });
                 });
-
-                // (Dalam gelung block.querySelectorAll(".syarikat-item").forEach...)
-                
-                // ... (Kutipan rakan kongsi & hibah) ...
                 
                 const penerimaWakafZurri = [];
                 block.querySelectorAll(".penerimaWakafZurriRow").forEach(row => {
@@ -882,7 +878,6 @@
                 });
 
                 senaraiSyarikat.push({
-                    // --- DATA ASAL SYARIKAT ---
                     namaSyarikat: block.querySelector(".namaSyarikat").value,
                     noSsm: block.querySelector(".noSsm").value,
                     alamatSyarikat: block.querySelector(".alamatSyarikat").value,
@@ -894,8 +889,6 @@
                     rakanKongsiList: rakanKongsiList,
                     penerimaHibahSaham: penerimaHibahSaham,
                     penerimaWakafZurri: penerimaWakafZurri,
-                    
-                    // --- DATA BARU WAKAF ZURRI ---
                     jenisWakafZurri: block.querySelector(".jenisWakafZurri")?.value || "",
                     jenisHartaWakafZurri: block.querySelector(".jenisHartaWakafZurri")?.value || "",
                     nazir: {
@@ -904,9 +897,12 @@
                         alamat: block.querySelector(".alamatNazir")?.value || ""
                     }
                 });
+            }); // <-- Tutup forEach syarikat-item
 
+            // 4. Kutip Maklumat Wasi
             const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
             let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
+            
             if (pilihanWasi1Val === "rtb") {
                 finalNamaWasi1 = syarikatAmanahDetails.nama;
                 finalIcWasi1 = syarikatAmanahDetails.noPendaftaran;
@@ -927,6 +923,7 @@
             const bandar = document.getElementById("bandar").value.trim();
             const negeri = document.getElementById("negeri").value.trim();
           
+            // 5. Hantar ke Firestore
             await setDoc(doc(db, "users", currentUser.uid, "corporate", "maklumat"), {
                 nama: document.getElementById("nama").value,
                 ic: document.getElementById("ic").value,
@@ -934,7 +931,7 @@
                 alamat: [alamat1, alamat2, `${poskod} ${bandar}`.trim(), negeri].filter(Boolean).join(", "),
                 telefon: document.getElementById("telefon").value,
                 
-                senaraiSyarikat: senaraiSyarikat, // SIMPAN SEBAGAI ARRAY
+                senaraiSyarikat: senaraiSyarikat, // Array Data Syarikat
                 
                 pilihanWasi1: pilihanWasi1Val,
                 namaWasi1: finalNamaWasi1,
@@ -942,6 +939,7 @@
                 hubunganWasi1: finalHubunganWasi1,
                 alamatWasi1: finalAlamatWasi1,
                 telefonWasi1: finalTelefonWasi1,
+                
                 namaWasi2: document.getElementById("namaWasi2").value,
                 icWasi2: document.getElementById("icWasi2").value,
                 hubunganWasi2: document.getElementById("hubunganWasi2").value,
@@ -971,8 +969,7 @@
             
             setTimeout(() => { document.getElementById("status").innerHTML = ""; }, 3000);
 
-        }
-        catch(error){
+        } catch(error) {
             console.error("Ralat Submit:", error);
             alert("Ralat semasa menyimpan: " + error.message);
             submitBtn.innerText = "Simpan Draf";
