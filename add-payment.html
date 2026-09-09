@@ -179,82 +179,47 @@ cancelTncBtn.addEventListener("click", () => {
     tncModal.classList.remove("flex");
 });
 
-// LOGIK PEMBAYARAN & REKOD JURNAL PERAKAUNAN
+// LOGIK HANTAR DATA KE TOYYIBPAY
 agreeBtn.addEventListener("click", async () => {
     agreeBtn.disabled = true;
-    agreeBtn.innerHTML = "Memproses...";
+    agreeBtn.innerHTML = "Menjana Invois ToyyibPay...";
     cancelTncBtn.disabled = true;
 
     try {
-        const txnDate = new Date();
-        const refNo = corporateFormData.docRef || "CORP-" + Date.now().toString().slice(-6);
-
-        // 1. UPDATE STATUS DI USERS
+        // 1. Semak status supaya tak bayar dua kali
         const userDocRef = doc(db, "users", userId, docType, "maklumat");
-        await updateDoc(userDocRef, {
-            status: "PAID",
-            jumlahBayaran: saleAmount,
-            tarikhBayaran: txnDate.toISOString()
-        });
+        const userSnap = await getDoc(userDocRef);
+        
+        if (userSnap.exists() && userSnap.data().status === "PAID") {
+            alert("Pembayaran telah direkodkan sebelum ini.");
+            window.location.href = "corporate-page.html";
+            return;
+        }
 
-        // 2. DOUBLE ENTRY KE SUBMISSIONS (UNTUK ADMIN)
-        const submissionRef = doc(db, "submissions", `${userId}_${docType}`);
-        await setDoc(submissionRef, {
-            ...corporateFormData,
-            status: "PAID",
-            jumlahBayaran: saleAmount,
-            userId: userId,
-            jenisDokumen: docType,
-            tarikhBayaran: txnDate.toISOString()
-        }, { merge: true });
+        // 2. Susun data untuk dihantar ke backend ToyyibPay
+        const dataPelanggan = {
+            nama: corporateFormData.nama || "Pelanggan Korporat", 
+            email: corporateFormData.email || "tiada@email.com",
+            telefon: corporateFormData.telefon || "0100000000", 
+            pakej: "Mawaris Korporat",
+            harga: saleAmount, 
+            uid: userId
+        };
 
-        // 3. REKOD JURNAL PERAKAUNAN (DEBIT 1000 BANK, CREDIT 4140 PROFESIONAL FEE)
-        await addDoc(collection(db, "ledger"), {
-            date: txnDate,
-            accountCode: "1000",
-            account: "Bank",
-            category: "asset",
-            description: `Caj Pelantikan ${namaAmanahServer} - ${corporateFormData.nama}`,
-            debit: saleAmount,
-            credit: 0,
-            paymentType: "ToyyibPay",
-            transactionGroup: refNo
-        });
-
-        await addDoc(collection(db, "ledger"), {
-            date: txnDate,
-            accountCode: "4140",
-            account: "Profesional Fee",
-            category: "income",
-            description: `Caj Pelantikan ${namaAmanahServer} - ${corporateFormData.nama}`,
-            debit: 0,
-            credit: saleAmount,
-            paymentType: "ToyyibPay",
-            transactionGroup: refNo
-        });
-
-        // 4. CIPTA RESIT PEMBAYARAN TOYYIBPAY
-        await addDoc(collection(db, "receipts"), {
-            receiptNo: "REC-" + Date.now(),
-            uid: userId,
-            payerName: corporateFormData.nama,
-            serviceCode: "TRUSTEE_FEE",
-            serviceName: `Caj Pelantikan ${namaAmanahServer}`,
-            amount: saleAmount,
-            paymentMethod: "ToyyibPay",
-            status: "PAID",
-            paymentDate: txnDate
-        });
-
-        alert(`Pembayaran Caj ${namaAmanahServer} berjaya direkodkan!`);
-        window.location.href = "corporate-page.html";
+        // 3. Panggil fungsi Cloud Function
+        const functions = getFunctions(auth.app);
+        const createToyyibpayBill = httpsCallable(functions, 'createToyyibpayBill');
+        const result = await createToyyibpayBill(dataPelanggan);
+                
+        // 4. Bawa pelanggan ke ToyyibPay
+        window.location.href = result.data.paymentUrl;
 
     } catch (error) {
         agreeBtn.disabled = false;
         agreeBtn.innerHTML = "Saya Faham & Bersetuju dengan Akad";
         cancelTncBtn.disabled = false;
         console.error(error);
-        alert("Ralat semasa pembayaran: " + error.message);
+        alert("Sistem sedang sibuk. Sila cuba sebentar lagi.");
     }
 });
 </script>
