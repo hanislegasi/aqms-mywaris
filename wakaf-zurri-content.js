@@ -391,7 +391,7 @@ function generateWakafZurri(data = {}) {
     .replace(/{{NO_SSM}}/g, data.noSsm || '________________')
     .replace(/{{NEGERI_MAIN}}/g, data.negeriMAIN || '________________')
     .replace(/{{NAMA_NAZIR}}/g, data.nazir?.nama || '________________')
-    .replace(/{{NO_IC_NAZIR}}/g, data.nazir?.noIc || '________________')
+    .replace(/{{NO_IC_NAZIR}}/g, data.nazir?.ic || '________________')
     .replace(/{{ALAMAT_NAZIR}}/g, data.nazir?.alamat || '________________');
 
   return output;
