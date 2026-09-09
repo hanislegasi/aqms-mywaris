@@ -112,6 +112,8 @@ const params = new URLSearchParams(window.location.search);
 let userId = params.get("id");
 const docType = params.get("type") || "corporate";
 
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+    
 let currentUser = null;
 let saleAmount = 100; // Harga Lalai
 let namaAmanahServer = "Syarikat Amanah"; // Nama Lalai
