@@ -91,8 +91,6 @@ SURAT IKATAN WAKAF ZURRI
 </div>
 
 
-// --- (Sambung terus dengan sisa kod template awak di bawah ini) ---
-
 <p>
 Dengan ini saya, <strong>{{NAMA_WAQIF}}</strong> (No. K/P: <strong>{{NO_IC_WAQIF}}</strong>), beralamat di <strong>{{ALAMAT_WAQIF}}</strong>, selepas ini dirujuk sebagai "Waqif", dengan penuh kerelaan, akal yang waras dan tanpa sebarang paksaan, mengikrarkan wakaf ini (<em>sighah</em>) ke atas harta yang dinyatakan di bawah, bagi manfaat zurriah (keturunan) saya, semata-mata kerana Allah S.W.T.
 </p>
@@ -105,14 +103,14 @@ Dengan ini saya, <strong>{{NAMA_WAQIF}}</strong> (No. K/P: <strong>{{NO_IC_WAQIF
 
 {{FASAL_JENIS_HARTA}}
 
-<h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 2: SIFAT DAN KUAT KUASA WAKAF</h3>
-
-{{FASAL_JENIS_WAKAF}}
-
 <div class="pdf-footer"><span class="footer-docref"></span><span class="page-number"></span></div>
 </div>
 
 <div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
+
+<h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 2: SIFAT DAN KUAT KUASA WAKAF</h3>
+
+{{FASAL_JENIS_WAKAF}}
 
 <h3 style="margin-top:20px; margin-bottom:12px; font-weight:bold;">FASAL 3: CADANGAN NAZIR (PENGURUS HARIAN MAWQUF)</h3>
 <table width="100%" style="border-collapse:collapse;">
