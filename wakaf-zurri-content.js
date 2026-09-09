@@ -28,48 +28,47 @@
 //      (papar terus dalam borang/app anda — bukan sebahagian dokumen sah)
 // ----------------------------------------------------------------------------
 const wakafZurriOptionsMeta = {
-  
-   jenisWakaf: [
-    {
-      value: 'munjiz',
-      label: 'Wakaf Serta-Merta (Munjiz)',
-      penerangan:
-        'Wakaf berkuat kuasa sebaik sahaja dokumen ini ditandatangani, semasa anda masih hidup. ' +
-        'Harta terus keluar daripada milik peribadi anda dari tarikh itu. TIDAK tertakluk had 1/3 pusaka ' +
-        '(sebab bukan wasiat) dan TIDAK boleh ditarik balik. Sesuai jika anda mahu kepastian penuh ' +
-        'sekarang dan tidak perlukan persetujuan waris kelak.',
-    },
-    {
-      value: 'muallaq',
-      label: 'Wakaf Selepas Kematian (Mu\u2019allaq)',
-      penerangan:
-        'Wakaf hanya berkuat kuasa selepas anda meninggal dunia. Dari segi hukum ia dianggap sebagai ' +
-        'wasiat, maka TERTAKLUK had satu pertiga (1/3) nilai bersih pusaka anda dan memerlukan ' +
-        'persetujuan waris-waris yang sah jika penerima manfaat turut layak menerima Faraid. Sesuai jika ' +
-        'anda mahu terus mengawal/menikmati harta tersebut semasa hayat.',
-    },
-  ],
-  jenisHartaWakaf: [
-    {
-      value: 'ain',
-      label: 'Wakaf Saham Penuh (\u2018Ain)',
-      penerangan:
-        'Saham syarikat itu sendiri menjadi harta wakaf dan dibekukan selama-lamanya — tidak boleh dijual, ' +
-        'digadai atau dilupuskan (melainkan proses istibdal diluluskan MAIN). Majlis Agama Islam Negeri ' +
-        'menjadi pemegang amanah rasmi ke atas saham tersebut. PERHATIAN: jika syarikat anda turut ada ' +
-        'Perjanjian Beli-Jual Saham (Buy-Sell Agreement) ke atas saham yang SAMA, pilihan ini akan ' +
-        'bercanggah dengan kewajipan jual-beli dalam perjanjian tersebut.',
-    },
-    {
-      value: 'manfaah',
-      label: 'Wakaf Hasil/Dividen Sahaja (Manfaah)',
-      penerangan:
-        'Saham syarikat KEKAL boleh diurus, dipindah milik atau dijual seperti biasa (termasuk di bawah ' +
-        'Perjanjian Beli-Jual Saham jika ada). Hanya hasil/dividen yang terjana daripada saham tersebut ' +
-        'disalurkan kepada zurriah anda selama-lamanya sebagai wakaf. Pilihan ini serasi sepenuhnya dengan ' +
-        'Buy-Sell Agreement dan disyorkan bagi syarikat yang mempunyai lebih daripada seorang pemegang saham.',
-    },
-  ],
+    jenisWakaf: [
+        {
+            value: 'munjiz',
+            label: 'Wakaf Serta-Merta (Munjiz)',
+            penerangan:
+                'Wakaf berkuat kuasa sebaik sahaja dokumen ini ditandatangani, semasa anda masih hidup. ' +
+                'Harta terus keluar daripada milik peribadi anda dari tarikh itu. TIDAK tertakluk had 1/3 pusaka ' +
+                '(sebab bukan wasiat) dan TIDAK boleh ditarik balik. Sesuai jika anda mahu kepastian penuh ' +
+                'sekarang dan tidak perlukan persetujuan waris kelak.',
+        },
+        {
+            value: 'muallaq',
+            label: 'Wakaf Selepas Kematian (Mu\u2019allaq)',
+            penerangan:
+                'Wakaf hanya berkuat kuasa selepas anda meninggal dunia. Dari segi hukum ia dianggap sebagai ' +
+                'wasiat, maka TERTAKLUK had satu pertiga (1/3) nilai bersih pusaka anda dan memerlukan ' +
+                'persetujuan waris-waris yang sah jika penerima manfaat turut layak menerima Faraid. Sesuai jika ' +
+                'anda mahu terus mengawal/menikmati harta tersebut semasa hayat.',
+        },
+    ],
+    jenisHartaWakaf: [
+        {
+            value: 'ain',
+            label: 'Wakaf Saham Penuh (\u2018Ain)',
+            penerangan:
+                'Saham syarikat itu sendiri menjadi harta wakaf dan dibekukan selama-lamanya — tidak boleh dijual, ' +
+                'digadai atau dilupuskan (melainkan proses istibdal diluluskan MAIN). Majlis Agama Islam Negeri ' +
+                'menjadi pemegang amanah rasmi ke atas saham tersebut. PERHATIAN: jika syarikat anda turut ada ' +
+                'Perjanjian Beli-Jual Saham (Buy-Sell Agreement) ke atas saham yang SAMA, pilihan ini akan ' +
+                'bercanggah dengan kewajipan jual-beli dalam perjanjian tersebut.',
+        },
+        {
+            value: 'manfaah',
+            label: 'Wakaf Hasil/Dividen Sahaja (Manfaah)',
+            penerangan:
+                'Saham syarikat KEKAL boleh diurus, dipindah milik atau dijual seperti biasa (termasuk di bawah ' +
+                'Perjanjian Beli-Jual Saham jika ada). Hanya hasil/dividen yang terjana daripada saham tersebut ' +
+                'disalurkan kepada zurriah anda selama-lamanya sebagai wakaf. Pilihan ini serasi sepenuhnya dengan ' +
+                'Buy-Sell Agreement dan disyorkan bagi syarikat yang mempunyai lebih daripada seorang pemegang saham.',
+        },
+    ],
 };
 
 // ----------------------------------------------------------------------------
@@ -90,6 +89,9 @@ SURAT IKATAN WAKAF ZURRI
 <div style="text-align:center; font-size:26px; margin-bottom:20px; font-family:'Amiri', serif;">
 بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
 </div>
+`;
+
+// --- (Sambung terus dengan sisa kod template awak di bawah ini) ---
 
 <p>
 Dengan ini saya, <strong>{{NAMA_WAQIF}}</strong> (No. K/P: <strong>{{NO_IC_WAQIF}}</strong>), beralamat di <strong>{{ALAMAT_WAQIF}}</strong>, selepas ini dirujuk sebagai "Waqif", dengan penuh kerelaan, akal yang waras dan tanpa sebarang paksaan, mengikrarkan wakaf ini (<em>sighah</em>) ke atas harta yang dinyatakan di bawah, bagi manfaat zurriah (keturunan) saya, semata-mata kerana Allah S.W.T.
