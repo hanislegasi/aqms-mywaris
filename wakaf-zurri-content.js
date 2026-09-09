@@ -4,28 +4,76 @@
    Dokumen ini SENGAJA dipisahkan daripada Wasiat Korporat & Buy-Sell
    Agreement sebab sifat wakaf berbeza dari segi hukum (ta'bid — kekal
    selama-lamanya, tak boleh ditarik balik/dijual seperti wasiat/buy-sell).
-
+ 
    Customer PILIH SATU sahaja bagi setiap soalan berikut (bukan gabungan):
-
+ 
    A) JENIS KUAT KUASA (data.jenisWakaf)
       - "munjiz"  → berkuat kuasa serta-merta semasa hayat, TIDAK tertakluk
                      had 1/3, TIDAK boleh ditarik balik.
       - "muallaq" → berkuat kuasa selepas kematian, dianggap wasiat dari segi
                      hukum, MAKA tertakluk had 1/3 & persetujuan waris.
-
+ 
    B) JENIS HARTA WAKAF (data.jenisHartaWakaf)
       - "ain"     → saham itu sendiri diwakafkan (beku selama-lamanya, MAIN
                      jadi pemegang amanah rasmi saham).
       - "manfaah" → hanya hasil/dividen saham diwakafkan; saham itu sendiri
                      kekal boleh diurus/dijual seperti biasa (contoh: masih
                      boleh gunakan Buy-Sell Agreement di atas saham yang sama).
-
+ 
    Penamaan Nazir (Fasal 3) dipaparkan SENTIASA — tidak bergantung kepada A/B.
    ============================================================================ */
-
+ 
 // ----------------------------------------------------------------------------
 // 4.1) Metadata penerangan untuk paparan UI semasa customer membuat pilihan
 //      (papar terus dalam borang/app anda — bukan sebahagian dokumen sah)
+// ----------------------------------------------------------------------------
+const wakafZurriOptionsMeta = {
+  jenisWakaf: [
+    {
+      value: 'munjiz',
+      label: 'Wakaf Serta-Merta (Munjiz)',
+      penerangan:
+        'Wakaf berkuat kuasa sebaik sahaja dokumen ini ditandatangani, semasa anda masih hidup. ' +
+        'Harta terus keluar daripada milik peribadi anda dari tarikh itu. TIDAK tertakluk had 1/3 pusaka ' +
+        '(sebab bukan wasiat) dan TIDAK boleh ditarik balik. Sesuai jika anda mahu kepastian penuh ' +
+        'sekarang dan tidak perlukan persetujuan waris kelak.',
+    },
+    {
+      value: 'muallaq',
+      label: 'Wakaf Selepas Kematian (Mu\u2019allaq)',
+      penerangan:
+        'Wakaf hanya berkuat kuasa selepas anda meninggal dunia. Dari segi hukum ia dianggap sebagai ' +
+        'wasiat, maka TERTAKLUK had satu pertiga (1/3) nilai bersih pusaka anda dan memerlukan ' +
+        'persetujuan waris-waris yang sah jika penerima manfaat turut layak menerima Faraid. Sesuai jika ' +
+        'anda mahu terus mengawal/menikmati harta tersebut semasa hayat.',
+    },
+  ],
+  jenisHartaWakaf: [
+    {
+      value: 'ain',
+      label: 'Wakaf Saham Penuh (\u2018Ain)',
+      penerangan:
+        'Saham syarikat itu sendiri menjadi harta wakaf dan dibekukan selama-lamanya — tidak boleh dijual, ' +
+        'digadai atau dilupuskan (melainkan proses istibdal diluluskan MAIN). Majlis Agama Islam Negeri ' +
+        'menjadi pemegang amanah rasmi ke atas saham tersebut. PERHATIAN: jika syarikat anda turut ada ' +
+        'Perjanjian Beli-Jual Saham (Buy-Sell Agreement) ke atas saham yang SAMA, pilihan ini akan ' +
+        'bercanggah dengan kewajipan jual-beli dalam perjanjian tersebut.',
+    },
+    {
+      value: 'manfaah',
+      label: 'Wakaf Hasil/Dividen Sahaja (Manfaah)',
+      penerangan:
+        'Saham syarikat KEKAL boleh diurus, dipindah milik atau dijual seperti biasa (termasuk di bawah ' +
+        'Perjanjian Beli-Jual Saham jika ada). Hanya hasil/dividen yang terjana daripada saham tersebut ' +
+        'disalurkan kepada zurriah anda selama-lamanya sebagai wakaf. Pilihan ini serasi sepenuhnya dengan ' +
+        'Buy-Sell Agreement dan disyorkan bagi syarikat yang mempunyai lebih daripada seorang pemegang saham.',
+    },
+  ],
+};
+ 
+// ----------------------------------------------------------------------------
+// 4.2) Templat induk — placeholder {{FASAL_JENIS_WAKAF}} & {{FASAL_JENIS_HARTA}}
+//      diisi secara bersyarat oleh generateWakafZurri() mengikut pilihan customer
 // ----------------------------------------------------------------------------
 const wakafZurriOptionsMeta = {
     jenisWakaf: [
