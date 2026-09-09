@@ -425,7 +425,20 @@ function semakKeserasianWakafBuySell(profil = {}) {
   return { ok: true, mesej: null };
 }
 
-module.exports.wakafZurriContent = wakafZurriContent;
-module.exports.wakafZurriOptionsMeta = wakafZurriOptionsMeta;
-module.exports.generateWakafZurri = generateWakafZurri;
-module.exports.semakKeserasianWakafBuySell = semakKeserasianWakafBuySell;
+// EXPORT UNTUK KEGUNAAN BROWSER FRONTEND
+if (typeof window !== 'undefined') {
+    window.wakafZurriContent = wakafZurriContent;
+    window.wakafZurriOptionsMeta = wakafZurriOptionsMeta;
+    window.generateWakafZurri = generateWakafZurri;
+    window.semakKeserasianWakafBuySell = semakKeserasianWakafBuySell;
+}
+
+// EXPORT UNTUK KEGUNAAN NODE.JS BACKEND (Sekiranya diperlukan kelak)
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        wakafZurriContent,
+        wakafZurriOptionsMeta,
+        generateWakafZurri,
+        semakKeserasianWakafBuySell
+    };
+}
