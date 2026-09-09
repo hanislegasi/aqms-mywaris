@@ -29,49 +29,6 @@
 // ----------------------------------------------------------------------------
 const wakafZurriOptionsMeta = {
   
-<div class="a4-page p-[18mm]">
- 
-<h2
-style="
-font-family:'Times New Roman', serif;
-font-size:30px;
-font-weight:700;
-margin-top:0;
-margin-bottom:20px;
-color:#153638;
-text-align:center;
-letter-spacing:1px;
-">
-DOKUMEN WAKAF ZURRI
-</h2>
- 
-<div
-style="
-text-align:center;
-font-size:30px;
-margin-bottom:10px;
-font-family:'Amiri', serif;
-">
-بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
-</div>
- 
-<div
-style="
-font-family:'Times New Roman', serif;
-font-size:15px;
-line-height:1.6;
-text-align:justify;
-color:#222;
-">
- 
-<p style="text-align:center; margin-bottom:20px;">
-<strong>Dengan Nama Allah yang Maha Pemurah Lagi Mengasihani</strong>
-</p>
- 
-<p>
-Segala puji bagi Allah S.W.T yang kekal selamanya. Tiada tuhan melainkan Allah S.W.T, Nabi Muhammad S.A.W itu adalah pesuruh Allah. Kematian adalah benar, kebangkitan semula adalah benar, semua yang disampaikan oleh Rasulullah S.A.W (semoga kesejahteraan dan rahmat Allah S.W.T dilimpahkan terhadapnya, keluarganya, para sahabat dan pengikut-pengikut) adalah benar, tiada keraguan bahawa Hari Penghakiman akan tiba dan Allah S.W.T, akan membangkitkan semua yang di dalam kubur.
-</p>
-
    jenisWakaf: [
     {
       value: 'munjiz',
