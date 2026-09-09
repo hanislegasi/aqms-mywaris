@@ -4,79 +4,59 @@
    Dokumen ini SENGAJA dipisahkan daripada Wasiat Korporat & Buy-Sell
    Agreement sebab sifat wakaf berbeza dari segi hukum (ta'bid — kekal
    selama-lamanya, tak boleh ditarik balik/dijual seperti wasiat/buy-sell).
- 
-   Customer PILIH SATU sahaja bagi setiap soalan berikut (bukan gabungan):
- 
-   A) JENIS KUAT KUASA (data.jenisWakaf)
-      - "munjiz"  → berkuat kuasa serta-merta semasa hayat, TIDAK tertakluk
-                     had 1/3, TIDAK boleh ditarik balik.
-      - "muallaq" → berkuat kuasa selepas kematian, dianggap wasiat dari segi
-                     hukum, MAKA tertakluk had 1/3 & persetujuan waris.
- 
-   B) JENIS HARTA WAKAF (data.jenisHartaWakaf)
-      - "ain"     → saham itu sendiri diwakafkan (beku selama-lamanya, MAIN
-                     jadi pemegang amanah rasmi saham).
-      - "manfaah" → hanya hasil/dividen saham diwakafkan; saham itu sendiri
-                     kekal boleh diurus/dijual seperti biasa (contoh: masih
-                     boleh gunakan Buy-Sell Agreement di atas saham yang sama).
- 
-   Penamaan Nazir (Fasal 3) dipaparkan SENTIASA — tidak bergantung kepada A/B.
    ============================================================================ */
- 
+
 // ----------------------------------------------------------------------------
 // 4.1) Metadata penerangan untuk paparan UI semasa customer membuat pilihan
-//      (papar terus dalam borang/app anda — bukan sebahagian dokumen sah)
 // ----------------------------------------------------------------------------
 const wakafZurriOptionsMeta = {
-  jenisWakaf: [
-    {
-      value: 'munjiz',
-      label: 'Wakaf Serta-Merta (Munjiz)',
-      penerangan:
-        'Wakaf berkuat kuasa sebaik sahaja dokumen ini ditandatangani, semasa anda masih hidup. ' +
-        'Harta terus keluar daripada milik peribadi anda dari tarikh itu. TIDAK tertakluk had 1/3 pusaka ' +
-        '(sebab bukan wasiat) dan TIDAK boleh ditarik balik. Sesuai jika anda mahu kepastian penuh ' +
-        'sekarang dan tidak perlukan persetujuan waris kelak.',
-    },
-    {
-      value: 'muallaq',
-      label: 'Wakaf Selepas Kematian (Mu\u2019allaq)',
-      penerangan:
-        'Wakaf hanya berkuat kuasa selepas anda meninggal dunia. Dari segi hukum ia dianggap sebagai ' +
-        'wasiat, maka TERTAKLUK had satu pertiga (1/3) nilai bersih pusaka anda dan memerlukan ' +
-        'persetujuan waris-waris yang sah jika penerima manfaat turut layak menerima Faraid. Sesuai jika ' +
-        'anda mahu terus mengawal/menikmati harta tersebut semasa hayat.',
-    },
-  ],
-  jenisHartaWakaf: [
-    {
-      value: 'ain',
-      label: 'Wakaf Saham Penuh (\u2018Ain)',
-      penerangan:
-        'Saham syarikat itu sendiri menjadi harta wakaf dan dibekukan selama-lamanya — tidak boleh dijual, ' +
-        'digadai atau dilupuskan (melainkan proses istibdal diluluskan MAIN). Majlis Agama Islam Negeri ' +
-        'menjadi pemegang amanah rasmi ke atas saham tersebut. PERHATIAN: jika syarikat anda turut ada ' +
-        'Perjanjian Beli-Jual Saham (Buy-Sell Agreement) ke atas saham yang SAMA, pilihan ini akan ' +
-        'bercanggah dengan kewajipan jual-beli dalam perjanjian tersebut.',
-    },
-    {
-      value: 'manfaah',
-      label: 'Wakaf Hasil/Dividen Sahaja (Manfaah)',
-      penerangan:
-        'Saham syarikat KEKAL boleh diurus, dipindah milik atau dijual seperti biasa (termasuk di bawah ' +
-        'Perjanjian Beli-Jual Saham jika ada). Hanya hasil/dividen yang terjana daripada saham tersebut ' +
-        'disalurkan kepada zurriah anda selama-lamanya sebagai wakaf. Pilihan ini serasi sepenuhnya dengan ' +
-        'Buy-Sell Agreement dan disyorkan bagi syarikat yang mempunyai lebih daripada seorang pemegang saham.',
-    },
-  ],
+    jenisWakaf: [
+        {
+            value: 'munjiz',
+            label: 'Wakaf Serta-Merta (Munjiz)',
+            penerangan:
+                'Wakaf berkuat kuasa sebaik sahaja dokumen ini ditandatangani, semasa anda masih hidup. ' +
+                'Harta terus keluar daripada milik peribadi anda dari tarikh itu. TIDAK tertakluk had 1/3 pusaka ' +
+                '(sebab bukan wasiat) dan TIDAK boleh ditarik balik. Sesuai jika anda mahu kepastian penuh ' +
+                'sekarang dan tidak perlukan persetujuan waris kelak.',
+        },
+        {
+            value: 'muallaq',
+            label: 'Wakaf Selepas Kematian (Mu\u2019allaq)',
+            penerangan:
+                'Wakaf hanya berkuat kuasa selepas anda meninggal dunia. Dari segi hukum ia dianggap sebagai ' +
+                'wasiat, maka TERTAKLUK had satu pertiga (1/3) nilai bersih pusaka anda dan memerlukan ' +
+                'persetujuan waris-waris yang sah jika penerima manfaat turut layak menerima Faraid. Sesuai jika ' +
+                'anda mahu terus mengawal/menikmati harta tersebut semasa hayat.',
+        },
+    ],
+    jenisHartaWakaf: [
+        {
+            value: 'ain',
+            label: 'Wakaf Saham Penuh (\u2018Ain)',
+            penerangan:
+                'Saham syarikat itu sendiri menjadi harta wakaf dan dibekukan selama-lamanya — tidak boleh dijual, ' +
+                'digadai atau dilupuskan (melainkan proses istibdal diluluskan MAIN). Majlis Agama Islam Negeri ' +
+                'menjadi pemegang amanah rasmi ke atas saham tersebut. PERHATIAN: jika syarikat anda turut ada ' +
+                'Perjanjian Beli-Jual Saham (Buy-Sell Agreement) ke atas saham yang SAMA, pilihan ini akan ' +
+                'bercanggah dengan kewajipan jual-beli dalam perjanjian tersebut.',
+        },
+        {
+            value: 'manfaah',
+            label: 'Wakaf Hasil/Dividen Sahaja (Manfaah)',
+            penerangan:
+                'Saham syarikat KEKAL boleh diurus, dipindah milik atau dijual seperti biasa (termasuk di bawah ' +
+                'Perjanjian Beli-Jual Saham jika ada). Hanya hasil/dividen yang terjana daripada saham tersebut ' +
+                'disalurkan kepada zurriah anda selama-lamanya sebagai wakaf. Pilihan ini serasi sepenuhnya dengan ' +
+                'Buy-Sell Agreement dan disyorkan bagi syarikat yang mempunyai lebih daripada seorang pemegang saham.',
+        },
+    ]
 };
- 
+
 // ----------------------------------------------------------------------------
-// 4.2) Templat induk — placeholder {{FASAL_JENIS_WAKAF}} & {{FASAL_JENIS_HARTA}}
-//      diisi secara bersyarat oleh generateWakafZurri() mengikut pilihan customer
+// 4.2) Templat induk — placeholder
 // ----------------------------------------------------------------------------
 const wakafZurriContent = `
-
 <div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
 
 <h2 style="font-size:26px; font-weight:bold; text-align:center; margin-bottom:5px; color:#153638;">
@@ -90,27 +70,33 @@ SURAT IKATAN WAKAF ZURRI
 بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
 </div>
 
-
 <p>
 Dengan ini saya, <strong>{{NAMA_WAQIF}}</strong> (No. K/P: <strong>{{NO_IC_WAQIF}}</strong>), beralamat di <strong>{{ALAMAT_WAQIF}}</strong>, selepas ini dirujuk sebagai "Waqif", dengan penuh kerelaan, akal yang waras dan tanpa sebarang paksaan, mengikrarkan wakaf ini (<em>sighah</em>) ke atas harta yang dinyatakan di bawah, bagi manfaat zurriah (keturunan) saya, semata-mata kerana Allah S.W.T.
 </p>
 
 <h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 1: HARTA YANG DIWAKAFKAN (MAWQUF)</h3>
-<p style="margin-bottom:8px;">
-•&nbsp;&nbsp;Nama Syarikat: <strong>{{NAMA_SYARIKAT}}</strong><br>
-•&nbsp;&nbsp;No. Pendaftaran Syarikat (SSM): <strong>{{NO_SSM}}</strong>
-</p>
+
+<table width="100%" style="border-collapse:collapse; margin-bottom:12px;">
+<tr valign="top">
+<td width="30" style="text-align:center;">&bull;</td>
+<td style="padding-bottom:5px;">Nama Syarikat: <strong>{{NAMA_SYARIKAT}}</strong></td>
+</tr>
+<tr valign="top">
+<td width="30" style="text-align:center;">&bull;</td>
+<td style="padding-bottom:5px;">No. Pendaftaran Syarikat (SSM): <strong>{{NO_SSM}}</strong></td>
+</tr>
+</table>
 
 {{FASAL_JENIS_HARTA}}
+
+<h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 2: SIFAT DAN KUAT KUASA WAKAF</h3>
+
+{{FASAL_JENIS_WAKAF}}
 
 <div class="pdf-footer"><span class="footer-docref"></span><span class="page-number"></span></div>
 </div>
 
 <div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
-
-<h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 2: SIFAT DAN KUAT KUASA WAKAF</h3>
-
-{{FASAL_JENIS_WAKAF}}
 
 <h3 style="margin-top:20px; margin-bottom:12px; font-weight:bold;">FASAL 3: CADANGAN NAZIR (PENGURUS HARIAN MAWQUF)</h3>
 <table width="100%" style="border-collapse:collapse;">
@@ -123,7 +109,7 @@ Saya mencadangkan <strong>{{NAMA_NAZIR}}</strong> (No. K/P: <strong>{{NO_IC_NAZI
 <tr valign="top">
 <td width="30">3.2</td>
 <td style="padding-bottom:10px;">
-Pelantikan Nazir ini adalah <strong>cadangan sahaja</strong> dan tertakluk sepenuhnya kepada kelulusan bertulis Majlis Agama Islam Negeri <strong>{{NEGERI_MAIN}}</strong> ("Majlis") sebagai pemegang amanah tunggal yang sah di sisi undang-undang. Majlis berhak menolak, mengganti, atau melantik Nazir lain mengikut budi bicara dan enakmen yang terpakai.
+Pelantikan Nazir ini adalah <strong>cadangan sahaja</strong> dan tertakluk sepenuhnya kepada kelulusan bertulis <strong>{{NAMA_MAJLIS}}</strong> ("Majlis") sebagai pemegang amanah tunggal yang sah di sisi undang-undang. Majlis berhak menolak, mengganti, atau melantik Nazir lain mengikut budi bicara dan enakmen yang terpakai.
 </td>
 </tr>
 <tr valign="top">
@@ -140,15 +126,15 @@ Nazir hendaklah menyediakan penyata akaun tahunan berkaitan hasil/manfaat mawquf
 
 <h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 5: PERUNTUKAN SEKIRANYA ZURRIAH PUPUS</h3>
 <p style="margin-bottom:15px;">
-Sekiranya pada suatu masa zurriah yang dinamakan dan keturunan mereka pupus sepenuhnya (tiada lagi zuriat yang hidup), manfaat wakaf ini hendaklah beralih sepenuhnya kepada wakaf khairi (kebajikan am) di bawah pentadbiran Majlis Agama Islam Negeri {{NEGERI_MAIN}}, untuk disalurkan mengikut budi bicara Majlis bagi maslahah ummah.
+Sekiranya pada suatu masa zurriah yang dinamakan dan keturunan mereka pupus sepenuhnya (tiada lagi zuriat yang hidup), manfaat wakaf ini hendaklah beralih sepenuhnya kepada wakaf khairi (kebajikan am) di bawah pentadbiran <strong>{{NAMA_MAJLIS}}</strong>, untuk disalurkan mengikut budi bicara Majlis bagi maslahah ummah.
 </p>
 
-<h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 6: PENGAKUAN TERTAKLUK KEPADA MAJLIS AGAMA ISLAM NEGERI</h3>
+<h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 6: PENGAKUAN TERTAKLUK KEPADA MAJLIS AGAMA ISLAM</h3>
 <table width="100%" style="border-collapse:collapse;">
 <tr valign="top">
 <td width="30">6.1</td>
 <td style="padding-bottom:10px;">
-Saya mengakui bahawa wakaf ini, sebaik sahaja didaftarkan, adalah tertakluk sepenuhnya kepada pentadbiran Majlis Agama Islam Negeri {{NEGERI_MAIN}} sebagai pemegang amanah tunggal yang sah di sisi Enakmen Wakaf/Enakmen Pentadbiran Agama Islam Negeri {{NEGERI_MAIN}} yang terpakai.
+Saya mengakui bahawa wakaf ini, sebaik sahaja didaftarkan, adalah tertakluk sepenuhnya kepada pentadbiran <strong>{{NAMA_MAJLIS}}</strong> sebagai pemegang amanah tunggal yang sah di sisi Enakmen Wakaf/Enakmen Pentadbiran Agama Islam Negeri <strong>{{NEGERI_MAIN}}</strong> yang terpakai.
 </td>
 </tr>
 <tr valign="top">
@@ -215,7 +201,7 @@ Sekiranya mana-mana fasal di dalam Surat Ikatan ini didapati tidak sah atau tida
 </table>
 
 <p style="margin-top:20px; font-size:12px; font-style:italic; color:#555;">
-Dokumen ini dijana melalui sistem eWasiat/AQMS berdasarkan maklumat yang dimasukkan oleh pengguna. Surat Ikatan ini WAJIB dikemukakan kepada Majlis Agama Islam Negeri {{NEGERI_MAIN}} untuk pendaftaran rasmi, dan dinasihatkan supaya disemak oleh Peguam Syarie bertauliah sebelum diserahkan.
+Dokumen ini dijana melalui sistem eWasiat/AQMS berdasarkan maklumat yang dimasukkan oleh pengguna. Surat Ikatan ini WAJIB dikemukakan kepada <strong>{{NAMA_MAJLIS}}</strong> untuk pendaftaran rasmi, dan dinasihatkan supaya disemak oleh Peguam Syarie bertauliah sebelum diserahkan.
 </p>
 
 <div class="pdf-footer"><span class="footer-docref"></span><span class="page-number"></span></div>
@@ -230,7 +216,7 @@ const hartaAinClauseTemplate = `
 <tr valign="top">
 <td width="30">1.1</td>
 <td style="padding-bottom:10px;">
-Wakaf ini adalah <strong>Wakaf 'Ain</strong> — iaitu <strong>{{BILANGAN_SAHAM_WAKAF}} unit saham</strong> (daripada jumlah keseluruhan {{JUMLAH_SAHAM}} unit) di dalam Syarikat itu sendiri menjadi harta wakaf (<em>mawquf</em>), dibekukan selama-lamanya dan TIDAK boleh dijual, digadai, dipindah milik atau dilupuskan melainkan melalui proses istibdal yang diluluskan secara bertulis oleh Majlis Agama Islam Negeri {{NEGERI_MAIN}}.
+Wakaf ini adalah <strong>Wakaf 'Ain</strong> — iaitu <strong>{{BILANGAN_SAHAM_WAKAF}} unit saham</strong> (daripada jumlah keseluruhan {{JUMLAH_SAHAM}} unit) di dalam Syarikat itu sendiri menjadi harta wakaf (<em>mawquf</em>), dibekukan selama-lamanya dan TIDAK boleh dijual, digadai, dipindah milik atau dilupuskan melainkan melalui proses istibdal yang diluluskan secara bertulis oleh <strong>{{NAMA_MAJLIS}}</strong>.
 </td>
 </tr>
 <tr valign="top">
@@ -315,18 +301,18 @@ Fasal ini hendaklah dibaca bersama-sama peruntukan had wasiat dan Faraid di dala
 `;
 
 // ----------------------------------------------------------------------------
-// 4.5) Fungsi bina jadual zurriah (HTML table) daripada senarai data
+// 4.5) Fungsi bina jadual zurriah (HTML table)
 // ----------------------------------------------------------------------------
 function buildJadualZurriah(senaraiZurriah = []) {
-  if (!senaraiZurriah.length) {
+  if (!senaraiZurriah || senaraiZurriah.length === 0) {
     return '<p style="font-style:italic;">(Senarai zurriah belum diisi — sila lengkapkan sebelum pendaftaran.)</p>';
   }
   const rows = senaraiZurriah.map((z, i) => `
     <tr>
-      <td style="border:1px solid #999; padding:6px;">${i + 1}</td>
-      <td style="border:1px solid #999; padding:6px;">${z.nama || ''}</td>
-      <td style="border:1px solid #999; padding:6px;">${z.hubungan || ''}</td>
-      <td style="border:1px solid #999; padding:6px;">${z.generasi || ''}</td>
+      <td style="border:1px solid #999; padding:6px; text-align:center;">${i + 1}</td>
+      <td style="border:1px solid #999; padding:6px;">${z.nama || '-'}</td>
+      <td style="border:1px solid #999; padding:6px; text-align:center;">${z.hubungan || '-'}</td>
+      <td style="border:1px solid #999; padding:6px; text-align:center;">${z.generasi || '-'}</td>
     </tr>`).join('');
 
   return `
@@ -342,21 +328,8 @@ function buildJadualZurriah(senaraiZurriah = []) {
 }
 
 // ----------------------------------------------------------------------------
-// 4.6) Generator utama
+// 4.6) Generator utama (Termasuk Fungsi Peta Nama Majlis)
 // ----------------------------------------------------------------------------
-/**
- * Jana Surat Ikatan Wakaf Zurri lengkap mengikut pilihan customer.
- *
- * @param {Object} data
- * @param {'munjiz'|'muallaq'} data.jenisWakaf          - WAJIB
- * @param {'ain'|'manfaah'}    data.jenisHartaWakaf      - WAJIB
- * @param {string} data.namaWaqif, data.noIcWaqif, data.alamatWaqif
- * @param {string} data.namaSyarikat, data.noSsm
- * @param {number} data.bilanganSahamWakaf, data.jumlahSaham
- * @param {string} data.negeriMAIN                       - cth "Perak"
- * @param {Object} data.nazir - { nama, noIc, alamat }
- * @param {Array}  data.senaraiZurriah - [{ nama, hubungan, generasi }]
- */
 function generateWakafZurri(data = {}) {
   if (!data.jenisWakaf || !['munjiz', 'muallaq'].includes(data.jenisWakaf)) {
     throw new Error('generateWakafZurri: data.jenisWakaf wajib "munjiz" atau "muallaq"');
@@ -365,30 +338,53 @@ function generateWakafZurri(data = {}) {
     throw new Error('generateWakafZurri: data.jenisHartaWakaf wajib "ain" atau "manfaah"');
   }
 
+  // Fungsi Peta Automatik Nama Penuh Majlis Agama
+  function getNamaMajlis(negeri) {
+      const map = {
+          "Johor": "Majlis Agama Islam Negeri Johor (MAINJ)",
+          "Kedah": "Majlis Agama Islam Negeri Kedah (MAIK)",
+          "Kelantan": "Majlis Agama Islam dan Adat Istiadat Melayu Kelantan (MAIK)",
+          "Melaka": "Majlis Agama Islam Melaka (MAIM)",
+          "Negeri Sembilan": "Majlis Agama Islam Negeri Sembilan (MAINS)",
+          "Pahang": "Majlis Ugama Islam dan Adat Resam Melayu Pahang (MUIP)",
+          "Perak": "Majlis Agama Islam dan Adat Melayu Perak (MAIPk)",
+          "Perlis": "Majlis Agama Islam dan Adat Istiadat Melayu Perlis (MAIPs)",
+          "Pulau Pinang": "Majlis Agama Islam Negeri Pulau Pinang (MAINPP)",
+          "Sabah": "Majlis Ugama Islam Sabah (MUIS)",
+          "Sarawak": "Majlis Islam Sarawak (MIS)",
+          "Selangor": "Majlis Agama Islam Selangor (MAIS)",
+          "Terengganu": "Majlis Agama Islam dan Adat Melayu Terengganu (MAIDAM)",
+          "WP Kuala Lumpur": "Majlis Agama Islam Wilayah Persekutuan (MAIWP)",
+          "WP Labuan": "Majlis Agama Islam Wilayah Persekutuan (MAIWP)",
+          "WP Putrajaya": "Majlis Agama Islam Wilayah Persekutuan (MAIWP)",
+          "Wilayah Persekutuan": "Majlis Agama Islam Wilayah Persekutuan (MAIWP)"
+      };
+      if (!negeri) return "Majlis Agama Islam Negeri ________________";
+      return map[negeri] || ("Majlis Agama Islam Negeri " + negeri);
+  }
+
+  const namaMajlis = getNamaMajlis(data.negeriMAIN);
   let output = wakafZurriContent;
 
-  // -- Fasal jenis harta (ain / manfaah) --
   const hartaTemplate = data.jenisHartaWakaf === 'ain' ? hartaAinClauseTemplate : hartaManfaahClauseTemplate;
   const fasalHarta = hartaTemplate
     .replace(/{{BILANGAN_SAHAM_WAKAF}}/g, data.bilanganSahamWakaf || '________')
     .replace(/{{JUMLAH_SAHAM}}/g, data.jumlahSaham || '________')
-    .replace(/{{NEGERI_MAIN}}/g, data.negeriMAIN || '________________');
+    .replace(/{{NAMA_MAJLIS}}/g, namaMajlis);
   output = output.replace('{{FASAL_JENIS_HARTA}}', fasalHarta);
 
-  // -- Fasal jenis kuat kuasa (munjiz / mu'allaq) --
   const jenisTemplate = data.jenisWakaf === 'munjiz' ? wakafMunjizClauseTemplate : wakafMuallaqClauseTemplate;
   output = output.replace('{{FASAL_JENIS_WAKAF}}', jenisTemplate);
 
-  // -- Jadual zurriah --
   output = output.replace('{{JADUAL_ZURRIAH}}', buildJadualZurriah(data.senaraiZurriah));
 
-  // -- Placeholder am --
   output = output
     .replace(/{{NAMA_WAQIF}}/g, data.namaWaqif || '________________')
     .replace(/{{NO_IC_WAQIF}}/g, data.noIcWaqif || '________________')
     .replace(/{{ALAMAT_WAQIF}}/g, data.alamatWaqif || '________________')
     .replace(/{{NAMA_SYARIKAT}}/g, data.namaSyarikat || '________________')
     .replace(/{{NO_SSM}}/g, data.noSsm || '________________')
+    .replace(/{{NAMA_MAJLIS}}/g, namaMajlis)
     .replace(/{{NEGERI_MAIN}}/g, data.negeriMAIN || '________________')
     .replace(/{{NAMA_NAZIR}}/g, data.nazir?.nama || '________________')
     .replace(/{{NO_IC_NAZIR}}/g, data.nazir?.ic || '________________')
@@ -400,15 +396,6 @@ function generateWakafZurri(data = {}) {
 // ----------------------------------------------------------------------------
 // 4.7) Semakan keserasian silang-dokumen (Wakaf 'Ain vs Buy-Sell Agreement)
 // ----------------------------------------------------------------------------
-/**
- * Panggil fungsi ini di peringkat aplikasi (bukan dalam dokumen) SEBELUM
- * membenarkan customer generate kedua-dua dokumen atas syarikat yang sama.
- *
- * @param {Object} profil
- * @param {boolean} profil.adaBuySellAgreement
- * @param {'ain'|'manfaah'|null} profil.jenisHartaWakafZurri
- * @returns {{ ok: boolean, mesej: string|null }}
- */
 function semakKeserasianWakafBuySell(profil = {}) {
   if (profil.adaBuySellAgreement && profil.jenisHartaWakafZurri === 'ain') {
     return {
