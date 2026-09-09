@@ -189,6 +189,7 @@
     <script src="hibah-content.js"></script>
     <script src="pemegang-amanah.js"></script>
     <script src="buy-sell-agreement.js"></script>
+    <script src="zurri-content.js"></script> <!-- TAMBAH INI -->
     <script src="trust-deed-content.js"></script>
 
     <!-- FIREBASE LOGIC -->
@@ -658,6 +659,37 @@ else if (syarikat.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefi
     }); // <-- TUTUP GELUNG PERTAMA SYARIKAT DI SINI
 
 
+// ... (Selepas blok buy-sell dan hibah) ...
+        
+        else if (syarikat.mekanismeAgihan === 'wakafzurri' && typeof generateWakafZurri !== 'undefined') {
+            
+            // Susun data mengikut kehendak fungsi generateWakafZurri()
+            const wakafData = {
+                jenisWakaf: syarikat.jenisWakafZurri || 'muallaq', // Fallback
+                jenisHartaWakaf: syarikat.jenisHartaWakafZurri || 'manfaah', // Fallback
+                namaWaqif: data.nama || "-",
+                noIcWaqif: data.ic || "-",
+                alamatWaqif: alamatPenuh || "-",
+                namaSyarikat: syarikat.namaSyarikat || "-",
+                noSsm: syarikat.noSsm || "-",
+                bilanganSahamWakaf: fSaham(syarikat.sahamPewasiat),
+                jumlahSaham: fSaham(syarikat.jumlahSaham),
+                negeriMAIN: data.negeri || "Wilayah Persekutuan", // Tarik dari negeri alamat
+                nazir: syarikat.nazir,
+                senaraiZurriah: syarikat.penerimaWakafZurri
+            };
+            
+            let wkfContent = generateWakafZurri(wakafData);
+            
+            // Masukkan class dinamik untuk pagination admin-preview
+            wkfContent = wkfContent.replaceAll('class="a4-page p-[18mm]"', `data-target="tocMek_w${sIndex}" class="a4-page p-[18mm] dynamic-page"`);
+            
+            mekanismeHTML += wkfContent;
+            
+            tocMekList.innerHTML += `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Surat Ikatan Wakaf Zurri (${syarikat.namaSyarikat})</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_w${sIndex}" class="text-[14px] font-bold">-</span></div>`;
+        }
+
+    
     // ---------------------------------------------------------
     // BINA FASAL 3 & 4 (DI LUAR GELUNG SYARIKAT)
     // ---------------------------------------------------------
