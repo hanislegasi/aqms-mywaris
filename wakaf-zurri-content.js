@@ -138,7 +138,7 @@ Sekiranya pada suatu masa zurriah yang dinamakan dan keturunan mereka pupus sepe
 <tr valign="top">
 <td width="30">1.</td>
 <td style="padding-bottom:10px;">
-Saya mengakui bahawa wakaf ini, sebaik sahaja didaftarkan, adalah tertakluk sepenuhnya kepada pentadbiran <strong>{{NAMA_MAJLIS}}</strong> sebagai pemegang amanah tunggal yang sah di sisi Enakmen Wakaf/Enakmen Pentadbiran Agama Islam Negeri <strong>{{NEGERI_MAIN}}</strong> yang terpakai.
+Saya mengakui bahawa wakaf ini, sebaik sahaja didaftarkan, adalah tertakluk sepenuhnya kepada pentadbiran <strong>{{NAMA_MAJLIS}}</strong> sebagai pemegang amanah tunggal yang sah di sisi Enakmen Wakaf/ Enakmen Pentadbiran Agama Islam Negeri <strong>{{NEGERI_MAIN}}</strong> yang terpakai.
 </td>
 </tr>
 <tr valign="top">
