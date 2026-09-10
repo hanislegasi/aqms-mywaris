@@ -232,6 +232,25 @@
             input.value = "";
         }
     };
+
+// Fungsi papar penerangan wakaf secara live
+    window.kemasKiniPeneranganWakaf = function(el, kategori) {
+        if (!window.wakafZurriOptionsMeta) return;
+        const val = el.value;
+        const targetP = el.parentElement.querySelector('.penerangan-teks');
+        if (!targetP) return;
+        
+        if (!val) {
+            targetP.innerHTML = "";
+            return;
+        }
+        
+        const optionData = window.wakafZurriOptionsMeta[kategori].find(opt => opt.value === val);
+        if (optionData) {
+            targetP.innerHTML = `<strong>Penerangan ;</strong> ${optionData.penerangan}`;
+        }
+    };
+
     
     // =====================================
     // FUNGSI DINAMIK SYARIKAT (MULTI-COMPANY)
@@ -311,22 +330,24 @@
                 </div>
 
                 <!-- Pilihan Jenis Wakaf -->
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="text-sm font-semibold text-gray-600 block mb-1">Jenis Kuat Kuasa Wakaf</label>
-                        <select class="jenisWakafZurri w-full border rounded-lg p-3 font-semibold text-purple-900 bg-white">
+                        <select class="jenisWakafZurri w-full border rounded-lg p-3 font-semibold text-purple-900 bg-white" onchange="kemasKiniPeneranganWakaf(this, 'jenisWakaf')">
                             <option value="">-- Pilih Jenis Kuat Kuasa --</option>
                             <option value="munjiz" ${item.jenisWakafZurri === 'munjiz' ? 'selected' : ''}>Wakaf Serta-Merta (Munjiz)</option>
                             <option value="muallaq" ${item.jenisWakafZurri === 'muallaq' ? 'selected' : ''}>Wakaf Selepas Kematian (Mu'allaq)</option>
                         </select>
+                        <p class="penerangan-teks text-xs italic text-gray-500 mt-2 text-justify leading-relaxed"></p>
                     </div>
                     <div>
                         <label class="text-sm font-semibold text-gray-600 block mb-1">Jenis Harta Wakaf</label>
-                        <select class="jenisHartaWakafZurri w-full border rounded-lg p-3 font-semibold text-purple-900 bg-white">
+                        <select class="jenisHartaWakafZurri w-full border rounded-lg p-3 font-semibold text-purple-900 bg-white" onchange="kemasKiniPeneranganWakaf(this, 'jenisHartaWakaf')">
                             <option value="">-- Pilih Harta Wakaf --</option>
                             <option value="ain" ${item.jenisHartaWakafZurri === 'ain' ? 'selected' : ''}>Wakaf Saham Penuh ('Ain)</option>
                             <option value="manfaah" ${item.jenisHartaWakafZurri === 'manfaah' ? 'selected' : ''}>Wakaf Hasil/Dividen Sahaja (Manfaah)</option>
                         </select>
+                        <p class="penerangan-teks text-xs italic text-gray-500 mt-2 text-justify leading-relaxed"></p>
                     </div>
                 </div>
 
@@ -374,6 +395,13 @@
                 const mekSelect = newBlock.querySelector('.mekanismeAgihan');
                 mekSelect.value = item.mekanismeAgihan || '';
                 mekSelect.dispatchEvent(new Event('change', {bubbles:true}));
+                
+                // AUTO TRIGGER PENERANGAN WAKAF
+                const jwSelect = newBlock.querySelector('.jenisWakafZurri');
+                if (jwSelect && jwSelect.value) kemasKiniPeneranganWakaf(jwSelect, 'jenisWakaf');
+                
+                const hwSelect = newBlock.querySelector('.jenisHartaWakafZurri');
+                if (hwSelect && hwSelect.value) kemasKiniPeneranganWakaf(hwSelect, 'jenisHartaWakaf');
             }, 50);
         }
     }
