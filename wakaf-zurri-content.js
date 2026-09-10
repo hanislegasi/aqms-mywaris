@@ -89,6 +89,11 @@ Dengan ini saya, <strong>{{NAMA_WAQIF}}</strong> (No. K/P: <strong>{{NO_IC_WAQIF
 
 {{FASAL_JENIS_HARTA}}
 
+<div class="pdf-footer"><span class="footer-docref"></span><span class="page-number"></span></div>
+</div>
+
+<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
+
 <h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 2: SIFAT DAN KUAT KUASA WAKAF</h3>
 
 {{FASAL_JENIS_WAKAF}}
