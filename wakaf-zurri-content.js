@@ -76,8 +76,6 @@ Dengan ini saya, <strong>{{NAMA_WAQIF}}</strong> (No. K/P: <strong>{{NO_IC_WAQIF
 
 <h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 1: HARTA YANG DIWAKAFKAN (MAWQUF)</h3>
 
-<h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 1: HARTA YANG DIWAKAFKAN (MAWQUF)</h3>
-
 <p style="margin-bottom:12px;">
 Harta yang diwakafkan (<em>mawquf</em>) di bawah Surat Ikatan ini adalah berhubung dengan kepentingan dan pegangan saham saya di dalam syarikat <strong>{{NAMA_SYARIKAT}}</strong> (No. Pendaftaran Syarikat: <strong>{{NO_SSM}}</strong>) yang beralamat berdaftar di <strong>{{ALAMAT_SYARIKAT}}</strong>.
 </p>
@@ -239,7 +237,7 @@ Wakaf ini adalah <strong>Wakaf 'Ain</strong> — iaitu <strong>{{BILANGAN_SAHAM_
 <tr valign="top">
 <td width="30">2.</td>
 <td style="padding-bottom:10px;">
-Saya mengakui bahawa saham yang diwakafkan di bawah Fasal ini adalah TERKECUALI dan tidak boleh menjadi subjek mana-mana Perjanjian Beli-Jual Saham (Buy-Sell Agreement) yang sedia ada atau akan wujud di dalam Syarikat, kecuali dinyatakan secara jelas sebaliknya.
+Saya mengakui bahawa saham yang diwakafkan di bawah Fasal ini adalah <strong>TERKECUALI</strong> dan tidak boleh menjadi subjek mana-mana <strong>Perjanjian Beli-Jual Saham <em>(Buy-Sell Agreement)</em></strong> yang sedia ada atau akan wujud di dalam Syarikat, kecuali dinyatakan secara jelas sebaliknya.
 </td>
 </tr>
 </table>
@@ -256,13 +254,13 @@ Wakaf ini adalah <strong>Wakaf Manfaah</strong> — iaitu BUKAN saham itu sendir
 <tr valign="top">
 <td width="30">2.</td>
 <td style="padding-bottom:10px;">
-Saham itu sendiri KEKAL boleh diurus, dipindah milik atau dijual seperti biasa mengikut Perlembagaan Syarikat dan/atau mana-mana Perjanjian Beli-Jual Saham yang berkuat kuasa di dalam Syarikat. Kewajipan wakaf di bawah dokumen ini hanya terpakai ke atas dividen/hasil yang benar-benar diisytiharkan dan dibayar berkaitan saham tersebut, dari semasa ke semasa.
+Saham itu sendiri <strong>KEKAL</strong> boleh diurus, dipindah milik atau dijual seperti biasa mengikut Perlembagaan Syarikat dan/atau mana-mana <strong>Perjanjian Beli-Jual Saham</strong> yang berkuat kuasa di dalam Syarikat. Kewajipan wakaf di bawah dokumen ini hanya terpakai ke atas dividen/hasil yang benar-benar diisytiharkan dan dibayar berkaitan saham tersebut, dari semasa ke semasa.
 </td>
 </tr>
 <tr valign="top">
 <td width="30">3.</td>
 <td style="padding-bottom:10px;">
-Sekiranya saham tersebut dijual/dipindah milik di bawah mana-mana Perjanjian Beli-Jual Saham, kewajipan wakaf manfaah ini hendaklah berterusan ke atas hasil pelaburan semula (jika ada) daripada hasil jualan tersebut, tertakluk kepada arahan lanjut Nazir dan kelulusan Majlis.
+Sekiranya saham tersebut dijual/dipindah milik di bawah mana-mana <strong>Perjanjian Beli-Jual Saham</strong>, kewajipan wakaf manfaah ini hendaklah berterusan ke atas hasil pelaburan semula (jika ada) daripada hasil jualan tersebut, tertakluk kepada arahan lanjut Nazir dan kelulusan Majlis.
 </td>
 </tr>
 </table>
@@ -311,7 +309,7 @@ Oleh sebab wakaf ini berkuat kuasa selepas kematian, ia dianggap sebagai wasiat 
 <tr valign="top">
 <td width="30">3.</td>
 <td style="padding-bottom:10px;">
-Fasal ini hendaklah dibaca bersama-sama peruntukan had wasiat dan Faraid di dalam Wasiat Korporat saya (jika ada), dan Wasi/Pentadbir saya hendaklah menguatkuasakan wakaf ini tertakluk kepada peruntukan tersebut.
+Fasal ini hendaklah dibaca bersama-sama peruntukan had wasiat dan Faraid di dalam <strong>Dokumen Wasiat Korporat</strong> saya, dan Wasi/Pentadbir saya hendaklah menguatkuasakan wakaf ini tertakluk kepada peruntukan tersebut.
 </td>
 </tr>
 </table>
