@@ -82,6 +82,11 @@ Harta yang diwakafkan (<em>mawquf</em>) di bawah Surat Ikatan ini adalah berhubu
 
 {{FASAL_JENIS_HARTA}}
 
+<div class="pdf-footer"><span class="footer-docref"></span><span class="page-number"></span></div>
+</div>
+
+<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
+
 <h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 2: SIFAT DAN KUAT KUASA WAKAF</h3>
 
 {{FASAL_JENIS_WAKAF}}
@@ -122,6 +127,11 @@ Manfaat wakaf ini hendaklah disalurkan kepada zurriah saya sepertimana yang dipe
 <p style="margin-bottom:15px;">
 Sekiranya pada suatu masa zurriah yang dinamakan dan keturunan mereka pupus sepenuhnya (tiada lagi zuriat yang hidup), manfaat wakaf ini hendaklah beralih sepenuhnya kepada wakaf khairi (kebajikan am) di bawah pentadbiran <strong>{{NAMA_MAJLIS}}</strong>, untuk disalurkan mengikut budi bicara Majlis bagi maslahah ummah.
 </p>
+
+<div class="pdf-footer"><span class="footer-docref"></span><span class="page-number"></span></div>
+</div>
+
+<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
 
 <h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 6: PENGAKUAN TERTAKLUK KEPADA MAJLIS AGAMA ISLAM</h3>
 <table width="100%" style="border-collapse:collapse;">
@@ -164,12 +174,12 @@ Sekiranya mana-mana fasal di dalam Surat Ikatan ini didapati tidak sah atau tida
 <p>..................................................</p>
 <p style="margin-top:5px;"><strong>{{NAMA_WAQIF}}</strong></p>
 <p>No. K/P: {{NO_IC_WAQIF}}</p>
-<p>Tarikh: ______________</p>
+<p>Tarikh: </p>
 </td>
 <td width="10%"></td>
 <td width="45%">
 <p style="font-weight:bold; margin-bottom:50px;">Di hadapan (Saksi 1):</p>
-<p>Tandatangan : ............................................</p>
+<p>..................................................</p>
 <p style="margin-top:5px;">Nama Saksi : </p>
 <p>No. K/P &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
 </td>
@@ -187,16 +197,14 @@ Sekiranya mana-mana fasal di dalam Surat Ikatan ini didapati tidak sah atau tida
 <td width="10%"></td>
 <td width="45%">
 <p style="font-weight:bold; margin-bottom:50px;">Di hadapan (Saksi 2):</p>
-<p>Tandatangan : ............................................</p>
+<p>..................................................</p>
 <p style="margin-top:5px;">Nama Saksi : </p>
 <p>No. K/P &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
 </td>
 </tr>
 </table>
 
-<p style="margin-top:20px; font-size:12px; font-style:italic; color:#555;">
-Dokumen ini dijana melalui sistem eWasiat/AQMS berdasarkan maklumat yang dimasukkan oleh pengguna. Surat Ikatan ini WAJIB dikemukakan kepada <strong>{{NAMA_MAJLIS}}</strong> untuk pendaftaran rasmi, dan dinasihatkan supaya disemak oleh Peguam Syarie bertauliah sebelum diserahkan.
-</p>
+
 
 <div class="pdf-footer"><span class="footer-docref"></span><span class="page-number"></span></div>
 </div>
@@ -221,13 +229,13 @@ Dokumen ini dijana melalui sistem eWasiat/AQMS berdasarkan maklumat yang dimasuk
 const hartaAinClauseTemplate = `
 <table width="100%" style="border-collapse:collapse;">
 <tr valign="top">
-<td width="30">1.1</td>
+<td width="30">1.</td>
 <td style="padding-bottom:10px;">
 Wakaf ini adalah <strong>Wakaf 'Ain</strong> — iaitu <strong>{{BILANGAN_SAHAM_WAKAF}} unit saham</strong> (daripada jumlah keseluruhan {{JUMLAH_SAHAM}} unit) di dalam Syarikat itu sendiri menjadi harta wakaf (<em>mawquf</em>), dibekukan selama-lamanya dan TIDAK boleh dijual, digadai, dipindah milik atau dilupuskan melainkan melalui proses istibdal yang diluluskan secara bertulis oleh <strong>{{NAMA_MAJLIS}}</strong>.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">1.2</td>
+<td width="30">2.</td>
 <td style="padding-bottom:10px;">
 Saya mengakui bahawa saham yang diwakafkan di bawah Fasal ini adalah TERKECUALI dan tidak boleh menjadi subjek mana-mana Perjanjian Beli-Jual Saham (Buy-Sell Agreement) yang sedia ada atau akan wujud di dalam Syarikat, kecuali dinyatakan secara jelas sebaliknya.
 </td>
@@ -238,19 +246,19 @@ Saya mengakui bahawa saham yang diwakafkan di bawah Fasal ini adalah TERKECUALI 
 const hartaManfaahClauseTemplate = `
 <table width="100%" style="border-collapse:collapse;">
 <tr valign="top">
-<td width="30">1.1</td>
+<td width="30">1.</td>
 <td style="padding-bottom:10px;">
 Wakaf ini adalah <strong>Wakaf Manfaah</strong> — iaitu BUKAN saham itu sendiri, tetapi <strong>hasil/dividen</strong> yang terjana daripada <strong>{{BILANGAN_SAHAM_WAKAF}} unit saham</strong> (daripada jumlah keseluruhan {{JUMLAH_SAHAM}} unit) di dalam Syarikat, yang menjadi harta wakaf.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">1.2</td>
+<td width="30">2.</td>
 <td style="padding-bottom:10px;">
 Saham itu sendiri KEKAL boleh diurus, dipindah milik atau dijual seperti biasa mengikut Perlembagaan Syarikat dan/atau mana-mana Perjanjian Beli-Jual Saham yang berkuat kuasa di dalam Syarikat. Kewajipan wakaf di bawah dokumen ini hanya terpakai ke atas dividen/hasil yang benar-benar diisytiharkan dan dibayar berkaitan saham tersebut, dari semasa ke semasa.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">1.3</td>
+<td width="30">3.</td>
 <td style="padding-bottom:10px;">
 Sekiranya saham tersebut dijual/dipindah milik di bawah mana-mana Perjanjian Beli-Jual Saham, kewajipan wakaf manfaah ini hendaklah berterusan ke atas hasil pelaburan semula (jika ada) daripada hasil jualan tersebut, tertakluk kepada arahan lanjut Nazir dan kelulusan Majlis.
 </td>
@@ -264,19 +272,19 @@ Sekiranya saham tersebut dijual/dipindah milik di bawah mana-mana Perjanjian Bel
 const wakafMunjizClauseTemplate = `
 <table width="100%" style="border-collapse:collapse;">
 <tr valign="top">
-<td width="30">2.1</td>
+<td width="30">1.</td>
 <td style="padding-bottom:10px;">
 Wakaf ini adalah <strong>Wakaf Munjiz</strong> (serta-merta) dan berkuat kuasa <strong>SEBAIK SAHAJA</strong> dokumen ini ditandatangani dan disempurnakan (<em>sighah</em> dan <em>qabd</em> dipenuhi), semasa saya masih hidup dan sedar.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">2.2</td>
+<td width="30">2.</td>
 <td style="padding-bottom:10px;">
 Oleh sebab wakaf ini adalah pemberian semasa hayat dan bukan wasiat, ia <strong>TIDAK tertakluk</strong> kepada had satu pertiga (1/3) pusaka dan <strong>TIDAK memerlukan</strong> persetujuan waris-waris saya.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">2.3</td>
+<td width="30">3.</td>
 <td style="padding-bottom:10px;">
 Wakaf ini adalah <strong>muktamad dan tidak boleh ditarik balik</strong> oleh saya atau mana-mana pihak selepas disempurnakan.
 </td>
@@ -287,19 +295,19 @@ Wakaf ini adalah <strong>muktamad dan tidak boleh ditarik balik</strong> oleh sa
 const wakafMuallaqClauseTemplate = `
 <table width="100%" style="border-collapse:collapse;">
 <tr valign="top">
-<td width="30">2.1</td>
+<td width="30">1.</td>
 <td style="padding-bottom:10px;">
 Wakaf ini adalah <strong>Wakaf Mu'allaq bi al-Maut</strong> (bersyarat kematian) dan hanya berkuat kuasa <strong>SELEPAS SAYA MENINGGAL DUNIA</strong>. Semasa hayat saya, harta yang dinyatakan di Fasal 1 kekal di bawah kawalan dan hak milik saya sepenuhnya.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">2.2</td>
+<td width="30">2.</td>
 <td style="padding-bottom:10px;">
 Oleh sebab wakaf ini berkuat kuasa selepas kematian, ia dianggap sebagai wasiat dari segi hukum, maka <strong>TERTAKLUK</strong> kepada had satu pertiga (1/3) daripada nilai bersih pusaka saya, dan sekiranya penerima manfaat adalah waris yang layak Faraid, tertakluk kepada persetujuan waris-waris lain selepas kematian saya, selaras prinsip <em>"la wasiyyata li-warith"</em>.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">2.3</td>
+<td width="30">3.</td>
 <td style="padding-bottom:10px;">
 Fasal ini hendaklah dibaca bersama-sama peruntukan had wasiat dan Faraid di dalam Wasiat Korporat saya (jika ada), dan Wasi/Pentadbir saya hendaklah menguatkuasakan wakaf ini tertakluk kepada peruntukan tersebut.
 </td>
@@ -325,10 +333,10 @@ function buildJadualZurriah(senaraiZurriah = []) {
   return `
   <table width="100%" style="border-collapse:collapse; margin-bottom:15px;">
     <tr>
-      <th style="border:1px solid #999; padding:6px; background:#1F4E5F; color:#fff;">Bil.</th>
-      <th style="border:1px solid #999; padding:6px; background:#1F4E5F; color:#fff;">Nama</th>
-      <th style="border:1px solid #999; padding:6px; background:#1F4E5F; color:#fff;">Hubungan dengan Waqif</th>
-      <th style="border:1px solid #999; padding:6px; background:#1F4E5F; color:#fff;">Generasi</th>
+      <th style="border:1px solid #999; padding:6px; text-align:center;">Bil.</th>
+      <th style="border:1px solid #999; padding:6px; text-align:center;">Nama</th>
+      <th style="border:1px solid #999; padding:6px; text-align:center;">Hubungan dengan Waqif</th>
+      <th style="border:1px solid #999; padding:6px; text-align:center;">Generasi</th>
     </tr>
     ${rows}
   </table>`;
