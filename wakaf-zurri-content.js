@@ -76,8 +76,10 @@ Dengan ini saya, <strong>{{NAMA_WAQIF}}</strong> (No. K/P: <strong>{{NO_IC_WAQIF
 
 <h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 1: HARTA YANG DIWAKAFKAN (MAWQUF)</h3>
 
+<h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 1: HARTA YANG DIWAKAFKAN (MAWQUF)</h3>
+
 <p style="margin-bottom:12px;">
-Harta yang diwakafkan (<em>mawquf</em>) di bawah Surat Ikatan ini adalah berhubung dengan kepentingan dan pegangan saham saya di dalam syarikat <strong>{{NAMA_SYARIKAT}}</strong> (No. Pendaftaran Syarikat: <strong>{{NO_SSM}}</strong>).
+Harta yang diwakafkan (<em>mawquf</em>) di bawah Surat Ikatan ini adalah berhubung dengan kepentingan dan pegangan saham saya di dalam syarikat <strong>{{NAMA_SYARIKAT}}</strong> (No. Pendaftaran Syarikat: <strong>{{NO_SSM}}</strong>) yang beralamat berdaftar di <strong>{{ALAMAT_SYARIKAT}}</strong>.
 </p>
 
 {{FASAL_JENIS_HARTA}}
@@ -399,6 +401,7 @@ function generateWakafZurri(data = {}) {
     .replace(/{{ALAMAT_WAQIF}}/g, data.alamatWaqif || '________________')
     .replace(/{{NAMA_SYARIKAT}}/g, data.namaSyarikat || '________________')
     .replace(/{{NO_SSM}}/g, data.noSsm || '________________')
+    .replace(/{{ALAMAT_SYARIKAT}}/g, data.alamatSyarikat || '________________') // <--- TAMBAH BARIS INI
     .replace(/{{NAMA_MAJLIS}}/g, namaMajlis)
     .replace(/{{NEGERI_MAIN}}/g, data.negeriMAIN || '________________')
     .replace(/{{NAMA_NAZIR}}/g, data.nazir?.nama || '________________')
