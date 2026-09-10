@@ -182,6 +182,7 @@ Sekiranya mana-mana fasal di dalam Surat Ikatan ini didapati tidak sah atau tida
 <p>..................................................</p>
 <p style="margin-top:5px;">Nama Saksi : </p>
 <p>No. K/P &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
+<p>Tarikh: </p>
 </td>
 </tr>
 </table>
@@ -193,6 +194,7 @@ Sekiranya mana-mana fasal di dalam Surat Ikatan ini didapati tidak sah atau tida
 <p>..................................................</p>
 <p style="margin-top:5px;"><strong>{{NAMA_NAZIR}}</strong></p>
 <p>No. K/P: {{NO_IC_NAZIR}}</p>
+<p>Tarikh: </p>
 </td>
 <td width="10%"></td>
 <td width="45%">
@@ -200,6 +202,7 @@ Sekiranya mana-mana fasal di dalam Surat Ikatan ini didapati tidak sah atau tida
 <p>..................................................</p>
 <p style="margin-top:5px;">Nama Saksi : </p>
 <p>No. K/P &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
+<p>Tarikh: </p>
 </td>
 </tr>
 </table>
