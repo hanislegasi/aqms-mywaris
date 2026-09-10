@@ -99,19 +99,19 @@ Harta yang diwakafkan (<em>mawquf</em>) di bawah Surat Ikatan ini adalah berhubu
 <h3 style="margin-top:20px; margin-bottom:12px; font-weight:bold;">FASAL 3: CADANGAN NAZIR (PENGURUS HARIAN MAWQUF)</h3>
 <table width="100%" style="border-collapse:collapse;">
 <tr valign="top">
-<td width="30">3.1</td>
+<td width="30">1.</td>
 <td style="padding-bottom:10px;">
 Saya mencadangkan <strong>{{NAMA_NAZIR}}</strong> (No. K/P: <strong>{{NO_IC_NAZIR}}</strong>), beralamat di <strong>{{ALAMAT_NAZIR}}</strong>, sebagai Nazir/Pengurus Harian bagi mawquf ini, bertanggungjawab menguruskan hal ehwal harian (termasuk mewakili dalam mesyuarat syarikat, jika berkaitan) dan memastikan hasil/manfaat wakaf disalurkan kepada zurriah yang layak.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">3.2</td>
+<td width="30">2.</td>
 <td style="padding-bottom:10px;">
 Pelantikan Nazir ini adalah <strong>cadangan sahaja</strong> dan tertakluk sepenuhnya kepada kelulusan bertulis <strong>{{NAMA_MAJLIS}}</strong> ("Majlis") sebagai pemegang amanah tunggal yang sah di sisi undang-undang. Majlis berhak menolak, mengganti, atau melantik Nazir lain mengikut budi bicara dan enakmen yang terpakai.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">3.3</td>
+<td width="30">3.</td>
 <td style="padding-bottom:10px;">
 Nazir hendaklah menyediakan penyata akaun tahunan berkaitan hasil/manfaat mawquf kepada Majlis dan zurriah yang berkenaan, bagi memastikan ketelusan pentadbiran.
 </td>
@@ -136,19 +136,19 @@ Sekiranya pada suatu masa zurriah yang dinamakan dan keturunan mereka pupus sepe
 <h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 6: PENGAKUAN TERTAKLUK KEPADA MAJLIS AGAMA ISLAM</h3>
 <table width="100%" style="border-collapse:collapse;">
 <tr valign="top">
-<td width="30">6.1</td>
+<td width="30">1.</td>
 <td style="padding-bottom:10px;">
 Saya mengakui bahawa wakaf ini, sebaik sahaja didaftarkan, adalah tertakluk sepenuhnya kepada pentadbiran <strong>{{NAMA_MAJLIS}}</strong> sebagai pemegang amanah tunggal yang sah di sisi Enakmen Wakaf/Enakmen Pentadbiran Agama Islam Negeri <strong>{{NEGERI_MAIN}}</strong> yang terpakai.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">6.2</td>
+<td width="30">2.</td>
 <td style="padding-bottom:10px;">
 Permohonan pendaftaran rasmi Surat Ikatan Wakaf ini hendaklah dikemukakan oleh Nazir dan/atau waris kepada Majlis dalam tempoh munasabah selepas penyempurnaan dokumen ini, dan wakaf ini hanya lengkap serta boleh dikuatkuasakan sepenuhnya selepas pendaftaran rasmi oleh Majlis.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">6.3</td>
+<td width="30">3.</td>
 <td style="padding-bottom:10px;">
 Wakaf ini adalah <em>ta'bid</em> (kekal selama-lamanya) dan tidak boleh ditarik balik, dijual, digadai atau dilupuskan kecuali melalui proses istibdal yang diluluskan secara bertulis oleh Majlis mengikut undang-undang yang terpakai.
 </td>
