@@ -869,6 +869,10 @@ else if (syarikat.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefi
                             hContent = hContent.replace("JADUAL 1 - SENARAI HARTA ALIH YANG DIHIBAHKAN", "JADUAL 1 - SENARAI SAHAM SYARIKAT YANG DIHIBAHKAN");
                             hContent = hContent.replace("JADUAL 2 - SENARAI HARTA TAK ALIH YANG DIHIBAHKAN", "");
 
+                            // --- TAMBAH DUA BARIS INI UNTUK BETULKAN AYAT KLAUSA B & C ---
+                            hContent = hContent.replaceAll("harta tak alih berikut seperti di dalam Jadual 1 dan 2", "saham syarikat berikut seperti di dalam Jadual 1");
+                            hContent = hContent.replaceAll("di dalam Jadual 1 dan 2", "di dalam Jadual 1");
+
                             hContent = hContent.replace(/class="a4-page/i, `data-target="tocMek_g${gIndex}" class="a4-page`);
                             mekanismeHTML += hContent;
                             tocMekList.innerHTML += `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Hibah Saham: ${namaPenerima}</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_g${gIndex}" class="text-[14px] font-bold">-</span></div>`;
