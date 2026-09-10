@@ -59,10 +59,10 @@ const wakafZurriOptionsMeta = {
 const wakafZurriContent = `
 <div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
 
-<h2 style="font-size:26px; font-weight:bold; text-align:center; margin-bottom:5px; color:#153638;">
+<h2 style="font-size:20px; font-weight:bold; text-align:center; margin-bottom:5px; color:#153638;">
 SURAT IKATAN WAKAF ZURRI
 </h2>
-<p style="text-align:center; margin-bottom:20px; font-style:italic; font-size:16px;">
+<p style="text-align:center; margin-bottom:20px; font-style:italic; font-size:20px;">
 (Corporate Family Waqf Deed)
 </p>
 
@@ -75,17 +75,9 @@ Dengan ini saya, <strong>{{NAMA_WAQIF}}</strong> (No. K/P: <strong>{{NO_IC_WAQIF
 </p>
 
 <h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 1: HARTA YANG DIWAKAFKAN (MAWQUF)</h3>
-
-<table width="100%" style="border-collapse:collapse; margin-bottom:12px;">
-<tr valign="top">
-<td width="30" style="text-align:center;">&bull;</td>
-<td style="padding-bottom:5px;">Nama Syarikat: <strong>{{NAMA_SYARIKAT}}</strong></td>
-</tr>
-<tr valign="top">
-<td width="30" style="text-align:center;">&bull;</td>
-<td style="padding-bottom:5px;">No. Pendaftaran Syarikat (SSM): <strong>{{NO_SSM}}</strong></td>
-</tr>
-</table>
+<p style="margin-bottom:12px;">
+Harta yang diwakafkan (<em>mawquf</em>) di bawah Surat Ikatan ini adalah berhubung dengan kepentingan dan pegangan saham saya di dalam syarikat <strong>{{NAMA_SYARIKAT}}</strong> (No. Pendaftaran Syarikat: <strong>{{NO_SSM}}</strong>).
+</p>
 
 {{FASAL_JENIS_HARTA}}
 
@@ -133,6 +125,11 @@ Nazir hendaklah menyediakan penyata akaun tahunan berkaitan hasil/manfaat mawquf
 <p style="margin-bottom:15px;">
 Sekiranya pada suatu masa zurriah yang dinamakan dan keturunan mereka pupus sepenuhnya (tiada lagi zuriat yang hidup), manfaat wakaf ini hendaklah beralih sepenuhnya kepada wakaf khairi (kebajikan am) di bawah pentadbiran <strong>{{NAMA_MAJLIS}}</strong>, untuk disalurkan mengikut budi bicara Majlis bagi maslahah ummah.
 </p>
+
+<div class="pdf-footer"><span class="footer-docref"></span><span class="page-number"></span></div>
+</div>
+
+<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
 
 <h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 6: PENGAKUAN TERTAKLUK KEPADA MAJLIS AGAMA ISLAM</h3>
 <table width="100%" style="border-collapse:collapse;">
