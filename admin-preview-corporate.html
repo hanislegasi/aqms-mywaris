@@ -663,16 +663,17 @@ else if (syarikat.mekanismeAgihan === 'hibah' && typeof hibahContent !== 'undefi
             
             // Susun data mengikut kehendak fungsi generateWakafZurri()
             const wakafData = {
-                jenisWakaf: syarikat.jenisWakafZurri || 'muallaq', // Fallback
-                jenisHartaWakaf: syarikat.jenisHartaWakafZurri || 'manfaah', // Fallback
+                jenisWakaf: syarikat.jenisWakafZurri || 'muallaq', 
+                jenisHartaWakaf: syarikat.jenisHartaWakafZurri || 'manfaah', 
                 namaWaqif: data.nama || "-",
                 noIcWaqif: data.ic || "-",
                 alamatWaqif: alamatPenuh || "-",
                 namaSyarikat: syarikat.namaSyarikat || "-",
                 noSsm: syarikat.noSsm || "-",
+                alamatSyarikat: syarikat.alamatSyarikat || "-", // <--- TAMBAH BARIS INI
                 bilanganSahamWakaf: fSaham(syarikat.sahamPewasiat),
                 jumlahSaham: fSaham(syarikat.jumlahSaham),
-                negeriMAIN: syarikat.negeriMainWakaf || data.negeri || "Wilayah Persekutuan",
+                negeriMAIN: syarikat.negeriMainWakaf || data.negeri || "Wilayah Persekutuan", 
                 nazir: syarikat.nazir,
                 senaraiZurriah: syarikat.penerimaWakafZurri
             };
