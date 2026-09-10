@@ -333,10 +333,10 @@ function buildJadualZurriah(senaraiZurriah = []) {
   return `
   <table width="100%" style="border-collapse:collapse; margin-bottom:15px;">
     <tr>
-      <th style="border:1px solid #999; padding:6px; text-align:center;">Bil.</th>
-      <th style="border:1px solid #999; padding:6px; text-align:center;">Nama</th>
-      <th style="border:1px solid #999; padding:6px; text-align:center;">Hubungan dengan Waqif</th>
-      <th style="border:1px solid #999; padding:6px; text-align:center;">Generasi</th>
+      <th style="border:1px solid #999; padding:6px; text-align:center; background-color:#f9fafb;">Bil.</th>
+      <th style="border:1px solid #999; padding:6px; text-align:center; background-color:#f9fafb;">Nama</th>
+      <th style="border:1px solid #999; padding:6px; text-align:center; background-color:#f9fafb;">Hubungan dengan Waqif</th>
+      <th style="border:1px solid #999; padding:6px; text-align:center; background-color:#f9fafb;">Generasi</th>
     </tr>
     ${rows}
   </table>`;
