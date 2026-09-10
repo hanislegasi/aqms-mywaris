@@ -59,7 +59,7 @@ const wakafZurriOptionsMeta = {
 const wakafZurriContent = `
 <div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
 
-<h2 style="font-size:20px; font-weight:bold; text-align:center; margin-bottom:5px; color:#153638;">
+<h2 style="font-size:26px; font-weight:bold; text-align:center; margin-bottom:5px; color:#153638;">
 SURAT IKATAN WAKAF ZURRI
 </h2>
 <p style="text-align:center; margin-bottom:20px; font-style:italic; font-size:20px;">
@@ -75,16 +75,12 @@ Dengan ini saya, <strong>{{NAMA_WAQIF}}</strong> (No. K/P: <strong>{{NO_IC_WAQIF
 </p>
 
 <h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 1: HARTA YANG DIWAKAFKAN (MAWQUF)</h3>
+
 <p style="margin-bottom:12px;">
 Harta yang diwakafkan (<em>mawquf</em>) di bawah Surat Ikatan ini adalah berhubung dengan kepentingan dan pegangan saham saya di dalam syarikat <strong>{{NAMA_SYARIKAT}}</strong> (No. Pendaftaran Syarikat: <strong>{{NO_SSM}}</strong>).
 </p>
 
 {{FASAL_JENIS_HARTA}}
-
-<div class="pdf-footer"><span class="footer-docref"></span><span class="page-number"></span></div>
-</div>
-
-<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
 
 <h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 2: SIFAT DAN KUAT KUASA WAKAF</h3>
 
@@ -118,18 +114,14 @@ Nazir hendaklah menyediakan penyata akaun tahunan berkaitan hasil/manfaat mawquf
 </table>
 
 <h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 4: SENARAI ZURRIAH (PENERIMA MANFAAT)</h3>
-<p style="margin-bottom:10px;">Manfaat wakaf ini hendaklah disalurkan kepada zurriah saya seperti berikut, dan seterusnya secara turun-temurun mengikut generasi:</p>
-{{JADUAL_ZURRIAH}}
+<p style="margin-bottom:10px;">
+Manfaat wakaf ini hendaklah disalurkan kepada zurriah saya sepertimana yang diperincikan di dalam <strong>Lampiran A (Jadual Penerima Manfaat Wakaf Zurri)</strong> pada helaian belakang dokumen ini, dan seterusnya secara turun-temurun mengikut generasi.
+</p>
 
 <h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 5: PERUNTUKAN SEKIRANYA ZURRIAH PUPUS</h3>
 <p style="margin-bottom:15px;">
 Sekiranya pada suatu masa zurriah yang dinamakan dan keturunan mereka pupus sepenuhnya (tiada lagi zuriat yang hidup), manfaat wakaf ini hendaklah beralih sepenuhnya kepada wakaf khairi (kebajikan am) di bawah pentadbiran <strong>{{NAMA_MAJLIS}}</strong>, untuk disalurkan mengikut budi bicara Majlis bagi maslahah ummah.
 </p>
-
-<div class="pdf-footer"><span class="footer-docref"></span><span class="page-number"></span></div>
-</div>
-
-<div class="a4-page p-[18mm]" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
 
 <h3 style="margin-top:30px; margin-bottom:12px; font-weight:bold;">FASAL 6: PENGAKUAN TERTAKLUK KEPADA MAJLIS AGAMA ISLAM</h3>
 <table width="100%" style="border-collapse:collapse;">
@@ -207,6 +199,19 @@ Dokumen ini dijana melalui sistem eWasiat/AQMS berdasarkan maklumat yang dimasuk
 </p>
 
 <div class="pdf-footer"><span class="footer-docref"></span><span class="page-number"></span></div>
+</div>
+
+<!-- ====================================================================== -->
+<!-- MUKA SURAT BARU: LAMPIRAN JADUAL PENERIMA MANFAAT WAKAF (AUTO PAGINATION) -->
+<!-- ====================================================================== -->
+<div class="a4-page p-[18mm] dynamic-page" style="font-family:'Times New Roman', serif; font-size:15px; line-height:1.6; text-align:justify; color:#222;">
+    <h2 style="font-size:22px; font-weight:bold; text-align:center; margin-top:20px; margin-bottom:25px; color:#153638; text-transform:uppercase;">
+        LAMPIRAN A : JADUAL PENERIMA MANFAAT WAKAF ZURRI
+    </h2>
+    
+    {{JADUAL_ZURRIAH}}
+
+    <div class="pdf-footer"><span class="footer-docref"></span><span class="page-number"></span></div>
 </div>
 `;
 
