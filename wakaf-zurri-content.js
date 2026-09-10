@@ -230,92 +230,104 @@ Sekiranya mana-mana fasal di dalam Surat Ikatan ini didapati tidak sah atau tida
 // 4.3) Sub-klausa bersyarat: JENIS HARTA WAKAF ('ain / manfaah)
 // ----------------------------------------------------------------------------
 const hartaAinClauseTemplate = `
-<table width="100%" style="border-collapse:collapse;">
+<table width="100%" style="border-collapse:collapse; margin-bottom:5px;">
 <tr valign="top">
-<td width="30">1.</td>
+<td width="30">1.1</td>
 <td style="padding-bottom:10px;">
 Wakaf ini adalah <strong>Wakaf 'Ain</strong> — iaitu <strong>{{BILANGAN_SAHAM_WAKAF}} unit saham</strong> (daripada jumlah keseluruhan {{JUMLAH_SAHAM}} unit) di dalam Syarikat itu sendiri menjadi harta wakaf (<em>mawquf</em>), dibekukan selama-lamanya dan TIDAK boleh dijual, digadai, dipindah milik atau dilupuskan melainkan melalui proses istibdal yang diluluskan secara bertulis oleh <strong>{{NAMA_MAJLIS}}</strong>.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">2.</td>
+<td width="30">1.2</td>
 <td style="padding-bottom:10px;">
-Saya mengakui bahawa saham yang diwakafkan di bawah Fasal ini adalah <strong>TERKECUALI</strong> dan tidak boleh menjadi subjek mana-mana <strong>Perjanjian Beli-Jual Saham <em>(Buy-Sell Agreement)</em></strong> yang sedia ada atau akan wujud di dalam Syarikat, kecuali dinyatakan secara jelas sebaliknya.
+Saya mengakui bahawa saham yang diwakafkan di bawah Fasal ini adalah TERKECUALI dan tidak boleh menjadi subjek mana-mana Perjanjian Beli-Jual Saham (Buy-Sell Agreement) yang sedia ada atau akan wujud di dalam Syarikat, kecuali dinyatakan secara jelas sebaliknya.
 </td>
 </tr>
 </table>
+<p style="font-style:italic; font-size:14px; text-align:justify; margin-bottom:20px; color:#444;">
+Penerangan ; ${wakafZurriOptionsMeta.jenisHartaWakaf.find(x => x.value === 'ain').penerangan}
+</p>
 `;
 
 const hartaManfaahClauseTemplate = `
-<table width="100%" style="border-collapse:collapse;">
+<table width="100%" style="border-collapse:collapse; margin-bottom:5px;">
 <tr valign="top">
-<td width="30">1.</td>
+<td width="30">1.1</td>
 <td style="padding-bottom:10px;">
 Wakaf ini adalah <strong>Wakaf Manfaah</strong> — iaitu BUKAN saham itu sendiri, tetapi <strong>hasil/dividen</strong> yang terjana daripada <strong>{{BILANGAN_SAHAM_WAKAF}} unit saham</strong> (daripada jumlah keseluruhan {{JUMLAH_SAHAM}} unit) di dalam Syarikat, yang menjadi harta wakaf.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">2.</td>
+<td width="30">1.2</td>
 <td style="padding-bottom:10px;">
-Saham itu sendiri <strong>KEKAL</strong> boleh diurus, dipindah milik atau dijual seperti biasa mengikut Perlembagaan Syarikat dan/atau mana-mana <strong>Perjanjian Beli-Jual Saham</strong> yang berkuat kuasa di dalam Syarikat. Kewajipan wakaf di bawah dokumen ini hanya terpakai ke atas dividen/hasil yang benar-benar diisytiharkan dan dibayar berkaitan saham tersebut, dari semasa ke semasa.
+Saham itu sendiri KEKAL boleh diurus, dipindah milik atau dijual seperti biasa mengikut Perlembagaan Syarikat dan/atau mana-mana Perjanjian Beli-Jual Saham yang berkuat kuasa di dalam Syarikat. Kewajipan wakaf di bawah dokumen ini hanya terpakai ke atas dividen/hasil yang benar-benar diisytiharkan dan dibayar berkaitan saham tersebut, dari semasa ke semasa.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">3.</td>
+<td width="30">1.3</td>
 <td style="padding-bottom:10px;">
-Sekiranya saham tersebut dijual/dipindah milik di bawah mana-mana <strong>Perjanjian Beli-Jual Saham</strong>, kewajipan wakaf manfaah ini hendaklah berterusan ke atas hasil pelaburan semula (jika ada) daripada hasil jualan tersebut, tertakluk kepada arahan lanjut Nazir dan kelulusan Majlis.
+Sekiranya saham tersebut dijual/dipindah milik di bawah mana-mana Perjanjian Beli-Jual Saham, kewajipan wakaf manfaah ini hendaklah berterusan ke atas hasil pelaburan semula (jika ada) daripada hasil jualan tersebut, tertakluk kepada arahan lanjut Nazir dan kelulusan Majlis.
 </td>
 </tr>
 </table>
+<p style="font-style:italic; font-size:14px; text-align:justify; margin-bottom:20px; color:#444;">
+Penerangan ; ${wakafZurriOptionsMeta.jenisHartaWakaf.find(x => x.value === 'manfaah').penerangan}
+</p>
 `;
 
 // ----------------------------------------------------------------------------
 // 4.4) Sub-klausa bersyarat: JENIS KUAT KUASA (munjiz / mu'allaq)
 // ----------------------------------------------------------------------------
 const wakafMunjizClauseTemplate = `
-<table width="100%" style="border-collapse:collapse;">
+<table width="100%" style="border-collapse:collapse; margin-bottom:5px;">
 <tr valign="top">
-<td width="30">1.</td>
+<td width="30">2.1</td>
 <td style="padding-bottom:10px;">
 Wakaf ini adalah <strong>Wakaf Munjiz</strong> (serta-merta) dan berkuat kuasa <strong>SEBAIK SAHAJA</strong> dokumen ini ditandatangani dan disempurnakan (<em>sighah</em> dan <em>qabd</em> dipenuhi), semasa saya masih hidup dan sedar.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">2.</td>
+<td width="30">2.2</td>
 <td style="padding-bottom:10px;">
 Oleh sebab wakaf ini adalah pemberian semasa hayat dan bukan wasiat, ia <strong>TIDAK tertakluk</strong> kepada had satu pertiga (1/3) pusaka dan <strong>TIDAK memerlukan</strong> persetujuan waris-waris saya.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">3.</td>
+<td width="30">2.3</td>
 <td style="padding-bottom:10px;">
 Wakaf ini adalah <strong>muktamad dan tidak boleh ditarik balik</strong> oleh saya atau mana-mana pihak selepas disempurnakan.
 </td>
 </tr>
 </table>
+<p style="font-style:italic; font-size:14px; text-align:justify; margin-bottom:20px; color:#444;">
+Penerangan ; ${wakafZurriOptionsMeta.jenisWakaf.find(x => x.value === 'munjiz').penerangan}
+</p>
 `;
 
 const wakafMuallaqClauseTemplate = `
-<table width="100%" style="border-collapse:collapse;">
+<table width="100%" style="border-collapse:collapse; margin-bottom:5px;">
 <tr valign="top">
-<td width="30">1.</td>
+<td width="30">2.1</td>
 <td style="padding-bottom:10px;">
 Wakaf ini adalah <strong>Wakaf Mu'allaq bi al-Maut</strong> (bersyarat kematian) dan hanya berkuat kuasa <strong>SELEPAS SAYA MENINGGAL DUNIA</strong>. Semasa hayat saya, harta yang dinyatakan di Fasal 1 kekal di bawah kawalan dan hak milik saya sepenuhnya.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">2.</td>
+<td width="30">2.2</td>
 <td style="padding-bottom:10px;">
 Oleh sebab wakaf ini berkuat kuasa selepas kematian, ia dianggap sebagai wasiat dari segi hukum, maka <strong>TERTAKLUK</strong> kepada had satu pertiga (1/3) daripada nilai bersih pusaka saya, dan sekiranya penerima manfaat adalah waris yang layak Faraid, tertakluk kepada persetujuan waris-waris lain selepas kematian saya, selaras prinsip <em>"la wasiyyata li-warith"</em>.
 </td>
 </tr>
 <tr valign="top">
-<td width="30">3.</td>
+<td width="30">2.3</td>
 <td style="padding-bottom:10px;">
-Fasal ini hendaklah dibaca bersama-sama peruntukan had wasiat dan Faraid di dalam <strong>Dokumen Wasiat Korporat</strong> saya, dan Wasi/Pentadbir saya hendaklah menguatkuasakan wakaf ini tertakluk kepada peruntukan tersebut.
+Fasal ini hendaklah dibaca bersama-sama peruntukan had wasiat dan Faraid di dalam Wasiat Korporat saya (jika ada), dan Wasi/Pentadbir saya hendaklah menguatkuasakan wakaf ini tertakluk kepada peruntukan tersebut.
 </td>
 </tr>
 </table>
+<p style="font-style:italic; font-size:14px; text-align:justify; margin-bottom:20px; color:#444;">
+Penerangan ; ${wakafZurriOptionsMeta.jenisWakaf.find(x => x.value === 'muallaq').penerangan}
+</p>
 `;
 
 // ----------------------------------------------------------------------------
