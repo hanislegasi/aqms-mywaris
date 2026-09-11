@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Settings</title>
+<title>Settings | Admin</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body{
@@ -89,35 +89,47 @@ font-family: Inter, sans-serif;
 
       <!-- ================= PRODUCT ================= -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Harga Produk</h2>
-            <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-5">
+            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Harga Produk (RM)</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
                 <div>
-                    <label class="font-medium text-sm text-gray-600 block mb-1">Wasiat (RM)</label>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Wasiat</label>
                     <input id="wasiatPrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
                 </div>
                 <div>
-                  <label class="font-medium text-sm text-gray-600 block mb-1">Sepencarian (RM)</label>
+                  <label class="font-medium text-sm text-gray-600 block mb-1">Sepencarian</label>
                     <input id="sepencarianPrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
                 </div>
                 <div>
-                    <label class="font-medium text-sm text-gray-600 block mb-1">Hibah (RM)</label>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Hibah</label>
                     <input id="hibahPrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
                 </div>
                 <div>
-                    <label class="font-medium text-sm text-gray-600 block mb-1">Mawaris (RM)</label>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Mawaris</label>
                     <input id="mawarisPrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
                 </div>
                 <div>
-                    <label class="font-medium text-sm text-gray-600 block mb-1">Mawaris Korporat (RM)</label>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Corp. Premium (Campur)</label>
                     <input id="corporatePrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Corp. Tunggal</label>
+                    <input id="corporateTunggalPrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Corp. Kongsi</label>
+                    <input id="corporateKongsiPrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Corp. Wakaf Zurri (Sahaja)</label>
+                    <input id="corporateZurriPrice" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
                 </div>
             </div>
         </div>
 
         <!-- ================= RENEWAL ================= -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Renewal Produk</h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-5">
+            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Renewal Produk (RM / Tahun)</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
                 <div>
                     <label class="font-medium text-sm text-gray-600 block mb-1">Renewal Wasiat</label>
                     <input id="wasiatRenewal" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
@@ -135,8 +147,20 @@ font-family: Inter, sans-serif;
                     <input id="mawarisRenewal" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
                 </div>
                 <div>
-                    <label class="font-medium text-sm text-gray-600 block mb-1">Renewal Mawaris Korporat</label>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Renewal Corp. Premium</label>
                     <input id="corporateRenewal" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Renewal Corp. Tunggal</label>
+                    <input id="corporateTunggalRenewal" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Renewal Corp. Kongsi</label>
+                    <input id="corporateKongsiRenewal" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Renewal Corp. Zurri</label>
+                    <input id="corporateZurriRenewal" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
                 </div>
             </div>
         </div>
@@ -427,7 +451,7 @@ font-family: Inter, sans-serif;
     
     <!-- 1. INPUT UNIT PRODUK -->
     <p class="text-sm font-semibold text-[#45d9d7] uppercase tracking-wider mb-3">1. Jualan Unit Produk</p>
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div>
             <label class="font-medium text-xs text-gray-300 block mb-1">Wasiat (Unit)</label>
             <input id="simWasiat" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
@@ -445,8 +469,20 @@ font-family: Inter, sans-serif;
             <input id="simMawaris" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
         </div>
         <div>
-            <label class="font-medium text-xs text-gray-300 block mb-1">Korporat (Unit)</label>
+            <label class="font-medium text-xs text-gray-300 block mb-1">Corp. Premium (Unit)</label>
             <input id="simCorporate" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
+        </div>
+        <div>
+            <label class="font-medium text-xs text-gray-300 block mb-1">Corp. Tunggal (Unit)</label>
+            <input id="simCorporateTunggal" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
+        </div>
+        <div>
+            <label class="font-medium text-xs text-gray-300 block mb-1">Corp. Kongsi (Unit)</label>
+            <input id="simCorporateKongsi" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
+        </div>
+        <div>
+            <label class="font-medium text-xs text-gray-300 block mb-1">Wakaf Zurri (Unit)</label>
+            <input id="simCorporateZurri" type="number" value="0" min="0" class="w-full bg-gray-800/50 border border-gray-600 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#2cb8b6] outline-none transition-all">
         </div>
     </div>
     
@@ -565,9 +601,6 @@ font-family: Inter, sans-serif;
         const el = (id) => document.getElementById(id);
         const getVal = (id) => el(id) ? (Number(el(id).value) || 0) : 0;
 
-        // ================= FIREBASE CONFIG =================
-        
-
         // ================= DEFAULT SETTINGS =================
         const defaultCompanySettings = {
             companyName: "AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.",
@@ -577,9 +610,12 @@ font-family: Inter, sans-serif;
         };
 
         const defaultCompensationSettings = {
-            wasiatPrice: 350, hibahPrice: 2500, sepencarianPrice: 800, mawarisPrice: 3000, corporatePrice: 6000, cajRTB: 100, 
+            wasiatPrice: 350, hibahPrice: 2500, sepencarianPrice: 800, mawarisPrice: 3000, 
+            corporatePrice: 6000, corporateTunggalPrice: 1500, corporateKongsiPrice: 3000, corporateZurriPrice: 1000,
+            cajRTB: 100, 
             namaSyarikatAmanah: "Rakyat Trustee Berhad", noSyarikatAmanah: "1462142-U", telefonSyarikatAmanah: "+603 2602 2722", alamatSyarikatAmanah: "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur",
-            wasiatRenewal: 50, hibahRenewal: 50, sepencarianRenewal: 50, mawarisRenewal: 80, corporateRenewal: 200,
+            wasiatRenewal: 50, hibahRenewal: 50, sepencarianRenewal: 50, mawarisRenewal: 80, 
+            corporateRenewal: 200, corporateTunggalRenewal: 100, corporateKongsiRenewal: 150, corporateZurriRenewal: 50,
             commissionAQC: 35, commissionAQCAS: 38, commissionAQCUM: 40, commissionMGAM: 45,
             overrideAQC: 0, overrideAQCAS: 3, overrideAQCUM: 4, overrideMGAM: 5,
             usb: 5, usbRegistrationAmount: 50, usbLockPeriod: 3,
@@ -598,7 +634,9 @@ font-family: Inter, sans-serif;
         
         const compensationFields = [
             "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice", "corporatePrice", "cajRTB", 
+            "corporateTunggalPrice", "corporateKongsiPrice", "corporateZurriPrice",
             "wasiatRenewal", "hibahRenewal", "sepencarianRenewal", "mawarisRenewal", "corporateRenewal", 
+            "corporateTunggalRenewal", "corporateKongsiRenewal", "corporateZurriRenewal",
             "commissionAQC", "commissionAQCAS", "commissionAQCUM", "commissionMGAM",
             "overrideAQC", "overrideAQCAS", "overrideAQCUM", "overrideMGAM",
             "usb", "usbRegistrationAmount", "usbLockPeriod", "targetSalesBonus", "rewardBonus", "kpiPeriod",
@@ -614,8 +652,6 @@ font-family: Inter, sans-serif;
         
         const trusteeFieldsString = ["namaSyarikatAmanah", "noSyarikatAmanah", "telefonSyarikatAmanah", "alamatSyarikatAmanah"];
 
-            
-        
         // ================= LOAD SETTINGS =================
         async function loadSettings() {
             const companyRef = doc(db, "settings", "company");
@@ -696,12 +732,18 @@ function calculateSimulation() {
     const prcSepencarian = getVal("sepencarianPrice");
     const prcMawaris = getVal("mawarisPrice");
     const prcCorporate = getVal("corporatePrice"); 
+    const prcCorporateTunggal = getVal("corporateTunggalPrice"); 
+    const prcCorporateKongsi = getVal("corporateKongsiPrice"); 
+    const prcCorporateZurri = getVal("corporateZurriPrice"); 
 
     const qtyWasiat = getVal("simWasiat");
     const qtyHibah = getVal("simHibah");
     const qtySepencarian = getVal("simSepencarian");
     const qtyMawaris = getVal("simMawaris");
     const qtyCorporate = getVal("simCorporate"); 
+    const qtyCorporateTunggal = getVal("simCorporateTunggal"); 
+    const qtyCorporateKongsi = getVal("simCorporateKongsi"); 
+    const qtyCorporateZurri = getVal("simCorporateZurri"); 
 
     // 2. Ambil Peratusan Pool & Syarikat
     const pctCommPool = getVal("commissionPool") / 100;   // 35%
@@ -725,18 +767,21 @@ function calculateSimulation() {
 
     // ====================================================
 
-    // Pengiraan Asas (Gross Sales)
+    // Pengiraan Asas (Gross Sales) Termasuk Produk Baru
     const sales = 
         (qtyWasiat * prcWasiat) +
         (qtyHibah * prcHibah) +
         (qtySepencarian * prcSepencarian) +
         (qtyMawaris * prcMawaris) +
-        (qtyCorporate * prcCorporate); 
+        (qtyCorporate * prcCorporate) +
+        (qtyCorporateTunggal * prcCorporateTunggal) +
+        (qtyCorporateKongsi * prcCorporateKongsi) +
+        (qtyCorporateZurri * prcCorporateZurri); 
 
     // Pengiraan Pool (Daripada Total Sales)
-    const commissionAmount = sales * pctCommPool; // RM 350 * 35% = RM 122.50
-    const overrideAmount = sales * pctOverridePool; // RM 350 * 12% = RM 42.00
-    const companyPoolAmount = sales * pctCompanyPool; // RM 350 * 48% = RM 168.00
+    const commissionAmount = sales * pctCommPool; 
+    const overrideAmount = sales * pctOverridePool; 
+    const companyPoolAmount = sales * pctCompanyPool; 
 
     // Pecahan Dalam Company Pool (Daripada Total Sales)
     const adminAmount = sales * pctAdmin; 
@@ -756,14 +801,14 @@ function calculateSimulation() {
     // *** PENGIRAAN PENDAPATAN PERUNDING (LOGIK BARU YANG TEPAT) ***
     // ====================================================
     
-    // 1. AQC ambik semua dari Commission Pool (RM 122.50)
+    // 1. AQC ambik semua dari Commission Pool
     const totalAqcIncome = commissionAmount; 
     
     // 2. Upline ambik peratusan DARIPADA TOTAL SALES, bukan dari Override Pool
     // Kerana 3% + 4% + 5% = 12% (Ngam-ngam sama dengan saiz Override Pool)
-    const totalAqcasIncome = sales * overAQCAS; // RM 350 * 3% = RM 10.50
-    const totalAqcumIncome = sales * overAQCUM; // RM 350 * 4% = RM 14.00
-    const totalMgamIncome = sales * overMGAM;   // RM 350 * 5% = RM 17.50
+    const totalAqcasIncome = sales * overAQCAS; 
+    const totalAqcumIncome = sales * overAQCUM; 
+    const totalMgamIncome = sales * overMGAM;  
 
     // 3. Bahagikan ikut bilangan supaya dapat pendapatan SEORANG
     const incomeAQC = bilAQC > 0 ? (totalAqcIncome / bilAQC) : 0;
@@ -813,7 +858,9 @@ function calculateSimulation() {
         // Input Triggers for Simulation
        const simTriggers = [
             "simWasiat", "simHibah", "simSepencarian", "simMawaris", "simCorporate", 
+            "simCorporateTunggal", "simCorporateKongsi", "simCorporateZurri",
             "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice", "corporatePrice", 
+            "corporateTunggalPrice", "corporateKongsiPrice", "corporateZurriPrice",
            "bilAqc", "bilAqcas", "bilAqcum", "bilMgam"
         ];
         simTriggers.forEach(id => {
