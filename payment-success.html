@@ -17,46 +17,68 @@
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { doc, getDoc, updateDoc, increment, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // Tangkap jawapan dari URL ToyyibPay
+// Tangkap jawapan dari URL ToyyibPay
 const urlParams = new URLSearchParams(window.location.search);
 const status_id = urlParams.get('status_id'); 
-const namaPakej = urlParams.get('pakej'); // Ini akan baca "Wasiat", "Hibah", dsb.
+const namaPakej = urlParams.get('pakej'); // Ini akan baca "Wasiat", "Hibah", "Korporat Tunggal" dsb.
 
 // 1. Sediakan pembolehubah dinamik
 let dbStatusField = "";
 let redirectPage = "";
 let lejarAkaun = "";
-let receiptPrefix = ""; // Tambah ini untuk kod resit
+let receiptPrefix = ""; 
+let accountCodeValue = "4010"; // Lalai
 
-// 2. Tentukan laluan data mengikut jenis pakej
+// 2. Tentukan laluan data & COA mengikut jenis pakej
 if (namaPakej === "Wasiat") {
     dbStatusField = "wasiatPaymentStatus";
     redirectPage = "wasiat-page.html";
     lejarAkaun = "Sales - Wasiat";
     receiptPrefix = "WST";
+    accountCodeValue = "4010";
 } else if (namaPakej === "Hibah") {
     dbStatusField = "hibahPaymentStatus";
     redirectPage = "hibah-page.html";
     lejarAkaun = "Sales - Hibah";
     receiptPrefix = "HIB";
+    accountCodeValue = "4020";
 } else if (namaPakej === "Sepencarian") {
     dbStatusField = "sepencarianPaymentStatus";
     redirectPage = "sepencarian-page.html";
     lejarAkaun = "Sales - Sepencarian";
     receiptPrefix = "HSP";
+    accountCodeValue = "4030";
 } else if (namaPakej === "Mawaris") {
     dbStatusField = "mawarisPaymentStatus";
     redirectPage = "mawaris-page.html";
     lejarAkaun = "Sales - Mawaris";
     receiptPrefix = "MAW";
+    accountCodeValue = "4040";
 } else if (namaPakej === "Korporat") {
     dbStatusField = "corporatePaymentStatus";
     redirectPage = "corporate-page.html";
     lejarAkaun = "Sales - Mawaris Korporat";
     receiptPrefix = "MCO";
-} // <-- INI KURUNGAN YANG TERTINGGAL SEBELUM INI!
-
-
+    accountCodeValue = "4050";
+} else if (namaPakej === "Korporat Tunggal") {
+    dbStatusField = "corporateTunggalPaymentStatus";
+    redirectPage = "corporate-tunggal-page.html";
+    lejarAkaun = "Sales - Mawaris Korporat (Milikan Tunggal)";
+    receiptPrefix = "MCT";
+    accountCodeValue = "4051";
+} else if (namaPakej === "Korporat Kongsi") {
+    dbStatusField = "corporateKongsiPaymentStatus";
+    redirectPage = "corporate-kongsi-page.html";
+    lejarAkaun = "Sales - Mawaris Korporat (Rakan Kongsi)";
+    receiptPrefix = "MCK";
+    accountCodeValue = "4052";
+} else if (namaPakej === "Korporat Zurri") {
+    dbStatusField = "corporateZurriPaymentStatus";
+    redirectPage = "corporate-zurri-page.html";
+    lejarAkaun = "Sales - Mawaris Korporat (Wakaf Zurri)";
+    receiptPrefix = "MCZ";
+    accountCodeValue = "4053";
+}
 
     // Toyyibpay Code: 1 = Berjaya
     if (status_id === "1") {
@@ -94,8 +116,14 @@ if (namaPakej === "Wasiat") {
                             saleAmount = Number(compData.sepencarianPrice);
                         } else if (namaPakej === "Mawaris" && compData.mawarisPrice !== undefined) {
                             saleAmount = Number(compData.mawarisPrice);
-                        } else if (namaPakej === "Mawaris Korporat" && compData.corporatePrice !== undefined) {
+                        } else if (namaPakej === "Korporat" && compData.corporatePrice !== undefined) {
                             saleAmount = Number(compData.corporatePrice);
+                        } else if (namaPakej === "Korporat Tunggal" && compData.corporateTunggalPrice !== undefined) {
+                            saleAmount = Number(compData.corporateTunggalPrice);
+                        } else if (namaPakej === "Korporat Kongsi" && compData.corporateKongsiPrice !== undefined) {
+                            saleAmount = Number(compData.corporateKongsiPrice);
+                        } else if (namaPakej === "Korporat Zurri" && compData.corporateZurriPrice !== undefined) {
+                            saleAmount = Number(compData.corporateZurriPrice);
                         }
                     }
 
@@ -128,20 +156,20 @@ if (namaPakej === "Wasiat") {
                     
                     const customer = userData; // Guna data pelanggan
                     
-                    // Ledger: Credit Sales
+                    // Ledger: Credit Sales (Dinamik COA)
                     await addDoc(collection(db, "ledger"), {
-                        date: txnDate, accountCode: "4010", account: lejarAkaun, // Dinamik
+                        date: txnDate, accountCode: accountCodeValue, account: lejarAkaun, 
                         category: "income", description: memberNo + " " + customer.nama,
                         debit: 0, credit: saleAmount, transactionGroup: memberNo,
-                        paymentType: "CUSTOMER", sourceAccount: "4010", product: namaPakej // Dinamik
+                        paymentType: "CUSTOMER", sourceAccount: accountCodeValue, product: namaPakej 
                     });
 
-                    // Ledger: Debit Bank
+                    // Ledger: Debit Bank (Dinamik Source)
                     await addDoc(collection(db, "ledger"), {
                         date: txnDate, accountCode: "1000", account: "Bank",
                         category: "asset", description: memberNo + " " + customer.nama,
                         debit: saleAmount, credit: 0, paymentType: "CUSTOMER",
-                        sourceAccount: "4010", transactionGroup: memberNo
+                        sourceAccount: accountCodeValue, transactionGroup: memberNo
                     });
                     
                     const comp = compData;
@@ -154,7 +182,7 @@ if (namaPakej === "Wasiat") {
                     // Company Allocation
                     await addDoc(collection(db, "companyAllocation"), {
                     createdAt: txnDate, memberNo, customerName: customer.nama,
-                    product: namaPakej, // <-- TUKAR DI SINI
+                    product: namaPakej, 
                     sale: saleAmount, company, allowance, adminOperation, royalty
                     });
 
@@ -237,7 +265,7 @@ if (namaPakej === "Wasiat") {
                                         await addDoc(collection(db, "introducerEarnings"), {
                                         createdAt: txnDate, introducerUid: customer.introducerUid, aqcNo: directConsultant.consultantNo,  
                                         customerMemberNo: memberNo, customerName: customer.nama, 
-                                        product: namaPakej, // <-- TUKAR DI SINI
+                                        product: namaPakej, 
                                         saleAmount: saleAmount, commPercent: introducerCommRate, earnedAmount: introducerAmt, status: "UNPAID" 
                                     });
                                     }
@@ -293,16 +321,16 @@ if (namaPakej === "Wasiat") {
 
                     // CREATE RECEIPT
                     await addDoc(collection(db, "receipts"), {
-                    receiptNo: receiptPrefix + "-" + Date.now(), // <-- Guna prefix dinamik
+                    receiptNo: receiptPrefix + "-" + Date.now(), 
                     uid: currentUser.uid, memberNo: memberNo, payerName: customer.nama,
-                    serviceCode: namaPakej.toUpperCase(), // <-- Tukar jadi dinamik (contoh: HIBAH, SEPENCARIAN)
-                    serviceName: "Pendaftaran " + namaPakej, // <-- Tukar jadi dinamik
+                    serviceCode: namaPakej.toUpperCase(), 
+                    serviceName: "Pendaftaran " + namaPakej, 
                     amount: saleAmount, paymentMethod: "ToyyibPay",
                     status: "PAID", paymentDate: txnDate
                     });
                     
                     document.getElementById('statusMesej').innerText = "Selesai! Anda akan dibawa ke dashboard.";
-                    setTimeout(() => { window.location.href = redirectPage; }, 2000); // Dinamik
+                    setTimeout(() => { window.location.href = redirectPage; }, 2000); 
 
                 } catch (error) {
                     console.error("Ralat merekod data:", error);
