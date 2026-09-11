@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview Draf Korporat Tunggal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- HEADER -->
+  <div class="bg-[#153638] text-white p-5 shadow">
+    <h1 class="text-2xl font-bold">Preview Draf Korporat (Pemilik Tunggal)</h1>
+    <p class="text-gray-200">Sila semak maklumat sebelum menghantar permohonan</p>
+  </div>
+
+  <!-- DOCUMENT -->
+  <div id="pdfContent" class="max-w-4xl mx-auto p-5">
+    <div class="bg-white rounded-2xl shadow p-8 space-y-8">
+
+      <!-- TITLE -->
+      <div class="text-center border-b pb-6">
+        <h1 class="text-3xl font-bold text-[#153638]">DRAF MAKLUMAT KORPORAT (PEMILIK TUNGGAL)</h1>
+        <p class="text-gray-500 mt-2 font-semibold" id="systemCompanyName">Memuatkan Nama Syarikat...</p>
+      </div>
+
+      <!-- SECTION 1 -->
+      <div class="bg-gray-50 rounded-xl p-5 border">
+        <h2 class="text-xl font-bold text-[#153638] mb-3">1. Butiran Pewasiat</h2>
+        <p><strong>Nama:</strong> <span id="nama"></span></p>
+        <p><strong>No IC:</strong> <span id="ic"></span></p>
+        <p><strong>Telefon:</strong> <span id="telefon"></span></p>
+        <p><strong>Alamat:</strong> <span id="alamat"></span></p>
+      </div>
+
+      <!-- SECTION 2 -->
+      <div class="bg-gray-50 rounded-xl p-5 border">
+        <h2 class="text-xl font-bold text-[#153638] mb-3">2. Senarai Waris</h2>
+        <div id="warisList"></div>
+      </div>
+
+      <!-- SECTION 3 -->
+      <div class="bg-gray-50 rounded-xl p-5 border">
+        <h2 class="text-xl font-bold text-[#153638] mb-3">3. Maklumat Syarikat Tunggal & Pelantikan Wasi</h2>
+        <div id="korporatInfo"></div>
+      </div>
+
+      <!-- SECTION 4 -->
+      <div class="bg-gray-50 rounded-xl p-5 border">
+        <h2 class="text-xl font-bold text-[#153638] mb-3">4. Wasiat 1/3</h2>
+        <div id="wasiat13Summary"></div>
+      </div>
+
+      <!-- SECTION 5 -->
+      <div class="bg-gray-50 rounded-xl p-5 border">
+        <h2 class="text-xl font-bold text-[#153638] mb-3">5. Pesanan Wasiat</h2>
+        <p id="pesananPreview" class="whitespace-pre-wrap"></p>
+      </div>
+
+      <!-- SECTION 6 -->
+      <div class="bg-gray-50 rounded-xl p-5 border">
+        <h2 class="text-xl font-bold text-[#153638] mb-3">6. Pemegang Amanah</h2>
+        <div id="amanahInfo"></div>
+      </div>
+
+      <!-- LAMPIRAN -->
+      <div>
+        <h2 class="text-2xl font-bold text-[#153638] mb-4">Lampiran Dokumen</h2>
+        <div id="lampiranList" class="space-y-3"></div>
+      </div>
+      
+      <!-- ACTION -->
+      <div class="pt-6 border-t space-y-3">
+        <button id="submitBtn" class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-3 rounded-lg font-semibold">
+          Hantar Permohonan
+        </button>
+        <a href="corporate-tunggal-page.html" class="block text-center bg-gray-200 hover:bg-gray-300 transition text-gray-700 py-3 rounded-lg font-semibold">
+          ← Kembali Edit Borang
+        </a>
+      </div>
+
+      <!-- STATUS -->
+      <p id="status" class="text-center text-green-600 font-medium"></p>
+    </div>
+  </div>
+
+  <!-- FIREBASE -->
+  <script type="module">
+    import { db, auth } from './firebase.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { doc, getDoc, updateDoc, collection, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    let currentUser = null;
+
+    // CHECK LOGIN
+    onAuthStateChanged(auth, async(user)=>{
+      if(!user){
+        window.location.href = "login.html";
+        return;
+      }
+      currentUser = user;
+
+      // 1. GET SYSTEM ADMIN COMPANY NAME
+      try {
+          const adminSnap = await getDoc(doc(db, "settings", "admin"));
+          if(adminSnap.exists() && adminSnap.data().namaSyarikat) {
+              document.getElementById("systemCompanyName").textContent = adminSnap.data().namaSyarikat;
+          } else {
+              document.getElementById("systemCompanyName").textContent = "Sistem Pengurusan Wasiat Korporat"; // Fallback
+          }
+      } catch(e) {
+          document.getElementById("systemCompanyName").textContent = "Sistem Pengurusan Wasiat Korporat";
+      }
+
+      // 2. GET USER CORPORATE TUNGGAL DATA
+      const docRef = doc(db, "users", currentUser.uid, "corporate_tunggal", "maklumat");
+      const docSnap = await getDoc(docRef);
+
+      if(docSnap.exists()){
+        const data = docSnap.data();
+        
+        // Kunci Butang Hantar Jika Sudah Dihantar/Dibayar
+        if(data.status === "PENDING_APPROVAL" || data.status === "PAID" || data.status === "COMPLETED") {
+            const btn = document.getElementById("submitBtn");
+            btn.disabled = true;
+            btn.innerText = "Permohonan Telah Dihantar";
+            btn.classList.replace("bg-[#153638]", "bg-gray-400");
+            btn.classList.remove("hover:bg-[#1d4a4d]");
+        }
+
+        // SECTION 1: PEWASIAT
+        document.getElementById("nama").innerHTML = data.nama || "-";
+        document.getElementById("ic").innerHTML = data.ic || "-";
+        document.getElementById("telefon").innerHTML = data.telefon || "-";
+        document.getElementById("alamat").innerHTML = data.alamat || "-";
+        
+        // SECTION 2: SENARAI WARIS
+        let warisHTML = "";
+        if(data.waris && data.waris.length > 0) {
+            data.waris.forEach((waris,index)=>{
+                warisHTML += `
+                <div class="border rounded-lg p-3 mb-3">
+                    <p><strong>${index+1}. ${waris.nama}</strong></p>
+                    <p>No IC: ${waris.ic || "-"}</p>
+                    <p>Hubungan: ${waris.hubungan || "-"}</p>
+                    <p>Telefon: ${waris.telefon || "-"}</p>
+                    <p>Status: ${waris.status === 'bawah18' ? 'Bawah 18 Tahun' : (waris.status === 'oku' ? 'OKU' : 'Dewasa')}</p>
+                </div>`;
+            });
+        } else {
+            warisHTML = "<p class='text-gray-500 text-sm'>Tiada senarai waris.</p>";
+        }
+        document.getElementById("warisList").innerHTML = warisHTML;
+
+        // SECTION 3: KORPORAT & WASI
+        let getMekanismeName = (kod) => {
+            if(kod === 'hibah') return 'Hibah Saham Mutlak';
+            if(kod === 'wakafzurri') return 'Wakaf Saham Zurri (Pewarisan Keturunan)';
+            return '-';
+        };
+
+        let fSaham = (val) => val ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "-";
+        
+        let korporatHTML = "";
+        let senaraiSyarikat = data.senaraiSyarikat || [];
+        
+        if (senaraiSyarikat.length === 0 && data.namaSyarikat) {
+            senaraiSyarikat.push(data);
+        }
+
+        if (senaraiSyarikat.length > 0) {
+            senaraiSyarikat.forEach((syarikat, sIndex) => {
+                korporatHTML += `
+                <div class="mb-5 p-5 bg-white border border-gray-200 rounded-xl shadow-sm">
+                    <h4 class="font-bold text-[#153638] text-lg border-b pb-2 mb-3">Syarikat ${sIndex + 1}: ${syarikat.namaSyarikat || "-"}</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-2 text-sm mb-4">
+                        <p><strong>No. Pendaftaran (SSM):</strong> ${syarikat.noSsm || "-"}</p>
+                        <p><strong>Jumlah Saham Keseluruhan:</strong> ${fSaham(syarikat.jumlahSaham)} Unit</p>
+                        <p class="md:col-span-2"><strong>Alamat Berdaftar:</strong> ${syarikat.alamatSyarikat || "-"}</p>
+                        <p><strong>Saham Milik Pewasiat:</strong> ${fSaham(syarikat.sahamPewasiat)} Unit</p>
+                        <p><strong>Status Pemilikan:</strong> Pemilik Tunggal</p>
+                        <p class="md:col-span-2 text-blue-700 mt-2"><strong>Mekanisme Agihan:</strong> ${getMekanismeName(syarikat.mekanismeAgihan)}</p>
+                    </div>`;
+
+                // Sub-Section Mekanisme
+                if (syarikat.mekanismeAgihan === 'hibah') {
+                    korporatHTML += `
+                    <div class="p-4 bg-green-50 border border-green-200 rounded-xl">
+                        <p class="font-bold text-green-800 border-b border-green-200 pb-2 mb-2">Penerima Hibah Saham</p>`;
+                    if (syarikat.penerimaHibahSaham && syarikat.penerimaHibahSaham.length > 0) {
+                        syarikat.penerimaHibahSaham.forEach((p, i) => {
+                            korporatHTML += `<p class="text-sm mb-1">${i+1}. <strong>${p.nama}</strong> (${p.peratus}%)</p>`;
+                        });
+                    } else {
+                        korporatHTML += `<p class="text-sm text-gray-500 italic">Tiada penerima dimasukkan.</p>`;
+                    }
+                    korporatHTML += `</div>`;
+                } 
+                else if (syarikat.mekanismeAgihan === 'wakafzurri') {
+                    let jWakaf = syarikat.jenisWakafZurri === 'munjiz' ? 'Wakaf Serta-Merta (Munjiz)' : (syarikat.jenisWakafZurri === 'muallaq' ? "Wakaf Selepas Kematian (Mu'allaq)" : "-");
+                    let jHarta = syarikat.jenisHartaWakafZurri === 'ain' ? "Wakaf Saham Penuh ('Ain)" : (syarikat.jenisHartaWakafZurri === 'manfaah' ? "Wakaf Hasil/Dividen Sahaja (Manfaah)" : "-");
+                    
+                    korporatHTML += `
+                    <div class="p-4 bg-purple-50 border border-purple-200 rounded-xl">
+                        <p class="font-bold text-purple-800 border-b border-purple-200 pb-2 mb-2">Maklumat Wakaf Zurri</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-4">
+                            <p><strong>Kuat Kuasa:</strong> ${jWakaf}</p>
+                            <p><strong>Jenis Harta:</strong> ${jHarta}</p>
+                            <p class="md:col-span-2"><strong>Nazir Dicadangkan:</strong> ${syarikat.nazir?.nama || "-"} (${syarikat.nazir?.ic || "-"})</p>
+                        </div>
+                        <p class="font-bold text-purple-800 border-b border-purple-200 pb-2 mb-2">Penerima Manfaat Wakaf Saham Zurri</p>`;
+                    if (syarikat.penerimaWakafZurri && syarikat.penerimaWakafZurri.length > 0) {
+                        syarikat.penerimaWakafZurri.forEach((p, i) => {
+                            korporatHTML += `<p class="text-sm mb-1">${i+1}. <strong>${p.nama}</strong> (${p.generasi || p.peratus || "-"})</p>`;
+                        });
+                    } else {
+                        korporatHTML += `<p class="text-sm text-gray-500 italic">Tiada penerima dimasukkan.</p>`;
+                    }
+                    korporatHTML += `</div>`;
+                }
+
+                korporatHTML += `</div>`; // Tutup syarikat-item block
+            });
+        } else {
+            korporatHTML += `<p class='text-gray-500 text-sm'>Tiada syarikat direkodkan.</p>`;
+        }
+
+        // Info Wasi
+        korporatHTML += `
+            <hr class="my-6 border-gray-300">
+            <h3 class="font-semibold text-lg text-[#153638] mb-3">Pelantikan Wasi / Pentadbir</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="border rounded-xl p-4 bg-white shadow-sm">
+                    <p class="text-xs font-bold text-gray-400 mb-2 tracking-wider">WASI PERTAMA</p>
+                    <p class="text-sm"><strong>Nama:</strong> ${data.namaWasi1 || "-"}</p>
+                    <p class="text-sm"><strong>No IC / SSM:</strong> ${data.icWasi1 || "-"}</p>
+                    <p class="text-sm"><strong>Hubungan:</strong> ${data.hubunganWasi1 || "-"}</p>
+                    <p class="text-sm"><strong>Telefon:</strong> ${data.telefonWasi1 || "-"}</p>
+                </div>
+                <div class="border rounded-xl p-4 bg-white shadow-sm">
+                    <p class="text-xs font-bold text-gray-400 mb-2 tracking-wider">WASI KEDUA (GANTIAN)</p>
+                    <p class="text-sm"><strong>Nama:</strong> ${data.namaWasi2 || "-"}</p>
+                    <p class="text-sm"><strong>No IC:</strong> ${data.icWasi2 || "-"}</p>
+                    <p class="text-sm"><strong>Hubungan:</strong> ${data.hubunganWasi2 || "-"}</p>
+                    <p class="text-sm"><strong>Telefon:</strong> ${data.telefonWasi2 || "-"}</p>
+                </div>
+            </div>
+        `;
+        document.getElementById("korporatInfo").innerHTML = korporatHTML;
+
+        // SECTION 4: WASIAT 1/3
+        let wasiat13HTML = "";
+        if(data.wasiatSatuPerTiga && data.wasiatSatuPerTiga.length > 0) {
+            data.wasiatSatuPerTiga.forEach((item,index)=>{
+                wasiat13HTML += `
+                <div class="border rounded-lg p-3 mb-3">
+                    <p><strong>${index+1}. ${item.harta}</strong></p>
+                    <p>Bahagian: ${item.bahagian}</p>
+                    <p>Penerima: ${item.penerima}</p>
+                    <p>Nota: ${item.nota}</p>
+                </div>`;
+            });
+        } else {
+            wasiat13HTML = "<p class='text-gray-500 text-sm'>Tiada Wasiat 1/3 direkodkan.</p>";
+        }
+        document.getElementById("wasiat13Summary").innerHTML = wasiat13HTML;
+
+        // SECTION 5: PESANAN
+        document.getElementById("pesananPreview").innerHTML = data.pesananWasiat || "-";
+
+        // SECTION 6: PEMEGANG AMANAH
+        if (data.pemegangAmanah && data.pemegangAmanah.pilihan === "ya") {
+            document.getElementById("amanahInfo").innerHTML = `
+                <div class="p-4 bg-orange-50 border border-orange-200 rounded-xl">
+                    <p><strong>Nama:</strong> ${data.pemegangAmanah.nama || "-"}</p>
+                    <p><strong>IC:</strong> ${data.pemegangAmanah.ic || "-"}</p>
+                    <p><strong>Hubungan:</strong> ${data.pemegangAmanah.hubungan || "-"}</p>
+                    <p><strong>Telefon:</strong> ${data.pemegangAmanah.telefon || "-"}</p>
+                </div>
+            `;
+        } else if (data.pemegangAmanah && data.pemegangAmanah.pilihan === "tidak") {
+            document.getElementById("amanahInfo").innerHTML = "<p class='text-gray-600 italic'>Sama seperti Wasi yang dilantik.</p>";
+        } else {
+            document.getElementById("amanahInfo").innerHTML = "<p class='text-gray-500 text-sm'>Tiada Pemegang Amanah diperlukan.</p>";
+        }
+        
+        // LAMPIRAN (Path Documents corporate_tunggalDocuments)
+        const snapshot = await getDocs(collection(db, "users", currentUser.uid, "corporate_tunggalDocuments"));
+        let lampiranHTML = "";
+        snapshot.forEach((doc)=>{
+          const file = doc.data();
+          lampiranHTML += `
+            <div class="bg-gray-100 p-4 rounded-xl space-y-3">
+              <div class="flex justify-between items-center">
+                <p class="text-sm font-medium text-gray-700">${file.namaLampiran || file.fileName}</p>
+                <a href="${file.fileURL}" target="_blank" class="text-[#153638] font-semibold hover:underline">Buka</a>
+              </div>
+              ${file.fileName.endsWith(".pdf") ? `<iframe src="${file.fileURL}" class="w-full h-96 rounded-lg border"></iframe>` : `<img src="${file.fileURL}" class="w-full rounded-lg border">`}
+            </div>
+          `;
+        });
+        document.getElementById("lampiranList").innerHTML = lampiranHTML || "<p class='text-gray-500 text-sm'>Tiada lampiran dimuat naik.</p>";
+        
+      }
+      
+      // ==========================================
+      // SUBMIT ACTION & KAWALAN BAYARAN
+      // ==========================================
+      document.getElementById("submitBtn").addEventListener("click", async()=>{
+        const btn = document.getElementById("submitBtn");
+        btn.disabled = true;
+        btn.innerText = "Memproses...";
+
+        try{
+            const docRef = doc(db, "users", currentUser.uid, "corporate_tunggal", "maklumat");
+            const docSnap = await getDoc(docRef);
+            
+            if(docSnap.exists()){
+                const data = docSnap.data();
+
+                // 1. JIKA KLIEN PILIH RTB (PERLU BAYAR RM100 TAMBAHAN)
+                if(data.pilihanWasi1 === "rtb"){
+                    // Redirect klien ke muka surat bayaran dengan parameter type corporate_tunggal
+                    window.location.href = `add-payment.html?id=${currentUser.uid}&type=corporate_tunggal`;
+                } 
+                // 2. JIKA KLIEN PILIH MANUAL (PERCUMA / TIADA CAJ RTB)
+                else {
+                    const submitData = {
+                        status: "PENDING_APPROVAL",
+                        submittedAt: new Date().toISOString()
+                    };
+                    
+                    // Update rekod profil klien
+                    await updateDoc(docRef, submitData);
+                    
+                    // Double Entry terus ke Submissions (Untuk Admin Semak)
+                    await setDoc(doc(db, "submissions", `${currentUser.uid}_corporate_tunggal`), {
+                        ...data,
+                        ...submitData,
+                        userId: currentUser.uid,
+                        jenisDokumen: "corporate_tunggal"
+                    }, { merge: true });
+                    
+                    alert("Permohonan berjaya dihantar untuk semakan Pengurusan.");
+                    window.location.href = "dashboard.html";
+                }
+            }
+        } catch(error){
+            document.getElementById("status").innerHTML = `<span class="text-red-500">Ralat: ${error.message}</span>`;
+            btn.disabled = false;
+            btn.innerText = "Hantar Permohonan";
+        }
+      });
+
+    });
+  </script>
+</body>
+</html>
