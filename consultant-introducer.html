@@ -171,13 +171,23 @@
             }
         };
 
-        // Fungsi Copy Link
-        window.copyRegisterLink = async (aqmUid) => {
+        // Fungsi Copy Link AQM (Ditambah baik dengan visual feedback)
+        window.copyRegisterLink = async (aqmUid, btnElement) => {
             const baseUrl = window.location.origin + window.location.pathname.replace("consultant-introducer.html", "register.html");
             const registerLink = `${baseUrl}?ref=${aqcNo}&intro=${aqmUid}`;
             try {
                 await navigator.clipboard.writeText(registerLink);
-                alert("Link Pendaftaran berjaya disalin!\n\n" + registerLink);
+                // Visual feedback
+                const originalHTML = btnElement.innerHTML;
+                btnElement.innerHTML = "✓ Copied!";
+                btnElement.classList.replace("bg-[#153638]", "bg-green-600");
+                btnElement.classList.replace("hover:bg-[#1d4a4d]", "hover:bg-green-700");
+                
+                setTimeout(() => {
+                    btnElement.innerHTML = originalHTML;
+                    btnElement.classList.replace("bg-green-600", "bg-[#153638]");
+                    btnElement.classList.replace("hover:bg-green-700", "hover:bg-[#1d4a4d]");
+                }, 2000);
             } catch (err) {
                 alert("Gagal menyalin link.");
             }
@@ -203,7 +213,7 @@
                 const earnings = [];
                 earnSnap.forEach(d => earnings.push({ id: d.id, ...d.data() }));
 
-                // 2. TARIK DATA PELANGGAN BERDAFTAR (AUTO-SYNC SYNC)
+                // 2. TARIK DATA PELANGGAN BERDAFTAR (AUTO-SYNC)
                 const usersQuery = query(collection(db, "users"), where("referral", "==", aqcNo));
                 const usersSnap = await getDocs(usersQuery);
                 const myAqmUids = [];
@@ -245,7 +255,7 @@
                             }
                         }
 
-                        // Semak Rekod Komisen (Bandingkan nama prospek/berdaftar dan UID Introducer)
+                        // Semak Rekod Komisen
                         const earning = earnings.find(e => 
                             e.introducerUid === p.introducerUid && 
                             (e.customerName.toLowerCase() === registeredName.toLowerCase() || e.customerName.toLowerCase() === p.namaProspek.toLowerCase())
@@ -300,7 +310,7 @@
                         `;
 
                         if (p.earning.status === "PAID") {
-                            // Convert Firestore Timestamp ke Tarikh Biasa
+                            // PAPARKAN TARIKH & CARA BAYARAN UNTUK AQM
                             let paidDateStr = "-";
                             if (p.earning.paidAt) {
                                 const paidDateObj = p.earning.paidAt.toDate ? p.earning.paidAt.toDate() : new Date(p.earning.paidAt);
@@ -344,11 +354,8 @@
                                 <option value="KIV / Tolak" ${p.status === "KIV / Tolak" ? "selected" : ""}>KIV / Tolak</option>
                             </select>
                         `;
-                        actionUI = `
-                            <button onclick="copyRegisterLink('${p.introducerUid}')" class="bg-[#153638] hover:bg-[#1d4a4d] text-white px-3 py-2 rounded-lg text-xs font-bold transition shadow-sm w-full flex items-center justify-center gap-1">
-                                🔗 Copy Link
-                            </button>
-                        `;
+                        // AQC sedang urus, tunggu register
+                        actionUI = `<span class="text-gray-400 text-xs font-medium italic">Tunggu Pendaftaran</span>`;
                     }
 
                     tbody.innerHTML += `
@@ -358,11 +365,14 @@
                                 <p class="font-bold text-gray-800 text-base">${p.namaProspek}</p>
                                 <p class="text-indigo-600 font-semibold mb-1">📞 ${p.telefonProspek}</p>
                                 <p class="text-gray-500 text-xs">💼 ${p.pekerjaanProspek}</p>
-                                ${p.nota ? `<p class="text-gray-400 text-xs mt-2 italic border-l-2 border-gray-200 pl-2">${p.nota}</p>` : ''}
+                                ${p.nota ? `<p class="text-gray-400 text-[11px] mt-2 italic border-l-2 border-gray-200 pl-2 line-clamp-2" title="${p.nota}">${p.nota}</p>` : ''}
                             </td>
                             <td class="p-4 align-top">
                                 <p class="font-semibold text-gray-800">${p.introducerNama}</p>
-                                <p class="text-gray-500 text-xs mt-1">📞 ${p.introducerPhone}</p>
+                                <p class="text-gray-500 text-xs mt-1 mb-2">📞 ${p.introducerPhone}</p>
+                                <button onclick="copyRegisterLink('${p.introducerUid}', this)" class="bg-[#153638] hover:bg-[#1d4a4d] text-white px-2 py-1.5 rounded text-[10px] font-bold transition shadow-sm inline-flex items-center gap-1 w-max">
+                                    🔗 Copy Link AQM
+                                </button>
                             </td>
                             <td class="p-4 align-top bg-indigo-50/30">
                                 ${earningUI}
