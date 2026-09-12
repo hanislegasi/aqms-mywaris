@@ -448,17 +448,16 @@ import {
       const userData = docSnap.data();
 
       // UPDATE STATUS 4 PRODUK BIASA
-      updateProductCard(userData.wasiatPaymentStatus, "wasiatCard", "wasiatTitle", "wasiatButton", "wasiatButtonText", "wasiatIcon", "wasiat.html", "Wasiat");
-      updateProductCard(userData.hibahPaymentStatus, "hibahCard", "hibahTitle", "hibahButton", "hibahButtonText", "hibahIcon", "hibah.html", "Hibah");
-      updateProductCard(userData.sepencarianPaymentStatus, "sepencarianCard", "sepencarianTitle", "sepencarianButton", "sepencarianButtonText", "sepencarianIcon", "sepencarian.html", "Harta Sepencarian");
-      updateProductCard(userData.mawarisPaymentStatus, "mawarisCard", "mawarisTitle", "mawarisButton", "mawarisButtonText", "mawarisIcon", "mawaris.html", "Mawaris");  
+      updateProductCard(userData.wasiatPaymentStatus, "wasiatCard", "wasiatTitle", "wasiatButton", "wasiatButtonText", "wasiatIcon", "wasiat-page.html", "Wasiat");
+      updateProductCard(userData.hibahPaymentStatus, "hibahCard", "hibahTitle", "hibahButton", "hibahButtonText", "hibahIcon", "hibah-page.html", "Hibah");
+      updateProductCard(userData.sepencarianPaymentStatus, "sepencarianCard", "sepencarianTitle", "sepencarianButton", "sepencarianButtonText", "sepencarianIcon", "sepencarian-page.html", "Harta Sepencarian");
+      updateProductCard(userData.mawarisPaymentStatus, "mawarisCard", "mawarisTitle", "mawarisButton", "mawarisButtonText", "mawarisIcon", "mawaris-page.html", "Mawaris");  
       
       // UPDATE STATUS 4 PRODUK CORPORATE
-      updateProductCard(userData.corporatePaymentStatus, "corporateCard", "corporateTitle", "corporateButton", "corporateButtonText", "corporateIcon", "corporate.html", "Corp. Premium");  
-      updateProductCard(userData.corporateTunggalPaymentStatus, "corporateTunggalCard", "corporateTunggalTitle", "corporateTunggalButton", "corporateTunggalButtonText", "corporateTunggalIcon", "corporate-tunggal.html", "Corp. Tunggal");  
-      updateProductCard(userData.corporateKongsiPaymentStatus, "corporateKongsiCard", "corporateKongsiTitle", "corporateKongsiButton", "corporateKongsiButtonText", "corporateKongsiIcon", "corporate-kongsi.html", "Corp. Kongsi");  
-      updateProductCard(userData.corporateZurriPaymentStatus, "corporateZurriCard", "corporateZurriTitle", "corporateZurriButton", "corporateZurriButtonText", "corporateZurriIcon", "corporate-zurri.html", "Corp. Zurri");  
-
+      updateProductCard(userData.corporatePaymentStatus, "corporateCard", "corporateTitle", "corporateButton", "corporateButtonText", "corporateIcon", "corporate-page.html", "Mawaris Korporat-Premium");  
+      updateProductCard(userData.corporateTunggalPaymentStatus, "corporateTunggalCard", "corporateTunggalTitle", "corporateTunggalButton", "corporateTunggalButtonText", "corporateTunggalIcon", "corporate-tunggal-page.html", "Mawaris Korporat-Sole");  
+      updateProductCard(userData.corporateKongsiPaymentStatus, "corporateKongsiCard", "corporateKongsiTitle", "corporateKongsiButton", "corporateKongsiButtonText", "corporateKongsiIcon", "corporate-kongsi-page.html", "Mawaris Korporat-P'Ship");  
+      updateProductCard(userData.corporateZurriPaymentStatus, "corporateZurriCard", "corporateZurriTitle", "corporateZurriButton", "corporateZurriButtonText", "corporateZurriIcon", "corporate-zurri-page.html", "Mawaris Korporat-Wakaf Zurri");
       document.getElementById("namaUser").innerHTML = "Selamat datang, " + userData.nama;
 
       // ==========================================
