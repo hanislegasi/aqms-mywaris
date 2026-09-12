@@ -78,6 +78,9 @@ import {
       let sepencarianStatus = "BELUM DIISI";
       let mawarisStatus = "BELUM DIISI";
       let corporateStatus = "BELUM DIISI";
+      let corporateTunggalStatus = "BELUM DIISI";
+      let corporateKongsiStatus = "BELUM DIISI";
+      let corporateZurriStatus = "BELUM DIISI";
 
       // LOAD USER
       const docSnap = await getDoc(doc(db, "users", userId));
@@ -299,28 +302,13 @@ import {
           mawarisBakiHari = mawarisExpiryDate !== "-" ? Math.ceil((new Date(mawarisData.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)) : 0;
         }
 
-        // CORPORATE STATUS
+        // CORPORATE (PREMIUM) STATUS
         const corporateSnap = await getDoc(doc(db, "users", userId, "corporate", "maklumat"));
         let corporateData = {};
         let corporateDocRef = "-";
-        let corporateApprovedDate = "-";
-        let corporateExpiryDate = "-";
-        let corporateBakiHari = 0;
-        let corporatePrintedAt = null;
-        let corporateSentAt = null;
-        let corporateCompletedAt = null;
-        let corporateDeliveryMethod = "";
-        let corporateCourier = "";
-        let corporateTrackingNo = "";
-        let corporateReceiver = "";
-        let corporateRemarks = "";
-        let corporateAkadDate = "";
-        let corporateAkadTime = "";
-        let corporateStampDate = "";
-        let corporateStampRef = "";
-        let corporateHandoverDate = "";
-        let corporateHandoverRemarks = "";
-        let corporateReceivedDate = "";
+        let corporatePrintedAt = null, corporateSentAt = null;
+        let corporateCourier = "", corporateTrackingNo = "", corporateReceiver = "", corporateRemarks = "";
+        let corporateAkadDate = "", corporateAkadTime = "", corporateStampDate = "", corporateStampRef = "", corporateHandoverDate = "", corporateHandoverRemarks = "", corporateReceivedDate = "";
           
         if (corporateSnap.exists()) {
           corporateData = corporateSnap.data();
@@ -333,35 +321,94 @@ import {
           corporateHandoverDate = corporateData.handoverDate || "";
           corporateHandoverRemarks = corporateData.handoverRemarks || "";
           corporateReceivedDate = corporateData.receivedDate || "";
-          corporateCompletedAt = corporateData.completedAt || null;
-          corporateDeliveryMethod = corporateData.deliveryMethod || "";
           corporateCourier = corporateData.courier || "";
           corporateTrackingNo = corporateData.trackingNo || "";
           corporateReceiver = corporateData.receiver || "";
           corporateRemarks = corporateData.remarks || "";
           corporateStatus = corporateData.status || "DRAFT";
           corporateDocRef = corporateData.docRef || "-";
-          corporateApprovedDate = corporateData.approvedAt ? new Date(corporateData.approvedAt).toLocaleDateString("ms-MY") : "-";
-          corporateExpiryDate = corporateData.expiryDate ? new Date(corporateData.expiryDate).toLocaleDateString("ms-MY") : "-";
-          corporateBakiHari = corporateExpiryDate !== "-" ? Math.ceil((new Date(corporateData.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)) : 0;
         }
 
-        const products = [
-          { name: "Wasiat", snap: wasiatSnap, status: wasiatStatus, docRef: wasiatDocRef, preview: "preview-wasiat.html" },
-          { name: "Hibah", snap: hibahSnap, status: hibahStatus, docRef: hibahDocRef, preview: "preview-hibah.html" },
-          { name: "Harta Sepencarian", snap: sepencarianSnap, status: sepencarianStatus, docRef: sepencarianDocRef, preview: "preview-sepencarian.html" },
-          { name: "Mawaris", snap: mawarisSnap, status: mawarisStatus, docRef: mawarisDocRef, preview: "preview-mawaris.html" },
-          { name: "Mawaris Korporat", snap: corporateSnap, status: corporateStatus, docRef: corporateDocRef, preview: "preview-corporate.html" }
-        ];
+        // CORPORATE (TUNGGAL) STATUS
+        const corporateTunggalSnap = await getDoc(doc(db, "users", userId, "corporate_tunggal", "maklumat"));
+        let corporateTunggalData = {};
+        let corporateTunggalDocRef = "-";
+        let corporateTunggalPrintedAt = null, corporateTunggalSentAt = null;
+        let corporateTunggalCourier = "", corporateTunggalTrackingNo = "", corporateTunggalReceiver = "", corporateTunggalRemarks = "";
+        let corporateTunggalAkadDate = "", corporateTunggalAkadTime = "", corporateTunggalStampDate = "", corporateTunggalStampRef = "", corporateTunggalHandoverDate = "", corporateTunggalHandoverRemarks = "", corporateTunggalReceivedDate = "";
+          
+        if (corporateTunggalSnap.exists()) {
+          corporateTunggalData = corporateTunggalSnap.data();
+          corporateTunggalPrintedAt = corporateTunggalData.printedAt || null;
+          corporateTunggalSentAt = corporateTunggalData.sentAt || null;
+          corporateTunggalAkadDate = corporateTunggalData.akadDate || "";
+          corporateTunggalAkadTime = corporateTunggalData.akadTime || "";
+          corporateTunggalStampDate = corporateTunggalData.stampingDate || "";
+          corporateTunggalStampRef = corporateTunggalData.stampingRef || "";
+          corporateTunggalHandoverDate = corporateTunggalData.handoverDate || "";
+          corporateTunggalHandoverRemarks = corporateTunggalData.handoverRemarks || "";
+          corporateTunggalReceivedDate = corporateTunggalData.receivedDate || "";
+          corporateTunggalCourier = corporateTunggalData.courier || "";
+          corporateTunggalTrackingNo = corporateTunggalData.trackingNo || "";
+          corporateTunggalReceiver = corporateTunggalData.receiver || "";
+          corporateTunggalRemarks = corporateTunggalData.remarks || "";
+          corporateTunggalStatus = corporateTunggalData.status || "DRAFT";
+          corporateTunggalDocRef = corporateTunggalData.docRef || "-";
+        }
 
-        const activeProduct = products.find(product => product.snap.exists());
+        // CORPORATE (KONGSI) STATUS
+        const corporateKongsiSnap = await getDoc(doc(db, "users", userId, "corporate_kongsi", "maklumat"));
+        let corporateKongsiData = {};
+        let corporateKongsiDocRef = "-";
+        let corporateKongsiPrintedAt = null, corporateKongsiSentAt = null;
+        let corporateKongsiCourier = "", corporateKongsiTrackingNo = "", corporateKongsiReceiver = "", corporateKongsiRemarks = "";
+        let corporateKongsiAkadDate = "", corporateKongsiAkadTime = "", corporateKongsiStampDate = "", corporateKongsiStampRef = "", corporateKongsiHandoverDate = "", corporateKongsiHandoverRemarks = "", corporateKongsiReceivedDate = "";
+          
+        if (corporateKongsiSnap.exists()) {
+          corporateKongsiData = corporateKongsiSnap.data();
+          corporateKongsiPrintedAt = corporateKongsiData.printedAt || null;
+          corporateKongsiSentAt = corporateKongsiData.sentAt || null;
+          corporateKongsiAkadDate = corporateKongsiData.akadDate || "";
+          corporateKongsiAkadTime = corporateKongsiData.akadTime || "";
+          corporateKongsiStampDate = corporateKongsiData.stampingDate || "";
+          corporateKongsiStampRef = corporateKongsiData.stampingRef || "";
+          corporateKongsiHandoverDate = corporateKongsiData.handoverDate || "";
+          corporateKongsiHandoverRemarks = corporateKongsiData.handoverRemarks || "";
+          corporateKongsiReceivedDate = corporateKongsiData.receivedDate || "";
+          corporateKongsiCourier = corporateKongsiData.courier || "";
+          corporateKongsiTrackingNo = corporateKongsiData.trackingNo || "";
+          corporateKongsiReceiver = corporateKongsiData.receiver || "";
+          corporateKongsiRemarks = corporateKongsiData.remarks || "";
+          corporateKongsiStatus = corporateKongsiData.status || "DRAFT";
+          corporateKongsiDocRef = corporateKongsiData.docRef || "-";
+        }
 
-       const currentCollection = activeProduct
-          ? (activeProduct.name === "Wasiat" ? "wasiat" : 
-             activeProduct.name === "Hibah" ? "hibah" : 
-             activeProduct.name === "Harta Sepencarian" ? "sepencarian" : 
-             activeProduct.name === "Mawaris" ? "mawaris" : "corporate")
-          : "wasiat";
+        // CORPORATE (WAKAF ZURRI) STATUS
+        const corporateZurriSnap = await getDoc(doc(db, "users", userId, "corporate_zurri", "maklumat"));
+        let corporateZurriData = {};
+        let corporateZurriDocRef = "-";
+        let corporateZurriPrintedAt = null, corporateZurriSentAt = null;
+        let corporateZurriCourier = "", corporateZurriTrackingNo = "", corporateZurriReceiver = "", corporateZurriRemarks = "";
+        let corporateZurriAkadDate = "", corporateZurriAkadTime = "", corporateZurriStampDate = "", corporateZurriStampRef = "", corporateZurriHandoverDate = "", corporateZurriHandoverRemarks = "", corporateZurriReceivedDate = "";
+          
+        if (corporateZurriSnap.exists()) {
+          corporateZurriData = corporateZurriSnap.data();
+          corporateZurriPrintedAt = corporateZurriData.printedAt || null;
+          corporateZurriSentAt = corporateZurriData.sentAt || null;
+          corporateZurriAkadDate = corporateZurriData.akadDate || "";
+          corporateZurriAkadTime = corporateZurriData.akadTime || "";
+          corporateZurriStampDate = corporateZurriData.stampingDate || "";
+          corporateZurriStampRef = corporateZurriData.stampingRef || "";
+          corporateZurriHandoverDate = corporateZurriData.handoverDate || "";
+          corporateZurriHandoverRemarks = corporateZurriData.handoverRemarks || "";
+          corporateZurriReceivedDate = corporateZurriData.receivedDate || "";
+          corporateZurriCourier = corporateZurriData.courier || "";
+          corporateZurriTrackingNo = corporateZurriData.trackingNo || "";
+          corporateZurriReceiver = corporateZurriData.receiver || "";
+          corporateZurriRemarks = corporateZurriData.remarks || "";
+          corporateZurriStatus = corporateZurriData.status || "DRAFT";
+          corporateZurriDocRef = corporateZurriData.docRef || "-";
+        }
 
         document.getElementById("customerInfo").innerHTML = `
           <div class="space-y-6">
@@ -382,6 +429,7 @@ import {
                   <div><p class="text-gray-500 text-sm">Status</p><p id="memberStatus"></p></div>
                 </div>
 
+                <!-- WASIAT -->
                 ${wasiatSnap.exists() ? `
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
                   <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
@@ -433,6 +481,7 @@ import {
                 </div>
                 ` : ""}
 
+                <!-- HIBAH -->
                 ${hibahSnap.exists() ? `
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
                   <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
@@ -484,6 +533,7 @@ import {
                 </div>
                 ` : ""}
 
+                <!-- SEPENCARIAN -->
                 ${sepencarianSnap.exists() ? `
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
                   <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
@@ -535,6 +585,7 @@ import {
                 </div>
                 ` : ""}
 
+                <!-- MAWARIS -->
                 ${mawarisSnap.exists() ? `
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
                   <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
@@ -586,10 +637,11 @@ import {
                 </div>
                 ` : ""}
 
+                <!-- CORPORATE (PREMIUM) -->
                 ${corporateSnap.exists() ? `
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
                   <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-green-700 mb-4">Corporate</h3>
+                    <h3 class="text-xl font-bold text-green-700 mb-4">Corporate Premium</h3>
                     <p class="text-sm text-gray-500">No Dokumen</p>
                     <p class="font-semibold mb-3">${corporateDocRef}</p>
                     <p class="text-sm text-gray-500">Status</p>
@@ -636,6 +688,163 @@ import {
                   </div>
                 </div>
                 ` : ""}
+
+                <!-- CORPORATE (TUNGGAL) -->
+                ${corporateTunggalSnap.exists() ? `
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
+                  <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">Corp. Tunggal</h3>
+                    <p class="text-sm text-gray-500">No Dokumen</p>
+                    <p class="font-semibold mb-3">${corporateTunggalDocRef}</p>
+                    <p class="text-sm text-gray-500">Status</p>
+                    <p class="font-semibold mb-6">${corporateTunggalStatus}</p>
+                    <a href="admin-preview-corporate-tunggal.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
+                  </div>
+
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
+                    <input type="datetime-local" id="corporateTunggalPrintedAt" value="${corporateTunggalPrintedAt ? corporateTunggalPrintedAt.substring(0, 16) : ""}" ${corporateTunggalStatus === "PRINTED" || corporateTunggalStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
+                    <button id="btnPrintCorporateTunggal" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
+                  </div>
+
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    ${getDeliveryAlert(corporateTunggalData)}
+                    <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
+                    <input type="datetime-local" id="corporateTunggalSentAt" value="${corporateTunggalSentAt ? corporateTunggalSentAt.substring(0, 16) : ""}" ${corporateTunggalStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
+                    <input id="corporateTunggalCourier" class="w-full border rounded-lg p-2 mb-2" placeholder="Courier" value="${corporateTunggalCourier}">
+                    <input id="corporateTunggalTrackingNo" class="w-full border rounded-lg p-2 mb-2" placeholder="Tracking No" value="${corporateTunggalTrackingNo}">
+                    <input id="corporateTunggalReceiver" class="w-full border rounded-lg p-2 mb-2" placeholder="Receiver" value="${corporateTunggalReceiver}">
+                    <textarea id="corporateTunggalRemarks" class="w-full border rounded-lg p-2 mb-3" rows="3" placeholder="Remarks">${corporateTunggalRemarks}</textarea>
+                    <button id="btnSendCorporateTunggal" class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">✔ Tandakan Dihantar</button>
+                  </div>
+
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
+                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <p class="font-semibold">${corporateTunggalAkadDate || "-"} ${corporateTunggalAkadTime || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Stamping</p>
+                    <p class="font-semibold">${corporateTunggalStampDate || "-"}</p>
+                    <p class="text-sm">${corporateTunggalStampRef || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="font-semibold">${corporateTunggalHandoverDate || "-"}</p>
+                    <p class="text-sm">${corporateTunggalHandoverRemarks || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="font-semibold text-green-700">${corporateTunggalReceivedDate || "-"}</p>
+                    <hr class="my-3">
+                    <button id="btnCompleteCorporateTunggal" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
+                  </div>
+                </div>
+                ` : ""}
+
+                <!-- CORPORATE (KONGSI) -->
+                ${corporateKongsiSnap.exists() ? `
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
+                  <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">Corp. Kongsi</h3>
+                    <p class="text-sm text-gray-500">No Dokumen</p>
+                    <p class="font-semibold mb-3">${corporateKongsiDocRef}</p>
+                    <p class="text-sm text-gray-500">Status</p>
+                    <p class="font-semibold mb-6">${corporateKongsiStatus}</p>
+                    <a href="admin-preview-corporate-kongsi.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
+                  </div>
+
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
+                    <input type="datetime-local" id="corporateKongsiPrintedAt" value="${corporateKongsiPrintedAt ? corporateKongsiPrintedAt.substring(0, 16) : ""}" ${corporateKongsiStatus === "PRINTED" || corporateKongsiStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
+                    <button id="btnPrintCorporateKongsi" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
+                  </div>
+
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    ${getDeliveryAlert(corporateKongsiData)}
+                    <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
+                    <input type="datetime-local" id="corporateKongsiSentAt" value="${corporateKongsiSentAt ? corporateKongsiSentAt.substring(0, 16) : ""}" ${corporateKongsiStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
+                    <input id="corporateKongsiCourier" class="w-full border rounded-lg p-2 mb-2" placeholder="Courier" value="${corporateKongsiCourier}">
+                    <input id="corporateKongsiTrackingNo" class="w-full border rounded-lg p-2 mb-2" placeholder="Tracking No" value="${corporateKongsiTrackingNo}">
+                    <input id="corporateKongsiReceiver" class="w-full border rounded-lg p-2 mb-2" placeholder="Receiver" value="${corporateKongsiReceiver}">
+                    <textarea id="corporateKongsiRemarks" class="w-full border rounded-lg p-2 mb-3" rows="3" placeholder="Remarks">${corporateKongsiRemarks}</textarea>
+                    <button id="btnSendCorporateKongsi" class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">✔ Tandakan Dihantar</button>
+                  </div>
+
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
+                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <p class="font-semibold">${corporateKongsiAkadDate || "-"} ${corporateKongsiAkadTime || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Stamping</p>
+                    <p class="font-semibold">${corporateKongsiStampDate || "-"}</p>
+                    <p class="text-sm">${corporateKongsiStampRef || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="font-semibold">${corporateKongsiHandoverDate || "-"}</p>
+                    <p class="text-sm">${corporateKongsiHandoverRemarks || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="font-semibold text-green-700">${corporateKongsiReceivedDate || "-"}</p>
+                    <hr class="my-3">
+                    <button id="btnCompleteCorporateKongsi" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
+                  </div>
+                </div>
+                ` : ""}
+
+                <!-- CORPORATE (WAKAF ZURRI) -->
+                ${corporateZurriSnap.exists() ? `
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-6">
+                  <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">Corp. Wakaf Zurri</h3>
+                    <p class="text-sm text-gray-500">No Dokumen</p>
+                    <p class="font-semibold mb-3">${corporateZurriDocRef}</p>
+                    <p class="text-sm text-gray-500">Status</p>
+                    <p class="font-semibold mb-6">${corporateZurriStatus}</p>
+                    <a href="admin-preview-corporate-zurri.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
+                  </div>
+
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
+                    <input type="datetime-local" id="corporateZurriPrintedAt" value="${corporateZurriPrintedAt ? corporateZurriPrintedAt.substring(0, 16) : ""}" ${corporateZurriStatus === "PRINTED" || corporateZurriStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
+                    <button id="btnPrintCorporateZurri" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
+                  </div>
+
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    ${getDeliveryAlert(corporateZurriData)}
+                    <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
+                    <input type="datetime-local" id="corporateZurriSentAt" value="${corporateZurriSentAt ? corporateZurriSentAt.substring(0, 16) : ""}" ${corporateZurriStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
+                    <input id="corporateZurriCourier" class="w-full border rounded-lg p-2 mb-2" placeholder="Courier" value="${corporateZurriCourier}">
+                    <input id="corporateZurriTrackingNo" class="w-full border rounded-lg p-2 mb-2" placeholder="Tracking No" value="${corporateZurriTrackingNo}">
+                    <input id="corporateZurriReceiver" class="w-full border rounded-lg p-2 mb-2" placeholder="Receiver" value="${corporateZurriReceiver}">
+                    <textarea id="corporateZurriRemarks" class="w-full border rounded-lg p-2 mb-3" rows="3" placeholder="Remarks">${corporateZurriRemarks}</textarea>
+                    <button id="btnSendCorporateZurri" class="mt-auto w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl">✔ Tandakan Dihantar</button>
+                  </div>
+
+                  <div class="bg-white border rounded-xl p-5 flex flex-col">
+                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
+                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <p class="font-semibold">${corporateZurriAkadDate || "-"} ${corporateZurriAkadTime || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Stamping</p>
+                    <p class="font-semibold">${corporateZurriStampDate || "-"}</p>
+                    <p class="text-sm">${corporateZurriStampRef || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="font-semibold">${corporateZurriHandoverDate || "-"}</p>
+                    <p class="text-sm">${corporateZurriHandoverRemarks || ""}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="font-semibold text-green-700">${corporateZurriReceivedDate || "-"}</p>
+                    <hr class="my-3">
+                    <button id="btnCompleteCorporateZurri" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
+                  </div>
+                </div>
+                ` : ""}
+
               </div>
             </div>
           </div>
@@ -645,9 +854,8 @@ import {
         document.getElementById("memberSince").innerHTML = user.memberSince ? new Date(user.memberSince).toLocaleDateString("ms-MY") : "-";
         document.getElementById("telefon").innerHTML = user.telefon || "-";
 
-        const alamatData = activeProduct
-          ? (currentCollection === "wasiat" ? wasiatData : currentCollection === "hibah" ? hibahData : currentCollection === "sepencarian" ? sepencarianData : mawarisData)
-          : {};
+        // Guna mana-mana alamat yang wujud
+        const alamatData = wasiatSnap.exists() ? wasiatData : (hibahSnap.exists() ? hibahData : (sepencarianSnap.exists() ? sepencarianData : (mawarisSnap.exists() ? mawarisData : (corporateSnap.exists() ? corporateData : (corporateTunggalSnap.exists() ? corporateTunggalData : (corporateKongsiSnap.exists() ? corporateKongsiData : corporateZurriData))))));
 
         document.getElementById("alamatRingkas").innerHTML = [alamatData.bandar, alamatData.negeri].filter(Boolean).join(", ") || "-";
         document.getElementById("referral").innerHTML = user.referral || "-";
@@ -659,7 +867,10 @@ import {
           user.hibahPaymentStatus === "paid" ||
           user.sepencarianPaymentStatus === "paid" ||
           user.mawarisPaymentStatus === "paid" ||
-          user.corporatePaymentStatus === "paid"
+          user.corporatePaymentStatus === "paid" ||
+          user.corporateTunggalPaymentStatus === "paid" ||
+          user.corporateKongsiPaymentStatus === "paid" ||
+          user.corporateZurriPaymentStatus === "paid"
         ) ? "AHLI AKTIF" : "PROSPEK";
 
         // ==================== EVENT LISTENERS (DI DALAM SKOP DOC SNAP) ====================
@@ -988,7 +1199,7 @@ import {
           }
         }
 
-        // 5. CORPORATE
+        // 5. CORPORATE (PREMIUM)
         const btnPrintCorporate = document.getElementById("btnPrintCorporate");
         const btnSendCorporate = document.getElementById("btnSendCorporate");
         const btnCompleteCorporate = document.getElementById("btnCompleteCorporate");
@@ -1069,7 +1280,249 @@ import {
           }
         }
 
-        
+        // 6. CORPORATE TUNGGAL
+        const btnPrintCorporateTunggal = document.getElementById("btnPrintCorporateTunggal");
+        const btnSendCorporateTunggal = document.getElementById("btnSendCorporateTunggal");
+        const btnCompleteCorporateTunggal = document.getElementById("btnCompleteCorporateTunggal");
+
+        if (btnPrintCorporateTunggal) {
+          if (corporateTunggalStatus === "VERIFIED") {
+            btnPrintCorporateTunggal.disabled = false;
+            btnPrintCorporateTunggal.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnPrintCorporateTunggal.classList.add("bg-blue-600", "hover:bg-blue-700");
+            btnPrintCorporateTunggal.onclick = async () => {
+              const val = document.getElementById("corporateTunggalPrintedAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
+              if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
+              await updateDoc(doc(db, "users", userId, "corporate_tunggal", "maklumat"), {
+                status: "PRINTED",
+                printedAt: val,
+                printedUpdatedAt: serverTimestamp(),
+                printedBy: auth.currentUser.uid
+              });
+              alert("Status berjaya dikemaskini.");
+              location.reload();
+            };
+          } else {
+            btnPrintCorporateTunggal.disabled = true;
+            btnPrintCorporateTunggal.classList.remove("bg-blue-600", "hover:bg-blue-700");
+            btnPrintCorporateTunggal.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        if (btnSendCorporateTunggal) {
+          if (corporateTunggalStatus === "PRINTED") {
+            btnSendCorporateTunggal.disabled = false;
+            btnSendCorporateTunggal.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnSendCorporateTunggal.classList.add("bg-orange-500", "hover:bg-orange-600");
+            btnSendCorporateTunggal.onclick = async () => {
+              const val = document.getElementById("corporateTunggalSentAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
+              if (!confirm("Tandakan dokumen telah dihantar?")) return;
+              await updateDoc(doc(db, "users", userId, "corporate_tunggal", "maklumat"), {
+                status: "SENT",
+                sentAt: val,
+                sentUpdatedAt: serverTimestamp(),
+                sentBy: auth.currentUser.uid,
+                courier: document.getElementById("corporateTunggalCourier")?.value || "",
+                trackingNo: document.getElementById("corporateTunggalTrackingNo")?.value || "",
+                receiver: document.getElementById("corporateTunggalReceiver")?.value || "",
+                remarks: document.getElementById("corporateTunggalRemarks")?.value || ""
+              });
+              alert("Dokumen berjaya dihantar.");
+              location.reload();
+            };
+          } else {
+            btnSendCorporateTunggal.disabled = true;
+            btnSendCorporateTunggal.classList.remove("bg-orange-500", "hover:bg-orange-600");
+            btnSendCorporateTunggal.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        if (btnCompleteCorporateTunggal) {
+          if (corporateTunggalStatus === "SENT") {
+            btnCompleteCorporateTunggal.disabled = false;
+            btnCompleteCorporateTunggal.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnCompleteCorporateTunggal.classList.add("bg-green-600", "hover:bg-green-700");
+            btnCompleteCorporateTunggal.onclick = async () => {
+              if (!confirm("Lengkapkan proses ini?")) return;
+              await updateDoc(doc(db, "users", userId, "corporate_tunggal", "maklumat"), {
+                status: "COMPLETED",
+                completedAt: new Date().toISOString(),
+                completedBy: auth.currentUser.uid
+              });
+              alert("Kes selesai.");
+              location.reload();
+            };
+          } else {
+            btnCompleteCorporateTunggal.disabled = true;
+            btnCompleteCorporateTunggal.classList.remove("bg-green-600", "hover:bg-green-700");
+            btnCompleteCorporateTunggal.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        // 7. CORPORATE KONGSI
+        const btnPrintCorporateKongsi = document.getElementById("btnPrintCorporateKongsi");
+        const btnSendCorporateKongsi = document.getElementById("btnSendCorporateKongsi");
+        const btnCompleteCorporateKongsi = document.getElementById("btnCompleteCorporateKongsi");
+
+        if (btnPrintCorporateKongsi) {
+          if (corporateKongsiStatus === "VERIFIED") {
+            btnPrintCorporateKongsi.disabled = false;
+            btnPrintCorporateKongsi.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnPrintCorporateKongsi.classList.add("bg-blue-600", "hover:bg-blue-700");
+            btnPrintCorporateKongsi.onclick = async () => {
+              const val = document.getElementById("corporateKongsiPrintedAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
+              if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
+              await updateDoc(doc(db, "users", userId, "corporate_kongsi", "maklumat"), {
+                status: "PRINTED",
+                printedAt: val,
+                printedUpdatedAt: serverTimestamp(),
+                printedBy: auth.currentUser.uid
+              });
+              alert("Status berjaya dikemaskini.");
+              location.reload();
+            };
+          } else {
+            btnPrintCorporateKongsi.disabled = true;
+            btnPrintCorporateKongsi.classList.remove("bg-blue-600", "hover:bg-blue-700");
+            btnPrintCorporateKongsi.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        if (btnSendCorporateKongsi) {
+          if (corporateKongsiStatus === "PRINTED") {
+            btnSendCorporateKongsi.disabled = false;
+            btnSendCorporateKongsi.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnSendCorporateKongsi.classList.add("bg-orange-500", "hover:bg-orange-600");
+            btnSendCorporateKongsi.onclick = async () => {
+              const val = document.getElementById("corporateKongsiSentAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
+              if (!confirm("Tandakan dokumen telah dihantar?")) return;
+              await updateDoc(doc(db, "users", userId, "corporate_kongsi", "maklumat"), {
+                status: "SENT",
+                sentAt: val,
+                sentUpdatedAt: serverTimestamp(),
+                sentBy: auth.currentUser.uid,
+                courier: document.getElementById("corporateKongsiCourier")?.value || "",
+                trackingNo: document.getElementById("corporateKongsiTrackingNo")?.value || "",
+                receiver: document.getElementById("corporateKongsiReceiver")?.value || "",
+                remarks: document.getElementById("corporateKongsiRemarks")?.value || ""
+              });
+              alert("Dokumen berjaya dihantar.");
+              location.reload();
+            };
+          } else {
+            btnSendCorporateKongsi.disabled = true;
+            btnSendCorporateKongsi.classList.remove("bg-orange-500", "hover:bg-orange-600");
+            btnSendCorporateKongsi.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        if (btnCompleteCorporateKongsi) {
+          if (corporateKongsiStatus === "SENT") {
+            btnCompleteCorporateKongsi.disabled = false;
+            btnCompleteCorporateKongsi.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnCompleteCorporateKongsi.classList.add("bg-green-600", "hover:bg-green-700");
+            btnCompleteCorporateKongsi.onclick = async () => {
+              if (!confirm("Lengkapkan proses ini?")) return;
+              await updateDoc(doc(db, "users", userId, "corporate_kongsi", "maklumat"), {
+                status: "COMPLETED",
+                completedAt: new Date().toISOString(),
+                completedBy: auth.currentUser.uid
+              });
+              alert("Kes selesai.");
+              location.reload();
+            };
+          } else {
+            btnCompleteCorporateKongsi.disabled = true;
+            btnCompleteCorporateKongsi.classList.remove("bg-green-600", "hover:bg-green-700");
+            btnCompleteCorporateKongsi.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        // 8. CORPORATE ZURRI
+        const btnPrintCorporateZurri = document.getElementById("btnPrintCorporateZurri");
+        const btnSendCorporateZurri = document.getElementById("btnSendCorporateZurri");
+        const btnCompleteCorporateZurri = document.getElementById("btnCompleteCorporateZurri");
+
+        if (btnPrintCorporateZurri) {
+          if (corporateZurriStatus === "VERIFIED") {
+            btnPrintCorporateZurri.disabled = false;
+            btnPrintCorporateZurri.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnPrintCorporateZurri.classList.add("bg-blue-600", "hover:bg-blue-700");
+            btnPrintCorporateZurri.onclick = async () => {
+              const val = document.getElementById("corporateZurriPrintedAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Cetak!");
+              if (!confirm("Tandakan dokumen ini telah dicetak?")) return;
+              await updateDoc(doc(db, "users", userId, "corporate_zurri", "maklumat"), {
+                status: "PRINTED",
+                printedAt: val,
+                printedUpdatedAt: serverTimestamp(),
+                printedBy: auth.currentUser.uid
+              });
+              alert("Status berjaya dikemaskini.");
+              location.reload();
+            };
+          } else {
+            btnPrintCorporateZurri.disabled = true;
+            btnPrintCorporateZurri.classList.remove("bg-blue-600", "hover:bg-blue-700");
+            btnPrintCorporateZurri.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        if (btnSendCorporateZurri) {
+          if (corporateZurriStatus === "PRINTED") {
+            btnSendCorporateZurri.disabled = false;
+            btnSendCorporateZurri.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnSendCorporateZurri.classList.add("bg-orange-500", "hover:bg-orange-600");
+            btnSendCorporateZurri.onclick = async () => {
+              const val = document.getElementById("corporateZurriSentAt")?.value;
+              if (!val) return alert("Sila pilih Tarikh & Masa Hantar!");
+              if (!confirm("Tandakan dokumen telah dihantar?")) return;
+              await updateDoc(doc(db, "users", userId, "corporate_zurri", "maklumat"), {
+                status: "SENT",
+                sentAt: val,
+                sentUpdatedAt: serverTimestamp(),
+                sentBy: auth.currentUser.uid,
+                courier: document.getElementById("corporateZurriCourier")?.value || "",
+                trackingNo: document.getElementById("corporateZurriTrackingNo")?.value || "",
+                receiver: document.getElementById("corporateZurriReceiver")?.value || "",
+                remarks: document.getElementById("corporateZurriRemarks")?.value || ""
+              });
+              alert("Dokumen berjaya dihantar.");
+              location.reload();
+            };
+          } else {
+            btnSendCorporateZurri.disabled = true;
+            btnSendCorporateZurri.classList.remove("bg-orange-500", "hover:bg-orange-600");
+            btnSendCorporateZurri.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
+        if (btnCompleteCorporateZurri) {
+          if (corporateZurriStatus === "SENT") {
+            btnCompleteCorporateZurri.disabled = false;
+            btnCompleteCorporateZurri.classList.remove("bg-gray-300", "cursor-not-allowed");
+            btnCompleteCorporateZurri.classList.add("bg-green-600", "hover:bg-green-700");
+            btnCompleteCorporateZurri.onclick = async () => {
+              if (!confirm("Lengkapkan proses ini?")) return;
+              await updateDoc(doc(db, "users", userId, "corporate_zurri", "maklumat"), {
+                status: "COMPLETED",
+                completedAt: new Date().toISOString(),
+                completedBy: auth.currentUser.uid
+              });
+              alert("Kes selesai.");
+              location.reload();
+            };
+          } else {
+            btnCompleteCorporateZurri.disabled = true;
+            btnCompleteCorporateZurri.classList.remove("bg-green-600", "hover:bg-green-700");
+            btnCompleteCorporateZurri.classList.add("bg-gray-300", "cursor-not-allowed");
+          }
+        }
+
       } else {
         document.getElementById("customerInfo").innerHTML = `<p class="text-red-500 font-bold">Pengguna tidak dijumpai.</p>`;
       }
@@ -1078,7 +1531,6 @@ import {
     }
   </script>
 </body>
-
 </html>
 
 
