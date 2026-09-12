@@ -20,7 +20,7 @@
 <h1 class="text-2xl font-bold">Dashboard Al-Qawthar Consultant (AQC)</h1>
 <p id="welcomeText">Memuatkan...</p>
 </div>
-<button id="logoutBtn" class="bg-red-500 px-4 py-2 rounded-xl">Logout</button>
+<button id="logoutBtn" class="bg-red-500 px-4 py-2 rounded-xl hover:bg-red-600 transition">Logout</button>
 </div>
 </div>
 
@@ -29,18 +29,17 @@
   
 <!-- PROFIL -->
 <div class="mb-5">
-<button id="profileBtn" class="bg-blue-600 text-white px-5 py-3 rounded-xl">Profile</button>
+<button id="profileBtn" class="bg-blue-600 text-white px-5 py-3 rounded-xl hover:bg-blue-700 transition shadow">Profile</button>
 </div>
  
 <div id="profileModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-2xl p-6 w-[600px]">
-        <h2 class="text-xl font-bold mb-4">Consultant Profile</h2>
-        <div id="profileContent">Loading...</div>
+    <div class="bg-white rounded-2xl p-6 w-[600px] shadow-2xl">
+        <h2 class="text-xl font-bold mb-4 text-[#153638]">Consultant Profile</h2>
+        <div id="profileContent" class="text-gray-700 space-y-2">Loading...</div>
         
-        <!-- TAMBAH BUTANG EDIT DI SINI -->
-        <div class="mt-5 flex gap-3">
-            <button id="editProfileBtn" class="bg-blue-600 text-white px-5 py-2 rounded-xl hover:bg-blue-700 transition">Edit Profile</button>
-            <button id="closeProfile" class="bg-red-500 text-white px-5 py-2 rounded-xl hover:bg-red-600 transition">Close</button>
+        <div class="mt-6 flex gap-3">
+            <button id="editProfileBtn" class="flex-1 bg-blue-600 text-white px-5 py-3 rounded-xl hover:bg-blue-700 transition font-semibold">Edit Profile</button>
+            <button id="closeProfile" class="flex-1 bg-red-500 text-white px-5 py-3 rounded-xl hover:bg-red-600 transition font-semibold">Tutup</button>
         </div>
         
     </div>
@@ -52,7 +51,7 @@
 
   <!-- Sales Analytics -->
     <div class="bg-white rounded-2xl shadow p-5">
-    <h3 class="text-lg font-bold mb-4">Sales by Product</h3>
+    <h3 class="text-lg font-bold mb-4 text-[#153638]">Sales by Product</h3>
     <div class="flex justify-center items-center h-64">
         <canvas id="productChart"></canvas>
     </div>
@@ -60,18 +59,18 @@
  
     <!-- Payment -->
     <div class="bg-white rounded-2xl shadow p-6">
-        <h3 class="font-bold text-lg mb-5">Payment Summary</h3>
+        <h3 class="font-bold text-lg mb-5 text-[#153638]">Payment Summary</h3>
         <div class="space-y-5">
-            <div class="border rounded-xl p-4">
-<div class="text-sm text-gray-500">Total Earned</div>
+            <div class="border rounded-xl p-4 bg-green-50/50">
+<div class="text-sm text-gray-500 font-semibold">Total Earned</div>
 <div id="earnedCard" class="text-2xl font-bold text-green-600">RM0.00</div>
 </div>
- <div class="border rounded-xl p-4">
-                <div class="text-sm text-gray-500">Paid</div>
+ <div class="border rounded-xl p-4 bg-blue-50/50">
+                <div class="text-sm text-gray-500 font-semibold">Paid</div>
                 <div id="paidCard" class="text-2xl font-bold text-blue-600">RM0.00</div>
             </div>
-            <div class="border rounded-xl p-4">
-                <div class="text-sm text-gray-500">Outstanding</div>
+            <div class="border rounded-xl p-4 bg-red-50/50">
+                <div class="text-sm text-gray-500 font-semibold">Outstanding</div>
                 <div id="outstandingCard" class="text-2xl font-bold text-red-600">RM0.00</div>
             </div>
         </div>
@@ -204,10 +203,10 @@
             <h3 class="font-bold text-gray-800 text-sm mb-3">AQM Terima</h3>
             <div class="flex justify-between text-xs text-gray-600 mb-1">
                 <span>Sepenuhnya:</span>
-                <span id="tl_received_done" class="font-bold text-gray-900">0</span>
+                <span id="tl_received_done" class="font-bold text-emerald-600">0</span>
             </div>
             <div class="bg-gray-100 border border-gray-200 rounded p-2 flex justify-between text-xs mt-auto">
-                <span class="text-gray-400">Baki:</span>
+                <span class="text-gray-400 font-semibold">Baki:</span>
                 <span class="font-bold text-gray-400">-</span>
             </div>
         </div>
@@ -217,23 +216,23 @@
 <!-- KPI (5 Kotak Sebaris) -->
 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-5">
     <div class="bg-white p-5 rounded-xl shadow">
-        <p class="text-gray-500">Client</p>
-        <p id="activeClients" class="text-2xl md:text-3xl font-bold">0</p>
+        <p class="text-gray-500 font-medium">Client</p>
+        <p id="activeClients" class="text-2xl md:text-3xl font-bold text-[#153638]">0</p>
     </div>
-    <div class="bg-white p-5 rounded-xl shadow">
-        <p class="text-gray-500">Jualan Peribadi</p>
-        <p id="totalSales" class="text-2xl md:text-3xl font-bold">RM0</p>
+    <div class="bg-white p-5 rounded-xl shadow border-l-4 border-[#153638]">
+        <p class="text-gray-500 font-medium">Jualan Peribadi</p>
+        <p id="totalSales" class="text-2xl md:text-3xl font-bold text-[#153638]">RM0</p>
     </div>
-    <div class="bg-white p-5 rounded-xl shadow">
-        <p class="text-gray-500">Komisen</p>
-        <p id="totalCommission" class="text-2xl md:text-3xl font-bold">RM0</p>
+    <div class="bg-white p-5 rounded-xl shadow border-l-4 border-green-500">
+        <p class="text-gray-500 font-medium">Komisen</p>
+        <p id="totalCommission" class="text-2xl md:text-3xl font-bold text-green-600">RM0</p>
     </div>
-    <div class="bg-white p-5 rounded-xl shadow">
-        <p class="text-gray-500">Overriding</p>
-        <p id="totalOverriding" class="text-2xl md:text-3xl font-bold">RM0</p>
+    <div class="bg-white p-5 rounded-xl shadow border-l-4 border-amber-500">
+        <p class="text-gray-500 font-medium">Overriding</p>
+        <p id="totalOverriding" class="text-2xl md:text-3xl font-bold text-amber-600">RM0</p>
     </div>
-    <div class="bg-white p-5 rounded-xl shadow">
-        <p class="text-gray-500">USB</p>
+    <div class="bg-white p-5 rounded-xl shadow border-l-4 border-blue-500">
+        <p class="text-gray-500 font-medium">USB</p>
         <p id="usbAmount" class="text-2xl md:text-3xl font-bold text-blue-600">RM0.00</p>
     </div>
 </div>
@@ -241,7 +240,7 @@
 <div class="bg-white p-5 rounded-2xl shadow mb-5 relative overflow-hidden">
   <div class="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40" style="background-image: url('https://i.postimg.cc/t4Xc6fPS/Chat-GPT-Image-Aug-11-2026-09-55-30-AM.png');"></div>
   <div class="relative z-10">
-    <h3 class="text-xl font-bold mb-4">Performance Summary</h3>
+    <h3 class="text-xl font-bold mb-4 text-[#153638]">Performance Summary</h3>
     <div class="relative w-full h-64 md:h-80">
       <canvas id="salesChart"></canvas>
     </div>
@@ -252,15 +251,15 @@
 <div class="flex flex-col gap-4">
     <!-- Baris 1 & 2 (Grid 4 Kotak) -->
     <div class="grid md:grid-cols-4 gap-4">
-        <button id="clientsBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">myClients</button>
-        <button id="overridingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">myTeam</button>
-        <button onclick="window.location.href='consultant-usb.html'" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">myUSB</button>
+        <button id="clientsBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">myClients</button>
+        <button id="overridingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">myTeam</button>
+        <button onclick="window.location.href='consultant-usb.html'" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">myUSB</button>
         <button onclick="window.location.href='consultant-claims.html'" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">myClaims</button>
         
-        <button id="careerBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">Career Path</button>
-        <button id="trainingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition text-sm">Continuous Professional Development</button>
-        <button id="renewalBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">Annual Consultant Renewal</button>  
-        <button id="marketingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition">Marketing Kit</button>
+        <button id="careerBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">Career Path</button>
+        <button id="trainingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md text-sm">Continuous Professional Development</button>
+        <button id="renewalBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">Annual Consultant Renewal</button>  
+        <button id="marketingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">Marketing Kit</button>
     </div>
 
     <!-- Baris 3 (Grid 3 Kotak Sama Saiz) -->
@@ -272,32 +271,16 @@
         <button onclick="window.location.href='my-statement.html'" class="bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md">
             My Statement
         </button>
-        <button id="copyReferralBtn" class="bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md">
-            Copy Referral
+        <button id="copyReferralBtn" class="bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md flex justify-center items-center gap-2">
+            Copy Referral Link
         </button>
     </div>
 </div>
 
 <script type="module">
-// 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
 import { db, auth } from './firebase.js';
-
-// 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
-import { 
-    onAuthStateChanged, 
-    signOut 
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-// 3. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
-import { 
-    doc, 
-    getDoc, 
-    getDocs, 
-    collection, 
-    updateDoc, 
-    query, 
-    where 
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { doc, getDoc, getDocs, collection, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 let consultantData = null;
 
@@ -319,11 +302,15 @@ onAuthStateChanged(auth, async(user)=>{
     const compSnap = await getDoc(doc(db, "settings", "compensation"));
     const comp = compSnap.exists() ? compSnap.data() : {};
 
+    // Harga Kesemua Produk Termasuk Pakej Korporat Baru
     const priceWasiat = Number(comp.wasiatPrice || 350);
     const priceHibah = Number(comp.hibahPrice || 2500);
     const priceSepencarian = Number(comp.sepencarianPrice || 800);
     const priceMawaris = Number(comp.mawarisPrice || 3000);
     const priceCorporate = Number(comp.corporatePrice || 6000);
+    const priceCorporateTunggal = Number(comp.corporateTunggalPrice || 3000);
+    const priceCorporateKongsi = Number(comp.corporateKongsiPrice || 3000);
+    const priceCorporateZurri = Number(comp.corporateZurriPrice || 1000);
 
    // 2. SEMAKAN BANNER RENEWAL & EXPIRY
     const renewalDate = data.renewalDate?.toDate ? data.renewalDate.toDate() : new Date(data.renewalDate);
@@ -364,16 +351,23 @@ onAuthStateChanged(auth, async(user)=>{
         const u = d.data();
         if(u.role==="customer" && (u.referral || "").trim()===data.consultantNo){
             activeClients++;
+            
+            // Jualan Biasa
             if(u.wasiatPaymentStatus === "paid"){ wasiatSales++; totalSales += priceWasiat; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceWasiat; }
             if(u.hibahPaymentStatus === "paid"){ hibahSales++; totalSales += priceHibah; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceHibah; }
             if(u.sepencarianPaymentStatus === "paid"){ sepencarianSales++; totalSales += priceSepencarian; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceSepencarian; }
             if(u.mawarisPaymentStatus === "paid"){ mawarisSales++; totalSales += priceMawaris; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceMawaris; }
+            
+            // Jualan 4 Pakej Korporat
             if(u.corporatePaymentStatus === "paid"){ corporateSales++; totalSales += priceCorporate; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceCorporate; }
+            if(u.corporateTunggalPaymentStatus === "paid"){ corporateSales++; totalSales += priceCorporateTunggal; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceCorporateTunggal; }
+            if(u.corporateKongsiPaymentStatus === "paid"){ corporateSales++; totalSales += priceCorporateKongsi; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceCorporateKongsi; }
+            if(u.corporateZurriPaymentStatus === "paid"){ corporateSales++; totalSales += priceCorporateZurri; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceCorporateZurri; }
         }
     });
 
     // ==========================================
-    // LOGIK: KIRAAN UNTUK STATUS TIMELINE DOKUMEN
+    // LOGIK: KIRAAN UNTUK STATUS TIMELINE SEMUA DOKUMEN 
     // ==========================================
     let s_approved = 0, s_printed = 0, s_sent = 0, s_akad = 0, s_stamping = 0, s_handover = 0, s_received = 0;
     const myClientUids = [];
@@ -386,7 +380,7 @@ onAuthStateChanged(auth, async(user)=>{
         }
     });
 
-    // 2. Tarik semua dokumen serentak
+    // 2. Tarik semua dokumen serentak termasuk pakej korporat baru
     const timelinePromises = [];
     myClientUids.forEach(uid => {
         timelinePromises.push(getDoc(doc(db, "users", uid, "wasiat", "maklumat")));
@@ -394,11 +388,14 @@ onAuthStateChanged(auth, async(user)=>{
         timelinePromises.push(getDoc(doc(db, "users", uid, "sepencarian", "maklumat")));
         timelinePromises.push(getDoc(doc(db, "users", uid, "mawaris", "maklumat")));
         timelinePromises.push(getDoc(doc(db, "users", uid, "corporate", "maklumat")));
+        timelinePromises.push(getDoc(doc(db, "users", uid, "corporate_tunggal", "maklumat")));
+        timelinePromises.push(getDoc(doc(db, "users", uid, "corporate_kongsi", "maklumat")));
+        timelinePromises.push(getDoc(doc(db, "users", uid, "corporate_zurri", "maklumat")));
     });
 
     const timelineSnaps = await Promise.all(timelinePromises);
     
-    // 3. Kelaskan mengikut status
+    // 3. Kelaskan mengikut status (Semak jika docSnap exists)
     timelineSnaps.forEach(snap => {
         if(snap.exists()) {
             const stat = snap.data().status;
@@ -782,15 +779,6 @@ onAuthStateChanged(auth, async(user)=>{
     document.getElementById("profileBtn")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.remove("hidden"); });
     document.getElementById("closeProfile")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.add("hidden"); });
     document.getElementById("logoutBtn").addEventListener("click", async()=>{ await signOut(auth); window.location.href = "index.html"; });
-  
-    document.getElementById("copyReferralBtn").addEventListener("click", async()=>{
-        try{
-            await navigator.clipboard.writeText(window.location.origin + window.location.pathname.replace("consultant-dashboard.html", "register.html") + "?ref=" + consultantData.consultantNo);
-            const btn = document.getElementById("copyReferralBtn");
-            btn.innerHTML = "✓ Copied";
-            setTimeout(()=>{ btn.innerHTML = "Copy Link"; },2000);
-        }catch(err){ alert("Gagal copy link"); }
-    });
 
 }); 
 </script>
