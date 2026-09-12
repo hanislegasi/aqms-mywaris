@@ -33,7 +33,11 @@
             "Hibah Renewal": { key: "hibah", code: "HIBAH_RENEWAL", prefix: "HIB", accountCode: "4220" },
             "Harta Sepencarian Renewal": { key: "sepencarian", code: "SEPENCARIAN_RENEWAL", prefix: "HSP", accountCode: "4230" },
             "Mawaris Renewal": { key: "mawaris", code: "MAWARIS_RENEWAL", prefix: "MAW", accountCode: "4240" },
-            "Mawaris Korporat Renewal": { key: "corporate", code: "CORPORATE_RENEWAL", prefix: "MCO", accountCode: "4250" }
+            "Mawaris Korporat Renewal": { key: "corporate", code: "CORPORATE_RENEWAL", prefix: "MCO", accountCode: "4250" },
+            // TIGA PAKEJ KORPORAT BAHARU
+            "Mawaris Korporat (Tunggal) Renewal": { key: "corporate_tunggal", code: "CORPORATE_TUNGGAL_RENEWAL", prefix: "MCT", accountCode: "4251" },
+            "Mawaris Korporat (Kongsi) Renewal": { key: "corporate_kongsi", code: "CORPORATE_KONGSI_RENEWAL", prefix: "MCK", accountCode: "4252" },
+            "Mawaris Korporat (Wakaf Zurri) Renewal": { key: "corporate_zurri", code: "CORPORATE_ZURRI_RENEWAL", prefix: "MCZ", accountCode: "4253" }
         };
 
         if (status_id === "1" && configMap[namaPakej]) {
@@ -52,7 +56,7 @@
                         const userData = userSnap.exists() ? userSnap.data() : {};
                         const compSettings = compSnap.exists() ? compSnap.data() : {};
                         
-                        // 2. Tarik Data Dokumen Spesifik (Contoh: wasiat/maklumat)
+                        // 2. Tarik Data Dokumen Spesifik (Contoh: corporate_tunggal/maklumat)
                         const productRef = doc(db, "users", user.uid, config.key, "maklumat");
                         const productSnap = await getDoc(productRef);
                         
