@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview Corp. Kongsi</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
+
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        .tracking-widest { letter-spacing: 0.1em; }
+
+        body {
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        #pdfContent {
+            width: 210mm;
+            background: white;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .a4-page {
+            width: 210mm;
+            height: 296.5mm; 
+            background: white;
+            margin: 0 auto;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            page-break-after: auto; 
+        }
+        
+        .a4-page:last-child { page-break-after: auto; }
+        .a4-page:not(:first-child){ padding-bottom: 25mm !important; }
+        .page-break{ page-break-before: always; break-before: page; }
+
+        .document-section {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.7;
+            color: #222;
+        }
+
+        .document-section p, .document-section td, .document-section li {
+            font-size: 16px;
+            text-align: justify;
+            line-height: 1.7;
+        }
+
+        .document-section p { margin-top: 0; margin-bottom: 14px; }
+
+        .pdf-footer {
+            position: absolute;
+            bottom: 5mm;
+            left: 18mm;
+            right: 18mm;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+            font-family: 'Times New Roman', serif;
+        }
+
+        #scale-wrapper {
+            transform-origin: top center;
+            transition: transform 0.2s ease, margin-bottom 0.2s ease;
+        }
+
+        @page { size: A4 portrait; margin: 10mm; }
+        @media print {
+            body { background: white !important; }
+            .no-print { display: none !important; }
+            #scale-wrapper { transform: none !important; margin: 0 !important; }
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="min-h-screen flex flex-col font-sans">
+
+    <!-- HEADER -->
+    <div class="bg-[#153638] text-white p-5 shadow-md sticky top-0 z-50">
+        <h1 class="text-2xl font-bold font-inter">Preview Corp. Kongsi</h1>
+        <p class="text-gray-300 text-sm">Semakan Dokumen Wasiat Korporat (Rakan Kongsi)</p>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow flex flex-col items-center pt-8 pb-4 overflow-y-auto overflow-x-hidden">
+        <div id="scale-wrapper" class="drop-shadow-2xl">
+            <div id="pdfContent">
+
+                <!-- PAGE 1 (COVER) -->
+                <div id="wrapper">
+                    <div class="a4-page">
+                        <img src="images/corporate-cover.png" 
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2100&auto=format&fit=crop';" 
+                             class="absolute inset-0 w-full h-full object-cover" alt="Cover Wasiat" />
+
+                        <p id="docRef" class="absolute top-[5%] left-[8%] text-[#153638] text-xl font-cinzel tracking-widest font-semibold drop-shadow-md">AQMS-MCK-2026-001</p>
+                        <p id="tahun" class="absolute top-[5%] right-[8%] text-dark azure text-4xl font-bold font-cinzel tracking-widest drop-shadow-lg">2026</p>
+                        <p id="namaCover" class="absolute top-[56%] left-[11%] text-dark azure text-2xl font-bold uppercase font-cinzel tracking-widest drop-shadow-lg">NAMA</p>
+                        <p id="icCover" class="absolute top-[62%] left-[11%] text-dark azure text-xl font-bold font-cinzel tracking-widest drop-shadow-md">IC</p>
+                    </div>
+
+                    <!-- PAGE 2 (ISI KANDUNGAN) -->
+                    <div class="a4-page p-[18mm]">
+                        <div class="border-b-2 border-[#153638] pb-4 mb-10 mt-5">
+                            <p id="docRefTOC" class="text-[#153638] text-lg font-bold font-cinzel tracking-widest">DOC REF: -</p>
+                        </div>
+                        <h2 class="text-xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-16 underline underline-offset-[12px] decoration-1">ISI KANDUNGAN</h2>
+                        <div class="max-w-4xl mx-auto space-y-8 text-lg font-cinzel text-[#153638]">
+                            
+                            <div class="flex items-end w-full">
+                                <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Butiran Pelanggan & Perunding</span>
+                                <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
+                                <span id="tocMaklumat" class="font-bold">3</span>
+                            </div>
+
+                            <div class="flex items-end w-full">
+                                <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Dokumen Wasiat Korporat</span>
+                                <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
+                                <span id="tocWasiat" class="font-bold">-</span>
+                            </div>
+
+                            <div class="w-full space-y-4">
+                                <div class="font-semibold uppercase tracking-wide">Mekanisme Pewarisan Saham:</div>
+                                <div id="tocMekanismeList" class="space-y-4 pl-6"></div>
+                            </div>
+
+                            <div class="flex items-end w-full">
+                                <span class="font-semibold uppercase tracking-wide whitespace-nowrap">Lampiran</span>
+                                <div class="flex-grow border-b-[3px] border-dotted border-[#153638]/40 mx-4 relative top-[-6px]"></div>
+                                <span id="tocLampiran" class="font-bold">-</span>
+                            </div>
+
+                        </div>
+                        <div class="pdf-footer"></div>
+                    </div>
+
+                    <!-- PAGE 3 (MAKLUMAT PELANGGAN) -->
+                    <div class="a4-page p-[18mm]">
+                        <div class="border-b-2 border-[#153638] pb-4 mb-6 mt-5">
+                            <p id="docRef2" class="text-[#153638] text-lg font-bold font-cinzel tracking-widest">DOC REF: -</p>
+                        </div>
+                        <h2 class="text-xl font-bold text-center text-[#153638] font-cinzel tracking-widest mb-8">MAKLUMAT PELANGGAN & PERUNDING</h2>
+                        <div class="space-y-4 text-lg font-cinzel text-[#153638]">
+                            <p><strong>Nama:</strong> <span id="namaTable">-</span></p>
+                            <p><strong>No. Kad Pengenalan:</strong> <span id="icTable">-</span></p>
+                            <p><strong>No. Telefon:</strong> <span id="telefonTable">-</span></p>
+                            <p><strong>Alamat:</strong> <span id="alamatTable">-</span></p>
+                            <p><strong>Kod Perunding:</strong> <span id="kodTable">-</span></p>
+                            <p><strong>No. Telefon Perunding:</strong> <span id="telefonPerundingTable">-</span></p>
+                        </div>
+                        <div class="pdf-footer"></div>
+                    </div>
+
+                    <!-- DINAMIK CONTENT -->
+                    <div id="sectionWasiat" class="document-section"></div>
+                    <div id="sectionMekanisme" class="document-section"></div>   
+                    <div id="sectionAmanah" class="document-section"></div>
+                    <div id="sectionLampiran" class="document-section"></div>
+
+                </div>                
+            </div>                
+        </div>                
+    </main>
+
+<div class="w-full max-w-3xl mx-auto p-4 mb-8 space-y-4 no-print">
+
+        <!-- Customer Verification -->
+       <div id="verificationSection" class="bg-amber-50 border border-amber-300 rounded-xl p-6 shadow-sm" style="font-family: 'Inter', sans-serif;">
+            
+            <h3 class="text-2xl font-bold text-amber-800 flex items-center gap-2">
+                ✅ Pengesahan Maklumat
+            </h3>
+
+            <p class="mt-4 text-[15px] leading-7 text-gray-700">
+                Saya telah menyemak semua maklumat dalam dokumen ini dan mengesahkan bahawa ia adalah benar serta tepat.
+                Saya juga membenarkan Al-Qawthar Mawaris Synergy meneruskan proses percetakan dokumen rasmi.
+            </p>
+
+            <!-- PILIHAN PENGHANTARAN -->
+            <div class="mt-6 border-t border-amber-200 pt-5">
+                <p class="font-bold text-gray-800 mb-3">Pilihan Penghantaran Dokumen Fizikal:</p>
+                <div class="space-y-3">
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="radio" name="deliveryMethod" value="existing" class="h-4 w-4 text-blue-600 focus:ring-blue-500 delivery-radio">
+                        <span class="text-gray-700 text-[15px]">Pos ke alamat seperti dalam dokumen</span>
+                    </label>
+                    
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="radio" name="deliveryMethod" value="new" class="h-4 w-4 text-blue-600 focus:ring-blue-500 delivery-radio">
+                        <span class="text-gray-700 text-[15px]">Pos ke alamat lain (Sila nyatakan)</span>
+                    </label>
+                    
+                    <textarea id="newDeliveryAddress" class="hidden w-full mt-2 p-3 border border-gray-300 rounded-lg text-sm" rows="3" placeholder="Masukkan alamat penuh penghantaran..."></textarea>
+                    
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="radio" name="deliveryMethod" value="consultant" class="h-4 w-4 text-blue-600 focus:ring-blue-500 delivery-radio">
+                        <span class="text-gray-700 text-[15px]">Serahkan kepada Perunding (Serahan Tangan)</span>
+                    </label>
+                </div>
+            </div>
+
+            <label class="mt-6 flex items-start gap-3 cursor-pointer">
+                <input id="agreeVerify" type="checkbox" class="mt-1 h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                <span class="text-[15px] leading-6 text-gray-800 font-medium">
+                    Saya telah menyemak semua maklumat dan mengesahkan bahawa dokumen ini adalah benar, lengkap dan tepat.
+                </span>
+            </label>
+
+            <button id="verifyBtn" disabled class="mt-5 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all text-white py-4 rounded-xl font-semibold text-lg shadow-lg">
+                ✔ Sahkan Maklumat
+            </button>
+        </div>
+
+        <!-- Butang Print & Download akan berada di bawah ini... -->
+    
+    <div class="w-full max-w-3xl mx-auto p-4 mb-8 no-print">
+        <div class="space-y-4">
+            <button id="printBtn" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold shadow-lg text-lg transition">🖨️ Cetak / Save as PDF (Disyorkan)</button>
+            <button id="downloadBtn" class="w-full bg-black hover:bg-gray-800 text-white py-4 rounded-xl font-semibold shadow-lg text-lg transition">📥 Download PDF (Legacy)</button>
+        </div>
+        
+    <!-- TEMPLATES (Dibuang hibah-content.js) -->
+    <script src="wasiat-corporate-content.js"></script>
+    <script src="pemegang-amanah.js"></script>
+    <script src="buy-sell-agreement.js"></script>
+    <script src="wakaf-zurri-content.js"></script> 
+    <script src="trust-deed-content.js"></script>
+
+    <!-- FIREBASE LOGIC -->
+    <script type="module">
+        import { db, auth } from './firebase.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { doc, getDoc, updateDoc, collection, getDocs, setDoc, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // Konfigurasi Skala Responsif
+        function updateScale() {
+             const wrapper = document.getElementById('scale-wrapper');
+             const pdfContent = document.getElementById('pdfContent');
+            if (!wrapper || !pdfContent) return;
+             const containerWidth = window.innerWidth;
+             const targetWidth = 794; 
+             const padding = 32;
+            if (containerWidth < targetWidth + padding) {
+                const scale = (containerWidth - padding) / targetWidth;
+                wrapper.style.transform = `scale(${scale})`;
+                 const actualHeight = pdfContent.offsetHeight;
+                 const scaledHeight = actualHeight * scale;
+                wrapper.style.marginBottom = `-${actualHeight - scaledHeight}px`;
+            } else {
+                wrapper.style.transform = 'scale(1)';
+                wrapper.style.marginBottom = '0px';
+            }
+        }
+        window.addEventListener('resize', updateScale);
+        window.addEventListener('DOMContentLoaded', () => setTimeout(updateScale, 100));
+
+        async function imageToBase64(url){
+            const response = await fetch(url);
+            if(!response.ok) throw new Error("Image gagal dimuatkan");
+            const blob = await response.blob();
+            return new Promise((resolve)=>{
+                 const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(blob);
+            });
+        }
+
+        function formatDateMY(dateStr){
+            if(!dateStr) return "-";
+            return new Date(dateStr).toLocaleDateString("ms-MY");
+        }
+
+        // Download Logik PDF
+        document.getElementById("downloadBtn").addEventListener("click", async () => {
+            const wrapper = document.getElementById('scale-wrapper');
+            const element = document.getElementById("pdfContent");
+
+            const originalTransform = wrapper.style.transform;
+            const originalMarginBottom = wrapper.style.marginBottom;
+            const originalMargin = element.style.margin;
+
+            wrapper.style.transform = 'scale(1)';
+            wrapper.style.marginBottom = '0px';
+            wrapper.style.transformOrigin = 'top left'; 
+            element.style.margin = '0'; 
+
+            await new Promise(r => setTimeout(r,150));
+            await document.fonts.ready;
+            
+            const options = {
+                margin: 0,
+                filename: "Wasiat_Korporat_Kongsi.pdf",
+                image: { type: "jpeg", quality: 0.92 },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true, 
+                    scrollY: 0,
+                    scrollX: 0, 
+                    windowWidth: document.documentElement.offsetWidth
+                },                
+                pagebreak: { mode: ['css'] }, 
+                jsPDF: { unit: "mm", format: "a4", orientation: "portrait", compress: true }
+            };
+
+            html2pdf().set(options).from(element).save().then(() => {
+                wrapper.style.transform = originalTransform;
+                wrapper.style.marginBottom = originalMarginBottom;
+                wrapper.style.transformOrigin = 'top center';
+                element.style.margin = originalMargin || '0 auto';
+            });
+        });
+        
+        function fSaham(val) {
+            return val ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0";
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const userId = params.get("uid"); 
+
+        // ==========================================
+        // FUNGSI AUTO-PAGINATION
+        // ==========================================
+        function autoPaginate() {
+            const pages = document.querySelectorAll('.dynamic-page');
+            const safeHeight = 900; 
+
+            let pageArray = Array.from(pages);
+
+            for (let i = 0; i < pageArray.length; i++) {
+                let page = pageArray[i];
+
+                let children = Array.from(page.childNodes).filter(node => {
+                    if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() === "") return false;
+                    if (node.classList && node.classList.contains('pdf-footer')) return false;
+                    return true;
+                });
+
+                let measureDiv = document.createElement('div');
+                measureDiv.style.width = '100%';
+                children.forEach(child => measureDiv.appendChild(child));
+                page.insertBefore(measureDiv, page.firstChild);
+
+                if (measureDiv.scrollHeight > safeHeight) {
+                    let newPage = document.createElement('div');
+                    newPage.className = "a4-page p-[18mm] dynamic-page";
+                    
+                    let newMeasureDiv = document.createElement('div');
+                    newPage.appendChild(newMeasureDiv);
+                    
+                    let newFooter = document.createElement('div');
+                    newFooter.className = "pdf-footer";
+                    newPage.appendChild(newFooter);
+
+                    page.parentNode.insertBefore(newPage, page.nextSibling);
+                    pageArray.splice(i + 1, 0, newPage); 
+
+                    let allItems = Array.from(measureDiv.childNodes);
+                    measureDiv.innerHTML = ''; 
+                    let overflowStarted = false;
+
+                    allItems.forEach((item) => {
+                        if (!overflowStarted) {
+                            measureDiv.appendChild(item);
+                            if (measureDiv.scrollHeight > safeHeight) {
+                                if (measureDiv.childNodes.length === 1) {
+                                    // Biarkan
+                                } else {
+                                    overflowStarted = true;
+                                    measureDiv.removeChild(item); 
+                                    newMeasureDiv.appendChild(item); 
+                                }
+                            }
+                        } else {
+                            newMeasureDiv.appendChild(item);
+                        }
+                    });
+
+                    while (newMeasureDiv.firstChild) {
+                        newPage.insertBefore(newMeasureDiv.firstChild, newMeasureDiv);
+                    }
+                    newPage.removeChild(newMeasureDiv);
+                }
+
+                while (measureDiv.firstChild) {
+                    page.insertBefore(measureDiv.firstChild, measureDiv);
+                }
+                page.removeChild(measureDiv);
+            }
+        }
+        
+        onAuthStateChanged(auth, async(user)=>{
+
+           if(!user){
+              location.href="login.html";
+              return;
+           }
+
+            const loginDoc = await getDoc(
+                doc(db,"users",user.uid)
+            );
+
+            const loginUser = loginDoc.data();
+                        
+            const targetUserId = userId || user.uid;
+
+            if(userId){
+                if(
+                    loginUser.role !== "admin" &&
+                    loginUser.role !== "consultant"
+                ){
+                    alert("Akses ditolak.");
+                    location.href="dashboard.html";
+                    return;
+                }
+            }
+            
+            // ==========================================
+            // KAWALAN PAPARAN AQC (HANYA VIEW)
+            // ==========================================
+            if (loginUser.role === "consultant") {
+                const printBtn = document.getElementById("printBtn");
+                const downloadBtn = document.getElementById("downloadBtn");
+                const verifySec = document.getElementById("verificationSection");
+                
+                if (printBtn) printBtn.classList.add("hidden");
+                if (downloadBtn) downloadBtn.classList.add("hidden");
+                if (verifySec) verifySec.classList.add("hidden");
+            }
+
+            document.getElementById("printBtn").onclick=()=>{
+                window.open(`print-corporate-kongsi.html?id=${targetUserId}`, "_blank");
+            };
+
+            // ==========================================
+            // LOGIK PENGESAHAN DOKUMEN (VERIFY)
+            // ==========================================
+            const agreeVerify = document.getElementById("agreeVerify");
+            const verifyBtn = document.getElementById("verifyBtn");
+            const deliveryRadios = document.querySelectorAll('.delivery-radio');
+            const newDeliveryAddress = document.getElementById("newDeliveryAddress");
+
+            function checkFormValidity() {
+                if(!agreeVerify || !verifyBtn) return;
+                let isDeliverySelected = false;
+                let deliveryValue = "";
+                
+                for (const radio of deliveryRadios) {
+                    if (radio.checked) {
+                        isDeliverySelected = true;
+                        deliveryValue = radio.value;
+                        break;
+                    }
+                }
+
+                if (deliveryValue === "new") {
+                    newDeliveryAddress.classList.remove("hidden");
+                } else {
+                    newDeliveryAddress.classList.add("hidden");
+                }
+
+                const isAddressValid = deliveryValue === "new" ? newDeliveryAddress.value.trim() !== "" : true;
+                verifyBtn.disabled = !(agreeVerify.checked && isDeliverySelected && isAddressValid);
+            }
+
+            if(agreeVerify){
+                agreeVerify.addEventListener("change", checkFormValidity);
+                deliveryRadios.forEach(radio => radio.addEventListener("change", checkFormValidity));
+                newDeliveryAddress.addEventListener("input", checkFormValidity);
+
+                verifyBtn.addEventListener("click", async () => {
+                    if (verifyBtn.disabled) return;
+                    if (!confirm("Adakah anda pasti semua maklumat adalah betul?")) return;
+
+                    try {
+                        let selectedDelivery = "";
+                        for (const radio of deliveryRadios) {
+                            if (radio.checked) selectedDelivery = radio.value;
+                        }
+
+                        // TUKAR KE KOLEKSI CORPORATE KONGSI
+                        const docRef = doc(db, "users", targetUserId, "corporate_kongsi", "maklumat");
+
+                        await updateDoc(docRef, {
+                            status: "VERIFIED",
+                            verified: true,
+                            verifiedAt: new Date().toISOString(),
+                            verifiedBy: user.uid,
+                            deliveryChoice: selectedDelivery,
+                            deliveryAddress: selectedDelivery === "new" ? newDeliveryAddress.value.trim() : ""
+                        });
+
+                        alert("Terima kasih. Pengesahan anda telah berjaya direkodkan.");
+                        location.reload();
+
+                    } catch (err) {
+                        console.error(err);
+                        alert("Gagal menyimpan pengesahan.");
+                    }
+                }); 
+            }
+
+            try {
+                // LOAD CUSTOMER DATA
+                if (targetUserId) {
+                    const docRef = doc(db, "users", targetUserId, "corporate_kongsi", "maklumat");
+                    const docSnap = await getDoc(docRef);
+
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+
+                        const alamatPenuh = [
+                            data.alamat1,
+                            data.alamat2,
+                            `${data.poskod || ""} ${data.bandar || ""}`.trim(),
+                            data.negeri
+                        ].filter(Boolean).join(", ");
+                        
+                        // ==========================================
+                        // SEKATAN / PAPARAN STATUS PENGESAHAN
+                        // ==========================================
+                        const statusSelepasSah = ["VERIFIED", "PRINTED", "SENT", "AKAD", "STAMPING", "HANDOVER", "RECEIVED", "COMPLETED"];
+
+                        if (data.verified === true || statusSelepasSah.includes(data.status)) {
+                            const verSec = document.getElementById("verificationSection");
+                            if(verSec) {
+                                verSec.innerHTML = `
+                                    <div class="bg-green-50 border border-green-300 rounded-xl p-5 text-center">
+                                        <h3 class="text-lg font-bold text-green-700">
+                                            ✅ Maklumat Telah Disahkan
+                                        </h3>
+                                        <p class="mt-2 text-gray-700">
+                                            Terima kasih. Pengesahan anda telah direkodkan.
+                                            Dokumen akan diproses untuk percetakan.
+                                        </p>
+                                    </div>
+                                `;
+                            }
+                        }
+
+                        if (!["APPROVED", "VERIFIED", "PRINTED", "SENT", "AKAD", "STAMPING", "HANDOVER", "RECEIVED", "COMPLETED"].includes(data.status)) {
+                           document.body.innerHTML = `
+                              <div style="max-width:700px; margin:120px auto; text-align:center; font-family:Arial,sans-serif; padding:30px;">
+                                 <h2>Dokumen Wasiat Masih Dalam Semakan</h2>
+                                 <p>Dokumen Wasiat anda masih belum diluluskan oleh pihak admin.</p>
+                                 <a href="dashboard.html" style="display:inline-block; margin-top:20px; padding:12px 24px; background:#153638; color:white; text-decoration:none; border-radius:8px;">Kembali ke Dashboard</a>
+                              </div>
+                           `;
+                           return;
+                        }
+                        
+                        if (!data.firstViewedAt && !userId) { 
+                            await updateDoc(docRef, {
+                                firstViewedAt: new Date().toISOString()
+                            });
+                            data.firstViewedAt = new Date().toISOString();
+                        }
+                            
+                        const userDoc = await getDoc(doc(db, "users", targetUserId));
+                        const userData = userDoc.exists() ? userDoc.data() : {};
+
+                        const consultantCode = userData?.referral || data.consultantCode;
+                        let consultantData = {};
+                        if (consultantCode) {
+                            const q = query(collection(db, "consultants"), where("consultantNo", "==", consultantCode.trim())); 
+                            const querySnapshot = await getDocs(q);
+                            if (!querySnapshot.empty) consultantData = querySnapshot.docs[0].data();
+                        }
+
+                        const currentDocRef = data.docRef || data.docRefNo || "-";
+
+                        document.getElementById("docRef").innerHTML = currentDocRef;
+                        document.getElementById("docRefTOC").innerHTML = `DOC REF: ${currentDocRef}`;
+                        document.getElementById("docRef2").innerHTML = `DOC REF: ${currentDocRef}`;
+
+                        const approvedDate = data.approvedAt ? new Date(data.approvedAt) : null;
+                        document.getElementById("tahun").innerHTML = approvedDate ? approvedDate.getFullYear() : new Date().getFullYear();
+
+                        document.getElementById("namaCover").innerHTML = (data.nama || "-").toUpperCase();
+                        document.getElementById("icCover").innerHTML = data.ic || "-";
+
+                        document.getElementById("namaTable").innerHTML = data.nama || "-";
+                        document.getElementById("icTable").innerHTML = data.ic || "-";
+                        document.getElementById("telefonTable").innerHTML = data.telefon || "-";
+                        document.getElementById("alamatTable").innerHTML = alamatPenuh || "-";
+                        document.getElementById("kodTable").innerHTML = userData?.referral || "-";
+                        document.getElementById("telefonPerundingTable").innerHTML = consultantData.telefon || "-";
+
+                        // ==========================================
+                        // A. LOGIK WASIAT 1/3
+                        // ==========================================
+                        const wasiatSah = (data.wasiatSatuPerTiga || []).filter(item => item.harta && item.harta.trim() !== "");
+                        let bahagianWasiat13HTML = "";
+                        
+                        if (wasiatSah.length > 0) {
+                            let tableWasiat = `<table style="width:100%; border-collapse:collapse; font-size:15px; margin-top:15px; margin-bottom:10px; page-break-inside:avoid;">
+                                <thead>
+                                    <tr>
+                                        <th style="border:1px solid #000; padding:8px; text-align:center; width:10%;">No.</th>
+                                        <th style="border:1px solid #000; padding:8px; text-align:center; width:35%;">Jenis Harta / Nilai Tunai Jualan</th>
+                                        <th style="border:1px solid #000; padding:8px; text-align:center; width:25%;">Nilai / Bahagian</th>
+                                        <th style="border:1px solid #000; padding:8px; text-align:center; width:30%;">Penerima</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+                            
+                            let senaraiNotaHTML = ""; 
+                            
+                            wasiatSah.forEach((item, index) => {
+                                let num = index + 1;
+                                
+                                tableWasiat += `<tr>
+                                    <td style="border:1px solid #000; padding:8px; text-align:center;">${num}</td>
+                                    <td style="border:1px solid #000; padding:8px;">${item.harta || "-"}</td>
+                                    <td style="border:1px solid #000; padding:8px; text-align:right;">${item.bahagian || "-"}</td>
+                                    <td style="border:1px solid #000; padding:8px; text-align:center;">${item.penerima || "-"}</td>
+                                </tr>`;
+                                
+                                if (item.nota && item.nota.trim() !== "") {
+                                    senaraiNotaHTML += `<p style="font-size:15px; margin-top:8px; margin-bottom:4px; text-align:justify;"><strong>Nota ${num}:</strong> ${item.nota}</p>`;
+                                }
+                            });
+                            tableWasiat += `</tbody></table>`;
+                            
+                            bahagianWasiat13HTML = `
+    <strong>Pelaksanaan Wasiat Korporat (Bukan Waris):</strong> Melaksanakan arahan wasiat melalui pegangan saham berkenaan (atau nilai terbitannya) terhad kepada satu pertiga (1/3) kadar maksimum tertakluk kepada Hukum Syarak, kepada penama di bawah:
+    <div style="margin-top:10px; margin-bottom:20px; page-break-inside:avoid;">
+        ${tableWasiat}
+        ${senaraiNotaHTML !== "" ? `<div style="margin-top:10px; margin-bottom:15px; padding-left:5px;">${senaraiNotaHTML}</div>` : ""}
+    </div>
+`;
+                        }
+
+                        // ==========================================
+                        // B. LOGIK WASI KEDUA 
+                        // ==========================================
+                        let wasiKeduaText = "";
+                        let nomborWasiKuasa = "2"; 
+                        
+                        if (data.namaWasi2 && data.namaWasi2.trim() !== "") {
+                            wasiKeduaText = `
+                            <tr valign="top">
+                                <td width="30">2.</td>
+                                <td style="padding-bottom:12px; text-align:justify;">
+                                Sekiranya Wasi Pertama meninggal dunia, hilang keupayaan, atau menolak pelantikan ini, saya dengan ini melantik <strong>${data.namaWasi2}</strong> (No. K/P: <strong>${data.icWasi2 || "-"}</strong>), yang beralamat di <strong>${data.alamatWasi2 || "-"}</strong> sebagai Wasi Kedua (Wasi Gantian).
+                                </td>
+                            </tr>`;
+                            nomborWasiKuasa = "3"; 
+                        }
+
+                        // ==========================================
+                        // C. LOGIK SYARIKAT (KONGSI ONLY)
+                        // ==========================================
+                        let takrifanAsetHTML = "";
+                        let fasal3_KandunganHTML = "";
+                        let fasal4_KandunganHTML = "";
+                        let lampiranKorporatHTML = "";
+                        let mekanismeHTML = "";
+                        const tocMekList = document.getElementById("tocMekanismeList");
+                        tocMekList.innerHTML = "";
+
+                        let senaraiSyarikat = data.senaraiSyarikat || [];
+                        if(senaraiSyarikat.length === 0 && data.namaSyarikat) {
+                            senaraiSyarikat.push(data); // Fallback
+                        }
+
+                        if(senaraiSyarikat.length > 0) {
+
+                            senaraiSyarikat.forEach((syarikat, sIndex) => {
+                                
+                                takrifanAsetHTML += `
+                                <table width="100%" style="border-collapse:collapse;">
+                                    <tr valign="top">
+                                        <td width="30" style="padding-bottom:12px;">1.${sIndex+1}</td>
+                                        <td style="padding-bottom:12px; text-align:justify;"><strong>${syarikat.namaSyarikat || "-"}</strong> (No. Pendaftaran SSM: ${syarikat.noSsm || "-"})</td>
+                                    </tr>
+                                </table>`;
+
+                                lampiranKorporatHTML += `
+                                    <div style="margin-bottom: 30px; width: 100%; page-break-inside: avoid;">
+                                        <table style="width:100%; border-collapse:collapse; font-size:14px;">
+                                            <tr style="background-color:#f9fafb;"><td colspan="2" style="border:1px solid #000; padding:10px; text-align:center;"><strong>SYARIKAT KORPORAT ${sIndex+1}</strong></td></tr>
+                                            <tr><td style="border:1px solid #000; padding:8px; width:35%;"><strong>Nama Syarikat</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.namaSyarikat || "-"}</td></tr>
+                                            <tr><td style="border:1px solid #000; padding:8px;"><strong>No Pendaftaran SSM</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.noSsm || "-"}</td></tr>
+                                            <tr><td style="border:1px solid #000; padding:8px;"><strong>Alamat Berdaftar</strong></td><td style="border:1px solid #000; padding:8px;">${syarikat.alamatSyarikat || "-"}</td></tr>
+                                            <tr><td style="border:1px solid #000; padding:8px;"><strong>Jumlah Keseluruhan Saham</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(syarikat.jumlahSaham)} Unit</td></tr>
+                                            <tr><td style="border:1px solid #000; padding:8px;"><strong>Saham Milik Pewasiat</strong></td><td style="border:1px solid #000; padding:8px;">${fSaham(syarikat.sahamPewasiat)} Unit</td></tr>
+                                            <tr><td style="border:1px solid #000; padding:8px;"><strong>Status Pemilikan</strong></td><td style="border:1px solid #000; padding:8px;">Dimiliki Bersama Rakan Kongsi</td></tr>
+                                        </table>
+                                    </div>
+                                `;
+
+                                // JANA DOKUMEN MEKANISME (BUY-SELL)
+                                if (syarikat.mekanismeAgihan === 'buysell' && typeof buySellAgreementContent !== 'undefined') {
+                                    
+                                    let senaraiRakanKongsiHTML = "";
+                                    let pihakPihakLabel = ["Pemegang Saham A"];
+                                    let senaraiRecitalSaham = []; 
+                                    let senaraiTandatanganHTML = ""; 
+                                    let abjad = 'B';
+                                    let indexParti = 2;
+
+                                    if (syarikat.rakanKongsiList && syarikat.rakanKongsiList.length > 0) {
+                                        syarikat.rakanKongsiList.forEach((partner) => {
+                                            
+                                            senaraiRakanKongsiHTML += `
+                                            <div style="page-break-inside: avoid; width: 100%;">
+                                                <table width="100%" style="margin-bottom:15px; border-collapse:collapse;">
+                                                    <tr valign="top">
+                                                        <td width="30">(${indexParti})</td>
+                                                        <td style="text-align:justify;">
+                                                            <strong>${partner.nama || "-"}</strong> (No. K/P: <strong>${partner.ic || "-"}</strong>), warganegara Malaysia yang beralamat di <strong>${partner.alamat || "-"}</strong> (selepas ini secara berasingan dirujuk sebagai "Pemegang Saham ${abjad}");
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>`;
+
+                                            senaraiTandatanganHTML += `
+                                            <div style="page-break-inside: avoid; width: 100%;">
+                                                <table style="width:100%; margin-bottom:40px; border-collapse:collapse;">
+                                                    <tr>
+                                                        <td width="45%" valign="top" style="height:45px;">
+                                                            <p style="font-weight:bold;">DITANDATANGANI OLEH PEMEGANG SAHAM ${abjad}:</p>
+                                                        </td>
+                                                        <td width="10%"></td>
+                                                        <td width="45%" valign="top">
+                                                            <p style="font-weight:bold;">Di hadapan (Saksi):</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="bottom" style="padding-bottom:5px;">
+                                                            <p>..................................................</p>
+                                                        </td>
+                                                        <td></td>
+                                                        <td valign="bottom" style="padding-bottom:5px;">
+                                                            <p>..................................................</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <p><strong>${partner.nama || "-"}</strong></p>
+                                                            <p>No. K/P: ${partner.ic || "-"}</p>
+                                                        </td>
+                                                        <td></td>
+                                                        <td valign="top">
+                                                            <p>Nama Saksi : </p>
+                                                            <p>No. K/P &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>`;
+                                            
+                                            pihakPihakLabel.push(`Pemegang Saham ${abjad}`);
+                                            senaraiRecitalSaham.push(`Pemegang Saham ${abjad} merupakan pemilik benefisial dan berdaftar ke atas <strong>${fSaham(partner.saham || 0)}</strong> unit saham`);
+                                            
+                                            abjad = String.fromCharCode(abjad.charCodeAt(0) + 1); 
+                                            indexParti++; 
+                                        });
+                                    }
+
+                                    let pihakPihakGabung = pihakPihakLabel.join(", ").replace(/,([^,]*)$/, ' dan$1');
+                                    let klausaPihak = `<i>(${pihakPihakGabung} selepas ini boleh dirujuk secara bersama sebagai "Pihak-Pihak" atau secara berasingan sebagai "Pihak")</i>`;
+                                    
+                                    let klausaRecitalB = senaraiRecitalSaham.join(", manakala ");
+                                    let totalSahamPartner = syarikat.jumlahSaham - syarikat.sahamPewasiat; 
+
+                                    let htmlMek = buySellAgreementContent
+                                        .replaceAll("{{TARIKH_PERJANJIAN}}", formatDateMY(data.tarikhPerjanjian))
+                                        .replaceAll("{{NAMA_PEWASIAT}}", data.nama || "-")
+                                        .replaceAll("{{NO_IC_PEWASIAT}}", data.ic || "-")
+                                        .replaceAll("{{ALAMAT_PEWASIAT}}", alamatPenuh || "-")
+                                        .replaceAll("{{SENARAI_RAKAN_KONGSI_DINAMIK}}", senaraiRakanKongsiHTML)
+                                        .replaceAll("{{TANDATANGAN_RAKAN_KONGSI_DINAMIK}}", senaraiTandatanganHTML) 
+                                        .replaceAll("{{KLAUSA_PIHAK_PIHAK}}", klausaPihak)
+                                        .replaceAll("{{INDEX_SYARIKAT}}", indexParti)
+                                        .replaceAll("{{NAMA_SYARIKAT}}", syarikat.namaSyarikat || "-")
+                                        .replaceAll("{{NO_SSM}}", syarikat.noSsm || "-")
+                                        .replaceAll("{{ALAMAT_SYARIKAT}}", syarikat.alamatSyarikat || "-")
+                                        .replaceAll("{{NAMA_WAKIL_SYARIKAT}}", (syarikat.namaWakilSyarikat || "-").toUpperCase())
+                                        .replaceAll("{{JUMLAH_SAHAM}}", fSaham(syarikat.jumlahSaham))
+                                        .replaceAll("{{SAHAM_PEWASIAT}}", fSaham(syarikat.sahamPewasiat))
+                                        .replaceAll("{{SAHAM_PARTNER}}", fSaham(totalSahamPartner)) 
+                                        .replaceAll("{{RECITAL_SAHAM_PARTNER}}", klausaRecitalB);   
+
+                                    htmlMek = htmlMek.replaceAll('class="a4-page p-[18mm]"', `data-target="tocMek_${sIndex}" class="a4-page p-[18mm] dynamic-page"`);
+                                    mekanismeHTML += htmlMek;
+                                    tocMekList.innerHTML += `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Perjanjian Buy-Sell (${syarikat.namaSyarikat})</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_${sIndex}" class="text-[14px] font-bold">-</span></div>`;
+                                } 
+                                
+                                // JANA WAKAF ZURRI 
+                                else if (syarikat.mekanismeAgihan === 'wakafzurri' && typeof generateWakafZurri !== 'undefined') {
+                                    
+                                    const wakafData = {
+                                        jenisWakaf: syarikat.jenisWakafZurri || 'muallaq', 
+                                        jenisHartaWakaf: syarikat.jenisHartaWakafZurri || 'manfaah', 
+                                        namaWaqif: data.nama || "-",
+                                        noIcWaqif: data.ic || "-",
+                                        alamatWaqif: alamatPenuh || "-",
+                                        namaSyarikat: syarikat.namaSyarikat || "-",
+                                        noSsm: syarikat.noSsm || "-",
+                                        alamatSyarikat: syarikat.alamatSyarikat || "-", 
+                                        bilanganSahamWakaf: fSaham(syarikat.sahamPewasiat),
+                                        jumlahSaham: fSaham(syarikat.jumlahSaham),
+                                        negeriMAIN: syarikat.negeriMainWakaf || data.negeri || "Wilayah Persekutuan", 
+                                        nazir: syarikat.nazir,
+                                        senaraiZurriah: syarikat.penerimaWakafZurri
+                                    };
+                                    
+                                    let wkfContent = generateWakafZurri(wakafData);
+                                    
+                                    wkfContent = wkfContent.replaceAll('class="a4-page p-[18mm]"', `data-target="tocMek_w${sIndex}" class="a4-page p-[18mm] dynamic-page"`);
+                                    
+                                    mekanismeHTML += wkfContent;
+                                    
+                                    tocMekList.innerHTML += `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Surat Ikatan Wakaf Zurri (${syarikat.namaSyarikat})</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocMek_w${sIndex}" class="text-[14px] font-bold">-</span></div>`;
+                                }
+                            }); 
+                            
+                            // ---------------------------------------------------------
+                            // BINA FASAL 3 & 4 (DI LUAR GELUNG SYARIKAT)
+                            // ---------------------------------------------------------
+                            let wasiatStr = bahagianWasiat13HTML ? bahagianWasiat13HTML.replace("{{TURUTAN_WASIAT}}", "Pelaksanaan Wasiat") : "";
+
+                            let syktBuySell = [];
+                            let syktWakaf = [];
+
+                            senaraiSyarikat.forEach((syarikat) => {
+                                if (syarikat.mekanismeAgihan === 'buysell') {
+                                    syktBuySell.push(syarikat.namaSyarikat);
+                                } else if (syarikat.mekanismeAgihan === 'wakafzurri') {
+                                    syktWakaf.push(syarikat.namaSyarikat);
+                                } else {
+                                    syktBuySell.push(syarikat.namaSyarikat); // Fallback
+                                }
+                            });
+
+                            let indexFasal34 = 1;
+
+                            // ---------------------------------------------------------
+                            // 3B/4B: KLAUSA UNTUK SYARIKAT BUY-SELL AGREEMENT
+                            // ---------------------------------------------------------
+                            if (syktBuySell.length > 0) {
+                                let namaGabung = syktBuySell.join(", ").replace(/,([^,]*)$/, ' dan$1');
+
+                                fasal3_KandunganHTML += `
+                                <div style="margin-bottom:20px;">
+                                    <p style="font-weight:bold; margin-bottom:10px;">3.${indexFasal34} Berkaitan Syarikat ${namaGabung} (Arahan Pematuhan Perjanjian Beli-Jual):</p>
+                                    <table width="100%" style="border-collapse:collapse;">
+                                        <tr valign="top"><td width="40">(a)</td><td style="padding-bottom:8px; text-align:justify;">Wasi hendaklah mematuhi, memantau dan menguatkuasakan segala terma yang termaktub di dalam <strong>Perjanjian Jual Beli Saham <em>(Buy-Sell Agreement)</em></strong> di antara Pewasiat dan rakan kongsi syarikat.</td></tr>
+                                        <tr valign="top"><td width="40">(b)</td><td style="padding-bottom:8px; text-align:justify;">Wasi diberi bidang kuasa untuk menandatangani resolusi bagi menjual dan menyempurnakan pindah milik Saham Syarikat kepada pemegang saham yang masih hidup.</td></tr>
+                                        <tr valign="top"><td width="40">(c)</td><td style="padding-bottom:8px; text-align:justify;">Wasi hendaklah menuntut, menerima, dan memegang hasil wang tunai jualan saham mahupun pampasan (seperti polisi <strong>Takaful Keyman</strong>) sebelum diagihkan.</td></tr>
+                                    </table>
+                                </div>`;
+
+                                fasal4_KandunganHTML += `
+                                <div style="margin-bottom:20px;">
+                                    <p style="font-weight:bold; margin-bottom:10px;">4.${indexFasal34} Pengagihan Hasil Tunai Jualan Saham ${namaGabung}:</p>
+                                    <table width="100%" style="border-collapse:collapse;">
+                                        <tr valign="top"><td width="40">(a)</td><td style="padding-bottom:8px; text-align:justify;"><strong>Penyelesaian Hutang Korporat:</strong> Melunaskan kos pentadbiran pusaka korporat dan liabiliti hutang yang sah yang berkait terus dengan pegangan ekuiti Pewasiat.</td></tr>
+                                        ${wasiatStr ? `<tr valign="top"><td width="40">(b)</td><td style="padding-bottom:8px; text-align:justify;">${wasiatStr}</td></tr>` : ""}
+                                        <tr valign="top"><td width="40">(${wasiatStr ? "c" : "b"})</td><td style="padding-bottom:8px; text-align:justify;"><strong>Pengagihan Faraid:</strong> Baki mutlak aset tunai diagihkan secara adil kepada waris-waris yang berhak mengikut peruntukan Hukum Faraid.</td></tr>
+                                    </table>
+                                </div>`;
+                                
+                                indexFasal34++;
+                            }
+
+                            // ---------------------------------------------------------
+                            // 3C/4C: KLAUSA UNTUK SYARIKAT WAKAF ZURRI
+                            // ---------------------------------------------------------
+                            if (syktWakaf.length > 0) {
+                                let namaGabung = syktWakaf.join(", ").replace(/,([^,]*)$/, ' dan$1');
+
+                                fasal3_KandunganHTML += `
+                                <div style="margin-bottom:20px;">
+                                    <p style="font-weight:bold; margin-bottom:10px;">3.${indexFasal34} Berkaitan Syarikat ${namaGabung} (Pelaksanaan Wakaf Saham Zurri):</p>
+                                    <table width="100%" style="border-collapse:collapse;">
+                                        <tr valign="top"><td width="40">(a)</td><td style="padding-bottom:8px; text-align:justify;">Wasi hendaklah mengambil maklum bahawa pegangan saham saya di dalam Syarikat ini (atau manfaatnya) telah diikrarkan sebagai <strong>Wakaf Zurri</strong> untuk waris keturunan saya semata-mata kerana Allah S.W.T.</td></tr>
+                                        <tr valign="top"><td width="40">(b)</td><td style="padding-bottom:8px; text-align:justify;">Wasi diberi kuasa penuh untuk bekerjasama dengan Nazir yang dilantik dan Majlis Agama Islam Negeri yang berkenaan bagi menyempurnakan proses pendaftaran wakaf ini secara rasmi.</td></tr>
+                                    </table>
+                                </div>`;
+
+                                fasal4_KandunganHTML += `
+                                <div style="margin-bottom:20px;">
+                                    <p style="font-weight:bold; margin-bottom:10px;">4.${indexFasal34} Pengurusan Status Saham ${namaGabung}:</p>
+                                    <table width="100%" style="border-collapse:collapse;">
+                                        <tr valign="top"><td width="40">(a)</td><td style="padding-bottom:8px; text-align:justify;"><strong>Pengecualian Faraid:</strong> Wasi hendaklah memastikan saham yang diwakafkan ini <strong>dikeluarkan</strong> secara mutlak daripada senarai pentadbiran harta pusaka biasa dan <strong>tidak</strong> diagihkan mengikut Hukum Faraid.</td></tr>
+                                        <tr valign="top"><td width="40">(b)</td><td style="padding-bottom:8px; text-align:justify;"><strong>Pematuhan Surat Ikatan:</strong> Keseluruhan urusan pemindahan hak milik (jika Wakaf 'Ain) atau penyaluran dividen (jika Wakaf Manfaah) hendaklah tertakluk sepenuhnya kepada arahan dan bidang kuasa yang dinyatakan di dalam <strong>Surat Ikatan Wakaf Zurri</strong> yang dilampirkan berasingan.</td></tr>
+                                    </table>
+                                </div>`;
+                                
+                                indexFasal34++;
+                            }
+                        } 
+
+                        // ==========================================
+                        // LOGIK PECAHAN JADUAL WARIS (PAGINATION)
+                        // ==========================================
+                        let lampiranWaris = "";
+                        const warisArray = data.waris || [];
+                        const maxRowsPerWarisPage = 18; 
+
+                        if (warisArray.length === 0) {
+                            lampiranWaris = "<p>Tiada maklumat waris direkodkan.</p>";
+                        } else {
+                            for (let i = 0; i < warisArray.length; i += maxRowsPerWarisPage) {
+                                let chunk = warisArray.slice(i, i + maxRowsPerWarisPage);
+                                
+                                let tableHTML = `
+                                <table style="width:100%; border-collapse:collapse; font-size:15px; margin-bottom:20px;">
+                                    <thead>
+                                        <tr style="background-color:#f9fafb;">
+                                            <th style="border:1px solid #000; padding:8px; width:35%;">Nama</th>
+                                            <th style="border:1px solid #000; padding:8px; width:25%;">No Kad Pengenalan</th>
+                                            <th style="border:1px solid #000; padding:8px; width:20%;">Hubungan</th>
+                                            <th style="border:1px solid #000; padding:8px; width:20%;">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                `;
+                                
+                                chunk.forEach(w => {
+                                    let statusText = w.status === "bawah18" ? "Bawah 18 Tahun" : w.status === "oku" ? "OKU" : "Dewasa";
+                                    tableHTML += `
+                                    <tr>
+                                        <td style="border:1px solid #000;padding:8px;">${w.nama || "-"}</td>
+                                        <td style="border:1px solid #000;padding:8px;text-align:center;">${w.ic || "-"}</td>
+                                        <td style="border:1px solid #000;padding:8px;text-align:center;">${w.hubungan || "-"}</td>
+                                        <td style="border:1px solid #000;padding:8px;text-align:center;">${statusText}</td>
+                                    </tr>
+                                    `;
+                                });
+                                tableHTML += `</tbody></table>`;
+
+                                if (i === 0) {
+                                    lampiranWaris += tableHTML;
+                                } else {
+                                    lampiranWaris += `
+                                        <div class="pdf-footer"></div>
+                                    </div> 
+
+                                    <div class="a4-page p-[18mm] dynamic-page">
+                                        <h2 style="font-family:'Times New Roman', serif; font-size:28px; margin-top:30px; margin-bottom:20px; color:#153638; text-transform:uppercase;">
+                                            LAMPIRAN A : SENARAI WARIS (SAMBUNGAN)
+                                        </h2>
+                                        ${tableHTML}
+                                    `;
+                                }
+                            }
+                        }
+                        
+                        // ==========================================
+                        // LOGIK DINAMIK: PEMEGANG AMANAH & SUSUNAN LAMPIRAN
+                        // ==========================================
+                        const adaPemegangAmanah = data.pemegangAmanah && data.pemegangAmanah.nama && data.pemegangAmanah.nama.trim() !== "";
+                        let lampiranPemegangAmanah = "";
+                        let mulaHurufLampiran = "B".charCodeAt(0); 
+
+                        if (adaPemegangAmanah) {
+                            mulaHurufLampiran = "C".charCodeAt(0); 
+                            lampiranPemegangAmanah = `
+                            <table style="width:100%; border-collapse:collapse; font-size:15px; page-break-inside: avoid;">
+                                <tr><th style="border:1px solid #000;padding:8px;width:30%;">Perkara</th><th style="border:1px solid #000;padding:8px;width:70%;">Maklumat</th></tr>
+                                <tr><td style="border:1px solid #000;padding:8px;">Nama</td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.nama || "-"}</td></tr>
+                                <tr><td style="border:1px solid #000;padding:8px;">No. Kad Pengenalan</td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.ic || "-"}</td></tr>
+                                <tr><td style="border:1px solid #000;padding:8px;">Hubungan</td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.hubungan || "-"}</td></tr>
+                                <tr><td style="border:1px solid #000;padding:8px;">Telefon</td><td style="border:1px solid #000;padding:8px;">${data.pemegangAmanah.telefon || "-"}</td></tr>
+                            </table>
+                            `;
+                        } else {
+                            lampiranPemegangAmanah = `<span class="bunuh-page-kosong"></span>`;
+                        }
+
+                        const pesananText = data.pesananWasiat || "Tiada pesanan khusus.";
+                        const paragraphs = pesananText.split("\n\n").filter(p => p.trim() !== "");
+                        const maxCharsPerPage = 2700;
+
+                        let currentPageLength = 0;
+                        let currentPageContent = [];
+                        let pagesPesanan = [];
+
+                        paragraphs.forEach(paragraph => {
+                            if (currentPageLength + paragraph.length > maxCharsPerPage) {
+                                pagesPesanan.push(currentPageContent.join(""));
+                                currentPageContent = [];
+                                currentPageLength = 0;
+                            }
+                            currentPageContent.push(`<p style="margin-bottom:12px; line-height:1.6; text-align:justify;">${paragraph}</p>`);
+                            currentPageLength += paragraph.length;
+                        });
+
+                        if (currentPageContent.length) {
+                            pagesPesanan.push(currentPageContent.join(""));
+                        }
+
+                        let pesananHTML = pagesPesanan[0] || "";
+
+                        for (let i = 1; i < pagesPesanan.length; i++) {
+                            pesananHTML += `
+                            <div class="pdf-footer"></div>
+                            </div>
+                            <div class="a4-page p-[18mm]">
+                            <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold;"><strong>PESANAN KEPADA WARIS (SAMBUNGAN)</strong></h3>
+                            ${pagesPesanan[i]}
+                            `;
+                        }
+
+                        // ==========================================
+                        // 1. GENERATE WASIAT KORPORAT CONTENT
+                        // ==========================================
+                        if (typeof wasiatCorporateContent !== 'undefined') {
+                            let wContent = wasiatCorporateContent
+                                .replaceAll("{{SENARAI_SYARIKAT_FASAL_1}}", takrifanAsetHTML) 
+                                .replaceAll("{{LAMPIRAN_KORPORAT}}", lampiranKorporatHTML)
+                                .replaceAll("{{LAMPIRAN_WARIS}}", lampiranWaris)  
+                                .replaceAll("{{LAMPIRAN_PEMEGANG_AMANAH}}", lampiranPemegangAmanah)
+                                .replaceAll("{{PESANAN_WASIAT}}", pesananHTML)
+                                .replaceAll("{{NAMA_PEWASIAT}}", data.nama || "-")
+                                .replaceAll("{{NO_IC_PEWASIAT}}", data.ic || "-")
+                                .replaceAll("{{ALAMAT_PEWASIAT}}", alamatPenuh || "-")
+                                .replaceAll("{{NAMA_WASI1}}", data.namaWasi1 || "-")
+                                .replaceAll("{{NO_IC_WASI1}}", data.icWasi1 || "-")
+                                .replaceAll("{{ALAMAT_WASI1}}", data.alamatWasi1 || "-")
+                                .replaceAll("{{WASI_KEDUA_TEXT}}", wasiKeduaText)
+                                .replaceAll("{{NOMBOR_WASI_KUASA}}", nomborWasiKuasa)
+                                .replaceAll("{{TAJUK_FASAL_3}}", "ARAHAN KHUSUS PENGURUSAN SYARIKAT")
+                                .replaceAll("{{KANDUNGAN_FASAL_3}}", fasal3_KandunganHTML)
+                                .replaceAll("{{TAJUK_FASAL_4}}", "ARAHAN KHUSUS PENGAGIHAN HASIL SAHAM")
+                                .replaceAll("{{KANDUNGAN_FASAL_4}}", fasal4_KandunganHTML);
+                                
+                            document.getElementById("sectionWasiat").innerHTML = wContent;
+                        }
+                        
+// ==========================================
+// 2. RENDER MEKANISME KORPORAT
+// ==========================================
+document.getElementById("sectionMekanisme").innerHTML = mekanismeHTML;
+
+                        // ==========================================
+                        // 2.5 GENERATE SURAT IKATAN AMANAH (TRUST DEED)
+                        // ==========================================
+                        if (typeof trustDeedContent !== 'undefined') {
+                            let klausaAmanah = "";
+
+                            if (senaraiSyarikat.length > 0 && senaraiSyarikat[0].mekanismeAgihan === 'buysell') {
+                                klausaAmanah = `
+                                <table width="100%" style="border-collapse:collapse; margin-top:10px;">
+                                    <tr valign="top">
+                                        <td width="30">1.</td>
+                                        <td style="padding-bottom:12px; text-align:justify;"><strong>Pelaksanaan Perjanjian Jual Beli Saham (Buy-Sell Agreement):</strong> Pemegang Amanah dengan ini diberi kuasa mutlak untuk bekerjasama dengan mana-mana rakan kongsi syarikat Pembuat Amanah bagi memastikan Perjanjian Jual Beli Saham dan Pewarisan Korporat dikuatkuasakan dengan serta-merta.</td>
+                                    </tr>
+                                    <tr valign="top">
+                                        <td width="30">2.</td>
+                                        <td style="padding-bottom:12px; text-align:justify;">Pemegang Amanah hendaklah memindahkan semua Saham Amanah kepada rakan kongsi syarikat, setelah Pemegang Amanah menerima pampasan kewangan secara penuh (contohnya melalui polisi <strong>Takaful Keyman</strong>). Pampasan yang diterima itu hendaklah dipegang amanah dan diagihkan kepada waris Pembuat Amanah selaras dengan peruntukan Hukum Faraid atau arahan wasiat (jika ada).</td>
+                                    </tr>
+                                </table>`;
+                            } else {
+                                klausaAmanah = `
+                                <table width="100%" style="border-collapse:collapse; margin-top:10px;">
+                                    <tr valign="top">
+                                        <td width="30">1.</td>
+                                        <td style="padding-bottom:12px; text-align:justify;"><strong>Penguatkuasaan Arahan Pewarisan Semasa:</strong> Pemegang Amanah hendaklah mentadbir Saham Amanah tersebut dan memindahkan hak milik serta faedahnya kepada penama, pemegang wakaf, atau waris yang sah berpandukan arahan instrumen perancangan harta pusaka utama Pembuat Amanah yang terpakai pada masa pemicuan insiden.</td>
+                                    </tr>
+                                </table>`;
+                            }
+
+                            let trustHTML = trustDeedContent
+                                .replaceAll("{{TARIKH_PERJANJIAN}}", formatDateMY(data.tarikhPerjanjian) || "___ haribulan ___")
+                                .replaceAll("{{NAMA_PEWASIAT}}", data.nama || "-")
+                                .replaceAll("{{NO_IC_PEWASIAT}}", data.ic || "-")
+                                .replaceAll("{{ALAMAT_PEWASIAT}}", alamatPenuh || "-")
+                                .replaceAll("{{NAMA_WASI1}}", data.namaWasi1 || "-")
+                                .replaceAll("{{NO_IC_WASI1}}", data.icWasi1 || "-")
+                                .replaceAll("{{ALAMAT_WASI1}}", data.alamatWasi1 || "-")
+                                .replaceAll("{{NAMA_SYARIKAT}}", senaraiSyarikat[0]?.namaSyarikat || "-")
+                                .replaceAll("{{NO_SSM}}", senaraiSyarikat[0]?.noSsm || "-")
+                                .replaceAll("{{SAHAM_PEWASIAT}}", fSaham(senaraiSyarikat[0]?.sahamPewasiat))
+                                .replaceAll("{{KLAUSA_MEKANISME_AMANAH}}", klausaAmanah);
+                            
+                            document.getElementById("sectionAmanah").innerHTML = trustHTML;
+                            tocMekList.innerHTML += `<div class="flex items-end w-full"><span class="text-[14px] font-medium uppercase tracking-wide opacity-90">• Surat Ikatan Amanah Korporat</span><div class="flex-grow border-b-[2px] border-dotted border-[#153638]/30 mx-4 relative top-[-5px]"></div><span id="tocAmanahNum" class="text-[14px] font-bold">-</span></div>`;
+                        }
+
+                        
+                       // ==========================================
+                        // 3. GENERATE LAMPIRAN DOKUMEN FIZIKAL
+                        // ==========================================
+                        const lampiranSnap = await getDocs(collection(db, "users", targetUserId, "corporate_kongsiDocuments"));
+                        let lampiranHTML = "";
+                        
+                        let hurufLampiran = mulaHurufLampiran; 
+
+                        for(const doc of lampiranSnap.docs){
+                            const file = doc.data();
+                            const base64Image = await imageToBase64(file.fileURL);
+
+                            lampiranHTML += `
+                            <div class="a4-page p-[18mm]">
+                                <h2 style="font-family:'Times New Roman', serif; font-size:28px; font-weight:400; margin-top:30px; margin-bottom:20px; color:#153638; text-transform:uppercase;">
+                                    LAMPIRAN ${String.fromCharCode(hurufLampiran)}: ${(file.namaLampiran || file.fileName).toUpperCase()}
+                                </h2>
+                                <img src="${base64Image}" style="display:block; max-width:170mm; max-height:220mm; width:auto; height:auto; margin:20px auto; border:1px solid #ccc; object-fit:contain;">
+                                <div class="pdf-footer"></div>
+                            </div>
+                            `;
+
+                            hurufLampiran++;
+                        }
+                        
+                        document.getElementById("sectionLampiran").innerHTML = lampiranHTML;
+
+                        // ==========================================
+                        // SCRIPT PEMBUNUH PAGE KOSONG
+                        // ==========================================
+                        document.querySelectorAll('.bunuh-page-kosong').forEach(marker => {
+                            const pageKosong = marker.closest('.a4-page');
+                            if (pageKosong) pageKosong.remove(); 
+                        });
+
+                        autoPaginate();
+                        
+                       // ==========================================
+                        // 4. UPDATE TABLE OF CONTENTS (TOC) PAGINATION
+                        // ==========================================
+                        setTimeout(() => {
+                            const pages = document.querySelectorAll(".a4-page");
+                            pages.forEach((page, index) => {
+                                if (index === 0) return; 
+                                const pageNum = index + 1;
+                                const footer = page.querySelector(".pdf-footer");
+                                if (footer) footer.innerHTML = `<span class="footer-docref">${currentDocRef}</span><span class="page-number">${pageNum}</span>`;
+
+                                if (page.closest("#sectionWasiat")) {
+                                    const tocWasiat = document.getElementById("tocWasiat");
+                                    if (tocWasiat && tocWasiat.innerText === "-") tocWasiat.innerText = pageNum;
+                                }
+
+                                if (page.closest("#sectionMekanisme")) {
+                                    const targetId = page.getAttribute("data-target"); 
+                                    if (targetId) {
+                                        const targetSpan = document.getElementById(targetId);
+                                        if (targetSpan && targetSpan.innerText === "-") targetSpan.innerText = pageNum; 
+                                    }
+                                }
+
+                                if (page.closest("#sectionAmanah")) {
+                                    const tocAmanahNum = document.getElementById("tocAmanahNum");
+                                    if (tocAmanahNum && tocAmanahNum.innerText === "-") tocAmanahNum.innerText = pageNum;
+                                }
+                                
+                                if (page.closest("#sectionLampiran")) {
+                                    const tocLampiran = document.getElementById("tocLampiran");
+                                    if (tocLampiran && tocLampiran.innerText === "-") tocLampiran.innerText = pageNum;
+                                }
+                            });
+
+                            updateScale();
+                        }, 500);
+
+                    } 
+                } 
+
+            } catch (error) { 
+                console.error("Error fetching data:", error);
+                alert("Ralat memuatkan dokumen: " + error.message);
+            }
+        }); 
+
+        // ==========================================
+        // BUTANG CETAK (PDF) & LULUS/TOLAK
+        // ==========================================
+        document.getElementById("printBtn").onclick = () => window.open(`print-corporate-kongsi.html?id=${userId}`, "_blank");
+       
+        document.getElementById("downloadBtn").addEventListener("click", async () => {
+             let wrapper = document.getElementById('scale-wrapper');
+             let element = document.getElementById("pdfContent");
+             let originalTransform = wrapper.style.transform;
+             let originalMarginBottom = wrapper.style.marginBottom;
+             let originalMargin = element.style.margin;
+
+            wrapper.style.transform = 'scale(1)';
+            wrapper.style.marginBottom = '0px';
+            wrapper.style.transformOrigin = 'top left'; 
+            element.style.margin = '0'; 
+
+            await new Promise(r => setTimeout(r,150));
+            await document.fonts.ready;
+            
+             const options = {
+                margin: 0,
+                filename: "Wasiat_Korporat_Kongsi.pdf",
+                image: { type: "jpeg", quality: 0.92 },
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, windowWidth: document.documentElement.offsetWidth },                
+                 pagebreak: { mode: ['css'] }, 
+                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait", compress: true }
+            };
+
+            html2pdf().set(options).from(element).save().then(() => {
+                wrapper.style.transform = originalTransform;
+                wrapper.style.marginBottom = originalMarginBottom;
+                wrapper.style.transformOrigin = 'top center';
+                element.style.margin = originalMargin || '0 auto';
+            });
+        });
+
+    </script>
+</body>
+</html>
