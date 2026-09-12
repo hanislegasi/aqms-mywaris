@@ -2,67 +2,33 @@
 <html lang="ms">
 
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-Customer Details
-</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap"
-rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body
-class="bg-gray-100 min-h-screen"
-style="font-family: Inter, sans-serif;">
+<body class="bg-gray-100 min-h-screen" style="font-family: Inter, sans-serif;">
 
 <!-- HEADER -->
 <div class="bg-[#153638] text-white p-5 shadow">
-
-<h1 class="text-2xl font-bold">
-Customer Details
-</h1>
-
-<p class="text-gray-200">
-Consultant Client Center
-</p>
-
+    <h1 class="text-2xl font-bold">Customer Details</h1>
+    <p class="text-gray-200">Consultant Client Center</p>
 </div>
 
 <!-- CONTENT -->
 <div class="p-5">
 
-<a
-href="consultant-clients.html"
-class="inline-block mb-5 bg-gray-200 hover:bg-gray-300 transition text-gray-700 px-5 py-3 rounded-xl font-semibold">
-
-← Kembali ke My Clients
-
+<a href="consultant-clients.html" class="inline-block mb-5 bg-gray-200 hover:bg-gray-300 transition text-gray-700 px-5 py-3 rounded-xl font-semibold">
+    ← Kembali ke My Clients
 </a>
   
-<div
-id="customerInfo"
-class="bg-white rounded-2xl shadow p-6">
-
-<p class="text-gray-500">
-Memuatkan data...
-</p>
-
+<div id="customerInfo" class="bg-white rounded-2xl shadow p-6">
+    <p class="text-gray-500">Memuatkan data...</p>
 </div>
 
 </div>
@@ -72,452 +38,248 @@ Memuatkan data...
 // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
 import { db, auth } from './firebase.js';
 
-// 2. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
+// 2. Tarik fungsi Firestore yang berkaitan sahaja
 import {
     doc,
     getDoc,
     updateDoc,
     serverTimestamp,
-    addDoc,
     collection
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// 3. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
+// 3. Tarik fungsi Auth yang berkaitan sahaja
 import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 onAuthStateChanged(auth, async(user)=>{
-
   if(!user){
-
-    window.location.href =
-    "login.html";
-
+    window.location.href = "login.html";
     return;
-
   }
 
-  const userDoc =
-  await getDoc(
-    doc(
-      db,
-      "users",
-      user.uid
-    )
-  );
-
-  const userData =
-  userDoc.data();
+  const userDoc = await getDoc(doc(db, "users", user.uid));
+  const userData = userDoc.data();
 
    if(userData.role !== "consultant"){
-
-    alert(
-      "Akses ditolak"
-    );
-
-    window.location.href =
-    "index.html";
-
+    alert("Akses ditolak");
+    window.location.href = "index.html";
   }
-
 });
 
 // GET ID
-const params =
-new URLSearchParams(
-window.location.search
-);
-
-const userId =
-params.get("id");
+const params = new URLSearchParams(window.location.search);
+const userId = params.get("id");
 
 // LOAD USER
-const docSnap =
-await getDoc(
-doc(db,"users",userId)
-);
+const docSnap = await getDoc(doc(db,"users",userId));
 
 if(docSnap.exists()){
 
-const user =
-docSnap.data();
+const user = docSnap.data();
 
 // ======================
 // WASIAT
 // ======================
-
-const wasiatSnap = await getDoc(
-    doc(db, "users", userId, "wasiat", "maklumat")
-);
-
+const wasiatSnap = await getDoc(doc(db, "users", userId, "wasiat", "maklumat"));
 let wasiatStatus = "BELUM DIISI";
 let wasiatDocRef = "-";
-let wasiatApprovedDate = "-";
-let wasiatExpiryDate = "-";
-let wasiatBakiHari = 0;
-
-let wasiatAkadDate = "";
-let wasiatAkadTime = "";
-
 let wasiatData = {};
-  
-let wasiatStampDate = "";
-let wasiatStampRef = "";
-
-let wasiatHandoverDate = "";
-let wasiatHandoverRemarks = "";
+let wasiatApprovedDate = "-", wasiatExpiryDate = "-", wasiatBakiHari = 0;
+let wasiatAkadDate = "", wasiatAkadTime = "", wasiatStampDate = "", wasiatStampRef = "", wasiatHandoverDate = "", wasiatHandoverRemarks = "";
   
 if (wasiatSnap.exists()) {
-
     wasiatData = wasiatSnap.data();
-
-wasiatAkadDate = wasiatData.akadDate || "";
-wasiatAkadTime = wasiatData.akadTime || "";
-
-wasiatStampDate = wasiatData.stampingDate || "";
-wasiatStampRef = wasiatData.stampingRef || "";
-
-wasiatHandoverDate = wasiatData.handoverDate || "";
-wasiatHandoverRemarks = wasiatData.handoverRemarks || "";
-  
+    wasiatAkadDate = wasiatData.akadDate || "";
+    wasiatAkadTime = wasiatData.akadTime || "";
+    wasiatStampDate = wasiatData.stampingDate || "";
+    wasiatStampRef = wasiatData.stampingRef || "";
+    wasiatHandoverDate = wasiatData.handoverDate || "";
+    wasiatHandoverRemarks = wasiatData.handoverRemarks || "";
     wasiatStatus = wasiatData.status || "DRAFT";
     wasiatDocRef = wasiatData.docRef || "-";
-
-    wasiatApprovedDate = wasiatData.approvedAt
-        ? new Date(wasiatData.approvedAt).toLocaleDateString("ms-MY")
-        : "-";
-
-    wasiatExpiryDate = wasiatData.expiryDate
-        ? new Date(wasiatData.expiryDate).toLocaleDateString("ms-MY")
-        : "-";
-
-    wasiatBakiHari = wasiatData.expiryDate
-        ? Math.ceil(
-            (new Date(wasiatData.expiryDate) - new Date())
-            / (1000 * 60 * 60 * 24)
-        )
-        : 0;
-
+    wasiatApprovedDate = wasiatData.approvedAt ? new Date(wasiatData.approvedAt).toLocaleDateString("ms-MY") : "-";
+    wasiatExpiryDate = wasiatData.expiryDate ? new Date(wasiatData.expiryDate).toLocaleDateString("ms-MY") : "-";
+    wasiatBakiHari = wasiatData.expiryDate ? Math.ceil((new Date(wasiatData.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)) : 0;
 }
-
 
 // ======================
 // HIBAH
 // ======================
-
-const hibahSnap = await getDoc(
-    doc(db, "users", userId, "hibah", "maklumat")
-);
-
+const hibahSnap = await getDoc(doc(db, "users", userId, "hibah", "maklumat"));
 let hibahStatus = "BELUM DIISI";
 let hibahDocRef = "-";
-let hibahApprovedDate = "-";
-let hibahExpiryDate = "-";
-let hibahBakiHari = 0;
-
-let hibahAkadDate = "";
-let hibahAkadTime = "";
-
 let hibahData = {};
-  
-let hibahStampDate = "";
-let hibahStampRef = "";
-
-let hibahHandoverDate = "";
-let hibahHandoverRemarks = "";
+let hibahApprovedDate = "-", hibahExpiryDate = "-", hibahBakiHari = 0;
+let hibahAkadDate = "", hibahAkadTime = "", hibahStampDate = "", hibahStampRef = "", hibahHandoverDate = "", hibahHandoverRemarks = "";
   
 if (hibahSnap.exists()) {
-
     hibahData = hibahSnap.data();
-
-hibahAkadDate = hibahData.akadDate || "";
-hibahAkadTime = hibahData.akadTime || "";
-
-hibahStampDate = hibahData.stampingDate || "";
-hibahStampRef = hibahData.stampingRef || "";
-
-hibahHandoverDate = hibahData.handoverDate || "";
-hibahHandoverRemarks = hibahData.handoverRemarks || "";
-  
+    hibahAkadDate = hibahData.akadDate || "";
+    hibahAkadTime = hibahData.akadTime || "";
+    hibahStampDate = hibahData.stampingDate || "";
+    hibahStampRef = hibahData.stampingRef || "";
+    hibahHandoverDate = hibahData.handoverDate || "";
+    hibahHandoverRemarks = hibahData.handoverRemarks || "";
     hibahStatus = hibahData.status || "DRAFT";
     hibahDocRef = hibahData.docRef || "-";
-
-    hibahApprovedDate = hibahData.approvedAt
-        ? new Date(hibahData.approvedAt).toLocaleDateString("ms-MY")
-        : "-";
-
-    hibahExpiryDate = hibahData.expiryDate
-        ? new Date(hibahData.expiryDate).toLocaleDateString("ms-MY")
-        : "-";
-
-    hibahBakiHari = hibahData.expiryDate
-        ? Math.ceil(
-            (new Date(hibahData.expiryDate) - new Date())
-            / (1000 * 60 * 60 * 24)
-        )
-        : 0;
-
+    hibahApprovedDate = hibahData.approvedAt ? new Date(hibahData.approvedAt).toLocaleDateString("ms-MY") : "-";
+    hibahExpiryDate = hibahData.expiryDate ? new Date(hibahData.expiryDate).toLocaleDateString("ms-MY") : "-";
+    hibahBakiHari = hibahData.expiryDate ? Math.ceil((new Date(hibahData.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)) : 0;
 }
-
 
 // ======================
 // HARTA SEPENCARIAN
 // ======================
-
-const sepencarianSnap = await getDoc(
-    doc(db, "users", userId, "sepencarian", "maklumat")
-);
-
+const sepencarianSnap = await getDoc(doc(db, "users", userId, "sepencarian", "maklumat"));
 let sepencarianStatus = "BELUM DIISI";
 let sepencarianDocRef = "-";
-let sepencarianApprovedDate = "-";
-let sepencarianExpiryDate = "-";
-let sepencarianBakiHari = 0;
-
-let sepencarianAkadDate = "";
-let sepencarianAkadTime = "";
-
 let sepencarianData = {};
-  
-let sepencarianStampDate = "";
-let sepencarianStampRef = "";
-
-let sepencarianHandoverDate = "";
-let sepencarianHandoverRemarks = "";
+let sepencarianApprovedDate = "-", sepencarianExpiryDate = "-", sepencarianBakiHari = 0;
+let sepencarianAkadDate = "", sepencarianAkadTime = "", sepencarianStampDate = "", sepencarianStampRef = "", sepencarianHandoverDate = "", sepencarianHandoverRemarks = "";
   
 if (sepencarianSnap.exists()) {
-
     sepencarianData = sepencarianSnap.data();
-
-sepencarianAkadDate = sepencarianData.akadDate || "";
-sepencarianAkadTime = sepencarianData.akadTime || "";
-
-sepencarianStampDate = sepencarianData.stampingDate || "";
-sepencarianStampRef = sepencarianData.stampingRef || "";
-
-sepencarianHandoverDate = sepencarianData.handoverDate || "";
-sepencarianHandoverRemarks = sepencarianData.handoverRemarks || "";
-  
+    sepencarianAkadDate = sepencarianData.akadDate || "";
+    sepencarianAkadTime = sepencarianData.akadTime || "";
+    sepencarianStampDate = sepencarianData.stampingDate || "";
+    sepencarianStampRef = sepencarianData.stampingRef || "";
+    sepencarianHandoverDate = sepencarianData.handoverDate || "";
+    sepencarianHandoverRemarks = sepencarianData.handoverRemarks || "";
     sepencarianStatus = sepencarianData.status || "DRAFT";
     sepencarianDocRef = sepencarianData.docRef || "-";
-
-    sepencarianApprovedDate = sepencarianData.approvedAt
-        ? new Date(sepencarianData.approvedAt).toLocaleDateString("ms-MY")
-        : "-";
-
-    sepencarianExpiryDate = sepencarianData.expiryDate
-        ? new Date(sepencarianData.expiryDate).toLocaleDateString("ms-MY")
-        : "-";
-
-    sepencarianBakiHari = sepencarianData.expiryDate
-        ? Math.ceil(
-            (new Date(sepencarianData.expiryDate) - new Date())
-            / (1000 * 60 * 60 * 24)
-        )
-        : 0;
-
+    sepencarianApprovedDate = sepencarianData.approvedAt ? new Date(sepencarianData.approvedAt).toLocaleDateString("ms-MY") : "-";
+    sepencarianExpiryDate = sepencarianData.expiryDate ? new Date(sepencarianData.expiryDate).toLocaleDateString("ms-MY") : "-";
+    sepencarianBakiHari = sepencarianData.expiryDate ? Math.ceil((new Date(sepencarianData.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)) : 0;
 }
-
 
 // ======================
 // MAWARIS
 // ======================
-
-const mawarisSnap = await getDoc(
-    doc(db, "users", userId, "mawaris", "maklumat")
-);
-
+const mawarisSnap = await getDoc(doc(db, "users", userId, "mawaris", "maklumat"));
 let mawarisStatus = "BELUM DIISI";
 let mawarisDocRef = "-";
-let mawarisApprovedDate = "-";
-let mawarisExpiryDate = "-";
-let mawarisBakiHari = 0;
-
-let mawarisAkadDate = "";
-let mawarisAkadTime = "";
-
 let mawarisData = {};
-  
-let mawarisStampDate = "";
-let mawarisStampRef = "";
-
-let mawarisHandoverDate = "";
-let mawarisHandoverRemarks = "";
+let mawarisApprovedDate = "-", mawarisExpiryDate = "-", mawarisBakiHari = 0;
+let mawarisAkadDate = "", mawarisAkadTime = "", mawarisStampDate = "", mawarisStampRef = "", mawarisHandoverDate = "", mawarisHandoverRemarks = "";
   
 if (mawarisSnap.exists()) {
-
     mawarisData = mawarisSnap.data();
-
-mawarisAkadDate = mawarisData.akadDate || "";
-mawarisAkadTime = mawarisData.akadTime || "";
-
-mawarisStampDate = mawarisData.stampingDate || "";
-mawarisStampRef = mawarisData.stampingRef || "";
-
-mawarisHandoverDate = mawarisData.handoverDate || "";
-mawarisHandoverRemarks = mawarisData.handoverRemarks || "";
-  
+    mawarisAkadDate = mawarisData.akadDate || "";
+    mawarisAkadTime = mawarisData.akadTime || "";
+    mawarisStampDate = mawarisData.stampingDate || "";
+    mawarisStampRef = mawarisData.stampingRef || "";
+    mawarisHandoverDate = mawarisData.handoverDate || "";
+    mawarisHandoverRemarks = mawarisData.handoverRemarks || "";
     mawarisStatus = mawarisData.status || "DRAFT";
     mawarisDocRef = mawarisData.docRef || "-";
-
-    mawarisApprovedDate = mawarisData.approvedAt
-        ? new Date(mawarisData.approvedAt).toLocaleDateString("ms-MY")
-        : "-";
-
-    mawarisExpiryDate = mawarisData.expiryDate
-        ? new Date(mawarisData.expiryDate).toLocaleDateString("ms-MY")
-        : "-";
-
-    mawarisBakiHari = mawarisData.expiryDate
-        ? Math.ceil(
-            (new Date(mawarisData.expiryDate) - new Date())
-            / (1000 * 60 * 60 * 24)
-        )
-        : 0;
-
+    mawarisApprovedDate = mawarisData.approvedAt ? new Date(mawarisData.approvedAt).toLocaleDateString("ms-MY") : "-";
+    mawarisExpiryDate = mawarisData.expiryDate ? new Date(mawarisData.expiryDate).toLocaleDateString("ms-MY") : "-";
+    mawarisBakiHari = mawarisData.expiryDate ? Math.ceil((new Date(mawarisData.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)) : 0;
 }
   
 // ======================
-// CORPORATE
+// CORPORATE (PREMIUM)
 // ======================
-
-const corporateSnap = await getDoc(
-    doc(db, "users", userId, "corporate", "maklumat")
-);
-
+const corporateSnap = await getDoc(doc(db, "users", userId, "corporate", "maklumat"));
 let corporateStatus = "BELUM DIISI";
 let corporateDocRef = "-";
-let corporateApprovedDate = "-";
-let corporateExpiryDate = "-";
-let corporateBakiHari = 0;
-
-let corporateAkadDate = "";
-let corporateAkadTime = "";
-
 let corporateData = {};
-  
-let corporateStampDate = "";
-let corporateStampRef = "";
-
-let corporateHandoverDate = "";
-let corporateHandoverRemarks = "";
+let corporateApprovedDate = "-", corporateExpiryDate = "-", corporateBakiHari = 0;
+let corporateAkadDate = "", corporateAkadTime = "", corporateStampDate = "", corporateStampRef = "", corporateHandoverDate = "", corporateHandoverRemarks = "";
   
 if (corporateSnap.exists()) {
-
     corporateData = corporateSnap.data();
-
-corporateAkadDate = corporateData.akadDate || "";
-corporateAkadTime = corporateData.akadTime || "";
-
-corporateStampDate = corporateData.stampingDate || "";
-corporateStampRef = corporateData.stampingRef || "";
-
-corporateHandoverDate = corporateData.handoverDate || "";
-corporateHandoverRemarks = corporateData.handoverRemarks || "";
-  
+    corporateAkadDate = corporateData.akadDate || "";
+    corporateAkadTime = corporateData.akadTime || "";
+    corporateStampDate = corporateData.stampingDate || "";
+    corporateStampRef = corporateData.stampingRef || "";
+    corporateHandoverDate = corporateData.handoverDate || "";
+    corporateHandoverRemarks = corporateData.handoverRemarks || "";
     corporateStatus = corporateData.status || "DRAFT";
     corporateDocRef = corporateData.docRef || "-";
-
-    corporateApprovedDate = corporateData.approvedAt
-        ? new Date(corporateData.approvedAt).toLocaleDateString("ms-MY")
-        : "-";
-
-    corporateExpiryDate = corporateData.expiryDate
-        ? new Date(corporateData.expiryDate).toLocaleDateString("ms-MY")
-        : "-";
-
-    corporateBakiHari = corporateData.expiryDate
-        ? Math.ceil(
-            (new Date(corporateData.expiryDate) - new Date())
-            / (1000 * 60 * 60 * 24)
-        )
-        : 0;
-
+    corporateApprovedDate = corporateData.approvedAt ? new Date(corporateData.approvedAt).toLocaleDateString("ms-MY") : "-";
+    corporateExpiryDate = corporateData.expiryDate ? new Date(corporateData.expiryDate).toLocaleDateString("ms-MY") : "-";
+    corporateBakiHari = corporateData.expiryDate ? Math.ceil((new Date(corporateData.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)) : 0;
 }
 
-  
+// ======================
+// CORPORATE TUNGGAL
+// ======================
+const corporateTunggalSnap = await getDoc(doc(db, "users", userId, "corporate_tunggal", "maklumat"));
+let corporateTunggalStatus = "BELUM DIISI";
+let corporateTunggalDocRef = "-";
+let corporateTunggalData = {};
+if (corporateTunggalSnap.exists()) {
+    corporateTunggalData = corporateTunggalSnap.data();
+    corporateTunggalStatus = corporateTunggalData.status || "DRAFT";
+    corporateTunggalDocRef = corporateTunggalData.docRef || "-";
+}
+
+// ======================
+// CORPORATE KONGSI
+// ======================
+const corporateKongsiSnap = await getDoc(doc(db, "users", userId, "corporate_kongsi", "maklumat"));
+let corporateKongsiStatus = "BELUM DIISI";
+let corporateKongsiDocRef = "-";
+let corporateKongsiData = {};
+if (corporateKongsiSnap.exists()) {
+    corporateKongsiData = corporateKongsiSnap.data();
+    corporateKongsiStatus = corporateKongsiData.status || "DRAFT";
+    corporateKongsiDocRef = corporateKongsiData.docRef || "-";
+}
+
+// ======================
+// CORPORATE ZURRI
+// ======================
+const corporateZurriSnap = await getDoc(doc(db, "users", userId, "corporate_zurri", "maklumat"));
+let corporateZurriStatus = "BELUM DIISI";
+let corporateZurriDocRef = "-";
+let corporateZurriData = {};
+if (corporateZurriSnap.exists()) {
+    corporateZurriData = corporateZurriSnap.data();
+    corporateZurriStatus = corporateZurriData.status || "DRAFT";
+    corporateZurriDocRef = corporateZurriData.docRef || "-";
+}
+
+// KUMPULKAN SEMUA PRODUK
 const products = [
-
-{
-name:"Wasiat",
-snap:wasiatSnap,
-status:wasiatStatus,
-docRef:wasiatDocRef,
-preview:"preview-wasiat.html"
-},
-
-{
-name:"Hibah",
-snap:hibahSnap,
-status:hibahStatus,
-docRef:hibahDocRef,
-preview:"preview-hibah.html"
-},
-
-{
-name:"Harta Sepencarian",
-snap:sepencarianSnap,
-status:sepencarianStatus,
-docRef:sepencarianDocRef,
-preview:"preview-sepencarian.html"
-},
-
-{
-name:"Mawaris",
-snap:mawarisSnap,
-status:mawarisStatus,
-docRef:mawarisDocRef,
-preview:"preview-mawaris.html"
-},
-
-{
-name:"Mawaris Korporat",
-snap:corporateSnap,
-status:corporateStatus,
-docRef:corporateDocRef,
-preview:"preview-corporate.html"
-}
-  
+    { name:"Wasiat", snap:wasiatSnap, status:wasiatStatus, docRef:wasiatDocRef, preview:"preview-wasiat.html" },
+    { name:"Hibah", snap:hibahSnap, status:hibahStatus, docRef:hibahDocRef, preview:"preview-hibah.html" },
+    { name:"Harta Sepencarian", snap:sepencarianSnap, status:sepencarianStatus, docRef:sepencarianDocRef, preview:"preview-sepencarian.html" },
+    { name:"Mawaris", snap:mawarisSnap, status:mawarisStatus, docRef:mawarisDocRef, preview:"preview-mawaris.html" },
+    { name:"Mawaris Korporat (Premium)", snap:corporateSnap, status:corporateStatus, docRef:corporateDocRef, preview:"preview-corporate.html" },
+    { name:"Mawaris Korporat (Tunggal)", snap:corporateTunggalSnap, status:corporateTunggalStatus, docRef:corporateTunggalDocRef, preview:"preview-corporate-tunggal.html" },
+    { name:"Mawaris Korporat (Kongsi)", snap:corporateKongsiSnap, status:corporateKongsiStatus, docRef:corporateKongsiDocRef, preview:"preview-corporate-kongsi.html" },
+    { name:"Mawaris Korporat (Wakaf Zurri)", snap:corporateZurriSnap, status:corporateZurriStatus, docRef:corporateZurriDocRef, preview:"preview-corporate-zurri.html" }
 ];
 
-const activeProduct =
-products.find(product => product.snap.exists());
+const activeProduct = products.find(product => product.snap.exists());
+const currentStatus = activeProduct ? activeProduct.status : "UNDER_REVIEW";
 
-const currentStatus =
-activeProduct
-? activeProduct.status
-: "UNDER_REVIEW";
-
-const currentCollection =
-activeProduct
+const currentCollection = activeProduct
 ? (
-activeProduct.name === "Wasiat"
-? "wasiat"
-: activeProduct.name === "Hibah"
-? "hibah"
-: activeProduct.name === "Harta Sepencarian"
-? "sepencarian"
-: activeProduct.name === "Mawaris Korporat"
-? "corporate"
-: "mawaris"
-)
-: "wasiat";
+    activeProduct.name === "Wasiat" ? "wasiat"
+    : activeProduct.name === "Hibah" ? "hibah"
+    : activeProduct.name === "Harta Sepencarian" ? "sepencarian"
+    : activeProduct.name === "Mawaris Korporat (Premium)" ? "corporate"
+    : activeProduct.name === "Mawaris Korporat (Tunggal)" ? "corporate_tunggal"
+    : activeProduct.name === "Mawaris Korporat (Kongsi)" ? "corporate_kongsi"
+    : activeProduct.name === "Mawaris Korporat (Wakaf Zurri)" ? "corporate_zurri"
+    : "mawaris"
+) : "wasiat";
 
-const currentData =
-activeProduct
+const currentData = activeProduct
 ? (
-currentCollection === "wasiat"
-? wasiatData
-: currentCollection === "hibah"
-? hibahData
-: currentCollection === "sepencarian"
-? sepencarianData
-: currentCollection === "corporate"
-? corporateData
-: mawarisData
-)
-: {};
+    currentCollection === "wasiat" ? wasiatData
+    : currentCollection === "hibah" ? hibahData
+    : currentCollection === "sepencarian" ? sepencarianData
+    : currentCollection === "corporate" ? corporateData
+    : currentCollection === "corporate_tunggal" ? corporateTunggalData
+    : currentCollection === "corporate_kongsi" ? corporateKongsiData
+    : currentCollection === "corporate_zurri" ? corporateZurriData
+    : mawarisData
+) : {};
 
   
 const workflowSteps = [
@@ -533,102 +295,40 @@ const workflowSteps = [
 ];
 
 function renderTimeline(currentStatus){
-
-    const currentIndex =
-    workflowSteps.findIndex(
-        s => s.key === currentStatus
-    );
-
-const timelineDates = {
-
-UNDER_REVIEW: user.memberSince,
-
-APPROVED:
-currentData.approvedAt || "",
-
-VERIFIED:
-currentData.verifiedAt || "",
-
-PRINTED:
-currentData.printedAt || "",
-
-SENT:
-currentData.sentAt || "",
-
-AKAD:
-currentData.akadDate || "",
-
-STAMPING:
-currentData.stampingDate || "",
-
-HANDOVER:
-currentData.handoverDate || "",
-
-COMPLETED:
-currentData.receivedDate || ""
-
-};
+    const currentIndex = workflowSteps.findIndex(s => s.key === currentStatus);
+    const timelineDates = {
+        UNDER_REVIEW: user.memberSince,
+        APPROVED: currentData.approvedAt || "",
+        VERIFIED: currentData.verifiedAt || "",
+        PRINTED: currentData.printedAt || "",
+        SENT: currentData.sentAt || "",
+        AKAD: currentData.akadDate || "",
+        STAMPING: currentData.stampingDate || "",
+        HANDOVER: currentData.handoverDate || "",
+        COMPLETED: currentData.receivedDate || ""
+    };
   
-    document.getElementById("timelineContainer").innerHTML =
-    workflowSteps.map((step,index)=>`
-
+    document.getElementById("timelineContainer").innerHTML = workflowSteps.map((step,index)=>`
     <div class="flex items-center gap-4 mb-4">
-
-        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold
-        ${index<=currentIndex
-        ?"bg-green-600 text-white"
-        :"bg-gray-200 text-gray-500"}">
-
-        ${index<=currentIndex?"✓":index+1}
-
+        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold ${index<=currentIndex ?"bg-green-600 text-white" :"bg-gray-200 text-gray-500"}">
+            ${index<=currentIndex?"✓":index+1}
         </div>
-
         <div>
-
-<span class="${
-    index<=currentIndex
-    ?"font-semibold text-green-700"
-    :"text-gray-500"
-}">
-${step.label}
-</span>
-
-<p class="text-xs text-gray-400 mt-1">
-
-${
-timelineDates[step.key]
-? new Date(timelineDates[step.key]).toLocaleDateString("ms-MY")
-: "-"
+            <span class="${index<=currentIndex ?"font-semibold text-green-700" :"text-gray-500"}">${step.label}</span>
+            <p class="text-xs text-gray-400 mt-1">${timelineDates[step.key] ? new Date(timelineDates[step.key]).toLocaleDateString("ms-MY") : "-"}</p>
+        </div>
+    </div>`).join("");
 }
 
-</p>
-
-</div>
-
-</span>
-
-    </div>
-
-    `).join("");
-
-}
-
-document.getElementById(
-"customerInfo"
-).innerHTML = `
-  
+document.getElementById("customerInfo").innerHTML = `
 <div class="space-y-6">
 
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
 
 <!-- CUSTOMER PROFILE -->
 <div class="bg-white rounded-2xl shadow p-5 h-full flex flex-col">
-    <h2 class="text-3xl font-bold text-[#153638]">
-        ${user.nama || "-"}
-    </h2>
-    <p class="text-gray-500 mb-5">
-        ${user.email || "-"}
-    </p>
+    <h2 class="text-3xl font-bold text-[#153638]">${user.nama || "-"}</h2>
+    <p class="text-gray-500 mb-5">${user.email || "-"}</p>
 
     <div class="space-y-3 text-sm flex-grow">
         <div class="flex justify-between">
@@ -677,214 +377,81 @@ document.getElementById(
 </div>
 
 <!-- TIMELINE -->
-<div
-id="timelineCard"
-class="bg-white rounded-2xl shadow p-5 h-full">
-
-<h3 class="font-bold mb-5">
-
-Status Timeline
-
-</h3>
-
-<div
-id="timelineContainer">
-
-</div>
-
+<div id="timelineCard" class="bg-white rounded-2xl shadow p-5 h-full">
+    <h3 class="font-bold mb-5">Status Timeline</h3>
+    <div id="timelineContainer"></div>
 </div>
 
 </div> <!-- PENUTUP GRID ATAS -->
 
 <div class="grid grid-cols-1 xl:grid-cols-4 gap-4">
 
-${products
-.filter(product => product.snap.exists())
-.map(product => `
-
+${products.filter(product => product.snap.exists()).map(product => `
 <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col h-full">
-
     <div>
-
-        <h3 class="font-bold text-green-700 text-lg">
-            ${product.name}
-        </h3>
-
-        <p class="text-sm mt-4">
-            No Dokumen :
-            <strong>${product.docRef}</strong>
-        </p>
-
-        <p class="text-sm mt-1">
-            Status :
-            <strong>${product.status}</strong>
-        </p>
-
+        <h3 class="font-bold text-green-700 text-lg">${product.name}</h3>
+        <p class="text-sm mt-4">No Dokumen : <strong>${product.docRef}</strong></p>
+        <p class="text-sm mt-1">Status : <strong>${product.status}</strong></p>
     </div>
-
     <div class="mt-auto pt-5">
-
-        <a
-        href="${product.preview}?uid=${userId}"
-        target="_blank"
-        class="block w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold">
-
+        <a href="${product.preview}?uid=${userId}" target="_blank" class="block w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold">
         👁 View Dokumen
-
         </a>
-
     </div>
-
 </div>
-
 `).join("")}
 
-
 <div class="bg-white border rounded-xl p-5 flex flex-col h-full">
-
-<h3 class="font-bold text-blue-700">
-Akad
-</h3>
-
-<label>Tarikh</label>
-
-<input
-type="date"
-id="akadDate"
-value="${currentData.akadDate || ""}"
-class="w-full border rounded-lg p-2 mt-2 mb-3">
-
-<label class="mt-3 block">Masa</label>
-
-<input
-type="time"
-id="akadTime"
-value="${currentData.akadTime || ""}"
-class="w-full border rounded-lg p-2 mt-1">
-
-<div class="mt-auto pt-5">
-
-<button
-id="saveAkad"
-${currentData.akadDate ? "disabled" : ""}
-class="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg disabled:bg-gray-400">
-
-Simpan
-
-</button>
-
-</div>
-
+    <h3 class="font-bold text-blue-700">Akad</h3>
+    <label>Tarikh</label>
+    <input type="date" id="akadDate" value="${currentData.akadDate || ""}" class="w-full border rounded-lg p-2 mt-2 mb-3">
+    <label class="mt-3 block">Masa</label>
+    <input type="time" id="akadTime" value="${currentData.akadTime || ""}" class="w-full border rounded-lg p-2 mt-1">
+    <div class="mt-auto pt-5">
+        <button id="saveAkad" ${currentData.akadDate ? "disabled" : ""} class="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg disabled:bg-gray-400">Simpan</button>
+    </div>
 </div>
 
 <div class="bg-white border rounded-xl p-5 flex flex-col h-full">
-
-<h3 class="font-bold text-orange-700">
-
-Stamping
-
-</h3>
-
-<input
-type="date"
-id="stampDate"
-value="${currentData.stampingDate || ""}"
-class="w-full border rounded-lg p-2 mt-2 mb-3">
-
-<input
-id="stampRef"
-value="${currentData.stampingRef || ""}"
-placeholder="No Rujukan"
-class="w-full border rounded-lg p-2 mt-3">
-
-<div class="mt-auto pt-5">
-
-<button
-id="saveStamping"
-${currentData.stampingDate ? "disabled" : ""}
-class="w-full mt-4 bg-orange-600 text-white py-2 rounded-lg disabled:bg-gray-400">
-
-Update
-
-</button>
-
+    <h3 class="font-bold text-orange-700">Stamping</h3>
+    <input type="date" id="stampDate" value="${currentData.stampingDate || ""}" class="w-full border rounded-lg p-2 mt-2 mb-3">
+    <input id="stampRef" value="${currentData.stampingRef || ""}" placeholder="No Rujukan" class="w-full border rounded-lg p-2 mt-3">
+    <div class="mt-auto pt-5">
+        <button id="saveStamping" ${currentData.stampingDate ? "disabled" : ""} class="w-full mt-4 bg-orange-600 text-white py-2 rounded-lg disabled:bg-gray-400">Update</button>
+    </div>
 </div>
 
-</div>
 <div class="bg-white border rounded-xl p-5 flex flex-col h-full">
-
-<h3 class="font-bold text-green-700">
-
-Handover - Complete
-
-</h3>
-
-<input
-type="date"
-id="completeDate"
-value="${currentData.handoverDate || ""}"
-class="w-full border rounded-lg p-2 mt-2 mb-3">
-
-<textarea
-id="completeRemarks"
-class="w-full border rounded-lg p-2 mt-3 mb-3"
-placeholder="Remarks">${currentData.handoverRemarks || ""}</textarea>
-
-<div class="mt-auto pt-5">
-
-<button
-id="saveComplete"
-${currentData.handoverDate ? "disabled" : ""}
-class="w-full mt-4 bg-green-700 text-white py-2 rounded-lg disabled:bg-gray-400">
-
-Complete
-
-</button>
-
-</div>  
-
+    <h3 class="font-bold text-green-700">Handover - Complete</h3>
+    <input type="date" id="completeDate" value="${currentData.handoverDate || ""}" class="w-full border rounded-lg p-2 mt-2 mb-3">
+    <textarea id="completeRemarks" class="w-full border rounded-lg p-2 mt-3 mb-3" placeholder="Remarks">${currentData.handoverRemarks || ""}</textarea>
+    <div class="mt-auto pt-5">
+        <button id="saveComplete" ${currentData.handoverDate ? "disabled" : ""} class="w-full mt-4 bg-green-700 text-white py-2 rounded-lg disabled:bg-gray-400">Complete</button>
+    </div>  
 </div>
 
 </div>
-
 </div>
-
 `;
 
   
-document.getElementById(
-"memberNo"
-).innerHTML =
-user.memberNo || "-";
-
-document.getElementById(
-"memberSince"
-).innerHTML =
-user.memberSince
-? new Date(
-user.memberSince
-).toLocaleDateString("ms-MY")
-: "-";
-
-document.getElementById(
-"referral"
-).innerHTML =
-user.referral || "-";
-
-document.getElementById("telefon").innerHTML =
-user.telefon || "-";
+document.getElementById("memberNo").innerHTML = user.memberNo || "-";
+document.getElementById("memberSince").innerHTML = user.memberSince ? new Date(user.memberSince).toLocaleDateString("ms-MY") : "-";
+document.getElementById("referral").innerHTML = user.referral || "-";
+document.getElementById("telefon").innerHTML = user.telefon || "-";
   
-document.getElementById("memberStatus").innerHTML =
-(
-user.paymentStatus === "paid" ||
-user.wasiatPaymentStatus === "paid" ||
-user.hibahPaymentStatus === "paid" ||
-user.sepencarianPaymentStatus === "paid" ||
-user.mawarisPaymentStatus === "paid" ||
-user.corporatePaymentStatus === "paid" 
-)
-? "AHLI AKTIF"
-: "PROSPEK";
+// Semakan untuk SEMUA jenis Corporate
+document.getElementById("memberStatus").innerHTML = (
+    user.paymentStatus === "paid" ||
+    user.wasiatPaymentStatus === "paid" ||
+    user.hibahPaymentStatus === "paid" ||
+    user.sepencarianPaymentStatus === "paid" ||
+    user.mawarisPaymentStatus === "paid" ||
+    user.corporatePaymentStatus === "paid" ||
+    user.corporateTunggalPaymentStatus === "paid" ||
+    user.corporateKongsiPaymentStatus === "paid" ||
+    user.corporateZurriPaymentStatus === "paid" 
+) ? "AHLI AKTIF" : "PROSPEK";
 
 renderTimeline(currentStatus);
 
@@ -903,11 +470,9 @@ if (btnToggleIntroducer) {
                 : `Anda pasti mahu aktifkan fungsi myIntroducer dengan komisen sebanyak ${percentVal}%?`;
 
             if (confirm(confirmMsg)) {
-                // Tukar butang jadi 'loading'
                 btnToggleIntroducer.innerText = "Memproses...";
                 btnToggleIntroducer.disabled = true;
 
-                // Update Firestore database
                 await updateDoc(doc(db, "users", userId), {
                     isIntroducer: !isCurrentlyIntroducer,
                     introducerComm: Number(percentVal)
@@ -926,141 +491,63 @@ if (btnToggleIntroducer) {
 }
   
 document.getElementById("saveAkad").onclick = async()=>{
+    const akadDate = document.getElementById("akadDate").value;
+    const akadTime = document.getElementById("akadTime").value;
 
-const akadDate =
-document.getElementById("akadDate").value;
+    if(!akadDate || !akadTime){
+        alert("Sila pilih tarikh dan masa.");
+        return;
+    }
 
-const akadTime =
-document.getElementById("akadTime").value;
+    await updateDoc(doc(db,"users",userId,currentCollection,"maklumat"), {
+        akadDate,
+        akadTime,
+        status:"AKAD",
+        akadUpdatedAt:serverTimestamp()
+    });
 
-if(!akadDate || !akadTime){
-
-alert("Sila pilih tarikh dan masa.");
-
-return;
-
-}
-
-await updateDoc(
-
-doc(
-db,
-"users",
-userId,
-currentCollection,
-"maklumat"
-),
-
-{
-
-akadDate,
-akadTime,
-
-status:"AKAD",
-
-akadUpdatedAt:serverTimestamp()
-
-}
-
-);
-
-
-alert("Tarikh akad berjaya disimpan.");
-
-location.reload();
-
+    alert("Tarikh akad berjaya disimpan.");
+    location.reload();
 };
   
 document.getElementById("saveStamping").onclick = async()=>{
+    const stampDate = document.getElementById("stampDate").value;
+    const stampRef = document.getElementById("stampRef").value;
 
-const stampDate =
-document.getElementById("stampDate").value;
+    if(!stampDate){
+        alert("Sila pilih tarikh stamping.");
+        return;
+    }
 
-const stampRef =
-document.getElementById("stampRef").value;
+    await updateDoc(doc(db,"users",userId,currentCollection,"maklumat"), {
+        stampingDate:stampDate,
+        stampingRef:stampRef,
+        status:"STAMPING",
+        stampingUpdatedAt:serverTimestamp()
+    });
 
-if(!stampDate){
-
-alert("Sila pilih tarikh stamping.");
-
-return;
-
-}
-
-await updateDoc(
-
-doc(
-db,
-"users",
-userId,
-currentCollection,
-"maklumat"
-),
-
-{
-
-stampingDate:stampDate,
-
-stampingRef:stampRef,
-
-status:"STAMPING",
-
-stampingUpdatedAt:serverTimestamp()
-
-}
-
-);
-
-alert("Stamping berjaya dikemaskini.");
-
-location.reload();
-
+    alert("Stamping berjaya dikemaskini.");
+    location.reload();
 };
 
 document.getElementById("saveComplete").onclick = async()=>{
+    const completeDate = document.getElementById("completeDate").value;
+    const remarks = document.getElementById("completeRemarks").value;
 
-const completeDate =
-document.getElementById("completeDate").value;
+    if(!completeDate){
+        alert("Sila pilih tarikh.");
+        return;
+    }
 
-const remarks =
-document.getElementById("completeRemarks").value;
+    await updateDoc(doc(db,"users",userId,currentCollection,"maklumat"), {
+        handoverDate:completeDate,
+        handoverRemarks:remarks,
+        status:"HANDOVER",
+        handoverUpdatedAt:serverTimestamp()
+    });
 
-if(!completeDate){
-
-alert("Sila pilih tarikh.");
-
-return;
-
-}
-
-await updateDoc(
-
-doc(
-db,
-"users",
-userId,
-currentCollection,
-"maklumat"
-),
-
-{
-
-handoverDate:completeDate,
-
-handoverRemarks:remarks,
-
-status:"HANDOVER",
-
-handoverUpdatedAt:serverTimestamp()
-
-}
-
-);
-
-alert("Dokumen telah diserahkan kepada AQM.");
-
-location.reload();
-
+    alert("Dokumen telah diserahkan kepada AQM.");
+    location.reload();
 };
   
 } 
