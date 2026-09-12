@@ -107,13 +107,22 @@
 import { db, auth } from './firebase.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { doc, getDoc, setDoc, updateDoc, addDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
 
 const params = new URLSearchParams(window.location.search);
 let userId = params.get("id");
 const docType = params.get("type") || "corporate";
 
-import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
-    
+// Tentukan Laluan Pulang Berdasarkan Pakej Korporat
+let redirectPage = "corporate-page.html";
+if (docType === "corporate_tunggal") {
+    redirectPage = "corporate-tunggal-page.html";
+} else if (docType === "corporate_kongsi") {
+    redirectPage = "corporate-kongsi-page.html";
+} else if (docType === "corporate_zurri") {
+    redirectPage = "corporate-zurri-page.html";
+}
+
 let currentUser = null;
 let saleAmount = 100; // Harga Lalai
 let namaAmanahServer = "Syarikat Amanah"; // Nama Lalai
@@ -143,7 +152,7 @@ onAuthStateChanged(auth, async (user) => {
         document.getElementById("lafazNama2").innerText = namaAmanahServer;
         document.getElementById("pengenalanNama").innerText = namaAmanahServer;
 
-        // Tarik Data Borang Klien
+        // Tarik Data Borang Klien menggunakan docType dinamik
         const formRef = doc(db, "users", userId, docType, "maklumat");
         const formSnap = await getDoc(formRef);
 
@@ -156,7 +165,7 @@ onAuthStateChanged(auth, async (user) => {
             document.getElementById("displayAmount").innerText = "RM " + formattedPrice;
         } else {
             alert("Data borang tidak dijumpai.");
-            window.location.href = "corporate-page.html";
+            window.location.href = redirectPage;
         }
         
     } catch (error) {
@@ -188,33 +197,43 @@ agreeBtn.addEventListener("click", async () => {
     cancelTncBtn.disabled = true;
 
     try {
-        // 1. Semak status supaya tak bayar dua kali
+        // 1. Semak status supaya tak bayar dua kali menggunakan docType dinamik
         const userDocRef = doc(db, "users", userId, docType, "maklumat");
         const userSnap = await getDoc(userDocRef);
         
         if (userSnap.exists() && userSnap.data().status === "PAID") {
             alert("Pembayaran telah direkodkan sebelum ini.");
-            window.location.href = "corporate-page.html";
+            window.location.href = redirectPage;
             return;
         }
 
-        // 2. Susun data untuk dihantar ke backend ToyyibPay
+        // 2. Bersihkan nilai harga (buang huruf "RM", koma, atau jarak jika ada di database)
+        let hargaBersih = parseFloat(String(saleAmount).replace(/[^0-9.]/g, ''));
+        
+        // 3. Kawalan keselamatan: Jika data dari database rosak atau 0, guna harga lalai
+        if (isNaN(hargaBersih) || hargaBersih < 1) {
+            hargaBersih = 100; 
+        }
+
+        // 4. Susun data untuk dihantar ke backend ToyyibPay
         const dataPelanggan = {
             nama: corporateFormData.nama || "Pelanggan Korporat", 
             email: corporateFormData.email || "tiada@email.com",
             telefon: corporateFormData.telefon || "0100000000", 
             pakej: "Lantikan RTB",
-            harga: saleAmount, 
-            uid: userId
+            harga: hargaBersih, 
+            uid: userId,
+            type: docType // Hantar type korporat supaya backend/webhook dapat akses (Jika perlu)
         };
 
-        // 3. Panggil fungsi Cloud Function
+        // 5. Panggil fungsi Cloud Function
         const functions = getFunctions(auth.app);
         const createToyyibpayBill = httpsCallable(functions, 'createToyyibpayBill');
         const result = await createToyyibpayBill(dataPelanggan);
                 
-        // 4. Bawa pelanggan ke ToyyibPay
-        window.location.href = result.data.paymentUrl;
+        // 6. Bawa pelanggan ke ToyyibPay (URL yang dipulangkan cloud function perlu append parameter `&type=...`)
+        // Biasanya sistem akan auto-redirect jika webhook dikonfigurasi dengan betul
+        window.location.href = result.data.paymentUrl + (result.data.paymentUrl.includes('?') ? '&' : '?') + `type=${docType}`;
 
     } catch (error) {
         agreeBtn.disabled = false;
