@@ -2,8 +2,17 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Status Pembayaran Korporat</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: Inter, sans-serif; }
+        .modal-enter { animation: fadeIn 0.2s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-5">
 
@@ -20,7 +29,27 @@
     // Tangkap jawapan dari URL ToyyibPay
     const urlParams = new URLSearchParams(window.location.search);
     const status_id = urlParams.get('status_id'); 
+    const docType = urlParams.get('type') || "corporate"; // corporate, corporate_tunggal, corporate_kongsi, corporate_zurri
     
+    // Tetapkan Redirect Page & Prefix Berdasarkan Pakej
+    let redirectPage = "corporate-page.html";
+    let failPage = "corporate.html";
+    let prefixResit = "MCO";
+
+    if (docType === "corporate_tunggal") {
+        redirectPage = "corporate-tunggal-page.html";
+        failPage = "corporate-tunggal.html";
+        prefixResit = "MCT";
+    } else if (docType === "corporate_kongsi") {
+        redirectPage = "corporate-kongsi-page.html";
+        failPage = "corporate-kongsi.html";
+        prefixResit = "MCK";
+    } else if (docType === "corporate_zurri") {
+        redirectPage = "corporate-zurri-page.html";
+        failPage = "corporate-zurri.html";
+        prefixResit = "MCZ";
+    }
+
     // Toyyibpay Code: 1 = Berjaya
     if (status_id === "1") {
         document.getElementById('statusTajuk').innerText = "Pembayaran Berjaya!";
@@ -29,7 +58,6 @@
             if (user) {
                 const currentUser = user;
                 const userId = currentUser.uid;
-                const docType = "corporate"; // Default, atau tangkap dari parameter jika ada
                 const txnDate = new Date(); 
                 
                 try {
@@ -52,12 +80,12 @@
                         corporateFormData = formSnap.data();
                         
                         // Elak rekod dua kali
-                        if (corporateFormData.status === "PAID") {
-                            window.location.href = "corporate-page.html";
+                        if (corporateFormData.status === "PAID" || corporateFormData.status === "PENDING_APPROVAL") {
+                            window.location.href = redirectPage;
                             return;
                         }
 
-                        const refNo = corporateFormData.docRef || "CORP-" + Date.now().toString().slice(-6);
+                        const refNo = corporateFormData.docRef || prefixResit + "-" + Date.now().toString().slice(-6);
 
                         // 1. UPDATE STATUS DI USERS
                         await updateDoc(formRef, {
@@ -106,7 +134,7 @@
 
                         // 4. CIPTA RESIT PEMBAYARAN TOYYIBPAY
                         await addDoc(collection(db, "receipts"), {
-                            receiptNo: "MCO-" + Date.now(), // Guna prefix MCO untuk Mawaris Korporat
+                            receiptNo: prefixResit + "-" + Date.now(), 
                             uid: userId,
                             payerName: corporateFormData.nama,
                             serviceCode: "TRUSTEE_FEE",
@@ -118,7 +146,7 @@
                         });
                         
                         document.getElementById('statusMesej').innerText = "Selesai! Anda akan dibawa ke dashboard.";
-                        setTimeout(() => { window.location.href = "corporate-page.html"; }, 2000);
+                        setTimeout(() => { window.location.href = redirectPage; }, 2000);
 
                     } else {
                         throw new Error("Data pelanggan tidak dijumpai di pangkalan data.");
@@ -137,7 +165,7 @@
         document.getElementById('statusMesej').innerText = "Sila cuba sebentar lagi.";
         document.getElementById('statusTajuk').classList.add("text-red-600");
         
-        setTimeout(() => { window.location.href = "corporate.html"; }, 3000);
+        setTimeout(() => { window.location.href = failPage; }, 3000);
     }
 </script>
 </body>
