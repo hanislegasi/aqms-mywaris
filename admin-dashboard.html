@@ -114,11 +114,11 @@
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-500">Selesai:</span>
-                            <span id="cntApproved" class="text-sm font-bold text-gray-800">4</span>
+                            <span id="cntApproved" class="text-sm font-bold text-gray-800">0</span>
                         </div>
                         <div class="flex justify-between items-center bg-[#d8ae81]/20 px-1.5 py-0.5 rounded border border-[#d8ae81]/40">
                             <span class="text-[10px] font-bold text-[#153638]">Belum Cetak:</span>
-                            <span id="balApproved" class="text-sm font-extrabold text-[#153638]">1</span>
+                            <span id="balApproved" class="text-sm font-extrabold text-[#153638]">0</span>
                         </div>
                     </div>
                 </div>
@@ -135,11 +135,11 @@
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-500">Selesai:</span>
-                            <span id="cntPrinted" class="text-sm font-bold text-gray-800">3</span>
+                            <span id="cntPrinted" class="text-sm font-bold text-gray-800">0</span>
                         </div>
                         <div class="flex justify-between items-center bg-[#d8ae81]/20 px-1.5 py-0.5 rounded border border-[#d8ae81]/40">
                             <span class="text-[10px] font-bold text-[#153638]">Belum Hantar:</span>
-                            <span id="balPrinted" class="text-sm font-extrabold text-[#153638]">2</span>
+                            <span id="balPrinted" class="text-sm font-extrabold text-[#153638]">0</span>
                         </div>
                     </div>
                 </div>
@@ -156,7 +156,7 @@
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-500">Selesai:</span>
-                            <span id="cntSent" class="text-sm font-bold text-gray-800">1</span>
+                            <span id="cntSent" class="text-sm font-bold text-gray-800">0</span>
                         </div>
                         <div class="flex justify-between items-center bg-[#d8ae81]/20 px-1.5 py-0.5 rounded border border-[#d8ae81]/40">
                             <span class="text-[10px] font-bold text-[#153638]">Menunggu Akad:</span>
@@ -177,7 +177,7 @@
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-500">Selesai:</span>
-                            <span id="cntAkad" class="text-sm font-bold text-gray-800">1</span>
+                            <span id="cntAkad" class="text-sm font-bold text-gray-800">0</span>
                         </div>
                         <div class="flex justify-between items-center bg-[#d8ae81]/20 px-1.5 py-0.5 rounded border border-[#d8ae81]/40">
                             <span class="text-[10px] font-bold text-[#153638]">Belum Stamping:</span>
@@ -198,7 +198,7 @@
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-500">Selesai:</span>
-                            <span id="cntStamping" class="text-sm font-bold text-gray-800">1</span>
+                            <span id="cntStamping" class="text-sm font-bold text-gray-800">0</span>
                         </div>
                         <div class="flex justify-between items-center bg-[#d8ae81]/20 px-1.5 py-0.5 rounded border border-[#d8ae81]/40">
                             <span class="text-[10px] font-bold text-[#153638]">Belum Diserah:</span>
@@ -219,7 +219,7 @@
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-500">Selesai:</span>
-                            <span id="cntDiserahAQM" class="text-sm font-bold text-gray-800">1</span>
+                            <span id="cntDiserahAQM" class="text-sm font-bold text-gray-800">0</span>
                         </div>
                         <div class="flex justify-between items-center bg-[#d8ae81]/20 px-1.5 py-0.5 rounded border border-[#d8ae81]/40">
                             <span class="text-[10px] font-bold text-[#153638]">Belum Terima:</span>
@@ -240,7 +240,7 @@
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] text-gray-500">Sepenuhnya Selesai:</span>
-                            <span id="cntTerimaAQM" class="text-sm font-bold text-emerald-600">1</span>
+                            <span id="cntTerimaAQM" class="text-sm font-bold text-emerald-600">0</span>
                         </div>
                         <div class="flex justify-between items-center bg-gray-100 px-1.5 py-0.5 rounded border border-gray-200">
                             <span class="text-[10px] font-semibold text-gray-400">Baki:</span>
@@ -270,9 +270,13 @@
                         <span>Harta Sepencarian</span>
                         <span id="queueSepencarian" class="font-semibold bg-gray-100 px-2 rounded">0</span>
                     </div>
-                    <div class="flex justify-between">
+                    <div class="flex justify-between border-b pb-2">
                         <span>Mawaris</span>
                         <span id="queueMawaris" class="font-semibold bg-gray-100 px-2 rounded">0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Korporat (Semua Pakej)</span>
+                        <span id="queueCorporate" class="font-semibold bg-gray-100 px-2 rounded">0</span>
                     </div>
                 </div>
             </div>  
@@ -346,6 +350,7 @@
             let queueHibah = 0;
             let queueSepencarian = 0;
             let queueMawaris = 0;
+            let queueCorporate = 0;
 
             let monthlySales = 0;
             let totalSales = 0;
@@ -416,11 +421,12 @@ const processDocData = (data, type) => {
     }
 
     // Queue (Approval Queue)
-    if (s === "UNDER_REVIEW") {
+    if (s === "UNDER_REVIEW" || s === "PENDING_APPROVAL") {
         if (type === 'wasiat') queueWasiat++;
         if (type === 'hibah') queueHibah++;
         if (type === 'sepencarian') queueSepencarian++;
         if (type === 'mawaris') queueMawaris++;
+        if (type.startsWith('corporate')) queueCorporate++;
     }
 
     if (data.renewedAt) renewal++;
@@ -440,7 +446,11 @@ const processDocData = (data, type) => {
                     user.wasiatPaymentStatus === "paid" ||
                     user.hibahPaymentStatus === "paid" ||
                     user.sepencarianPaymentStatus === "paid" ||
-                    user.mawarisPaymentStatus === "paid";
+                    user.mawarisPaymentStatus === "paid" ||
+                    user.corporatePaymentStatus === "paid" ||
+                    user.corporateTunggalPaymentStatus === "paid" ||
+                    user.corporateKongsiPaymentStatus === "paid" ||
+                    user.corporateZurriPaymentStatus === "paid";
 
                 const isExpired = user.expiryDate && new Date(user.expiryDate) < new Date();
 
@@ -454,7 +464,7 @@ const processDocData = (data, type) => {
 
                 // Baca sub-collection secara selamat
                 try {
-                    const modules = ['wasiat', 'hibah', 'sepencarian', 'mawaris'];
+                    const modules = ['wasiat', 'hibah', 'sepencarian', 'mawaris', 'corporate', 'corporate_tunggal', 'corporate_kongsi', 'corporate_zurri'];
                     for (const mod of modules) {
                         const snap = await getDoc(doc(db, "users", userDoc.id, mod, "maklumat"));
                         if (snap.exists()) {
@@ -530,6 +540,7 @@ const processDocData = (data, type) => {
             document.getElementById("queueHibah").innerText = queueHibah;
             document.getElementById("queueSepencarian").innerText = queueSepencarian;
             document.getElementById("queueMawaris").innerText = queueMawaris;
+            document.getElementById("queueCorporate").innerText = queueCorporate;
 
             document.getElementById("cntApproved").innerText = cntApproved;
             document.getElementById("cntPrinted").innerText = cntPrinted;
@@ -539,6 +550,14 @@ const processDocData = (data, type) => {
             document.getElementById("cntDiserahAQM").innerText = cntDiserahAQM;
             document.getElementById("cntTerimaAQM").innerText = cntTerimaAQM;
             
+            // Calculate Balances dynamically to avoid errors in HTML logic
+            document.getElementById("balApproved").innerText = (cntApproved - cntPrinted);
+            document.getElementById("balPrinted").innerText = (cntPrinted - cntSent);
+            document.getElementById("balSent").innerText = (cntSent - cntAkad);
+            document.getElementById("balAkad").innerText = (cntAkad - cntStamping);
+            document.getElementById("balStamping").innerText = (cntStamping - cntDiserahAQM);
+            document.getElementById("balDiserahAQM").innerText = (cntDiserahAQM - cntTerimaAQM);
+
             document.getElementById("monthlySales").innerText = `RM${formatRM(monthlySales)}`;
             document.getElementById("cashBalance").innerText = `RM${formatRM(cashBalance)}`;
             document.getElementById("totalSales").innerText = `RM${formatRM(totalSales)}`;
@@ -546,7 +565,7 @@ const processDocData = (data, type) => {
             document.getElementById("todayActivity").innerHTML = activityHTML;
             document.getElementById("missingReceipt").innerText = missingReceipt;
             document.getElementById("ledgerError").innerText = "0";
-            document.getElementById("pendingApproval").innerText = (queueWasiat + queueHibah + queueSepencarian + queueMawaris);
+            document.getElementById("pendingApproval").innerText = (queueWasiat + queueHibah + queueSepencarian + queueMawaris + queueCorporate);
 
         } catch (error) {
             console.error("Error loading KPI data:", error);
