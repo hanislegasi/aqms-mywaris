@@ -16,7 +16,7 @@
 <div class="bg-[#153638] text-white px-5 py-6 shadow">
   <div class="flex justify-between items-center">
     <div>
-      <h1 class="text-2xl font-bold">my-Corporate Tunggal</h1>
+      <h1 class="text-2xl font-bold">my-Mawaris Korporat-Sole</h1>
       <p id="namaUser">Memuatkan...</p>
     </div>
   </div>
@@ -27,7 +27,7 @@
     ← Kembali ke Dashboard
   </a>
 
-  <h2 class="font-bold text-xl mb-4 text-[#153638]">Pakej Corporate (Pemilik Tunggal)</h2>
+  <h2 class="font-bold text-xl mb-4 text-[#153638]">Pakej Korporat (Pemilik Tunggal)</h2>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <div id="profileCard" class="h-full">Loading...</div>
@@ -234,7 +234,7 @@ onAuthStateChanged(auth, async(user) => {
             </div>
             <div>
               <div class="flex items-center gap-2">
-                <p id="corporateTunggalTitle" class="font-semibold text-base">Corporate Tunggal</p>
+                <p id="corporateTunggalTitle" class="font-semibold text-base">Mawaris Korporat-Sole</p>
                 
                 <span id="editIcon"></span>
               </div>
@@ -312,7 +312,7 @@ onAuthStateChanged(auth, async(user) => {
       if (bakiHari <= 0) {
         // JIKA KEAHLIAN TAMAT
         document.getElementById("corporateTunggalButton").href = "renewal.html";
-        document.getElementById("corporateTunggalTitle").innerText = "Corporate Tunggal";
+        document.getElementById("corporateTunggalTitle").innerText = "Mawaris Korporat-Sole";
         
         const statusEl = document.getElementById("corporateTunggalStatus");
         statusEl.innerHTML = `
