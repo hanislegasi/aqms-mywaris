@@ -222,15 +222,16 @@ onAuthStateChanged(auth, async(user) => {
 
         <!-- BAHAGIAN KAD BUTANG CORPORATE DAN LIHAT DOKUMEN -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
-          <a id="corporateButton" href="payment-corporate.html" class="bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl p-4 flex items-center gap-4 transition">
-            <div class="bg-white/20 p-2.5 rounded-xl">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <a id="corporateButton" href="payment-corporate.html" class="bg-red-600 hover:bg-red-700 text-white rounded-2xl p-4 flex items-center gap-4 transition shadow-lg">
+            <div id="iconBgCorporate" class="bg-white/20 p-2.5 rounded-xl">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-1.042-.133-2.052-.382-3.016z"/>
               </svg>
             </div>
             <div>
               <div class="flex items-center gap-2">
-                <p id="corporateTitle" class="font-semibold text-base">Corporate</p>
+                <p id="corporateTitle" class="font-semibold text-base">Mawaris Korporat</p>
+                
                 <span id="editIcon"></span>
               </div>
               <p id="corporateStatus" class="hidden"></p>
@@ -324,17 +325,25 @@ onAuthStateChanged(auth, async(user) => {
           lihatDokumenBtn.classList.add("hidden");
           lihatDokumenBtn.style.display = "none";
         }
-      } else {
+     } else {
         // JIKA SUDAH BAYAR DAN AKTIF
         document.getElementById("corporateButton").href = "corporate.html";
-        document.getElementById("corporateTitle").innerText = "Corporate"; 
+        document.getElementById("corporateTitle").innerText = "Isi / Edit Borang"; 
+        
+        // --- KOD TUKAR WARNA BUTANG & IKON ---
+        document.getElementById("corporateButton").className = "bg-white text-green-700 hover:bg-gray-50 rounded-2xl p-4 flex items-center gap-4 transition shadow-md border border-gray-100";
+        
+        // NOTA PENTING: Pastikan ID ini sama dengan HTML anda (contoh: iconBgCorporate atau iconBg)
+        const iconBg = document.getElementById("iconBgCorporate");
+        if(iconBg) iconBg.className = "bg-green-100 p-2.5 rounded-xl text-green-700";
+        // -------------------------------------
         
         document.getElementById("editIcon").innerHTML = `
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.862 4.487a2.25 2.25 0 113.182 3.182L8.25 19.463 4.5 20.25l.787-3.75L16.862 4.487z"/>
           </svg>
         `;
-
+        
         // SEMAK SAMA ADA DOKUMEN TELAH APPROVED
         if (currentStatus === "APPROVED" || done("APPROVED")) {
           if (lihatDokumenBtn) {
