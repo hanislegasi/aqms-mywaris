@@ -16,7 +16,7 @@
 <div class="bg-[#153638] text-white px-5 py-6 shadow">
   <div class="flex justify-between items-center">
     <div>
-      <h1 class="text-2xl font-bold">my-Corporate Kongsi</h1>
+      <h1 class="text-2xl font-bold">my-Mawaris Korporat-P'ship</h1>
       <p id="namaUser">Memuatkan...</p>
     </div>
   </div>
@@ -27,7 +27,7 @@
     ← Kembali ke Dashboard
   </a>
 
-  <h2 class="font-bold text-xl mb-4 text-[#153638]">Pakej Corporate (Rakan Kongsi)</h2>
+  <h2 class="font-bold text-xl mb-4 text-[#153638]">Pakej Korporat (Rakan Kongsi)</h2>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <div id="profileCard" class="h-full">Loading...</div>
@@ -232,7 +232,7 @@ onAuthStateChanged(auth, async(user) => {
             </div>
             <div>
               <div class="flex items-center gap-2">
-                <p id="corporateKongsiTitle" class="font-semibold text-base">Corp. Kongsi</p>
+                <p id="corporateKongsiTitle" class="font-semibold text-base">Mawaris Korporat-P'ship</p>
                 
                 <span id="editIcon"></span>
               </div>
@@ -311,7 +311,7 @@ onAuthStateChanged(auth, async(user) => {
       if (bakiHari <= 0) {
         // JIKA KEAHLIAN TAMAT
         document.getElementById("corporateKongsiButton").href = "renewal.html";
-        document.getElementById("corporateKongsiTitle").innerText = "Corp. Kongsi";
+        document.getElementById("corporateKongsiTitle").innerText = "Mawaris Korporat-P'ship";
         
         const statusEl = document.getElementById("corporateKongsiStatus");
         statusEl.innerHTML = `
@@ -329,7 +329,7 @@ onAuthStateChanged(auth, async(user) => {
       } else {
         // JIKA SUDAH BAYAR DAN AKTIF
         document.getElementById("corporateKongsiButton").href = "corporate-kongsi.html";
-        document.getElementById("corporateKongsiTitle").innerText = "Mawaris Koprorat-P'ship"; 
+        document.getElementById("corporateKongsiTitle").innerText = "Mawaris Korporat-P'ship"; 
         
         // --- TAMBAH 2 BARIS INI UNTUK TUKAR WARNA BUTANG & IKON ---
         document.getElementById("corporateKongsiButton").className = "bg-white text-green-700 hover:bg-gray-50 rounded-2xl p-4 flex items-center gap-4 transition shadow-md";
