@@ -309,20 +309,13 @@ onAuthStateChanged(auth, async(user) => {
       if (bakiHari <= 0) {
         // JIKA KEAHLIAN TAMAT
         document.getElementById("wasiatButton").href = "renewal.html";
-        document.getElementById("wasiatTitle").innerText = "Isi / Edit Borang"; 
+        document.getElementById("wasiatTitle").innerText = "Renew Wasiat";
         
-        // --- KOD TUKAR WARNA BUTANG & IKON ---
-        document.getElementById("wasiatButton").className = "bg-white text-green-700 hover:bg-gray-50 rounded-2xl p-4 flex items-center gap-4 transition shadow-md border border-gray-100";
-        
-        // NOTA PENTING: Pastikan ID ini sama dengan HTML anda (contoh: iconBgCorporate atau iconBg)
-        const iconBg = document.getElementById("iconBgWasiat");
-        if(iconBg) iconBg.className = "bg-green-100 p-2.5 rounded-xl text-green-700";
-        // -------------------------------------
-        
-        document.getElementById("editIcon").innerHTML = `
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.862 4.487a2.25 2.25 0 113.182 3.182L8.25 19.463 4.5 20.25l.787-3.75L16.862 4.487z"/>
-          </svg>
+        const statusEl = document.getElementById("wasiatStatus");
+        statusEl.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 inline text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3-1.343 3-3V7a3 3 0 10-6 0v1c0 1.657 1.343 3 3 3zm-6 0h12a1 1 0 011 1v7a2 2 0 01-2 2H7a2 2 0 01-2-2v-7a1 1 0 011-1z"/>
+          </svg> Keahlian Tamat
         `;
         
         statusEl.classList.remove("hidden");
@@ -335,10 +328,18 @@ onAuthStateChanged(auth, async(user) => {
       } else {
         // JIKA SUDAH BAYAR DAN AKTIF
         document.getElementById("wasiatButton").href = "wasiat.html";
-        document.getElementById("wasiatTitle").innerText = "Wasiat"; 
+        document.getElementById("wasiatTitle").innerText = "Isi / Edit Borang"; 
+        
+        // --- KOD TUKAR WARNA BUTANG & IKON ---
+        document.getElementById("wasiatButton").className = "bg-white text-green-700 hover:bg-gray-50 rounded-2xl p-4 flex items-center gap-4 transition shadow-md border border-gray-100";
+        
+        // NOTA PENTING: Pastikan ID ini sama dengan HTML anda (contoh: iconBgCorporate atau iconBg)
+        const iconBg = document.getElementById("iconBgWasiat");
+        if(iconBg) iconBg.className = "bg-green-100 p-2.5 rounded-xl text-green-700";
+        // -------------------------------------
         
         document.getElementById("editIcon").innerHTML = `
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.862 4.487a2.25 2.25 0 113.182 3.182L8.25 19.463 4.5 20.25l.787-3.75L16.862 4.487z"/>
           </svg>
         `;
