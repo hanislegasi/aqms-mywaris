@@ -222,15 +222,16 @@ onAuthStateChanged(auth, async(user) => {
 
         <!-- BAHAGIAN KAD BUTANG SEPENCARIAN DAN LIHAT DOKUMEN -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
-          <a id="sepencarianButton" href="payment-sepencarian.html" class="bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl p-4 flex items-center gap-4 transition">
-            <div class="bg-white/20 p-2.5 rounded-xl">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <a id="sepencarianButton" href="payment-sepencarian.html" class="bg-red-600 hover:bg-red-700 text-white border border-white/80 rounded-2xl p-4 flex items-center gap-4 transition shadow-lg">
+            <div id="iconBgSepencarian" class="bg-white/20 p-2.5 rounded-xl">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-1.042-.133-2.052-.382-3.016z"/>
               </svg>
             </div>
             <div>
               <div class="flex items-center gap-2">
                 <p id="sepencarianTitle" class="font-semibold text-base">Sepencarian</p>
+                
                 <span id="editIcon"></span>
               </div>
               <p id="sepencarianStatus" class="hidden"></p>
@@ -309,14 +310,22 @@ onAuthStateChanged(auth, async(user) => {
       if (bakiHari <= 0) {
         // JIKA KEAHLIAN TAMAT
         document.getElementById("sepencarianButton").href = "renewal.html";
-        document.getElementById("sepencarianTitle").innerText = "Sepencarian";
+        document.getElementById("sepencarianTitle").innerText = "Isi / Edit Borang"; 
         
-        const statusEl = document.getElementById("sepencarianStatus");
-        statusEl.innerHTML = `
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 inline text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3-1.343 3-3V7a3 3 0 10-6 0v1c0 1.657 1.343 3 3 3zm-6 0h12a1 1 0 011 1v7a2 2 0 01-2 2H7a2 2 0 01-2-2v-7a1 1 0 011-1z"/>
-          </svg> Keahlian Tamat
+        // --- KOD TUKAR WARNA BUTANG & IKON ---
+        document.getElementById("sepencarianButton").className = "bg-white text-green-700 hover:bg-gray-50 rounded-2xl p-4 flex items-center gap-4 transition shadow-md border border-gray-100";
+        
+        // NOTA PENTING: Pastikan ID ini sama dengan HTML anda (contoh: iconBgCorporate atau iconBg)
+        const iconBg = document.getElementById("iconBgSepencarian");
+        if(iconBg) iconBg.className = "bg-green-100 p-2.5 rounded-xl text-green-700";
+        // -------------------------------------
+        
+        document.getElementById("editIcon").innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.862 4.487a2.25 2.25 0 113.182 3.182L8.25 19.463 4.5 20.25l.787-3.75L16.862 4.487z"/>
+          </svg>
         `;
+        
         statusEl.classList.remove("hidden");
         statusEl.classList.add("text-sm", "text-amber-600", "mt-1");
 
