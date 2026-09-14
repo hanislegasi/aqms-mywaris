@@ -651,19 +651,48 @@ if (pilihanWasi1) {
             wasi1BorangSection.classList.remove("hidden");
             if(wasi2Section) wasi2Section.classList.remove("hidden");
 
-            // Jika Pasangan (Tarik data auto)
+           // Jika Pasangan (Tarik data auto dari Senarai Waris)
             if (this.value === "pasangan") {
-                namaWasi1.value = document.getElementById("namaPasangan")?.value || "";
-                icWasi1.value = document.getElementById("icPasangan")?.value || "";
-                hubunganWasi1.value = "Pasangan"; 
-                alamatWasi1.value = document.getElementById("alamat")?.value || ""; 
-                telefonWasi1.value = document.getElementById("telefonPasangan")?.value || ""; 
-                
-                [namaWasi1, icWasi1, hubunganWasi1, alamatWasi1, telefonWasi1].forEach(el => {
-                    el.readOnly = true;
-                    el.classList.add("bg-gray-100", "cursor-not-allowed");
-                });
-            } 
+                const namaWarisElems = document.querySelectorAll(".nacorporate");
+                const icWarisElems = document.querySelectorAll(".icWaris");
+                const hubunganWarisElems = document.querySelectorAll(".hubunganWaris");
+                const telWarisElems = document.querySelectorAll(".telefonWaris");
+                const alamatWarisElems = document.querySelectorAll(".alamatWaris");
+
+                let indexPasangan = -1;
+
+                // Cari jika ada waris yang hubungannya adalah suami / isteri
+                for (let i = 0; i < hubunganWarisElems.length; i++) {
+                    let hub = hubunganWarisElems[i].value.toLowerCase();
+                    if (hub.includes("isteri") || hub.includes("suami") || hub.includes("pasangan")) {
+                        indexPasangan = i;
+                        break;
+                    }
+                }
+
+                if (indexPasangan !== -1) {
+                    // Berjaya jumpa! Tarik data waris tersebut
+                    namaWasi1.value = namaWarisElems[indexPasangan].value || "";
+                    icWasi1.value = icWarisElems[indexPasangan].value || "";
+                    hubunganWasi1.value = hubunganWarisElems[indexPasangan].value || "Pasangan"; 
+                    alamatWasi1.value = alamatWarisElems[indexPasangan].value || ""; 
+                    telefonWasi1.value = telWarisElems[indexPasangan].value || ""; 
+                    
+                    // Kunci kotak
+                    [namaWasi1, icWasi1, hubunganWasi1, alamatWasi1, telefonWasi1].forEach(el => {
+                        el.readOnly = true;
+                        el.classList.add("bg-gray-100", "cursor-not-allowed");
+                    });
+                } else {
+                    // Jika tak jumpa rekod pasangan dalam senarai waris
+                    alert("Tiada rekod Suami/Isteri dijumpai di bahagian 'Senarai Waris'.\n\nSila tambah mereka di Senarai Waris terlebih dahulu, atau pilih 'Individu Lain' jika anda mahu menaip secara manual.");
+                    
+                    // Reset dropdown
+                    this.value = "";
+                    wasi1ManualSection.classList.add("hidden");
+                    wasi1BorangSection.classList.add("hidden");
+                }
+            }
             // Jika Lain (Buka semula kunci untuk edit manual)
             else {
                 namaWasi1.value = "";
