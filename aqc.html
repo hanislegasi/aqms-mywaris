@@ -93,7 +93,7 @@
                     <!-- KAWASAN PETA -->
                 <div class="relative w-full aspect-[4/3] md:aspect-[16/9] bg-[#eef6f9] rounded-xl overflow-hidden border border-blue-100">
                     <!-- Peta Background -->
-                    <!-- GANTIKAN URL DI BAWAH DENGAN URL POSTIMAGE ANDA JIKA BERBEZA -->
+                    <div id="mapContainer" class="relative w-full aspect-[4/3] md:aspect-[16/9] bg-[#eef6f9] rounded-xl overflow-hidden border border-blue-100">
                     <img src="https://i.postimg.cc/LsFLrMQP/Malaysia-Map.png" 
                          alt="Peta Malaysia" 
                          class="absolute inset-0 w-full h-full object-contain opacity-70">
@@ -284,6 +284,20 @@
         }
 
         fetchAQCDatabase();
+
+document.getElementById('mapContainer').addEventListener('click', function(e) {
+        // Jangan bertindak kalau terklik pin sedia ada
+        if(e.target.classList.contains('map-pin') || e.target.classList.contains('tooltip')) return;
+
+        const rect = this.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        
+        // Keluar popup supaya anda boleh terus copy
+        prompt("Copy koordinat ini dan letak pada style pin:", `top: ${y.toFixed(1)}%; left: ${x.toFixed(1)}%;`);
+    });
+
+        
     </script>
 </body>
 </html>
