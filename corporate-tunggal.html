@@ -77,12 +77,13 @@
       <!-- MAKLUMAT WASI PERTAMA -->
       <h3 class="font-semibold mb-3 text-[#153638] text-lg">Maklumat Wasi Pertama</h3>
       
-      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4 shadow-sm">
           <label class="block font-semibold text-blue-900 mb-2">Pilih Wasi / Pentadbir Pertama</label>
-          <select id="pilihanWasi1" class="w-full border rounded-lg p-3 bg-white font-semibold text-[#153638]">
+          <select id="pilihanWasi1" class="w-full border border-blue-300 rounded-lg p-3 bg-white font-semibold text-[#153638] focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer">
               <option value="">-- Sila Pilih --</option>
               <option value="rtb">Syarikat Amanah (Disyorkan)</option>
-              <option value="manual">Individu / Syarikat Lain</option>
+              <option value="pasangan">Pasangan (Tarik data automatik)</option>
+              <option value="lain">Individu / Syarikat Lain (Isi manual)</option>
           </select>
       </div>
 
@@ -102,20 +103,10 @@
 
       <!-- KOTAK MANUAL (INDIVIDU / SYARIKAT LAIN) -->
       <div id="wasi1ManualSection" class="hidden bg-gray-50 border border-gray-200 rounded-xl p-5 mb-4 shadow-sm">
-          <h3 class="font-bold text-gray-800 mb-4">Maklumat Wasi Individu</h3>
+          <h3 class="font-bold text-gray-800 mb-4 border-b pb-2">Maklumat Wasi Individu</h3>
           
-          <!-- PILIHAN HUBUNGAN -->
-          <div class="mb-4">
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Pilih Wasi Pertama</label>
-              <select id="pilihanWasi1" class="w-full border border-gray-300 rounded-lg p-3 bg-white focus:ring-2 focus:ring-[#153638] outline-none transition cursor-pointer">
-                  <option value="" disabled selected>-- Sila Pilih --</option>
-                  <option value="pasangan">Pasangan (Tarik data automatik)</option>
-                  <option value="lain">Penama Lain (Isi manual)</option>
-              </select>
-          </div>
-
           <!-- BORANG INPUT WASI 1 -->
-          <div id="wasi1BorangSection" class="hidden space-y-3 pt-2 border-t border-gray-200">
+          <div id="wasi1BorangSection" class="space-y-3 pt-2">
               <input type="text" id="namaWasi1" placeholder="Nama Penuh" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#153638] outline-none">
               <input type="text" id="icWasi1" placeholder="No IC / Passport" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#153638] outline-none">
               <input type="text" id="hubunganWasi1" placeholder="Hubungan (Cth: Suami / Isteri / Adik)" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#153638] outline-none">
@@ -125,7 +116,7 @@
       </div>
 
       <hr class="my-6 border-gray-200">
-
+      
       <!-- MAKLUMAT WASI KEDUA -->
       <div id="wasi2Section" class="hidden">
           <h3 class="font-semibold mb-2">Maklumat Wasi Kedua (Wasi Gantian)</h3>
