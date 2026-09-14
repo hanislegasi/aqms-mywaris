@@ -83,7 +83,7 @@
     </div>
 
     <!-- MAIN CONTENT -->
-    <div class="max-w-7xl mx-auto w-full p-5 py-8 flex-grow">
+    <div class="p-5">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
             <!-- BAHAGIAN PETA (KIRI - 2 Column) -->
@@ -140,76 +140,53 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT & DATABASE AQC -->
-    <script>
-        // 1. DATABASE AQC (Boleh diubah/tambah dari database sebenar nanti)
-        const dataAQC = {
-            "Selangor": [
-                { nama: "Mohd Faizal Bin Halim", kawasan: "Shah Alam", telefon: "60123456789" },
-                { nama: "AQC Nurin Hidayah", kawasan: "Bangi / Kajang", telefon: "60198765432" },
-                { nama: "Agensi Megah Waris", kawasan: "Klang", telefon: "601122334455" }
-            ],
-            "Kuala Lumpur": [
-                { nama: "Ahmad Zaki (AQC HQ)", kawasan: "Wangsa Maju", telefon: "60134567890" },
-                { nama: "Pusat Warisan Kita", kawasan: "Cheras", telefon: "60199887766" }
-            ],
-            "Johor": [
-                { nama: "Siti Zubaidah", kawasan: "Johor Bahru", telefon: "60176543210" },
-                { nama: "Kumpulan Selatan Wasiat", kawasan: "Batu Pahat", telefon: "60122223333" }
-            ],
-            "Perak": [
-                { nama: "Kamal Adli", kawasan: "Ipoh", telefon: "60187654321" }
-            ],
-            "Pulau Pinang": [
-                { nama: "AQC Utara Maju", kawasan: "Bayan Lepas", telefon: "60105556666" }
-            ]
-        };
+   <!-- JAVASCRIPT & DATABASE AQC FIREBASE -->
+    <script type="module">
+        import { db } from './firebase.js';
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // 2. FUNGSI UNTUK GENERATE WHATSAPP LINK
+        // Objek kosong untuk menyimpan data dari Firebase
+        let dataAQC = {};
+        
+        // Simpan negeri yang dipilih (berjaga-jaga jika klien klik terlalu cepat)
+        let negeriAktifSekarang = "";
+
+        // 1. FUNGSI UNTUK GENERATE WHATSAPP LINK
         function getWhatsAppLink(phone, name) {
-            // Bersihkan nombor (buang + atau dash)
+            if (!phone) return "#";
             let cleanPhone = phone.replace(/\D/g, '');
-            // Mesej default bila klien klik
+            // Jika nombor tak bermula dengan 6, tambah 6 di hadapan (format Malaysia)
+            if (!cleanPhone.startsWith('6')) cleanPhone = '6' + cleanPhone;
+            
             let message = encodeURIComponent(`Hai ${name}, saya ingin bertanya mengenai perkhidmatan MyWaris.`);
             return `https://wa.me/${cleanPhone}?text=${message}`;
         }
 
-        // 3. FUNGSI APABILA NEGERI DIKLIK
-        function pilihNegeri(namaNegeri, pinElement) {
-            // Reset semua pin ke warna merah (buang class active)
-            document.querySelectorAll('.map-pin').forEach(pin => pin.classList.remove('active'));
-            
-            // Aktifkan pin yang diklik (Tukar hijau)
-            if (pinElement) pinElement.classList.add('active');
-
-            // Tukar Tajuk Negeri
-            document.getElementById("paparNamaNegeri").innerText = `Negeri: ${namaNegeri}`;
-
+        // 2. FUNGSI RENDER KAD AQC KE DALAM HTML
+        function renderSenaraiAQC(namaNegeri) {
             const senaraiContainer = document.getElementById("senaraiAQC");
-            senaraiContainer.innerHTML = ""; // Kosongkan senarai lama
+            senaraiContainer.innerHTML = ""; // Kosongkan
+            
+            // Ambil list AQC untuk negeri ini dari data yang telah disedut
+            const aqcList = dataAQC[namaNegeri] || [];
 
-            // Semak jika ada data untuk negeri tersebut
-            const aqcList = dataAQC[namaNegeri];
-
-            if (aqcList && aqcList.length > 0) {
-                // Generate Kad AQC
+            if (aqcList.length > 0) {
                 aqcList.forEach(aqc => {
                     const waLink = getWhatsAppLink(aqc.telefon, aqc.nama);
+                    const kawasanPaparan = aqc.bandar || "Seluruh Negeri";
                     
                     const kadHTML = `
                     <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition group">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1"><i class="fa-solid fa-map-pin mr-1"></i> ${aqc.kawasan}</p>
-                                <!-- NAMA BOLEH KLIK TERUS WHATSAPP -->
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1"><i class="fa-solid fa-map-pin mr-1"></i> ${kawasanPaparan}</p>
                                 <a href="${waLink}" target="_blank" class="text-lg font-bold text-[#153638] group-hover:text-green-600 transition block mb-1">
-                                    ${aqc.nama}
+                                    ${aqc.nama || "Wakil AQC"}
                                 </a>
-                                <p class="text-sm text-gray-600 font-medium">No. Tel: +${aqc.telefon}</p>
+                                <p class="text-sm text-gray-600 font-medium">No. Tel: ${aqc.telefon || "-"}</p>
                             </div>
                         </div>
                         <div class="mt-4 pt-3 border-t border-gray-100">
-                            <!-- BUTANG WHATSAPP -->
                             <a href="${waLink}" target="_blank" class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition shadow-sm">
                                 <i class="fa-brands fa-whatsapp text-lg"></i>
                                 WhatsApp Sekarang
@@ -220,22 +197,100 @@
                     senaraiContainer.insertAdjacentHTML("beforeend", kadHTML);
                 });
             } else {
-                // Jika Tiada Rekod
                 senaraiContainer.innerHTML = `
                 <div class="text-center py-8 bg-white border border-gray-200 rounded-xl">
                     <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3 text-gray-400 text-2xl">
                         <i class="fa-solid fa-user-xmark"></i>
                     </div>
                     <p class="font-semibold text-gray-700">Tiada Maklumat</p>
-                    <p class="text-sm text-gray-500 mt-1">Belum ada AQC direkodkan untuk negeri ${namaNegeri}.</p>
+                    <p class="text-sm text-gray-500 mt-1">Belum ada perunding berdaftar direkodkan untuk negeri ${namaNegeri}.</p>
                 </div>`;
             }
         }
 
-        // 4. (Optional) Auto-klik Selangor waktu mula-mula buka page
-        // window.onload = () => {
-        //     pilihNegeri('Selangor', document.getElementById('pinSelangor'));
-        // };
+        // 3. FUNGSI APABILA NEGERI DIKLIK
+        // Kita jadikan pautan pada Global (window) supaya onClick dari HTML berfungsi dengan module type
+        window.pilihNegeri = function(namaNegeri, pinElement) {
+            negeriAktifSekarang = namaNegeri;
+            
+            // Animasi Pin
+            document.querySelectorAll('.map-pin').forEach(pin => pin.classList.remove('active'));
+            if (pinElement) pinElement.classList.add('active');
+
+            // Tukar Tajuk Panel Kanan
+            document.getElementById("paparNamaNegeri").innerText = `Negeri: ${namaNegeri}`;
+            
+            // Paparkan data yang telah siap dimuat turun dari Firebase
+            renderSenaraiAQC(namaNegeri);
+        };
+
+        // 4. MUAT TURUN DATA AQC (CONSULTANTS) DARI FIREBASE KETIKA HALAMAN DIBUKA
+        async function fetchAQCDatabase() {
+            try {
+                // Tunjuk status sedang memuat pada panel kanan
+                const senaraiContainer = document.getElementById("senaraiAQC");
+                senaraiContainer.innerHTML = `
+                    <div class="flex justify-center items-center py-10">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#153638]"></div>
+                        <span class="ml-3 font-semibold text-gray-500">Memuat turun data perunding...</span>
+                    </div>
+                `;
+
+                // PENTING: Sila pastikan nama collection ini betul (contoh: 'consultants', 'users', 'aqc')
+                // Andaikan collection anda bernama "consultants"
+                const qSnap = await getDocs(collection(db, "consultants")); 
+                
+                // Reset data
+                dataAQC = {};
+
+                qSnap.forEach(docSnap => {
+                    const data = docSnap.data();
+                    
+                    // Kita hanya mahu tarik user yang ada negeri & nombor telefon
+                    if (data.negeri && data.telefon) {
+                        const namaNegeri = data.negeri.trim();
+                        
+                        // Buat tatasusunan (array) untuk negeri jika belum wujud
+                        if (!dataAQC[namaNegeri]) {
+                            dataAQC[namaNegeri] = [];
+                        }
+                        
+                        // Masukkan profil AQC ke dalam negeri masing-masing
+                        dataAQC[namaNegeri].push({
+                            nama: data.nama || data.namaPenuh || data.name, // Ubah ikut medan sebenar db anda
+                            bandar: data.bandar || data.kawasan,
+                            telefon: data.telefon || data.noTel || data.phone
+                        });
+                    }
+                });
+
+                // Jika tiada negeri yang ditekan lagi, paparkan arahan
+                if (!negeriAktifSekarang) {
+                    senaraiContainer.innerHTML = `
+                        <div class="text-center py-10 text-gray-400 flex flex-col items-center">
+                            <i class="fa-solid fa-map-location-dot text-4xl mb-3 opacity-50"></i>
+                            <p>Data Perunding Sedia Ada. Sila klik pada mana-mana negeri di peta.</p>
+                        </div>
+                    `;
+                } else {
+                    // Jika klien dah klik negeri masa loading tadi, kita render terus
+                    renderSenaraiAQC(negeriAktifSekarang);
+                }
+
+            } catch (error) {
+                console.error("Ralat memuat turun AQC:", error);
+                document.getElementById("senaraiAQC").innerHTML = `
+                    <div class="text-center py-10 text-red-500">
+                        <p class="font-bold">Gagal memuat turun data.</p>
+                        <p class="text-sm mt-1">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Mula sedut data Firebase secara automatik
+        fetchAQCDatabase();
+
     </script>
 </body>
 </html>
