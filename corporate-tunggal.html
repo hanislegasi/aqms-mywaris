@@ -100,13 +100,28 @@
           </div>
       </div>
 
-      <!-- KOTAK MANUAL -->
-      <div id="wasi1ManualSection" class="hidden space-y-3 mb-4">
-          <input type="text" id="namaWasi1" placeholder="Nama Wasi / Syarikat Lain" class="w-full border rounded-lg p-3">
-          <input type="text" id="icWasi1" placeholder="No IC / No Pendaftaran Syarikat" class="w-full border rounded-lg p-3">
-          <input type="text" id="hubunganWasi1" placeholder="Hubungan" class="w-full border rounded-lg p-3">
-          <textarea id="alamatWasi1" rows="2" placeholder="Alamat" class="w-full border rounded-lg p-3"></textarea>
-          <input type="text" id="telefonWasi1" placeholder="No Telefon" class="w-full border rounded-lg p-3">
+      <!-- KOTAK MANUAL (INDIVIDU / SYARIKAT LAIN) -->
+      <div id="wasi1ManualSection" class="hidden bg-gray-50 border border-gray-200 rounded-xl p-5 mb-4 shadow-sm">
+          <h3 class="font-bold text-gray-800 mb-4">Maklumat Wasi Individu</h3>
+          
+          <!-- PILIHAN HUBUNGAN -->
+          <div class="mb-4">
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Pilih Wasi Pertama</label>
+              <select id="pilihanWasi1" class="w-full border border-gray-300 rounded-lg p-3 bg-white focus:ring-2 focus:ring-[#153638] outline-none transition cursor-pointer">
+                  <option value="" disabled selected>-- Sila Pilih --</option>
+                  <option value="pasangan">Pasangan (Tarik data automatik)</option>
+                  <option value="lain">Penama Lain (Isi manual)</option>
+              </select>
+          </div>
+
+          <!-- BORANG INPUT WASI 1 -->
+          <div id="wasi1BorangSection" class="hidden space-y-3 pt-2 border-t border-gray-200">
+              <input type="text" id="namaWasi1" placeholder="Nama Penuh" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#153638] outline-none">
+              <input type="text" id="icWasi1" placeholder="No IC / Passport" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#153638] outline-none">
+              <input type="text" id="hubunganWasi1" placeholder="Hubungan (Cth: Suami / Isteri / Adik)" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#153638] outline-none">
+              <textarea id="alamatWasi1" rows="2" placeholder="Alamat Penuh" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#153638] outline-none"></textarea>
+              <input type="text" id="telefonWasi1" placeholder="No Telefon" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#153638] outline-none">
+          </div>
       </div>
 
       <hr class="my-6 border-gray-200">
@@ -877,29 +892,34 @@
                 });
             }); // <-- Tutup forEach syarikat-item
 
-            // 4. Kutip Maklumat Wasi
-            const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
-            let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
-            
-            if (pilihanWasi1Val === "rtb") {
-                finalNamaWasi1 = syarikatAmanahDetails.nama;
-                finalIcWasi1 = syarikatAmanahDetails.noPendaftaran;
-                finalHubunganWasi1 = "Syarikat Amanah";
-                finalAlamatWasi1 = syarikatAmanahDetails.alamat;
-                finalTelefonWasi1 = syarikatAmanahDetails.telefon;
-            } else {
-                finalNamaWasi1 = document.getElementById("namaWasi1").value;
-                finalIcWasi1 = document.getElementById("icWasi1").value;
-                finalHubunganWasi1 = document.getElementById("hubunganWasi1").value;
-                finalAlamatWasi1 = document.getElementById("alamatWasi1").value;
-                finalTelefonWasi1 = document.getElementById("telefonWasi1").value;
-            }
+           // 4. Kutip Maklumat Wasi
+const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
+let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
 
-            const alamat1 = document.getElementById("alamat1").value.trim();
-            const alamat2 = document.getElementById("alamat2").value.trim();
-            const poskod = document.getElementById("poskod").value.trim();
-            const bandar = document.getElementById("bandar").value.trim();
-            const negeri = document.getElementById("negeri").value.trim();
+if (pilihanWasi1Val === "rtb") {
+    // JIKA PILIH SYARIKAT AMANAH
+    finalNamaWasi1 = syarikatAmanahDetails.nama;
+    finalIcWasi1 = syarikatAmanahDetails.noPendaftaran;
+    finalHubunganWasi1 = "Syarikat Amanah";
+    finalAlamatWasi1 = syarikatAmanahDetails.alamat;
+    finalTelefonWasi1 = syarikatAmanahDetails.telefon;
+
+} else {
+    // JIKA PILIH PASANGAN ATAU PENAMA LAIN
+    // Sistem akan kutip data dari kotak input (sama ada diisi manual atau auto-fill)
+    finalNamaWasi1 = document.getElementById("namaWasi1").value.trim();
+    finalIcWasi1 = document.getElementById("icWasi1").value.trim();
+    finalHubunganWasi1 = document.getElementById("hubunganWasi1").value.trim();
+    finalAlamatWasi1 = document.getElementById("alamatWasi1").value.trim();
+    finalTelefonWasi1 = document.getElementById("telefonWasi1").value.trim();
+}
+
+// Alamat Pewasiat (Kekal sama)
+const alamat1 = document.getElementById("alamat1").value.trim();
+const alamat2 = document.getElementById("alamat2").value.trim();
+const poskod = document.getElementById("poskod").value.trim();
+const bandar = document.getElementById("bandar").value.trim();
+const negeri = document.getElementById("negeri").value.trim();
           
             // 5. Hantar ke Firestore (TUKAR PATH KE corporate_tunggal)
             await setDoc(doc(db, "users", currentUser.uid, "corporate_tunggal", "maklumat"), {
