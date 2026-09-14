@@ -610,36 +610,77 @@
       }
     }); 
 
-    // WASI TOGGLE LOGIC
-    const pilihanWasi1 = document.getElementById("pilihanWasi1");
-    const wasi1RTBSection = document.getElementById("wasi1RTBSection");
-    const wasi1ManualSection = document.getElementById("wasi1ManualSection");
-    const wasi2Section = document.getElementById("wasi2Section"); 
+    // ==========================================
+// KAWALAN DROPDOWN WASI PERTAMA (AUTO-FILL & TOGGLE)
+// ==========================================
+const pilihanWasi1 = document.getElementById("pilihanWasi1");
+const wasi1RTBSection = document.getElementById("wasi1RTBSection");
+const wasi1ManualSection = document.getElementById("wasi1ManualSection");
+const wasi1BorangSection = document.getElementById("wasi1BorangSection");
+const wasi2Section = document.getElementById("wasi2Section");
 
-    function toggleWasi1() {
+if (pilihanWasi1) {
+    pilihanWasi1.addEventListener("change", function() {
+        // 1. Sembunyikan semua section (Reset)
         wasi1RTBSection.classList.add("hidden");
         wasi1ManualSection.classList.add("hidden");
         if(wasi2Section) wasi2Section.classList.add("hidden");
-
-        if (pilihanWasi1.value === "rtb") {
+        
+        // 2. Jika pilih RTB (Syarikat Amanah)
+        if (this.value === "rtb") {
             wasi1RTBSection.classList.remove("hidden");
+            
+            // Kosongkan form manual supaya tiada data bertindih
             document.getElementById("namaWasi1").value = "";
             document.getElementById("icWasi1").value = "";
             document.getElementById("hubunganWasi1").value = "";
             document.getElementById("alamatWasi1").value = "";
             document.getElementById("telefonWasi1").value = "";
-        } else if (pilihanWasi1.value === "manual") {
-            wasi1ManualSection.classList.remove("hidden");
-            if(wasi2Section) wasi2Section.classList.remove("hidden");
-        }
-    }
-
-    pilihanWasi1.addEventListener("change", function() {
-        if (this.value === "rtb") {
+            
             alert(`NOTIS PELANTIKAN ${syarikatAmanahDetails.nama.toUpperCase()}\n\nHarap maklum dengan terma berikut:\n\n1. Caj pelantikan tambahan sebanyak RM${cajRTBServer} akan dikenakan.\n2. Kos pentadbiran pusaka akan dikenakan oleh pihak Syarikat Amanah berdasarkan peratusan nilai harta pada waktu urusan tuntutan pusaka kelak.`);
+        } 
+        // 3. Jika pilih Pasangan ATAU Penama Lain
+        else if (this.value === "pasangan" || this.value === "lain") {
+            wasi1ManualSection.classList.remove("hidden");
+            wasi1BorangSection.classList.remove("hidden");
+            if(wasi2Section) wasi2Section.classList.remove("hidden");
+
+            // KAWALAN AUTO-FILL
+            const namaWasi1 = document.getElementById("namaWasi1");
+            const icWasi1 = document.getElementById("icWasi1");
+            const hubunganWasi1 = document.getElementById("hubunganWasi1");
+            const alamatWasi1 = document.getElementById("alamatWasi1");
+            const telefonWasi1 = document.getElementById("telefonWasi1");
+
+            if (this.value === "pasangan") {
+                // Tarik data pasangan
+                namaWasi1.value = document.getElementById("namaPasangan")?.value || "";
+                icWasi1.value = document.getElementById("icPasangan")?.value || "";
+                hubunganWasi1.value = "Pasangan"; 
+                alamatWasi1.value = document.getElementById("alamat")?.value || ""; 
+                telefonWasi1.value = document.getElementById("telefonPasangan")?.value || ""; 
+                
+                // Kunci kotak (read-only)
+                [namaWasi1, icWasi1, hubunganWasi1, alamatWasi1, telefonWasi1].forEach(el => {
+                    el.readOnly = true;
+                    el.classList.add("bg-gray-100", "cursor-not-allowed");
+                });
+            } else {
+                // Jika Penama Lain, kosongkan dan buka mangga kunci
+                namaWasi1.value = "";
+                icWasi1.value = "";
+                hubunganWasi1.value = "";
+                alamatWasi1.value = "";
+                telefonWasi1.value = "";
+                
+                [namaWasi1, icWasi1, hubunganWasi1, alamatWasi1, telefonWasi1].forEach(el => {
+                    el.readOnly = false;
+                    el.classList.remove("bg-gray-100", "cursor-not-allowed");
+                });
+            }
         }
-        toggleWasi1();
     });
+}
 
     // WASIAT 1/3 & WARIS FUNCTIONS
     function addWasiatToDOM(item = {}){
@@ -931,12 +972,12 @@ const negeri = document.getElementById("negeri").value.trim();
                 
                 senaraiSyarikat: senaraiSyarikat, // Array Data Syarikat
                 
-                pilihanWasi1: pilihanWasi1Val,
-                namaWasi1: finalNamaWasi1,
-                icWasi1: finalIcWasi1,
-                hubunganWasi1: finalHubunganWasi1,
-                alamatWasi1: finalAlamatWasi1,
-                telefonWasi1: finalTelefonWasi1,
+                pilihanWasi1: document.getElementById("pilihanWasi1").value,
+    namaWasi1: finalNamaWasi1,
+    icWasi1: finalIcWasi1,
+    hubunganWasi1: finalHubunganWasi1,
+    alamatWasi1: finalAlamatWasi1,
+    telefonWasi1: finalTelefonWasi1,
                 
                 namaWasi2: document.getElementById("namaWasi2").value,
                 icWasi2: document.getElementById("icWasi2").value,
