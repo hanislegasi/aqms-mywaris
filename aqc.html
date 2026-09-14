@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direktori AQC | MyWaris</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome untuk ikon WhatsApp -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Animasi Pin Peta */
+        .map-pin {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .map-pin:hover, .map-pin.active {
+            background-color: #22c55e;
+            box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.4);
+            transform: translate(-50%, -50%) scale(1.3);
+            z-index: 20;
+        }
+
+        /* Animasi Ping (Berdenyut) untuk pin yang aktif */
+        .map-pin::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 50%;
+            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+            background-color: inherit;
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        .tooltip {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #153638;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .map-pin:hover .tooltip {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <div class="bg-[#153638] text-white p-6 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">Direktori AQC MyWaris</h1>
+                <p class="text-gray-300 text-sm mt-1">Cari pusat agensi (AQC) yang berdekatan dengan anda di seluruh Malaysia.</p>
+            </div>
+            <a href="dashboard.html" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition font-medium text-sm">
+                ← Kembali
+            </a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="max-w-7xl mx-auto w-full p-5 py-8 flex-grow">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- BAHAGIAN PETA (KIRI - 2 Column) -->
+            <div class="lg:col-span-2 bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
+                <h2 class="font-bold text-lg text-[#153638] mb-4 px-2">Pilih Negeri Anda</h2>
+                
+                <!-- KAWASAN PETA -->
+                <div class="relative w-full aspect-[4/3] md:aspect-[16/9] bg-[#eef6f9] rounded-xl overflow-hidden border border-blue-100">
+                    <!-- Peta Background -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Malaysia_adm_location_map.svg/1000px-Malaysia_adm_location_map.svg.png" 
+                         alt="Peta Malaysia" 
+                         class="absolute inset-0 w-full h-full object-contain opacity-60">
+                    
+                    <!-- PIN NEGERI (Koordinat approximate) -->
+                    <div class="map-pin" style="top: 12%; left: 18%;" onclick="pilihNegeri('Perlis', this)"><span class="tooltip">Perlis</span></div>
+                    <div class="map-pin" style="top: 18%; left: 19%;" onclick="pilihNegeri('Kedah', this)"><span class="tooltip">Kedah</span></div>
+                    <div class="map-pin" style="top: 22%; left: 16%;" onclick="pilihNegeri('Pulau Pinang', this)"><span class="tooltip">Pulau Pinang</span></div>
+                    <div class="map-pin" style="top: 28%; left: 21%;" onclick="pilihNegeri('Perak', this)"><span class="tooltip">Perak</span></div>
+                    <div class="map-pin" style="top: 22%; left: 28%;" onclick="pilihNegeri('Kelantan', this)"><span class="tooltip">Kelantan</span></div>
+                    <div class="map-pin" style="top: 26%; left: 34%;" onclick="pilihNegeri('Terengganu', this)"><span class="tooltip">Terengganu</span></div>
+                    <div class="map-pin" style="top: 38%; left: 29%;" onclick="pilihNegeri('Pahang', this)"><span class="tooltip">Pahang</span></div>
+                    <div class="map-pin" style="top: 42%; left: 22%;" onclick="pilihNegeri('Selangor', this)" id="pinSelangor"><span class="tooltip">Selangor</span></div>
+                    <div class="map-pin" style="top: 46%; left: 24%;" onclick="pilihNegeri('Kuala Lumpur', this)"><span class="tooltip">Kuala Lumpur</span></div>
+                    <div class="map-pin" style="top: 50%; left: 25%;" onclick="pilihNegeri('Negeri Sembilan', this)"><span class="tooltip">Negeri Sembilan</span></div>
+                    <div class="map-pin" style="top: 54%; left: 27%;" onclick="pilihNegeri('Melaka', this)"><span class="tooltip">Melaka</span></div>
+                    <div class="map-pin" style="top: 58%; left: 32%;" onclick="pilihNegeri('Johor', this)"><span class="tooltip">Johor</span></div>
+                    <div class="map-pin" style="top: 48%; left: 68%;" onclick="pilihNegeri('Sarawak', this)"><span class="tooltip">Sarawak</span></div>
+                    <div class="map-pin" style="top: 28%; left: 88%;" onclick="pilihNegeri('Sabah', this)"><span class="tooltip">Sabah</span></div>
+                </div>
+                
+                <p class="text-xs text-center text-gray-400 mt-4 italic">Tekan pada pin merah di atas peta untuk melihat maklumat AQC bagi negeri tersebut.</p>
+            </div>
+
+            <!-- BAHAGIAN SENARAI AQC (KANAN - 1 Column) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="bg-gradient-to-r from-[#153638] to-[#24575a] p-5 text-white">
+                    <h3 class="font-bold text-lg">Senarai AQC</h3>
+                    <p class="text-sm text-green-100 font-medium mt-1 flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot"></i> 
+                        <span id="paparNamaNegeri">Sila pilih negeri</span>
+                    </p>
+                </div>
+                
+                <!-- CONTAINER SENARAI -->
+                <div id="senaraiAQC" class="p-5 flex-grow overflow-y-auto max-h-[500px] bg-gray-50/50 space-y-4">
+                    <!-- Placeholder sebelum klik -->
+                    <div class="text-center py-10 text-gray-400 flex flex-col items-center">
+                        <i class="fa-solid fa-map-location-dot text-4xl mb-3 opacity-50"></i>
+                        <p>Sila klik pada mana-mana negeri di peta untuk melihat senarai AQC.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT & DATABASE AQC -->
+    <script>
+        // 1. DATABASE AQC (Boleh diubah/tambah dari database sebenar nanti)
+        const dataAQC = {
+            "Selangor": [
+                { nama: "Mohd Faizal Bin Halim", kawasan: "Shah Alam", telefon: "60123456789" },
+                { nama: "AQC Nurin Hidayah", kawasan: "Bangi / Kajang", telefon: "60198765432" },
+                { nama: "Agensi Megah Waris", kawasan: "Klang", telefon: "601122334455" }
+            ],
+            "Kuala Lumpur": [
+                { nama: "Ahmad Zaki (AQC HQ)", kawasan: "Wangsa Maju", telefon: "60134567890" },
+                { nama: "Pusat Warisan Kita", kawasan: "Cheras", telefon: "60199887766" }
+            ],
+            "Johor": [
+                { nama: "Siti Zubaidah", kawasan: "Johor Bahru", telefon: "60176543210" },
+                { nama: "Kumpulan Selatan Wasiat", kawasan: "Batu Pahat", telefon: "60122223333" }
+            ],
+            "Perak": [
+                { nama: "Kamal Adli", kawasan: "Ipoh", telefon: "60187654321" }
+            ],
+            "Pulau Pinang": [
+                { nama: "AQC Utara Maju", kawasan: "Bayan Lepas", telefon: "60105556666" }
+            ]
+        };
+
+        // 2. FUNGSI UNTUK GENERATE WHATSAPP LINK
+        function getWhatsAppLink(phone, name) {
+            // Bersihkan nombor (buang + atau dash)
+            let cleanPhone = phone.replace(/\D/g, '');
+            // Mesej default bila klien klik
+            let message = encodeURIComponent(`Hai ${name}, saya ingin bertanya mengenai perkhidmatan MyWaris.`);
+            return `https://wa.me/${cleanPhone}?text=${message}`;
+        }
+
+        // 3. FUNGSI APABILA NEGERI DIKLIK
+        function pilihNegeri(namaNegeri, pinElement) {
+            // Reset semua pin ke warna merah (buang class active)
+            document.querySelectorAll('.map-pin').forEach(pin => pin.classList.remove('active'));
+            
+            // Aktifkan pin yang diklik (Tukar hijau)
+            if (pinElement) pinElement.classList.add('active');
+
+            // Tukar Tajuk Negeri
+            document.getElementById("paparNamaNegeri").innerText = `Negeri: ${namaNegeri}`;
+
+            const senaraiContainer = document.getElementById("senaraiAQC");
+            senaraiContainer.innerHTML = ""; // Kosongkan senarai lama
+
+            // Semak jika ada data untuk negeri tersebut
+            const aqcList = dataAQC[namaNegeri];
+
+            if (aqcList && aqcList.length > 0) {
+                // Generate Kad AQC
+                aqcList.forEach(aqc => {
+                    const waLink = getWhatsAppLink(aqc.telefon, aqc.nama);
+                    
+                    const kadHTML = `
+                    <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1"><i class="fa-solid fa-map-pin mr-1"></i> ${aqc.kawasan}</p>
+                                <!-- NAMA BOLEH KLIK TERUS WHATSAPP -->
+                                <a href="${waLink}" target="_blank" class="text-lg font-bold text-[#153638] group-hover:text-green-600 transition block mb-1">
+                                    ${aqc.nama}
+                                </a>
+                                <p class="text-sm text-gray-600 font-medium">No. Tel: +${aqc.telefon}</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-gray-100">
+                            <!-- BUTANG WHATSAPP -->
+                            <a href="${waLink}" target="_blank" class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-lg"></i>
+                                WhatsApp Sekarang
+                            </a>
+                        </div>
+                    </div>`;
+                    
+                    senaraiContainer.insertAdjacentHTML("beforeend", kadHTML);
+                });
+            } else {
+                // Jika Tiada Rekod
+                senaraiContainer.innerHTML = `
+                <div class="text-center py-8 bg-white border border-gray-200 rounded-xl">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3 text-gray-400 text-2xl">
+                        <i class="fa-solid fa-user-xmark"></i>
+                    </div>
+                    <p class="font-semibold text-gray-700">Tiada Maklumat</p>
+                    <p class="text-sm text-gray-500 mt-1">Belum ada AQC direkodkan untuk negeri ${namaNegeri}.</p>
+                </div>`;
+            }
+        }
+
+        // 4. (Optional) Auto-klik Selangor waktu mula-mula buka page
+        // window.onload = () => {
+        //     pilihNegeri('Selangor', document.getElementById('pinSelangor'));
+        // };
+    </script>
+</body>
+</html>
