@@ -88,7 +88,7 @@ Dokumen ini sama sekali tidak membatalkan wasiat peribadi saya ke atas aset-aset
     </div>
 
     <h3 style="margin-top:40px; margin-bottom:15px; font-weight:bold; font-size: 16px;">
-        FASAL 2: PELANTIKAN WASI DAN PEMEGANG AMANAH (PIHAK KETIGA)
+        FASAL 2: PELANTIKAN WASI DAN PEMEGANG AMANAH
     </h3>
 
     <table width="100%" style="border-collapse:collapse;">
