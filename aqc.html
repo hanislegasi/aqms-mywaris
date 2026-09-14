@@ -89,29 +89,34 @@
             <!-- BAHAGIAN PETA (KIRI - 2 Column) -->
             <div class="lg:col-span-2 bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
                 <h2 class="font-bold text-lg text-[#153638] mb-4 px-2">Pilih Negeri Anda</h2>
-                
-                <!-- KAWASAN PETA -->
+                                  
+                    <!-- KAWASAN PETA -->
                 <div class="relative w-full aspect-[4/3] md:aspect-[16/9] bg-[#eef6f9] rounded-xl overflow-hidden border border-blue-100">
                     <!-- Peta Background -->
+                    <!-- GANTIKAN URL DI BAWAH DENGAN URL POSTIMAGE ANDA JIKA BERBEZA -->
                     <img src="https://i.postimg.cc/LsFLrMQP/Malaysia-Map.png" 
-     alt="Peta Malaysia" 
-     class="absolute inset-0 w-full h-full object-contain opacity-60">
+                         alt="Peta Malaysia" 
+                         class="absolute inset-0 w-full h-full object-contain opacity-70">
                     
-                    <!-- PIN NEGERI (Koordinat approximate) -->
-                    <div class="map-pin" style="top: 12%; left: 18%;" onclick="pilihNegeri('Perlis', this)"><span class="tooltip">Perlis</span></div>
-                    <div class="map-pin" style="top: 18%; left: 19%;" onclick="pilihNegeri('Kedah', this)"><span class="tooltip">Kedah</span></div>
-                    <div class="map-pin" style="top: 22%; left: 16%;" onclick="pilihNegeri('Pulau Pinang', this)"><span class="tooltip">Pulau Pinang</span></div>
-                    <div class="map-pin" style="top: 28%; left: 21%;" onclick="pilihNegeri('Perak', this)"><span class="tooltip">Perak</span></div>
-                    <div class="map-pin" style="top: 22%; left: 28%;" onclick="pilihNegeri('Kelantan', this)"><span class="tooltip">Kelantan</span></div>
-                    <div class="map-pin" style="top: 26%; left: 34%;" onclick="pilihNegeri('Terengganu', this)"><span class="tooltip">Terengganu</span></div>
-                    <div class="map-pin" style="top: 38%; left: 29%;" onclick="pilihNegeri('Pahang', this)"><span class="tooltip">Pahang</span></div>
-                    <div class="map-pin" style="top: 42%; left: 22%;" onclick="pilihNegeri('Selangor', this)" id="pinSelangor"><span class="tooltip">Selangor</span></div>
-                    <div class="map-pin" style="top: 46%; left: 24%;" onclick="pilihNegeri('Kuala Lumpur', this)"><span class="tooltip">Kuala Lumpur</span></div>
-                    <div class="map-pin" style="top: 50%; left: 25%;" onclick="pilihNegeri('Negeri Sembilan', this)"><span class="tooltip">Negeri Sembilan</span></div>
-                    <div class="map-pin" style="top: 54%; left: 27%;" onclick="pilihNegeri('Melaka', this)"><span class="tooltip">Melaka</span></div>
-                    <div class="map-pin" style="top: 58%; left: 32%;" onclick="pilihNegeri('Johor', this)"><span class="tooltip">Johor</span></div>
-                    <div class="map-pin" style="top: 48%; left: 68%;" onclick="pilihNegeri('Sarawak', this)"><span class="tooltip">Sarawak</span></div>
-                    <div class="map-pin" style="top: 28%; left: 88%;" onclick="pilihNegeri('Sabah', this)"><span class="tooltip">Sabah</span></div>
+                    <!-- PIN NEGERI (KEDUDUKAN TELAH DIKEMASKINI) -->
+                    <div class="map-pin" style="top: 35%; left: 8.5%;" onclick="pilihNegeri('Perlis', this)"><span class="tooltip">Perlis</span></div>
+                    <div class="map-pin" style="top: 39%; left: 9.5%;" onclick="pilihNegeri('Kedah', this)"><span class="tooltip">Kedah</span></div>
+                    <div class="map-pin" style="top: 44%; left: 8%;" onclick="pilihNegeri('Pulau Pinang', this)"><span class="tooltip">Pulau Pinang</span></div>
+                    <div class="map-pin" style="top: 48%; left: 11.5%;" onclick="pilihNegeri('Perak', this)"><span class="tooltip">Perak</span></div>
+                    <div class="map-pin" style="top: 43%; left: 15.5%;" onclick="pilihNegeri('Kelantan', this)"><span class="tooltip">Kelantan</span></div>
+                    <div class="map-pin" style="top: 47%; left: 19%;" onclick="pilihNegeri('Terengganu', this)"><span class="tooltip">Terengganu</span></div>
+                    <div class="map-pin" style="top: 55%; left: 17%;" onclick="pilihNegeri('Pahang', this)"><span class="tooltip">Pahang</span></div>
+                    <div class="map-pin" style="top: 59%; left: 11.5%;" onclick="pilihNegeri('Selangor', this)" id="pinSelangor"><span class="tooltip">Selangor</span></div>
+                    
+                    <!-- KUALA LUMPUR & PUTRAJAYA -->
+                    <div class="map-pin" style="top: 61%; left: 13.5%;" onclick="pilihNegeri('Kuala Lumpur', this)"><span class="tooltip">Kuala Lumpur</span></div>
+                    <div class="map-pin" style="top: 63.5%; left: 14%;" onclick="pilihNegeri('Putrajaya', this)"><span class="tooltip">Putrajaya</span></div>
+                    
+                    <div class="map-pin" style="top: 64%; left: 15.5%;" onclick="pilihNegeri('Negeri Sembilan', this)"><span class="tooltip">Negeri Sembilan</span></div>
+                    <div class="map-pin" style="top: 68%; left: 16%;" onclick="pilihNegeri('Melaka', this)"><span class="tooltip">Melaka</span></div>
+                    <div class="map-pin" style="top: 71%; left: 20%;" onclick="pilihNegeri('Johor', this)"><span class="tooltip">Johor</span></div>
+                    <div class="map-pin" style="top: 62%; left: 44%;" onclick="pilihNegeri('Sarawak', this)"><span class="tooltip">Sarawak</span></div>
+                    <div class="map-pin" style="top: 44%; left: 56%;" onclick="pilihNegeri('Sabah', this)"><span class="tooltip">Sabah</span></div>
                 </div>
                 
                 <p class="text-xs text-center text-gray-400 mt-4 italic">Tekan pada pin merah di atas peta untuk melihat maklumat AQC bagi negeri tersebut.</p>
