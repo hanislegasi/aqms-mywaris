@@ -77,12 +77,13 @@
       <!-- MAKLUMAT WASI PERTAMA -->
       <h3 class="font-semibold mb-3 text-[#153638] text-lg">Maklumat Wasi Pertama</h3>
       
-      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4 shadow-sm">
           <label class="block font-semibold text-blue-900 mb-2">Pilih Wasi / Pentadbir Pertama</label>
-          <select id="pilihanWasi1" class="w-full border rounded-lg p-3 bg-white font-semibold text-[#153638]">
+          <select id="pilihanWasi1" class="w-full border border-blue-300 rounded-lg p-3 bg-white font-semibold text-[#153638] focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer">
               <option value="">-- Sila Pilih --</option>
               <option value="rtb">Syarikat Amanah (Disyorkan)</option>
-              <option value="manual">Individu / Syarikat Lain</option>
+              <option value="pasangan">Pasangan (Tarik data automatik)</option>
+              <option value="lain">Individu / Syarikat Lain (Isi manual)</option>
           </select>
       </div>
 
@@ -100,13 +101,18 @@
           </div>
       </div>
 
-      <!-- KOTAK MANUAL -->
-      <div id="wasi1ManualSection" class="hidden space-y-3 mb-4">
-          <input type="text" id="namaWasi1" placeholder="Nama Wasi / Syarikat Lain" class="w-full border rounded-lg p-3">
-          <input type="text" id="icWasi1" placeholder="No IC / No Pendaftaran Syarikat" class="w-full border rounded-lg p-3">
-          <input type="text" id="hubunganWasi1" placeholder="Hubungan" class="w-full border rounded-lg p-3">
-          <textarea id="alamatWasi1" rows="2" placeholder="Alamat" class="w-full border rounded-lg p-3"></textarea>
-          <input type="text" id="telefonWasi1" placeholder="No Telefon" class="w-full border rounded-lg p-3">
+      <!-- KOTAK MANUAL (INDIVIDU / SYARIKAT LAIN) -->
+      <div id="wasi1ManualSection" class="hidden bg-gray-50 border border-gray-200 rounded-xl p-5 mb-4 shadow-sm">
+          <h3 class="font-bold text-gray-800 mb-4 border-b pb-2">Maklumat Wasi Individu</h3>
+          
+          <!-- BORANG INPUT WASI 1 -->
+          <div id="wasi1BorangSection" class="space-y-3 pt-2">
+              <input type="text" id="namaWasi1" placeholder="Nama Penuh" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#153638] outline-none">
+              <input type="text" id="icWasi1" placeholder="No IC / Passport" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#153638] outline-none">
+              <input type="text" id="hubunganWasi1" placeholder="Hubungan (Cth: Suami / Isteri / Adik)" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#153638] outline-none">
+              <textarea id="alamatWasi1" rows="2" placeholder="Alamat Penuh" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#153638] outline-none"></textarea>
+              <input type="text" id="telefonWasi1" placeholder="No Telefon" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#153638] outline-none">
+          </div>
       </div>
 
       <hr class="my-6 border-gray-200">
@@ -481,24 +487,33 @@
         
         populateWarisDropdowns();
         
-        if (data.pilihanWasi1 === "manual") {
-            document.getElementById("pilihanWasi1").value = "manual";
+     // ==========================================
+        // ISI SEMULA MAKLUMAT WASI (DARI DATABASE)
+        // ==========================================
+        if (data.pilihanWasi1 === "pasangan" || data.pilihanWasi1 === "lain") {
+            document.getElementById("pilihanWasi1").value = data.pilihanWasi1;
             document.getElementById("namaWasi1").value = data.namaWasi1 || "";
             document.getElementById("icWasi1").value = data.icWasi1 || "";
             document.getElementById("hubunganWasi1").value = data.hubunganWasi1 || "";
             document.getElementById("alamatWasi1").value = data.alamatWasi1 || "";
             document.getElementById("telefonWasi1").value = data.telefonWasi1 || "";
-        } else {
+        } else if (data.pilihanWasi1 === "rtb") {
             document.getElementById("pilihanWasi1").value = "rtb";
         }
         
-        toggleWasi1();
+        // PENTING: "Trigger" butang dropdown secara automatik supaya sistem buka kotak yang betul
+        const eventDropdown = new Event('change');
+        if (document.getElementById("pilihanWasi1")) {
+            document.getElementById("pilihanWasi1").dispatchEvent(eventDropdown);
+        }
         
+        // Isi Wasi 2 (Gantian)
         document.getElementById("namaWasi2").value = data.namaWasi2 || "";
         document.getElementById("icWasi2").value = data.icWasi2 || "";
         document.getElementById("hubunganWasi2").value = data.hubunganWasi2 || "";
         document.getElementById("alamatWasi2").value = data.alamatWasi2 || "";
         document.getElementById("telefonWasi2").value = data.telefonWasi2 || "";
+
 
         document.getElementById("pesananWasiat").value = data.pesananWasiat || "";
         
@@ -527,37 +542,107 @@
       }
     }); 
 
-    // WASI TOGGLE LOGIC
-    const pilihanWasi1 = document.getElementById("pilihanWasi1");
-    const wasi1RTBSection = document.getElementById("wasi1RTBSection");
-    const wasi1ManualSection = document.getElementById("wasi1ManualSection");
-    const wasi2Section = document.getElementById("wasi2Section"); 
+   // ==========================================
+// WASI TOGGLE LOGIC (DIKEMASKINI)
+// ==========================================
+const pilihanWasi1 = document.getElementById("pilihanWasi1");
+const wasi1RTBSection = document.getElementById("wasi1RTBSection");
+const wasi1ManualSection = document.getElementById("wasi1ManualSection");
+const wasi1BorangSection = document.getElementById("wasi1BorangSection");
+const wasi2Section = document.getElementById("wasi2Section");
 
-    function toggleWasi1() {
+// ELEMEN INPUT WASI 1
+const namaWasi1 = document.getElementById("namaWasi1");
+const icWasi1 = document.getElementById("icWasi1");
+const hubunganWasi1 = document.getElementById("hubunganWasi1");
+const alamatWasi1 = document.getElementById("alamatWasi1");
+const telefonWasi1 = document.getElementById("telefonWasi1");
+
+if (pilihanWasi1) {
+    pilihanWasi1.addEventListener("change", function() {
+        // 1. Reset dan sembunyikan semua kotak
         wasi1RTBSection.classList.add("hidden");
         wasi1ManualSection.classList.add("hidden");
         if(wasi2Section) wasi2Section.classList.add("hidden");
-
-        if (pilihanWasi1.value === "rtb") {
-            wasi1RTBSection.classList.remove("hidden");
-            document.getElementById("namaWasi1").value = "";
-            document.getElementById("icWasi1").value = "";
-            document.getElementById("hubunganWasi1").value = "";
-            document.getElementById("alamatWasi1").value = "";
-            document.getElementById("telefonWasi1").value = "";
-        } else if (pilihanWasi1.value === "manual") {
-            wasi1ManualSection.classList.remove("hidden");
-            if(wasi2Section) wasi2Section.classList.remove("hidden");
-        }
-    }
-
-    pilihanWasi1.addEventListener("change", function() {
+        
+        // 2. Jika RTB
         if (this.value === "rtb") {
+            wasi1RTBSection.classList.remove("hidden");
+            
+            // Kosongkan form input
+            namaWasi1.value = "";
+            icWasi1.value = "";
+            hubunganWasi1.value = "";
+            alamatWasi1.value = "";
+            telefonWasi1.value = "";
+            
             alert(`NOTIS PELANTIKAN ${syarikatAmanahDetails.nama.toUpperCase()}\n\nHarap maklum dengan terma berikut:\n\n1. Caj pelantikan tambahan sebanyak RM${cajRTBServer} akan dikenakan.\n2. Kos pentadbiran pusaka akan dikenakan oleh pihak Syarikat Amanah berdasarkan peratusan nilai harta pada waktu urusan tuntutan pusaka kelak.`);
-        }
-        toggleWasi1();
-    });
+        } 
+        // 3. Jika Pasangan ATAU Penama Lain
+        else if (this.value === "pasangan" || this.value === "lain") {
+            wasi1ManualSection.classList.remove("hidden");
+            wasi1BorangSection.classList.remove("hidden");
+            if(wasi2Section) wasi2Section.classList.remove("hidden");
 
+           // Jika Pasangan (Tarik data auto dari Senarai Waris)
+            if (this.value === "pasangan") {
+                const namaWarisElems = document.querySelectorAll(".nacorporate");
+                const icWarisElems = document.querySelectorAll(".icWaris");
+                const hubunganWarisElems = document.querySelectorAll(".hubunganWaris");
+                const telWarisElems = document.querySelectorAll(".telefonWaris");
+                const alamatWarisElems = document.querySelectorAll(".alamatWaris");
+
+                let indexPasangan = -1;
+
+                // Cari jika ada waris yang hubungannya adalah suami / isteri
+                for (let i = 0; i < hubunganWarisElems.length; i++) {
+                    let hub = hubunganWarisElems[i].value.toLowerCase();
+                    if (hub.includes("isteri") || hub.includes("suami") || hub.includes("pasangan")) {
+                        indexPasangan = i;
+                        break;
+                    }
+                }
+
+                if (indexPasangan !== -1) {
+                    // Berjaya jumpa! Tarik data waris tersebut
+                    namaWasi1.value = namaWarisElems[indexPasangan].value || "";
+                    icWasi1.value = icWarisElems[indexPasangan].value || "";
+                    hubunganWasi1.value = hubunganWarisElems[indexPasangan].value || "Pasangan"; 
+                    alamatWasi1.value = alamatWarisElems[indexPasangan].value || ""; 
+                    telefonWasi1.value = telWarisElems[indexPasangan].value || ""; 
+                    
+                    // Kunci kotak
+                    [namaWasi1, icWasi1, hubunganWasi1, alamatWasi1, telefonWasi1].forEach(el => {
+                        el.readOnly = true;
+                        el.classList.add("bg-gray-100", "cursor-not-allowed");
+                    });
+                } else {
+                    // Jika tak jumpa rekod pasangan dalam senarai waris
+                    alert("Tiada rekod Suami/Isteri dijumpai di bahagian 'Senarai Waris'.\n\nSila tambah mereka di Senarai Waris terlebih dahulu, atau pilih 'Individu Lain' jika anda mahu menaip secara manual.");
+                    
+                    // Reset dropdown
+                    this.value = "";
+                    wasi1ManualSection.classList.add("hidden");
+                    wasi1BorangSection.classList.add("hidden");
+                }
+            }
+            // Jika Lain (Buka semula kunci untuk edit manual)
+            else {
+                namaWasi1.value = "";
+                icWasi1.value = "";
+                hubunganWasi1.value = "";
+                alamatWasi1.value = "";
+                telefonWasi1.value = "";
+                
+                [namaWasi1, icWasi1, hubunganWasi1, alamatWasi1, telefonWasi1].forEach(el => {
+                    el.readOnly = false;
+                    el.classList.remove("bg-gray-100", "cursor-not-allowed");
+                });
+            }
+        }
+    });
+}
+    
     function addWasiatToDOM(item = {}){
         const html = `
         <div class="border rounded-xl p-4 space-y-3 mb-4">
@@ -801,28 +886,33 @@
             }); 
 
             // 4. Kutip Maklumat Wasi
-            const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
-            let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
-            
-            if (pilihanWasi1Val === "rtb") {
-                finalNamaWasi1 = syarikatAmanahDetails.nama;
-                finalIcWasi1 = syarikatAmanahDetails.noPendaftaran;
-                finalHubunganWasi1 = "Syarikat Amanah";
-                finalAlamatWasi1 = syarikatAmanahDetails.alamat;
-                finalTelefonWasi1 = syarikatAmanahDetails.telefon;
-            } else {
-                finalNamaWasi1 = document.getElementById("namaWasi1").value;
-                finalIcWasi1 = document.getElementById("icWasi1").value;
-                finalHubunganWasi1 = document.getElementById("hubunganWasi1").value;
-                finalAlamatWasi1 = document.getElementById("alamatWasi1").value;
-                finalTelefonWasi1 = document.getElementById("telefonWasi1").value;
-            }
+const pilihanWasi1Val = document.getElementById("pilihanWasi1").value;
+let finalNamaWasi1, finalIcWasi1, finalHubunganWasi1, finalAlamatWasi1, finalTelefonWasi1;
 
-            const alamat1 = document.getElementById("alamat1").value.trim();
-            const alamat2 = document.getElementById("alamat2").value.trim();
-            const poskod = document.getElementById("poskod").value.trim();
-            const bandar = document.getElementById("bandar").value.trim();
-            const negeri = document.getElementById("negeri").value.trim();
+if (pilihanWasi1Val === "rtb") {
+    // JIKA PILIH SYARIKAT AMANAH
+    finalNamaWasi1 = syarikatAmanahDetails.nama;
+    finalIcWasi1 = syarikatAmanahDetails.noPendaftaran;
+    finalHubunganWasi1 = "Syarikat Amanah";
+    finalAlamatWasi1 = syarikatAmanahDetails.alamat;
+    finalTelefonWasi1 = syarikatAmanahDetails.telefon;
+
+} else {
+    // JIKA PILIH PASANGAN ATAU PENAMA LAIN
+    // Sistem akan kutip data dari kotak input (sama ada diisi manual atau auto-fill)
+    finalNamaWasi1 = document.getElementById("namaWasi1").value.trim();
+    finalIcWasi1 = document.getElementById("icWasi1").value.trim();
+    finalHubunganWasi1 = document.getElementById("hubunganWasi1").value.trim();
+    finalAlamatWasi1 = document.getElementById("alamatWasi1").value.trim();
+    finalTelefonWasi1 = document.getElementById("telefonWasi1").value.trim();
+}
+
+// Alamat Pewasiat (Kekal sama)
+const alamat1 = document.getElementById("alamat1").value.trim();
+const alamat2 = document.getElementById("alamat2").value.trim();
+const poskod = document.getElementById("poskod").value.trim();
+const bandar = document.getElementById("bandar").value.trim();
+const negeri = document.getElementById("negeri").value.trim();
           
             // 5. Hantar ke Firestore (TUKAR PATH KE corporate_zurri)
             await setDoc(doc(db, "users", currentUser.uid, "corporate_zurri", "maklumat"), {
@@ -834,12 +924,12 @@
                 
                 senaraiSyarikat: senaraiSyarikat, // Array Data Syarikat
                 
-                pilihanWasi1: pilihanWasi1Val,
-                namaWasi1: finalNamaWasi1,
-                icWasi1: finalIcWasi1,
-                hubunganWasi1: finalHubunganWasi1,
-                alamatWasi1: finalAlamatWasi1,
-                telefonWasi1: finalTelefonWasi1,
+                pilihanWasi1: document.getElementById("pilihanWasi1").value,
+    namaWasi1: finalNamaWasi1,
+    icWasi1: finalIcWasi1,
+    hubunganWasi1: finalHubunganWasi1,
+    alamatWasi1: finalAlamatWasi1,
+    telefonWasi1: finalTelefonWasi1,
                 
                 namaWasi2: document.getElementById("namaWasi2").value,
                 icWasi2: document.getElementById("icWasi2").value,
