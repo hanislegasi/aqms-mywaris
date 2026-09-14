@@ -564,19 +564,27 @@
         
         populateWarisDropdowns();
         
-        if (data.pilihanWasi1 === "manual") {
-            document.getElementById("pilihanWasi1").value = "manual";
+        // ==========================================
+        // ISI SEMULA MAKLUMAT WASI (DARI DATABASE)
+        // ==========================================
+        if (data.pilihanWasi1 === "pasangan" || data.pilihanWasi1 === "lain") {
+            document.getElementById("pilihanWasi1").value = data.pilihanWasi1;
             document.getElementById("namaWasi1").value = data.namaWasi1 || "";
             document.getElementById("icWasi1").value = data.icWasi1 || "";
             document.getElementById("hubunganWasi1").value = data.hubunganWasi1 || "";
             document.getElementById("alamatWasi1").value = data.alamatWasi1 || "";
             document.getElementById("telefonWasi1").value = data.telefonWasi1 || "";
-        } else {
+        } else if (data.pilihanWasi1 === "rtb") {
             document.getElementById("pilihanWasi1").value = "rtb";
         }
         
-        toggleWasi1();
+        // PENTING: "Trigger" butang dropdown secara automatik supaya sistem buka kotak yang betul
+        const eventDropdown = new Event('change');
+        if (document.getElementById("pilihanWasi1")) {
+            document.getElementById("pilihanWasi1").dispatchEvent(eventDropdown);
+        }
         
+        // Isi Wasi 2 (Gantian)
         document.getElementById("namaWasi2").value = data.namaWasi2 || "";
         document.getElementById("icWasi2").value = data.icWasi2 || "";
         document.getElementById("hubunganWasi2").value = data.hubunganWasi2 || "";
@@ -610,8 +618,8 @@
       }
     }); 
 
-    // ==========================================
-// KAWALAN DROPDOWN WASI PERTAMA (AUTO-FILL & TOGGLE)
+// ==========================================
+// WASI TOGGLE LOGIC (DIKEMASKINI)
 // ==========================================
 const pilihanWasi1 = document.getElementById("pilihanWasi1");
 const wasi1RTBSection = document.getElementById("wasi1RTBSection");
@@ -619,54 +627,54 @@ const wasi1ManualSection = document.getElementById("wasi1ManualSection");
 const wasi1BorangSection = document.getElementById("wasi1BorangSection");
 const wasi2Section = document.getElementById("wasi2Section");
 
+// ELEMEN INPUT WASI 1
+const namaWasi1 = document.getElementById("namaWasi1");
+const icWasi1 = document.getElementById("icWasi1");
+const hubunganWasi1 = document.getElementById("hubunganWasi1");
+const alamatWasi1 = document.getElementById("alamatWasi1");
+const telefonWasi1 = document.getElementById("telefonWasi1");
+
 if (pilihanWasi1) {
     pilihanWasi1.addEventListener("change", function() {
-        // 1. Sembunyikan semua section (Reset)
+        // 1. Reset dan sembunyikan semua kotak
         wasi1RTBSection.classList.add("hidden");
         wasi1ManualSection.classList.add("hidden");
         if(wasi2Section) wasi2Section.classList.add("hidden");
         
-        // 2. Jika pilih RTB (Syarikat Amanah)
+        // 2. Jika RTB
         if (this.value === "rtb") {
             wasi1RTBSection.classList.remove("hidden");
             
-            // Kosongkan form manual supaya tiada data bertindih
-            document.getElementById("namaWasi1").value = "";
-            document.getElementById("icWasi1").value = "";
-            document.getElementById("hubunganWasi1").value = "";
-            document.getElementById("alamatWasi1").value = "";
-            document.getElementById("telefonWasi1").value = "";
+            // Kosongkan form input
+            namaWasi1.value = "";
+            icWasi1.value = "";
+            hubunganWasi1.value = "";
+            alamatWasi1.value = "";
+            telefonWasi1.value = "";
             
             alert(`NOTIS PELANTIKAN ${syarikatAmanahDetails.nama.toUpperCase()}\n\nHarap maklum dengan terma berikut:\n\n1. Caj pelantikan tambahan sebanyak RM${cajRTBServer} akan dikenakan.\n2. Kos pentadbiran pusaka akan dikenakan oleh pihak Syarikat Amanah berdasarkan peratusan nilai harta pada waktu urusan tuntutan pusaka kelak.`);
         } 
-        // 3. Jika pilih Pasangan ATAU Penama Lain
+        // 3. Jika Pasangan ATAU Penama Lain
         else if (this.value === "pasangan" || this.value === "lain") {
             wasi1ManualSection.classList.remove("hidden");
             wasi1BorangSection.classList.remove("hidden");
             if(wasi2Section) wasi2Section.classList.remove("hidden");
 
-            // KAWALAN AUTO-FILL
-            const namaWasi1 = document.getElementById("namaWasi1");
-            const icWasi1 = document.getElementById("icWasi1");
-            const hubunganWasi1 = document.getElementById("hubunganWasi1");
-            const alamatWasi1 = document.getElementById("alamatWasi1");
-            const telefonWasi1 = document.getElementById("telefonWasi1");
-
+            // Jika Pasangan (Tarik data auto)
             if (this.value === "pasangan") {
-                // Tarik data pasangan
                 namaWasi1.value = document.getElementById("namaPasangan")?.value || "";
                 icWasi1.value = document.getElementById("icPasangan")?.value || "";
                 hubunganWasi1.value = "Pasangan"; 
                 alamatWasi1.value = document.getElementById("alamat")?.value || ""; 
                 telefonWasi1.value = document.getElementById("telefonPasangan")?.value || ""; 
                 
-                // Kunci kotak (read-only)
                 [namaWasi1, icWasi1, hubunganWasi1, alamatWasi1, telefonWasi1].forEach(el => {
                     el.readOnly = true;
                     el.classList.add("bg-gray-100", "cursor-not-allowed");
                 });
-            } else {
-                // Jika Penama Lain, kosongkan dan buka mangga kunci
+            } 
+            // Jika Lain (Buka semula kunci untuk edit manual)
+            else {
                 namaWasi1.value = "";
                 icWasi1.value = "";
                 hubunganWasi1.value = "";
