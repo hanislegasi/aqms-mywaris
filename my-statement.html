@@ -2,171 +2,230 @@
 <html lang="ms">
 
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
-
-<title>My Statement</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>My Statement | MyWaris</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
     </style>
-  <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="bg-gray-100 min-h-screen">
 
-<div class="max-w-5xl mx-auto p-6">
+<div class="max-w-4xl mx-auto p-6">
 
-<a
-href="consultant-dashboard.html"
-class="inline-block bg-gray-200 px-5 py-3 rounded-xl mb-6">
+    <a href="consultant-dashboard.html" class="inline-block bg-gray-200 hover:bg-gray-300 transition px-5 py-3 rounded-xl mb-6 font-semibold text-gray-700">
+        ← Dashboard
+    </a>
 
-← Dashboard
+    <h1 class="text-3xl font-bold text-[#153638] mb-2">My Statement & Documents</h1>
+    <p class="text-gray-500 mb-8">View official documents, payment statements and receipts.</p>
 
-</a>
+    <!-- SENARAI DOKUMEN & PENYATA -->
+    <div class="flex flex-col gap-4">
 
-<h1
-class="text-3xl font-bold text-[#153638] mb-2">
+        <!-- 1. PAYMENT RECEIPTS -->
+        <a href="payment-receipts.html" class="flex items-center justify-between bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-[#153638]/30 hover:shadow-md transition cursor-pointer">
+            <div class="flex items-center gap-4">
+                <div class="text-3xl bg-blue-50 p-3 rounded-lg">🧾</div>
+                <div>
+                    <h2 class="font-bold text-lg text-[#153638]">Payment Receipts</h2>
+                    <p class="text-sm text-gray-500">Registration, Renewal, Wasiat, Hibah, Mawaris & Corporate</p>
+                </div>
+            </div>
+            <div class="text-gray-400 font-bold text-xl">➔</div>
+        </a>
 
-My Statement
+        <!-- 2. SURAT LANTIKAN AQC -->
+        <button id="downloadAqcLetterBtn" class="w-full text-left flex items-center justify-between bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-[#153638]/30 hover:shadow-md transition cursor-pointer">
+            <div class="flex items-center gap-4">
+                <div class="text-3xl bg-emerald-50 p-3 rounded-lg">📄</div>
+                <div>
+                    <h2 class="font-bold text-lg text-[#153638]">Surat Lantikan Rasmi (AQC)</h2>
+                    <p class="text-sm text-gray-500">Muat turun dan cetak surat pelantikan rasmi anda</p>
+                </div>
+            </div>
+            <div class="text-gray-400 font-bold text-xl" id="downloadIcon">📥</div>
+        </button>
 
-</h1>
+        <!-- 3. CONSULTANT PAYMENT STATEMENT -->
+        <a href="consultant-statement.html" class="flex items-center justify-between bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-[#153638]/30 hover:shadow-md transition cursor-pointer">
+            <div class="flex items-center gap-4">
+                <div class="text-3xl bg-indigo-50 p-3 rounded-lg">📊</div>
+                <div>
+                    <h2 class="font-bold text-lg text-[#153638]">Consultant Payment Statement</h2>
+                    <p class="text-sm text-gray-500">View monthly commission, override & payment statements</p>
+                </div>
+            </div>
+            <div class="text-gray-400 font-bold text-xl">➔</div>
+        </a>
 
-<p class="text-gray-500 mb-8">
+        <!-- 4. ANNUAL INCOME SUMMARY (COMING SOON) -->
+        <a href="annual-income.html" class="flex items-center justify-between bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-[#153638]/30 hover:shadow-md transition cursor-pointer">
+            <div class="flex items-center gap-4">
+                <div class="text-3xl grayscale bg-gray-200 p-3 rounded-lg">📈</div>
+                <div>
+                    <h2 class="font-bold text-lg text-gray-600">Annual Income Summary</h2>
+                    <p class="text-sm text-gray-500">Ringkasan pendapatan tahunan</p>
+                </div>
+            </div>
+            <div class="text-gray-400 font-bold text-xl">➔</div>
+        </a>
 
-View payment statements and official receipts.
-
-</p>
-
-<div class="grid md:grid-cols-2 gap-6">
-
-<!-- PAYMENT STATEMENT -->
-
-<div
-class="bg-white rounded-2xl shadow border p-6 hover:shadow-xl transition">
-
-<div class="text-5xl mb-4">
-
-📄
-
-</div>
-
-<h2 class="text-xl font-bold">
-
-Consultant Payment Statement
-
-</h2>
-
-<p class="text-gray-500 mt-3">
-
-View monthly commission,
-override and payment statement.
-
-</p>
-
-<a
-href="consultant-statement.html"
-class="inline-block mt-6 bg-[#153638] text-white px-5 py-2 rounded-xl">
-
-Open
-
-</a>
-
-</div>
-
-<!-- RECEIPT -->
-
-<div
-class="bg-white rounded-2xl shadow border p-6 hover:shadow-xl transition">
-
-<div class="text-5xl mb-4">
-
-🧾
-
-</div>
-
-<h2 class="text-xl font-bold">
-
-Payment Receipts
-
-</h2>
-
-<p class="text-gray-500 mt-3">
-
-Registration Fee
-
-<br>
-
-Renewal Fee
-
-<br>
-
-e-Wasiat
-
-<br>
-
-Hibah
-
-<br>
-
-Harta Sepencarian
-
-<br>
-
-Mawaris
-
-</p>
-
-<a
-href="payment-receipts.html"
-class="inline-block mt-6 bg-[#153638] text-white px-5 py-2 rounded-xl">
-
-Open
-
-</a>
+        <!-- 5. TAX SUMMARY (COMING SOON) -->
+        <a href="tax-summary.html" class="flex items-center justify-between bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-[#153638]/30 hover:shadow-md transition cursor-pointer">
+            <div class="flex items-center gap-4">
+                <div class="text-3xl grayscale bg-gray-200 p-3 rounded-lg">🏛️</div>
+                <div>
+                    <h2 class="font-bold text-lg text-gray-600">Tax Summary</h2>
+                    <p class="text-sm text-gray-500">Penyata cukai pendapatan tahunan (EA/CP58)</p>
+                </div>
+            </div>
+            <div class="text-gray-400 font-bold text-xl">➔</div>
+        </a>
+    </div>
 
 </div>
 
+<!-- TEMPLAT SURAT LANTIKAN RASMI (TERSEMBUNYI UNTUK PROSES PDF) -->
+<div id="aqcLetterTemplate" class="hidden">
+    <div style="width: 210mm; min-height: 297mm; padding: 25mm; background: white; font-family: 'Times New Roman', serif; color: #222; line-height: 1.8; box-sizing: border-box; position: relative; margin:0 auto;">
+        
+        <!-- HEADER SURAT -->
+        <div style="text-align: center; border-bottom: 3px double #153638; padding-bottom: 15px; margin-bottom: 30px;">
+            <h1 style="color: #153638; margin: 0; font-size: 22px; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 1px;">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</h1>
+            <p style="margin: 5px 0 0 0; font-size: 12px; color: #555;">No. Pendaftaran: 123456xxx | E-mel: support@mywaris.com</p>
+        </div>
+
+        <!-- TARIKH & RUJUKAN -->
+        <div style="display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 15px;">
+            <div>
+                <strong>Rujukan Kami:</strong> AQMS/AQC/<span id="letterConsultantNo">-</span><br>
+                <strong>Tarikh:</strong> <span id="letterDate">-</span>
+            </div>
+        </div>
+
+        <!-- MAKLUMAT PENERIMA -->
+        <div style="margin-bottom: 25px; font-size: 15px;">
+            Kepada,<br>
+            <strong><span id="letterName">-</span></strong><br>
+            No. Kad Pengenalan: <span id="letterIc">-</span><br>
+            No. Perunding: <span id="letterConsultantNoSub">-</span>
+        </div>
+
+        <!-- TAJUK SURAT -->
+        <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 25px; text-decoration: underline;">
+            SURAT LANTIKAN RASMI SEBAGAI AL-QAWTHAR CONSULTANT (AQC)
+        </div>
+
+        <!-- ISI KANDUNGAN -->
+        <div style="font-size: 15px; text-align: justify; margin-bottom: 20px;">
+            Dengan hormatnya perkara di atas adalah dirujuk.
+        </div>
+
+        <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+            2. Sukacita dimaklumkan bahawa pihak pengurusan <strong>AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</strong> dengan berbesar hatinya melantik tuan/puan sebagai <strong>Al-Qawthar Consultant (AQC)</strong> berkuat kuasa mulai tarikh surat ini dikeluarkan.
+        </div>
+
+        <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+            3. Melalui pelantikan ini, tuan/puan dipertanggungjawabkan untuk memasarkan perkhidmatan perancangan harta pusaka Islam (Wasiat, Hibah, Harta Sepencarian, Mawaris & Korporat) serta membimbing rangkaian perunding di bawah seliaan tuan/puan selaras dengan terma, syarat, dan kod etika syarikat.
+        </div>
+
+        <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+            4. Pihak syarikat amat yakin dan percaya bahawa tuan/puan dapat melaksanakan amanah ini dengan penuh integriti, dedikasi, serta mencapai sasaran yang ditetapkan.
+        </div>
+
+        <div style="font-size: 15px; text-align: justify; margin-bottom: 40px;">
+            Sekian, terima kasih.
+        </div>
+
+        <!-- TANDATANGAN PENGURUSAN -->
+        <div style="margin-top: 50px; font-size: 15px; page-break-inside: avoid;">
+            <p style="margin: 0 0 50px 0;">Yang benar,</p>
+            <p style="margin: 0; font-weight: bold; color: #153638;">PENGURUSAN EKSEKUTIF</p>
+            <p style="margin: 0;">Al-Qawthar Mawaris Synergy Sdn. Bhd.</p>
+        </div>
+
+    </div>
 </div>
 
-<div class="mt-10">
+<script type="module">
+    import { db, auth } from './firebase.js';
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-<div
-class="bg-yellow-50 border border-yellow-200 rounded-xl p-5">
+    let currentUser = null;
 
-<h3 class="font-bold">
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            window.location.href = "login.html";
+            return;
+        }
+        currentUser = user;
+    });
 
-Coming Soon
+    document.getElementById("downloadAqcLetterBtn").addEventListener("click", async () => {
+        if (!currentUser) return;
+        
+        const btn = document.getElementById("downloadAqcLetterBtn");
+        const icon = document.getElementById("downloadIcon");
+        const originalContent = icon.innerHTML;
+        
+        icon.innerHTML = "⏳";
+        btn.classList.add("opacity-70", "pointer-events-none");
 
-</h3>
+        try {
+            // Tarik data perunding/pengguna
+            const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+            const consultantSnap = await getDoc(doc(db, "consultants", currentUser.uid));
+            
+            const userData = userSnap.exists() ? userSnap.data() : {};
+            const consultantData = consultantSnap.exists() ? consultantSnap.data() : {};
 
-<p class="text-gray-600 mt-2">
+            // Masukkan data dinamik ke dalam template surat
+            document.getElementById("letterName").innerText = userData.nama || consultantData.nama || "-";
+            document.getElementById("letterIc").innerText = userData.ic || "-";
+            
+            const cNo = consultantData.consultantNo || userData.referral || "AQ-AQC-XXXX";
+            document.getElementById("letterConsultantNo").innerText = cNo;
+            document.getElementById("letterConsultantNoSub").innerText = cNo;
+            
+            const todayStr = new Date().toLocaleDateString("ms-MY", { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById("letterDate").innerText = todayStr;
 
-Annual Income Summary
+            // Paparkan elemen sementara untuk dicetak/download
+            const templateEl = document.getElementById("aqcLetterTemplate");
+            templateEl.classList.remove("hidden");
+            templateEl.style.display = "block"; // Paksa block display untuk render
 
-<br>
+            const options = {
+                margin: 0,
+                filename: `Surat_Lantikan_AQC_${cNo}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
 
-Tax Summary
+            // Jana dan muat turun PDF
+            await html2pdf().set(options).from(templateEl).save();
 
-<br>
+            // Sembunyikan semula template
+            templateEl.classList.add("hidden");
+            templateEl.style.display = "";
 
-Payment Voucher History
-
-</p>
-
-</div>
-
-</div>
-
-</div>
+        } catch (err) {
+            console.error("Gagal menjana surat lantikan:", err);
+            alert("Gagal menjana surat lantikan. Sila cuba lagi.");
+            document.getElementById("aqcLetterTemplate").classList.add("hidden");
+        } finally {
+            icon.innerHTML = originalContent;
+            btn.classList.remove("opacity-70", "pointer-events-none");
+        }
+    });
+</script>
 
 </body>
-
 </html>
