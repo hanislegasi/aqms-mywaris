@@ -9,6 +9,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
+        
+        /* Modal Animation */
+        .modal-enter { animation: fadeIn 0.2s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Responsive A4 Preview wrapper */
+        .a4-preview-wrapper {
+            background-color: #e5e7eb; /* gray-200 */
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: auto;
+        }
     </style>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -39,16 +55,16 @@
             <div class="text-gray-400 font-bold text-xl">➔</div>
         </a>
 
-        <!-- 2. SURAT LANTIKAN AQC -->
-        <button id="downloadAqcLetterBtn" class="w-full text-left flex items-center justify-between bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-[#153638]/30 hover:shadow-md transition cursor-pointer">
+        <!-- 2. SURAT LANTIKAN AQC (VIEW DULU) -->
+        <button id="viewAqcLetterBtn" class="w-full text-left flex items-center justify-between bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-[#153638]/30 hover:shadow-md transition cursor-pointer">
             <div class="flex items-center gap-4">
                 <div class="text-3xl bg-emerald-50 p-3 rounded-lg">📄</div>
                 <div>
                     <h2 class="font-bold text-lg text-[#153638]">Surat Lantikan Rasmi (AQC)</h2>
-                    <p class="text-sm text-gray-500">Muat turun dan cetak surat pelantikan rasmi anda</p>
+                    <p class="text-sm text-gray-500">Papar dan muat turun surat pelantikan rasmi anda</p>
                 </div>
             </div>
-            <div class="text-gray-400 font-bold text-xl" id="downloadIcon">📥</div>
+            <div class="text-gray-400 font-bold text-xl" id="viewIcon">👁️</div>
         </button>
 
         <!-- 3. CONSULTANT PAYMENT STATEMENT -->
@@ -63,90 +79,120 @@
             <div class="text-gray-400 font-bold text-xl">➔</div>
         </a>
 
-        <!-- 4. ANNUAL INCOME SUMMARY (COMING SOON) -->
+        <!-- 4. ANNUAL INCOME SUMMARY -->
         <a href="annual-income.html" class="flex items-center justify-between bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-[#153638]/30 hover:shadow-md transition cursor-pointer">
             <div class="flex items-center gap-4">
-                <div class="text-3xl grayscale bg-gray-200 p-3 rounded-lg">📈</div>
+                <div class="text-3xl bg-orange-50 p-3 rounded-lg">📈</div>
                 <div>
-                    <h2 class="font-bold text-lg text-gray-600">Annual Income Summary</h2>
+                    <h2 class="font-bold text-lg text-[#153638]">Annual Income Summary</h2>
                     <p class="text-sm text-gray-500">Ringkasan pendapatan tahunan</p>
                 </div>
             </div>
             <div class="text-gray-400 font-bold text-xl">➔</div>
         </a>
 
-        <!-- 5. TAX SUMMARY (COMING SOON) -->
+        <!-- 5. TAX SUMMARY (CP58) -->
         <a href="tax-summary.html" class="flex items-center justify-between bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-[#153638]/30 hover:shadow-md transition cursor-pointer">
             <div class="flex items-center gap-4">
-                <div class="text-3xl grayscale bg-gray-200 p-3 rounded-lg">🏛️</div>
+                <div class="text-3xl bg-red-50 p-3 rounded-lg">🏛️</div>
                 <div>
-                    <h2 class="font-bold text-lg text-gray-600">Tax Summary</h2>
-                    <p class="text-sm text-gray-500">Penyata cukai pendapatan tahunan (EA/CP58)</p>
+                    <h2 class="font-bold text-lg text-[#153638]">Tax Summary</h2>
+                    <p class="text-sm text-gray-500">Penyata cukai pendapatan tahunan (Borang CP58)</p>
                 </div>
             </div>
             <div class="text-gray-400 font-bold text-xl">➔</div>
         </a>
+
     </div>
 
 </div>
 
-<!-- TEMPLAT SURAT LANTIKAN RASMI (TERSEMBUNYI UNTUK PROSES PDF) -->
-<div id="aqcLetterTemplate" class="hidden">
-    <div style="width: 210mm; min-height: 297mm; padding: 25mm; background: white; font-family: 'Times New Roman', serif; color: #222; line-height: 1.8; box-sizing: border-box; position: relative; margin:0 auto;">
+<!-- MODAL PREVIEW SURAT LANTIKAN -->
+<div id="letterModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4 backdrop-blur-sm">
+    <div class="bg-gray-100 w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden modal-enter">
         
-        <!-- HEADER SURAT -->
-        <div style="text-align: center; border-bottom: 3px double #153638; padding-bottom: 15px; margin-bottom: 30px;">
-            <h1 style="color: #153638; margin: 0; font-size: 22px; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 1px;">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</h1>
-            <p style="margin: 5px 0 0 0; font-size: 12px; color: #555;">No. Pendaftaran: 123456xxx | E-mel: support@mywaris.com</p>
-        </div>
-
-        <!-- TARIKH & RUJUKAN -->
-        <div style="display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 15px;">
+        <!-- Header Modal -->
+        <div class="bg-white border-b px-6 py-4 flex justify-between items-center z-10 shadow-sm">
             <div>
-                <strong>Rujukan Kami:</strong> AQMS/AQC/<span id="letterConsultantNo">-</span><br>
-                <strong>Tarikh:</strong> <span id="letterDate">-</span>
+                <h2 class="text-xl font-bold text-[#153638]">Pratonton Surat Lantikan</h2>
+                <p class="text-sm text-gray-500" id="modalStatusText">Sila semak maklumat sebelum muat turun.</p>
             </div>
+            <button id="closeModalBtnTop" class="text-gray-400 hover:text-red-500 font-bold text-3xl leading-none transition">&times;</button>
         </div>
 
-        <!-- MAKLUMAT PENERIMA -->
-        <div style="margin-bottom: 25px; font-size: 15px;">
-            Kepada,<br>
-            <strong><span id="letterName">-</span></strong><br>
-            No. Kad Pengenalan: <span id="letterIc">-</span><br>
-            No. Perunding: <span id="letterConsultantNoSub">-</span>
+        <!-- Ruangan Scroll A4 -->
+        <div class="flex-1 overflow-y-auto a4-preview-wrapper shadow-inner">
+            
+            <!-- TEMPLAT SURAT LANTIKAN RASMI -->
+            <div id="aqcLetterTemplate" class="shadow-lg" style="width: 210mm; min-height: 297mm; padding: 25mm; background: white; font-family: 'Times New Roman', serif; color: #222; line-height: 1.8; box-sizing: border-box; position: relative;">
+                
+                <!-- HEADER SURAT (Tarik dari Settings) -->
+                <div style="text-align: center; border-bottom: 3px double #153638; padding-bottom: 15px; margin-bottom: 30px;">
+                    <h1 id="letterCompanyName" style="color: #153638; margin: 0; font-size: 22px; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 1px;">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</h1>
+                    <p style="margin: 5px 0 0 0; font-size: 12px; color: #555;">No. Pendaftaran: <span id="letterCompanyRegNo">123456-X</span> | E-mel: support@mywaris.com</p>
+                </div>
+
+                <!-- TARIKH & RUJUKAN -->
+                <div style="display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 15px;">
+                    <div>
+                        <strong>Rujukan Kami:</strong> AQMS/AQC/<span id="letterConsultantNo">-</span><br>
+                        <strong>Tarikh:</strong> <span id="letterDate">-</span>
+                    </div>
+                </div>
+
+                <!-- MAKLUMAT PENERIMA -->
+                <div style="margin-bottom: 25px; font-size: 15px;">
+                    Kepada,<br>
+                    <strong><span id="letterName">-</span></strong><br>
+                    No. Kad Pengenalan: <span id="letterIc">-</span><br>
+                    No. Perunding: <span id="letterConsultantNoSub">-</span>
+                </div>
+
+                <!-- TAJUK SURAT (Diubah ke Kiri) -->
+                <div style="text-align: left; font-weight: bold; font-size: 16px; margin-bottom: 25px; text-decoration: underline;">
+                    SURAT LANTIKAN RASMI SEBAGAI AL-QAWTHAR CONSULTANT (AQC)
+                </div>
+
+                <!-- ISI KANDUNGAN -->
+                <div style="font-size: 15px; text-align: justify; margin-bottom: 20px;">
+                    Dengan hormatnya perkara di atas adalah dirujuk.
+                </div>
+
+                <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+                    2. Sukacita dimaklumkan bahawa pihak pengurusan <strong id="letterCompanyNameBody">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</strong> dengan berbesar hatinya melantik tuan/puan sebagai <strong>Al-Qawthar Consultant (AQC)</strong> berkuat kuasa mulai tarikh yang dinyatakan.
+                </div>
+
+                <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+                    3. Melalui pelantikan ini, tuan/puan dipertanggungjawabkan untuk memasarkan perkhidmatan perancangan harta pusaka Islam (Wasiat, Hibah, Harta Sepencarian, Mawaris & Korporat) serta membimbing rangkaian perunding di bawah seliaan tuan/puan selaras dengan terma, syarat, dan kod etika syarikat.
+                </div>
+
+                <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+                    4. Pihak syarikat amat yakin dan percaya bahawa tuan/puan dapat melaksanakan amanah ini dengan penuh integriti, dedikasi, serta mencapai sasaran yang ditetapkan.
+                </div>
+
+                <div style="font-size: 15px; text-align: justify; margin-bottom: 40px;">
+                    Sekian, terima kasih.
+                </div>
+
+                <!-- TANDATANGAN PENGURUSAN -->
+                <div style="margin-top: 50px; font-size: 15px; page-break-inside: avoid;">
+                    <p style="margin: 0 0 50px 0;">Yang benar,</p>
+                    <p style="margin: 0; font-weight: bold; color: #153638;">PENGURUSAN EKSEKUTIF</p>
+                    <p style="margin: 0;" id="letterCompanyNameFooter">Al-Qawthar Mawaris Synergy Sdn. Bhd.</p>
+                </div>
+
+            </div>
+
         </div>
 
-        <!-- TAJUK SURAT -->
-        <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 25px; text-decoration: underline;">
-            SURAT LANTIKAN RASMI SEBAGAI AL-QAWTHAR CONSULTANT (AQC)
-        </div>
-
-        <!-- ISI KANDUNGAN -->
-        <div style="font-size: 15px; text-align: justify; margin-bottom: 20px;">
-            Dengan hormatnya perkara di atas adalah dirujuk.
-        </div>
-
-        <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
-            2. Sukacita dimaklumkan bahawa pihak pengurusan <strong>AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</strong> dengan berbesar hatinya melantik tuan/puan sebagai <strong>Al-Qawthar Consultant (AQC)</strong> berkuat kuasa mulai tarikh surat ini dikeluarkan.
-        </div>
-
-        <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
-            3. Melalui pelantikan ini, tuan/puan dipertanggungjawabkan untuk memasarkan perkhidmatan perancangan harta pusaka Islam (Wasiat, Hibah, Harta Sepencarian, Mawaris & Korporat) serta membimbing rangkaian perunding di bawah seliaan tuan/puan selaras dengan terma, syarat, dan kod etika syarikat.
-        </div>
-
-        <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
-            4. Pihak syarikat amat yakin dan percaya bahawa tuan/puan dapat melaksanakan amanah ini dengan penuh integriti, dedikasi, serta mencapai sasaran yang ditetapkan.
-        </div>
-
-        <div style="font-size: 15px; text-align: justify; margin-bottom: 40px;">
-            Sekian, terima kasih.
-        </div>
-
-        <!-- TANDATANGAN PENGURUSAN -->
-        <div style="margin-top: 50px; font-size: 15px; page-break-inside: avoid;">
-            <p style="margin: 0 0 50px 0;">Yang benar,</p>
-            <p style="margin: 0; font-weight: bold; color: #153638;">PENGURUSAN EKSEKUTIF</p>
-            <p style="margin: 0;">Al-Qawthar Mawaris Synergy Sdn. Bhd.</p>
+        <!-- Footer Modal (Butang Aksi) -->
+        <div class="bg-white border-t px-6 py-4 flex flex-col-reverse sm:flex-row justify-end gap-3 z-10 shadow-sm">
+            <button id="closeModalBtnBottom" class="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold transition">
+                Tutup
+            </button>
+            <button id="actualDownloadBtn" class="w-full sm:w-auto bg-[#153638] hover:bg-[#1d4a4d] text-white px-6 py-3 rounded-xl font-semibold transition flex items-center justify-center gap-2 shadow-md">
+                <span id="actualDownloadIcon">📥</span> Muat Turun PDF
+            </button>
         </div>
 
     </div>
@@ -158,6 +204,7 @@
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     let currentUser = null;
+    let generatedFilename = "Surat_Lantikan_AQC.pdf"; // Nama default fail
 
     onAuthStateChanged(auth, (user) => {
         if (!user) {
@@ -167,64 +214,118 @@
         currentUser = user;
     });
 
-    document.getElementById("downloadAqcLetterBtn").addEventListener("click", async () => {
+    // ELEMENT MODAL & BUTANG
+    const viewBtn = document.getElementById("viewAqcLetterBtn");
+    const modal = document.getElementById("letterModal");
+    const closeTop = document.getElementById("closeModalBtnTop");
+    const closeBottom = document.getElementById("closeModalBtnBottom");
+    const downloadBtn = document.getElementById("actualDownloadBtn");
+
+    // BUKA MODAL DAN JANA PREVIEW
+    viewBtn.addEventListener("click", async () => {
         if (!currentUser) return;
         
-        const btn = document.getElementById("downloadAqcLetterBtn");
-        const icon = document.getElementById("downloadIcon");
+        const icon = document.getElementById("viewIcon");
         const originalContent = icon.innerHTML;
         
         icon.innerHTML = "⏳";
-        btn.classList.add("opacity-70", "pointer-events-none");
+        viewBtn.classList.add("opacity-70", "pointer-events-none");
 
         try {
-            // Tarik data perunding/pengguna
-            const userSnap = await getDoc(doc(db, "users", currentUser.uid));
-            const consultantSnap = await getDoc(doc(db, "consultants", currentUser.uid));
+            // Tarik data perunding, pengguna dan tetapan syarikat serentak
+            const [userSnap, consultantSnap, adminSnap] = await Promise.all([
+                getDoc(doc(db, "users", currentUser.uid)),
+                getDoc(doc(db, "consultants", currentUser.uid)),
+                getDoc(doc(db, "settings", "admin"))
+            ]);
             
             const userData = userSnap.exists() ? userSnap.data() : {};
             const consultantData = consultantSnap.exists() ? consultantSnap.data() : {};
+            const adminData = adminSnap.exists() ? adminSnap.data() : {};
 
-            // Masukkan data dinamik ke dalam template surat
-            document.getElementById("letterName").innerText = userData.nama || consultantData.nama || "-";
-            document.getElementById("letterIc").innerText = userData.ic || "-";
+            // 1. Masukkan Nama Syarikat & No Pendaftaran (Dari Settings)
+            const namaSyarikat = adminData.namaSyarikat || "AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.";
+            const noSyarikat = adminData.noPendaftaran || "123456-X";
+            
+            document.getElementById("letterCompanyName").innerText = namaSyarikat;
+            document.getElementById("letterCompanyNameBody").innerText = namaSyarikat;
+            document.getElementById("letterCompanyNameFooter").innerText = namaSyarikat;
+            document.getElementById("letterCompanyRegNo").innerText = noSyarikat;
+
+            // 2. Masukkan Maklumat Penerima & IC
+            document.getElementById("letterName").innerText = consultantData.nama || userData.nama || "-";
+            document.getElementById("letterIc").innerText = consultantData.ic || userData.ic || "-";
             
             const cNo = consultantData.consultantNo || userData.referral || "AQ-AQC-XXXX";
             document.getElementById("letterConsultantNo").innerText = cNo;
             document.getElementById("letterConsultantNoSub").innerText = cNo;
             
-            const todayStr = new Date().toLocaleDateString("ms-MY", { day: 'numeric', month: 'long', year: 'numeric' });
-            document.getElementById("letterDate").innerText = todayStr;
+            // Set nama fail PDF berdasarkan no ejen
+            generatedFilename = `Surat_Lantikan_AQC_${cNo}.pdf`;
 
-            // Paparkan elemen sementara untuk dicetak/download
-            const templateEl = document.getElementById("aqcLetterTemplate");
-            templateEl.classList.remove("hidden");
-            templateEl.style.display = "block"; // Paksa block display untuk render
+            // 3. Masukkan Tarikh Mengikut Tarikh Daftar
+            let regDate = new Date(); 
+            if (consultantData.createdAt) {
+                regDate = consultantData.createdAt.toDate();
+            } else if (userData.createdAt) {
+                regDate = userData.createdAt.toDate();
+            }
+            const dateStr = regDate.toLocaleDateString("ms-MY", { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById("letterDate").innerText = dateStr;
 
-            const options = {
-                margin: 0,
-                filename: `Surat_Lantikan_AQC_${cNo}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            // Jana dan muat turun PDF
-            await html2pdf().set(options).from(templateEl).save();
-
-            // Sembunyikan semula template
-            templateEl.classList.add("hidden");
-            templateEl.style.display = "";
+            // Tunjukkan Modal Preview
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
 
         } catch (err) {
-            console.error("Gagal menjana surat lantikan:", err);
-            alert("Gagal menjana surat lantikan. Sila cuba lagi.");
-            document.getElementById("aqcLetterTemplate").classList.add("hidden");
+            console.error("Gagal menarik data:", err);
+            alert("Ralat semasa menyemak data. Sila cuba lagi.");
         } finally {
             icon.innerHTML = originalContent;
-            btn.classList.remove("opacity-70", "pointer-events-none");
+            viewBtn.classList.remove("opacity-70", "pointer-events-none");
         }
     });
+
+    // FUNGSI TUTUP MODAL
+    const closeModal = () => {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+    };
+    closeTop.addEventListener("click", closeModal);
+    closeBottom.addEventListener("click", closeModal);
+
+    // FUNGSI MUAT TURUN PDF (Selepas klik dari dalam modal)
+    downloadBtn.addEventListener("click", async () => {
+        const icon = document.getElementById("actualDownloadIcon");
+        const originalContent = icon.innerHTML;
+        
+        icon.innerHTML = "⏳";
+        downloadBtn.classList.add("opacity-70", "pointer-events-none");
+        
+        // Element yang nak dijadikan PDF
+        const templateEl = document.getElementById("aqcLetterTemplate");
+
+        const options = {
+            margin: 0,
+            filename: generatedFilename,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        try {
+            await html2pdf().set(options).from(templateEl).save();
+            // Optional: Auto tutup modal lepas download berjaya
+            // closeModal();
+        } catch (err) {
+            console.error("Gagal muat turun PDF:", err);
+            alert("Ralat semasa menjana PDF.");
+        } finally {
+            icon.innerHTML = originalContent;
+            downloadBtn.classList.remove("opacity-70", "pointer-events-none");
+        }
+    });
+
 </script>
 
 </body>
