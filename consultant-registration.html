@@ -166,6 +166,19 @@ Loading...
 </form>
 
 <script type="module">
+    // 1. TANGKAP NOMBOR UPLINE DARI LINK
+    const urlParams = new URLSearchParams(window.location.search);
+    const referralCode = urlParams.get('ref');
+
+    if (referralCode) {
+        const inputUpline = document.getElementById('upline');
+        if (inputUpline) {
+            inputUpline.value = referralCode;
+            // Pilihan: Kunci kotak supaya rekrut tak boleh padam nombor AQC awak
+            inputUpline.readOnly = true;
+            inputUpline.classList.add('bg-gray-100', 'cursor-not-allowed', 'text-gray-500');
+        }
+    }
 
 // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
 import { db, auth } from './firebase.js';
