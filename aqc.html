@@ -69,37 +69,38 @@
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
 
-    <!-- HEADER -->
-    <div class="bg-[#153638] text-white p-6 shadow-md">
-         <div class="flex justify-between items-center px-5">
-            <div>
-            <h1 class="text-2xl font-bold">Direktori AQC MyWaris</h1>
-                <p class="text-gray-300 text-sm mt-1">Cari pusat agensi (AQC) yang berdekatan dengan anda di seluruh Malaysia.</p>
+<!-- HEADER -->
+    <div class="bg-[#153638] text-white p-4 md:p-6 shadow-md">
+         <div class="flex justify-between items-center px-2 md:px-5">
+            <div class="pr-3">
+                <h1 class="text-xl md:text-2xl font-bold leading-tight">Direktori AQC MyWaris</h1>
+                <p class="text-gray-300 text-xs md:text-sm mt-1">Cari pusat agensi (AQC) yang berdekatan dengan anda di seluruh Malaysia.</p>
             </div>
             
-            <!-- Butang Kembali menggunakan fungsi sejarah browser -->
-            <a href="javascript:history.back()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition font-medium text-sm cursor-pointer">
+            <a href="javascript:history.back()" class="bg-white/10 hover:bg-white/20 px-3 md:px-4 py-2 rounded-lg transition font-medium text-xs md:text-sm cursor-pointer whitespace-nowrap flex-shrink-0">
                 Kembali
             </a>
-            
         </div>
     </div>
 
     <!-- MAIN CONTENT -->
-    <div class="p-5">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="p-3 md:p-5">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
             
             <!-- BAHAGIAN PETA (KIRI - 2 Column) -->
             <div class="lg:col-span-2 bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
                 <h2 class="font-bold text-lg text-[#153638] mb-4 px-2">Pilih Negeri Anda</h2>
                                   
-                <!-- KAWASAN PETA -->
-                <div id="mapContainer" class="relative w-full aspect-[4/3] md:aspect-[16/9] bg-[#eef6f9] rounded-xl overflow-hidden border border-blue-100">
+                <!-- KAWASAN PETA (Telah Diperkemas Untuk Mobile) -->
+                <div class="bg-[#eef6f9] rounded-xl overflow-hidden border border-blue-100 p-2 md:p-4 flex items-center justify-center">
                     
-                    <!-- Peta Background -->
-                    <img src="https://i.postimg.cc/LsFLrMQP/Malaysia-Map.png" 
-                         alt="Peta Malaysia" 
-                         class="absolute inset-0 w-full h-full object-contain opacity-70">
+                    <!-- Container Peta Sebenar (Kini mengikut saiz imej tepat) -->
+                    <div id="mapContainer" class="relative w-full max-w-3xl mx-auto">
+                        
+                        <!-- Peta Background -->
+                        <img src="https://i.postimg.cc/LsFLrMQP/Malaysia-Map.png" 
+                             alt="Peta Malaysia" 
+                             class="w-full h-auto object-contain opacity-80 block">
                     
                     <!-- PIN NEGERI (KEDUDUKAN TELAH DIKEMASKINI) -->
                     <div class="map-pin" style="top: 20.9%; left: 7.7%;" onclick="pilihNegeri('Perlis', this)"><span class="tooltip">Perlis</span></div>
