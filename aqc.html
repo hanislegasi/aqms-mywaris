@@ -76,9 +76,12 @@
             <h1 class="text-2xl font-bold">Direktori AQC MyWaris</h1>
                 <p class="text-gray-300 text-sm mt-1">Cari pusat agensi (AQC) yang berdekatan dengan anda di seluruh Malaysia.</p>
             </div>
-            <a href="https://alqawthar.my" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition font-medium text-sm">
-                ← Kembali
+            
+            <!-- Butang Kembali menggunakan fungsi sejarah browser -->
+            <a href="javascript:history.back()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition font-medium text-sm cursor-pointer">
+                Kembali
             </a>
+            
         </div>
     </div>
 
@@ -111,7 +114,7 @@
                     <div class="map-pin" style="top: 55.0%; left: 17.7%;" onclick="pilihNegeri('Selangor', this)" id="pinSelangor"><span class="tooltip">Selangor</span></div>
                     
                     <!-- KUALA LUMPUR & PUTRAJAYA -->
-                    <div class="map-pin" style="top: 60.2%; left: 17.6%;" onclick="pilihNegeri('Kuala Lumpur', this)"><span class="tooltip">Kuala Lumpur</span></div>
+                    <div class="map-pin" style="top: 58.9%; left: 17.8%;" onclick="pilihNegeri('Kuala Lumpur', this)"><span class="tooltip">Kuala Lumpur</span></div>
                     <div class="map-pin" style="top: 62.7%; left: 17.6%;" onclick="pilihNegeri('Putrajaya', this)"><span class="tooltip">Putrajaya</span></div>
                     
                     <div class="map-pin" style="top: 64.2%; left: 21.9%;" onclick="pilihNegeri('Negeri Sembilan', this)"><span class="tooltip">Negeri Sembilan</span></div>
