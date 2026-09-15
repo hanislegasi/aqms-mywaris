@@ -163,7 +163,7 @@
             if (!phone) return "#";
             let cleanPhone = phone.replace(/\D/g, '');
             if (!cleanPhone.startsWith('6')) cleanPhone = '6' + cleanPhone;
-            let message = encodeURIComponent(`Assalamualaikum ${name}, saya ingin bertanya mengenai perkhidmatan MyWaris.`);
+            let message = encodeURIComponent(`Assalamualaikum ${name}, saya ingin bertanya mengenai perkhidmatan Mawaris.`);
             return `https://wa.me/${cleanPhone}?text=${message}`;
         }
 
@@ -180,11 +180,14 @@
                 aqcList.forEach(aqc => {
                     const waLink = getWhatsAppLink(aqc.telefon, aqc.nama);
                     
+                    // --- LOGIK BARU: PAPARKAN BANDAR JIKA ADA ---
+                    const paparanLokasi = aqc.bandar ? `SELURUH NEGERI / ${aqc.bandar.toUpperCase()}` : `SELURUH NEGERI`;
+                    
                     const kadHTML = `
                     <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition group">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1"><i class="fa-solid fa-map-pin mr-1"></i> Seluruh Negeri</p>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1"><i class="fa-solid fa-map-pin mr-1"></i> ${paparanLokasi}</p>
                                 <a href="${waLink}" target="_blank" class="text-lg font-bold text-[#153638] group-hover:text-green-600 transition block mb-1">
                                     ${aqc.nama}
                                 </a>
@@ -243,10 +246,11 @@
                 qSnap.forEach(docSnap => {
                     const data = docSnap.data();
                     
-                    // Guna tepat seperti dalam database anda
                     const negeriAsal = data.state || "";
                     const telefonAsal = data.telefon || "";
                     const namaAsal = data.nama || "Perunding AQMS";
+                    // --- KOD BARU: Tarik field city dari Firebase ---
+                    const bandarAsal = data.city || ""; 
                     
                     if (negeriAsal && telefonAsal) {
                         const namaNegeriKunci = negeriAsal.trim().toLowerCase();
@@ -257,7 +261,8 @@
                         
                         dataAQC[namaNegeriKunci].push({
                             nama: namaAsal,
-                            telefon: telefonAsal
+                            telefon: telefonAsal,
+                            bandar: bandarAsal // --- Simpan bandar ke dalam memori
                         });
                     }
                 });
@@ -283,7 +288,7 @@
                 `;
             }
         }
-
+        
         fetchAQCDatabase();
 
 document.getElementById('mapContainer').addEventListener('click', function(e) {
