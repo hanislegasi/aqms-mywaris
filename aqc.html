@@ -77,7 +77,10 @@
                 <p class="text-gray-300 text-xs md:text-sm mt-1">Cari pusat agensi (AQC) yang berdekatan dengan anda di seluruh Malaysia.</p>
             </div>
             
-            <a href="javascript:history.back()" class="bg-white/10 hover:bg-white/20 px-3 md:px-4 py-2 rounded-lg transition font-medium text-xs md:text-sm cursor-pointer whitespace-nowrap flex-shrink-0">
+            <!-- Butang Kembali Pintar (Gabungan History & Fallback URL) -->
+            <a href="javascript:void(0);" 
+               onclick="if(document.referrer || window.history.length > 1) { history.back(); } else { window.location.href = 'https://alqawthar.my'; }" 
+               class="bg-white/10 hover:bg-white/20 px-3 md:px-4 py-2 rounded-lg transition font-medium text-xs md:text-sm cursor-pointer whitespace-nowrap flex-shrink-0">
                 Kembali
             </a>
         </div>
@@ -125,6 +128,7 @@
                     <!-- BORNEO -->
                     <div class="map-pin" style="top: 66.3%; left: 67.6%;" onclick="pilihNegeri('Sarawak', this)"><span class="tooltip">Sarawak</span></div>
                     <div class="map-pin" style="top: 37.6%; left: 84.3%;" onclick="pilihNegeri('Sabah', this)"><span class="tooltip">Sabah</span></div>
+                </div>
                 </div>
                 
                 <p class="text-xs text-center text-gray-400 mt-4 italic">Tekan pada pin merah di atas peta untuk melihat maklumat AQC bagi negeri tersebut.</p>
