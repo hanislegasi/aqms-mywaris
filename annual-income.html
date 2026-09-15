@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Annual Income Summary | MyWaris</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style> body { font-family: 'Inter', sans-serif; } </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+<div class="max-w-5xl mx-auto p-6">
+
+    <a href="my-statement.html" class="inline-block bg-gray-200 hover:bg-gray-300 transition px-5 py-3 rounded-xl mb-6 font-semibold text-gray-700">
+        ← Kembali
+    </a>
+
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div>
+            <h1 class="text-3xl font-bold text-[#153638]">Annual Income Summary</h1>
+            <p class="text-gray-500 mt-1">Ringkasan pendapatan tahunan komisen anda</p>
+        </div>
+        <select id="yearFilter" class="border border-gray-300 rounded-xl p-3 font-semibold text-[#153638] bg-white outline-none focus:ring-2 focus:ring-[#153638]">
+            <option value="2025">Tahun 2025</option>
+            <option value="2026" selected>Tahun 2026</option>
+            <option value="2027">Tahun 2027</option>
+        </select>
+    </div>
+
+    <!-- SUMMARY CARDS -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white rounded-2xl shadow p-6 border border-gray-100">
+            <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Jumlah Pendapatan Kasar</p>
+            <h2 id="totalIncome" class="text-4xl font-bold text-green-600">RM 0.00</h2>
+        </div>
+        <div class="bg-white rounded-2xl shadow p-6 border border-gray-100">
+            <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Status Penyata</p>
+            <h2 class="text-2xl font-bold text-[#153638] mt-2">Disahkan (Auto-Generated)</h2>
+        </div>
+    </div>
+
+    <!-- TABLE BREAKDOWN -->
+    <div class="bg-white rounded-2xl shadow overflow-hidden border border-gray-100">
+        <table class="w-full text-left">
+            <thead class="bg-[#153638] text-white">
+                <tr>
+                    <th class="p-4">Bulan</th>
+                    <th class="p-4 text-right">Komisen / Override (RM)</th>
+                </tr>
+            </thead>
+            <tbody id="incomeTable">
+                <tr><td colspan="2" class="p-6 text-center text-gray-500">Memuatkan data...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script type="module">
+    import { db, auth } from './firebase.js';
+    import { doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    let currentUser = null;
+    let consultantNo = null;
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            window.location.href = "login.html";
+            return;
+        }
+        currentUser = user;
+        
+        const consultantSnap = await getDoc(doc(db, "consultants", user.uid));
+        if (consultantSnap.exists()) {
+            consultantNo = consultantSnap.data().consultantNo;
+            loadIncomeData(document.getElementById("yearFilter").value);
+        }
+    });
+
+    document.getElementById("yearFilter").addEventListener("change", (e) => {
+        loadIncomeData(e.target.value);
+    });
+
+    async function loadIncomeData(selectedYear) {
+        document.getElementById("incomeTable").innerHTML = `<tr><td colspan="2" class="p-6 text-center text-gray-500">Memuatkan data...</td></tr>`;
+        
+        let monthlyIncome = new Array(12).fill(0);
+        let totalIncome = 0;
+
+        try {
+            const ledgerQ = query(collection(db, "ledger"), where("consultantNo", "==", consultantNo), where("accountCode", "==", "2000"));
+            const ledgerSnap = await getDocs(ledgerQ);
+
+            ledgerSnap.forEach(d => {
+                const data = d.data();
+                if (data.createdAt) {
+                    const date = data.createdAt.toDate();
+                    if (date.getFullYear() == selectedYear) {
+                        const monthIndex = date.getMonth(); // 0 = Jan, 11 = Dec
+                        const credit = Number(data.credit || 0);
+                        monthlyIncome[monthIndex] += credit;
+                        totalIncome += credit;
+                    }
+                }
+            });
+
+            const monthNames = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
+            let html = "";
+
+            monthNames.forEach((month, index) => {
+                html += `
+                <tr class="border-b hover:bg-gray-50 transition">
+                    <td class="p-4 font-semibold text-gray-700">${month}</td>
+                    <td class="p-4 text-right font-bold ${monthlyIncome[index] > 0 ? 'text-green-600' : 'text-gray-400'}">
+                        RM ${monthlyIncome[index].toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </td>
+                </tr>`;
+            });
+
+            document.getElementById("incomeTable").innerHTML = html;
+            document.getElementById("totalIncome").innerHTML = `RM ${totalIncome.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+        } catch (error) {
+            console.error(error);
+            document.getElementById("incomeTable").innerHTML = `<tr><td colspan="2" class="p-6 text-center text-red-500">Ralat memuatkan rekod.</td></tr>`;
+        }
+    }
+</script>
+</body>
+</html>
