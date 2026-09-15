@@ -262,8 +262,8 @@
         <button id="marketingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">Marketing Kit</button>
     </div>
 
-    <!-- Baris 3 (Grid 3 Kotak Sama Saiz) -->
-    <div class="grid md:grid-cols-3 gap-4">
+   <!-- Baris 3 (Grid 4 Kotak Sama Saiz) -->
+    <div class="grid md:grid-cols-4 gap-4">
         <!-- BUTANG myIntroducer -->
         <button id="introducerBtn" class="bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md flex items-center justify-center gap-2">
             <span>myIntroducer</span>
@@ -271,8 +271,15 @@
         <button onclick="window.location.href='my-statement.html'" class="bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md">
             My Statement
         </button>
-        <button id="copyReferralBtn" class="bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md flex justify-center items-center gap-2">
-            Copy Referral Link
+        
+        <!-- BUTANG COPY LINK AQM (Prospek) -->
+        <button id="copyReferralAqmBtn" class="bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md flex justify-center items-center gap-2">
+            Copy Referral Link - AQM
+        </button>
+        
+        <!-- BUTANG COPY LINK AQC (Rekrut) -->
+        <button id="copyReferralAqcBtn" class="bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md flex justify-center items-center gap-2">
+            Copy Referral Link - AQC
         </button>
     </div>
 </div>
@@ -717,10 +724,10 @@ onAuthStateChanged(auth, async(user)=>{
 
     // 13. BUTANG NAVIGASI
     if (isExpired) {
-        // KUNCI BUTANG JIKA EXPIRED (trainingBtn DIBUANG DARI SENARAI INI)
+        // KUNCI BUTANG JIKA EXPIRED
         const buttonsToDisable = [
             "clientsBtn", "overridingBtn", "careerBtn", 
-            "marketingBtn", "copyReferralBtn", "introducerBtn"
+            "marketingBtn", "copyReferralAqmBtn", "copyReferralAqcBtn", "introducerBtn"
         ];
         
         buttonsToDisable.forEach(id => {
@@ -764,12 +771,25 @@ onAuthStateChanged(auth, async(user)=>{
         // FUNGSI KLIK BUTANG BARU: myIntroducer
         document.getElementById("introducerBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-introducer.html"; })
        
-        document.getElementById("copyReferralBtn").addEventListener("click", async()=>{
+        // Fungsi Copy Link AQM (Pelanggan)
+        document.getElementById("copyReferralAqmBtn").addEventListener("click", async()=>{
             try{
+                // Link bawa ke register.html (Pendaftaran Pelanggan)
                 await navigator.clipboard.writeText(window.location.origin + window.location.pathname.replace("consultant-dashboard.html", "register.html") + "?ref=" + consultantData.consultantNo);
-                const btn = document.getElementById("copyReferralBtn");
-                btn.innerHTML = "✓ Copied";
-                setTimeout(()=>{ btn.innerHTML = "Copy Referral Link"; },2000);
+                const btn = document.getElementById("copyReferralAqmBtn");
+                btn.innerHTML = "✓ Copied AQM";
+                setTimeout(()=>{ btn.innerHTML = "Copy Referral Link - AQM"; },2000);
+            }catch(err){ alert("Gagal copy link"); }
+        });
+
+        // Fungsi Copy Link AQC (Rekrut Konsultan)
+        document.getElementById("copyReferralAqcBtn").addEventListener("click", async()=>{
+            try{
+                // NOTA: Sila pastikan nama fail pendaftaran AQC anda betul (contoh: register-aqc.html)
+                await navigator.clipboard.writeText(window.location.origin + window.location.pathname.replace("consultant-dashboard.html", "consultant-registration.html") + "?ref=" + consultantData.consultantNo);
+                const btn = document.getElementById("copyReferralAqcBtn");
+                btn.innerHTML = "✓ Copied AQC";
+                setTimeout(()=>{ btn.innerHTML = "Copy Referral Link - AQC"; },2000);
             }catch(err){ alert("Gagal copy link"); }
         });
     }
