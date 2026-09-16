@@ -13,7 +13,7 @@ Pendaftaran Konsultan
 </title>
 
 <script src="https://cdn.tailwindcss.com"></script>
-
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body
@@ -24,18 +24,21 @@ style="font-family: Inter, sans-serif;">
 class="bg-white w-full max-w-xl p-8 rounded-3xl shadow-xl">
 
 <h1
-class="text-3xl font-bold text-[#153638] mb-2">
+class="text-2xl font-bold text-[#153638] mb-2">
 
 Al-Qawthar Consultant
 
 </h1>
 
 <p
+id="registrationFeeText"
 class="text-gray-500 mb-6">
 
-Pendaftaran Konsultan (RM200)
+Loading...
 
-</p><form id="consultantForm" class="space-y-4">
+</p>
+  
+<form id="consultantForm" class="space-y-4">
 
 <input
 id="nama"
@@ -79,18 +82,44 @@ placeholder="No Akaun Bank"
 class="w-full border p-3 rounded-xl"
 required>
   
-<input
+<!-- Alamat -->
+
+<textarea
 id="alamat"
-type="text"
 placeholder="Alamat"
+rows="3"
 class="w-full border p-3 rounded-xl"
+required></textarea>
+
+<!-- Poskod & Bandar -->
+
+<div class="grid grid-cols-3 gap-3">
+
+<input
+id="postcode"
+type="text"
+placeholder="Poskod"
+class="border p-3 rounded-xl"
+maxlength="5"
 required>
+
+<input
+id="city"
+type="text"
+placeholder="Bandar"
+class="col-span-2 border p-3 rounded-xl"
+required>
+
+</div>
+
+<!-- Negeri -->
 
 <select
 id="state"
-class="w-full border p-3 rounded-xl">
+class="w-full border p-3 rounded-xl"
+required>
 
-
+<option value="">Pilih Negeri</option>
 
 <option>Johor</option>
 <option>Kedah</option>
@@ -103,7 +132,7 @@ class="w-full border p-3 rounded-xl">
 <option>Perak</option>
 <option>Perlis</option>
 <option>Pulau Pinang</option>
-<option>Putrjaya</option>
+<option>Putrajaya</option>
 <option>Sabah</option>
 <option>Sarawak</option>
 <option>Selangor</option>
@@ -111,174 +140,186 @@ class="w-full border p-3 rounded-xl">
 
 </select>
 
+
 <input
-
 id="upline"
-
 type="text"
-
 placeholder="Kod Upline (AQC001)"
-
 class="w-full border p-3 rounded-xl">
 
-
-
 <div class="flex items-start mt-4 mb-6">
-
     <input id="agentPdpaConsent" type="checkbox" class="w-5 h-5 text-[#153638] bg-white border-gray-300 rounded focus:ring-[#153638] mt-1 cursor-pointer" required>
-
     <label for="agentPdpaConsent" class="ml-3 text-xs text-gray-600 cursor-pointer leading-relaxed text-justify">
-
         Saya bersetuju dengan <strong>Polisi PDPA 2010</strong> dan berikrar akan mematuhi dasar <strong>Kerahsiaan Data (Confidentiality)</strong> secara mutlak. Saya faham bahawa sebarang pendedahan, salah guna, atau kecuaian terhadap maklumat peribadi dan harta pusaka pelanggan tanpa kebenaran adalah satu jenayah perundangan dan melanggar dasar Syarikat.
-
     </label>
-
 </div>
-
   
-
 <button
-
 id="registerButton"
-
 type="submit"
-
 class="w-full bg-[#153638] text-white p-4 rounded-xl font-bold">
-
-
 
 Loading...
 
-
-
 </button>
-
-
 
 </form>
 
-
-
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+// 1. TANGKAP NOMBOR UPLINE DARI LINK
+    const urlParams = new URLSearchParams(window.location.search);
+    const referralCode = urlParams.get('ref');
 
+    if (referralCode) {
+        const inputUpline = document.getElementById('upline');
+        if (inputUpline) {
+            inputUpline.value = referralCode;
+            // Pilihan: Kunci kotak supaya rekrut tak boleh padam nombor AQC awak
+            inputUpline.readOnly = true;
+            inputUpline.classList.add('bg-gray-100', 'cursor-not-allowed', 'text-gray-500');
+        }
+    }
+  
+// 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
+import { db, auth } from './firebase.js';
+
+// 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
 import {
-getAuth,
-onAuthStateChanged,
-signOut
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    onAuthStateChanged,
+    createUserWithEmailAndPassword,  
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+// 3. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
 import {
-getFirestore,
-doc,
-getDoc,
-getDocs,
-collection,
-updateDoc,
-query  
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";  
+    doc,
+    getDoc,
+    getDocs,
+    collection,
+    updateDoc,
+    setDoc,
+    query, 
+    where
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig = {
+// FIX 1: Tambah fungsi formatRM supaya tidak ReferenceError
+      const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2 });
 
-apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
-authDomain: "alqawthar-mywaris.firebaseapp.com",
-projectId: "alqawthar-mywaris",
-storageBucket: "alqawthar-mywaris.firebasestorage.app",
-messagingSenderId: "3498810778",
-appId: "1:3498810778:web:ee36e0fe42f76698046e23"
+      // Ambil compensation dari Firestore
+      const compensationSnap = await getDoc(
+        doc(db, "settings", "compensation")
+      );
 
-};
+      // FIX 2 & 3: Semak kewujudan dokumen & gunakan nama field yang betul (consultantRegistrationFee)
+      const compensation = compensationSnap.exists() ? compensationSnap.data() : {};
+      const registrationFee = compensation.consultantRegistrationFee || compensation.consultantRegistration || 0;
 
-const app =
-initializeApp(firebaseConfig);
+      document.getElementById("registrationFeeText").innerHTML =
+        `Pendaftaran Konsultan (RM${formatRM(registrationFee)})`;
 
-const auth =
-getAuth(app);
-
-const db =
-getFirestore(app);
-
+      document.getElementById("registerButton").innerHTML =
+        `Daftar Akaun`;
+  
 // CHECK LOGIN
-onAuthStateChanged(auth,(user)=>{
-
-if(!user){
-
-window.location.href =
-"login.html";
-
-return;
-
-}
-
+onAuthStateChanged(auth, (user) => {
+    // Jika pengguna sudah log masuk & sudah ada pendaftaran, boleh bawa terus ke dashboard/payment
+    if (user) {
+        console.log("User sedia ada:", user.uid);
+    }
+    // Jika (!user), BIARKAN SAHAJA pengguna mengisi borang pendaftaran baharu ini.
 });
   
-document
-.getElementById("consultantForm")
-.addEventListener("submit", async(e)=>{
+document.getElementById("consultantForm").addEventListener("submit", async(e)=>{
+    e.preventDefault();
 
-e.preventDefault();
+    // Buang semakan `if(!auth.currentUser)` lama yang menyekat pendaftaran
 
-if(!auth.currentUser){
+    // --- MULA KOD PENGESAHAN UPLINE ---
+    const uplineInput = document.getElementById("upline").value.trim();
+    let finalUpline = "";
 
-alert(
-"Sila login dahulu"
-);
+    if (uplineInput) {
+        finalUpline = uplineInput.toUpperCase();
+        
+        const uplineQ = query(
+            collection(db, "consultants"), 
+            where("consultantNo", "==", finalUpline)
+        );
+        const uplineSnap = await getDocs(uplineQ);
 
-return;
+        if (uplineSnap.empty) {
+            alert("Kod Upline (" + finalUpline + ") tidak wujud! Sila semak semula ejaan.");
+            return; 
+        }
+    } 
+    // --- TAMAT KOD PENGESAHAN UPLINE ---
 
-}
-  
-await updateDoc(
-doc(
-db,
-"users",
-auth.currentUser.uid
-),
-{
+    const btn = document.getElementById("registerButton");
+    const originalBtnText = btn.innerHTML;
+    btn.innerHTML = "Memproses Pendaftaran...";
+    btn.disabled = true;
 
-nama:
-document.getElementById("nama").value,
+    try {
+        const email = document.getElementById("email").value.trim();
+        // Guna No IC sebagai Katalaluan Asas (Password) Pendaftaran jika tiada medan Katalaluan
+        const password = document.getElementById("ic").value.trim(); 
 
-ic:
-document.getElementById("ic").value,
+        let user = auth.currentUser;
 
-telefon:
-document.getElementById("telefon").value,
+        // Jika akaun Auth belum wujud, cipta akaun baharu secara automatik
+        if (!user) {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            user = userCredential.user;
+        }
 
-email:
-document.getElementById("email").value,
+        // --- TANGKAP NILAI CHECKBOX DI SINI (SEBELUM SETDOC) ---
+        const pdpaAgreed = document.getElementById("agentPdpaConsent").checked;
 
-bankName:
-document.getElementById("bankName").value,
+        // Simpan pendaftaran ke Firestore
+        await setDoc(doc(db, "consultants", user.uid), {
+            uid: user.uid,
+            nama: document.getElementById("nama").value,
+            ic: document.getElementById("ic").value,
+            telefon: document.getElementById("telefon").value,
+            email: email,
+            bankName: document.getElementById("bankName").value,
+            bankAccount: document.getElementById("bankAccount").value,
+            alamat: document.getElementById("alamat").value,
+            postcode: document.getElementById("postcode").value,
+            city: document.getElementById("city").value,
+            state: document.getElementById("state").value,
+            
+            upline: finalUpline, 
 
-bankAccount:
-document.getElementById("bankAccount").value,
+            // --- MASUKKAN OBJEK CONSENT DI SINI ---
+            consent: {
+                pdpaAgreed: pdpaAgreed,
+                confidentialityAgreed: true, // Automatik setuju sebab wajib
+                agreedAt: new Date().toISOString(),
+                version: "1.0"
+            },
+            
+            consultantLevel: "AQC",
+            consultantPaymentStatus: "pending",
+            createdAt: new Date()
+        });
 
-alamat:
-document.getElementById("alamat").value,
+       
+        // Update role di collection users
+        await setDoc(doc(db, "users", user.uid), {
+            role: "consultant"
+        }, { merge: true });
 
-state:
-document.getElementById("state").value,
+        // Pergi ke halaman bayaran
+        window.location.href = "consultant-payment.html";
 
-upline:
-document.getElementById("upline").value || "",
-
-consultantLevel:
-"AQC",
-
-consultantPaymentStatus:
-"pending"
-
-}
-);
-
-window.location.href =
-"consultant-payment.html";
-
+    } catch (error) {
+        console.error(error);
+        alert("Ralat semasa pendaftaran: " + error.message);
+        btn.innerHTML = originalBtnText;
+        btn.disabled = false;
+    }
 });
 
 </script>
