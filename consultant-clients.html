@@ -44,8 +44,8 @@
                     <th class="p-3 text-left">No Ahli</th>
                     <th class="p-3 text-left">Nama</th>
                     <th class="p-3 text-left">Telefon</th>
-                    <th class="p-3 text-left">Sales (Dari Lejer)</th>
-                    <th class="p-3 text-left">Komisen (Dari Lejer)</th>
+                    <th class="p-3 text-left">Sales</th>
+                    <th class="p-3 text-left">Komisen</th>
                     <th class="p-3 text-left">Tarikh Tamat</th>
                     <th class="p-3 text-center">Status Ahli</th>
                     <th class="p-3 text-center">Workflow</th>
@@ -78,7 +78,7 @@ onAuthStateChanged(auth, async(user)=>{
     const consultantData = consultantSnap.data();
     const consultantNo = consultantData.consultantNo;
 
-    // --- 1. TARIK DATA SETTINGS UNTUK FALLBACK REKOD LAMA ---
+    // --- 1. TARIK DATA SETTINGS (UNTUK FALLBACK JIKA REKOD LAMA TIADA RESIT) ---
     const compSnap = await getDoc(doc(db, "settings", "compensation"));
     const comp = compSnap.exists() ? compSnap.data() : {};
 
@@ -99,46 +99,41 @@ onAuthStateChanged(auth, async(user)=>{
     else if(lvl === "AQC-UM") commissionRate = Number(comp.commissionAQCUM || 40);
     else if(lvl === "MGAM") commissionRate = Number(comp.commissionMGAM || 45);
 
-    // --- 2. TARIK DATA DARI LEJER ---
-    const ledgerClientMap = {};
-    let exactTotalSales = 0;
-    let exactTotalCommission = 0;
-
-    const ledgerQ = query(collection(db, "ledger"), where("consultantNo", "==", consultantNo));
-    const ledgerSnap = await getDocs(ledgerQ);
-    
-    ledgerSnap.forEach(d => {
-        const rekod = d.data();
-        
-        // 1. Tambah Jumlah Keseluruhan (Berada di luar if supaya total tetap naik walaupun tiada ID Klien)
-        if (String(rekod.accountCode) === "1000") {
-            exactTotalSales += Number(rekod.debit || 0);
-        }
-        if (String(rekod.accountCode) === "2000" && Number(rekod.credit || 0) > 0) {
-            exactTotalCommission += Number(rekod.credit || 0);
-        }
-
-        // 2. Cuba padankan ID pelanggan (Bergantung kepada cara skrip payment save ke lejer)
-        const possibleUid = rekod.clientUid || rekod.userId || rekod.uid;
-        
-        if (possibleUid) {
-            if (!ledgerClientMap[possibleUid]) {
-                ledgerClientMap[possibleUid] = { sales: 0, commission: 0 };
-            }
-            if (String(rekod.accountCode) === "1000") {
-                ledgerClientMap[possibleUid].sales += Number(rekod.debit || 0);
-            }
-            if (String(rekod.accountCode) === "2000" && Number(rekod.credit || 0) > 0) {
-                ledgerClientMap[possibleUid].commission += Number(rekod.credit || 0);
-            }
+    // --- 2. TARIK DATA DARI PAYMENT VOUCHERS (Untuk Jualan Sebenar Kekal) ---
+    const paymentClientMap = {};
+    const paymentQ = query(collection(db, "paymentVouchers"), where("consultantNo", "==", consultantNo), where("status", "==", "PAID"));
+    const paymentSnap = await getDocs(paymentQ);
+    paymentSnap.forEach(d => {
+        const p = d.data();
+        const uid = p.uid || p.userId || p.clientUid;
+        if (uid) {
+            if (!paymentClientMap[uid]) paymentClientMap[uid] = 0;
+            paymentClientMap[uid] += Number(p.amount || 0);
         }
     });
 
-    // --- 3. BINA JADUAL PELANGGAN ---
+    // --- 3. TARIK DATA DARI LEJER (Untuk Komisen Sebenar Kekal) ---
+    const commissionClientMap = {};
+    const ledgerQ = query(collection(db, "ledger"), where("consultantNo", "==", consultantNo), where("accountCode", "==", "2000"));
+    const ledgerSnap = await getDocs(ledgerQ);
+    ledgerSnap.forEach(d => {
+        const rekod = d.data();
+        const uid = rekod.clientUid || rekod.userId || rekod.uid;
+        if (uid) {
+            if (!commissionClientMap[uid]) commissionClientMap[uid] = 0;
+            commissionClientMap[uid] += Number(rekod.credit || 0);
+        }
+    });
+
+    // --- 4. BINA JADUAL PELANGGAN ---
     const snap = await getDocs(collection(db,"users"));
     let html = "";
     let bil = 1;
+    
+    // Total Variables
     let totalClients = 0;
+    let sumTotalSales = 0;
+    let sumTotalCommission = 0;
   
     for (const docSnap of snap.docs){
         const client = docSnap.data();
@@ -154,12 +149,10 @@ onAuthStateChanged(auth, async(user)=>{
         let clientSales = 0;
         let commission = 0;
 
-        // Semak jika data ada di dalam Map Lejer (Rekod Baru yang lengkap)
-        if (ledgerClientMap[clientId] && (ledgerClientMap[clientId].sales > 0 || ledgerClientMap[clientId].commission > 0)) {
-            clientSales = ledgerClientMap[clientId].sales;
-            commission = ledgerClientMap[clientId].commission;
+        // AMBIL JUALAN TEPAT DARI VOUCHER (Atau fallback jika rekod lama)
+        if (paymentClientMap[clientId] && paymentClientMap[clientId] > 0) {
+            clientSales = paymentClientMap[clientId];
         } else {
-            // FALLBACK UNTUK REKOD LAMA (Jika lejer tidak mengandungi ID klien)
             if(client.wasiatPaymentStatus === "paid") clientSales += priceWasiat;
             if(client.hibahPaymentStatus === "paid") clientSales += priceHibah;
             if(client.sepencarianPaymentStatus === "paid") clientSales += priceSepencarian;
@@ -169,9 +162,18 @@ onAuthStateChanged(auth, async(user)=>{
             if(client.corporateTunggalPaymentStatus === "paid") clientSales += priceCorporateTunggal;
             if(client.corporateKongsiPaymentStatus === "paid") clientSales += priceCorporateKongsi;
             if(client.corporateZurriPaymentStatus === "paid") clientSales += priceCorporateZurri;
+        }
 
+        // AMBIL KOMISEN TEPAT DARI LEJER (Atau fallback jika rekod lama)
+        if (commissionClientMap[clientId] && commissionClientMap[clientId] > 0) {
+            commission = commissionClientMap[clientId];
+        } else {
             commission = clientSales * (commissionRate / 100);
         }
+
+        // KIRA JUMLAH BESAR UNTUK KOTAK ATAS SUPAYA 100% TALLY
+        sumTotalSales += clientSales;
+        sumTotalCommission += commission;
 
         const expiryDate = client.expiryDate ? new Date(client.expiryDate).toLocaleDateString("ms-MY") : "-";
 
@@ -254,14 +256,14 @@ onAuthStateChanged(auth, async(user)=>{
         `;
     }
 
+    // --- 5. PAPARKAN JUMLAH TEPAT KE KOTAK ATAS ---
     document.getElementById("totalClients").innerHTML = totalClients;
     
-    // PAPARAN JUMLAH TEPAT DARI LEJER (KOTAK ATAS)
-    document.getElementById("totalClientSales").innerHTML = "RM " + exactTotalSales.toLocaleString("en-US",{
+    document.getElementById("totalClientSales").innerHTML = "RM " + sumTotalSales.toLocaleString("en-US",{
         minimumFractionDigits:2, maximumFractionDigits:2
     });
 
-    document.getElementById("totalCommission").innerHTML = "RM " + exactTotalCommission.toLocaleString("en-US",{
+    document.getElementById("totalCommission").innerHTML = "RM " + sumTotalCommission.toLocaleString("en-US",{
         minimumFractionDigits:2, maximumFractionDigits:2
     });
 
@@ -272,6 +274,8 @@ onAuthStateChanged(auth, async(user)=>{
     `;
 
 });
+
 </script>
+
 </body>
 </html>
