@@ -78,56 +78,39 @@ onAuthStateChanged(auth, async(user)=>{
     const consultantData = consultantSnap.data();
     const consultantNo = consultantData.consultantNo;
 
-    // --- 1. TARIK DATA DARI LEJER & PETAKAN KEPADA NO AHLI (MEMBER NO) ---
-    // Cara ini memastikan kita dapat tarik nilai sejarah tanpa mengubahnya jika harga bertukar kelak.
-    const ledgerMap = {};
+    // --- 1. TARIK DATA KOMISEN SETTINGS (Sebagai Fallback JIKA Lejer Komisen Tiada) ---
+    const compSnap = await getDoc(doc(db, "settings", "compensation"));
+    const comp = compSnap.exists() ? compSnap.data() : {};
+
+    let commissionRate = 0;
+    const lvl = consultantData.consultantLevel;
+    if(lvl === "AQC") commissionRate = Number(comp.commissionAQC || 35);
+    else if(lvl === "AQC-AS") commissionRate = Number(comp.commissionAQCAS || 38);
+    else if(lvl === "AQC-UM") commissionRate = Number(comp.commissionAQCUM || 40);
+    else if(lvl === "MGAM") commissionRate = Number(comp.commissionMGAM || 45);
+
+    // --- 2. TARIK SEMUA DATA LEJER KE DALAM MEMORI ---
     const ledgerSnap = await getDocs(collection(db, "ledger"));
+    const ledgerRecords = [];
     
     ledgerSnap.forEach(d => {
-        const rekod = d.data();
-        
-        // Cuba dapatkan No Ahli dari transactionGroup (Atau description) [Rujukan: Capture11.JPG]
-        let mNo = rekod.transactionGroup;
-        if (!mNo && rekod.description) {
-            // Kesan format AQMXXXX dalam penerangan jika transactionGroup tiada
-            const match = rekod.description.match(/AQM\d+/);
-            if (match) mNo = match[0];
-        }
-
-        if (mNo) {
-            if (!ledgerMap[mNo]) {
-                ledgerMap[mNo] = { sales: 0, commission: 0 };
-            }
-            
-            // SALES = Debit pada Akaun 1000 (Akaun Bank)
-            if (String(rekod.accountCode) === "1000") {
-                ledgerMap[mNo].sales += Number(rekod.debit || 0);
-            }
-            
-            // COMMISSION = Kredit pada Akaun 2000 (Komisen Belum Bayar)
-            if (String(rekod.accountCode) === "2000") {
-                // Pastikan komisen direkod atas nama AQC ini, atau setuju secara lalai jika tiada label nama konsultan di rekod
-                if (!rekod.consultantNo || rekod.consultantNo === consultantNo) {
-                    ledgerMap[mNo].commission += Number(rekod.credit || 0);
-                }
-            }
-        }
+        ledgerRecords.push({ id: d.id, ...d.data() });
     });
 
-    // --- 2. BINA JADUAL PELANGGAN ---
+    // --- 3. BINA JADUAL PELANGGAN ---
     const snap = await getDocs(collection(db,"users"));
     let html = "";
     let bil = 1;
     
-    // Pembolehubah Total untuk diletak pada kotak atas
     let totalClients = 0;
-    let sumTotalSales = 0;
+    let sumTotalSales = 0; 
     let sumTotalCommission = 0;
   
     for (const docSnap of snap.docs){
         const client = docSnap.data();
+        const clientId = docSnap.id;
         
-        // Penapisan Prospek & Pelanggan milik konsultan sahaja
+        // Penapisan: Hanya pelanggan di bawah seliaan konsultan ini
         if(client.role !== "customer" || (client.referral || "").trim() !== consultantNo){
             continue;
         }
@@ -137,14 +120,47 @@ onAuthStateChanged(auth, async(user)=>{
         let clientSales = 0;
         let commission = 0;
 
-        // AMBIL DATA DARI MAP LEJER (Berdasarkan No Ahli / MemberNo klien)
-        // TIADA LAGI FALLBACK MENGGUNAKAN HARGA DARI "SETTINGS"
-        if (client.memberNo && ledgerMap[client.memberNo]) {
-            clientSales = ledgerMap[client.memberNo].sales;
-            commission = ledgerMap[client.memberNo].commission;
+        const mNo = client.memberNo ? client.memberNo.toUpperCase() : null;
+        const cName = client.nama ? client.nama.toLowerCase() : null;
+
+        // --- 4. PADANAN LEJER AGRESIF (Cari menggunakan UID, Member No, atau Nama) ---
+        ledgerRecords.forEach(rekod => {
+            let isMatch = false;
+            const desc = rekod.description ? rekod.description.toLowerCase() : "";
+            const tGroup = rekod.transactionGroup ? rekod.transactionGroup.toUpperCase() : "";
+            
+            // A. Cuba padankan dengan UID
+            if (rekod.clientUid === clientId || rekod.userId === clientId || rekod.uid === clientId || rekod.customerId === clientId) {
+                isMatch = true;
+            }
+            // B. Jika UID tiada, cuba padankan menggunakan No Ahli (AQM...)
+            else if (mNo && (tGroup === mNo || rekod.memberNo === mNo || desc.includes(mNo.toLowerCase()))) {
+                isMatch = true;
+            }
+            // C. Jika kedua-duanya tiada, padankan menggunakan Nama Klien
+            else if (cName && desc.includes(cName)) {
+                isMatch = true;
+            }
+
+            if (isMatch) {
+                // Jualan = Debit pada Akaun 1000 (Bank)
+                if (String(rekod.accountCode) === "1000") {
+                    clientSales += Number(rekod.debit || 0);
+                }
+                // Komisen = Kredit pada Akaun 2000 (Kita buang syarat check consultantNo di sini)
+                if (String(rekod.accountCode) === "2000") {
+                    commission += Number(rekod.credit || 0);
+                }
+            }
+        });
+
+        // 5. PENYELARASAN KOMISEN (Bagi rekod lama yang tiada Akaun 2000)
+        // Jika Lejer tiada rekod komisen, kita kira berdasarkan nilai Jualan Lejer * Komisen Semasa
+        if (commission === 0 && clientSales > 0) {
+            commission = clientSales * (commissionRate / 100);
         }
 
-        // KIRA JUMLAH BESAR UNTUK KOTAK ATAS (Gerenti Tally dengan Jadual)
+        // Kumpul untuk kotak atas (Gerenti Tally dengan jadual)
         sumTotalSales += clientSales;
         sumTotalCommission += commission;
 
@@ -229,7 +245,7 @@ onAuthStateChanged(auth, async(user)=>{
         `;
     }
 
-    // --- 3. PAPARKAN JUMLAH TEPAT KE KOTAK ATAS ---
+    // --- 6. PAPARKAN JUMLAH TEPAT KE KOTAK ATAS (100% Selari dengan Jadual) ---
     document.getElementById("totalClients").innerHTML = totalClients;
     
     document.getElementById("totalClientSales").innerHTML = "RM " + sumTotalSales.toLocaleString("en-US",{
@@ -247,6 +263,8 @@ onAuthStateChanged(auth, async(user)=>{
     `;
 
 });
+
 </script>
+
 </body>
 </html>
