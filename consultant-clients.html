@@ -78,18 +78,7 @@ onAuthStateChanged(auth, async(user)=>{
     const consultantData = consultantSnap.data();
     const consultantNo = consultantData.consultantNo;
 
-    // --- 1. TARIK DATA KOMISEN SETTINGS (Sebagai Fallback JIKA Lejer Komisen Tiada) ---
-    const compSnap = await getDoc(doc(db, "settings", "compensation"));
-    const comp = compSnap.exists() ? compSnap.data() : {};
-
-    let commissionRate = 0;
-    const lvl = consultantData.consultantLevel;
-    if(lvl === "AQC") commissionRate = Number(comp.commissionAQC || 35);
-    else if(lvl === "AQC-AS") commissionRate = Number(comp.commissionAQCAS || 38);
-    else if(lvl === "AQC-UM") commissionRate = Number(comp.commissionAQCUM || 40);
-    else if(lvl === "MGAM") commissionRate = Number(comp.commissionMGAM || 45);
-
-    // --- 2. TARIK SEMUA DATA LEJER KE DALAM MEMORI ---
+    // --- 1. TARIK SEMUA DATA LEJER KE DALAM MEMORI ---
     const ledgerSnap = await getDocs(collection(db, "ledger"));
     const ledgerRecords = [];
     
@@ -97,7 +86,7 @@ onAuthStateChanged(auth, async(user)=>{
         ledgerRecords.push({ id: d.id, ...d.data() });
     });
 
-    // --- 3. BINA JADUAL PELANGGAN ---
+    // --- 2. BINA JADUAL PELANGGAN ---
     const snap = await getDocs(collection(db,"users"));
     let html = "";
     let bil = 1;
@@ -121,24 +110,21 @@ onAuthStateChanged(auth, async(user)=>{
         let commission = 0;
 
         const mNo = client.memberNo ? client.memberNo.toUpperCase() : null;
-        const cName = client.nama ? client.nama.toLowerCase() : null;
 
-        // --- 4. PADANAN LEJER AGRESIF (Cari menggunakan UID, Member No, atau Nama) ---
+        // --- 3. PADANAN LEJER SANGAT KETAT (STRICT MATCHING) ---
+        // Menghalang komisen perunding (nama sama) tersedut ke baris klien prospek
         ledgerRecords.forEach(rekod => {
             let isMatch = false;
-            const desc = rekod.description ? rekod.description.toLowerCase() : "";
-            const tGroup = rekod.transactionGroup ? rekod.transactionGroup.toUpperCase() : "";
+            const tGroup = rekod.transactionGroup ? String(rekod.transactionGroup).trim().toUpperCase() : "";
+            const rClientUid = rekod.clientUid || rekod.userId || rekod.uid || rekod.customerId || "";
+            const rMemNo = rekod.memberNo ? String(rekod.memberNo).toUpperCase() : "";
             
-            // A. Cuba padankan dengan UID
-            if (rekod.clientUid === clientId || rekod.userId === clientId || rekod.uid === clientId || rekod.customerId === clientId) {
+            // A. Padan menggunakan UID secara mutlak
+            if (rClientUid === clientId || tGroup === clientId.toUpperCase()) {
                 isMatch = true;
             }
-            // B. Jika UID tiada, cuba padankan menggunakan No Ahli (AQM...)
-            else if (mNo && (tGroup === mNo || rekod.memberNo === mNo || desc.includes(mNo.toLowerCase()))) {
-                isMatch = true;
-            }
-            // C. Jika kedua-duanya tiada, padankan menggunakan Nama Klien
-            else if (cName && desc.includes(cName)) {
+            // B. Padan menggunakan No Ahli (AQM...) jika UID tiada
+            else if (mNo && (tGroup === mNo || rMemNo === mNo)) {
                 isMatch = true;
             }
 
@@ -147,20 +133,19 @@ onAuthStateChanged(auth, async(user)=>{
                 if (String(rekod.accountCode) === "1000") {
                     clientSales += Number(rekod.debit || 0);
                 }
-                // Komisen = Kredit pada Akaun 2000 (Kita buang syarat check consultantNo di sini)
+                // Komisen = Kredit pada Akaun 2000
                 if (String(rekod.accountCode) === "2000") {
                     commission += Number(rekod.credit || 0);
                 }
             }
         });
 
-        // 5. PENYELARASAN KOMISEN (Bagi rekod lama yang tiada Akaun 2000)
-        // Jika Lejer tiada rekod komisen, kita kira berdasarkan nilai Jualan Lejer * Komisen Semasa
-        if (commission === 0 && clientSales > 0) {
-            commission = clientSales * (commissionRate / 100);
+        // 4. BLOCKER MUTLAK: Jika jualan = 0, komisen WAJIB 0
+        if (clientSales <= 0) {
+            commission = 0;
         }
 
-        // Kumpul untuk kotak atas (Gerenti Tally dengan jadual)
+        // Kumpul untuk kotak atas (Gerenti Tally dengan jadual 100%)
         sumTotalSales += clientSales;
         sumTotalCommission += commission;
 
@@ -245,7 +230,7 @@ onAuthStateChanged(auth, async(user)=>{
         `;
     }
 
-    // --- 6. PAPARKAN JUMLAH TEPAT KE KOTAK ATAS (100% Selari dengan Jadual) ---
+    // --- 5. PAPARKAN JUMLAH TEPAT KE KOTAK ATAS (100% Selari dengan Jadual) ---
     document.getElementById("totalClients").innerHTML = totalClients;
     
     document.getElementById("totalClientSales").innerHTML = "RM " + sumTotalSales.toLocaleString("en-US",{
