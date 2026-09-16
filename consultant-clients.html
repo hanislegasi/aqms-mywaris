@@ -44,8 +44,8 @@
                     <th class="p-3 text-left">No Ahli</th>
                     <th class="p-3 text-left">Nama</th>
                     <th class="p-3 text-left">Telefon</th>
-                    <th class="p-3 text-left">Sales</th>
-                    <th class="p-3 text-left">Komisen</th>
+                    <th class="p-3 text-left">Sales (Dari Lejer)</th>
+                    <th class="p-3 text-left">Komisen (Dari Lejer)</th>
                     <th class="p-3 text-left">Tarikh Tamat</th>
                     <th class="p-3 text-center">Status Ahli</th>
                     <th class="p-3 text-center">Workflow</th>
@@ -76,75 +76,64 @@ onAuthStateChanged(auth, async(user)=>{
 
     const consultantSnap = await getDoc(doc(db, "consultants", user.uid));
     const consultantData = consultantSnap.data();
-  
     const consultantNo = consultantData.consultantNo;
 
-    // --- 1. TARIK DATA SETTINGS & LEJER ---
-    const compSnap = await getDoc(doc(db, "settings", "compensation"));
-    const comp = compSnap.exists() ? compSnap.data() : {};
-
-    const priceWasiat = Number(comp.wasiatPrice || 350);
-    const priceHibah = Number(comp.hibahPrice || 2500);
-    const priceSepencarian = Number(comp.sepencarianPrice || 800);
-    const priceMawaris = Number(comp.mawarisPrice || 3000);
-    
-    const priceCorporate = Number(comp.corporatePrice || 6000);
-    const priceCorporateTunggal = Number(comp.corporateTunggalPrice || 1500);
-    const priceCorporateKongsi = Number(comp.corporateKongsiPrice || 3000);
-    const priceCorporateZurri = Number(comp.corporateZurriPrice || 1000);
-
-    let commissionRate = 0;
-    const lvl = consultantData.consultantLevel;
-    if(lvl === "AQC") commissionRate = Number(comp.commissionAQC || 35);
-    else if(lvl === "AQC-AS") commissionRate = Number(comp.commissionAQCAS || 38);
-    else if(lvl === "AQC-UM") commissionRate = Number(comp.commissionAQCUM || 40);
-    else if(lvl === "MGAM") commissionRate = Number(comp.commissionMGAM || 45);
-
-    // Tarik komisen keseluruhan yang tepat dari Lejer
+    // --- 1. TARIK DATA DARI LEJER (Sales & Komisen Kekal) ---
+    // Simpan data lejer dalam bentuk map berasaskan ID Klien (clientUid)
+    // supaya kita boleh match dengan setiap klien di bawah
+    const ledgerClientMap = {};
+    let exactTotalSales = 0;
     let exactTotalCommission = 0;
-    const ledgerQ = query(collection(db, "ledger"), where("consultantNo", "==", consultantNo), where("accountCode", "==", "2000"));
+
+    const ledgerQ = query(collection(db, "ledger"), where("consultantNo", "==", consultantNo));
     const ledgerSnap = await getDocs(ledgerQ);
+    
     ledgerSnap.forEach(d => {
-        exactTotalCommission += Number(d.data().credit || 0);
+        const rekod = d.data();
+        const clientUid = rekod.clientUid; // Pastikan data lejer ada catat clientUid
+        
+        if (clientUid) {
+            if (!ledgerClientMap[clientUid]) {
+                ledgerClientMap[clientUid] = { sales: 0, commission: 0 };
+            }
+
+            // Jika kod akaun "1000" (Jualan/Akaun Terima)
+            if (String(rekod.accountCode) === "1000") {
+                const jualan = Number(rekod.debit || 0);
+                ledgerClientMap[clientUid].sales += jualan;
+                exactTotalSales += jualan;
+            }
+
+            // Jika kod akaun "2000" (Komisen Belum Bayar)
+            if (String(rekod.accountCode) === "2000") {
+                const komisen = Number(rekod.credit || 0);
+                ledgerClientMap[clientUid].commission += komisen;
+                exactTotalCommission += komisen;
+            }
+        }
     });
     // -------------------------------------------------
 
     const snap = await getDocs(collection(db,"users"));
     let html = "";
     let bil = 1;
-
     let totalClients = 0;
-    let totalClientSales = 0;
-
   
     for (const docSnap of snap.docs){
         const client = docSnap.data();
-      
+        const clientId = docSnap.id;
+        
         // SYARAT BARU: Benarkan klien yang belum ada memberNo (Prospek) masuk senarai
         if(client.role !== "customer" || (client.referral || "").trim() !== consultantNo){
             continue;
         }
 
-        let clientSales = 0;
-        let commission = 0;
-
-        // GUNA HARGA DARI SETTINGS
-        if(client.wasiatPaymentStatus === "paid") clientSales += priceWasiat;
-        if(client.hibahPaymentStatus === "paid") clientSales += priceHibah;
-        if(client.sepencarianPaymentStatus === "paid") clientSales += priceSepencarian;
-        if(client.mawarisPaymentStatus === "paid") clientSales += priceMawaris;
-        
-        if(client.corporatePaymentStatus === "paid") clientSales += priceCorporate;
-        if(client.corporateTunggalPaymentStatus === "paid") clientSales += priceCorporateTunggal;
-        if(client.corporateKongsiPaymentStatus === "paid") clientSales += priceCorporateKongsi;
-        if(client.corporateZurriPaymentStatus === "paid") clientSales += priceCorporateZurri;
-
-        // Komisen paparan jadual (Anggaran kasar ikut level terkini)
-        commission = clientSales * (commissionRate / 100);
-
         totalClients++;
-        totalClientSales += clientSales;
-      
+        
+        // GUNA DATA DARI LEJER (Lebih tepat, tidak terjejas jika harga berubah)
+        const clientSales = ledgerClientMap[clientId] ? ledgerClientMap[clientId].sales : 0;
+        const commission = ledgerClientMap[clientId] ? ledgerClientMap[clientId].commission : 0;
+
         const expiryDate = client.expiryDate ? new Date(client.expiryDate).toLocaleDateString("ms-MY") : "-";
 
         // Tambah Modul Korporat Baharu Untuk Semakan Workflow
@@ -228,7 +217,7 @@ onAuthStateChanged(auth, async(user)=>{
 
     document.getElementById("totalClients").innerHTML = totalClients;
     
-    document.getElementById("totalClientSales").innerHTML = "RM " + totalClientSales.toLocaleString("en-US",{
+    document.getElementById("totalClientSales").innerHTML = "RM " + exactTotalSales.toLocaleString("en-US",{
         minimumFractionDigits:2, maximumFractionDigits:2
     });
 
