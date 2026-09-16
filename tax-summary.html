@@ -58,7 +58,7 @@
                 <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Jumlah Komisen Terkumpul</p>
                 <h2 id="totalCommission" class="text-3xl font-bold text-[#153638]">Memuatkan...</h2>
             </div>
-            <!-- BUTANG VIEW (Bukan terus muat turun) -->
+            <!-- BUTANG VIEW -->
             <button id="viewCp58Btn" class="bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-6 py-3 rounded-xl font-semibold shadow-md flex items-center gap-2 pointer-events-none opacity-50">
                 <span id="btnIcon">👁️</span> <span id="btnText">Lihat CP58</span>
             </button>
@@ -172,7 +172,7 @@
                     </table>
                 </div>
 
-                <!-- PENGESAHAN (Auto-Generated Signature) -->
+                <!-- PENGESAHAN -->
                 <div style="font-size: 12px;">
                     <div style="background-color: #d1d5db; padding: 5px; font-weight: bold; margin-bottom: 10px; border: 1px solid #000;">BAHAGIAN C : PENGESAHAN SYARIKAT</div>
                     <p style="margin-bottom: 40px;">Saya mengesahkan bahawa butir-butir yang dinyatakan di atas adalah benar dan betul berdasarkan rekod kewangan syarikat bagi tahun taksiran berkenaan.</p>
@@ -189,7 +189,6 @@
                         </div>
                     </div>
                     
-                    <!-- NOTA LHDN UNTUK SYSTEM GENERATED -->
                     <p style="margin-top: 50px; font-size: 11px; font-style: italic; color: #555; text-align: center; border-top: 1px dashed #ccc; padding-top: 10px;">
                         Nota: Borang ini dijana secara automatik oleh sistem dan mematuhi spesifikasi LHDNM. Tiada tandatangan fizikal diperlukan.
                     </p>
@@ -198,7 +197,7 @@
             </div>
         </div>
 
-        <!-- Footer Modal (Butang Aksi) -->
+        <!-- Footer Modal -->
         <div class="bg-white border-t px-6 py-4 flex flex-col-reverse sm:flex-row justify-end gap-3 z-10 shadow-sm">
             <button id="closeModalBtnBottom" class="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold transition">
                 Tutup
@@ -219,7 +218,7 @@
     let currentUser = null;
     let consultantNo = null;
     let totalAnnualIncome = 0;
-    let cachedData = {}; // Cache data untuk dimasukkan masa preview
+    let cachedData = {}; 
     let generatedFilename = "CP58.pdf";
 
     onAuthStateChanged(auth, async (user) => {
@@ -229,18 +228,18 @@
         }
         currentUser = user;
         
-        // Tarik semua data yang diperlukan serentak (Users, Consultants & Admin Settings)
-        const [userSnap, consultantSnap, adminSnap] = await Promise.all([
+        // Tarik data serentak: pengguna, perunding dan tetapan "company"
+        const [userSnap, consultantSnap, companySnap] = await Promise.all([
             getDoc(doc(db, "users", user.uid)),
             getDoc(doc(db, "consultants", user.uid)),
-            getDoc(doc(db, "settings", "admin"))
+            getDoc(doc(db, "settings", "company")) // <--- DIKEMASKINI: rujuk dokumen "company"
         ]);
         
         const userData = userSnap.exists() ? userSnap.data() : {};
         const consultantData = consultantSnap.exists() ? consultantSnap.data() : {};
-        const adminData = adminSnap.exists() ? adminSnap.data() : {};
+        const companyData = companySnap.exists() ? companySnap.data() : {};
 
-        // Pengurusan Alamat - Menarik terus dari data "consultants"
+        // Pengurusan Alamat
         let arrAlamat = [];
         const alamatUtama = consultantData.alamat || userData.alamat || userData.alamat1;
         if(alamatUtama) arrAlamat.push(alamatUtama);
@@ -256,14 +255,15 @@
 
         const alamatPenuh = arrAlamat.length > 0 ? arrAlamat.join(", ") : "Tidak Dikemaskini";
 
+        // Kemas kini pemetaan data mengikut struktur Firebase
         cachedData = {
             nama: consultantData.nama || userData.nama || "-",
             ic: consultantData.ic || userData.ic || "-",
             taxNo: consultantData.taxNo || userData.taxNo || "-",
             alamat: alamatPenuh,
-            namaSyarikat: adminData.namaSyarikat || "AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.",
-            noSyarikat: adminData.noPendaftaran || "-",
-            noMajikanE: adminData.noMajikanE || "-" 
+            namaSyarikat: companyData.companyName || "AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.", // Dari Firebase (companyName)
+            noSyarikat: companyData.registrationNo || "-", // Dari Firebase (registrationNo)
+            noMajikanE: companyData.employerNo || "-" // Sedia untuk guna bila field employerNo ditambah kelak
         };
 
         if (consultantSnap.exists()) {
@@ -284,7 +284,6 @@
         document.getElementById("totalCommission").innerHTML = "Mengira...";
 
         try {
-            // Kita cari dalam ledger menggunakan method JS filtering untuk elak isu composite index
             const ledgerQ = query(collection(db, "ledger"), where("consultantNo", "==", consultantNo));
             const ledgerSnap = await getDocs(ledgerQ);
 
@@ -308,7 +307,6 @@
             document.getElementById("totalCommission").innerHTML = `RM ${totalAnnualIncome.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
             
             if (totalAnnualIncome > 0) {
-                // Aktifkan butang lihat jika ada pendapatan
                 btn.classList.remove("pointer-events-none", "opacity-50");
             } else {
                 document.getElementById("totalCommission").innerHTML = "Tiada Rekod Pendapatan";
@@ -339,13 +337,13 @@
         const amountStr = totalAnnualIncome.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         const todayStr = new Date().toLocaleDateString("ms-MY");
 
-        // Masukkan Data Syarikat (Dari Settings)
+        // Masukkan Data Syarikat 
         document.getElementById("pdfCompName").innerText = cachedData.namaSyarikat;
         document.getElementById("pdfCompNameFooter").innerText = cachedData.namaSyarikat;
         document.getElementById("pdfCompRegNo").innerText = cachedData.noSyarikat;
         document.getElementById("pdfCompENo").innerText = cachedData.noMajikanE;
 
-        // Masukkan Data Ejen (Dari User/Consultant Profile)
+        // Masukkan Data Ejen
         document.getElementById("pdfYear").innerText = selectedYear;
         document.getElementById("pdfAgentName").innerText = cachedData.nama.toUpperCase();
         document.getElementById("pdfAgentIc").innerText = cachedData.ic;
@@ -365,7 +363,7 @@
         modal.classList.add("flex");
     });
 
-    // FUNGSI MUAT TURUN PDF (Di dalam modal)
+    // FUNGSI MUAT TURUN PDF
     document.getElementById("actualDownloadBtn").addEventListener("click", async () => {
         const btn = document.getElementById("actualDownloadBtn");
         const icon = document.getElementById("actualDownloadIcon");
