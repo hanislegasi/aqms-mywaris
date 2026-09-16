@@ -64,7 +64,7 @@
   
 <script type="module">
 import { db, auth } from './firebase.js';
-import { collection, getDocs, doc, getDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 onAuthStateChanged(auth, async(user)=>{
@@ -74,33 +74,60 @@ onAuthStateChanged(auth, async(user)=>{
         return;
     }
 
-    // 1. Tarik Data Consultant
     const consultantSnap = await getDoc(doc(db, "consultants", user.uid));
     const consultantData = consultantSnap.data();
     const consultantNo = consultantData.consultantNo;
 
-    // 2. Tarik SEMUA rekod Lejer ke dalam memori 
-    // (Ini menjamin kita jumpa rekod Jualan walaupun tiada consultantNo direkod pada Akaun 1000)
+    // --- 1. TARIK DATA DARI LEJER & PETAKAN KEPADA NO AHLI (MEMBER NO) ---
+    // Cara ini memastikan kita dapat tarik nilai sejarah tanpa mengubahnya jika harga bertukar kelak.
+    const ledgerMap = {};
     const ledgerSnap = await getDocs(collection(db, "ledger"));
-    const ledgerRecords = [];
+    
     ledgerSnap.forEach(d => {
-        ledgerRecords.push({ id: d.id, ...d.data() });
+        const rekod = d.data();
+        
+        // Cuba dapatkan No Ahli dari transactionGroup (Atau description) [Rujukan: Capture11.JPG]
+        let mNo = rekod.transactionGroup;
+        if (!mNo && rekod.description) {
+            // Kesan format AQMXXXX dalam penerangan jika transactionGroup tiada
+            const match = rekod.description.match(/AQM\d+/);
+            if (match) mNo = match[0];
+        }
+
+        if (mNo) {
+            if (!ledgerMap[mNo]) {
+                ledgerMap[mNo] = { sales: 0, commission: 0 };
+            }
+            
+            // SALES = Debit pada Akaun 1000 (Akaun Bank)
+            if (String(rekod.accountCode) === "1000") {
+                ledgerMap[mNo].sales += Number(rekod.debit || 0);
+            }
+            
+            // COMMISSION = Kredit pada Akaun 2000 (Komisen Belum Bayar)
+            if (String(rekod.accountCode) === "2000") {
+                // Pastikan komisen direkod atas nama AQC ini, atau setuju secara lalai jika tiada label nama konsultan di rekod
+                if (!rekod.consultantNo || rekod.consultantNo === consultantNo) {
+                    ledgerMap[mNo].commission += Number(rekod.credit || 0);
+                }
+            }
+        }
     });
 
-    // 3. Tarik senarai pelanggan dari Users
+    // --- 2. BINA JADUAL PELANGGAN ---
     const snap = await getDocs(collection(db,"users"));
-    
     let html = "";
     let bil = 1;
+    
+    // Pembolehubah Total untuk diletak pada kotak atas
     let totalClients = 0;
     let sumTotalSales = 0;
     let sumTotalCommission = 0;
   
     for (const docSnap of snap.docs){
         const client = docSnap.data();
-        const clientId = docSnap.id;
         
-        // Penapisan: Hanya pelanggan milik konsultan ini
+        // Penapisan Prospek & Pelanggan milik konsultan sahaja
         if(client.role !== "customer" || (client.referral || "").trim() !== consultantNo){
             continue;
         }
@@ -110,30 +137,14 @@ onAuthStateChanged(auth, async(user)=>{
         let clientSales = 0;
         let commission = 0;
 
-        // 4. PADANAN LEJER AGRESIF (Tiada lagi 'fallback' ke harga Settings!)
-        // Kita padankan rekod lejer berdasarkan pelbagai kemungkinan ID klien
-        ledgerRecords.forEach(rekod => {
-            const isThisClient = 
-                rekod.uid === clientId || 
-                rekod.userId === clientId || 
-                rekod.clientUid === clientId || 
-                rekod.customerId === clientId ||
-                (client.memberNo && rekod.memberNo === client.memberNo) ||
-                (client.ic && rekod.ic === client.ic);
-                
-            if (isThisClient) {
-                // Akaun 1000 = Jualan
-                if (String(rekod.accountCode) === "1000") {
-                    clientSales += Number(rekod.debit || 0);
-                }
-                // Akaun 2000 = Komisen
-                if (String(rekod.accountCode) === "2000") {
-                    commission += Number(rekod.credit || 0);
-                }
-            }
-        });
+        // AMBIL DATA DARI MAP LEJER (Berdasarkan No Ahli / MemberNo klien)
+        // TIADA LAGI FALLBACK MENGGUNAKAN HARGA DARI "SETTINGS"
+        if (client.memberNo && ledgerMap[client.memberNo]) {
+            clientSales = ledgerMap[client.memberNo].sales;
+            commission = ledgerMap[client.memberNo].commission;
+        }
 
-        // 5. Tambah ke jumlah keseluruhan (Top Cards)
+        // KIRA JUMLAH BESAR UNTUK KOTAK ATAS (Gerenti Tally dengan Jadual)
         sumTotalSales += clientSales;
         sumTotalCommission += commission;
 
@@ -218,7 +229,7 @@ onAuthStateChanged(auth, async(user)=>{
         `;
     }
 
-    // 6. PAPARKAN JUMLAH TEPAT KE KOTAK ATAS (100% Selari dengan Jadual)
+    // --- 3. PAPARKAN JUMLAH TEPAT KE KOTAK ATAS ---
     document.getElementById("totalClients").innerHTML = totalClients;
     
     document.getElementById("totalClientSales").innerHTML = "RM " + sumTotalSales.toLocaleString("en-US",{
@@ -236,8 +247,6 @@ onAuthStateChanged(auth, async(user)=>{
     `;
 
 });
-
 </script>
-
 </body>
 </html>
