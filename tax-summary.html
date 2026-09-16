@@ -32,7 +32,7 @@
         </div>
 
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6 text-sm text-blue-800">
-            <strong>Makluman:</strong> Borang CP58 ini dijana secara automatik berdasarkan rekod lejer sistem. Sila cetak atau simpan sebagai fail PDF untuk tujuan pengisytiharan cukai pendapatan anda kepada pihak Lembaga Hasil Dalam Negeri (LHDN).
+            <strong>Makluman:</strong> Borang CP58 ini dijana secara automatik berdasarkan rekod lejer sistem selaras dengan peruntukan <strong>Subseksyen 83A Akta Cukai Pendapatan 1967</strong>. Sila muat turun dan simpan untuk pengisytiharan cukai (Borang B / BE) anda.
         </div>
 
         <div class="flex justify-between items-center bg-gray-50 p-6 rounded-xl border border-gray-200">
@@ -48,74 +48,117 @@
 
 </div>
 
-<!-- TEMPLAT BORANG CP58 (TERSEMBUNYI UNTUK PROSES PDF) -->
+<!-- TEMPLAT BORANG CP58 STANDARD LHDN -->
 <div id="cp58Template" class="hidden">
-    <div style="width: 210mm; min-height: 297mm; padding: 25mm; background: white; font-family: 'Arial', sans-serif; color: #000; line-height: 1.5; box-sizing: border-box; margin:0 auto;">
+    <div style="width: 210mm; min-height: 297mm; padding: 20mm; background: white; font-family: 'Arial', sans-serif; color: #000; line-height: 1.5; box-sizing: border-box; margin:0 auto;">
         
         <!-- HEADER LHDN -->
-        <div style="text-align: right; font-weight: bold; font-size: 16px; margin-bottom: 20px;">
+        <div style="text-align: right; font-weight: bold; font-size: 18px; margin-bottom: 10px;">
             C.P. 58
         </div>
         <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px;">
-            <h1 style="margin: 0; font-size: 18px; text-transform: uppercase;">LEMBAGA HASIL DALAM NEGERI MALAYSIA</h1>
-            <h2 style="margin: 5px 0 0 0; font-size: 14px; text-transform: uppercase;">PENYATA BAYARAN INSENTIF KEPADA EJEN / PENGEDAR / PENGEDAR SAHAM</h2>
-            <p style="margin: 5px 0 0 0; font-size: 14px;">Bagi Tahun Berakhir 31 Disember <span id="pdfYear">-</span></p>
+            <h1 style="margin: 0; font-size: 16px; font-weight:bold;">LEMBAGA HASIL DALAM NEGERI MALAYSIA</h1>
+            <h2 style="margin: 5px 0 0 0; font-size: 14px; font-weight:bold;">PENYATA BAYARAN MONETARI DAN BUKAN MONETARI KEPADA EJEN, PENGEDAR ATAU PENGEDAR SAHAM</h2>
+            <p style="margin: 5px 0 0 0; font-size: 13px;">(Seksyen 83A Akta Cukai Pendapatan 1967)</p>
+            <p style="margin: 5px 0 0 0; font-size: 14px; font-weight:bold;">BAGI TAHUN BERAKHIR 31 DISEMBER <span id="pdfYear">-</span></p>
         </div>
 
         <!-- MAKLUMAT SYARIKAT -->
-        <div style="margin-bottom: 20px; font-size: 13px;">
-            <div style="background-color: #f0f0f0; padding: 5px; font-weight: bold; margin-bottom: 10px;">A. MAKLUMAT SYARIKAT PEMBAYAR</div>
-            <table style="width: 100%; border-collapse: collapse;">
-                <tr><td style="width: 30%; padding: 4px 0;">Nama Syarikat:</td><td><strong>AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</strong></td></tr>
-                <tr><td style="padding: 4px 0;">No. Pendaftaran Perniagaan:</td><td>123456-X</td></tr>
-                <tr><td style="padding: 4px 0;">No. Majikan (E):</td><td>E 12345678</td></tr>
+        <div style="margin-bottom: 15px; font-size: 12px;">
+            <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
+                <tr style="background-color: #d1d5db; font-weight: bold;">
+                    <td colspan="2" style="border: 1px solid #000; padding: 6px;">BAHAGIAN A : MAKLUMAT SYARIKAT PEMBAYAR</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #000; padding: 6px; width: 35%;">1. Nama Syarikat</td>
+                    <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #000; padding: 6px;">2. No. Majikan (E)</td>
+                    <td style="border: 1px solid #000; padding: 6px;">E 12345678</td> <!-- Anda boleh tukar E No syarikat di sini -->
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #000; padding: 6px;">3. No. Pendaftaran Perniagaan</td>
+                    <td style="border: 1px solid #000; padding: 6px;">123456-X</td> <!-- Anda boleh tukar No SSM di sini -->
+                </tr>
             </table>
         </div>
 
         <!-- MAKLUMAT EJEN -->
-        <div style="margin-bottom: 20px; font-size: 13px;">
-            <div style="background-color: #f0f0f0; padding: 5px; font-weight: bold; margin-bottom: 10px;">B. MAKLUMAT PENERIMA BAYARAN (EJEN)</div>
-            <table style="width: 100%; border-collapse: collapse;">
-                <tr><td style="width: 30%; padding: 4px 0;">Nama Penuh:</td><td><strong id="pdfAgentName">-</strong></td></tr>
-                <tr><td style="padding: 4px 0;">No. Kad Pengenalan:</td><td><span id="pdfAgentIc">-</span></td></tr>
-                <tr><td style="padding: 4px 0;">No. Rujukan Ejen:</td><td><span id="pdfAgentNo">-</span></td></tr>
+        <div style="margin-bottom: 15px; font-size: 12px;">
+            <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
+                <tr style="background-color: #d1d5db; font-weight: bold;">
+                    <td colspan="2" style="border: 1px solid #000; padding: 6px;">BAHAGIAN B : MAKLUMAT EJEN / PENGEDAR</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #000; padding: 6px; width: 35%;">1. Nama Penuh</td>
+                    <td style="border: 1px solid #000; padding: 6px;"><strong id="pdfAgentName">-</strong></td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #000; padding: 6px;">2. No. Kad Pengenalan Baru</td>
+                    <td style="border: 1px solid #000; padding: 6px;" id="pdfAgentIc">-</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #000; padding: 6px;">3. No. Cukai Pendapatan (SG/OG)</td>
+                    <td style="border: 1px solid #000; padding: 6px;" id="pdfAgentTaxNo">-</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #000; padding: 6px;">4. Alamat Surat Menyurat</td>
+                    <td style="border: 1px solid #000; padding: 6px;" id="pdfAgentAddress">-</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #000; padding: 6px;">5. No. Rujukan Ejen</td>
+                    <td style="border: 1px solid #000; padding: 6px;" id="pdfAgentNo">-</td>
+                </tr>
             </table>
         </div>
 
         <!-- BUTIRAN PENDAPATAN -->
-        <div style="margin-bottom: 40px; font-size: 13px;">
-            <div style="background-color: #f0f0f0; padding: 5px; font-weight: bold; margin-bottom: 10px;">C. BUTIRAN BAYARAN INSENTIF</div>
+        <div style="margin-bottom: 30px; font-size: 12px;">
             <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
-                <tr style="background-color: #e0e0e0;">
-                    <th style="border: 1px solid #000; padding: 8px; text-align: left; width: 70%;">JENIS BAYARAN</th>
-                    <th style="border: 1px solid #000; padding: 8px; text-align: right; width: 30%;">JUMLAH (RM)</th>
+                <tr style="background-color: #d1d5db; font-weight: bold; text-align: center;">
+                    <td style="border: 1px solid #000; padding: 6px; width: 10%;">BIL.</td>
+                    <td style="border: 1px solid #000; padding: 6px; width: 60%;">JENIS BAYARAN INSENTIF</td>
+                    <td style="border: 1px solid #000; padding: 6px; width: 30%;">JUMLAH (RM)</td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid #000; padding: 8px;">1. Komisen / Bonus / Elaun</td>
-                    <td style="border: 1px solid #000; padding: 8px; text-align: right;" id="pdfAmountVal">-</td>
+                    <td style="border: 1px solid #000; padding: 6px; text-align: center;">1</td>
+                    <td style="border: 1px solid #000; padding: 6px;">Komisen Pemasaran / <em>Override</em> (Kewangan)</td>
+                    <td style="border: 1px solid #000; padding: 6px; text-align: right;" id="pdfAmountVal">-</td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid #000; padding: 8px;">2. Insentif Bukan Kewangan (Pakej Percutian/Barangan)</td>
-                    <td style="border: 1px solid #000; padding: 8px; text-align: right;">0.00</td>
+                    <td style="border: 1px solid #000; padding: 6px; text-align: center;">2</td>
+                    <td style="border: 1px solid #000; padding: 6px;">Insentif Bukan Kewangan (Contoh: Percutian, Kenderaan)</td>
+                    <td style="border: 1px solid #000; padding: 6px; text-align: right;">0.00</td>
                 </tr>
-                <tr>
-                    <td style="border: 1px solid #000; padding: 8px; font-weight: bold;">JUMLAH KESELURUHAN PENDAPATAN</td>
-                    <td style="border: 1px solid #000; padding: 8px; text-align: right; font-weight: bold;" id="pdfTotalVal">-</td>
+                <tr style="background-color: #f3f4f6; font-weight: bold;">
+                    <td colspan="2" style="border: 1px solid #000; padding: 8px; text-align: right;">JUMLAH KESELURUHAN PENDAPATAN :</td>
+                    <td style="border: 1px solid #000; padding: 8px; text-align: right;" id="pdfTotalVal">-</td>
                 </tr>
             </table>
         </div>
 
-        <!-- PENGESAHAN -->
-        <div style="font-size: 13px;">
-            <p><strong>D. PENGESAHAN SYARIKAT</strong></p>
-            <p>Saya mengesahkan bahawa butir-butir yang dinyatakan di atas adalah benar dan betul berdasarkan rekod kewangan syarikat.</p>
-            <div style="margin-top: 50px;">
-                <p style="margin: 0;">_________________________________________</p>
-                <p style="margin: 5px 0 0 0; font-weight: bold;">PENGURUSAN KEWANGAN</p>
-                <p style="margin: 0;">Al-Qawthar Mawaris Synergy Sdn. Bhd.</p>
-                <p style="margin: 0;">Tarikh: <span id="pdfPrintDate">-</span></p>
+        <!-- PENGESAHAN (Auto-Generated Signature) -->
+        <div style="font-size: 12px;">
+            <div style="background-color: #d1d5db; padding: 5px; font-weight: bold; margin-bottom: 10px; border: 1px solid #000;">BAHAGIAN C : PENGESAHAN SYARIKAT</div>
+            <p style="margin-bottom: 40px;">Saya mengesahkan bahawa butir-butir yang dinyatakan di atas adalah benar dan betul berdasarkan rekod kewangan syarikat bagi tahun taksiran berkenaan.</p>
+            
+            <div style="display: flex; justify-content: space-between;">
+                <div style="width: 50%;">
+                    <p style="margin: 0; font-weight:bold;">Disahkan Oleh:</p>
+                    <p style="margin: 30px 0 0 0;">...................................................................</p>
+                    <p style="margin: 5px 0 0 0; font-weight: bold;">JABATAN KEWANGAN</p>
+                    <p style="margin: 0;">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</p>
+                </div>
+                <div style="width: 40%; padding-top:15px;">
+                    <p style="margin: 0;">Tarikh Cetakan: <strong id="pdfPrintDate">-</strong></p>
+                </div>
             </div>
-            <p style="margin-top: 30px; font-size: 11px; font-style: italic; color: #666; text-align: center;">Borang ini dijana secara automatik oleh sistem pengurusan AQMS dan tidak memerlukan tandatangan fizikal.</p>
+            
+            <!-- NOTA LHDN UNTUK SYSTEM GENERATED -->
+            <p style="margin-top: 50px; font-size: 11px; font-style: italic; color: #555; text-align: center; border-top: 1px dashed #ccc; padding-top: 10px;">
+                Nota: Borang ini dijana secara automatik oleh sistem dan mematuhi spesifikasi LHDNM. Tiada tandatangan fizikal diperlukan.
+            </p>
         </div>
 
     </div>
@@ -143,7 +186,9 @@
         
         cachedUserData = {
             nama: userSnap.exists() ? userSnap.data().nama : "-",
-            ic: userSnap.exists() ? userSnap.data().ic : "-"
+            ic: userSnap.exists() ? userSnap.data().ic : "-",
+            alamat: userSnap.exists() ? [userSnap.data().alamat1, userSnap.data().poskod, userSnap.data().bandar, userSnap.data().negeri].filter(Boolean).join(", ") : "Tidak Dikemaskini",
+            taxNo: userSnap.exists() && userSnap.data().taxNo ? userSnap.data().taxNo : "Tiada Maklumat" // Jika ada data taxNo di database
         };
 
         if (consultantSnap.exists()) {
@@ -165,14 +210,22 @@
         document.getElementById("totalCommission").innerHTML = "Mengira...";
 
         try {
-            const ledgerQ = query(collection(db, "ledger"), where("consultantNo", "==", consultantNo), where("accountCode", "==", "2000"));
+            // Kita cari dalam ledger menggunakan method JS filtering untuk elak isu index
+            const ledgerQ = query(collection(db, "ledger"), where("consultantNo", "==", consultantNo));
             const ledgerSnap = await getDocs(ledgerQ);
 
             ledgerSnap.forEach(d => {
                 const data = d.data();
-                if (data.createdAt) {
-                    const date = data.createdAt.toDate();
-                    if (date.getFullYear() == selectedYear) {
+                if (String(data.accountCode) === "2000") {
+                    let rawDate = data.createdAt || data.date; 
+                    let dateObj = null;
+
+                    if (rawDate) {
+                        if (typeof rawDate.toDate === 'function') dateObj = rawDate.toDate();
+                        else dateObj = new Date(rawDate);
+                    }
+
+                    if (dateObj && dateObj.getFullYear() == selectedYear) {
                         totalAnnualIncome += Number(data.credit || 0);
                     }
                 }
@@ -180,7 +233,6 @@
 
             document.getElementById("totalCommission").innerHTML = `RM ${totalAnnualIncome.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
             
-            // Aktifkan butang jika ada pendapatan
             if (totalAnnualIncome > 0) {
                 btn.classList.remove("pointer-events-none", "opacity-50");
             } else {
@@ -209,8 +261,10 @@
             const todayStr = new Date().toLocaleDateString("ms-MY");
 
             document.getElementById("pdfYear").innerText = selectedYear;
-            document.getElementById("pdfAgentName").innerText = cachedUserData.nama;
+            document.getElementById("pdfAgentName").innerText = cachedUserData.nama.toUpperCase();
             document.getElementById("pdfAgentIc").innerText = cachedUserData.ic;
+            document.getElementById("pdfAgentTaxNo").innerText = cachedUserData.taxNo;
+            document.getElementById("pdfAgentAddress").innerText = cachedUserData.alamat.toUpperCase();
             document.getElementById("pdfAgentNo").innerText = consultantNo;
             document.getElementById("pdfAmountVal").innerText = amountStr;
             document.getElementById("pdfTotalVal").innerText = amountStr;
@@ -222,7 +276,7 @@
 
             const options = {
                 margin: 0,
-                filename: `Borang_CP58_${consultantNo}_${selectedYear}.pdf`,
+                filename: `C.P.58_${consultantNo}_${selectedYear}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2, useCORS: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
