@@ -309,26 +309,14 @@ onAuthStateChanged(auth, async(user)=>{
     const compSnap = await getDoc(doc(db, "settings", "compensation"));
     const comp = compSnap.exists() ? compSnap.data() : {};
 
-    // Harga Kesemua Produk Termasuk Pakej Korporat Baru
-    const priceWasiat = Number(comp.wasiatPrice || 350);
-    const priceHibah = Number(comp.hibahPrice || 2500);
-    const priceSepencarian = Number(comp.sepencarianPrice || 800);
-    const priceMawaris = Number(comp.mawarisPrice || 3000);
-    const priceCorporate = Number(comp.corporatePrice || 6000);
-    const priceCorporateTunggal = Number(comp.corporateTunggalPrice || 3000);
-    const priceCorporateKongsi = Number(comp.corporateKongsiPrice || 3000);
-    const priceCorporateZurri = Number(comp.corporateZurriPrice || 1000);
-
    // 2. SEMAKAN BANNER RENEWAL & EXPIRY
     const renewalDate = data.renewalDate?.toDate ? data.renewalDate.toDate() : new Date(data.renewalDate);
     const today = new Date();
     const diffDays = Math.ceil((renewalDate - today) / (1000 * 60 * 60 * 24));
     
-    // Pembolehubah untuk kesan jika dah expired (hari kurang dari 0)
     const isExpired = diffDays < 0; 
 
     if (isExpired) {
-        // Banner Akaun Expired
         document.getElementById("renewalBanner").classList.remove("hidden");
         document.getElementById("renewalBanner").innerHTML = `
         <div class="bg-red-600 text-white border border-red-800 rounded-2xl p-5 shadow-lg">
@@ -337,7 +325,6 @@ onAuthStateChanged(auth, async(user)=>{
             <a href="consultant-renewal.html" class="inline-block mt-4 bg-white text-red-700 font-bold px-5 py-3 rounded-xl hover:bg-gray-100 transition shadow">Renew Sekarang</a>
         </div>`;
     } else if(diffDays <= 30){
-        // Banner Amaran Nak Dekat Expired
         document.getElementById("renewalBanner").classList.remove("hidden");
         document.getElementById("renewalBanner").innerHTML = `
         <div class="bg-red-50 border border-red-200 rounded-2xl p-5">
@@ -347,48 +334,85 @@ onAuthStateChanged(auth, async(user)=>{
         </div>`;
     }
 
-   // 3. KIRA JUALAN (PERSONAL) & CLIENT
-    const monthlySales = { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0 };
+   // 3. KIRA JUALAN (BERASASKAN LEJER & PRODUK DARI USERS)
     let activeClients = 0;
-    let totalSales = 0; // Jualan Peribadi
     let wasiatSales = 0, hibahSales = 0, sepencarianSales = 0, mawarisSales = 0;
     let corpPremiumSales = 0, corpTunggalSales = 0, corpKongsiSales = 0, corpZurriSales = 0;
   
+    // 3A. Tarik Kuantiti Produk & Maklumat Client dari Users
     const usersSnap = await getDocs(collection(db,"users"));
+    const myClientUids = [];
+    
     usersSnap.forEach((d)=>{
         const u = d.data();
         if(u.role==="customer" && (u.referral || "").trim()===data.consultantNo){
             activeClients++;
+            myClientUids.push(d.id);
             
-            // Jualan Biasa
-            if(u.wasiatPaymentStatus === "paid"){ wasiatSales++; totalSales += priceWasiat; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceWasiat; }
-            if(u.hibahPaymentStatus === "paid"){ hibahSales++; totalSales += priceHibah; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceHibah; }
-            if(u.sepencarianPaymentStatus === "paid"){ sepencarianSales++; totalSales += priceSepencarian; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceSepencarian; }
-            if(u.mawarisPaymentStatus === "paid"){ mawarisSales++; totalSales += priceMawaris; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceMawaris; }
+            // Jualan Biasa (Kuantiti untuk Pie Chart)
+            if(u.wasiatPaymentStatus === "paid"){ wasiatSales++; }
+            if(u.hibahPaymentStatus === "paid"){ hibahSales++; }
+            if(u.sepencarianPaymentStatus === "paid"){ sepencarianSales++; }
+            if(u.mawarisPaymentStatus === "paid"){ mawarisSales++; }
             
-            // Jualan 4 Pakej Korporat (YANG INI DAH DIBETULKAN)
-            if(u.corporatePaymentStatus === "paid"){ corpPremiumSales++; totalSales += priceCorporate; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceCorporate; }
-            if(u.corporateTunggalPaymentStatus === "paid"){ corpTunggalSales++; totalSales += priceCorporateTunggal; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceCorporateTunggal; }
-            if(u.corporateKongsiPaymentStatus === "paid"){ corpKongsiSales++; totalSales += priceCorporateKongsi; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceCorporateKongsi; }
-            if(u.corporateZurriPaymentStatus === "paid"){ corpZurriSales++; totalSales += priceCorporateZurri; const m = u.joinDate?.toDate()?.getMonth() + 1; if(m) monthlySales[m] += priceCorporateZurri; }
+            // Jualan Pakej Korporat
+            if(u.corporatePaymentStatus === "paid"){ corpPremiumSales++; }
+            if(u.corporateTunggalPaymentStatus === "paid"){ corpTunggalSales++; }
+            if(u.corporateKongsiPaymentStatus === "paid"){ corpKongsiSales++; }
+            if(u.corporateZurriPaymentStatus === "paid"){ corpZurriSales++; }
         }
     });
+
+    // 3B. Tarik Data Jualan & Komisen dari LEJER secara terus
+    let totalSales = 0; 
+    let totalCommission = 0, totalOverriding = 0, totalMyUsb = 0;
+    const monthlySales = { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0 };
+    const monthlyCommission = [0,0,0,0,0,0,0,0,0,0,0,0];
+    const monthlyOverride = [0,0,0,0,0,0,0,0,0,0,0,0];
+
+    const ledgerQ = query(collection(db, "ledger"), where("consultantNo", "==", data.consultantNo));
+    const ledgerSnap = await getDocs(ledgerQ);
+    
+    ledgerSnap.forEach((d) => {
+        const row = d.data();
+        
+        const month = row.date?.toDate()?.getMonth();
+        const m = month !== undefined ? month + 1 : null;
+
+        // Akaun 1000: Jualan / Bank (Sales)
+        if (String(row.accountCode) === "1000") {
+            const saleAmt = Number(row.debit || 0);
+            totalSales += saleAmt;
+            if(m) monthlySales[m] += saleAmt;
+        }
+        // Akaun 2000: Komisen
+        if (String(row.accountCode) === "2000" && row.credit > 0) { 
+            totalCommission += Number(row.credit); 
+            if(month !== undefined) monthlyCommission[month] += Number(row.credit);
+        }
+        // Akaun 2100: Overriding
+        if (String(row.accountCode) === "2100" && row.credit > 0) { 
+            totalOverriding += Number(row.credit); 
+            if(month !== undefined) monthlyOverride[month] += Number(row.credit);
+        }
+        // Akaun 2150: USB
+        if (String(row.accountCode) === "2150") {
+            totalMyUsb += Number(row.credit || 0) - Number(row.debit || 0);
+        }
+    });
+
+    // Tarik Paid amount dari paymentVouchers
+    let paid = 0;
+    const paymentSnap = await getDocs(query(collection(db,"paymentVouchers"), where("consultantNo","==",data.consultantNo), where("status","==","PAID")));
+    paymentSnap.forEach((d)=>{ paid += Number(d.data().amount || 0); });
+
 
     // ==========================================
     // LOGIK: KIRAAN UNTUK STATUS TIMELINE SEMUA DOKUMEN 
     // ==========================================
     let s_approved = 0, s_printed = 0, s_sent = 0, s_akad = 0, s_stamping = 0, s_handover = 0, s_received = 0;
-    const myClientUids = [];
     
-    // 1. Kumpul UID semua pelanggan di bawah konsultan ini
-    usersSnap.forEach((d) => {
-        const u = d.data();
-        if(u.role === "customer" && (u.referral || "").trim() === data.consultantNo) {
-            myClientUids.push(d.id);
-        }
-    });
-
-    // 2. Tarik semua dokumen serentak termasuk pakej korporat baru
+    // Tarik semua dokumen serentak
     const timelinePromises = [];
     myClientUids.forEach(uid => {
         timelinePromises.push(getDoc(doc(db, "users", uid, "wasiat", "maklumat")));
@@ -403,7 +427,6 @@ onAuthStateChanged(auth, async(user)=>{
 
     const timelineSnaps = await Promise.all(timelinePromises);
     
-    // 3. Kelaskan mengikut status (Semak jika docSnap exists)
     timelineSnaps.forEach(snap => {
         if(snap.exists()) {
             const stat = snap.data().status;
@@ -417,7 +440,6 @@ onAuthStateChanged(auth, async(user)=>{
         }
     });
 
-    // 4. Pengiraan Kumulatif (Dari hujung ke pangkal)
     const t_received = s_received;
     const t_handover = s_handover + t_received;
     const t_stamping = s_stamping + t_handover;
@@ -426,7 +448,6 @@ onAuthStateChanged(auth, async(user)=>{
     const t_printed = s_printed + t_sent;
     const t_approved = s_approved + t_printed;
 
-    // 5. Paparkan ke UI Timeline
     if(document.getElementById("tl_approved_done")) {
         document.getElementById("tl_approved_done").innerText = t_approved;
         document.getElementById("tl_approved_pending").innerText = s_approved;
@@ -453,7 +474,6 @@ onAuthStateChanged(auth, async(user)=>{
   
     // 4. KIRA REKRUT & OVERRIDING (TEAM SALES)
     let totalRecruits = 0;
-    // Mengira jumlah downline berdasarkan upline atau referral
     const agentsQuery = await getDocs(query(collection(db, "consultants"), where("upline", "==", data.consultantNo)));
     totalRecruits = agentsQuery.size;
 
@@ -489,18 +509,18 @@ onAuthStateChanged(auth, async(user)=>{
     if(data.consultantLevel === "AQC"){
         nextLevel = "AQC-AS";
         targetSales = promoteSalesAQCAS;
-        targetRecruits = 0; // Tiada syarat rekrut ke AS
-        currentSalesForPromote = totalSales; // AQC guna Personal Sales
+        targetRecruits = 0; 
+        currentSalesForPromote = totalSales; 
     } else if(data.consultantLevel === "AQC-AS"){
         nextLevel = "AQC-UM";
         targetSales = promoteSalesAQCUM;
         targetRecruits = promoteRecruitUM;
-        currentSalesForPromote = overridingSales; // Guna Team Sales
+        currentSalesForPromote = overridingSales; 
     } else if(data.consultantLevel === "AQC-UM"){
         nextLevel = "MGAM";
         targetSales = promoteSalesMGAM;
         targetRecruits = promoteRecruitMGAM;
-        currentSalesForPromote = overridingSales; // Guna Team Sales
+        currentSalesForPromote = overridingSales; 
     } else {
         nextLevel = "TOP LEVEL";
     }
@@ -520,10 +540,9 @@ onAuthStateChanged(auth, async(user)=>{
     } else if (data.consultantLevel === "MGAM") {
         maintainSalesReq = maintainSalesMGAM;
         maintainRecruitReq = maintainRecruitMGAM;
-        currentSalesForMaintain = overridingSales; // MGAM guna Team Sales
+        currentSalesForMaintain = overridingSales; 
     }
 
-    // Penilaian 1 Tahun dari tarikh pangkat
     const promoDate = data.promotionDate?.toDate ? data.promotionDate.toDate() : new Date();
     const daysSincePromoted = Math.floor((today - promoDate) / (1000 * 60 * 60 * 24));
     if (data.consultantLevel !== "AQC" && daysSincePromoted >= 365) {
@@ -532,33 +551,7 @@ onAuthStateChanged(auth, async(user)=>{
         }
     }
 
-    // 8. KIRAAN KEWANGAN (LEDGER, COMMISSION, USB)
-    let totalCommission = 0, totalOverriding = 0, totalMyUsb = 0, paid = 0;
-    const monthlyCommission = [0,0,0,0,0,0,0,0,0,0,0,0];
-    const monthlyOverride = [0,0,0,0,0,0,0,0,0,0,0,0];
-
-    const paymentSnap = await getDocs(query(collection(db,"paymentVouchers"), where("consultantNo","==",data.consultantNo), where("status","==","PAID")));
-    paymentSnap.forEach((d)=>{ paid += Number(d.data().amount || 0); });
-
-    const ledgerSnap = await getDocs(collection(db,"ledger"));
-    ledgerSnap.forEach((d)=>{
-        const row = d.data();
-        if(row.consultantNo === data.consultantNo){
-            const month = row.date?.toDate()?.getMonth();
-            if(row.accountCode==="2000" && row.credit > 0){ 
-                totalCommission += Number(row.credit); 
-                if(month !== undefined) monthlyCommission[month]+=Number(row.credit);
-            }
-            if(row.accountCode==="2100" && row.credit > 0){ 
-                totalOverriding += Number(row.credit); 
-                if(month !== undefined) monthlyOverride[month]+=Number(row.credit);
-            }
-            if(row.accountCode==="2150"){
-                totalMyUsb += Number(row.credit || 0) - Number(row.debit || 0);
-            }
-        }
-    });
-
+    // 8. KIRAAN KEWANGAN 
     const earned = totalCommission + totalOverriding + totalMyUsb;
     const outstanding = earned - paid;
 
@@ -579,7 +572,7 @@ onAuthStateChanged(auth, async(user)=>{
             requestedLevel: nextLevel,
             promotionRequestDate: new Date()
         });
-        data.promotionRequest = true; // Update local state
+        data.promotionRequest = true; 
     }
 
     // 11. PAPARAN UI (CARDS, PROFILE, DLL)
@@ -676,7 +669,6 @@ onAuthStateChanged(auth, async(user)=>{
             labels: ["Wasiat", "Hibah", "Sepencarian", "Mawaris", "Korporat-Premium", "Korporat-Sole", "Korporat-P'ship", "Korporat-Zurri"],
             datasets: [{
                 data: [wasiatSales, hibahSales, sepencarianSales, mawarisSales, corpPremiumSales, corpTunggalSales, corpKongsiSales, corpZurriSales],
-                // 8 Warna berbeza supaya tak pening lalat
                 backgroundColor: ["#3B82F6", "#F43F5E", "#F59E0B", "#FACC15", "#10B981", "#14B8A6", "#8B5CF6", "#84CC16"]
             }]
         },
@@ -726,7 +718,6 @@ onAuthStateChanged(auth, async(user)=>{
 
     // 13. BUTANG NAVIGASI
     if (isExpired) {
-        // KUNCI BUTANG JIKA EXPIRED
         const buttonsToDisable = [
             "clientsBtn", "overridingBtn", "careerBtn", 
             "marketingBtn", "copyReferralAqmBtn", "copyReferralAqcBtn", "introducerBtn"
@@ -757,12 +748,10 @@ onAuthStateChanged(auth, async(user)=>{
             statementBtnHtml.classList.add("bg-gray-400", "cursor-not-allowed");
         }
         
-        // Butang SAHAJA yang dibenarkan klik jika expired (Kini termasuk CPD)
         document.getElementById("renewalBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-renewal.html"; });
         document.getElementById("trainingBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-training.html"; });
         
     } else {
-        // LOGIK KLIK MACAM BIASA JIKA BELUM EXPIRED
         document.getElementById("clientsBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-clients.html"; });
         document.getElementById("careerBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-career.html"; });
         document.getElementById("overridingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-overriding.html"; });
@@ -770,13 +759,10 @@ onAuthStateChanged(auth, async(user)=>{
         document.getElementById("trainingBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-training.html"; });
         document.getElementById("marketingBtn")?.addEventListener("click",()=>{ window.location.href = "consultant-marketing.html"; });
         document.getElementById("claimsBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-claims.html"; });
-        // FUNGSI KLIK BUTANG BARU: myIntroducer
         document.getElementById("introducerBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-introducer.html"; })
        
-        // Fungsi Copy Link AQM (Pelanggan)
         document.getElementById("copyReferralAqmBtn").addEventListener("click", async()=>{
             try{
-                // Link bawa ke register.html (Pendaftaran Pelanggan)
                 await navigator.clipboard.writeText(window.location.origin + window.location.pathname.replace("consultant-dashboard.html", "register.html") + "?ref=" + consultantData.consultantNo);
                 const btn = document.getElementById("copyReferralAqmBtn");
                 btn.innerHTML = "✓ Copied AQM";
@@ -784,10 +770,8 @@ onAuthStateChanged(auth, async(user)=>{
             }catch(err){ alert("Gagal copy link"); }
         });
 
-        // Fungsi Copy Link AQC (Rekrut Konsultan)
         document.getElementById("copyReferralAqcBtn").addEventListener("click", async()=>{
             try{
-                // NOTA: Sila pastikan nama fail pendaftaran AQC anda betul (contoh: register-aqc.html)
                 await navigator.clipboard.writeText(window.location.origin + window.location.pathname.replace("consultant-dashboard.html", "consultant-registration.html") + "?ref=" + consultantData.consultantNo);
                 const btn = document.getElementById("copyReferralAqcBtn");
                 btn.innerHTML = "✓ Copied AQC";
@@ -796,7 +780,6 @@ onAuthStateChanged(auth, async(user)=>{
         });
     }
 
-    // Butang Profil & Logout sentiasa aktif
     document.getElementById("editProfileBtn")?.addEventListener("click", () => { window.location.href = "consultant-profile-edit.html"; });
     document.getElementById("profileBtn")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.remove("hidden"); });
     document.getElementById("closeProfile")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.add("hidden"); });
