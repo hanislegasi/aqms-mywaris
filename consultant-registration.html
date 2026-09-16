@@ -1,399 +1,258 @@
 <!DOCTYPE html>
 <html lang="ms">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Tax Summary (CP58) | MyWaris</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style> 
-        body { font-family: 'Inter', sans-serif; } 
-        
-        /* Modal Animation */
-        .modal-enter { animation: fadeIn 0.2s ease-out forwards; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
 
-        /* Responsive A4 Preview wrapper */
-        .a4-preview-wrapper {
-            background-color: #e5e7eb;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            overflow-x: auto;
-        }
-    </style>
-    <link rel="stylesheet" href="style.css">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Pendaftaran Konsultan
+</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
 </head>
 
-<body class="bg-gray-100 min-h-screen">
+<body
+class="bg-gray-100 min-h-screen flex items-center justify-center p-5"
+style="font-family: Inter, sans-serif;">
+  
+<div
+class="bg-white w-full max-w-xl p-8 rounded-3xl shadow-xl">
 
-<div class="p-5">
+<h1
+class="text-3xl font-bold text-[#153638] mb-2">
 
-    <a href="my-statement.html" class="inline-block bg-gray-200 hover:bg-gray-300 transition px-5 py-3 rounded-xl mb-6 font-semibold text-gray-700">
-        ← Kembali
-    </a>
+Al-Qawthar Consultant
 
-    <div class="bg-white rounded-2xl shadow p-8 mb-6 border border-gray-100">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-b pb-6 mb-6">
-            <div>
-                <h1 class="text-2xl font-bold text-[#153638]">Tax Summary (Borang CP58)</h1>
-                <p class="text-gray-500 text-sm mt-1">Penyata Bayaran Insentif (Kewajipan LHDN)</p>
-            </div>
-            <select id="cp58Year" class="border border-gray-300 rounded-xl p-3 font-semibold text-[#153638] bg-white outline-none focus:ring-2 focus:ring-[#153638]">
-                <option value="2025">Tahun Taksiran 2025</option>
-                <option value="2026" selected>Tahun Taksiran 2026</option>
-                <option value="2027">Tahun Taksiran 2027</option>
-            </select>
-        </div>
+</h1>
 
-        <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6 text-sm text-blue-800">
-            <strong>Makluman:</strong> Borang CP58 ini dijana secara automatik berdasarkan rekod lejer sistem selaras dengan peruntukan <strong>Subseksyen 83A Akta Cukai Pendapatan 1967</strong>. Sila semak dan muat turun untuk pengisytiharan cukai (Borang B / BE) anda.
-        </div>
+<p
+class="text-gray-500 mb-6">
 
-        <div class="flex justify-between items-center bg-gray-50 p-6 rounded-xl border border-gray-200">
-            <div>
-                <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Jumlah Komisen Terkumpul</p>
-                <h2 id="totalCommission" class="text-3xl font-bold text-[#153638]">Memuatkan...</h2>
-            </div>
-            <!-- BUTANG VIEW (Bukan terus muat turun) -->
-            <button id="viewCp58Btn" class="bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-6 py-3 rounded-xl font-semibold shadow-md flex items-center gap-2 pointer-events-none opacity-50">
-                <span id="btnIcon">👁️</span> <span id="btnText">Lihat CP58</span>
-            </button>
-        </div>
-    </div>
+Pendaftaran Konsultan (RM200)
 
-</div>
+</p><form id="consultantForm" class="space-y-4">
 
-<!-- MODAL PREVIEW BORANG CP58 -->
-<div id="cp58Modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4 backdrop-blur-sm">
-    <div class="bg-gray-100 w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden modal-enter">
-        
-        <!-- Header Modal -->
-        <div class="bg-white border-b px-6 py-4 flex justify-between items-center z-10 shadow-sm">
-            <div>
-                <h2 class="text-xl font-bold text-[#153638]">Pratonton Borang CP58</h2>
-                <p class="text-sm text-gray-500">Sila semak maklumat anda sebelum muat turun.</p>
-            </div>
-            <button id="closeModalBtnTop" class="text-gray-400 hover:text-red-500 font-bold text-3xl leading-none transition">&times;</button>
-        </div>
+<input
+id="nama"
+type="text"
+placeholder="Nama Penuh"
+class="w-full border p-3 rounded-xl"
+required>
 
-        <!-- Ruangan Scroll A4 -->
-        <div class="flex-1 overflow-y-auto a4-preview-wrapper shadow-inner">
-            
-            <!-- TEMPLAT BORANG CP58 STANDARD LHDN -->
-            <div id="cp58Template" class="shadow-lg" style="width: 210mm; min-height: 297mm; padding: 20mm; background: white; font-family: 'Arial', sans-serif; color: #000; line-height: 1.5; box-sizing: border-box; position: relative;">
-                
-                <!-- HEADER LHDN -->
-                <div style="text-align: right; font-weight: bold; font-size: 18px; margin-bottom: 10px;">
-                    C.P. 58
-                </div>
-                <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px;">
-                    <h1 style="margin: 0; font-size: 16px; font-weight:bold;">LEMBAGA HASIL DALAM NEGERI MALAYSIA</h1>
-                    <h2 style="margin: 5px 0 0 0; font-size: 14px; font-weight:bold;">PENYATA BAYARAN MONETARI DAN BUKAN MONETARI KEPADA EJEN, PENGEDAR ATAU PENGEDAR SAHAM</h2>
-                    <p style="margin: 5px 0 0 0; font-size: 13px;">(Seksyen 83A Akta Cukai Pendapatan 1967)</p>
-                    <p style="margin: 5px 0 0 0; font-size: 14px; font-weight:bold;">BAGI TAHUN BERAKHIR 31 DISEMBER <span id="pdfYear">-</span></p>
-                </div>
+<input
+id="ic"
+type="text"
+placeholder="No IC"
+class="w-full border p-3 rounded-xl"
+required>
 
-                <!-- MAKLUMAT SYARIKAT -->
-                <div style="margin-bottom: 15px; font-size: 12px;">
-                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
-                        <tr style="background-color: #d1d5db; font-weight: bold;">
-                            <td colspan="2" style="border: 1px solid #000; padding: 6px;">BAHAGIAN A : MAKLUMAT SYARIKAT PEMBAYAR</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #000; padding: 6px; width: 35%;">1. Nama Syarikat</td>
-                            <td style="border: 1px solid #000; padding: 6px; font-weight: bold;" id="pdfCompName">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #000; padding: 6px;">2. No. Majikan (E)</td>
-                            <td style="border: 1px solid #000; padding: 6px;" id="pdfCompENo">-</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #000; padding: 6px;">3. No. Pendaftaran Perniagaan</td>
-                            <td style="border: 1px solid #000; padding: 6px;" id="pdfCompRegNo">-</td>
-                        </tr>
-                    </table>
-                </div>
+<input
+id="telefon"
+type="text"
+placeholder="No Telefon"
+class="w-full border p-3 rounded-xl"
+required>
 
-                <!-- MAKLUMAT EJEN -->
-                <div style="margin-bottom: 15px; font-size: 12px;">
-                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
-                        <tr style="background-color: #d1d5db; font-weight: bold;">
-                            <td colspan="2" style="border: 1px solid #000; padding: 6px;">BAHAGIAN B : MAKLUMAT EJEN / PENGEDAR</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #000; padding: 6px; width: 35%;">1. Nama Penuh</td>
-                            <td style="border: 1px solid #000; padding: 6px;"><strong id="pdfAgentName">-</strong></td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #000; padding: 6px;">2. No. Kad Pengenalan Baru</td>
-                            <td style="border: 1px solid #000; padding: 6px;" id="pdfAgentIc">-</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #000; padding: 6px;">3. No. Cukai Pendapatan (SG/OG)</td>
-                            <td style="border: 1px solid #000; padding: 6px;" id="pdfAgentTaxNo">-</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #000; padding: 6px;">4. Alamat Surat Menyurat</td>
-                            <td style="border: 1px solid #000; padding: 6px;" id="pdfAgentAddress">-</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #000; padding: 6px;">5. No. Rujukan Ejen</td>
-                            <td style="border: 1px solid #000; padding: 6px;" id="pdfAgentNo">-</td>
-                        </tr>
-                    </table>
-                </div>
+<input
+id="email"
+type="email"
+placeholder="Email"
+class="w-full border p-3 rounded-xl"
+required>
 
-                <!-- BUTIRAN PENDAPATAN -->
-                <div style="margin-bottom: 30px; font-size: 12px;">
-                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
-                        <tr style="background-color: #d1d5db; font-weight: bold; text-align: center;">
-                            <td style="border: 1px solid #000; padding: 6px; width: 10%;">BIL.</td>
-                            <td style="border: 1px solid #000; padding: 6px; width: 60%;">JENIS BAYARAN INSENTIF</td>
-                            <td style="border: 1px solid #000; padding: 6px; width: 30%;">JUMLAH (RM)</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #000; padding: 6px; text-align: center;">1</td>
-                            <td style="border: 1px solid #000; padding: 6px;">Komisen Pemasaran / <em>Override</em> (Kewangan)</td>
-                            <td style="border: 1px solid #000; padding: 6px; text-align: right;" id="pdfAmountVal">-</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #000; padding: 6px; text-align: center;">2</td>
-                            <td style="border: 1px solid #000; padding: 6px;">Insentif Bukan Kewangan (Contoh: Percutian, Kenderaan)</td>
-                            <td style="border: 1px solid #000; padding: 6px; text-align: right;">0.00</td>
-                        </tr>
-                        <tr style="background-color: #f3f4f6; font-weight: bold;">
-                            <td colspan="2" style="border: 1px solid #000; padding: 8px; text-align: right;">JUMLAH KESELURUHAN PENDAPATAN :</td>
-                            <td style="border: 1px solid #000; padding: 8px; text-align: right;" id="pdfTotalVal">-</td>
-                        </tr>
-                    </table>
-                </div>
+<input
+id="bankName"
+type="text"
+placeholder="Nama Bank"
+class="w-full border p-3 rounded-xl"
+required>
 
-                <!-- PENGESAHAN (Auto-Generated Signature) -->
-                <div style="font-size: 12px;">
-                    <div style="background-color: #d1d5db; padding: 5px; font-weight: bold; margin-bottom: 10px; border: 1px solid #000;">BAHAGIAN C : PENGESAHAN SYARIKAT</div>
-                    <p style="margin-bottom: 40px;">Saya mengesahkan bahawa butir-butir yang dinyatakan di atas adalah benar dan betul berdasarkan rekod kewangan syarikat bagi tahun taksiran berkenaan.</p>
-                    
-                    <div style="display: flex; justify-content: space-between;">
-                        <div style="width: 50%;">
-                            <p style="margin: 0; font-weight:bold;">Disahkan Oleh:</p>
-                            <p style="margin: 30px 0 0 0;">...................................................................</p>
-                            <p style="margin: 5px 0 0 0; font-weight: bold;">JABATAN KEWANGAN</p>
-                            <p style="margin: 0;" id="pdfCompNameFooter">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</p>
-                        </div>
-                        <div style="width: 40%; padding-top:15px;">
-                            <p style="margin: 0;">Tarikh Cetakan: <strong id="pdfPrintDate">-</strong></p>
-                        </div>
-                    </div>
-                    
-                    <!-- NOTA LHDN UNTUK SYSTEM GENERATED -->
-                    <p style="margin-top: 50px; font-size: 11px; font-style: italic; color: #555; text-align: center; border-top: 1px dashed #ccc; padding-top: 10px;">
-                        Nota: Borang ini dijana secara automatik oleh sistem dan mematuhi spesifikasi LHDNM. Tiada tandatangan fizikal diperlukan.
-                    </p>
-                </div>
+<input
+id="bankAccount"
+type="text"
+placeholder="No Akaun Bank"
+class="w-full border p-3 rounded-xl"
+required>
+  
+<input
+id="alamat"
+type="text"
+placeholder="Alamat"
+class="w-full border p-3 rounded-xl"
+required>
 
-            </div>
-        </div>
+<select
+id="state"
+class="w-full border p-3 rounded-xl">
 
-        <!-- Footer Modal (Butang Aksi) -->
-        <div class="bg-white border-t px-6 py-4 flex flex-col-reverse sm:flex-row justify-end gap-3 z-10 shadow-sm">
-            <button id="closeModalBtnBottom" class="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold transition">
-                Tutup
-            </button>
-            <button id="actualDownloadBtn" class="w-full sm:w-auto bg-[#153638] hover:bg-[#1d4a4d] text-white px-6 py-3 rounded-xl font-semibold transition flex items-center justify-center gap-2 shadow-md">
-                <span id="actualDownloadIcon">📥</span> Muat Turun PDF
-            </button>
-        </div>
 
-    </div>
-</div>
+
+<option>Johor</option>
+<option>Kedah</option>
+<option>Kelantan</option>
+<option>Kuala Lumpur</option>
+<option>Labuan</option>
+<option>Melaka</option>
+<option>Negeri Sembilan</option>
+<option>Pahang</option>
+<option>Perak</option>
+<option>Perlis</option>
+<option>Pulau Pinang</option>
+<option>Putrjaya</option>
+<option>Sabah</option>
+<option>Sarawak</option>
+<option>Selangor</option>
+<option>Terengganu</option>
+
+</select>
+
+<input
+id="upline"
+type="text"
+placeholder="Kod Upline (AQC001)"
+class="w-full border p-3 rounded-xl">
+
+<button
+type="submit"
+class="w-full bg-[#153638] text-white p-4 rounded-xl font-bold">
+
+Daftar Konsultan (RM200)
+
+</button>
+
+</form>
 
 <script type="module">
-    import { db, auth } from './firebase.js';
-    import { doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    let currentUser = null;
-    let consultantNo = null;
-    let totalAnnualIncome = 0;
-    let cachedData = {}; // Cache data untuk dimasukkan masa preview
-    let generatedFilename = "CP58.pdf";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-    onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-            window.location.href = "login.html";
-            return;
-        }
-        currentUser = user;
-        
-        // Tarik semua data yang diperlukan serentak (Users, Consultants & Admin Settings)
-        const [userSnap, consultantSnap, adminSnap] = await Promise.all([
-            getDoc(doc(db, "users", user.uid)),
-            getDoc(doc(db, "consultants", user.uid)),
-            getDoc(doc(db, "settings", "admin"))
-        ]);
-        
-        const userData = userSnap.exists() ? userSnap.data() : {};
-        const consultantData = consultantSnap.exists() ? consultantSnap.data() : {};
-        const adminData = adminSnap.exists() ? adminSnap.data() : {};
+import {
+getAuth,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-        // Pengurusan Alamat - Menarik terus dari data "consultants"
-        let arrAlamat = [];
-        const alamatUtama = consultantData.alamat || userData.alamat || userData.alamat1;
-        if(alamatUtama) arrAlamat.push(alamatUtama);
-        
-        const poskod = consultantData.postcode || userData.poskod || "";
-        const bandar = consultantData.city || userData.bandar || "";
-        const poskodBandar = `${poskod} ${bandar}`.trim();
-        
-        if(poskodBandar) arrAlamat.push(poskodBandar);
-        
-        const negeri = consultantData.state || userData.negeri;
-        if(negeri) arrAlamat.push(negeri);
+import {
+getFirestore,
+doc,
+getDoc,
+getDocs,
+collection,
+updateDoc,
+query  
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";  
 
-        const alamatPenuh = arrAlamat.length > 0 ? arrAlamat.join(", ") : "Tidak Dikemaskini";
+const firebaseConfig = {
 
-        cachedData = {
-            nama: consultantData.nama || userData.nama || "-",
-            ic: consultantData.ic || userData.ic || "-",
-            taxNo: consultantData.taxNo || userData.taxNo || "-",
-            alamat: alamatPenuh,
-            namaSyarikat: adminData.namaSyarikat || "AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.",
-            noSyarikat: adminData.noPendaftaran || "-",
-            noMajikanE: adminData.noMajikanE || "-" 
-        };
+apiKey: "AIzaSyCR3hpOyMowg4yLMxBw3Iu3QkepGvSE0MU",
+authDomain: "alqawthar-mywaris.firebaseapp.com",
+projectId: "alqawthar-mywaris",
+storageBucket: "alqawthar-mywaris.firebasestorage.app",
+messagingSenderId: "3498810778",
+appId: "1:3498810778:web:ee36e0fe42f76698046e23"
 
-        if (consultantSnap.exists()) {
-            consultantNo = consultantSnap.data().consultantNo;
-            loadTaxData(document.getElementById("cp58Year").value);
-        }
-    });
+};
 
-    document.getElementById("cp58Year").addEventListener("change", (e) => {
-        loadTaxData(e.target.value);
-    });
+const app =
+initializeApp(firebaseConfig);
 
-    async function loadTaxData(selectedYear) {
-        totalAnnualIncome = 0;
-        const btn = document.getElementById("viewCp58Btn");
-        
-        btn.classList.add("pointer-events-none", "opacity-50");
-        document.getElementById("totalCommission").innerHTML = "Mengira...";
+const auth =
+getAuth(app);
 
-        try {
-            // Kita cari dalam ledger menggunakan method JS filtering untuk elak isu composite index
-            const ledgerQ = query(collection(db, "ledger"), where("consultantNo", "==", consultantNo));
-            const ledgerSnap = await getDocs(ledgerQ);
+const db =
+getFirestore(app);
 
-            ledgerSnap.forEach(d => {
-                const data = d.data();
-                if (String(data.accountCode) === "2000") {
-                    let rawDate = data.createdAt || data.date; 
-                    let dateObj = null;
+// CHECK LOGIN
+onAuthStateChanged(auth,(user)=>{
 
-                    if (rawDate) {
-                        if (typeof rawDate.toDate === 'function') dateObj = rawDate.toDate();
-                        else dateObj = new Date(rawDate);
-                    }
+if(!user){
 
-                    if (dateObj && dateObj.getFullYear() == selectedYear) {
-                        totalAnnualIncome += Number(data.credit || 0);
-                    }
-                }
-            });
+window.location.href =
+"login.html";
 
-            document.getElementById("totalCommission").innerHTML = `RM ${totalAnnualIncome.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            
-            if (totalAnnualIncome > 0) {
-                // Aktifkan butang lihat jika ada pendapatan
-                btn.classList.remove("pointer-events-none", "opacity-50");
-            } else {
-                document.getElementById("totalCommission").innerHTML = "Tiada Rekod Pendapatan";
-            }
+return;
 
-        } catch (error) {
-            console.error(error);
-            document.getElementById("totalCommission").innerHTML = `<span class="text-red-500">Ralat</span>`;
-        }
-    }
+}
 
-    // ELEMENT MODAL & BUTANG
-    const modal = document.getElementById("cp58Modal");
-    const closeTop = document.getElementById("closeModalBtnTop");
-    const closeBottom = document.getElementById("closeModalBtnBottom");
+});
+  
+document
+.getElementById("consultantForm")
+.addEventListener("submit", async(e)=>{
 
-    const closeModal = () => {
-        modal.classList.add("hidden");
-        modal.classList.remove("flex");
-    };
+e.preventDefault();
 
-    closeTop.addEventListener("click", closeModal);
-    closeBottom.addEventListener("click", closeModal);
+if(!auth.currentUser){
 
-    // FUNGSI BUKA PREVIEW CP58
-    document.getElementById("viewCp58Btn").addEventListener("click", () => {
-        const selectedYear = document.getElementById("cp58Year").value;
-        const amountStr = totalAnnualIncome.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        const todayStr = new Date().toLocaleDateString("ms-MY");
+alert(
+"Sila login dahulu"
+);
 
-        // Masukkan Data Syarikat (Dari Settings)
-        document.getElementById("pdfCompName").innerText = cachedData.namaSyarikat;
-        document.getElementById("pdfCompNameFooter").innerText = cachedData.namaSyarikat;
-        document.getElementById("pdfCompRegNo").innerText = cachedData.noSyarikat;
-        document.getElementById("pdfCompENo").innerText = cachedData.noMajikanE;
+return;
 
-        // Masukkan Data Ejen (Dari User/Consultant Profile)
-        document.getElementById("pdfYear").innerText = selectedYear;
-        document.getElementById("pdfAgentName").innerText = cachedData.nama.toUpperCase();
-        document.getElementById("pdfAgentIc").innerText = cachedData.ic;
-        document.getElementById("pdfAgentTaxNo").innerText = cachedData.taxNo;
-        document.getElementById("pdfAgentAddress").innerText = cachedData.alamat.toUpperCase();
-        document.getElementById("pdfAgentNo").innerText = consultantNo || "-";
-        
-        // Masukkan Kewangan
-        document.getElementById("pdfAmountVal").innerText = amountStr;
-        document.getElementById("pdfTotalVal").innerText = amountStr;
-        document.getElementById("pdfPrintDate").innerText = todayStr;
+}
+  
+await updateDoc(
+doc(
+db,
+"users",
+auth.currentUser.uid
+),
+{
 
-        generatedFilename = `C.P.58_${consultantNo}_${selectedYear}.pdf`;
+nama:
+document.getElementById("nama").value,
 
-        // Tunjukkan Modal Preview
-        modal.classList.remove("hidden");
-        modal.classList.add("flex");
-    });
+ic:
+document.getElementById("ic").value,
 
-    // FUNGSI MUAT TURUN PDF (Di dalam modal)
-    document.getElementById("actualDownloadBtn").addEventListener("click", async () => {
-        const btn = document.getElementById("actualDownloadBtn");
-        const icon = document.getElementById("actualDownloadIcon");
-        const originalContent = icon.innerHTML;
-        
-        icon.innerHTML = "⏳";
-        btn.classList.add("pointer-events-none", "opacity-70");
-        
-        const templateEl = document.getElementById("cp58Template");
+telefon:
+document.getElementById("telefon").value,
 
-        const options = {
-            margin: 0,
-            filename: generatedFilename,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
+email:
+document.getElementById("email").value,
 
-        try {
-            await html2pdf().set(options).from(templateEl).save();
-        } catch (err) {
-            console.error("Gagal menjana Borang CP58.", err);
-            alert("Ralat menjana PDF.");
-        } finally {
-            icon.innerHTML = originalContent;
-            btn.classList.remove("pointer-events-none", "opacity-70");
-        }
-    });
+bankName:
+document.getElementById("bankName").value,
+
+bankAccount:
+document.getElementById("bankAccount").value,
+
+alamat:
+document.getElementById("alamat").value,
+
+state:
+document.getElementById("state").value,
+
+upline:
+document.getElementById("upline").value || "",
+
+consultantLevel:
+"AQC",
+
+consultantPaymentStatus:
+"pending"
+
+}
+);
+
+window.location.href =
+"consultant-payment.html";
+
+});
+
 </script>
+
+</div>
+
 </body>
-</html>
+
+</html>  
