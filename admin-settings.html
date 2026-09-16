@@ -49,11 +49,16 @@ font-family: Inter, sans-serif;
                     <label class="font-medium text-sm text-gray-600 block mb-1">No. Syarikat</label>
                     <input id="registrationNo" type="text" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] focus:border-transparent outline-none transition-all">
                 </div>
+                <!-- TAMBAHAN NO MAJIKAN E -->
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">No. Majikan (E)</label>
+                    <input id="employerNo" type="text" placeholder="Cth: E 12345678" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] focus:border-transparent outline-none transition-all">
+                </div>
                 <div>
                     <label class="font-medium text-sm text-gray-600 block mb-1">Email</label>
                     <input id="companyEmail" type="email" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] focus:border-transparent outline-none transition-all">
                 </div>
-                <div>
+                <div class="md:col-span-4">
                     <label class="font-medium text-sm text-gray-600 block mb-1">Alamat</label>
                     <input id="companyAddress" type="text" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] focus:border-transparent outline-none transition-all">
                 </div>
@@ -605,6 +610,7 @@ font-family: Inter, sans-serif;
         const defaultCompanySettings = {
             companyName: "AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.",
             registrationNo: "",
+            employerNo: "",
             companyEmail: "",
             companyAddress: ""
         };
