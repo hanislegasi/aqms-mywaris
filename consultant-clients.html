@@ -77,6 +77,7 @@ onAuthStateChanged(auth, async(user)=>{
     const consultantSnap = await getDoc(doc(db, "consultants", user.uid));
     const consultantData = consultantSnap.data();
     const consultantNo = consultantData.consultantNo;
+    const consName = consultantData.nama ? consultantData.nama.toLowerCase().trim() : "";
 
     // --- 1. DAPATKAN KADAR KOMISEN SEMASA (UNTUK FALLBACK REKOD LAMA) ---
     const compSnap = await getDoc(doc(db, "settings", "compensation"));
@@ -123,36 +124,27 @@ onAuthStateChanged(auth, async(user)=>{
         const mNo = client.memberNo ? client.memberNo.toUpperCase() : null;
         const cName = client.nama ? client.nama.toLowerCase().trim() : null;
 
-        // --- 4. LOGIK PADANAN LEJER (SMART MATCHING) ---
+        // --- 4. LOGIK PADANAN LEJER (SMART & SAFE MATCHING) ---
         ledgerRecords.forEach(rekod => {
             let isMatch = false;
             const acc = String(rekod.accountCode);
             const desc = rekod.description ? rekod.description.toLowerCase() : "";
             const tGroup = rekod.transactionGroup ? String(rekod.transactionGroup).trim().toUpperCase() : "";
             const rUid = rekod.clientUid || rekod.userId || rekod.uid || rekod.customerId || "";
+            const rMemNo = rekod.memberNo ? String(rekod.memberNo).toUpperCase() : "";
 
-            // A. Padan menggunakan UID atau Transaction Group
+            // A. Padan menggunakan UID secara Mutlak (Paling Tepat)
             if (rUid === clientId || tGroup === clientId.toUpperCase()) {
-                // TRAP KESELAMATAN: Jika klien ini adalah Perunding sendiri (Test Akaun),
-                // rekod 'uid' dalam Acc 2000 merujuk kepada Perunding. Jangan match!
-                if (acc === "2000" && clientId === user.uid) {
-                    isMatch = false; 
-                } else {
-                    isMatch = true;
-                }
-            }
-            // B. Padan menggunakan No Ahli
-            if (!isMatch && mNo && (tGroup === mNo || rekod.memberNo === mNo || desc.includes(mNo.toLowerCase()))) {
                 isMatch = true;
             }
-            // C. Padan menggunakan Nama Klien (Penting untuk rekod lama)
-            if (!isMatch && cName && cName.length > 3 && desc.includes(cName)) {
-                // Elak tersilap tarik nama Perunding untuk akaun ujian
-                if (acc === "2000" && clientId === user.uid) {
-                    isMatch = false;
-                } else {
-                    isMatch = true;
-                }
+            // B. Padan menggunakan No Ahli (AQM)
+            else if (mNo && (tGroup === mNo || rMemNo === mNo || desc.includes(mNo.toLowerCase()))) {
+                isMatch = true;
+            }
+            // C. Padan menggunakan Nama Klien (Fallback untuk rekod lama)
+            // SAFETY LOCK: Jika nama klien sama sebiji dengan nama perunding, KITA HARAMKAN carian nama!
+            else if (cName && cName.length > 3 && cName !== consName && desc.includes(cName)) {
+                isMatch = true;
             }
 
             // Jika Padan, rekod jualan & komisen
@@ -162,7 +154,8 @@ onAuthStateChanged(auth, async(user)=>{
             }
         });
 
-        // 5. PENYELARASAN FALLBACK (Jika Lejer Akaun 2000 belum wujud tapi jualan ada)
+        // 5. PENYELARASAN FALLBACK (Jika Lejer Akaun 2000 belum wujud tapi Jualan ada)
+        // Ini memastikan Ali Bin Abu dan Mikey Moore dapat komisen mereka
         if (commission === 0 && clientSales > 0) {
             commission = clientSales * (commissionRate / 100);
         }
@@ -172,7 +165,7 @@ onAuthStateChanged(auth, async(user)=>{
             commission = 0;
         }
 
-        // Kumpul untuk kotak atas
+        // Kumpul untuk kotak atas (Gerenti Tally dengan jadual 100%)
         sumTotalSales += clientSales;
         sumTotalCommission += commission;
 
