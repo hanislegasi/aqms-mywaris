@@ -240,14 +240,21 @@
         const consultantData = consultantSnap.exists() ? consultantSnap.data() : {};
         const adminData = adminSnap.exists() ? adminSnap.data() : {};
 
-        // Pengurusan Alamat (Pasti ia tak jadi undefined)
+        // Pengurusan Alamat - Menarik terus dari data "consultants"
         let arrAlamat = [];
-        if(userData.alamat1) arrAlamat.push(userData.alamat1);
-        if(userData.alamat2) arrAlamat.push(userData.alamat2);
-        let poskodBandar = `${userData.poskod || ""} ${userData.bandar || ""}`.trim();
+        const alamatUtama = consultantData.alamat || userData.alamat || userData.alamat1;
+        if(alamatUtama) arrAlamat.push(alamatUtama);
+        
+        const poskod = consultantData.postcode || userData.poskod || "";
+        const bandar = consultantData.city || userData.bandar || "";
+        const poskodBandar = `${poskod} ${bandar}`.trim();
+        
         if(poskodBandar) arrAlamat.push(poskodBandar);
-        if(userData.negeri) arrAlamat.push(userData.negeri);
-        const alamatPenuh = arrAlamat.length > 0 ? arrAlamat.join(", ") : "-";
+        
+        const negeri = consultantData.state || userData.negeri;
+        if(negeri) arrAlamat.push(negeri);
+
+        const alamatPenuh = arrAlamat.length > 0 ? arrAlamat.join(", ") : "Tidak Dikemaskini";
 
         cachedData = {
             nama: consultantData.nama || userData.nama || "-",
