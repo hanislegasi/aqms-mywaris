@@ -45,7 +45,7 @@
                     <th class="p-3 text-left">Nama</th>
                     <th class="p-3 text-left">Telefon</th>
                     <th class="p-3 text-left">Sales (Lejer)</th>
-                    <th class="p-3 text-left">Komisen (Lejer)</th>
+                    <th class="p-3 text-left">Komisen (Lejer/Kiraan)</th>
                     <th class="p-3 text-left">Tarikh Tamat</th>
                     <th class="p-3 text-center">Status Ahli</th>
                     <th class="p-3 text-center">Workflow</th>
@@ -78,7 +78,18 @@ onAuthStateChanged(auth, async(user)=>{
     const consultantData = consultantSnap.data();
     const consultantNo = consultantData.consultantNo;
 
-    // --- 1. TARIK SEMUA DATA LEJER KE DALAM MEMORI ---
+    // --- 1. DAPATKAN KADAR KOMISEN SEMASA (UNTUK FALLBACK REKOD LAMA) ---
+    const compSnap = await getDoc(doc(db, "settings", "compensation"));
+    const comp = compSnap.exists() ? compSnap.data() : {};
+
+    let commissionRate = 0;
+    const lvl = consultantData.consultantLevel;
+    if(lvl === "AQC") commissionRate = Number(comp.commissionAQC || 35);
+    else if(lvl === "AQC-AS") commissionRate = Number(comp.commissionAQCAS || 38);
+    else if(lvl === "AQC-UM") commissionRate = Number(comp.commissionAQCUM || 40);
+    else if(lvl === "MGAM") commissionRate = Number(comp.commissionMGAM || 45);
+
+    // --- 2. TARIK SEMUA DATA LEJER KE DALAM MEMORI ---
     const ledgerSnap = await getDocs(collection(db, "ledger"));
     const ledgerRecords = [];
     
@@ -86,7 +97,7 @@ onAuthStateChanged(auth, async(user)=>{
         ledgerRecords.push({ id: d.id, ...d.data() });
     });
 
-    // --- 2. BINA JADUAL PELANGGAN ---
+    // --- 3. BINA JADUAL PELANGGAN ---
     const snap = await getDocs(collection(db,"users"));
     let html = "";
     let bil = 1;
@@ -110,53 +121,58 @@ onAuthStateChanged(auth, async(user)=>{
         let commission = 0;
 
         const mNo = client.memberNo ? client.memberNo.toUpperCase() : null;
-        const cName = client.nama ? client.nama.toLowerCase() : null;
+        const cName = client.nama ? client.nama.toLowerCase().trim() : null;
 
-        // --- 3. PADANAN LEJER DENGAN FILTER KESELAMATAN ---
+        // --- 4. LOGIK PADANAN LEJER (SMART MATCHING) ---
         ledgerRecords.forEach(rekod => {
             let isMatch = false;
+            const acc = String(rekod.accountCode);
             const desc = rekod.description ? rekod.description.toLowerCase() : "";
             const tGroup = rekod.transactionGroup ? String(rekod.transactionGroup).trim().toUpperCase() : "";
-            const rClientUid = rekod.clientUid || rekod.userId || rekod.uid || rekod.customerId || "";
+            const rUid = rekod.clientUid || rekod.userId || rekod.uid || rekod.customerId || "";
 
-            // A. Cuba padankan dengan UID Pelanggan
-            if (rClientUid === clientId) {
-                // FILTER KHAS: Jika klien ini adalah Perunding itu sendiri (Test Akaun)
-                // Kita tidak boleh terima Akaun 2000 bulat-bulat sebab ia akan sedut komisen klien lain.
-                if (String(rekod.accountCode) === "2000" && clientId === user.uid) {
-                    if ((cName && desc.includes(cName)) || (mNo && (tGroup === mNo || desc.includes(mNo.toLowerCase())))) {
-                        isMatch = true;
-                    }
+            // A. Padan menggunakan UID atau Transaction Group
+            if (rUid === clientId || tGroup === clientId.toUpperCase()) {
+                // TRAP KESELAMATAN: Jika klien ini adalah Perunding sendiri (Test Akaun),
+                // rekod 'uid' dalam Acc 2000 merujuk kepada Perunding. Jangan match!
+                if (acc === "2000" && clientId === user.uid) {
+                    isMatch = false; 
                 } else {
                     isMatch = true;
                 }
             }
-            // B. Jika UID tak sepadan, cari menggunakan No Ahli (AQM...)
-            else if (mNo && (tGroup === mNo || rekod.memberNo === mNo || desc.includes(mNo.toLowerCase()))) {
+            // B. Padan menggunakan No Ahli
+            if (!isMatch && mNo && (tGroup === mNo || rekod.memberNo === mNo || desc.includes(mNo.toLowerCase()))) {
                 isMatch = true;
             }
-            // C. Jika tak sepadan juga, cari menggunakan Nama Klien dalam description
-            else if (cName && desc.includes(cName)) {
-                isMatch = true;
+            // C. Padan menggunakan Nama Klien (Penting untuk rekod lama)
+            if (!isMatch && cName && cName.length > 3 && desc.includes(cName)) {
+                // Elak tersilap tarik nama Perunding untuk akaun ujian
+                if (acc === "2000" && clientId === user.uid) {
+                    isMatch = false;
+                } else {
+                    isMatch = true;
+                }
             }
 
-            // D. Jika MATCH, proses nilai Jualan & Komisen
+            // Jika Padan, rekod jualan & komisen
             if (isMatch) {
-                if (String(rekod.accountCode) === "1000") {
-                    clientSales += Number(rekod.debit || 0);
-                }
-                if (String(rekod.accountCode) === "2000") {
-                    commission += Number(rekod.credit || 0);
-                }
+                if (acc === "1000") clientSales += Number(rekod.debit || 0);
+                if (acc === "2000") commission += Number(rekod.credit || 0);
             }
         });
 
-        // 4. BLOCKER MUTLAK: Jika prospek belum beli apa-apa (Jualan RM0), komisen WAJIB RM0
+        // 5. PENYELARASAN FALLBACK (Jika Lejer Akaun 2000 belum wujud tapi jualan ada)
+        if (commission === 0 && clientSales > 0) {
+            commission = clientSales * (commissionRate / 100);
+        }
+
+        // 6. BLOK MUTLAK: Jika prospek belum beli apa-apa, komisen WAJIB RM0
         if (clientSales <= 0) {
             commission = 0;
         }
 
-        // Kumpul untuk kotak atas (Gerenti Tally 100%)
+        // Kumpul untuk kotak atas
         sumTotalSales += clientSales;
         sumTotalCommission += commission;
 
@@ -241,7 +257,7 @@ onAuthStateChanged(auth, async(user)=>{
         `;
     }
 
-    // --- 5. PAPARKAN JUMLAH TEPAT KE KOTAK ATAS ---
+    // --- 7. PAPARKAN JUMLAH TEPAT KE KOTAK ATAS ---
     document.getElementById("totalClients").innerHTML = totalClients;
     
     document.getElementById("totalClientSales").innerHTML = "RM " + sumTotalSales.toLocaleString("en-US",{
