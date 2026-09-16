@@ -110,42 +110,53 @@ onAuthStateChanged(auth, async(user)=>{
         let commission = 0;
 
         const mNo = client.memberNo ? client.memberNo.toUpperCase() : null;
+        const cName = client.nama ? client.nama.toLowerCase() : null;
 
-        // --- 3. PADANAN LEJER SANGAT KETAT (STRICT MATCHING) ---
-        // Menghalang komisen perunding (nama sama) tersedut ke baris klien prospek
+        // --- 3. PADANAN LEJER DENGAN FILTER KESELAMATAN ---
         ledgerRecords.forEach(rekod => {
             let isMatch = false;
+            const desc = rekod.description ? rekod.description.toLowerCase() : "";
             const tGroup = rekod.transactionGroup ? String(rekod.transactionGroup).trim().toUpperCase() : "";
             const rClientUid = rekod.clientUid || rekod.userId || rekod.uid || rekod.customerId || "";
-            const rMemNo = rekod.memberNo ? String(rekod.memberNo).toUpperCase() : "";
-            
-            // A. Padan menggunakan UID secara mutlak
-            if (rClientUid === clientId || tGroup === clientId.toUpperCase()) {
+
+            // A. Cuba padankan dengan UID Pelanggan
+            if (rClientUid === clientId) {
+                // FILTER KHAS: Jika klien ini adalah Perunding itu sendiri (Test Akaun)
+                // Kita tidak boleh terima Akaun 2000 bulat-bulat sebab ia akan sedut komisen klien lain.
+                if (String(rekod.accountCode) === "2000" && clientId === user.uid) {
+                    if ((cName && desc.includes(cName)) || (mNo && (tGroup === mNo || desc.includes(mNo.toLowerCase())))) {
+                        isMatch = true;
+                    }
+                } else {
+                    isMatch = true;
+                }
+            }
+            // B. Jika UID tak sepadan, cari menggunakan No Ahli (AQM...)
+            else if (mNo && (tGroup === mNo || rekod.memberNo === mNo || desc.includes(mNo.toLowerCase()))) {
                 isMatch = true;
             }
-            // B. Padan menggunakan No Ahli (AQM...) jika UID tiada
-            else if (mNo && (tGroup === mNo || rMemNo === mNo)) {
+            // C. Jika tak sepadan juga, cari menggunakan Nama Klien dalam description
+            else if (cName && desc.includes(cName)) {
                 isMatch = true;
             }
 
+            // D. Jika MATCH, proses nilai Jualan & Komisen
             if (isMatch) {
-                // Jualan = Debit pada Akaun 1000 (Bank)
                 if (String(rekod.accountCode) === "1000") {
                     clientSales += Number(rekod.debit || 0);
                 }
-                // Komisen = Kredit pada Akaun 2000
                 if (String(rekod.accountCode) === "2000") {
                     commission += Number(rekod.credit || 0);
                 }
             }
         });
 
-        // 4. BLOCKER MUTLAK: Jika jualan = 0, komisen WAJIB 0
+        // 4. BLOCKER MUTLAK: Jika prospek belum beli apa-apa (Jualan RM0), komisen WAJIB RM0
         if (clientSales <= 0) {
             commission = 0;
         }
 
-        // Kumpul untuk kotak atas (Gerenti Tally dengan jadual 100%)
+        // Kumpul untuk kotak atas (Gerenti Tally 100%)
         sumTotalSales += clientSales;
         sumTotalCommission += commission;
 
@@ -230,7 +241,7 @@ onAuthStateChanged(auth, async(user)=>{
         `;
     }
 
-    // --- 5. PAPARKAN JUMLAH TEPAT KE KOTAK ATAS (100% Selari dengan Jadual) ---
+    // --- 5. PAPARKAN JUMLAH TEPAT KE KOTAK ATAS ---
     document.getElementById("totalClients").innerHTML = totalClients;
     
     document.getElementById("totalClientSales").innerHTML = "RM " + sumTotalSales.toLocaleString("en-US",{
