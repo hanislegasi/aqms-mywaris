@@ -91,7 +91,11 @@ class="inline-block bg-gray-200 hover:bg-gray-300 px-5 py-3 rounded-xl font-semi
                             <label class="block text-sm font-medium text-gray-700 mb-1">No Telefon</label>
                             <input type="text" id="telefon" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Contoh: 0123456789">
                         </div>
-                        <div class="md:col-span-2">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">No. Cukai Pendapatan (TIN / SG / OG)</label>
+                            <input type="text" id="taxNo" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Contoh: SG 1234567890">
+                        </div>
+                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                             <input type="email" id="email" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition" placeholder="Contoh: nama@email.com">
                         </div>
@@ -174,20 +178,20 @@ class="inline-block bg-gray-200 hover:bg-gray-300 px-5 py-3 rounded-xl font-semi
     </div>
 
     <script type="module">
-       // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
-import { db, auth } from './firebase.js';
+        // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
+        import { db, auth } from './firebase.js';
 
-// 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
-import { 
-    onAuthStateChanged 
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        // 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
+        import { 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// 3. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
-import { 
-    doc, 
-    getDoc, 
-    updateDoc 
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        // 3. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
+        import { 
+            doc, 
+            getDoc, 
+            updateDoc 
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         let currentUserUid = null;
 
@@ -210,14 +214,15 @@ import {
                     document.getElementById("consultantNo").value = (data.consultantNo || "") + " (" + (data.consultantLevel || "AQC") + ")";
                     document.getElementById("ic").value = data.ic || "";
                     document.getElementById("telefon").value = data.telefon || "";
+                    document.getElementById("taxNo").value = data.taxNo || ""; // Load nombor cukai pendapatan
                     document.getElementById("email").value = data.email || "";
                     document.getElementById("bankName").value = data.bankName || "";
                     document.getElementById("bankAccount").value = data.bankAccount || "";
                     
                     // Maklumat Alamat
                     document.getElementById("alamat").value = data.alamat || "";
-                    document.getElementById("poskod").value = data.poskod || "";
-                    document.getElementById("bandar").value = data.bandar || "";
+                    document.getElementById("poskod").value = data.poskod || data.postcode || "";
+                    document.getElementById("bandar").value = data.bandar || data.city || "";
                     document.getElementById("state").value = data.state || "";
                     
                     // Sembunyikan simbol loading dan tunjukkan borang
@@ -247,12 +252,15 @@ import {
                 await updateDoc(doc(db, "consultants", currentUserUid), {
                     ic: document.getElementById("ic").value.trim(),
                     telefon: document.getElementById("telefon").value.trim(),
+                    taxNo: document.getElementById("taxNo").value.trim(), // Save nombor cukai pendapatan
                     email: document.getElementById("email").value.trim(),
                     bankName: document.getElementById("bankName").value.trim(),
                     bankAccount: document.getElementById("bankAccount").value.trim(),
                     alamat: document.getElementById("alamat").value.trim(),
                     poskod: document.getElementById("poskod").value.trim(),
+                    postcode: document.getElementById("poskod").value.trim(), // Tambahan mapping untuk structure lama
                     bandar: document.getElementById("bandar").value.trim(),
+                    city: document.getElementById("bandar").value.trim(), // Tambahan mapping untuk structure lama
                     state: document.getElementById("state").value,
                     lastUpdated: new Date()
                 });
