@@ -27,11 +27,11 @@
         </div>
         <div class="bg-white p-5 rounded-xl shadow">
             <p class="text-gray-500">Jumlah Sales</p>
-            <p id="totalClientSales" class="text-3xl font-bold text-green-600">RM0</p>
+            <p id="totalClientSales" class="text-3xl font-bold text-green-600">RM0.00</p>
         </div>
         <div class="bg-white p-5 rounded-xl shadow">
             <p class="text-gray-500">Jumlah Komisen</p>
-            <p id="totalCommission" class="text-3xl font-bold text-blue-600">RM0</p>
+            <p id="totalCommission" class="text-3xl font-bold text-blue-600">RM0.00</p>
         </div>
     </div>
   
@@ -44,8 +44,8 @@
                     <th class="p-3 text-left">No Ahli</th>
                     <th class="p-3 text-left">Nama</th>
                     <th class="p-3 text-left">Telefon</th>
-                    <th class="p-3 text-left">Sales</th>
-                    <th class="p-3 text-left">Komisen</th>
+                    <th class="p-3 text-left">Sales (Lejer)</th>
+                    <th class="p-3 text-left">Komisen (Lejer)</th>
                     <th class="p-3 text-left">Tarikh Tamat</th>
                     <th class="p-3 text-center">Status Ahli</th>
                     <th class="p-3 text-center">Workflow</th>
@@ -74,63 +74,24 @@ onAuthStateChanged(auth, async(user)=>{
         return;
     }
 
+    // 1. Tarik Data Consultant
     const consultantSnap = await getDoc(doc(db, "consultants", user.uid));
     const consultantData = consultantSnap.data();
     const consultantNo = consultantData.consultantNo;
 
-    // --- 1. TARIK DATA SETTINGS (UNTUK FALLBACK JIKA REKOD LAMA TIADA RESIT) ---
-    const compSnap = await getDoc(doc(db, "settings", "compensation"));
-    const comp = compSnap.exists() ? compSnap.data() : {};
-
-    const priceWasiat = Number(comp.wasiatPrice || 350);
-    const priceHibah = Number(comp.hibahPrice || 2500);
-    const priceSepencarian = Number(comp.sepencarianPrice || 800);
-    const priceMawaris = Number(comp.mawarisPrice || 3000);
-    
-    const priceCorporate = Number(comp.corporatePrice || 6000);
-    const priceCorporateTunggal = Number(comp.corporateTunggalPrice || 1500);
-    const priceCorporateKongsi = Number(comp.corporateKongsiPrice || 3000);
-    const priceCorporateZurri = Number(comp.corporateZurriPrice || 1000);
-
-    let commissionRate = 0;
-    const lvl = consultantData.consultantLevel;
-    if(lvl === "AQC") commissionRate = Number(comp.commissionAQC || 35);
-    else if(lvl === "AQC-AS") commissionRate = Number(comp.commissionAQCAS || 38);
-    else if(lvl === "AQC-UM") commissionRate = Number(comp.commissionAQCUM || 40);
-    else if(lvl === "MGAM") commissionRate = Number(comp.commissionMGAM || 45);
-
-    // --- 2. TARIK DATA DARI PAYMENT VOUCHERS (Untuk Jualan Sebenar Kekal) ---
-    const paymentClientMap = {};
-    const paymentQ = query(collection(db, "paymentVouchers"), where("consultantNo", "==", consultantNo), where("status", "==", "PAID"));
-    const paymentSnap = await getDocs(paymentQ);
-    paymentSnap.forEach(d => {
-        const p = d.data();
-        const uid = p.uid || p.userId || p.clientUid;
-        if (uid) {
-            if (!paymentClientMap[uid]) paymentClientMap[uid] = 0;
-            paymentClientMap[uid] += Number(p.amount || 0);
-        }
-    });
-
-    // --- 3. TARIK DATA DARI LEJER (Untuk Komisen Sebenar Kekal) ---
-    const commissionClientMap = {};
-    const ledgerQ = query(collection(db, "ledger"), where("consultantNo", "==", consultantNo), where("accountCode", "==", "2000"));
-    const ledgerSnap = await getDocs(ledgerQ);
+    // 2. Tarik SEMUA rekod Lejer ke dalam memori 
+    // (Ini menjamin kita jumpa rekod Jualan walaupun tiada consultantNo direkod pada Akaun 1000)
+    const ledgerSnap = await getDocs(collection(db, "ledger"));
+    const ledgerRecords = [];
     ledgerSnap.forEach(d => {
-        const rekod = d.data();
-        const uid = rekod.clientUid || rekod.userId || rekod.uid;
-        if (uid) {
-            if (!commissionClientMap[uid]) commissionClientMap[uid] = 0;
-            commissionClientMap[uid] += Number(rekod.credit || 0);
-        }
+        ledgerRecords.push({ id: d.id, ...d.data() });
     });
 
-    // --- 4. BINA JADUAL PELANGGAN ---
+    // 3. Tarik senarai pelanggan dari Users
     const snap = await getDocs(collection(db,"users"));
+    
     let html = "";
     let bil = 1;
-    
-    // Total Variables
     let totalClients = 0;
     let sumTotalSales = 0;
     let sumTotalCommission = 0;
@@ -139,7 +100,7 @@ onAuthStateChanged(auth, async(user)=>{
         const client = docSnap.data();
         const clientId = docSnap.id;
         
-        // Penapisan Prospek & Pelanggan milik konsultan
+        // Penapisan: Hanya pelanggan milik konsultan ini
         if(client.role !== "customer" || (client.referral || "").trim() !== consultantNo){
             continue;
         }
@@ -149,29 +110,30 @@ onAuthStateChanged(auth, async(user)=>{
         let clientSales = 0;
         let commission = 0;
 
-        // AMBIL JUALAN TEPAT DARI VOUCHER (Atau fallback jika rekod lama)
-        if (paymentClientMap[clientId] && paymentClientMap[clientId] > 0) {
-            clientSales = paymentClientMap[clientId];
-        } else {
-            if(client.wasiatPaymentStatus === "paid") clientSales += priceWasiat;
-            if(client.hibahPaymentStatus === "paid") clientSales += priceHibah;
-            if(client.sepencarianPaymentStatus === "paid") clientSales += priceSepencarian;
-            if(client.mawarisPaymentStatus === "paid") clientSales += priceMawaris;
-            
-            if(client.corporatePaymentStatus === "paid") clientSales += priceCorporate;
-            if(client.corporateTunggalPaymentStatus === "paid") clientSales += priceCorporateTunggal;
-            if(client.corporateKongsiPaymentStatus === "paid") clientSales += priceCorporateKongsi;
-            if(client.corporateZurriPaymentStatus === "paid") clientSales += priceCorporateZurri;
-        }
+        // 4. PADANAN LEJER AGRESIF (Tiada lagi 'fallback' ke harga Settings!)
+        // Kita padankan rekod lejer berdasarkan pelbagai kemungkinan ID klien
+        ledgerRecords.forEach(rekod => {
+            const isThisClient = 
+                rekod.uid === clientId || 
+                rekod.userId === clientId || 
+                rekod.clientUid === clientId || 
+                rekod.customerId === clientId ||
+                (client.memberNo && rekod.memberNo === client.memberNo) ||
+                (client.ic && rekod.ic === client.ic);
+                
+            if (isThisClient) {
+                // Akaun 1000 = Jualan
+                if (String(rekod.accountCode) === "1000") {
+                    clientSales += Number(rekod.debit || 0);
+                }
+                // Akaun 2000 = Komisen
+                if (String(rekod.accountCode) === "2000") {
+                    commission += Number(rekod.credit || 0);
+                }
+            }
+        });
 
-        // AMBIL KOMISEN TEPAT DARI LEJER (Atau fallback jika rekod lama)
-        if (commissionClientMap[clientId] && commissionClientMap[clientId] > 0) {
-            commission = commissionClientMap[clientId];
-        } else {
-            commission = clientSales * (commissionRate / 100);
-        }
-
-        // KIRA JUMLAH BESAR UNTUK KOTAK ATAS SUPAYA 100% TALLY
+        // 5. Tambah ke jumlah keseluruhan (Top Cards)
         sumTotalSales += clientSales;
         sumTotalCommission += commission;
 
@@ -256,7 +218,7 @@ onAuthStateChanged(auth, async(user)=>{
         `;
     }
 
-    // --- 5. PAPARKAN JUMLAH TEPAT KE KOTAK ATAS ---
+    // 6. PAPARKAN JUMLAH TEPAT KE KOTAK ATAS (100% Selari dengan Jadual)
     document.getElementById("totalClients").innerHTML = totalClients;
     
     document.getElementById("totalClientSales").innerHTML = "RM " + sumTotalSales.toLocaleString("en-US",{
