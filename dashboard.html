@@ -121,25 +121,19 @@ onAuthStateChanged(auth, async(user)=>{
         let commission = 0;
 
         const mNo = client.memberNo ? client.memberNo.toUpperCase() : null;
-        const cName = client.nama ? client.nama.toLowerCase() : null;
 
-        // --- 4. PADANAN LEJER AGRESIF YANG SELAMAT ---
+        // --- 4. PADANAN LEJER STRICT (Tiada carian nama) ---
         ledgerRecords.forEach(rekod => {
             let isMatch = false;
-            const desc = rekod.description ? rekod.description.toLowerCase() : "";
-            const tGroup = rekod.transactionGroup ? rekod.transactionGroup.toUpperCase() : "";
+            const tGroup = rekod.transactionGroup ? String(rekod.transactionGroup).trim().toUpperCase() : "";
+            const rClientUid = rekod.clientUid || rekod.userId || rekod.uid || rekod.customerId || "";
             
-            // A. Padan menggunakan UID (HANYA DIBENARKAN UNTUK JUALAN/AKAUN 1000)
-            // Ini menghalang komisen perunding disedut ke klien jika klien itu adalah perunding sendiri
-            if (String(rekod.accountCode) === "1000" && (rekod.clientUid === clientId || rekod.userId === clientId || rekod.uid === clientId || rekod.customerId === clientId)) {
+            // A. Padan menggunakan UID (100% Tepat)
+            if (rClientUid === clientId || tGroup === clientId.toUpperCase()) {
                 isMatch = true;
             }
-            // B. Padan menggunakan No Ahli (AQM...) dalam description atau transactionGroup
-            else if (mNo && (tGroup === mNo || rekod.memberNo === mNo || desc.includes(mNo.toLowerCase()))) {
-                isMatch = true;
-            }
-            // C. Padan menggunakan Nama Klien dalam description
-            else if (cName && desc.includes(cName)) {
+            // B. Padan menggunakan No Ahli (AQM...) jika UID tiada
+            else if (mNo && (tGroup === mNo || rekod.memberNo === mNo)) {
                 isMatch = true;
             }
 
@@ -150,10 +144,7 @@ onAuthStateChanged(auth, async(user)=>{
                 }
                 // Komisen = Kredit pada Akaun 2000
                 if (String(rekod.accountCode) === "2000") {
-                    // Pastikan komisen ini benar-benar milik konsultan yang sedang login
-                    if (!rekod.consultantNo || rekod.consultantNo === consultantNo) {
-                        commission += Number(rekod.credit || 0);
-                    }
+                    commission += Number(rekod.credit || 0);
                 }
             }
         });
@@ -163,9 +154,8 @@ onAuthStateChanged(auth, async(user)=>{
             commission = clientSales * (commissionRate / 100);
         }
 
-        // 6. SAFETY CHECK: HALANG KOMISEN HANTU KEPADA PROSPEK
-        // Jika tiada jualan (RM0.00), mustahil ada komisen. Ini menyelesaikan isu "Hasnawi".
-        if (clientSales === 0) {
+        // 6. BLOCKER MUTLAK: Jika jualan = 0, komisen WAJIB 0
+        if (clientSales <= 0) {
             commission = 0;
         }
 
