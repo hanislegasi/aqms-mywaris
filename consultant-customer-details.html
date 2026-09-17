@@ -353,7 +353,7 @@ document.getElementById("customerInfo").innerHTML = `
         </div>
     </div>
 
-    <!-- BUTANG MYINTRODUCER (BOLEH UBAH KOMISEN %) -->
+   <!-- BUTANG MYINTRODUCER (BOLEH UBAH KOMISEN %) -->
     <div class="mt-5 pt-4 border-t border-gray-100">
         <label class="text-xs text-gray-500 mb-2 font-semibold block">Tetapan myIntroducer (Komisen)</label>
         
@@ -370,9 +370,18 @@ document.getElementById("customerInfo").innerHTML = `
             </button>
         </div>
         
-        <p class="text-[10px] text-gray-400 mt-2 leading-relaxed">
-            *Tetapkan % komisen sebelum mengaktifkan. Jika ingin tukar %, nyahaktifkan dahulu.
-        </p>
+        <!-- KOTAK NOTA & AMARAN BARU DI SINI -->
+        <div class="mt-3">
+            <p class="text-[10px] text-gray-400 leading-relaxed italic">
+                *Tetapkan % komisen sebelum mengaktifkan. Jika ingin tukar %, nyahaktifkan dahulu.
+            </p>
+            <div class="bg-red-50 border-l-2 border-red-500 p-2 mt-2 rounded">
+                <p class="text-[10px] text-red-700 leading-tight">
+                    <strong>⚠️ PENEGASAN:</strong> Program myIntroducer ini adalah urusan tertutup di antara AQC dan AQM sahaja. Pihak pengurusan (AQMS) <b>tidak terlibat</b> dalam sebarang urusan janji atau tuntutan pembayaran komisen ini. AQC dituntut untuk bersikap jujur, amanah, dan bertanggungjawab.
+                </p>
+            </div>
+        </div>
+        
     </div>
 </div>
 
