@@ -312,8 +312,10 @@ files:[file]
 ){
 
 await navigator.share({
-files:[file]
-});
+  files: [file],
+  title: 'Kad Bisnes Al-Qawthar',
+  text: `Assalamualaikum! Saya ${data.nama}, Perunding Perancangan Harta Pusaka anda.\n\nSila layari pautan di bawah untuk maklumat lanjut atau pendaftaran:\nhttps://aqms.alqawthar.my/register.html?ref=${data.consultantNo}`
+  });
 
 }
 
