@@ -127,10 +127,10 @@
             <div id="aqcLetterTemplate" class="shadow-lg" style="width: 210mm; min-height: 297mm; padding: 25mm; background: white; font-family: 'Times New Roman', serif; color: #222; line-height: 1.8; box-sizing: border-box; position: relative;">
                 
                 <!-- HEADER SURAT (Tarik dari Settings) -->
-                <div style="text-align: center; border-bottom: 3px double #153638; padding-bottom: 15px; margin-bottom: 30px;">
-                    <h1 id="letterCompanyName" style="color: #153638; margin: 0; font-size: 22px; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 1px;">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</h1>
-                    <p style="margin: 5px 0 0 0; font-size: 12px; color: #555;">No. Pendaftaran: <span id="letterCompanyRegNo">123456-X</span> | E-mel: support@mywaris.com</p>
-                </div>
+<div style="text-align: center; border-bottom: 3px double #153638; padding-bottom: 15px; margin-bottom: 30px;">
+    <h1 id="letterCompanyName" style="color: #153638; margin: 0; font-size: 22px; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 1px;">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</h1>
+    <p style="margin: 5px 0 0 0; font-size: 12px; color: #555;">No. Pendaftaran: <span id="letterCompanyRegNo">123456-X</span> | E-mel: <span id="letterCompanyEmail">support@mywaris.com</span></p>
+</div>
 
                 <!-- TARIKH & RUJUKAN -->
                 <div style="display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 15px;">
@@ -243,14 +243,16 @@
             const consultantData = consultantSnap.exists() ? consultantSnap.data() : {};
             const adminData = adminSnap.exists() ? adminSnap.data() : {};
 
-            // 1. Masukkan Nama Syarikat & No Pendaftaran (Dari Settings)
-            const namaSyarikat = adminData.namaSyarikat || "AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.";
-            const noSyarikat = adminData.noPendaftaran || "123456-X";
-            
-            document.getElementById("letterCompanyName").innerText = namaSyarikat;
-            document.getElementById("letterCompanyNameBody").innerText = namaSyarikat;
-            document.getElementById("letterCompanyNameFooter").innerText = namaSyarikat;
-            document.getElementById("letterCompanyRegNo").innerText = noSyarikat;
+           // 1. Masukkan Nama Syarikat, No Pendaftaran & E-mel (Dari Settings -> company)
+const namaSyarikat = adminData.companyName || "AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.";
+const noSyarikat = adminData.registrationNo || "123456-X";
+const emailSyarikat = adminData.companyEmail || "support@mywaris.com"; 
+
+document.getElementById("letterCompanyName").innerText = namaSyarikat;
+document.getElementById("letterCompanyNameBody").innerText = namaSyarikat;
+document.getElementById("letterCompanyNameFooter").innerText = namaSyarikat;
+document.getElementById("letterCompanyRegNo").innerText = noSyarikat;
+document.getElementById("letterCompanyEmail").innerText = emailSyarikat;
 
             // 2. Masukkan Maklumat Penerima & IC
             document.getElementById("letterName").innerText = consultantData.nama || userData.nama || "-";
