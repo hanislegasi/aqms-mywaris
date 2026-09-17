@@ -236,7 +236,7 @@
             const [userSnap, consultantSnap, adminSnap] = await Promise.all([
                 getDoc(doc(db, "users", currentUser.uid)),
                 getDoc(doc(db, "consultants", currentUser.uid)),
-                getDoc(doc(db, "settings", "admin"))
+                getDoc(doc(db, "settings", "company"))
             ]);
             
             const userData = userSnap.exists() ? userSnap.data() : {};
