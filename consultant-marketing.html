@@ -93,14 +93,14 @@ doc(db,"consultants",user.uid)
 const data =
 snap.data();
 
-let roleText = "Perunding Perancangan Harta Pusaka"; // Ini jawatan default
+let roleText = "<i>Perunding Perancangan Harta Pusaka</i>"; // Ini jawatan default
 
 if (data.consultantNo === "AQC0001") {
-    roleText = "Pengarah Pembangunan Perniagaan";
+    roleText = "<i>Pengarah Pembangunan Perniagaan</i>";
 } else if (data.consultantNo === "AQC0002") {
-    roleText = "Pengarah Urusan";
+    roleText = "<i>Pengarah Urusan</i>";
 } else if (data.consultantNo === "AQC0003") {
-    roleText = "Pengarah Operasi";
+    roleText = "<i>Pengarah Operasi</i>";
 }
   
 document.getElementById(
