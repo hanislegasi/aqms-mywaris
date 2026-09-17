@@ -306,8 +306,18 @@ onAuthStateChanged(auth, async(user)=>{
     sessionStorage.setItem("consultantName", data.nama);
     sessionStorage.setItem("userUid", user.uid);
 
+    const consName = data.nama ? data.nama.toLowerCase().trim() : "";
+
     const compSnap = await getDoc(doc(db, "settings", "compensation"));
     const comp = compSnap.exists() ? compSnap.data() : {};
+    
+    // KADAR KOMISEN SEMASA (UNTUK FALLBACK REKOD LAMA)
+    let commissionRate = 0;
+    const lvl = data.consultantLevel;
+    if(lvl === "AQC") commissionRate = Number(comp.commissionAQC || 35);
+    else if(lvl === "AQC-AS") commissionRate = Number(comp.commissionAQCAS || 38);
+    else if(lvl === "AQC-UM") commissionRate = Number(comp.commissionAQCUM || 40);
+    else if(lvl === "MGAM") commissionRate = Number(comp.commissionMGAM || 45);
 
    // 2. SEMAKAN BANNER RENEWAL & EXPIRY
     const renewalDate = data.renewalDate?.toDate ? data.renewalDate.toDate() : new Date(data.renewalDate);
@@ -334,70 +344,137 @@ onAuthStateChanged(auth, async(user)=>{
         </div>`;
     }
 
-   // 3. KIRA JUALAN (BERASASKAN LEJER & PRODUK DARI USERS)
+   // 3. KIRA JUALAN (SMART MATCHING DARI LEJER)
     let activeClients = 0;
     let wasiatSales = 0, hibahSales = 0, sepencarianSales = 0, mawarisSales = 0;
     let corpPremiumSales = 0, corpTunggalSales = 0, corpKongsiSales = 0, corpZurriSales = 0;
   
-    // 3A. Tarik Kuantiti Produk & Maklumat Client dari Users
+    let totalSales = 0; 
+    let totalCommission = 0;
+    let totalOverriding = 0; 
+    let totalMyUsb = 0;
+    const monthlySales = { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0 };
+    const monthlyCommission = [0,0,0,0,0,0,0,0,0,0,0,0];
+    const monthlyOverride = [0,0,0,0,0,0,0,0,0,0,0,0];
+
+    // 3A. Tarik Semua Data Lejer
+    const ledgerSnap = await getDocs(collection(db, "ledger"));
+    const ledgerRecords = [];
+    ledgerSnap.forEach(d => ledgerRecords.push({ id: d.id, ...d.data() }));
+
+    // 3B. Proses Overriding (2100) dan USB (2150) yang memang milik consultant ini
+    ledgerRecords.forEach(row => {
+        if (row.consultantNo === data.consultantNo) {
+            const month = row.date?.toDate()?.getMonth();
+            const m = month !== undefined ? month + 1 : null;
+
+            if (String(row.accountCode) === "2100" && row.credit > 0) { 
+                totalOverriding += Number(row.credit); 
+                if (month !== undefined) monthlyOverride[month] += Number(row.credit);
+            }
+            if (String(row.accountCode) === "2150") {
+                totalMyUsb += Number(row.credit || 0) - Number(row.debit || 0);
+            }
+        }
+    });
+
+    // 3C. Proses Klien (Jualan Peribadi & Komisen)
     const usersSnap = await getDocs(collection(db,"users"));
     const myClientUids = [];
     
     usersSnap.forEach((d)=>{
         const u = d.data();
-        if(u.role==="customer" && (u.referral || "").trim()===data.consultantNo){
+        const clientId = d.id;
+        
+        if (u.role === "customer" && (u.referral || "").trim() === data.consultantNo) {
             activeClients++;
-            myClientUids.push(d.id);
+            myClientUids.push(clientId);
             
-            // Jualan Biasa (Kuantiti untuk Pie Chart)
+            // Kuantiti untuk Pie Chart
             if(u.wasiatPaymentStatus === "paid"){ wasiatSales++; }
             if(u.hibahPaymentStatus === "paid"){ hibahSales++; }
             if(u.sepencarianPaymentStatus === "paid"){ sepencarianSales++; }
             if(u.mawarisPaymentStatus === "paid"){ mawarisSales++; }
             
-            // Jualan Pakej Korporat
             if(u.corporatePaymentStatus === "paid"){ corpPremiumSales++; }
             if(u.corporateTunggalPaymentStatus === "paid"){ corpTunggalSales++; }
             if(u.corporateKongsiPaymentStatus === "paid"){ corpKongsiSales++; }
             if(u.corporateZurriPaymentStatus === "paid"){ corpZurriSales++; }
-        }
-    });
 
-    // 3B. Tarik Data Jualan & Komisen dari LEJER secara terus
-    let totalSales = 0; 
-    let totalCommission = 0, totalOverriding = 0, totalMyUsb = 0;
-    const monthlySales = { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0 };
-    const monthlyCommission = [0,0,0,0,0,0,0,0,0,0,0,0];
-    const monthlyOverride = [0,0,0,0,0,0,0,0,0,0,0,0];
+            // LOGIK PADANAN LEJER (SMART & SAFE MATCHING)
+            let clientSales = 0;
+            let commission = 0;
+            let clientMonths = { sales: {}, comm: {} };
 
-    const ledgerQ = query(collection(db, "ledger"), where("consultantNo", "==", data.consultantNo));
-    const ledgerSnap = await getDocs(ledgerQ);
-    
-    ledgerSnap.forEach((d) => {
-        const row = d.data();
-        
-        const month = row.date?.toDate()?.getMonth();
-        const m = month !== undefined ? month + 1 : null;
+            const mNo = u.memberNo ? u.memberNo.toUpperCase() : null;
+            const cName = u.nama ? u.nama.toLowerCase().trim() : null;
 
-        // Akaun 1000: Jualan / Bank (Sales)
-        if (String(row.accountCode) === "1000") {
-            const saleAmt = Number(row.debit || 0);
-            totalSales += saleAmt;
-            if(m) monthlySales[m] += saleAmt;
-        }
-        // Akaun 2000: Komisen
-        if (String(row.accountCode) === "2000" && row.credit > 0) { 
-            totalCommission += Number(row.credit); 
-            if(month !== undefined) monthlyCommission[month] += Number(row.credit);
-        }
-        // Akaun 2100: Overriding
-        if (String(row.accountCode) === "2100" && row.credit > 0) { 
-            totalOverriding += Number(row.credit); 
-            if(month !== undefined) monthlyOverride[month] += Number(row.credit);
-        }
-        // Akaun 2150: USB
-        if (String(row.accountCode) === "2150") {
-            totalMyUsb += Number(row.credit || 0) - Number(row.debit || 0);
+            ledgerRecords.forEach(rekod => {
+                let isMatch = false;
+                const acc = String(rekod.accountCode);
+                const desc = rekod.description ? rekod.description.toLowerCase() : "";
+                const tGroup = rekod.transactionGroup ? String(rekod.transactionGroup).trim().toUpperCase() : "";
+                const rUid = rekod.clientUid || rekod.userId || rekod.uid || rekod.customerId || "";
+                const rMemNo = rekod.memberNo ? String(rekod.memberNo).toUpperCase() : "";
+
+                // A. Padan menggunakan UID secara Mutlak
+                if (rUid === clientId || tGroup === clientId.toUpperCase()) {
+                    isMatch = true;
+                }
+                // B. Padan menggunakan No Ahli (AQM)
+                else if (mNo && (tGroup === mNo || rMemNo === mNo || desc.includes(mNo.toLowerCase()))) {
+                    isMatch = true;
+                }
+                // C. Padan menggunakan Nama Klien (Fallback untuk rekod lama)
+                // SAFETY LOCK: Jika nama klien sama sebiji dengan nama perunding, HARAMKAN carian nama!
+                else if (cName && cName.length > 3 && cName !== consName && desc.includes(cName)) {
+                    isMatch = true;
+                }
+
+                // Jika Padan, rekod jualan & komisen beserta bulan transaksi
+                if (isMatch) {
+                    const month = rekod.date?.toDate()?.getMonth();
+                    
+                    if (acc === "1000") {
+                        const amt = Number(rekod.debit || 0);
+                        clientSales += amt;
+                        if (month !== undefined) clientMonths.sales[month] = (clientMonths.sales[month] || 0) + amt;
+                    }
+                    if (acc === "2000") {
+                        const amt = Number(rekod.credit || 0);
+                        commission += amt;
+                        if (month !== undefined) clientMonths.comm[month] = (clientMonths.comm[month] || 0) + amt;
+                    }
+                }
+            });
+
+            // PENYELARASAN FALLBACK (Jika Lejer Akaun 2000 belum wujud tapi Jualan ada)
+            if (commission === 0 && clientSales > 0) {
+                commission = clientSales * (commissionRate / 100);
+                
+                // Agihkan komisen fallback ke bulan yang sama dengan bulan jualan berlaku
+                for (const [m, amt] of Object.entries(clientMonths.sales)) {
+                    clientMonths.comm[m] = (clientMonths.comm[m] || 0) + (amt * (commissionRate / 100));
+                }
+            }
+
+            // BLOK MUTLAK: Jika prospek belum beli apa-apa, komisen WAJIB RM0
+            if (clientSales <= 0) {
+                commission = 0;
+                clientMonths.comm = {}; // Reset komisen bulanan
+            }
+
+            // Kumpul ke Total Keseluruhan
+            totalSales += clientSales;
+            totalCommission += commission;
+
+            // Kumpul ke Data Carta Bulanan
+            for (const [m, amt] of Object.entries(clientMonths.sales)) {
+                monthlySales[Number(m) + 1] += amt; 
+            }
+            for (const [m, amt] of Object.entries(clientMonths.comm)) {
+                monthlyCommission[Number(m)] += amt; 
+            }
         }
     });
 
