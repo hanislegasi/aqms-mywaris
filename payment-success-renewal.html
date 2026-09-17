@@ -25,19 +25,18 @@
         const urlParams = new URLSearchParams(window.location.search);
         const status_id = urlParams.get('status_id');
         const namaPakej = urlParams.get('pakej') || ""; 
-        const amountPaid = Number(urlParams.get('amount') || 0);
 
-        // Peta Konfigurasi untuk menukar Nama Pakej ke format Database & Perakaunan
+        // 1. KEMAS KINI: Tambah 'settingField' untuk pautkan dengan nama field dalam Firestore anda
         const configMap = {
-            "Wasiat Renewal": { key: "wasiat", code: "WASIAT_RENEWAL", prefix: "WST", accountCode: "4210" },
-            "Hibah Renewal": { key: "hibah", code: "HIBAH_RENEWAL", prefix: "HIB", accountCode: "4220" },
-            "Harta Sepencarian Renewal": { key: "sepencarian", code: "SEPENCARIAN_RENEWAL", prefix: "HSP", accountCode: "4230" },
-            "Mawaris Renewal": { key: "mawaris", code: "MAWARIS_RENEWAL", prefix: "MAW", accountCode: "4240" },
-            "Mawaris Korporat Renewal": { key: "corporate", code: "CORPORATE_RENEWAL", prefix: "MCO", accountCode: "4250" },
-            // TIGA PAKEJ KORPORAT BAHARU
-            "Mawaris Korporat (Tunggal) Renewal": { key: "corporate_tunggal", code: "CORPORATE_TUNGGAL_RENEWAL", prefix: "MCT", accountCode: "4251" },
-            "Mawaris Korporat (Kongsi) Renewal": { key: "corporate_kongsi", code: "CORPORATE_KONGSI_RENEWAL", prefix: "MCK", accountCode: "4252" },
-            "Mawaris Korporat (Wakaf Zurri) Renewal": { key: "corporate_zurri", code: "CORPORATE_ZURRI_RENEWAL", prefix: "MCZ", accountCode: "4253" }
+            "Wasiat Renewal": { key: "wasiat", code: "WASIAT_RENEWAL", prefix: "WST", accountCode: "4210", settingField: "wasiatRenewal" },
+            "Hibah Renewal": { key: "hibah", code: "HIBAH_RENEWAL", prefix: "HIB", accountCode: "4220", settingField: "hibahRenewal" },
+            "Harta Sepencarian Renewal": { key: "sepencarian", code: "SEPENCARIAN_RENEWAL", prefix: "HSP", accountCode: "4230", settingField: "sepencarianRenewal" },
+            "Mawaris Renewal": { key: "mawaris", code: "MAWARIS_RENEWAL", prefix: "MAW", accountCode: "4240", settingField: "mawarisRenewal" },
+            
+            "Mawaris Korporat Renewal": { key: "corporate", code: "CORPORATE_RENEWAL", prefix: "MCO", accountCode: "4250", settingField: "corporateRenewal" }, 
+            "Mawaris Korporat (Tunggal) Renewal": { key: "corporate_tunggal", code: "CORPORATE_TUNGGAL_RENEWAL", prefix: "MCT", accountCode: "4251", settingField: "corporateTunggalRenewal" },
+            "Mawaris Korporat (Kongsi) Renewal": { key: "corporate_kongsi", code: "CORPORATE_KONGSI_RENEWAL", prefix: "MCK", accountCode: "4252", settingField: "corporateKongsiRenewal" },
+            "Mawaris Korporat (Wakaf Zurri) Renewal": { key: "corporate_zurri", code: "CORPORATE_ZURRI_RENEWAL", prefix: "MCZ", accountCode: "4253", settingField: "corporateZurriRenewal" }
         };
 
         if (status_id === "1" && configMap[namaPakej]) {
@@ -47,7 +46,7 @@
                     const config = configMap[namaPakej];
                     
                     try {
-                        // 1. Tarik Data User & Tetapan Sistem
+                        // 1. Tarik Data User & Tetapan Sistem TERLEBIH DAHULU
                         const [userSnap, compSnap] = await Promise.all([
                             getDoc(doc(db, "users", user.uid)),
                             getDoc(doc(db, "settings", "compensation"))
@@ -56,7 +55,11 @@
                         const userData = userSnap.exists() ? userSnap.data() : {};
                         const compSettings = compSnap.exists() ? compSnap.data() : {};
                         
-                        // 2. Tarik Data Dokumen Spesifik (Contoh: corporate_tunggal/maklumat)
+                        // 2. KEMAS KINI: Tarik harga pembayaran secara dinamik dari setting
+                        // (Jika setting kosong, ia akan guna nilai lalai/fallback RM0)
+                        const amountPaid = Number(compSettings[config.settingField] || 0);
+                        
+                        // 3. Tarik Data Dokumen Spesifik
                         const productRef = doc(db, "users", user.uid, config.key, "maklumat");
                         const productSnap = await getDoc(productRef);
                         
@@ -66,6 +69,7 @@
                         
                         const productData = productSnap.data();
 
+                     
                         // Halang double-entry jika pengguna 'refresh' skrin ini
                         const timeSinceLastUpdate = productData.renewedAt ? (txnDate.getTime() - new Date(productData.renewedAt).getTime()) : 999999;
                         if (timeSinceLastUpdate < 60000) { 
