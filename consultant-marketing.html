@@ -93,7 +93,15 @@ doc(db,"consultants",user.uid)
 const data =
 snap.data();
 
+let roleText = "Perunding Perancangan Harta Pusaka"; // Ini jawatan default
 
+if (data.consultantNo === "AQC0001") {
+    roleText = "Pengarah Pembangunan Perniagaan";
+} else if (data.consultantNo === "AQC0002") {
+    roleText = "Pengarah Urusan";
+} else if (data.consultantNo === "AQC0003") {
+    roleText = "Pengarah Operasi";
+}
   
 document.getElementById(
 "driveCard"
@@ -186,18 +194,10 @@ font-size:clamp(8px,3vw,26px)
 ${data.nama}
 </h3>
 
-<p
-class="
-absolute
-left-[5%]
-top-[32%]
-text-[#153638]
-"
-style="
-font-size:clamp(6px,2vw,24px)
-">
-Perunding Perancangan Harta Pusaka
-</p>
+<!-- GUNA PEMBOLEHUBAH roleText DI SINI -->
+        <p class="absolute left-[5%] top-[32%] text-[#153638]" style="font-size:clamp(6px,2vw,24px)">
+            ${roleText}
+        </p>
 
 <p
 class="
