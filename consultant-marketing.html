@@ -96,11 +96,11 @@ snap.data();
 let roleText = "<i>Perunding Perancangan Harta Pusaka</i>"; // Ini jawatan default
 
 if (data.consultantNo === "AQC0001") {
-    roleText = "<i>Pengarah Pembangunan Perniagaan</i>";
+    roleText = "<i>Pengarah Operasi</i>";
 } else if (data.consultantNo === "AQC0002") {
     roleText = "<i>Pengarah Urusan</i>";
 } else if (data.consultantNo === "AQC0003") {
-    roleText = "<i>Pengarah Operasi</i>";
+    roleText = "<i>Pengarah Pembangunan Agensi</i>";
 }
   
 document.getElementById("driveCard").innerHTML = `
@@ -278,11 +278,11 @@ scale:2
 // 1. Logik Jawatan Khas untuk Teks WhatsApp (Tanpa tag <i> supaya teks kemas)
     let jawatanWhatsApp = "Perunding Perancangan Harta Pusaka";
     if (data.consultantNo === "AQC0001") {
-        jawatanWhatsApp = "Pengarah Pembangunan Perniagaan";
+        jawatanWhatsApp = "Pengarah Operasi/ Perunding Perancangan Harta Pusaka";
     } else if (data.consultantNo === "AQC0002") {
-        jawatanWhatsApp = "Pengarah Urusan";
+        jawatanWhatsApp = "Pengarah Urusan/ Perunding Perancangan Harta Pusaka";
     } else if (data.consultantNo === "AQC0003") {
-        jawatanWhatsApp = "Pengarah Operasi";
+        jawatanWhatsApp = "Pengarah Pembangunan Agensi/ Perunding Perancangan Harta Pusaka";
     }
     
 canvas.toBlob(async(blob)=>{
@@ -306,7 +306,7 @@ files:[file]
 await navigator.share({
   files: [file],
   title: 'Kad Bisnes Al-Qawthar',
-  text: `Assalamualaikum! Saya ${data.nama}, ${jawatanWhatsApp} AQMS.\n\nSila layari pautan di bawah untuk maklumat lanjut:\n\n🌐 Laman Web Rasmi:\nhttps://www.alqawthar.my\n\n📝 Pendaftaran:\nhttps://aqms.alqawthar.my/register.html?ref=${data.consultantNo}`
+  text: `Assalamualaikum! Saya ${data.nama}, ${jawatanWhatsApp} anda.\n\nSila layari pautan di bawah untuk maklumat lanjut:\n\n🌐 Laman Web Rasmi:\nhttps://www.alqawthar.my\n\n📝 Pendaftaran:\nhttps://aqms.alqawthar.my/register.html?ref=${data.consultantNo}`
 });
 
 }
