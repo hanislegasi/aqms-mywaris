@@ -98,13 +98,21 @@
                         await addDoc(collection(db, "ledger"), {
                             date: txnDate, accountCode: "1000", account: "Bank", category: "asset",
                             description: `${namaPakej} - ${userData.nama || "Pelanggan"}`,
-                            debit: amountPaid, credit: 0, paymentType: "CUSTOMER", transactionGroup: user.uid
+                            debit: amountPaid, credit: 0, paymentType: "CUSTOMER", transactionGroup: user.uid,
+                            // 👇 TAMBAHAN FOREIGN KEYS 👇
+                            clientUid: user.uid,
+                            clientNo: userData.memberNo || "-",
+                            consultantNo: userData.referral || "-"
                         });
                         
                         await addDoc(collection(db, "ledger"), {
                             date: txnDate, accountCode: config.accountCode, account: namaPakej, category: "income",
                             description: `${namaPakej} - ${userData.nama || "Pelanggan"}`,
-                            debit: 0, credit: amountPaid, paymentType: "CUSTOMER", transactionGroup: user.uid
+                            debit: 0, credit: amountPaid, paymentType: "CUSTOMER", transactionGroup: user.uid,
+                            // 👇 TAMBAHAN FOREIGN KEYS 👇
+                            clientUid: user.uid,
+                            clientNo: userData.memberNo || "-",
+                            consultantNo: userData.referral || "-"
                         });
 
                         // 6. Cipta Resit Pembayaran
