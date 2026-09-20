@@ -83,12 +83,18 @@
                                 date: txnDate, accountCode: "1000", account: "Bank", category: "asset",
                                 description: consultantNo + " Registration", debit: registrationFee, credit: 0,
                                 paymentType: "CONSULTANT", sourceAccount: "4120", transactionGroup: consultantNo
-                            });
+                                // 👇 TAMBAHAN FOREIGN KEYS 👇
+                                consultantUid: currentUser.uid, // atau user.uid (bergantung pada pembolehubah auth anda)
+                                consultantNo: consultantNo
+                                });
                             await addDoc(collection(db, "ledger"), {
                                 date: txnDate, accountCode: "4120", account: "Registration AQC", category: "income",
                                 description: consultantNo + " Registration", debit: 0, credit: companyRevenue,
                                 paymentType: "CONSULTANT", sourceAccount: "4120", transactionGroup: consultantNo
-                            });
+                                // 👇 TAMBAHAN FOREIGN KEYS 👇
+                                consultantUid: currentUser.uid, 
+                                consultantNo: consultantNo
+                                });
                             await addDoc(collection(db, "ledger"), {
                                 date: txnDate, accountCode: "2150", account: "USB Payable", category: "liability",
                                 description: consultantNo + " Registration - Upline Supporting Benefit",
