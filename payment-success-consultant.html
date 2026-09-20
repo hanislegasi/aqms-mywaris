@@ -82,24 +82,29 @@
                             await addDoc(collection(db, "ledger"), {
                                 date: txnDate, accountCode: "1000", account: "Bank", category: "asset",
                                 description: consultantNo + " Registration", debit: registrationFee, credit: 0,
-                                paymentType: "CONSULTANT", sourceAccount: "4120", transactionGroup: consultantNo
+                                paymentType: "CONSULTANT", sourceAccount: "4120", transactionGroup: consultantNo,
                                 // 👇 TAMBAHAN FOREIGN KEYS 👇
-                                consultantUid: currentUser.uid, // atau user.uid (bergantung pada pembolehubah auth anda)
+                                consultantUid: user.uid,
                                 consultantNo: consultantNo
-                                });
+                            });
+                            
                             await addDoc(collection(db, "ledger"), {
                                 date: txnDate, accountCode: "4120", account: "Registration AQC", category: "income",
                                 description: consultantNo + " Registration", debit: 0, credit: companyRevenue,
-                                paymentType: "CONSULTANT", sourceAccount: "4120", transactionGroup: consultantNo
+                                paymentType: "CONSULTANT", sourceAccount: "4120", transactionGroup: consultantNo,
                                 // 👇 TAMBAHAN FOREIGN KEYS 👇
-                                consultantUid: currentUser.uid, 
+                                consultantUid: user.uid, 
                                 consultantNo: consultantNo
-                                });
+                            });
+                            
                             await addDoc(collection(db, "ledger"), {
                                 date: txnDate, accountCode: "2150", account: "USB Payable", category: "liability",
                                 description: consultantNo + " Registration - Upline Supporting Benefit",
                                 debit: 0, credit: usbAmount, paymentType: "CONSULTANT", sourceAccount: "4120",
-                                transactionGroup: consultantNo, consultantNo: uplineCode, fromConsultant: consultantNo
+                                transactionGroup: consultantNo, consultantNo: uplineCode, fromConsultant: consultantNo,
+                                // 👇 TAMBAHAN FOREIGN KEYS 👇
+                                consultantUid: user.uid, 
+                                consultantNo: consultantNo
                             });
 
                             // 4. Proses USB Kepada Upline
@@ -151,12 +156,19 @@
                             await addDoc(collection(db, "ledger"), {
                                 date: txnDate, accountCode: "1000", account: "Bank", category: "asset",
                                 description: `${consData.consultantNo} - Renewal AQC`, debit: amount, credit: 0,
-                                paymentType: "CUSTOMER", transactionGroup: consData.consultantNo
+                                paymentType: "CUSTOMER", transactionGroup: consData.consultantNo,
+                                // 👇 TAMBAHAN FOREIGN KEYS 👇
+                                consultantUid: user.uid,
+                                consultantNo: consData.consultantNo
                             });
+                            
                             await addDoc(collection(db, "ledger"), {
                                 date: txnDate, accountCode: "4310", account: "Renewal AQC", category: "income",
                                 description: `${consData.consultantNo} - Renewal AQC`, debit: 0, credit: amount,
-                                paymentType: "CUSTOMER", transactionGroup: consData.consultantNo
+                                paymentType: "CUSTOMER", transactionGroup: consData.consultantNo,
+                                // 👇 TAMBAHAN FOREIGN KEYS 👇
+                                consultantUid: user.uid,
+                                consultantNo: consData.consultantNo
                             });
 
                             await addDoc(collection(db, "receipts"), {
