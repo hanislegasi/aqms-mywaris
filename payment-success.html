@@ -17,68 +17,68 @@
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { doc, getDoc, updateDoc, increment, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Tangkap jawapan dari URL ToyyibPay
-const urlParams = new URLSearchParams(window.location.search);
-const status_id = urlParams.get('status_id'); 
-const namaPakej = urlParams.get('pakej'); // Ini akan baca "Wasiat", "Hibah", "Korporat Tunggal" dsb.
+    // Tangkap jawapan dari URL ToyyibPay
+    const urlParams = new URLSearchParams(window.location.search);
+    const status_id = urlParams.get('status_id'); 
+    const namaPakej = urlParams.get('pakej');
 
-// 1. Sediakan pembolehubah dinamik
-let dbStatusField = "";
-let redirectPage = "";
-let lejarAkaun = "";
-let receiptPrefix = ""; 
-let accountCodeValue = "4010"; // Lalai
+    // 1. Sediakan pembolehubah dinamik
+    let dbStatusField = "";
+    let redirectPage = "";
+    let lejarAkaun = "";
+    let receiptPrefix = ""; 
+    let accountCodeValue = "4010";
 
-// 2. Tentukan laluan data & COA mengikut jenis pakej
-if (namaPakej === "Wasiat") {
-    dbStatusField = "wasiatPaymentStatus";
-    redirectPage = "wasiat-page.html";
-    lejarAkaun = "Sales - Wasiat";
-    receiptPrefix = "WST";
-    accountCodeValue = "4010";
-} else if (namaPakej === "Hibah") {
-    dbStatusField = "hibahPaymentStatus";
-    redirectPage = "hibah-page.html";
-    lejarAkaun = "Sales - Hibah";
-    receiptPrefix = "HIB";
-    accountCodeValue = "4020";
-} else if (namaPakej === "Sepencarian") {
-    dbStatusField = "sepencarianPaymentStatus";
-    redirectPage = "sepencarian-page.html";
-    lejarAkaun = "Sales - Sepencarian";
-    receiptPrefix = "HSP";
-    accountCodeValue = "4030";
-} else if (namaPakej === "Mawaris") {
-    dbStatusField = "mawarisPaymentStatus";
-    redirectPage = "mawaris-page.html";
-    lejarAkaun = "Sales - Mawaris";
-    receiptPrefix = "MAW";
-    accountCodeValue = "4040";
-} else if (namaPakej === "Korporat") {
-    dbStatusField = "corporatePaymentStatus";
-    redirectPage = "corporate-page.html";
-    lejarAkaun = "Sales - Mawaris Korporat";
-    receiptPrefix = "MCO";
-    accountCodeValue = "4050";
-} else if (namaPakej === "Korporat Tunggal") {
-    dbStatusField = "corporateTunggalPaymentStatus";
-    redirectPage = "corporate-tunggal-page.html";
-    lejarAkaun = "Sales - Mawaris Korporat (Milikan Tunggal)";
-    receiptPrefix = "MCT";
-    accountCodeValue = "4051";
-} else if (namaPakej === "Korporat Kongsi") {
-    dbStatusField = "corporateKongsiPaymentStatus";
-    redirectPage = "corporate-kongsi-page.html";
-    lejarAkaun = "Sales - Mawaris Korporat (Rakan Kongsi)";
-    receiptPrefix = "MCK";
-    accountCodeValue = "4052";
-} else if (namaPakej === "Korporat Zurri") {
-    dbStatusField = "corporateZurriPaymentStatus";
-    redirectPage = "corporate-zurri-page.html";
-    lejarAkaun = "Sales - Mawaris Korporat (Wakaf Zurri)";
-    receiptPrefix = "MCZ";
-    accountCodeValue = "4053";
-}
+    // 2. Tentukan laluan data & COA mengikut jenis pakej
+    if (namaPakej === "Wasiat") {
+        dbStatusField = "wasiatPaymentStatus";
+        redirectPage = "wasiat-page.html";
+        lejarAkaun = "Sales - Wasiat";
+        receiptPrefix = "WST";
+        accountCodeValue = "4010";
+    } else if (namaPakej === "Hibah") {
+        dbStatusField = "hibahPaymentStatus";
+        redirectPage = "hibah-page.html";
+        lejarAkaun = "Sales - Hibah";
+        receiptPrefix = "HIB";
+        accountCodeValue = "4020";
+    } else if (namaPakej === "Sepencarian") {
+        dbStatusField = "sepencarianPaymentStatus";
+        redirectPage = "sepencarian-page.html";
+        lejarAkaun = "Sales - Sepencarian";
+        receiptPrefix = "HSP";
+        accountCodeValue = "4030";
+    } else if (namaPakej === "Mawaris") {
+        dbStatusField = "mawarisPaymentStatus";
+        redirectPage = "mawaris-page.html";
+        lejarAkaun = "Sales - Mawaris";
+        receiptPrefix = "MAW";
+        accountCodeValue = "4040";
+    } else if (namaPakej === "Korporat") {
+        dbStatusField = "corporatePaymentStatus";
+        redirectPage = "corporate-page.html";
+        lejarAkaun = "Sales - Mawaris Korporat";
+        receiptPrefix = "MCO";
+        accountCodeValue = "4050";
+    } else if (namaPakej === "Korporat Tunggal") {
+        dbStatusField = "corporateTunggalPaymentStatus";
+        redirectPage = "corporate-tunggal-page.html";
+        lejarAkaun = "Sales - Mawaris Korporat (Milikan Tunggal)";
+        receiptPrefix = "MCT";
+        accountCodeValue = "4051";
+    } else if (namaPakej === "Korporat Kongsi") {
+        dbStatusField = "corporateKongsiPaymentStatus";
+        redirectPage = "corporate-kongsi-page.html";
+        lejarAkaun = "Sales - Mawaris Korporat (Rakan Kongsi)";
+        receiptPrefix = "MCK";
+        accountCodeValue = "4052";
+    } else if (namaPakej === "Korporat Zurri") {
+        dbStatusField = "corporateZurriPaymentStatus";
+        redirectPage = "corporate-zurri-page.html";
+        lejarAkaun = "Sales - Mawaris Korporat (Wakaf Zurri)";
+        receiptPrefix = "MCZ";
+        accountCodeValue = "4053";
+    }
 
     // Toyyibpay Code: 1 = Berjaya
     if (status_id === "1") {
@@ -95,19 +95,32 @@ if (namaPakej === "Wasiat") {
 
                     // Elak rekod dua kali jika pelanggan refresh page
                     if (userData[dbStatusField] === "paid") {
-                    window.location.href = redirectPage;
-                    return;
+                        window.location.href = redirectPage;
+                        return;
                     }
+
+                    // Ambil senarai semua konsultan dan sediakan fungsi pencarian lebih awal
+                    const consultantSnap = await getDocs(collection(db, "consultants"));
+                    const allConsultants = [];
+                    consultantSnap.forEach((d) => { allConsultants.push({ id: d.id, ...d.data() }); });
+                    
+                    function findConsultant(no) { return allConsultants.find(u => u.consultantNo === no); }
+
+                    const customer = userData;
+                    const directConsultant = findConsultant(customer.referral);
+                    let currentConsultant = findConsultant(customer.referral);
+
+                    const refConsultantUid = directConsultant ? directConsultant.id : "-";
+                    const refConsultantNo = directConsultant ? directConsultant.consultantNo : "-";
 
                     // Ambil harga terkini dari settings
                     const compensationSnap = await getDoc(doc(db, "settings", "compensation"));
                     let compData = {};
-                    let saleAmount = 350; // Fallback lalai
+                    let saleAmount = 350; 
                     
                     if (compensationSnap.exists()) {
                         compData = compensationSnap.data();
                         
-                        // Semak harga mengikut pakej yang dibeli secara dinamik
                         if (namaPakej === "Wasiat" && compData.wasiatPrice !== undefined) {
                             saleAmount = Number(compData.wasiatPrice);
                         } else if (namaPakej === "Hibah" && compData.hibahPrice !== undefined) {
@@ -138,47 +151,40 @@ if (namaPakej === "Wasiat") {
                         await updateDoc(counterRef, { memberCounter: increment(1) });
                     }
 
-                    // Update Status Pelanggan secara dinamik
+                    // Update Status Pelanggan
                     const updateData = {
-                    [dbStatusField]: "paid", 
-                    memberSince: txnDate.toISOString(),
-                    expiryDate: (() => {
-                        const d = new Date(txnDate);
-                        d.setFullYear(d.getFullYear() + 1);
-                         return d.toISOString();
-                    })()
+                        [dbStatusField]: "paid", 
+                        memberSince: txnDate.toISOString(),
+                        expiryDate: (() => {
+                            const d = new Date(txnDate);
+                            d.setFullYear(d.getFullYear() + 1);
+                            return d.toISOString();
+                        })()
                     };
 
                     if (!userData.memberNo) {
                         updateData.memberNo = memberNo;
                     }
                     await updateDoc(doc(db, "users", currentUser.uid), updateData);
-                    
-                    const customer = userData; // Guna data pelanggan
-                    // Tetapkan ID Konsultan jika ada
-                    const refConsultantUid = directConsultant ? directConsultant.id : "-";
-                    const refConsultantNo = directConsultant ? directConsultant.consultantNo : "-";
-                    
-                    // Ledger: Credit Sales (Dinamik COA)
+
+                    // Ledger: Credit Sales
                     await addDoc(collection(db, "ledger"), {
                         date: txnDate, accountCode: accountCodeValue, account: lejarAkaun, 
                         category: "income", description: memberNo + " " + customer.nama,
                         debit: 0, credit: saleAmount, transactionGroup: memberNo,
                         paymentType: "CUSTOMER", sourceAccount: accountCodeValue, product: namaPakej,
-                        // 👇 TAMBAHAN FOREIGN KEYS 👇
                         clientUid: currentUser.uid,
                         clientNo: memberNo,
                         consultantUid: refConsultantUid,
                         consultantNo: refConsultantNo
                     });
 
-                    // Ledger: Debit Bank (Dinamik Source)
+                    // Ledger: Debit Bank
                     await addDoc(collection(db, "ledger"), {
                         date: txnDate, accountCode: "1000", account: "Bank",
                         category: "asset", description: memberNo + " " + customer.nama,
                         debit: saleAmount, credit: 0, paymentType: "CUSTOMER",
                         sourceAccount: accountCodeValue, transactionGroup: memberNo,
-                        // 👇 TAMBAHAN FOREIGN KEYS 👇
                         clientUid: currentUser.uid,
                         clientNo: memberNo,
                         consultantUid: refConsultantUid,
@@ -194,14 +200,10 @@ if (namaPakej === "Wasiat") {
 
                     // Company Allocation
                     await addDoc(collection(db, "companyAllocation"), {
-                    createdAt: txnDate, memberNo, customerName: customer.nama,
-                    product: namaPakej, 
-                    sale: saleAmount, company, allowance, adminOperation, royalty
+                        createdAt: txnDate, memberNo, customerName: customer.nama,
+                        product: namaPakej, 
+                        sale: saleAmount, company, allowance, adminOperation, royalty
                     });
-
-                    const consultantSnap = await getDocs(collection(db, "consultants"));
-                    const allConsultants = [];
-                    consultantSnap.forEach((d) => { allConsultants.push({ id: d.id, ...d.data() }); });
                     
                     function getCleanLevelKey(level) { return (level || "AQC").replace(/[^a-zA-Z0-9]/g, ""); }
                     function getCommissionRate(level) {
@@ -212,10 +214,6 @@ if (namaPakej === "Wasiat") {
                         const key = "override" + getCleanLevelKey(level);
                         return comp[key] !== undefined ? comp[key] : 0;
                     }
-                    function findConsultant(no) { return allConsultants.find(u => u.consultantNo === no); }
-
-                    const directConsultant = findConsultant(customer.referral);
-                    let currentConsultant = findConsultant(customer.referral);
 
                     // UPLINE SPONSOR BENEFIT
                     const sponsor = directConsultant ? findConsultant(directConsultant.upline) : null;
@@ -224,7 +222,6 @@ if (namaPakej === "Wasiat") {
                             date: txnDate, accountCode: "5150", account: "Upline Sponsor Benefit", category: "expense",
                             consultantNo: sponsor.consultantNo, consultantName: sponsor.nama, description: directConsultant.consultantNo + " USB", 
                             debit: usbAmount, credit: 0, transactionGroup: memberNo, paymentType: "USB", fromConsultant: directConsultant.consultantNo,
-                            // 👇 TAMBAHAN FOREIGN KEYS 👇
                             clientUid: currentUser.uid,
                             clientNo: memberNo,
                             consultantUid: sponsor.id,
@@ -235,7 +232,6 @@ if (namaPakej === "Wasiat") {
                             date: txnDate, accountCode: "2150", account: "USB Payable", category: "liability",
                             consultantNo: sponsor.consultantNo, consultantName: sponsor.nama, description: directConsultant.consultantNo + " USB", 
                             debit: 0, credit: usbAmount, transactionGroup: memberNo, paymentType: "USB", fromConsultant: directConsultant.consultantNo,
-                            // 👇 TAMBAHAN FOREIGN KEYS 👇
                             clientUid: currentUser.uid,
                             clientNo: memberNo,
                             consultantUid: sponsor.id,
@@ -254,7 +250,6 @@ if (namaPakej === "Wasiat") {
                             date: txnDate, accountCode: "5000", account: "Consultant Commission", category: "expense",
                             consultantNo: directConsultant.consultantNo, consultantName: directConsultant.nama, 
                             description: directConsultant.consultantNo + " " + directConsultant.nama, debit: commissionAmount, credit: 0,
-                            // 👇 TAMBAHAN FOREIGN KEYS 👇
                             clientUid: currentUser.uid,
                             clientNo: memberNo,
                             consultantUid: directConsultant.id,
@@ -265,7 +260,6 @@ if (namaPakej === "Wasiat") {
                             date: txnDate, accountCode: "2000", account: "Commission Payable", consultantNo: directConsultant.consultantNo,
                             consultantName: directConsultant.nama, category: "liability", description: directConsultant.consultantNo + " " + directConsultant.nama,
                             debit: 0, credit: commissionAmount,
-                            // 👇 TAMBAHAN FOREIGN KEYS 👇
                             clientUid: currentUser.uid,
                             clientNo: memberNo,
                             consultantUid: directConsultant.id,
@@ -296,11 +290,11 @@ if (namaPakej === "Wasiat") {
                                     
                                     if (introducerAmt > 0) {
                                         await addDoc(collection(db, "introducerEarnings"), {
-                                        createdAt: txnDate, introducerUid: customer.introducerUid, aqcNo: directConsultant.consultantNo,  
-                                        customerMemberNo: memberNo, customerName: customer.nama, 
-                                        product: namaPakej, 
-                                        saleAmount: saleAmount, commPercent: introducerCommRate, earnedAmount: introducerAmt, status: "UNPAID" 
-                                    });
+                                            createdAt: txnDate, introducerUid: customer.introducerUid, aqcNo: directConsultant.consultantNo,  
+                                            customerMemberNo: memberNo, customerName: customer.nama, 
+                                            product: namaPakej, 
+                                            saleAmount: saleAmount, commPercent: introducerCommRate, earnedAmount: introducerAmt, status: "UNPAID" 
+                                        });
                                     }
                                 }
                             } catch (error) { console.error("Ralat komisen introducer:", error); }
@@ -341,7 +335,6 @@ if (namaPakej === "Wasiat") {
                         await addDoc(collection(db, "ledger"), {
                             date: txnDate, accountCode: "5100", account: "Consultant Override", category: "expense",
                             consultantNo: upline.consultantNo, consultantName: upline.nama, description: upline.consultantNo + " " + upline.nama, debit: overrideAmount, credit: 0,
-                            // 👇 TAMBAHAN FOREIGN KEYS 👇
                             clientUid: currentUser.uid,
                             clientNo: memberNo,
                             consultantUid: upline.id,
@@ -350,7 +343,6 @@ if (namaPakej === "Wasiat") {
                         await addDoc(collection(db, "ledger"), {
                             date: txnDate, accountCode: "2100", account: "Override Payable", consultantNo: upline.consultantNo,
                             consultantName: upline.nama, category: "liability", description: upline.consultantNo + " " + upline.nama, debit: 0, credit: overrideAmount,
-                            // 👇 TAMBAHAN FOREIGN KEYS 👇
                             clientUid: currentUser.uid,
                             clientNo: memberNo,
                             consultantUid: upline.id,
@@ -368,12 +360,12 @@ if (namaPakej === "Wasiat") {
 
                     // CREATE RECEIPT
                     await addDoc(collection(db, "receipts"), {
-                    receiptNo: receiptPrefix + "-" + Date.now(), 
-                    uid: currentUser.uid, memberNo: memberNo, payerName: customer.nama,
-                    serviceCode: namaPakej.toUpperCase(), 
-                    serviceName: "Pendaftaran " + namaPakej, 
-                    amount: saleAmount, paymentMethod: "ToyyibPay",
-                    status: "PAID", paymentDate: txnDate
+                        receiptNo: receiptPrefix + "-" + Date.now(), 
+                        uid: currentUser.uid, memberNo: memberNo, payerName: customer.nama,
+                        serviceCode: namaPakej.toUpperCase(), 
+                        serviceName: "Pendaftaran " + namaPakej, 
+                        amount: saleAmount, paymentMethod: "ToyyibPay",
+                        status: "PAID", paymentDate: txnDate
                     });
                     
                     document.getElementById('statusMesej').innerText = "Selesai! Anda akan dibawa ke dashboard.";
