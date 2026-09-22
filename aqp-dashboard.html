@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AQP Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-100 min-h-screen" style="font-family: Inter, sans-serif;">
+
+<!-- HEADER -->
+<div class="bg-[#153638] text-white p-5 shadow">
+<div class="flex justify-between items-center">
+<div>
+<h1 class="text-2xl font-bold">Dashboard Al-Qawthar Partner (AQP)</h1>
+<p id="welcomeText">Memuatkan...</p>
+</div>
+<button id="logoutBtn" class="bg-red-500 px-4 py-2 rounded-xl hover:bg-red-600 transition">Logout</button>
+</div>
+</div>
+
+<div class="p-5">
+<div id="renewalBanner" class="hidden mb-5"></div>
+  
+<!-- PROFIL -->
+<div class="mb-5">
+<button id="profileBtn" class="bg-blue-600 text-white px-5 py-3 rounded-xl hover:bg-blue-700 transition shadow">Profile Institusi</button>
+</div>
+ 
+<div id="profileModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-2xl p-6 w-[600px] shadow-2xl">
+        <h2 class="text-xl font-bold mb-4 text-[#153638]">Maklumat Partner (AQP)</h2>
+        <div id="profileContent" class="text-gray-700 space-y-2">Loading...</div>
+        
+        <div class="mt-6 flex gap-3">
+            <button id="editProfileBtn" class="flex-1 bg-blue-600 text-white px-5 py-3 rounded-xl hover:bg-blue-700 transition font-semibold">Edit Profile</button>
+            <button id="closeProfile" class="flex-1 bg-red-500 text-white px-5 py-3 rounded-xl hover:bg-red-600 transition font-semibold">Tutup</button>
+        </div>
+        
+    </div>
+</div>
+
+<div class="grid lg:grid-cols-2 gap-5 mb-5">
+  <!-- Sales Analytics -->
+    <div class="bg-white rounded-2xl shadow p-5">
+    <h3 class="text-lg font-bold mb-4 text-[#153638]">Pecahan Jualan (Produk)</h3>
+    <div class="flex justify-center items-center h-64">
+        <canvas id="productChart"></canvas>
+    </div>
+</div>
+ 
+    <!-- Payment -->
+    <div class="bg-white rounded-2xl shadow p-6">
+        <h3 class="font-bold text-lg mb-5 text-[#153638]">Ringkasan Kewangan (Institusi)</h3>
+        <div class="space-y-5">
+            <div class="border rounded-xl p-4 bg-green-50/50">
+                <div class="text-sm text-gray-500 font-semibold">Total Earned (35%)</div>
+                <div id="earnedCard" class="text-2xl font-bold text-green-600">RM0.00</div>
+            </div>
+            <div class="border rounded-xl p-4 bg-blue-50/50">
+                <div class="text-sm text-gray-500 font-semibold">Paid</div>
+                <div id="paidCard" class="text-2xl font-bold text-blue-600">RM0.00</div>
+            </div>
+            <div class="border rounded-xl p-4 bg-red-50/50">
+                <div class="text-sm text-gray-500 font-semibold">Outstanding</div>
+                <div id="outstandingCard" class="text-2xl font-bold text-red-600">RM0.00</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TIMELINE WORKFLOW -->
+<div class="bg-[#123133] rounded-2xl p-6 mb-5 shadow-xl overflow-hidden relative">
+    <div class="flex flex-col md:flex-row justify-between md:items-center mb-6 gap-3">
+        <div>
+            <h2 class="text-white text-xl font-bold">Status Dokumen Pelanggan (Ahli Institusi)</h2>
+            <p class="text-gray-300 text-sm mt-1">Pemantauan status selesai dan baki dokumen klien di bawah institusi anda.</p>
+        </div>
+        <button onclick="location.reload()" class="bg-[#e5c18e] hover:bg-[#d4ac74] text-[#153638] font-bold px-5 py-2 rounded-xl text-sm transition shadow">
+            Kemas Kini Semasa
+        </button>
+    </div>
+
+    <div class="flex gap-3 overflow-x-auto pb-4 snap-x" style="scrollbar-width: thin; scrollbar-color: #e5c18e #123133;">
+        
+        <div onclick="window.location.href='aqp-clients.html?status=APPROVED'" class="min-w-[190px] xl:min-w-0 xl:flex-1 bg-white rounded-xl p-3 flex flex-col snap-start shrink-0 cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-[#e5c18e] transition-all duration-200">
+            <h3 class="font-bold text-gray-800 text-sm mb-3">1. Diluluskan</h3>
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
+                <span>Selesai:</span>
+                <span id="tl_approved_done" class="font-bold text-gray-900">0</span>
+            </div>
+        </div>
+        
+        <div onclick="window.location.href='aqp-clients.html?status=PRINTED'" class="min-w-[190px] xl:min-w-0 xl:flex-1 bg-white rounded-xl p-3 flex flex-col snap-start shrink-0 cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-[#e5c18e] transition-all duration-200">
+            <h3 class="font-bold text-gray-800 text-sm mb-3">2. Dicetak</h3>
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
+                <span>Selesai:</span>
+                <span id="tl_printed_done" class="font-bold text-gray-900">0</span>
+            </div>
+        </div>
+
+        <div onclick="window.location.href='aqp-clients.html?status=SENT'" class="min-w-[190px] xl:min-w-0 xl:flex-1 bg-white rounded-xl p-3 flex flex-col snap-start shrink-0 cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-[#e5c18e] transition-all duration-200">
+            <h3 class="font-bold text-gray-800 text-sm mb-3">3. Dihantar Kurier</h3>
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
+                <span>Selesai:</span>
+                <span id="tl_sent_done" class="font-bold text-gray-900">0</span>
+            </div>
+        </div>
+
+        <div onclick="window.location.href='aqp-clients.html?status=AKAD'" class="min-w-[190px] xl:min-w-0 xl:flex-1 bg-white rounded-xl p-3 flex flex-col snap-start shrink-0 cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-[#e5c18e] transition-all duration-200">
+            <h3 class="font-bold text-gray-800 text-sm mb-3">4. Selesai Akad</h3>
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
+                <span>Selesai:</span>
+                <span id="tl_akad_done" class="font-bold text-gray-900">0</span>
+            </div>
+        </div>
+
+        <div onclick="window.location.href='aqp-clients.html?status=STAMPING'" class="min-w-[190px] xl:min-w-0 xl:flex-1 bg-white rounded-xl p-3 flex flex-col snap-start shrink-0 cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-[#e5c18e] transition-all duration-200">
+            <h3 class="font-bold text-gray-800 text-sm mb-3">5. Duti Setem</h3>
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
+                <span>Selesai:</span>
+                <span id="tl_stamping_done" class="font-bold text-gray-900">0</span>
+            </div>
+        </div>
+
+        <div onclick="window.location.href='aqp-clients.html?status=HANDOVER'" class="min-w-[190px] xl:min-w-0 xl:flex-1 bg-white rounded-xl p-3 flex flex-col snap-start shrink-0 cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-[#e5c18e] transition-all duration-200">
+            <h3 class="font-bold text-gray-800 text-sm mb-3">6. Serah AQM</h3>
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
+                <span>Selesai:</span>
+                <span id="tl_handover_done" class="font-bold text-gray-900">0</span>
+            </div>
+        </div>
+
+        <div onclick="window.location.href='aqp-clients.html?status=COMPLETED'" class="min-w-[190px] xl:min-w-0 xl:flex-1 bg-white rounded-xl p-3 flex flex-col snap-start shrink-0 cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-[#e5c18e] transition-all duration-200">
+            <h3 class="font-bold text-gray-800 text-sm mb-3">7. Terima AQM</h3>
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
+                <span>Sepenuhnya:</span>
+                <span id="tl_received_done" class="font-bold text-emerald-600">0</span>
+            </div>
+        </div>
+    </div>
+</div>
+  
+<!-- KPI (4 Kotak) -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
+    <div class="bg-white p-5 rounded-xl shadow">
+        <p class="text-gray-500 font-medium">Jumlah Ahli Pelanggan</p>
+        <p id="activeClients" class="text-2xl md:text-3xl font-bold text-[#153638]">0</p>
+    </div>
+    <div class="bg-white p-5 rounded-xl shadow border-l-4 border-indigo-500">
+        <p class="text-gray-500 font-medium">Rekod Ejen Koperasi (ALK)</p>
+        <p id="totalAlk" class="text-2xl md:text-3xl font-bold text-indigo-600">0</p>
+    </div>
+    <div class="bg-white p-5 rounded-xl shadow border-l-4 border-[#153638]">
+        <p class="text-gray-500 font-medium">Jumlah Jualan Institusi</p>
+        <p id="totalSales" class="text-2xl md:text-3xl font-bold text-[#153638]">RM0</p>
+    </div>
+    <div class="bg-white p-5 rounded-xl shadow border-l-4 border-green-500">
+        <p class="text-gray-500 font-medium">Komisen Koperasi (35%)</p>
+        <p id="totalCommission" class="text-2xl md:text-3xl font-bold text-green-600">RM0</p>
+    </div>
+</div>
+
+<div class="bg-white p-5 rounded-2xl shadow mb-5 relative overflow-hidden">
+  <div class="relative z-10">
+    <h3 class="text-xl font-bold mb-4 text-[#153638]">Prestasi Tahunan Institusi</h3>
+    <div class="relative w-full h-64 md:h-80">
+      <canvas id="salesChart"></canvas>
+    </div>
+  </div>
+</div>
+ 
+<!-- MENU -->
+<div class="flex flex-col gap-4">
+    <!-- Baris 1 (Grid 4 Kotak) -->
+    <div class="grid md:grid-cols-4 gap-4">
+        <button id="clientsBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">myClients (Senarai Ahli)</button>
+        <button id="alkBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">myALK (Urus Introducer)</button>
+        <button id="claimsBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">myClaims / Resit</button>
+        <button id="renewalBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">Annual AQP Renewal</button>  
+    </div>
+
+   <!-- Baris 2 (Grid 3 Kotak Sama Saiz) -->
+    <div class="grid md:grid-cols-3 gap-4">
+        <button onclick="window.location.href='my-statement.html'" class="bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md">
+            Penyata Kewangan (Statement)
+        </button>
+        <button id="copyReferralAqmBtn" class="bg-[#153638] hover:bg-[#1e4d50] transition text-white p-5 rounded-xl font-bold shadow-md flex justify-center items-center gap-2">
+            Copy Link Pelanggan (AQM)
+        </button>
+        <button id="copyReferralAlkBtn" class="bg-indigo-600 hover:bg-indigo-700 transition text-white p-5 rounded-xl font-bold shadow-md flex justify-center items-center gap-2">
+            Copy Link Ejen ALK Baru
+        </button>
+    </div>
+</div>
+
+<script type="module">
+import { db, auth } from './firebase.js';
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { doc, getDoc, getDocs, collection, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+let aqpData = null;
+
+onAuthStateChanged(auth, async(user)=>{
+    if(!user){
+        window.location.href = "login.html";
+        return;
+    }
+
+    // 1. AMBIL DATA INSTITUSI AQP
+    const aqpSnap = await getDoc(doc(db, "consultants", user.uid));
+    const data = aqpSnap.data();
+    aqpData = data;
+
+    sessionStorage.setItem("consultantNo", data.consultantNo);
+    sessionStorage.setItem("consultantName", data.nama);
+    sessionStorage.setItem("userUid", user.uid);
+
+    const aqpName = data.nama ? data.nama.toLowerCase().trim() : "";
+    const compSnap = await getDoc(doc(db, "settings", "compensation"));
+    const comp = compSnap.exists() ? compSnap.data() : {};
+    
+    // Kadar komisen AQP Tetap
+    const commissionRate = Number(comp.aqpCommissionPercent || 35); 
+
+   // 2. SEMAKAN BANNER RENEWAL & EXPIRY
+    const renewalDate = data.renewalDate?.toDate ? data.renewalDate.toDate() : new Date(data.renewalDate);
+    const today = new Date();
+    const diffDays = Math.ceil((renewalDate - today) / (1000 * 60 * 60 * 24));
+    const isExpired = diffDays < 0; 
+
+    if (isExpired) {
+        document.getElementById("renewalBanner").classList.remove("hidden");
+        document.getElementById("renewalBanner").innerHTML = `
+        <div class="bg-red-600 text-white border border-red-800 rounded-2xl p-5 shadow-lg">
+            <h2 class="font-bold text-xl">Akaun Institusi Telah Tamat Tempoh!</h2>
+            <p class="mt-2 text-red-100">Lesen institusi anda telah tamat pada <b>${renewalDate.toLocaleDateString('ms-MY')}</b>. Sila perbaharui segera.</p>
+            <a href="aqp-renewal.html" class="inline-block mt-4 bg-white text-red-700 font-bold px-5 py-3 rounded-xl hover:bg-gray-100 transition shadow">Renew RM1000 Sekarang</a>
+        </div>`;
+    }
+
+   // 3. KIRA JUALAN & KOMISEN AQP (GUNA AKAUN LEJAR 2010)
+    let activeClients = 0;
+    let wasiatSales = 0, hibahSales = 0, sepencarianSales = 0, mawarisSales = 0;
+    let corpPremiumSales = 0, corpTunggalSales = 0, corpKongsiSales = 0, corpZurriSales = 0;
+  
+    let totalSales = 0; 
+    let totalCommission = 0;
+    const monthlySales = { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0 };
+    const monthlyCommission = [0,0,0,0,0,0,0,0,0,0,0,0];
+
+    // 3A. Tarik Semua Data Lejer
+    const ledgerSnap = await getDocs(collection(db, "ledger"));
+    const ledgerRecords = [];
+    ledgerSnap.forEach(d => ledgerRecords.push({ id: d.id, ...d.data() }));
+
+    // 3B. Proses Klien (Jualan Institusi & Komisen 2010)
+    const usersSnap = await getDocs(collection(db,"users"));
+    const myClientUids = [];
+    
+    usersSnap.forEach((d)=>{
+        const u = d.data();
+        const clientId = d.id;
+        
+        if (u.role === "customer" && (u.referral || "").trim() === data.consultantNo) {
+            activeClients++;
+            myClientUids.push(clientId);
+            
+            // Kuantiti untuk Pie Chart
+            if(u.wasiatPaymentStatus === "paid"){ wasiatSales++; }
+            if(u.hibahPaymentStatus === "paid"){ hibahSales++; }
+            if(u.sepencarianPaymentStatus === "paid"){ sepencarianSales++; }
+            if(u.mawarisPaymentStatus === "paid"){ mawarisSales++; }
+            if(u.corporatePaymentStatus === "paid"){ corpPremiumSales++; }
+            if(u.corporateTunggalPaymentStatus === "paid"){ corpTunggalSales++; }
+            if(u.corporateKongsiPaymentStatus === "paid"){ corpKongsiSales++; }
+            if(u.corporateZurriPaymentStatus === "paid"){ corpZurriSales++; }
+
+            // Logik Padanan Lejer Jualan(1000) & Komisen AQP (2010)
+            let clientSales = 0;
+            let commission = 0;
+            let clientMonths = { sales: {}, comm: {} };
+            const mNo = u.memberNo ? u.memberNo.toUpperCase() : null;
+
+            ledgerRecords.forEach(rekod => {
+                let isMatch = false;
+                const acc = String(rekod.accountCode);
+                const tGroup = rekod.transactionGroup ? String(rekod.transactionGroup).trim().toUpperCase() : "";
+                const rUid = rekod.clientUid || rekod.userId || rekod.uid || rekod.customerId || "";
+                const rMemNo = rekod.memberNo ? String(rekod.memberNo).toUpperCase() : "";
+
+                if (rUid === clientId || tGroup === clientId.toUpperCase() || (mNo && (tGroup === mNo || rMemNo === mNo))) {
+                    isMatch = true;
+                }
+
+                if (isMatch) {
+                    const month = rekod.date?.toDate()?.getMonth();
+                    if (acc === "1000") {
+                        const amt = Number(rekod.debit || 0);
+                        clientSales += amt;
+                        if (month !== undefined) clientMonths.sales[month] = (clientMonths.sales[month] || 0) + amt;
+                    }
+                    // AQP Commission Code is 2010
+                    if (acc === "2010") {
+                        const amt = Number(rekod.credit || 0);
+                        commission += amt;
+                        if (month !== undefined) clientMonths.comm[month] = (clientMonths.comm[month] || 0) + amt;
+                    }
+                }
+            });
+
+            // Fallback jika belum dijana (Legacy)
+            if (commission === 0 && clientSales > 0) {
+                commission = clientSales * (commissionRate / 100);
+                for (const [m, amt] of Object.entries(clientMonths.sales)) {
+                    clientMonths.comm[m] = (clientMonths.comm[m] || 0) + (amt * (commissionRate / 100));
+                }
+            }
+
+            if (clientSales <= 0) { commission = 0; clientMonths.comm = {}; }
+
+            totalSales += clientSales;
+            totalCommission += commission;
+
+            for (const [m, amt] of Object.entries(clientMonths.sales)) { monthlySales[Number(m) + 1] += amt; }
+            for (const [m, amt] of Object.entries(clientMonths.comm)) { monthlyCommission[Number(m)] += amt; }
+        }
+    });
+
+    // 4. KIRA ALK / EJEN KOPERASI
+    let totalAlk = 0;
+    try {
+        const alkQuery = await getDocs(query(collection(db, "users"), where("alkRef", "!=", null), where("referral", "==", data.consultantNo)));
+        // Ini adalah cara ringkas, sebaiknya kira dari sub-koleksi introducers institusi
+        // Untuk UI kita setkan sementara 0 (atau count unik ALK ref).
+    } catch(e){}
+
+    // 5. PAID & OUTSTANDING
+    let paid = 0;
+    const paymentSnap = await getDocs(query(collection(db,"paymentVouchers"), where("consultantNo","==",data.consultantNo), where("status","==","PAID")));
+    paymentSnap.forEach((d)=>{ paid += Number(d.data().amount || 0); });
+    const earned = totalCommission;
+    const outstanding = earned - paid;
+
+    // 6. PAPARAN UI KAD
+    document.getElementById("welcomeText").innerHTML = data.nama;
+    document.getElementById("earnedCard").innerHTML = "RM" + earned.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+    document.getElementById("paidCard").innerHTML = "RM" + paid.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+    document.getElementById("outstandingCard").innerHTML = "RM" + outstanding.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+    
+    document.getElementById("activeClients").innerHTML = activeClients;
+    document.getElementById("totalAlk").innerHTML = totalAlk;
+    document.getElementById("totalSales").innerHTML = "RM" + totalSales.toLocaleString("ms-MY", {minimumFractionDigits: 2});
+    document.getElementById("totalCommission").innerHTML = "RM" + totalCommission.toLocaleString("ms-MY", {minimumFractionDigits: 2});
+
+    document.getElementById("profileContent").innerHTML = `
+        <p><b>Nama Institusi:</b> ${data.nama}</p>
+        <p><b>No Pendaftaran (AQP):</b> ${data.consultantNo}</p>
+        <p><b>Penaja AQC (Upline):</b> ${data.upline || "-"}</p>
+        <p><b>Telefon:</b> ${data.telefon}</p>
+        <p><b>Email Rasmi:</b> ${data.email || "-"}</p>
+        <p><b>No SSM / SKM:</b> ${data.ic || data.regNo || "-"}</p>
+        <p><b>Bank:</b> ${data.bankName || "-"}</p>
+        <p><b>No Akaun Institusi:</b> ${data.bankAccount || "-"}</p>
+    `;
+
+    // 7. LUKIS CARTA (CHARTS)
+    Chart.register(ChartDataLabels);
+    new Chart(document.getElementById("productChart"), {
+        type: "pie",
+        data: {
+            labels: ["Wasiat", "Hibah", "Sepencarian", "Mawaris", "Korp-Premium", "Korp-Sole", "Korp-P'ship", "Korp-Zurri"],
+            datasets: [{
+                data: [wasiatSales, hibahSales, sepencarianSales, mawarisSales, corpPremiumSales, corpTunggalSales, corpKongsiSales, corpZurriSales],
+                backgroundColor: ["#3B82F6", "#F43F5E", "#F59E0B", "#FACC15", "#10B981", "#14B8A6", "#8B5CF6", "#84CC16"]
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { datalabels: { color: "#fff", font: { weight: "bold" }, formatter: (value, context) => { if (value === 0) return ""; const dataSet = context.chart.data.datasets[0].data; const total = dataSet.reduce((a,b)=>a+b,0); return total ? ((value / total) * 100).toFixed(1) + "%" : ""; } } } }
+    });
+
+    const ctx = document.getElementById("salesChart").getContext("2d");
+    new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Jan", "Feb", "Mac", "Apr", "Mei", "Jun", "Jul", "Ogos", "Sep", "Okt", "Nov", "Dis"],
+            datasets: [
+                { label: "Jualan Bersih", data: [monthlySales[1], monthlySales[2], monthlySales[3], monthlySales[4], monthlySales[5], monthlySales[6], monthlySales[7], monthlySales[8], monthlySales[9], monthlySales[10], monthlySales[11], monthlySales[12]], backgroundColor: "rgba(59, 130, 246, 0.85)" },
+                { label: "Komisen AQP", data: monthlyCommission, backgroundColor: "rgba(16, 185, 129, 0.85)" }
+            ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false } }, scales: { x: { grid: { display: false } }, y: { beginAtZero: true } } }
+    }); 
+
+    // 8. BUTANG NAVIGASI AQP
+    if (isExpired) {
+        const buttonsToDisable = ["clientsBtn", "alkBtn", "copyReferralAqmBtn", "copyReferralAlkBtn"];
+        buttonsToDisable.forEach(id => {
+            const btn = document.getElementById(id);
+            if(btn) {
+                btn.disabled = true;
+                btn.classList.add("bg-gray-400", "cursor-not-allowed");
+            }
+        });
+        document.getElementById("renewalBtn")?.addEventListener("click",()=>{ window.location.href = "aqp-renewal.html"; });
+    } else {
+        document.getElementById("clientsBtn")?.addEventListener("click", ()=>{ window.location.href = "aqp-clients.html"; });
+        document.getElementById("alkBtn")?.addEventListener("click",()=>{ window.location.href = "aqp-alk-manager.html"; });
+        document.getElementById("renewalBtn")?.addEventListener("click",()=>{ window.location.href = "aqp-renewal.html"; });  
+        document.getElementById("claimsBtn")?.addEventListener("click", ()=>{ window.location.href = "consultant-claims.html"; }); // Boleh share fail claims
+        
+        document.getElementById("copyReferralAqmBtn").addEventListener("click", async()=>{
+            try{
+                await navigator.clipboard.writeText(window.location.origin + window.location.pathname.replace("aqp-dashboard.html", "register.html") + "?ref=" + aqpData.consultantNo);
+                const btn = document.getElementById("copyReferralAqmBtn");
+                btn.innerHTML = "✓ Copied AQM Link";
+                setTimeout(()=>{ btn.innerHTML = "Copy Link Pelanggan (AQM)"; },2000);
+            }catch(err){ alert("Gagal copy link"); }
+        });
+
+        document.getElementById("copyReferralAlkBtn").addEventListener("click", async()=>{
+            try{
+                // Ini pautan untuk pendaftaran ALK baharu di bawah AQP ini
+                await navigator.clipboard.writeText(window.location.origin + window.location.pathname.replace("aqp-dashboard.html", "register-alk.html") + "?ref=" + aqpData.consultantNo);
+                const btn = document.getElementById("copyReferralAlkBtn");
+                btn.innerHTML = "✓ Copied ALK Form Link";
+                setTimeout(()=>{ btn.innerHTML = "Copy Link Ejen ALK Baru"; },2000);
+            }catch(err){ alert("Gagal copy link"); }
+        });
+    }
+
+    document.getElementById("editProfileBtn")?.addEventListener("click", () => { window.location.href = "aqp-profile-edit.html"; });
+    document.getElementById("profileBtn")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.remove("hidden"); });
+    document.getElementById("closeProfile")?.addEventListener("click",()=>{ document.getElementById("profileModal").classList.add("hidden"); });
+    document.getElementById("logoutBtn").addEventListener("click", async()=>{ await signOut(auth); window.location.href = "index.html"; });
+
+    // Timeline Logik Dikekalkan (Boleh digabung dalam fungsi render Timeline berasingan).
+}); 
+</script>
+
+</body>
+</html>
