@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Clients (AQP)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style> body { font-family: 'Inter', sans-serif; } </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+<div class="bg-[#153638] text-white p-5 shadow-md">
+    <h1 class="text-2xl font-bold">Senarai Pelanggan Institusi (AQP)</h1>
+</div>
+
+<div class="p-5 max-w-7xl mx-auto">
+
+    <a href="aqp-dashboard.html" class="inline-block bg-white hover:bg-gray-50 border border-gray-200 px-5 py-3 rounded-xl font-semibold mb-5 transition text-gray-800 shadow-sm">
+        ← Kembali ke Dashboard
+    </a>
+
+    <!-- RINGKASAN STATISTIK -->
+    <div class="grid md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-[#153638]">
+            <p class="text-gray-500 font-medium text-sm uppercase tracking-wider">Jumlah Pelanggan</p>
+            <p id="totalClients" class="text-3xl font-bold text-gray-800 mt-2">0</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-green-500">
+            <p class="text-gray-500 font-medium text-sm uppercase tracking-wider">Jumlah Jualan (RM)</p>
+            <p id="totalClientSales" class="text-3xl font-bold text-green-600 mt-2">RM 0.00</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-blue-500">
+            <p class="text-gray-500 font-medium text-sm uppercase tracking-wider">Komisen Institusi (35%)</p>
+            <p id="totalCommission" class="text-3xl font-bold text-blue-600 mt-2">RM 0.00</p>
+        </div>
+    </div>
+    
+    <!-- JADUAL PELANGGAN -->
+    <div id="clientList" class="overflow-x-auto bg-white rounded-2xl shadow-sm border border-gray-100">
+        <table class="w-full text-sm text-left">
+            <thead class="bg-gray-50 text-gray-600 uppercase font-semibold border-b border-gray-200">
+                <tr>
+                    <th class="p-4">Bil</th>
+                    <th class="p-4">Tarikh Daftar</th>
+                    <th class="p-4">No Ahli</th>
+                    <th class="p-4">Nama Pelanggan</th>
+                    <th class="p-4">Ejen/Wakil</th>
+                    <th class="p-4 text-right">Sales (RM)</th>
+                    <th class="p-4 text-right">Komisen (RM)</th>
+                    <th class="p-4 text-center">Status</th>
+                    <th class="p-4 text-center">Workflow</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody" class="divide-y divide-gray-100">
+                <tr>
+                    <td colspan="9" class="p-8 text-center text-gray-500">Memuat turun data pelanggan...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+  
+<script type="module">
+import { db, auth } from './firebase.js';
+import { collection, getDocs, doc, getDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+onAuthStateChanged(auth, async(user) => {
+    if(!user){
+        window.location.href = "login.html";
+        return;
+    }
+
+    const aqpSnap = await getDoc(doc(db, "consultants", user.uid));
+    if(!aqpSnap.exists()) return;
+    const aqpData = aqpSnap.data();
+    const consultantNo = aqpData.consultantNo; // Contoh: AQP0001
+
+    // 1. Tarik Data Settings (Harga Produk)
+    const compSnap = await getDoc(doc(db, "settings", "compensation"));
+    const comp = compSnap.exists() ? compSnap.data() : {};
+
+    const priceWasiat = Number(comp.wasiatPrice || 350);
+    const priceHibah = Number(comp.hibahPrice || 2500);
+    const priceSepencarian = Number(comp.sepencarianPrice || 800);
+    const priceMawaris = Number(comp.mawarisPrice || 3000);
+    const priceCorporate = Number(comp.corporatePrice || 6000);
+    const priceCorporateTunggal = Number(comp.corporateTunggalPrice || 1500);
+    const priceCorporateKongsi = Number(comp.corporateKongsiPrice || 3000);
+    const priceCorporateZurri = Number(comp.corporateZurriPrice || 1000);
+
+    // Komisen tetap AQP (35%)
+    const commissionRate = 35; 
+
+    // 2. Tarik komisen keseluruhan yang tepat dari Lejar (Kod 2010)
+    let exactTotalCommission = 0;
+    const ledgerQ = query(collection(db, "ledger"), where("consultantNo", "==", consultantNo), where("accountCode", "==", "2010"));
+    const ledgerSnap = await getDocs(ledgerQ);
+    ledgerSnap.forEach(d => {
+        exactTotalCommission += Number(d.data().credit || 0);
+    });
+
+    // 3. Tarik senarai pelanggan di bawah AQP ini
+    const snap = await getDocs(collection(db,"users"));
+    let html = "";
+    let bil = 1;
+
+    let totalClients = 0;
+    let totalClientSales = 0;
+  
+    for (const docSnap of snap.docs){
+        const client = docSnap.data();
+        
+        // Semak adakah pelanggan ini di bawah AQP yang sedang log masuk
+        if(client.role !== "customer" || (client.referral || "").trim() !== consultantNo){
+            continue;
+        }
+
+        let clientSales = 0;
+
+        // Semak status bayaran produk
+        if(client.wasiatPaymentStatus === "paid") clientSales += priceWasiat;
+        if(client.hibahPaymentStatus === "paid") clientSales += priceHibah;
+        if(client.sepencarianPaymentStatus === "paid") clientSales += priceSepencarian;
+        if(client.mawarisPaymentStatus === "paid") clientSales += priceMawaris;
+        if(client.corporatePaymentStatus === "paid") clientSales += priceCorporate;
+        if(client.corporateTunggalPaymentStatus === "paid") clientSales += priceCorporateTunggal;
+        if(client.corporateKongsiPaymentStatus === "paid") clientSales += priceCorporateKongsi;
+        if(client.corporateZurriPaymentStatus === "paid") clientSales += priceCorporateZurri;
+
+        const commission = clientSales * (commissionRate / 100);
+
+        totalClients++;
+        totalClientSales += clientSales;
+        
+        // Pengecaman Ejen Dalaman (alkRef)
+        const agentName = client.alkRef ? client.alkRef : "Direct (HQ)";
+        const registerDate = client.createdAt ? client.createdAt.toDate().toLocaleDateString("ms-MY") : "-";
+        
+        const isAhliAktif = clientSales > 0;
+        
+        // Semakan Workflow Status
+        const modules = ["corporate_tunggal", "corporate_kongsi", "corporate_zurri", "corporate", "hibah", "wasiat", "sepencarian", "mawaris"];
+        let workflowStatus = "PROSPEK";
+
+        for(const module of modules){
+            const moduleSnap = await getDoc(doc(db, "users", docSnap.id, module, "maklumat"));
+            if(moduleSnap.exists() && moduleSnap.data().status){
+                workflowStatus = moduleSnap.data().status;
+                break;
+            }
+        }
+        
+        html += `
+        <tr class="hover:bg-gray-50 transition">
+            <td class="p-4 text-gray-500">${bil++}</td>
+            <td class="p-4">${registerDate}</td>
+            <td class="p-4 font-medium">${client.memberNo || "-"}</td>
+            <td class="p-4 font-semibold text-gray-800">${client.nama || "-"}</td>
+            <td class="p-4 text-gray-500"><span class="bg-gray-100 px-2 py-1 rounded text-xs">${agentName}</span></td>
+            <td class="p-4 text-right font-semibold text-green-600">RM ${clientSales.toLocaleString("en-US",{ minimumFractionDigits:2 })}</td>
+            <td class="p-4 text-right font-semibold text-blue-600">RM ${commission.toLocaleString("en-US",{ minimumFractionDigits:2 })}</td>
+            <td class="p-4 text-center">
+                <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${isAhliAktif ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}">
+                    ${isAhliAktif ? "Aktif" : "Prospek"}
+                </span>
+            </td>
+            <td class="p-4 text-center">
+                <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-700">
+                    ${workflowStatus}
+                </span>
+            </td>
+        </tr>
+        `;
+    }
+
+    // 4. Update UI
+    document.getElementById("totalClients").innerHTML = totalClients;
+    document.getElementById("totalClientSales").innerHTML = "RM " + totalClientSales.toLocaleString("en-US",{ minimumFractionDigits:2 });
+    document.getElementById("totalCommission").innerHTML = "RM " + exactTotalCommission.toLocaleString("en-US",{ minimumFractionDigits:2 });
+  
+    document.getElementById("tableBody").innerHTML = html || `
+    <tr>
+        <td colspan="9" class="p-8 text-center text-gray-500">Tiada pelanggan direkodkan di bawah institusi ini.</td>
+    </tr>
+    `;
+});
+</script>
+
+</body>
+</html>
