@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran Rakan Institusi (AQP)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style> body { font-family: 'Inter', sans-serif; } </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center py-10 px-4">
+
+    <div class="max-w-2xl w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+        
+        <!-- HEADER -->
+        <div class="bg-[#153638] p-8 text-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80');"></div>
+            <div class="relative z-10">
+                <div class="inline-flex items-center justify-center p-3 bg-white/10 rounded-full mb-4 border border-white/20">
+                    <i data-lucide="building-2" class="w-8 h-8 text-[#d8ae81]"></i>
+                </div>
+                <h1 class="text-2xl font-extrabold text-white tracking-tight">Pendaftaran Rakan Institusi</h1>
+                <p class="text-[#d8ae81] font-medium mt-1">Al-Qawthar Partner (AQP)</p>
+            </div>
+        </div>
+
+        <!-- FORM -->
+        <div class="p-8">
+            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 mb-8 text-sm text-indigo-800 leading-relaxed text-justify">
+                <strong>Pemberitahuan:</strong> Borang ini dikhususkan untuk entiti korporat, koperasi, yayasan atau pertubuhan berdaftar. Sebagai AQP, institusi anda akan menerima <strong>35% komisen</strong> daripada setiap perancangan pewarisan yang dilanggan oleh ahli di bawah organisasi anda.
+            </div>
+
+            <form id="aqpForm" class="space-y-6">
+                
+                <!-- SEKSYEN 1: MAKLUMAT UPLINE -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest border-b pb-2">1. Maklumat Penaja (AQC)</h3>
+                    <div>
+                        <label class="block text-sm font-semibold text-[#153638] mb-1">Kod Penaja (Upline) <span class="text-red-500">*</span></label>
+                        <input type="text" id="upline" required readonly placeholder="Contoh: AQC0001" class="w-full border border-gray-300 p-3 rounded-xl bg-gray-100 text-gray-500 cursor-not-allowed focus:outline-none">
+                        <p class="text-xs text-gray-400 mt-1">Sistem mengunci kod penaja secara automatik melalui pautan (link) rujukan.</p>
+                    </div>
+                </div>
+
+                <!-- SEKSYEN 2: MAKLUMAT INSTITUSI -->
+                <div class="space-y-4 mt-8">
+                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest border-b pb-2">2. Maklumat Institusi</h3>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-[#153638] mb-1">Nama Rasmi Institusi / Syarikat / Koperasi <span class="text-red-500">*</span></label>
+                        <input type="text" id="instName" required placeholder="Contoh: Koperasi Kakitangan Kerajaan Berhad" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-[#153638] mb-1">No. Pendaftaran (SSM / SKM / ROS) <span class="text-red-500">*</span></label>
+                        <input type="text" id="regNo" required placeholder="Contoh: B-12345678" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
+                    </div>
+                </div>
+
+                <!-- SEKSYEN 3: MAKLUMAT WAKIL & LOG MASUK -->
+                <div class="space-y-4 mt-8">
+                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest border-b pb-2">3. Maklumat Wakil & Akses Portal</h3>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-[#153638] mb-1">Nama Penuh Wakil (Cth: Bendahari / Pengarah) <span class="text-red-500">*</span></label>
+                        <input type="text" id="wakilName" required class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-[#153638] mb-1">Nombor Telefon (Wakil) <span class="text-red-500">*</span></label>
+                            <input type="tel" id="phone" required placeholder="01X-XXXXXXX" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-[#153638] mb-1">Emel Rasmi / Log Masuk <span class="text-red-500">*</span></label>
+                            <input type="email" id="email" required placeholder="emel@syarikat.com" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-[#153638] mb-1">Kata Laluan Portal <span class="text-red-500">*</span></label>
+                        <input type="password" id="password" required minlength="6" placeholder="Minima 6 aksara" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
+                    </div>
+                </div>
+
+                <!-- PERSETUJUAN -->
+                <div class="flex items-start mt-8 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <input id="pdpaConsent" type="checkbox" class="w-5 h-5 text-[#153638] border-gray-300 rounded mt-1 cursor-pointer" required>
+                    <label for="pdpaConsent" class="ml-3 text-xs text-gray-600 cursor-pointer leading-relaxed">
+                        Kami selaku wakil institusi bersetuju mematuhi garis panduan operasi rakan strategik AQMS. Kami berikrar akan menjaga kerahsiaan data ahli mengikut <strong>Polisi PDPA 2010</strong>.
+                    </label>
+                </div>
+
+                <button id="registerBtn" type="submit" class="w-full bg-[#153638] hover:bg-[#1d4a4d] text-white p-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 mt-6">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-[#d8ae81]"></i> Daftar & Cipta Portal AQP
+                </button>
+
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { db, auth } from './firebase.js';
+        import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { doc, setDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        lucide.createIcons();
+
+        // TANGKAP UPLINE DARI URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const uplineRef = urlParams.get('ref');
+        const inputUpline = document.getElementById('upline');
+        
+        if (uplineRef) {
+            inputUpline.value = uplineRef.toUpperCase();
+        } else {
+            alert("Ralat Pautan: Kod Penaja (Upline) tiada. Sila pastikan anda klik dari pautan rujukan yang sah.");
+            document.getElementById("registerBtn").disabled = true;
+            document.getElementById("registerBtn").classList.replace("bg-[#153638]", "bg-gray-400");
+        }
+
+        // HANTAR BORANG
+        document.getElementById('aqpForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById("registerBtn");
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = "Memproses Pendaftaran...";
+            btn.disabled = true;
+
+            const instName = document.getElementById('instName').value;
+            const regNo = document.getElementById('regNo').value;
+            const wakilName = document.getElementById('wakilName').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const uplineVal = document.getElementById('upline').value;
+
+            try {
+                // 1. DAFTAR AUTH FIREBASE
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // 2. JANA AUTO-COUNTER AQP MENGGUNAKAN TRANSACTION (Bebas Pertindihan)
+                const newAqpNo = await runTransaction(db, async (transaction) => {
+                    const counterDocRef = doc(db, "system", "counter");
+                    const counterDoc = await transaction.get(counterDocRef);
+                    
+                    let newCount = 1;
+                    if (counterDoc.exists() && counterDoc.data().aqpCounter) {
+                        newCount = counterDoc.data().aqpCounter + 1;
+                    }
+                    
+                    transaction.set(counterDocRef, { aqpCounter: newCount }, { merge: true });
+                    // Format: AQP0001
+                    return "AQP" + String(newCount).padStart(4, '0');
+                });
+
+                // Set 1 Tahun Expired Date (Untuk logik modul renewal RM1000 kelak)
+                const expiryDate = new Date();
+                expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+
+                // 3. SIMPAN KE KOLEKSI 'consultants' (Akaun Kewangan & Lejar)
+                await setDoc(doc(db, "consultants", user.uid), {
+                    nama: instName,
+                    regNo: regNo,
+                    wakilNama: wakilName,
+                    telefon: phone,
+                    email: email,
+                    upline: uplineVal,
+                    consultantNo: newAqpNo,
+                    role: "aqp",
+                    consultantLevel: "AQP",
+                    status: "ACTIVE",
+                    createdAt: new Date(),
+                    renewalDate: expiryDate,
+                    totalSales: 0,
+                    totalCommission: 0
+                });
+
+                // 4. SIMPAN KE KOLEKSI 'users' (Untuk Pengecaman Berpusat & Login Bypass)
+                await setDoc(doc(db, "users", user.uid), {
+                    nama: instName,
+                    email: email,
+                    telefon: phone,
+                    role: "aqp",
+                    consultantNo: newAqpNo,
+                    createdAt: new Date()
+                });
+
+                alert(`Pendaftaran Berjaya!\nNo Institusi Anda: ${newAqpNo}\nSila teruskan ke Dashboard.`);
+                window.location.href = "aqp-dashboard.html";
+
+            } catch (error) {
+                console.error(error);
+                alert("Gagal mendaftar: " + error.message);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
