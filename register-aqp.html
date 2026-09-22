@@ -37,12 +37,12 @@
                 <div class="space-y-4">
                     <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest border-b pb-2">1. Maklumat Penaja (AQC)</h3>
                     <div>
-                        <label class="block text-sm font-semibold text-[#153638] mb-1">Kod Penaja (Upline) <span class="text-red-500">*</span></label>
-                        <input type="text" id="upline" required readonly placeholder="Contoh: AQC0001" class="w-full border border-gray-300 p-3 rounded-xl bg-gray-100 text-gray-500 cursor-not-allowed focus:outline-none">
-                        <p class="text-xs text-gray-400 mt-1">Sistem mengunci kod penaja secara automatik melalui pautan (link) rujukan.</p>
+                        <label class="block text-sm font-semibold text-[#153638] mb-1">Kod Penaja (Upline) <span class="text-gray-400 font-normal text-xs">(Pilihan)</span></label>
+                        <input type="text" id="upline" placeholder="Cth: AQC0001 (Kosongkan jika pendaftaran terus)" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition uppercase">
+                        <p class="text-xs text-gray-400 mt-1">Jika anda klik dari pautan AQC, kod akan diisi dan dikunci secara automatik.</p>
                     </div>
                 </div>
-
+                
                 <!-- SEKSYEN 2: MAKLUMAT INSTITUSI -->
                 <div class="space-y-4 mt-8">
                     <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest border-b pb-2">2. Maklumat Institusi</h3>
@@ -107,18 +107,18 @@
 
         lucide.createIcons();
 
-        // TANGKAP UPLINE DARI URL
+       // TANGKAP UPLINE DARI URL
         const urlParams = new URLSearchParams(window.location.search);
         const uplineRef = urlParams.get('ref');
         const inputUpline = document.getElementById('upline');
         
         if (uplineRef) {
+            // Jika datang dari link AQC, isi kod dan kunci kotak tersebut
             inputUpline.value = uplineRef.toUpperCase();
-        } else {
-            alert("Ralat Pautan: Kod Penaja (Upline) tiada. Sila pastikan anda klik dari pautan rujukan yang sah.");
-            document.getElementById("registerBtn").disabled = true;
-            document.getElementById("registerBtn").classList.replace("bg-[#153638]", "bg-gray-400");
+            inputUpline.readOnly = true;
+            inputUpline.classList.add("bg-gray-100", "cursor-not-allowed", "text-gray-500");
         }
+        // Jika tiada link (direct), biarkan kotak bebas diisi atau dikosongkan. Tiada lagi alert ralat.
 
         // HANTAR BORANG
         document.getElementById('aqpForm').addEventListener('submit', async (e) => {
@@ -135,8 +135,9 @@
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const uplineVal = document.getElementById('upline').value;
-
+           // Ambil nilai upline. Jika dikosongkan (direct registration), tetapkan sebagai "HQ".
+            const uplineVal = document.getElementById('upline').value.trim().toUpperCase() || "HQ";
+            
             try {
                 // 1. DAFTAR AUTH FIREBASE
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
