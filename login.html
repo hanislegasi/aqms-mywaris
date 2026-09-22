@@ -37,15 +37,16 @@
       </button>
     </form>
 
-<!-- Pautan Pendaftaran Baharu -->
+    <!-- Pautan Pendaftaran Baharu -->
     <div class="mt-6 border-t border-gray-100 pt-4 text-center">
         <a href="index.html" class="text-sm text-gray-500 hover:text-[#153638] hover:underline transition duration-150 ease-in-out">
             Belum mempunyai akaun?
         </a>
     </div>
+  </div>
 
  <script type="module">
-    // 1. Tarik db dan auth dari fail berpusat (Pendek dan kemas)
+    // 1. Tarik db dan auth dari fail berpusat
     import { db, auth } from './firebase.js';
 
     // 2. Tarik fungsi yang digunakan sahaja
@@ -60,8 +61,6 @@
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        alert("Login berjaya");
-
         const uid = auth.currentUser.uid;
 
         // ==========================================
@@ -71,13 +70,13 @@
         const adminDoc = await getDoc(adminRef);
 
         if (adminDoc.exists()) {
-          // Jika profilnya wujud dalam koleksi 'admins', terus terbangkan ke Admin Dashboard!
+          // Terus terbangkan ke Admin Dashboard!
           window.location.href = "admin-dashboard.html";
-          return; // Berhentikan fungsi di sini supaya ia tak baca kod di bawah.
+          return; 
         }
 
         // ==========================================
-        // SEMAKAN 2: Jika bukan Admin, dia Perunding atau Pelanggan?
+        // SEMAKAN 2: Dia AQC, AQP, atau Pelanggan?
         // ==========================================
         const userRef = doc(db, "users", uid);
         const userDoc = await getDoc(userRef);
@@ -93,24 +92,27 @@
           consultantNo = userData.consultantNo || "";
           nama = userData.nama || "";
         } else {
-          // AUTO-HEAL: Jika users tak wujud, cari dalam consultants
+          // AUTO-HEAL: Cari dalam 'consultants' jika tiada dalam 'users'
           const consultantRef = doc(db, "consultants", uid);
           const consultantDoc = await getDoc(consultantRef);
 
           if (consultantDoc.exists()) {
             const consultantData = consultantDoc.data();
-            role = "consultant";
+            
+            // Baca role dengan dinamik (boleh jadi 'consultant' atau 'aqp')
+            role = consultantData.role || "consultant";
             consultantNo = consultantData.consultantNo || "";
             nama = consultantData.nama || "";
 
-            // Cipta semula dokumen yang terpadam di 'users'
+            // Cipta semula dokumen yang hilang di 'users'
             await setDoc(userRef, {
-              role: "consultant",
+              role: role, 
               consultantNo: consultantNo,
-              nama: nama
+              nama: nama,
+              email: email
             }, { merge: true });
           } else {
-            // Jika tak wujud di mana-mana, jadikan customer biasa
+            // Jika tak wujud di mana-mana langsung, jadikan customer biasa
             await setDoc(userRef, {
               role: "customer",
               email: email
@@ -118,15 +120,23 @@
           }
         }
 
-        // 3. Halakan pengguna mengikut role yang sah
+        // ==========================================
+        // 3. PENGHALAAN (ROUTING) IKUT ROLE
+        // ==========================================
         if (role === "consultant") {
           sessionStorage.setItem("consultantNo", consultantNo);
           sessionStorage.setItem("consultantName", nama);
           sessionStorage.setItem("userUid", uid);
           window.location.href = "consultant-dashboard.html";
         } 
+        else if (role === "aqp") {
+          sessionStorage.setItem("consultantNo", consultantNo);
+          sessionStorage.setItem("consultantName", nama);
+          sessionStorage.setItem("userUid", uid);
+          window.location.href = "aqp-dashboard.html";
+        } 
         else {
-          // Pelanggan biasa pergi ke dashboard portal
+          // Pelanggan biasa pergi ke dashboard AQM
           window.location.href = "dashboard.html";
         }
 
@@ -135,11 +145,6 @@
         alert("Ralat Log Masuk: " + error.message);
       }
     });
-
-  
-   
-  
-   
-  </script>
+ </script>
 </body>
 </html>
