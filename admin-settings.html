@@ -171,7 +171,7 @@ font-family: Inter, sans-serif;
         </div>
 
 <!-- ================= COMMISSION & OVERRIDE ================= -->
-        <div class="grid md:grid-cols-3 gap-6 mb-6">
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
             
             <!-- COMMISSION -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
@@ -200,10 +200,14 @@ font-family: Inter, sans-serif;
                 </div>
             </div>
 
-            <!-- OVERRIDE (NORMAL AQC) -->
+            <!-- OVERRIDE -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Override Jualan Normal</h2>
+                <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Override (%)</h2>
                 <div class="grid grid-cols-2 gap-4">
+                    <div class="col-span-2 bg-emerald-50 p-3 rounded-lg border border-emerald-100 mb-2">
+                        <label class="font-bold text-sm text-emerald-800 block mb-1">AQP Flat Rate (Semua Upline)</label>
+                        <input id="overrideAQP" type="number" class="w-full border-gray-300 border rounded-xl p-2 focus:ring-2 focus:ring-emerald-400 outline-none transition-all font-bold">
+                    </div>
                     <div>
                         <label class="font-medium text-sm text-gray-600 block mb-1">AQC</label>
                         <input id="overrideAQC" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
@@ -222,24 +226,8 @@ font-family: Inter, sans-serif;
                     </div>
                 </div>
             </div>
-
-            <!-- OVERRIDE KHAS (AQP) -->
-            <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-6 relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg">ASING & FLAT RATE</div>
-                <h2 class="text-xl font-bold mb-5 text-emerald-800 border-b border-emerald-100 pb-3">Override Jualan AQP</h2>
-                
-                <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
-                    <label class="font-bold text-sm text-emerald-800 block mb-1">Flat Rate (Semua Pangkat Upline)</label>
-                    <div class="flex items-center gap-3">
-                        <input id="overrideAQP" type="number" class="w-full border-emerald-300 border rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none transition-all font-bold text-emerald-900 text-lg">
-                        <span class="text-emerald-700 font-bold text-lg">%</span>
-                    </div>
-                    <p class="text-xs text-emerald-600 mt-3 leading-relaxed">
-                        *Tidak mengikut pangkat (AQC/AS/UM/MGAM). Upline akan menerima peratusan tetap ini secara penuh daripada jualan AQP di bawahnya.
-                    </p>
-                </div>
-            </div>
-</div>
+            
+        </div>
           
        <!-- ================= UPLINE BENEFIT & BONUS ================= -->
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
