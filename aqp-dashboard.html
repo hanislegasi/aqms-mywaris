@@ -59,7 +59,7 @@
         <h3 class="font-bold text-lg mb-5 text-[#153638]">Ringkasan Kewangan (Institusi)</h3>
         <div class="space-y-5">
             <div class="border rounded-xl p-4 bg-green-50/50">
-                <div class="text-sm text-gray-500 font-semibold">Total Earned (35%)</div>
+                <div id="earnedLabel" class="text-sm text-gray-500 font-semibold">Total Earned</div>
                 <div id="earnedCard" class="text-2xl font-bold text-green-600">RM0.00</div>
             </div>
             <div class="border rounded-xl p-4 bg-blue-50/50">
@@ -153,7 +153,7 @@
         <p id="activeClients" class="text-2xl md:text-3xl font-bold text-[#153638]">0</p>
     </div>
     <div class="bg-white p-5 rounded-xl shadow border-l-4 border-indigo-500">
-        <p class="text-gray-500 font-medium">Rekod Ejen Koperasi (ALK)</p>
+        <p class="text-gray-500 font-medium">Rekod Ejen (ALK)</p>
         <p id="totalAlk" class="text-2xl md:text-3xl font-bold text-indigo-600">0</p>
     </div>
     <div class="bg-white p-5 rounded-xl shadow border-l-4 border-[#153638]">
@@ -161,7 +161,8 @@
         <p id="totalSales" class="text-2xl md:text-3xl font-bold text-[#153638]">RM0</p>
     </div>
     <div class="bg-white p-5 rounded-xl shadow border-l-4 border-green-500">
-        <p class="text-gray-500 font-medium">Komisen Koperasi (35%)</p>
+        <!-- Label ini akan berubah secara dinamik -->
+        <p id="commissionLabel" class="text-gray-500 font-medium">Komisen Institusi</p>
         <p id="totalCommission" class="text-2xl md:text-3xl font-bold text-green-600">RM0</p>
     </div>
 </div>
@@ -225,8 +226,16 @@ onAuthStateChanged(auth, async(user)=>{
     const compSnap = await getDoc(doc(db, "settings", "compensation"));
     const comp = compSnap.exists() ? compSnap.data() : {};
     
-    // Kadar komisen AQP Tetap
-    const commissionRate = Number(comp.aqpCommissionPercent || 35); 
+    // 🟢 TUKAR: Ambil kadar komisen AQP Tetap daripada setting baharu "commissionAQP"
+    const commissionRate = Number(comp.commissionAQP !== undefined ? comp.commissionAQP : 35); 
+    
+    // Kemas kini Label HTML secara dinamik
+    if (document.getElementById("earnedLabel")) {
+        document.getElementById("earnedLabel").innerText = `Total Earned (${commissionRate}%)`;
+    }
+    if (document.getElementById("commissionLabel")) {
+        document.getElementById("commissionLabel").innerText = `Komisen Institusi (${commissionRate}%)`;
+    }
 
    // 2. SEMAKAN BANNER RENEWAL & EXPIRY
     const renewalDate = data.renewalDate?.toDate ? data.renewalDate.toDate() : new Date(data.renewalDate);
