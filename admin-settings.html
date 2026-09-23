@@ -433,7 +433,13 @@ font-family: Inter, sans-serif;
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
+            <!-- Ditukar ke lg:grid-cols-5 untuk muatkan 5 kotak sebaris -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-5 mt-6">
+                <!-- TAMBAHAN AQP RENEWAL -->
+                <div class="bg-blue-50 p-2 rounded-xl border border-blue-100">
+                    <label class="font-bold text-sm text-blue-800 block mb-1">Renewal AQP (RM)</label>
+                    <input id="renewalAQP" type="number" class="w-full border-blue-300 border rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all font-bold">
+                </div>
                 <div>
                     <label class="font-medium text-sm text-gray-600 block mb-1">Renewal AQC (RM)</label>
                     <input id="renewalAQC" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
@@ -645,7 +651,7 @@ font-family: Inter, sans-serif;
             maintainSalesAQCAS: 30000, maintainSalesAQCUM: 60000, maintainSalesMGAM: 120000,
             maintainRecruitAQCAS: 5, maintainRecruitAQCUM: 10, maintainRecruitMGAM: 15,
             memberValidity: 365, consultantRegistrationFee: 200,
-            renewalAQC: 100, renewalAQCAS: 150, renewalAQCUM: 250, renewalMGAM: 500,
+            renewalAQC: 100, renewalAQCAS: 150, renewalAQCUM: 250, renewalMGAM: 500, renewalAQP: 1000,
            };
 
         const companyFields = ["companyName", "registrationNo", "employerNo", "companyEmail", "companyAddress"];
@@ -663,7 +669,7 @@ font-family: Inter, sans-serif;
             "maintainSalesAQCAS", "maintainSalesAQCUM", "maintainSalesMGAM",
             "maintainRecruitAQCAS", "maintainRecruitAQCUM", "maintainRecruitMGAM",
             "memberValidity", "consultantRegistrationFee", 
-            "renewalAQC", "renewalAQCAS", "renewalAQCUM", "renewalMGAM",
+            "renewalAQC", "renewalAQCAS", "renewalAQCUM", "renewalMGAM", "renewalAQP",
             "companyPool", "commissionPool", "overridePool",
             "adminOperation", "allowance", "royalty"
         ];
