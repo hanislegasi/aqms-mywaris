@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style> body { font-family: 'Inter', sans-serif; } </style>
+     <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="bg-gray-100 min-h-screen">
@@ -15,7 +16,7 @@
     <h1 class="text-2xl font-bold">Senarai Pelanggan Institusi (AQP)</h1>
 </div>
 
-<div class="p-5 max-w-7xl mx-auto">
+<div class="p-5">
 
     <a href="aqp-dashboard.html" class="inline-block bg-white hover:bg-gray-50 border border-gray-200 px-5 py-3 rounded-xl font-semibold mb-5 transition text-gray-800 shadow-sm">
         ← Kembali ke Dashboard
@@ -32,7 +33,7 @@
             <p id="totalClientSales" class="text-3xl font-bold text-green-600 mt-2">RM 0.00</p>
         </div>
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-blue-500">
-            <p class="text-gray-500 font-medium text-sm uppercase tracking-wider">Komisen Institusi (35%)</p>
+            <p id="labelKomisen" class="text-gray-500 font-medium text-sm uppercase tracking-wider">Komisen Institusi</p>
             <p id="totalCommission" class="text-3xl font-bold text-blue-600 mt-2">RM 0.00</p>
         </div>
     </div>
@@ -47,8 +48,8 @@
                     <th class="p-4">No Ahli</th>
                     <th class="p-4">Nama Pelanggan</th>
                     <th class="p-4">Ejen/Wakil</th>
-                    <th class="p-4 text-right">Sales (RM)</th>
-                    <th class="p-4 text-right">Komisen (RM)</th>
+                    <th class="p-4 text-right">Sales (Lejer)</th>
+                    <th class="p-4 text-right">Komisen (Lejer)</th>
                     <th class="p-4 text-center">Status</th>
                     <th class="p-4 text-center">Workflow</th>
                 </tr>
@@ -65,7 +66,7 @@
   
 <script type="module">
 import { db, auth } from './firebase.js';
-import { collection, getDocs, doc, getDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 onAuthStateChanged(auth, async(user) => {
@@ -77,69 +78,99 @@ onAuthStateChanged(auth, async(user) => {
     const aqpSnap = await getDoc(doc(db, "consultants", user.uid));
     if(!aqpSnap.exists()) return;
     const aqpData = aqpSnap.data();
-    const consultantNo = aqpData.consultantNo; // Contoh: AQP0001
+    const consultantNo = aqpData.consultantNo; 
+    const consName = aqpData.nama ? aqpData.nama.toLowerCase().trim() : "";
 
-    // 1. Tarik Data Settings (Harga Produk)
+    // --- 1. DAPATKAN KADAR KOMISEN DARI TETAPAN ADMIN ---
     const compSnap = await getDoc(doc(db, "settings", "compensation"));
     const comp = compSnap.exists() ? compSnap.data() : {};
+    
+    // Guna nilai dari admin setting (commissionAQP), default 35 jika tiada
+    const commissionRate = Number(comp.commissionAQP || 35); 
+    
+    // Kemas kini label untuk memaparkan peratusan komisen secara dinamik
+    document.getElementById("labelKomisen").innerText = `Komisen Institusi (${commissionRate}%)`;
 
-    const priceWasiat = Number(comp.wasiatPrice || 350);
-    const priceHibah = Number(comp.hibahPrice || 2500);
-    const priceSepencarian = Number(comp.sepencarianPrice || 800);
-    const priceMawaris = Number(comp.mawarisPrice || 3000);
-    const priceCorporate = Number(comp.corporatePrice || 6000);
-    const priceCorporateTunggal = Number(comp.corporateTunggalPrice || 1500);
-    const priceCorporateKongsi = Number(comp.corporateKongsiPrice || 3000);
-    const priceCorporateZurri = Number(comp.corporateZurriPrice || 1000);
-
-    // Komisen tetap AQP (35%)
-    const commissionRate = 35; 
-
-    // 2. Tarik komisen keseluruhan yang tepat dari Lejar (Kod 2010)
-    let exactTotalCommission = 0;
-    const ledgerQ = query(collection(db, "ledger"), where("consultantNo", "==", consultantNo), where("accountCode", "==", "2010"));
-    const ledgerSnap = await getDocs(ledgerQ);
+    // --- 2. TARIK SEMUA DATA LEJER KE DALAM MEMORI ---
+    const ledgerSnap = await getDocs(collection(db, "ledger"));
+    const ledgerRecords = [];
+    
     ledgerSnap.forEach(d => {
-        exactTotalCommission += Number(d.data().credit || 0);
+        ledgerRecords.push({ id: d.id, ...d.data() });
     });
 
-    // 3. Tarik senarai pelanggan di bawah AQP ini
+    // --- 3. BINA JADUAL PELANGGAN ---
     const snap = await getDocs(collection(db,"users"));
     let html = "";
     let bil = 1;
 
     let totalClients = 0;
-    let totalClientSales = 0;
+    let sumTotalSales = 0;
+    let sumTotalCommission = 0;
   
     for (const docSnap of snap.docs){
         const client = docSnap.data();
+        const clientId = docSnap.id;
         
-        // Semak adakah pelanggan ini di bawah AQP yang sedang log masuk
+        // Penapisan: Hanya pelanggan di bawah rujukan AQP ini
         if(client.role !== "customer" || (client.referral || "").trim() !== consultantNo){
             continue;
         }
 
-        let clientSales = 0;
-
-        // Semak status bayaran produk
-        if(client.wasiatPaymentStatus === "paid") clientSales += priceWasiat;
-        if(client.hibahPaymentStatus === "paid") clientSales += priceHibah;
-        if(client.sepencarianPaymentStatus === "paid") clientSales += priceSepencarian;
-        if(client.mawarisPaymentStatus === "paid") clientSales += priceMawaris;
-        if(client.corporatePaymentStatus === "paid") clientSales += priceCorporate;
-        if(client.corporateTunggalPaymentStatus === "paid") clientSales += priceCorporateTunggal;
-        if(client.corporateKongsiPaymentStatus === "paid") clientSales += priceCorporateKongsi;
-        if(client.corporateZurriPaymentStatus === "paid") clientSales += priceCorporateZurri;
-
-        const commission = clientSales * (commissionRate / 100);
-
         totalClients++;
-        totalClientSales += clientSales;
         
-        // Pengecaman Ejen Dalaman (alkRef)
+        let clientSales = 0;
+        let commission = 0;
+
+        const mNo = client.memberNo ? client.memberNo.toUpperCase() : null;
+        const cName = client.nama ? client.nama.toLowerCase().trim() : null;
+
+        // --- 4. LOGIK PADANAN LEJER (SMART & SAFE MATCHING) ---
+        ledgerRecords.forEach(rekod => {
+            let isMatch = false;
+            const acc = String(rekod.accountCode);
+            const desc = rekod.description ? rekod.description.toLowerCase() : "";
+            const tGroup = rekod.transactionGroup ? String(rekod.transactionGroup).trim().toUpperCase() : "";
+            const rUid = rekod.clientUid || rekod.userId || rekod.uid || rekod.customerId || "";
+            const rMemNo = rekod.memberNo ? String(rekod.memberNo).toUpperCase() : "";
+
+            // A. Padan menggunakan UID secara Mutlak
+            if (rUid === clientId || tGroup === clientId.toUpperCase()) {
+                isMatch = true;
+            }
+            // B. Padan menggunakan No Ahli (AQM)
+            else if (mNo && (tGroup === mNo || rMemNo === mNo || desc.includes(mNo.toLowerCase()))) {
+                isMatch = true;
+            }
+            // C. Padan menggunakan Nama Klien
+            else if (cName && cName.length > 3 && cName !== consName && desc.includes(cName)) {
+                isMatch = true;
+            }
+
+            // Jika Padan, rekod jualan (1000) & komisen AQP (2010)
+            if (isMatch) {
+                if (acc === "1000") clientSales += Number(rekod.debit || 0);
+                if (acc === "2010") commission += Number(rekod.credit || 0);
+            }
+        });
+
+        // --- 5. PENYELARASAN FALLBACK ---
+        // Kiraan dinamik berdasarkan tetapan admin jika lejer belum dikemaskini
+        if (commission === 0 && clientSales > 0) {
+            commission = clientSales * (commissionRate / 100);
+        }
+
+        // BLOK MUTLAK: Jika prospek belum beli apa-apa
+        if (clientSales <= 0) {
+            commission = 0;
+        }
+
+        sumTotalSales += clientSales;
+        sumTotalCommission += commission;
+        
+        // Pengecaman Ejen Dalaman
         const agentName = client.alkRef ? client.alkRef : "Direct (HQ)";
         const registerDate = client.createdAt ? client.createdAt.toDate().toLocaleDateString("ms-MY") : "-";
-        
         const isAhliAktif = clientSales > 0;
         
         // Semakan Workflow Status
@@ -160,9 +191,9 @@ onAuthStateChanged(auth, async(user) => {
             <td class="p-4">${registerDate}</td>
             <td class="p-4 font-medium">${client.memberNo || "-"}</td>
             <td class="p-4 font-semibold text-gray-800">${client.nama || "-"}</td>
-            <td class="p-4 text-gray-500"><span class="bg-gray-100 px-2 py-1 rounded text-xs">${agentName}</span></td>
-            <td class="p-4 text-right font-semibold text-green-600">RM ${clientSales.toLocaleString("en-US",{ minimumFractionDigits:2 })}</td>
-            <td class="p-4 text-right font-semibold text-blue-600">RM ${commission.toLocaleString("en-US",{ minimumFractionDigits:2 })}</td>
+            <td class="p-4 text-gray-500"><span class="bg-gray-100 px-2 py-1 rounded text-xs font-bold">${agentName}</span></td>
+            <td class="p-4 text-right font-semibold text-green-600">RM ${clientSales.toLocaleString("en-US",{ minimumFractionDigits:2, maximumFractionDigits:2 })}</td>
+            <td class="p-4 text-right font-semibold text-blue-600">RM ${commission.toLocaleString("en-US",{ minimumFractionDigits:2, maximumFractionDigits:2 })}</td>
             <td class="p-4 text-center">
                 <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${isAhliAktif ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}">
                     ${isAhliAktif ? "Aktif" : "Prospek"}
@@ -177,10 +208,10 @@ onAuthStateChanged(auth, async(user) => {
         `;
     }
 
-    // 4. Update UI
+    // --- 6. KEMAS KINI UI ---
     document.getElementById("totalClients").innerHTML = totalClients;
-    document.getElementById("totalClientSales").innerHTML = "RM " + totalClientSales.toLocaleString("en-US",{ minimumFractionDigits:2 });
-    document.getElementById("totalCommission").innerHTML = "RM " + exactTotalCommission.toLocaleString("en-US",{ minimumFractionDigits:2 });
+    document.getElementById("totalClientSales").innerHTML = "RM " + sumTotalSales.toLocaleString("en-US",{ minimumFractionDigits:2, maximumFractionDigits:2 });
+    document.getElementById("totalCommission").innerHTML = "RM " + sumTotalCommission.toLocaleString("en-US",{ minimumFractionDigits:2, maximumFractionDigits:2 });
   
     document.getElementById("tableBody").innerHTML = html || `
     <tr>
