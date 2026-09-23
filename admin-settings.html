@@ -170,11 +170,17 @@ font-family: Inter, sans-serif;
             </div>
         </div>
 
-        <!-- ================= COMMISSION & OVERRIDE ================= -->
-        <div class="grid md:grid-cols-2 gap-6 mb-6">
+<!-- ================= COMMISSION & OVERRIDE ================= -->
+        <div class="grid md:grid-cols-3 gap-6 mb-6">
+            
+            <!-- COMMISSION -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                 <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Commission (%)</h2>
                 <div class="grid grid-cols-2 gap-4">
+                    <div class="col-span-2 bg-blue-50 p-3 rounded-lg border border-blue-100 mb-2">
+                        <label class="font-bold text-sm text-blue-800 block mb-1">AQP (Institusi Korporat)</label>
+                        <input id="commissionAQP" type="number" class="w-full border-gray-300 border rounded-xl p-2 focus:ring-2 focus:ring-blue-400 outline-none transition-all font-bold">
+                    </div>
                     <div>
                         <label class="font-medium text-sm text-gray-600 block mb-1">AQC</label>
                         <input id="commissionAQC" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all">
@@ -194,8 +200,9 @@ font-family: Inter, sans-serif;
                 </div>
             </div>
 
+            <!-- OVERRIDE (NORMAL AQC) -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Override (%)</h2>
+                <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Override Jualan Normal</h2>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="font-medium text-sm text-gray-600 block mb-1">AQC</label>
@@ -215,7 +222,23 @@ font-family: Inter, sans-serif;
                     </div>
                 </div>
             </div>
-        </div>
+
+            <!-- OVERRIDE KHAS (AQP) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-6 relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg">ASING & FLAT RATE</div>
+                <h2 class="text-xl font-bold mb-5 text-emerald-800 border-b border-emerald-100 pb-3">Override Jualan AQP</h2>
+                
+                <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                    <label class="font-bold text-sm text-emerald-800 block mb-1">Flat Rate (Semua Pangkat Upline)</label>
+                    <div class="flex items-center gap-3">
+                        <input id="overrideAQP" type="number" class="w-full border-emerald-300 border rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none transition-all font-bold text-emerald-900 text-lg">
+                        <span class="text-emerald-700 font-bold text-lg">%</span>
+                    </div>
+                    <p class="text-xs text-emerald-600 mt-3 leading-relaxed">
+                        *Tidak mengikut pangkat (AQC/AS/UM/MGAM). Upline akan menerima peratusan tetap ini secara penuh daripada jualan AQP di bawahnya.
+                    </p>
+                </div>
+            </div>
 
        <!-- ================= UPLINE BENEFIT & BONUS ================= -->
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
@@ -622,8 +645,8 @@ font-family: Inter, sans-serif;
             namaSyarikatAmanah: "Rakyat Trustee Berhad", noSyarikatAmanah: "1462142-U", telefonSyarikatAmanah: "+603 2602 2722", alamatSyarikatAmanah: "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur",
             wasiatRenewal: 50, hibahRenewal: 50, sepencarianRenewal: 50, mawarisRenewal: 80, 
             corporateRenewal: 200, corporateTunggalRenewal: 100, corporateKongsiRenewal: 150, corporateZurriRenewal: 50,
-            commissionAQC: 35, commissionAQCAS: 38, commissionAQCUM: 40, commissionMGAM: 45,
-            overrideAQC: 0, overrideAQCAS: 3, overrideAQCUM: 4, overrideMGAM: 5,
+            commissionAQC: 35, commissionAQCAS: 38, commissionAQCUM: 40, commissionMGAM: 45, commissionAQP: 35,
+            overrideAQC: 0, overrideAQCAS: 3, overrideAQCUM: 4, overrideMGAM: 5, overrideAQP: 12,
             usb: 5, usbRegistrationAmount: 50, usbLockPeriod: 3,
             targetSalesBonus: 50000, rewardBonus: 1000, kpiPeriod: 365,
             companyPool: 48, commissionPool: 35, overridePool: 12,
@@ -643,8 +666,8 @@ font-family: Inter, sans-serif;
             "corporateTunggalPrice", "corporateKongsiPrice", "corporateZurriPrice",
             "wasiatRenewal", "hibahRenewal", "sepencarianRenewal", "mawarisRenewal", "corporateRenewal", 
             "corporateTunggalRenewal", "corporateKongsiRenewal", "corporateZurriRenewal",
-            "commissionAQC", "commissionAQCAS", "commissionAQCUM", "commissionMGAM",
-            "overrideAQC", "overrideAQCAS", "overrideAQCUM", "overrideMGAM",
+            "commissionAQC", "commissionAQCAS", "commissionAQCUM", "commissionMGAM", "commissionAQP",
+            "overrideAQC", "overrideAQCAS", "overrideAQCUM", "overrideMGAM", "overrideAQP",
             "usb", "usbRegistrationAmount", "usbLockPeriod", "targetSalesBonus", "rewardBonus", "kpiPeriod",
             "targetSalesAQCAS", "targetSalesAQCUM", "targetSalesMGAM", 
             "targetRecruitAQCUM", "targetRecruitMGAM",
@@ -874,12 +897,14 @@ function calculateSimulation() {
         });
 
         // Input Triggers for Revenue Check & Simulation
-        const poolTriggers = [
+       const poolTriggers = [
             "companyPool", "commissionPool", "overridePool",
             "adminOperation", "allowance", "royalty",
-          // Tambah ID compensation kat sini
-    "commissionAQC", "commissionAQCAS", "commissionAQCUM", "commissionMGAM",
-    "overrideAQC", "overrideAQCAS", "overrideAQCUM", "overrideMGAM"
+            "commissionAQP", "commissionAQC", "commissionAQCAS", "commissionAQCUM", "commissionMGAM",
+            "overrideAQC", "overrideAQCAS", "overrideAQCUM", "overrideMGAM",
+
+            // TRIGGER SIMULASI
+            "overrideAQP"
         ];
         poolTriggers.forEach(id => {
             if(el(id)) el(id).addEventListener("input", () => {
