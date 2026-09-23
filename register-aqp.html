@@ -29,7 +29,7 @@
         <!-- FORM -->
         <div class="p-8">
             <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 mb-8 text-sm text-indigo-800 leading-relaxed text-justify">
-                <strong>Pemberitahuan:</strong> Borang ini dikhususkan untuk entiti korporat, koperasi, yayasan atau pertubuhan berdaftar. Sebagai AQP, institusi anda akan menerima <strong>35% komisen</strong> daripada setiap perancangan pewarisan yang dilanggan oleh ahli di bawah organisasi anda.
+                <strong>Pemberitahuan:</strong> Borang ini dikhususkan untuk entiti korporat, koperasi, yayasan atau pertubuhan berdaftar. Sebagai AQP, institusi anda akan menerima <strong id="commissionDisplay">... komisen</strong> daripada setiap perancangan pewarisan yang dilanggan oleh ahli di bawah organisasi anda.
             </div>
 
             <form id="aqpForm" class="space-y-6">
@@ -104,22 +104,38 @@
     <script type="module">
         import { db, auth } from './firebase.js';
         import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { doc, setDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { doc, getDoc, setDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         lucide.createIcons();
 
-       // TANGKAP UPLINE DARI URL
+        // TANGKAP KOMISEN AQP DARI SETTINGS SECARA DINAMIK
+        async function fetchAqpRate() {
+            try {
+                const compSnap = await getDoc(doc(db, "settings", "compensation"));
+                if (compSnap.exists()) {
+                    const compData = compSnap.data();
+                    const rate = compData.commissionAQP !== undefined ? compData.commissionAQP : 35;
+                    document.getElementById("commissionDisplay").innerText = `${rate}% komisen`;
+                } else {
+                    document.getElementById("commissionDisplay").innerText = `35% komisen`; // Nilai default jika settings belum wujud
+                }
+            } catch (e) {
+                console.log("Ralat tarik komisen:", e);
+                document.getElementById("commissionDisplay").innerText = `35% komisen`;
+            }
+        }
+        fetchAqpRate();
+
+        // TANGKAP UPLINE DARI URL
         const urlParams = new URLSearchParams(window.location.search);
         const uplineRef = urlParams.get('ref');
         const inputUpline = document.getElementById('upline');
         
         if (uplineRef) {
-            // Jika datang dari link AQC, isi kod dan kunci kotak tersebut
             inputUpline.value = uplineRef.toUpperCase();
             inputUpline.readOnly = true;
             inputUpline.classList.add("bg-gray-100", "cursor-not-allowed", "text-gray-500");
         }
-        // Jika tiada link (direct), biarkan kotak bebas diisi atau dikosongkan. Tiada lagi alert ralat.
 
         // HANTAR BORANG
         document.getElementById('aqpForm').addEventListener('submit', async (e) => {
@@ -136,7 +152,6 @@
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-           // Ambil nilai upline. Jika dikosongkan (direct registration), tetapkan sebagai "HQ".
             const uplineVal = document.getElementById('upline').value.trim().toUpperCase() || "HQ";
             
             try {
@@ -144,7 +159,7 @@
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
-                // 2. JANA AUTO-COUNTER AQP MENGGUNAKAN TRANSACTION (Bebas Pertindihan)
+                // 2. JANA AUTO-COUNTER AQP
                 const newAqpNo = await runTransaction(db, async (transaction) => {
                     const counterDocRef = doc(db, "system", "counter");
                     const counterDoc = await transaction.get(counterDocRef);
@@ -155,15 +170,14 @@
                     }
                     
                     transaction.set(counterDocRef, { aqpCounter: newCount }, { merge: true });
-                    // Format: AQP0001
                     return "AQP" + String(newCount).padStart(4, '0');
                 });
 
-                // Set 1 Tahun Expired Date (Untuk logik modul renewal RM1000 kelak)
+                // Set 1 Tahun Expired Date
                 const expiryDate = new Date();
                 expiryDate.setFullYear(expiryDate.getFullYear() + 1);
 
-                // 3. SIMPAN KE KOLEKSI 'consultants' (Akaun Kewangan & Lejar)
+                // 3. SIMPAN KE KOLEKSI 'consultants'
                 await setDoc(doc(db, "consultants", user.uid), {
                     nama: instName,
                     regNo: regNo,
@@ -181,7 +195,7 @@
                     totalCommission: 0
                 });
 
-                // 4. SIMPAN KE KOLEKSI 'users' (Untuk Pengecaman Berpusat & Login Bypass)
+                // 4. SIMPAN KE KOLEKSI 'users'
                 await setDoc(doc(db, "users", user.uid), {
                     nama: instName,
                     email: email,
