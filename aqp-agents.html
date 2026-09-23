@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urus Ejen Institusi (AQP) | MyWaris</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style> 
+        body { font-family: 'Inter', sans-serif; } 
+        /* Modal Animation */
+        .modal-enter { animation: fadeIn 0.2s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+
+<!-- HEADER -->
+<div class="bg-[#153638] text-white p-6 shadow-md relative overflow-hidden">
+    <div class="absolute inset-0 bg-cover bg-center opacity-10" style="background-image: url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&q=80');"></div>
+    <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            <h1 class="text-2xl font-bold flex items-center gap-2">
+                <i data-lucide="users-2"></i> Pengurusan Ejen Institusi
+            </h1>
+            <p class="text-[#d8ae81] text-sm mt-1">Urus wakil jualan, tetapan komisen dan pautan rujukan (Referral Link)</p>
+        </div>
+        <a href="aqp-dashboard.html" class="bg-white/10 hover:bg-white/20 border border-white/20 transition px-5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali
+        </a>
+    </div>
+</div>
+
+<div class="p-6 max-w-7xl mx-auto">
+
+    <!-- MAKLUMAN & BUTANG TAMBAH -->
+    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+        <div class="bg-blue-50 border border-blue-200 p-4 rounded-xl text-sm text-blue-800 flex-1 flex items-start gap-3">
+            <i data-lucide="info" class="w-5 h-5 text-blue-500 shrink-0 mt-0.5"></i>
+            <p><strong>Nota:</strong> Ejen yang didaftarkan di sini adalah di bawah seliaan terus Institusi (AQP). <strong>Peratusan komisen yang ditetapkan adalah bayaran dalaman daripada institusi kepada ejen tersebut</strong> dan tiada kaitan dengan sistem pengurusan kewangan Al-Qawthar (AQMS).</p>
+        </div>
+        <button id="openModalBtn" class="bg-[#153638] hover:bg-[#1d4a4d] text-white px-6 py-4 rounded-xl font-bold shadow-lg transition flex items-center gap-2 shrink-0">
+            <i data-lucide="user-plus" class="w-5 h-5 text-[#d8ae81]"></i> Tambah Ejen Baru
+        </button>
+    </div>
+
+    <!-- JADUAL EJEN -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-gray-50 border-b border-gray-100 text-gray-500 uppercase tracking-wider font-semibold">
+                    <tr>
+                        <th class="p-4 w-12 text-center">Bil</th>
+                        <th class="p-4">Maklumat Ejen</th>
+                        <th class="p-4">Jawatan</th>
+                        <th class="p-4">Akaun Bank</th>
+                        <th class="p-4 text-center">Kongsi Komisen</th>
+                        <th class="p-4">Pautan Rujukan (Link)</th>
+                        <th class="p-4 text-center">Tindakan</th>
+                    </tr>
+                </thead>
+                <tbody id="agentsTableBody" class="divide-y divide-gray-100">
+                    <tr>
+                        <td colspan="7" class="p-8 text-center text-gray-500">
+                            <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2"></i> Memuatkan data...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL TAMBAH EJEN -->
+<div id="addAgentModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl flex flex-col max-h-[90vh] modal-enter">
+        
+        <div class="border-b border-gray-100 px-6 py-4 flex justify-between items-center bg-gray-50 rounded-t-2xl">
+            <h2 class="text-xl font-bold text-[#153638] flex items-center gap-2">
+                <i data-lucide="user-plus" class="w-5 h-5 text-[#d8ae81]"></i> Daftar Ejen Institusi
+            </h2>
+            <button id="closeModalBtn" class="text-gray-400 hover:text-red-500 transition"><i data-lucide="x"></i></button>
+        </div>
+
+        <div class="p-6 overflow-y-auto">
+            <form id="addAgentForm" class="space-y-5">
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Penuh <span class="text-red-500">*</span></label>
+                    <input type="text" id="agentName" required placeholder="Contoh: Ahmad Bin Ali" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition uppercase">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">No. Kad Pengenalan <span class="text-red-500">*</span></label>
+                    <input type="text" id="agentIC" required placeholder="Contoh: 900101-14-5566" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Jawatan / Peranan</label>
+                    <input type="text" id="agentPosition" placeholder="Contoh: AJK Surau / Pengerusi" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition capitalize">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">No. Akaun Bank & Nama Bank <span class="text-red-500">*</span></label>
+                    <input type="text" id="agentBank" required placeholder="Contoh: Maybank - 162022334455" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
+                    <p class="text-xs text-gray-400 mt-1">Digunakan oleh PIC untuk urusan pembayaran komisen.</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-[#153638] mb-1">Peratusan Komisen Ejen (%) <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <input type="number" id="agentComm" required min="0" max="100" placeholder="Contoh: 10" class="w-full border border-gray-300 p-3 pl-4 pr-10 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none transition font-bold text-[#153638] bg-blue-50">
+                        <span class="absolute right-4 top-3.5 font-bold text-gray-400">%</span>
+                    </div>
+                    <p class="text-xs text-blue-600 mt-1 font-medium">Berapa % daripada jualan yang akan Institusi bayar kepada ejen ini?</p>
+                </div>
+
+                <div class="pt-4 border-t border-gray-100 flex gap-3">
+                    <button type="button" id="cancelBtn" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold p-3 rounded-xl transition">Batal</button>
+                    <button type="submit" id="saveBtn" class="flex-1 bg-[#153638] hover:bg-[#1d4a4d] text-white font-semibold p-3 rounded-xl transition flex items-center justify-center gap-2">
+                        Simpan Ejen
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { db, auth } from './firebase.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { doc, getDoc, collection, query, where, getDocs, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    lucide.createIcons();
+
+    let currentAqpNo = null;
+    let currentAqpName = null;
+
+    // ELEMENT MODAL
+    const modal = document.getElementById("addAgentModal");
+    const openBtn = document.getElementById("openModalBtn");
+    const closeBtn = document.getElementById("closeModalBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const form = document.getElementById("addAgentForm");
+    const tableBody = document.getElementById("agentsTableBody");
+
+    const toggleModal = (show) => {
+        if (show) {
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        } else {
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+            form.reset();
+        }
+    };
+
+    openBtn.addEventListener("click", () => toggleModal(true));
+    closeBtn.addEventListener("click", () => toggleModal(false));
+    cancelBtn.addEventListener("click", () => toggleModal(false));
+
+    // CHECK AUTH
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            window.location.href = "login.html";
+            return;
+        }
+        
+        const aqpSnap = await getDoc(doc(db, "consultants", user.uid));
+        if (aqpSnap.exists()) {
+            currentAqpNo = aqpSnap.data().consultantNo;
+            currentAqpName = aqpSnap.data().nama;
+            loadAgents();
+        }
+    });
+
+    // LOAD AGENTS DARI DATABASE
+    async function loadAgents() {
+        if (!currentAqpNo) return;
+        tableBody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-gray-500"><i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2"></i> Memuatkan data...</td></tr>`;
+        lucide.createIcons();
+
+        try {
+            // Tarik data dari koleksi 'users' yang berdaftar di bawah aqpRef
+            const q = query(collection(db, "users"), where("role", "==", "aqp_agent"), where("aqpRef", "==", currentAqpNo));
+            const querySnapshot = await getDocs(q);
+            
+            let html = "";
+            let bil = 1;
+
+            if (querySnapshot.empty) {
+                tableBody.innerHTML = `<tr><td colspan="7" class="p-10 text-center text-gray-500">Belum ada ejen yang didaftarkan.</td></tr>`;
+                return;
+            }
+
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const agentId = docSnap.id;
+                
+                // Bina Link Rujukan menggunakan kod ejen
+                const refLink = `${window.location.origin}${window.location.pathname.replace("aqp-agents.html", "register.html")}?ref=${data.agentCode}`;
+
+                html += `
+                <tr class="hover:bg-gray-50 transition border-b border-gray-50">
+                    <td class="p-4 text-center text-gray-500 font-medium">${bil++}</td>
+                    <td class="p-4">
+                        <p class="font-bold text-[#153638] uppercase">${data.nama}</p>
+                        <p class="text-xs text-gray-500 flex items-center gap-1 mt-0.5"><i data-lucide="credit-card" class="w-3 h-3"></i> ${data.ic}</p>
+                    </td>
+                    <td class="p-4 text-gray-600 capitalize">${data.jawatan || "-"}</td>
+                    <td class="p-4 text-gray-600 font-medium">${data.bankAccount || "-"}</td>
+                    <td class="p-4 text-center">
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-lg font-bold text-sm">${data.commissionRate}%</span>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <input type="text" readonly value="${refLink}" class="bg-gray-100 border border-gray-200 text-xs p-2 rounded-lg w-48 outline-none text-gray-500">
+                            <button onclick="copyLink('${refLink}', this)" class="bg-[#e5c18e] hover:bg-[#d4ac74] text-[#153638] p-2 rounded-lg transition" title="Copy Link">
+                                <i data-lucide="copy" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td class="p-4 text-center">
+                        <button onclick="deleteAgent('${agentId}', '${data.nama}')" class="text-red-400 hover:text-red-600 bg-red-50 hover:bg-red-100 p-2 rounded-lg transition" title="Padam Ejen">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </td>
+                </tr>
+                `;
+            });
+
+            tableBody.innerHTML = html;
+            lucide.createIcons();
+
+        } catch (error) {
+            console.error(error);
+            tableBody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-red-500">Ralat memuatkan senarai ejen.</td></tr>`;
+        }
+    }
+
+    // FUNGSI COPY LINK (Global supaya boleh dipanggil dari HTML)
+    window.copyLink = async (link, btnElement) => {
+        try {
+            await navigator.clipboard.writeText(link);
+            const originalIcon = btnElement.innerHTML;
+            btnElement.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-green-700"></i>`;
+            btnElement.classList.replace("bg-[#e5c18e]", "bg-green-300");
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                btnElement.innerHTML = originalIcon;
+                btnElement.classList.replace("bg-green-300", "bg-[#e5c18e]");
+            }, 2000);
+        } catch (err) {
+            alert("Gagal copy link.");
+        }
+    };
+
+    // FUNGSI PADAM EJEN
+    window.deleteAgent = async (agentId, agentName) => {
+        if (confirm(`Adakah anda pasti mahu memadam rekod ejen ${agentName}? Tindakan ini tidak boleh dikembalikan.`)) {
+            try {
+                await deleteDoc(doc(db, "users", agentId));
+                loadAgents(); // Reload table
+            } catch (error) {
+                alert("Gagal memadam ejen.");
+                console.error(error);
+            }
+        }
+    };
+
+    // SUBMIT BORANG TAMBAH EJEN
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        const btn = document.getElementById("saveBtn");
+        const originalText = btn.innerHTML;
+        btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Menyimpan...`;
+        btn.disabled = true;
+
+        try {
+            const nama = document.getElementById("agentName").value.trim().toUpperCase();
+            const ic = document.getElementById("agentIC").value.trim();
+            const jawatan = document.getElementById("agentPosition").value.trim();
+            const bank = document.getElementById("agentBank").value.trim();
+            const comm = document.getElementById("agentComm").value;
+
+            // Generate Kod Ejen Unik: Cth AG-123456
+            const shortCode = "AG-" + Math.floor(100000 + Math.random() * 900000);
+
+            // Simpan ke database 'users' tapi sebagai role: aqp_agent (Bukan customer/consultant)
+            // Kita guna custom ID berasaskan masa supaya tak kacau Auth login biasa.
+            const docId = `aqpagent_${Date.now()}`;
+            
+            await setDoc(doc(db, "users", docId), {
+                nama: nama,
+                ic: ic,
+                jawatan: jawatan,
+                bankAccount: bank,
+                commissionRate: Number(comm),
+                agentCode: shortCode,
+                aqpRef: currentAqpNo,        // Link dengan Institusi
+                aqpName: currentAqpName,
+                role: "aqp_agent",
+                createdAt: new Date()
+            });
+
+            toggleModal(false);
+            loadAgents();
+
+        } catch (error) {
+            console.error(error);
+            alert("Ralat semasa menyimpan ejen.");
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    });
+
+</script>
+</body>
+</html>
