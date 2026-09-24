@@ -99,7 +99,7 @@
                         return;
                     }
 
-                    // Ambil senarai semua konsultan dan sediakan fungsi pencarian lebih awal
+                    // Ambil senarai semua konsultan
                     const consultantSnap = await getDocs(collection(db, "consultants"));
                     const allConsultants = [];
                     consultantSnap.forEach((d) => { allConsultants.push({ id: d.id, ...d.data() }); });
@@ -192,26 +192,41 @@
                     });
                     
                     const comp = compData;
-                    const company = saleAmount * ((comp.companyPool || 0) / 100);
-                    const allowance = saleAmount * ((comp.allowance || 0) / 100);
-                    const adminOperation = saleAmount * ((comp.adminOperation || 0) / 100);
-                    const royalty = saleAmount * ((comp.royalty || 0) / 100);
+                    
+                    // ==========================================
+                    // LOGIK BAHARU: PEMILIHAN PERATUSAN AQP vs AQC
+                    // ==========================================
+                    let isAQP = directConsultant && directConsultant.consultantLevel === "AQP";
+                    
+                    // Tarik peratusan berdasarkan status ejen
+                    let pctCompany = isAQP ? (comp.companyPoolAQP || 0) : (comp.companyPool || 0);
+                    let pctAllowance = isAQP ? (comp.allowanceAQP || 0) : (comp.allowance || 0);
+                    let pctAdmin = isAQP ? (comp.adminOperationAQP || 0) : (comp.adminOperation || 0);
+                    let pctRoyalty = isAQP ? (comp.royaltyAQP || 0) : (comp.royalty || 0);
+
+                    // Kira pecahan menggunakan peratusan yang tepat
+                    const company = saleAmount * (pctCompany / 100);
+                    const allowance = saleAmount * (pctAllowance / 100);
+                    const adminOperation = saleAmount * (pctAdmin / 100);
+                    const royalty = saleAmount * (pctRoyalty / 100);
                     const usbAmount = saleAmount * ((comp.usb || 0) / 100);
+                    // ==========================================
 
                     // Company Allocation
                     await addDoc(collection(db, "companyAllocation"), {
                         createdAt: txnDate, memberNo, customerName: customer.nama,
                         product: namaPakej, 
-                        sale: saleAmount, company, allowance, adminOperation, royalty
+                        sale: saleAmount, company, allowance, adminOperation, royalty,
+                        isAQP: isAQP // Flag tambahan untuk rujukan masa depan
                     });
                     
                     function getCleanLevelKey(level) { return (level || "AQC").replace(/[^a-zA-Z0-9]/g, ""); }
                     function getCommissionRate(level) {
-                        const key = "commission" + getCleanLevelKey(level);
+                        const key = "commission" + getCleanLevelKey(level); // Contoh: "commissionAQP"
                         return comp[key] !== undefined ? comp[key] : 35; 
                     }
                     function getOverrideRate(level) {
-                        const key = "override" + getCleanLevelKey(level);
+                        const key = "override" + getCleanLevelKey(level); // Contoh: "overrideAQP"
                         return comp[key] !== undefined ? comp[key] : 0;
                     }
 
@@ -280,9 +295,12 @@
                                 if (introducerCommRate > 0) {
                                     let aqcRate = 35; 
                                     const levelAqc = directConsultant.consultantLevel || "AQC";
+                                    
+                                    // Penambahan AQP dan Pembaikan MGAM
                                     if (levelAqc === "AQC-UM") { aqcRate = Number(comp.commissionAQCUM) || 40; } 
                                     else if (levelAqc === "AQC-AS") { aqcRate = Number(comp.commissionAQCAS) || 38; } 
-                                    else if (levelAqc === "MG-AM") { aqcRate = Number(comp.commissionMGAM) || 45; } 
+                                    else if (levelAqc === "MG-AM" || levelAqc === "MGAM") { aqcRate = Number(comp.commissionMGAM) || 45; } 
+                                    else if (levelAqc === "AQP") { aqcRate = Number(comp.commissionAQP) || 35; }
                                     else { aqcRate = Number(comp.commissionAQC) || 35; }
                                     
                                     const aqcCommAmount = saleAmount * (aqcRate / 100);
@@ -301,7 +319,7 @@
                         }
                     }
 
-                    // ALLOCATION EXPENSES
+                    // ALLOCATION EXPENSES (Telah diselaraskan dengan logik AQP)
                     await addDoc(collection(db, "ledger"), {
                         date: txnDate, accountCode: "5200", account: "Allowance Expense", category: "expense", description: "Allowance Allocation", debit: allowance, credit: 0,
                         clientUid: currentUser.uid, clientNo: memberNo
@@ -319,7 +337,7 @@
                         clientUid: currentUser.uid, clientNo: memberNo
                     });
 
-                    // OVERRIDING
+                    // OVERRIDING (Telah diselaraskan dengan nama pembolehubah getOverrideRate)
                     while (currentConsultant) {
                         const upline = findConsultant(currentConsultant.upline);
                         if (!upline) break;
