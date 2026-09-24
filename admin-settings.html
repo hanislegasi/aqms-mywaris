@@ -175,7 +175,7 @@ font-family: Inter, sans-serif;
             
             <!-- COMMISSION -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Commission (%)</h2>
+                <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Commission Rates (%)</h2>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-2 bg-blue-50 p-3 rounded-lg border border-blue-100 mb-2">
                         <label class="font-bold text-sm text-blue-800 block mb-1">AQP (Institusi Korporat)</label>
@@ -202,7 +202,7 @@ font-family: Inter, sans-serif;
 
             <!-- OVERRIDE -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Override (%)</h2>
+                <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Override Rates (%)</h2>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-2 bg-emerald-50 p-3 rounded-lg border border-emerald-100 mb-2">
                         <label class="font-bold text-sm text-emerald-800 block mb-1">AQP Flat Rate (Semua Upline)</label>
@@ -279,9 +279,9 @@ font-family: Inter, sans-serif;
     </div>
 </div>
 
-        <!-- ================= REVENUE DISTRIBUTION ================= -->
+        <!-- ================= 1. REVENUE DISTRIBUTION (ASAL / AQC) ================= -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Revenue Allocation (%)</h2>
+            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Revenue Allocation Asal / AQC (%)</h2>
             <div class="grid md:grid-cols-3 gap-5">
                 <div>
                     <label class="font-medium text-sm text-gray-600 block mb-1">Company Pool</label>
@@ -297,8 +297,8 @@ font-family: Inter, sans-serif;
                 </div>
             </div>
 
-            <div class="mt-6 border border-blue-100 bg-blue-50/50 p-5 rounded-xl">
-                <h3 class="font-bold mb-4 text-[#153638]">Company Pool Breakdown</h3>
+            <div class="mt-6 border border-gray-200 bg-gray-50 p-5 rounded-xl">
+                <h3 class="font-bold mb-4 text-[#153638]">Company Pool Breakdown (Asal)</h3>
                 <div class="grid md:grid-cols-3 gap-5">
                     <div>
                         <label class="font-medium text-sm text-gray-600 block mb-1">Admin Operation</label>
@@ -314,6 +314,44 @@ font-family: Inter, sans-serif;
                     </div>
                 </div>
                 <div id="revenueCheck" class="mt-4 transition-all"></div>
+            </div>
+        </div>
+
+        <!-- ================= 2. REVENUE DISTRIBUTION (KHUSUS AQP) ================= -->
+        <div class="bg-white rounded-2xl shadow-sm border border-blue-200 p-6 mb-8">
+            <h2 class="text-xl font-bold mb-5 text-blue-900 border-b border-blue-100 pb-3">Revenue Allocation Khusus Institusi / AQP (%)</h2>
+            <div class="grid md:grid-cols-3 gap-5">
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Company Pool AQP</label>
+                    <input id="companyPoolAQP" type="number" class="w-full border-blue-300 bg-blue-50 border rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Commission Pool AQP</label>
+                    <input id="commissionPoolAQP" type="number" class="w-full border-blue-300 bg-blue-50 border rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Override Pool AQP</label>
+                    <input id="overridePoolAQP" type="number" class="w-full border-blue-300 bg-blue-50 border rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+            </div>
+
+            <div class="mt-6 border border-blue-200 bg-blue-50/50 p-5 rounded-xl">
+                <h3 class="font-bold mb-4 text-blue-900">Company Pool Breakdown (AQP)</h3>
+                <div class="grid md:grid-cols-3 gap-5">
+                    <div>
+                        <label class="font-medium text-sm text-gray-600 block mb-1">Admin Operation AQP</label>
+                        <input id="adminOperationAQP" type="number" class="w-full border-blue-300 border rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="font-medium text-sm text-gray-600 block mb-1">Allowance AQP</label>
+                        <input id="allowanceAQP" type="number" class="w-full border-blue-300 border rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="font-medium text-sm text-gray-600 block mb-1">Royalty AQP</label>
+                        <input id="royaltyAQP" type="number" class="w-full border-blue-300 border rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    </div>
+                </div>
+                <div id="revenueCheckAQP" class="mt-4 transition-all"></div>
             </div>
         </div>
 
@@ -470,7 +508,7 @@ font-family: Inter, sans-serif;
 
 <!-- ================= SALES SIMULATION ================= -->
 <div class="bg-gradient-to-br from-gray-900 to-[#153638] rounded-2xl shadow-lg p-6 lg:p-8 text-white mb-8">
-    <h2 class="text-xl font-bold mb-6 border-b border-gray-600 pb-3">Simulasi Sales & Profit</h2>
+    <h2 class="text-xl font-bold mb-6 border-b border-gray-600 pb-3">Simulasi Sales & Profit (Berdasarkan Pool Asal)</h2>
     
     <!-- 1. INPUT UNIT PRODUK -->
     <p class="text-sm font-semibold text-[#45d9d7] uppercase tracking-wider mb-3">1. Jualan Unit Produk</p>
@@ -640,12 +678,20 @@ font-family: Inter, sans-serif;
             namaSyarikatAmanah: "Rakyat Trustee Berhad", noSyarikatAmanah: "1462142-U", telefonSyarikatAmanah: "+603 2602 2722", alamatSyarikatAmanah: "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur",
             wasiatRenewal: 50, hibahRenewal: 50, sepencarianRenewal: 50, mawarisRenewal: 80, 
             corporateRenewal: 200, corporateTunggalRenewal: 100, corporateKongsiRenewal: 150, corporateZurriRenewal: 50,
+            
             commissionAQC: 35, commissionAQCAS: 38, commissionAQCUM: 40, commissionMGAM: 45, commissionAQP: 35,
             overrideAQC: 0, overrideAQCAS: 3, overrideAQCUM: 4, overrideMGAM: 5, overrideAQP: 12,
             usb: 5, usbRegistrationAmount: 50, usbLockPeriod: 3,
             targetSalesBonus: 50000, rewardBonus: 1000, kpiPeriod: 365,
+            
+            // Pool Asal (AQC)
             companyPool: 48, commissionPool: 35, overridePool: 12,
             adminOperation: 30, allowance: 10, royalty: 8,
+            
+            // Pool Khusus AQP (BARU)
+            companyPoolAQP: 48, commissionPoolAQP: 35, overridePoolAQP: 12,
+            adminOperationAQP: 30, allowanceAQP: 10, royaltyAQP: 8,
+            
             targetSalesAQCAS: 30000, targetSalesAQCUM: 60000, targetSalesMGAM: 120000, 
             targetRecruitAQCUM: 10, targetRecruitMGAM: 20,
             maintainSalesAQCAS: 30000, maintainSalesAQCUM: 60000, maintainSalesMGAM: 120000,
@@ -661,6 +707,7 @@ font-family: Inter, sans-serif;
             "corporateTunggalPrice", "corporateKongsiPrice", "corporateZurriPrice",
             "wasiatRenewal", "hibahRenewal", "sepencarianRenewal", "mawarisRenewal", "corporateRenewal", 
             "corporateTunggalRenewal", "corporateKongsiRenewal", "corporateZurriRenewal",
+            
             "commissionAQC", "commissionAQCAS", "commissionAQCUM", "commissionMGAM", "commissionAQP",
             "overrideAQC", "overrideAQCAS", "overrideAQCUM", "overrideMGAM", "overrideAQP",
             "usb", "usbRegistrationAmount", "usbLockPeriod", "targetSalesBonus", "rewardBonus", "kpiPeriod",
@@ -670,8 +717,14 @@ font-family: Inter, sans-serif;
             "maintainRecruitAQCAS", "maintainRecruitAQCUM", "maintainRecruitMGAM",
             "memberValidity", "consultantRegistrationFee", 
             "renewalAQC", "renewalAQCAS", "renewalAQCUM", "renewalMGAM", "renewalAQP",
+            
+            // Pool Asal (AQC)
             "companyPool", "commissionPool", "overridePool",
-            "adminOperation", "allowance", "royalty"
+            "adminOperation", "allowance", "royalty",
+            
+            // Pool Khusus AQP (BARU)
+            "companyPoolAQP", "commissionPoolAQP", "overridePoolAQP",
+            "adminOperationAQP", "allowanceAQP", "royaltyAQP"
         ];
         
         const trusteeFieldsString = ["namaSyarikatAmanah", "noSyarikatAmanah", "telefonSyarikatAmanah", "alamatSyarikatAmanah"];
@@ -706,7 +759,9 @@ font-family: Inter, sans-serif;
             calculateSimulation();
         }
 
+        // ================= FUNGSI SEMAKAN (ASAL & AQP) =================
         function checkRevenue() {
+            // --- 1. KIRAAN ASAL (AQC) ---
             const admin = getVal("adminOperation");
             const allow = getVal("allowance");
             const royal = getVal("royalty");
@@ -717,32 +772,67 @@ font-family: Inter, sans-serif;
             const overPool = getVal("overridePool");
             const totalAllocation = comPool + commPool + overPool;
 
+            // --- 2. KIRAAN AQP (BARU) ---
+            const adminAQP = getVal("adminOperationAQP");
+            const allowAQP = getVal("allowanceAQP");
+            const royalAQP = getVal("royaltyAQP");
+            const companyBreakdownTotalAQP = adminAQP + allowAQP + royalAQP;
+
+            const comPoolAQP = getVal("companyPoolAQP");
+            const commPoolAQP = getVal("commissionPoolAQP");
+            const overPoolAQP = getVal("overridePoolAQP");
+            const totalAllocationAQP = comPoolAQP + commPoolAQP + overPoolAQP;
+
             const saveBtn = el("saveSettings");
             const revCheck = el("revenueCheck");
+            const revCheckAQP = el("revenueCheckAQP");
 
+            let isAsalValid = true;
+            let isAQPValid = true;
+
+            // --- VALIDATION ASAL ---
             if (companyBreakdownTotal !== comPool || totalAllocation > 100) {
+                isAsalValid = false;
                 revCheck.innerHTML = `
                     <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700">
-                        <div class="font-bold flex items-center gap-2">⚠️ Allocation Tidak Sah</div>
+                        <div class="font-bold flex items-center gap-2">⚠️ Allocation Asal Tidak Sah</div>
                         <div class="text-sm mt-2 leading-relaxed">
-                            Company Breakdown (Admin+Allow+Royalty): <strong>${companyBreakdownTotal}%</strong> / Target: <strong>${comPool}%</strong><br>
-                            Total Global Allocation: <strong>${totalAllocation}%</strong> (Max 100%)<br><br>
-                            Pastikan:
-                            <ul class="list-disc pl-5 mt-1">
-                                <li>Company Breakdown mesti sama dengan Company Pool.</li>
-                                <li>Total Global Allocation tidak melebihi 100%.</li>
-                            </ul>
+                            Breakdown Asal (Admin+Allow+Royalty): <strong>${companyBreakdownTotal}%</strong> / Target: <strong>${comPool}%</strong><br>
+                            Total Global Asal: <strong>${totalAllocation}%</strong> (Max 100%)
                         </div>
                     </div>`;
-                saveBtn.disabled = true;
-                saveBtn.classList.add("opacity-50", "cursor-not-allowed");
             } else {
                 revCheck.innerHTML = `
                     <div class="bg-green-50 border border-green-200 rounded-xl p-4 text-green-700">
-                        <div class="font-bold flex items-center gap-2">✅ Allocation Sempurna</div>
-                        <div class="text-sm mt-1">Company Breakdown (${companyBreakdownTotal}%) tally dengan Company Pool. Total agihan: ${totalAllocation}%. Profit bersih: ${100 - totalAllocation}%.</div>
-                    </div>
-                `;
+                        <div class="font-bold flex items-center gap-2">✅ Allocation Asal Sempurna</div>
+                        <div class="text-sm mt-1">Breakdown Asal (${companyBreakdownTotal}%) tally dengan Company Pool. Total agihan: ${totalAllocation}%. Profit bersih: ${100 - totalAllocation}%.</div>
+                    </div>`;
+            }
+
+            // --- VALIDATION AQP ---
+            if (companyBreakdownTotalAQP !== comPoolAQP || totalAllocationAQP > 100) {
+                isAQPValid = false;
+                revCheckAQP.innerHTML = `
+                    <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700">
+                        <div class="font-bold flex items-center gap-2">⚠️ Allocation AQP Tidak Sah</div>
+                        <div class="text-sm mt-2 leading-relaxed">
+                            Breakdown AQP (Admin+Allow+Royalty): <strong>${companyBreakdownTotalAQP}%</strong> / Target: <strong>${comPoolAQP}%</strong><br>
+                            Total Global AQP: <strong>${totalAllocationAQP}%</strong> (Max 100%)
+                        </div>
+                    </div>`;
+            } else {
+                revCheckAQP.innerHTML = `
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-blue-800">
+                        <div class="font-bold flex items-center gap-2">✅ Allocation AQP Sempurna</div>
+                        <div class="text-sm mt-1">Breakdown AQP (${companyBreakdownTotalAQP}%) tally dengan Company Pool AQP. Total agihan AQP: ${totalAllocationAQP}%. Profit bersih AQP: ${100 - totalAllocationAQP}%.</div>
+                    </div>`;
+            }
+
+            // --- KAWAL BUTANG SIMPAN ---
+            if (!isAsalValid || !isAQPValid) {
+                saveBtn.disabled = true;
+                saveBtn.classList.add("opacity-50", "cursor-not-allowed");
+            } else {
                 saveBtn.disabled = false;
                 saveBtn.classList.remove("opacity-50", "cursor-not-allowed");
             }
@@ -769,7 +859,7 @@ function calculateSimulation() {
     const qtyCorporateKongsi = getVal("simCorporateKongsi"); 
     const qtyCorporateZurri = getVal("simCorporateZurri"); 
 
-    // 2. Ambil Peratusan Pool & Syarikat
+    // 2. Ambil Peratusan Pool & Syarikat (Guna Pool Asal untuk Simulasi ini)
     const pctCommPool = getVal("commissionPool") / 100;   // 35%
     const pctOverridePool = getVal("overridePool") / 100; // 12%
     const pctCompanyPool = getVal("companyPool") / 100;   // 48%
@@ -895,10 +985,11 @@ function calculateSimulation() {
        const poolTriggers = [
             "companyPool", "commissionPool", "overridePool",
             "adminOperation", "allowance", "royalty",
+            "companyPoolAQP", "commissionPoolAQP", "overridePoolAQP",
+            "adminOperationAQP", "allowanceAQP", "royaltyAQP",
+            
             "commissionAQP", "commissionAQC", "commissionAQCAS", "commissionAQCUM", "commissionMGAM",
             "overrideAQC", "overrideAQCAS", "overrideAQCUM", "overrideMGAM",
-
-            // TRIGGER SIMULASI
             "overrideAQP"
         ];
         poolTriggers.forEach(id => {
