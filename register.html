@@ -112,10 +112,13 @@ const introUid = params.get("intro");
 let validIntroducer = false;
 let introducerCommPercent = 0;
 
-// FUNGSI BARU: Semak Referal (Konsultan ATAU Ejen AQP) menggunakan Query
+// FUNGSI BARU: Semak Referal (AQC ATAU Ejen AQP) menggunakan Query
 async function checkReferralValidity(referralCode) {
     let isValid = false;
     let sponsorName = null;
+    let aqpName = null;
+    let sponsorId = null;
+    let data = null;
 
     try {
         // 1. Semak dalam koleksi 'consultants' (AQC Utama)
@@ -124,35 +127,49 @@ async function checkReferralValidity(referralCode) {
         
         if (!snapConsultant.empty) {
             isValid = true;
-            sponsorName = snapConsultant.docs[0].data().nama;
-            return { isValid, sponsorName, type: "AQC" };
+            const docData = snapConsultant.docs[0].data();
+            sponsorName = docData.nama;
+            sponsorId = snapConsultant.docs[0].id;
+            return { isValid, sponsorName, aqpName: null, type: "AQC", sponsorId, data: docData };
         }
 
-        // 2. Semak dalam koleksi 'users' untuk Ejen AQP (Format AG-XXXXXX)
+        // 2. Semak dalam koleksi 'users' untuk Ejen AQP (Format AQP0001-001)
         const qAgent = query(collection(db, "users"), where("agentCode", "==", referralCode), where("role", "==", "aqp_agent"));
         const snapAgent = await getDocs(qAgent);
 
         if (!snapAgent.empty) {
             isValid = true;
-            sponsorName = snapAgent.docs[0].data().nama;
-            return { isValid, sponsorName, type: "Ejen AQP" };
+            const docData = snapAgent.docs[0].data();
+            sponsorName = docData.nama;        // Nama Ejen
+            aqpName = docData.aqpName || "";   // Nama Institusi AQP
+            sponsorId = snapAgent.docs[0].id;
+            return { isValid, sponsorName, aqpName, type: "Ejen AQP", sponsorId, data: docData };
         }
     } catch (e) {
         console.error("Ralat menyemak referral:", e);
     }
 
-    return { isValid, sponsorName, type: null };
+    return { isValid, sponsorName: null, aqpName: null, type: null, sponsorId: null, data: null };
 }
 
-// FUNGSI PAPARAN NAMA REFERRAL
+// FUNGSI PAPARAN NAMA REFERRAL PADA SKRIN
 async function semakAQC(referralCode) {
     if(!referralCode) return;
     
     const result = await checkReferralValidity(referralCode);
 
-    document.getElementById("referralName").innerHTML = result.sponsorName 
-        ? `✓ Rujukan Sah: ${result.sponsorName}` 
-        : "❌ Kod rujukan (Konsultan/Ejen) tidak sah";
+    if (result.isValid) {
+        if (result.type === "Ejen AQP") {
+            // PAPARKAN NAMA AQP DAHULU, KEMUDIAN NAMA EJEN
+            const aqpText = result.aqpName ? `${result.aqpName} ` : "";
+            document.getElementById("referralName").innerHTML = `✓ Rujukan Sah: <b>${aqpText}</b>(Ejen: ${result.sponsorName})`;
+        } else {
+            // PAPARKAN NAMA KONSULTAN BIASA
+            document.getElementById("referralName").innerHTML = `✓ Rujukan Sah: <b>${result.sponsorName}</b>`;
+        }
+    } else {
+        document.getElementById("referralName").innerHTML = "❌ Kod rujukan (Konsultan/Ejen) tidak sah";
+    }
 }
 
 // SEMAK REFERRAL AQC DARI URL
@@ -216,7 +233,7 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
     return;
   }
 
-  // SEMAK SEKALI LAGI SEBELUM SUBMIT
+  // SEMAK SEKALI LAGI SEBELUM SUBMIT (UNTUK AQC ATAU EJEN AQP)
   const referralCheck = await checkReferralValidity(referral);
 
   if(!referralCheck.isValid){
@@ -230,12 +247,14 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const uid = userCredential.user.uid;
 
+    // DATA ASAS KLIEN BARU
     let payloadData = {
       nama,
       ic,
       email,
       telefon,
-      referral, // Boleh simpan AQC No atau AG-XXXXXX
+      referral,                  // Menyimpan kod (Contoh: AQC0001 atau AQP0001-001)
+      referralType: referralCheck.type, // Merekodkan "AQC" atau "Ejen AQP"
       accountType: "customer",
       role: "customer",
       leadStatus: "REGISTERED",
@@ -250,13 +269,22 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
       createdAt: new Date()
     };
 
+    // JIKA DIREF KAN OLEH EJEN AQP, SIMPAN PULA MAKLUMAT INDUK AQP DENGAN LENGKAP
+    if (referralCheck.type === "Ejen AQP" && referralCheck.data) {
+        payloadData.agentUid = referralCheck.sponsorId || null;
+        payloadData.aqpRef = referralCheck.data.aqpRef || null; // No AQP Induk (Cth: AQP0001)
+    }
+
+    // JIKA ADA INTRODUCER (AQM) DARI URL
     if (validIntroducer && introUid) {
         payloadData.introducerUid = introUid;
         payloadData.introducerComm = introducerCommPercent;
     }
 
+    // Simpan ke Firestore
     await setDoc(doc(db, "users", uid), payloadData);
 
+    // AUTO-UPDATE STATUS PROSPEK JIKA ADA
     if (validIntroducer && introUid) {
         try {
             const prosQuery = query(
@@ -289,7 +317,7 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
     btn.disabled = false;
   }
 });
-
+    
 </script>
   
 </body>
