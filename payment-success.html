@@ -292,13 +292,25 @@
                         date: txnDate, accountCode: "2300", account: "Royalty Payable", category: "liability", description: "Royalty Allocation", debit: 0, credit: royalty, clientUid: currentUser.uid, clientNo: memberNo
                     });
 
-                    // OVERRIDING
+                   // OVERRIDING
                     while (currentConsultant) {
                         const upline = findConsultant(currentConsultant.upline);
                         if (!upline) break;
 
-                        const diffRate = Math.max(0, getOverrideRate(upline.consultantLevel) - getOverrideRate(currentConsultant.consultantLevel));
-                        const overrideAmount = saleAmount * diffRate / 100;
+                        let overrideRate = 0;
+
+                        // ==========================================
+                        // UNDANG-UNDANG BARU (DUNIA AQP vs DUNIA AQC)
+                        // ==========================================
+                        if (currentConsultant.consultantLevel === "AQP") {
+                            // DUNIA AQP: Satu rate % tetap sahaja! (Tarik dari comp.overrideAQP, contoh default 5%)
+                            overrideRate = Number(comp.overrideAQP) || 5; 
+                        } else {
+                            // DUNIA AQC: Guna sistem beza pangkat (Differential)
+                            overrideRate = Math.max(0, getOverrideRate(upline.consultantLevel) - getOverrideRate(currentConsultant.consultantLevel));
+                        }
+
+                        const overrideAmount = saleAmount * (overrideRate / 100);
 
                         if (overrideAmount > 0) {
                             await addDoc(collection(db, "ledger"), {
@@ -308,10 +320,19 @@
                                 date: txnDate, accountCode: "2100", account: "Override Payable", consultantNo: upline.consultantNo, consultantName: upline.nama, category: "liability", description: upline.consultantNo + " " + upline.nama, debit: 0, credit: overrideAmount, clientUid: currentUser.uid, clientNo: memberNo, consultantUid: upline.id, consultantNo: upline.consultantNo
                             });
                             await updateDoc(doc(db, "consultants", upline.id), { careerSales: increment(saleAmount), totalOverriding: increment(overrideAmount) });
+                            
+                            // Rekod untuk Jadual "My Overriding"
                             await addDoc(collection(db, "overrideHistory"), {
-                                createdAt: txnDate, customerNo: memberNo, customerName: customer.nama, fromConsultant: currentConsultant.consultantNo, fromName: currentConsultant.nama, fromLevel: currentConsultant.consultantLevel, receiver: upline.consultantNo, receiverName: upline.nama, receiverLevel: upline.consultantLevel, sales: saleAmount, diffRate: diffRate, override: overrideAmount
+                                createdAt: txnDate, customerNo: memberNo, customerName: customer.nama, fromConsultant: currentConsultant.consultantNo, fromName: currentConsultant.nama, fromLevel: currentConsultant.consultantLevel, receiver: upline.consultantNo, receiverName: upline.nama, receiverLevel: upline.consultantLevel, sales: saleAmount, diffRate: overrideRate, override: overrideAmount
                             });
                         }
+
+                        // PENTING: Hentikan loop jika datang dari AQP 
+                        // (Sebab AQP bayar flat rate kepada 1 level uplinenya sahaja)
+                        if (currentConsultant.consultantLevel === "AQP") {
+                            break; 
+                        }
+
                         currentConsultant = upline;
                     }
 
