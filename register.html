@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Daftar Akaun AQM</title>
 <script src="https://cdn.tailwindcss.com"></script>
-     <link rel="stylesheet" href="style.css">  
+<link rel="stylesheet" href="style.css">  
 </head>
 
 <body class="bg-gray-100 min-h-screen flex items-center justify-center py-10">
@@ -56,7 +56,7 @@ required>
 <input
 id="referral"
 type="text"
-placeholder="Kod Referral AQC"
+placeholder="Kod Referral AQC / Ejen AQP"
 class="w-full border p-3 rounded-lg bg-gray-50"
 required>
 
@@ -101,28 +101,65 @@ Sudah ada akaun? Log Masuk
 </div>
 
 <script type="module">
-// 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
 import { db, auth } from './firebase.js';
-
-// 2. Tarik fungsi Auth yang berkaitan sahaja
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-// 3. Tarik fungsi Firestore (TAMBAH getDoc untuk semak Introducer)
 import { doc, setDoc, getDoc, getDocs, collection, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
      
 const params = new URLSearchParams(window.location.search);
 const ref = params.get("ref");
-const introUid = params.get("intro"); // Tangkap UID AQM dari URL
+const introUid = params.get("intro"); 
 
 let validIntroducer = false;
 let introducerCommPercent = 0;
 
+// FUNGSI BARU: Semak Referal (Konsultan ATAU Ejen AQP) menggunakan Query
+async function checkReferralValidity(referralCode) {
+    let isValid = false;
+    let sponsorName = null;
+
+    try {
+        // 1. Semak dalam koleksi 'consultants' (AQC Utama)
+        const qConsultant = query(collection(db, "consultants"), where("consultantNo", "==", referralCode));
+        const snapConsultant = await getDocs(qConsultant);
+        
+        if (!snapConsultant.empty) {
+            isValid = true;
+            sponsorName = snapConsultant.docs[0].data().nama;
+            return { isValid, sponsorName, type: "AQC" };
+        }
+
+        // 2. Semak dalam koleksi 'users' untuk Ejen AQP (Format AG-XXXXXX)
+        const qAgent = query(collection(db, "users"), where("agentCode", "==", referralCode), where("role", "==", "aqp_agent"));
+        const snapAgent = await getDocs(qAgent);
+
+        if (!snapAgent.empty) {
+            isValid = true;
+            sponsorName = snapAgent.docs[0].data().nama;
+            return { isValid, sponsorName, type: "Ejen AQP" };
+        }
+    } catch (e) {
+        console.error("Ralat menyemak referral:", e);
+    }
+
+    return { isValid, sponsorName, type: null };
+}
+
+// FUNGSI PAPARAN NAMA REFERRAL
+async function semakAQC(referralCode) {
+    if(!referralCode) return;
+    
+    const result = await checkReferralValidity(referralCode);
+
+    document.getElementById("referralName").innerHTML = result.sponsorName 
+        ? `✓ Rujukan Sah: ${result.sponsorName}` 
+        : "❌ Kod rujukan (Konsultan/Ejen) tidak sah";
+}
+
 // SEMAK REFERRAL AQC DARI URL
 if(ref){
-  document.getElementById("referral").value = ref;
+  document.getElementById("referral").value = ref.toUpperCase();
   document.getElementById("referral").readOnly = true;
-  // Trigger semakan nama AQC
-  semakAQC(ref);
+  semakAQC(ref.toUpperCase());
 }
 
 // SEMAK INTRODUCER (AQM) DARI URL
@@ -147,27 +184,14 @@ if (introUid) {
     })();
 }
 
-async function semakAQC(referralCode) {
-    if(!referralCode) return;
-    const usersSnap = await getDocs(collection(db,"consultants"));
-    let sponsor = null;
-
-    usersSnap.forEach((d)=>{
-        const u = d.data();
-        if(u.consultantNo === referralCode){
-            sponsor = u.nama;
-        }
-    });
-
-    document.getElementById("referralName").innerHTML = sponsor
-        ? "✓ Perunding: " + sponsor
-        : "❌ No Konsultan tidak sah";
-}
-
-document.getElementById("referral").addEventListener("blur", () => {
-    semakAQC(document.getElementById("referral").value.trim());
+// EVENT LISTENER JIKA USER TAIP KOD SECARA MANUAL
+document.getElementById("referral").addEventListener("blur", (e) => {
+    const val = e.target.value.trim().toUpperCase();
+    e.target.value = val;
+    semakAQC(val);
 });
 
+// SUBMIT BORANG
 document.getElementById("registerForm").addEventListener("submit", async (e)=>{
   e.preventDefault();
 
@@ -175,14 +199,13 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
   btn.innerText = "Mendaftar...";
   btn.disabled = true;
 
-  const nama = document.getElementById("nama").value;
-  const ic = document.getElementById("ic").value;
-  const email = document.getElementById("email").value;
-  const telefon = document.getElementById("telefon").value;
+  const nama = document.getElementById("nama").value.trim();
+  const ic = document.getElementById("ic").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const telefon = document.getElementById("telefon").value.trim();
   const password = document.getElementById("password").value;
-  const referral = document.getElementById("referral").value;
+  const referral = document.getElementById("referral").value.trim().toUpperCase();
   
-  // Kutip status checkbox PDPA & Marketing
   const pdpaAgreed = document.getElementById("pdpaConsent").checked;
   const marketingAgreed = document.getElementById("marketingConsent").checked;
 
@@ -193,46 +216,31 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
     return;
   }
 
-  const usersSnap = await getDocs(collection(db,"consultants"));
-  let validReferral = false;
+  // SEMAK SEKALI LAGI SEBELUM SUBMIT
+  const referralCheck = await checkReferralValidity(referral);
 
-  usersSnap.forEach((d)=>{
-    const u = d.data();
-    if(u.consultantNo === referral){
-      validReferral = true;
-    }
-  });
-
-  if(!validReferral){
-    alert("Referral (AQC) tidak sah. Sila semak semula kod.");
+  if(!referralCheck.isValid){
+    alert("Kod Referral tidak sah. Sila semak semula kod.");
     btn.innerText = "Daftar Akaun";
     btn.disabled = false;
     return;
   }  
 
   try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const uid = userCredential.user.uid;
 
-    // DATA ASAS KLIEN BARU
     let payloadData = {
       nama,
       ic,
       email,
       telefon,
-      referral,
+      referral, // Boleh simpan AQC No atau AG-XXXXXX
       accountType: "customer",
       role: "customer",
       leadStatus: "REGISTERED",
       paymentStatus: "unpaid",
       memberNo: null,
-      
-      // REKOD KONSEN PDPA & MARKETING
       consent: {
           pdpaAgreed: pdpaAgreed,
           marketingAgreed: marketingAgreed,
@@ -242,21 +250,15 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
       createdAt: new Date()
     };
 
-    // JIKA ADA INTRODUCER YANG SAH, TAMBAH DATA INI
     if (validIntroducer && introUid) {
         payloadData.introducerUid = introUid;
         payloadData.introducerComm = introducerCommPercent;
     }
 
-    // Simpan terus ke collection 'users'
     await setDoc(doc(db, "users", uid), payloadData);
 
-    // =====================================================================
-    // 2. FUNGSI AUTO-UPDATE STATUS PROSPEK KE "Didaftarkan"
-    // =====================================================================
     if (validIntroducer && introUid) {
         try {
-            // Cari prospek yang mempunyai UID Introducer & No Telefon yang sepadan
             const prosQuery = query(
                 collection(db, "prospects"), 
                 where("introducerUid", "==", introUid),
@@ -265,7 +267,6 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
             const prosSnap = await getDocs(prosQuery);
 
             if (!prosSnap.empty) {
-                // Jika jumpa, tukar status prospek tersebut
                 const prosDocId = prosSnap.docs[0].id;
                 await updateDoc(doc(db, "prospects", prosDocId), {
                     status: "Didaftarkan"
@@ -275,13 +276,10 @@ document.getElementById("registerForm").addEventListener("submit", async (e)=>{
             console.error("Gagal auto-update status prospek:", err);
         }
     }
-    // =====================================================================
 
     alert("Pendaftaran berjaya! Anda akan dibawa ke sistem utama.");
     
-    // TUNGGU 1.5 SAAT SUPAYA TOKEN FIREBASE AUTH BETUL-BETUL MELEKAT DI BROWSER
     setTimeout(() => {
-        // Awak boleh arahkan mereka ke dashboard dahulu, ATAU terus ke payment
         window.location.href = "dashboard.html"; 
     }, 1500);
 
