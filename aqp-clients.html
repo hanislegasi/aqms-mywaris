@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style> body { font-family: 'Inter', sans-serif; } </style>
-     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="bg-gray-100 min-h-screen">
@@ -18,7 +18,7 @@
 
 <div class="p-5">
 
-    <a href="aqp-dashboard.html" class="inline-block bg-white hover:bg-gray-50 border border-gray-200 px-5 py-3 rounded-xl font-semibold mb-5 transition text-gray-800 shadow-sm">
+    <a href="aqp-dashboard.html" class="inline-block bg-white hover:bg-gray-50 border border-gray-200 px-5 py-3 rounded-xl font-semibold mb-5 transition text-gray-800 shadow-sm text-base">
         ← Kembali ke Dashboard
     </a>
 
@@ -38,23 +38,23 @@
         </div>
     </div>
     
-    <!-- JADUAL PELANGGAN -->
+    <!-- JADUAL PELANGGAN (FONT DIBESARKAN) -->
     <div id="clientList" class="overflow-x-auto bg-white rounded-2xl shadow-sm border border-gray-100">
-        <table class="w-full text-sm text-left">
-            <thead class="bg-gray-50 text-gray-600 uppercase font-semibold border-b border-gray-200">
+        <table class="w-full text-base text-left">
+            <thead class="bg-gray-50 text-gray-600 uppercase font-bold border-b border-gray-200 text-sm tracking-wider">
                 <tr>
-                    <th class="p-4">Bil</th>
-                    <th class="p-4">Tarikh Daftar</th>
-                    <th class="p-4">No Ahli</th>
-                    <th class="p-4">Nama Pelanggan</th>
-                    <th class="p-4">Ejen/Wakil</th>
-                    <th class="p-4 text-right">Sales (Lejer)</th>
-                    <th class="p-4 text-right">Komisen (Lejer)</th>
-                    <th class="p-4 text-center">Status</th>
-                    <th class="p-4 text-center">Workflow</th>
+                    <th class="p-5">Bil</th>
+                    <th class="p-5">Tarikh Daftar</th>
+                    <th class="p-5">No Ahli</th>
+                    <th class="p-5">Nama Pelanggan</th>
+                    <th class="p-5">Ejen/Wakil</th>
+                    <th class="p-5 text-right">Sales (Lejer)</th>
+                    <th class="p-5 text-right">Komisen (Lejer)</th>
+                    <th class="p-5 text-center">Status</th>
+                    <th class="p-5 text-center">Workflow</th>
                 </tr>
             </thead>
-            <tbody id="tableBody" class="divide-y divide-gray-100">
+            <tbody id="tableBody" class="divide-y divide-gray-100 text-base">
                 <tr>
                     <td colspan="9" class="p-8 text-center text-gray-500">Memuat turun data pelanggan...</td>
                 </tr>
@@ -66,7 +66,7 @@
   
 <script type="module">
 import { db, auth } from './firebase.js';
-import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { collection, getDocs, doc, getDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 onAuthStateChanged(auth, async(user) => {
@@ -84,12 +84,17 @@ onAuthStateChanged(auth, async(user) => {
     // --- 1. DAPATKAN KADAR KOMISEN DARI TETAPAN ADMIN ---
     const compSnap = await getDoc(doc(db, "settings", "compensation"));
     const comp = compSnap.exists() ? compSnap.data() : {};
-    
-    // Guna nilai dari admin setting (commissionAQP), default 35 jika tiada
     const commissionRate = Number(comp.commissionAQP || 35); 
-    
-    // Kemas kini label untuk memaparkan peratusan komisen secara dinamik
     document.getElementById("labelKomisen").innerText = `Komisen Institusi (${commissionRate}%)`;
+
+    // --- 1.5 TARIK SEMUA DATA EJEN AQP UNTUK PADANAN NAMA ---
+    const agentsQ = query(collection(db, "users"), where("role", "==", "aqp_agent"), where("aqpRef", "==", consultantNo));
+    const agentsSnap = await getDocs(agentsQ);
+    const agentMap = {};
+    agentsSnap.forEach(d => {
+        const ag = d.data();
+        agentMap[ag.agentCode] = ag.nama; // Cth: { "AQP0001-001" : "KHAIRUL AMING" }
+    });
 
     // --- 2. TARIK SEMUA DATA LEJER KE DALAM MEMORI ---
     const ledgerSnap = await getDocs(collection(db, "ledger"));
@@ -112,7 +117,7 @@ onAuthStateChanged(auth, async(user) => {
         const client = docSnap.data();
         const clientId = docSnap.id;
         
-        // Penapisan: Memastikan pelanggan berada di bawah Institusi AQP ATAU Agen AQP (Contoh: AQP0001 atau AQP0001-001)
+        // Penapisan: Memastikan pelanggan berada di bawah Institusi AQP ATAU Agen AQP
         const refCode = (client.referral || "").trim().toUpperCase();
         if(client.role !== "customer" || !refCode.startsWith(consultantNo.toUpperCase())){
             continue;
@@ -135,33 +140,26 @@ onAuthStateChanged(auth, async(user) => {
             const rUid = rekod.clientUid || rekod.userId || rekod.uid || rekod.customerId || "";
             const rMemNo = rekod.memberNo ? String(rekod.memberNo).toUpperCase() : "";
 
-            // A. Padan menggunakan UID secara Mutlak
             if (rUid === clientId || tGroup === clientId.toUpperCase()) {
                 isMatch = true;
             }
-            // B. Padan menggunakan No Ahli (AQM)
             else if (mNo && (tGroup === mNo || rMemNo === mNo || desc.includes(mNo.toLowerCase()))) {
                 isMatch = true;
             }
-            // C. Padan menggunakan Nama Klien
             else if (cName && cName.length > 3 && cName !== consName && desc.includes(cName)) {
                 isMatch = true;
             }
 
-            // Jika Padan, rekod jualan (1000) & komisen AQP (2010)
             if (isMatch) {
                 if (acc === "1000") clientSales += Number(rekod.debit || 0);
                 if (acc === "2010") commission += Number(rekod.credit || 0);
             }
         });
 
-        // --- 5. PENYELARASAN FALLBACK ---
-        // Kiraan dinamik berdasarkan tetapan admin jika lejer belum dikemaskini
         if (commission === 0 && clientSales > 0) {
             commission = clientSales * (commissionRate / 100);
         }
 
-        // BLOK MUTLAK: Jika prospek belum beli apa-apa
         if (clientSales <= 0) {
             commission = 0;
         }
@@ -169,9 +167,19 @@ onAuthStateChanged(auth, async(user) => {
         sumTotalSales += clientSales;
         sumTotalCommission += commission;
         
-        // Pengecaman Ejen Dalaman
-        const agentName = client.alkRef ? client.alkRef : "Direct (HQ)";
-        const registerDate = client.createdAt ? client.createdAt.toDate().toLocaleDateString("ms-MY") : "-";
+        // --- NAMA EJEN DINAMIK ---
+        let agentNameStr = "Direct (Institusi)";
+        if (refCode !== consultantNo.toUpperCase()) {
+            agentNameStr = agentMap[refCode] || refCode; // Akan memaparkan nama ejen, jika tiada ia paparkan AQP0001-001
+        }
+
+        const rawDate = client.joinDate || client.createdAt; 
+        let registerDate = "-";
+        if (rawDate) {
+            const dateObj = rawDate?.toDate ? rawDate.toDate() : (rawDate instanceof Date ? rawDate : new Date(rawDate));
+            if(!isNaN(dateObj)) registerDate = dateObj.toLocaleDateString("ms-MY");
+        }
+        
         const isAhliAktif = clientSales > 0;
         
         // Semakan Workflow Status
@@ -187,21 +195,25 @@ onAuthStateChanged(auth, async(user) => {
         }
         
         html += `
-        <tr class="hover:bg-gray-50 transition">
-            <td class="p-4 text-gray-500">${bil++}</td>
-            <td class="p-4">${registerDate}</td>
-            <td class="p-4 font-medium">${client.memberNo || "-"}</td>
-            <td class="p-4 font-semibold text-gray-800">${client.nama || "-"}</td>
-            <td class="p-4 text-gray-500"><span class="bg-gray-100 px-2 py-1 rounded text-xs font-bold">${agentName}</span></td>
-            <td class="p-4 text-right font-semibold text-green-600">RM ${clientSales.toLocaleString("en-US",{ minimumFractionDigits:2, maximumFractionDigits:2 })}</td>
-            <td class="p-4 text-right font-semibold text-blue-600">RM ${commission.toLocaleString("en-US",{ minimumFractionDigits:2, maximumFractionDigits:2 })}</td>
-            <td class="p-4 text-center">
-                <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${isAhliAktif ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}">
+        <tr class="hover:bg-gray-50 transition border-b border-gray-100">
+            <td class="p-5 text-gray-500 font-medium">${bil++}</td>
+            <td class="p-5 text-gray-600">${registerDate}</td>
+            <td class="p-5 font-semibold text-gray-600">${client.memberNo || "-"}</td>
+            <td class="p-5 font-bold text-gray-900 uppercase text-lg">${client.nama || "-"}</td>
+            <td class="p-5 text-gray-500">
+                <span class="bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1.5 rounded-md text-sm font-bold uppercase shadow-sm whitespace-nowrap">
+                    ${agentNameStr}
+                </span>
+            </td>
+            <td class="p-5 text-right font-bold text-green-600 text-lg">RM ${clientSales.toLocaleString("en-US",{ minimumFractionDigits:2, maximumFractionDigits:2 })}</td>
+            <td class="p-5 text-right font-bold text-blue-600 text-lg">RM ${commission.toLocaleString("en-US",{ minimumFractionDigits:2, maximumFractionDigits:2 })}</td>
+            <td class="p-5 text-center">
+                <span class="px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${isAhliAktif ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}">
                     ${isAhliAktif ? "Aktif" : "Prospek"}
                 </span>
             </td>
-            <td class="p-4 text-center">
-                <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-700">
+            <td class="p-5 text-center">
+                <span class="px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-gray-100 text-gray-700">
                     ${workflowStatus}
                 </span>
             </td>
@@ -216,7 +228,7 @@ onAuthStateChanged(auth, async(user) => {
   
     document.getElementById("tableBody").innerHTML = html || `
     <tr>
-        <td colspan="9" class="p-8 text-center text-gray-500">Tiada pelanggan direkodkan di bawah institusi ini.</td>
+        <td colspan="9" class="p-10 text-center text-gray-500 text-lg">Tiada pelanggan direkodkan di bawah institusi ini.</td>
     </tr>
     `;
 });
