@@ -20,8 +20,8 @@
    <div class="bg-[#153638] text-white px-6 py-4 shadow">
         <div class="flex justify-between items-center px-5">
             <div>
-                <h1 class="text-2xl font-bold">AQC Management</h1>
-                <p class="text-green-200 text-sm mt-1">Consultant Management Centre & Directory</p>
+                <h1 class="text-2xl font-bold">Consultant Management</h1>
+                <p class="text-green-200 text-sm mt-1">Pengurusan AQC & AQP (Institusi)</p>
             </div>
             <div class="flex items-center gap-3">
                 <span class="bg-green-800 text-green-100 text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1.5">
@@ -54,7 +54,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
                 <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Jumlah Perunding</p>
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Jumlah Rakan Niaga</p>
                     <h3 id="statTotalConsultants" class="text-2xl font-bold text-gray-800 mt-1">-</h3>
                 </div>
                 <div class="p-3 bg-green-50 text-green-700 rounded-xl">
@@ -80,6 +80,7 @@
                     <div class="flex justify-between">AQC-AS: <span id="countAS" class="font-bold text-blue-700">0</span></div>
                     <div class="flex justify-between">AQC-UM: <span id="countUM" class="font-bold text-purple-700">0</span></div>
                     <div class="flex justify-between">MGAM: <span id="countMGAM" class="font-bold text-amber-600">0</span></div>
+                    <div class="flex justify-between col-span-2 pt-1 mt-1 border-t border-gray-100">AQP (Institusi): <span id="countAQP" class="font-bold text-emerald-600">0</span></div>
                 </div>
             </div>
         </div>
@@ -94,7 +95,7 @@
             <input
                 id="searchInput"
                 type="text"
-                placeholder="Cari nama, no AQC, upline, negeri atau level perunding..."
+                placeholder="Cari nama, no rujukan, upline, negeri atau level perunding..."
                 class="w-full pl-11 pr-4 py-4 rounded-2xl border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#153638] focus:border-transparent transition duration-150 text-base"
             >
         </div>
@@ -107,7 +108,7 @@
                         <tr>
                             <th class="p-3 text-left">Bil</th>
                             <th class="p-3 text-left">Tarikh Daftar</th>
-                            <th class="p-3 text-left">No AQC</th>
+                            <th class="p-3 text-left">No Rujukan</th>
                             <th class="p-3 text-left min-w-[200px]">Maklumat Perunding</th>
                             <th class="p-3 text-left">Upline</th>
                             <th class="p-3 text-left">Level</th>
@@ -149,7 +150,6 @@
 
  <!-- Firebase Scripts -->
 <script type="module">  
-    // 1. Tarik alat yang diperlukan sahaja (tak perlu getFirestore, getAuth atau initializeApp lagi)
     import { 
         collection, 
         getDocs, 
@@ -163,19 +163,11 @@
         onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // 2. Tarik 'db' dan 'auth' yang dah siap dipasang dari fail firebase.js awak
     import { db, auth } from './firebase.js';
 
-    // (Pilihan) Kalau ada kod lain yang nak pakai __firebase_config, letak sini
-    // Tapi selalunya dah tak perlu kalau dah guna import { db, auth } dari fail berpusat
     if (typeof __firebase_config !== 'undefined') {
         try { let firebaseConfig = JSON.parse(__firebase_config); } catch (e) { }
     }
-
-    // 3. TERUS MULA BUAT FUNGSI AWAK (Contoh)
-    // Awak dah boleh panggil auth.currentUser atau getDocs(collection(db, "nama-collection"))
-    
-
 
         // Toast Notification
         window.showToast = function(message) {
@@ -192,10 +184,8 @@
 
        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Jika pengguna dah login, panggil data
                 await loadConsultantsData();
             } else {
-                // Jika belum login, halau ke muka surat login
                 window.location.href = "login.html"; 
             }
         });
@@ -207,7 +197,7 @@
                 
                 let consultants = [];
                 let totalSales = 0;
-                let cAQC = 0, cAS = 0, cUM = 0, cMGAM = 0;
+                let cAQC = 0, cAS = 0, cUM = 0, cMGAM = 0, cAQP = 0;
 
                 snapshot.forEach((d) => {
                     const u = d.data();
@@ -215,11 +205,12 @@
                     
                     totalSales += (u.careerSales || 0);
 
-                    // Kira Pecahan Pangkat
+                    // Kira Pecahan Pangkat (Ditambah AQP)
                     if(u.consultantLevel === "AQC") cAQC++;
                     else if(u.consultantLevel === "AQC-AS") cAS++;
                     else if(u.consultantLevel === "AQC-UM") cUM++;
                     else if(u.consultantLevel === "MGAM") cMGAM++;
+                    else if(u.consultantLevel === "AQP") cAQP++;
                     else cAQC++; // Default jika undefined
                 });
 
@@ -230,6 +221,7 @@
                 document.getElementById("countAS").textContent = cAS;
                 document.getElementById("countUM").textContent = cUM;
                 document.getElementById("countMGAM").textContent = cMGAM;
+                document.getElementById("countAQP").textContent = cAQP;
 
                 // Sort: Paling Baru Di Atas
                 consultants.sort((a, b) => {
@@ -249,12 +241,14 @@
                     html = `<tr><td colspan="8" class="p-8 text-center text-gray-500 font-medium">Tiada data perunding ditemui.</td></tr>`;
                 } else {
                     consultants.forEach((u) => {
-                        const joinDate = u.joinDate?.toDate ? u.joinDate.toDate() : (u.joinDate instanceof Date ? u.joinDate : new Date(u.joinDate));
+                        // Guna joinDate. Jika tiada, fallback kepada createdAt
+const rawDate = u.joinDate || u.createdAt; 
+const joinDate = rawDate?.toDate ? rawDate.toDate() : (rawDate instanceof Date ? rawDate : new Date(rawDate));
                         const state = u.state || "Tiada Negeri";
                         const upline = u.upline || "Tiada Upline";
                         const lvl = u.consultantLevel || "AQC";
 
-                        // Logik Action Column (Tindakan)
+                        // Logik Action Column (Tindakan) - Ditambah AQP
                         let actionHTML = "";
                         if (u.promotionRequest) {
                             actionHTML = `
@@ -274,11 +268,16 @@
                                         <option value="AQC-AS" ${lvl==='AQC-AS'?'selected':''}>AQC-AS</option>
                                         <option value="AQC-UM" ${lvl==='AQC-UM'?'selected':''}>AQC-UM</option>
                                         <option value="MGAM" ${lvl==='MGAM'?'selected':''}>MGAM</option>
+                                        <option value="AQP" ${lvl==='AQP'?'selected':''}>AQP</option>
                                     </select>
                                     <button onclick="window.updateLevel('${u.id}')" class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs px-3 py-1.5 rounded-lg font-semibold transition shadow-sm">Save</button>
                                 </div>
                             `;
                         }
+
+                        // Tukar warna lencana bergantung pada jenis (AQP warna Emerald)
+                        let badgeColorClass = "bg-gray-100 text-gray-700 border-gray-200";
+                        if(lvl === 'AQP') badgeColorClass = "bg-emerald-100 text-emerald-800 border-emerald-200";
 
                        html += `
     <tr onclick="window.location.href='admin-consultant-details.html?id=${u.id}'" class="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
@@ -291,7 +290,7 @@
         </td>
         <td class="p-4 text-lg font-medium text-blue-600">${upline}</td>
         <td class="p-4 text-lg">
-            <span class="bg-gray-100 text-gray-700 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider border border-gray-200">${lvl}</span>
+            <span class="${badgeColorClass} px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider border">${lvl}</span>
         </td>
         <td class="p-4 text-lg font-bold text-green-700">RM${(u.careerSales || 0).toLocaleString()}</td>
         <td class="p-4 text-center align-middle" onclick="event.stopPropagation()">
@@ -317,7 +316,6 @@
             let hasVisible = false;
 
             rows.forEach(row => {
-                // Jangan hilangkan row loading/empty message
                 if(row.children.length === 1) return; 
 
                 const text = row.innerText.toLowerCase();
@@ -336,7 +334,6 @@
 
         // ==========================================
         // FUNGSI TINDAKAN (Tukar Pangkat & Kelulusan)
-        // Didaftarkan ke window supaya boleh dipanggil dari onclick=""
         // ==========================================
 
         window.approvePromo = async (uid, newLevel) => {
@@ -344,7 +341,7 @@
             try {
                 await updateDoc(doc(db, "consultants", uid), {
                     consultantLevel: newLevel,
-                    promotionDate: new Date(), // Reset tarikh maintain 1 tahun
+                    promotionDate: new Date(), 
                     promotionRequest: false,
                     requestedLevel: null
                 });
@@ -373,7 +370,7 @@
             try {
                 await updateDoc(doc(db, "consultants", uid), {
                     consultantLevel: newLevel,
-                    promotionDate: new Date(), // Reset tarikh maintain 1 tahun
+                    promotionDate: new Date(), 
                     promotionRequest: false
                 });
                 window.showToast("Pangkat berjaya dikemaskini!");
