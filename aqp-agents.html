@@ -39,38 +39,53 @@
 
 <div class="p-5">
 
-    <!-- MAKLUMAN & BUTANG TAMBAH -->
-    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+    <!-- MAKLUMAN & SETTING KOMISEN GLOBAL & BUTANG TAMBAH -->
+    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-stretch gap-4 mb-6">
+        
         <div class="bg-blue-50 border border-blue-200 p-4 rounded-xl text-sm text-blue-800 flex-1 flex items-start gap-3">
             <i data-lucide="info" class="w-5 h-5 text-blue-500 shrink-0 mt-0.5"></i>
-            <p><strong>Nota:</strong> Ejen yang didaftarkan di sini adalah di bawah seliaan terus Institusi (AQP). <strong>Peratusan komisen yang ditetapkan adalah bayaran dalaman daripada institusi kepada ejen tersebut</strong> dan tiada kaitan dengan sistem pengurusan kewangan Al-Qawthar (AQMS).</p>
+            <p><strong>Nota:</strong> Tetapkan peratusan komisen seragam untuk semua ejen di ruangan sebelah. Jadual di bawah membolehkan anda memantau jualan ejen dan <strong>memproses bayaran komisen</strong> mereka secara terus.</p>
         </div>
-        <button id="openModalBtn" class="bg-[#153638] hover:bg-[#1d4a4d] text-white px-6 py-4 rounded-xl font-bold shadow-lg transition flex items-center gap-2 shrink-0">
-            <i data-lucide="user-plus" class="w-5 h-5 text-[#d8ae81]"></i> Tambah Ejen Baru
-        </button>
+
+        <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
+            <!-- TETAPAN KOMISEN KESELURUHAN -->
+            <div class="flex items-center bg-white p-2 rounded-xl shadow-sm border border-gray-200 h-full">
+                <label class="text-sm font-bold text-gray-700 ml-2 whitespace-nowrap">Komisen Ejen:</label>
+                <div class="relative w-24 mx-2">
+                    <input type="number" id="globalCommInput" min="0" max="100" placeholder="0" class="w-full border border-gray-300 p-2 pr-6 rounded-lg focus:ring-2 focus:ring-[#d8ae81] outline-none text-center font-bold text-[#153638] bg-gray-50">
+                    <span class="absolute right-2 top-2.5 font-bold text-gray-400 text-sm">%</span>
+                </div>
+                <button id="saveGlobalCommBtn" class="bg-[#d8ae81] hover:bg-[#c29b70] text-[#153638] px-4 py-2 rounded-lg font-bold transition flex items-center gap-1 shadow-sm">
+                    <i data-lucide="save" class="w-4 h-4"></i> Simpan
+                </button>
+            </div>
+
+            <!-- BUTANG TAMBAH EJEN -->
+            <button id="openModalBtn" class="bg-[#153638] hover:bg-[#1d4a4d] text-white px-6 py-2 rounded-xl font-bold shadow-sm transition flex items-center gap-2 h-full">
+                <i data-lucide="user-plus" class="w-5 h-5 text-[#d8ae81]"></i> Tambah Ejen Baru
+            </button>
+        </div>
+
     </div>
 
-<!-- JADUAL EJEN -->
+<!-- JADUAL EJEN (FORMAT PROSES BAYARAN) -->
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left text-md">
-            <thead class="bg-gray-50 border-b border-gray-100 text-gray-500 uppercase tracking-wider font-semibold">
+            <thead class="bg-gray-50 border-b border-gray-100 text-gray-500 uppercase tracking-wider font-semibold text-xs">
                 <tr>
-                    <th class="p-4 w-12 text-center">Bil</th>
-                    <th class="p-4">Maklumat Ejen</th>
-                    <th class="p-4">Jawatan</th>
-                    <!-- LAJUR BANK DIASINGKAN -->
-                    <th class="p-4">Nama Bank</th>
-                    <th class="p-4">No. Akaun Bank</th>
-                    <th class="p-4 text-center">Kongsi Komisen</th>
-                    <th class="p-4">Pautan Rujukan (Link)</th>
+                    <th class="p-4 w-10 text-center">Bil</th>
+                    <th class="p-4">Maklumat Ejen & Jawatan</th>
+                    <th class="p-4">Maklumat Bank</th>
+                    <th class="p-4 text-right">Jualan (RM)</th>
+                    <th class="p-4 text-right border-r border-gray-100">Komisen Boleh Tebus</th>
+                    <th class="p-4 text-center">Pautan Rujukan</th>
                     <th class="p-4 text-center">Tindakan</th>
                 </tr>
             </thead>
             <tbody id="agentsTableBody" class="divide-y divide-gray-100">
                 <tr>
-                    <!-- Tukar colspan 7 jadi 8 sebab dah tambah 1 column -->
-                    <td colspan="8" class="p-8 text-center text-gray-500">
+                    <td colspan="7" class="p-8 text-center text-gray-500">
                         <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2"></i> Memuatkan data...
                     </td>
                 </tr>
@@ -98,17 +113,17 @@
                     <input type="text" id="agentName" required placeholder="Contoh: Ahmad Bin Ali" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition uppercase">
                 </div>
 
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">No. Kad Pengenalan <span class="text-red-500">*</span></label>
-                    <input type="text" id="agentIC" required placeholder="Contoh: 900101-14-5566" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">No. Kad Pengenalan <span class="text-red-500">*</span></label>
+                        <input type="text" id="agentIC" required placeholder="Contoh: 900101-14-5566" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Jawatan / Peranan</label>
+                        <input type="text" id="agentPosition" placeholder="Contoh: Staf/Anggota" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition capitalize">
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Jawatan / Peranan</label>
-                    <input type="text" id="agentPosition" placeholder="Contoh: AJK/Staf/Anggota" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition capitalize">
-                </div>
-
-                <!-- INPUT BANK DIASINGKAN MENGGUNAKAN GRID -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Bank <span class="text-red-500">*</span></label>
@@ -133,16 +148,7 @@
                         <input type="text" id="agentBankAcc" required placeholder="Contoh: 162022334455" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
                     </div>
                 </div>
-                <p class="text-xs text-gray-400 mt-1">Digunakan oleh PIC untuk urusan pembayaran komisen.</p>
-
-                <div>
-                    <label class="block text-sm font-semibold text-[#153638] mb-1">Peratusan Komisen Ejen (%) <span class="text-red-500">*</span></label>
-                    <div class="relative">
-                        <input type="number" id="agentComm" required min="0" max="100" placeholder="Contoh: 10" class="w-full border border-gray-300 p-3 pl-4 pr-10 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none transition font-bold text-[#153638] bg-blue-50">
-                        <span class="absolute right-4 top-3.5 font-bold text-gray-400">%</span>
-                    </div>
-                    <p class="text-xs text-blue-600 mt-1 font-medium">Berapa % daripada jualan yang akan Institusi bayar kepada ejen ini?</p>
-                </div>
+                <p class="text-xs text-gray-400 mt-1">Digunakan untuk urusan pembayaran komisen.</p>
 
                 <div class="pt-4 border-t border-gray-100 flex gap-3">
                     <button type="button" id="cancelBtn" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold p-3 rounded-xl transition">Batal</button>
@@ -154,16 +160,18 @@
         </div>
     </div>
 </div>
+</div>
 
 <script type="module">
     import { db, auth } from './firebase.js';
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { doc, getDoc, collection, query, where, getDocs, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { doc, getDoc, collection, query, where, getDocs, setDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     lucide.createIcons();
 
     let currentAqpNo = null;
     let currentAqpName = null;
+    let globalCommissionRate = 0;
 
     // ELEMENT MODAL
     const modal = document.getElementById("addAgentModal");
@@ -197,9 +205,44 @@
         
         const aqpSnap = await getDoc(doc(db, "consultants", user.uid));
         if (aqpSnap.exists()) {
-            currentAqpNo = aqpSnap.data().consultantNo;
-            currentAqpName = aqpSnap.data().nama;
+            const data = aqpSnap.data();
+            currentAqpNo = data.consultantNo;
+            currentAqpName = data.nama;
+            
+            // Dapatkan kadar komisen global dari database (jika ada)
+            globalCommissionRate = data.globalAgentCommission || 0;
+            document.getElementById('globalCommInput').value = globalCommissionRate;
+
             loadAgents();
+        }
+    });
+
+    // SIMPAN TETAPAN KOMISEN GLOBAL
+    document.getElementById('saveGlobalCommBtn').addEventListener('click', async () => {
+        const commValue = document.getElementById('globalCommInput').value;
+        const btn = document.getElementById('saveGlobalCommBtn');
+        const oriContent = btn.innerHTML;
+        
+        if (commValue === '' || commValue < 0) {
+            alert("Sila masukkan peratusan yang sah.");
+            return;
+        }
+
+        btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Menyimpan...`;
+        
+        try {
+            await updateDoc(doc(db, "consultants", auth.currentUser.uid), {
+                globalAgentCommission: Number(commValue)
+            });
+            globalCommissionRate = Number(commValue);
+            alert("Tetapan komisen berjaya dikemaskini.");
+            loadAgents(); // Refresh jadual untuk kemaskini paparan komisen ejen
+        } catch (error) {
+            console.error(error);
+            alert("Gagal menyimpan tetapan komisen.");
+        } finally {
+            btn.innerHTML = oriContent;
+            lucide.createIcons();
         }
     });
 
@@ -210,7 +253,6 @@
         lucide.createIcons();
 
         try {
-            // Tarik data dari koleksi 'users' yang berdaftar di bawah aqpRef
             const q = query(collection(db, "users"), where("role", "==", "aqp_agent"), where("aqpRef", "==", currentAqpNo));
             const querySnapshot = await getDocs(q);
             
@@ -226,33 +268,57 @@
                 const data = docSnap.data();
                 const agentId = docSnap.id;
                 
-                // Bina Link Rujukan menggunakan kod ejen
                 const refLink = `${window.location.origin}${window.location.pathname.replace("aqp-agents.html", "register.html")}?ref=${data.agentCode}`;
+
+                // Simulasi pengiraan data Jualan (Ubahsuai ikut field DB sebenar anda)
+                const totalSales = data.totalSales || 0; 
+                const commissionAmount = (totalSales * (globalCommissionRate / 100)).toFixed(2);
 
                 html += `
                 <tr class="hover:bg-gray-50 transition border-b border-gray-50">
                     <td class="p-4 text-center text-gray-500 font-medium">${bil++}</td>
+                    
                     <td class="p-4">
                         <p class="font-bold text-[#153638] uppercase">${data.nama}</p>
-                        <p class="text-xs text-gray-500 flex items-center gap-1 mt-0.5"><i data-lucide="credit-card" class="w-3 h-3"></i> ${data.ic}</p>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-xs text-gray-500 mt-1">
+                            <span class="flex items-center gap-1"><i data-lucide="credit-card" class="w-3.5 h-3.5"></i> ${data.ic}</span>
+                            <span class="hidden sm:inline text-gray-300">|</span>
+                            <span class="flex items-center gap-1 capitalize"><i data-lucide="briefcase" class="w-3.5 h-3.5"></i> ${data.jawatan || "-"}</span>
+                        </div>
                     </td>
-                    <td class="p-4 text-gray-600 capitalize">${data.jawatan || "-"}</td>
-                    <td class="p-4 text-gray-600 font-medium">${data.bankAccount || "-"}</td>
-                    <td class="p-4 text-center">
-                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-lg font-bold text-sm">${data.commissionRate}%</span>
-                    </td>
+                    
                     <td class="p-4">
-                        <div class="flex items-center gap-2">
-                            <input type="text" readonly value="${refLink}" class="bg-gray-100 border border-gray-200 text-xs p-2 rounded-lg w-48 outline-none text-gray-500">
+                        <p class="font-semibold text-gray-700 text-sm">${data.bankName || "-"}</p>
+                        <p class="text-xs text-gray-500 font-mono mt-0.5">${data.bankAccount || "-"}</p>
+                    </td>
+                    
+                    <td class="p-4 text-right font-semibold text-gray-700">
+                        RM ${totalSales.toFixed(2)}
+                    </td>
+                    
+                    <td class="p-4 text-right border-r border-gray-100">
+                        <p class="font-bold text-green-600 text-base">RM ${commissionAmount}</p>
+                        <p class="text-[10px] text-gray-400 mt-0.5">Berdasarkan ${globalCommissionRate}%</p>
+                    </td>
+                    
+                    <td class="p-4 text-center">
+                        <div class="flex items-center justify-center gap-1">
+                            <input type="text" readonly value="${refLink}" class="bg-gray-100 border border-gray-200 text-xs p-2 rounded-lg w-32 outline-none text-gray-500">
                             <button onclick="copyLink('${refLink}', this)" class="bg-[#e5c18e] hover:bg-[#d4ac74] text-[#153638] p-2 rounded-lg transition" title="Copy Link">
                                 <i data-lucide="copy" class="w-4 h-4"></i>
                             </button>
                         </div>
                     </td>
+                    
                     <td class="p-4 text-center">
-                        <button onclick="deleteAgent('${agentId}', '${data.nama}')" class="text-red-400 hover:text-red-600 bg-red-50 hover:bg-red-100 p-2 rounded-lg transition" title="Padam Ejen">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="payAgent('${agentId}', '${data.nama}', ${commissionAmount})" class="bg-[#153638] hover:bg-[#1d4a4d] text-white text-xs px-3 py-2 rounded-lg font-semibold transition shadow-sm flex items-center gap-1" title="Proses Bayaran">
+                                Bayar
+                            </button>
+                            <button onclick="deleteAgent('${agentId}', '${data.nama}')" class="text-red-400 hover:text-red-600 bg-red-50 hover:bg-red-100 p-2 rounded-lg transition" title="Padam Ejen">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 `;
@@ -267,7 +333,7 @@
         }
     }
 
-    // FUNGSI COPY LINK (Global supaya boleh dipanggil dari HTML)
+    // FUNGSI COPY LINK
     window.copyLink = async (link, btnElement) => {
         try {
             await navigator.clipboard.writeText(link);
@@ -285,12 +351,25 @@
         }
     };
 
+    // FUNGSI BAYAR EJEN (Untuk dihubungkan dengan fungsi pembayaran anda)
+    window.payAgent = async (agentId, agentName, amount) => {
+        if(amount <= 0) {
+            alert(`Tiada komisen terkumpul untuk ejen ${agentName} pada masa ini.`);
+            return;
+        }
+        
+        if(confirm(`Adakah anda pasti mahu merekodkan pembayaran komisen sebanyak RM ${amount} kepada ${agentName}?`)) {
+            // Sila masukkan logik update database untuk pembayaran komisen di sini
+            alert(`Rekod pembayaran RM ${amount} untuk ${agentName} sedang diproses... (Logik bayaran perlu ditambah)`);
+        }
+    };
+
     // FUNGSI PADAM EJEN
     window.deleteAgent = async (agentId, agentName) => {
         if (confirm(`Adakah anda pasti mahu memadam rekod ejen ${agentName}? Tindakan ini tidak boleh dikembalikan.`)) {
             try {
                 await deleteDoc(doc(db, "users", agentId));
-                loadAgents(); // Reload table
+                loadAgents();
             } catch (error) {
                 alert("Gagal memadam ejen.");
                 console.error(error);
@@ -311,26 +390,24 @@
             const nama = document.getElementById("agentName").value.trim().toUpperCase();
             const ic = document.getElementById("agentIC").value.trim();
             const jawatan = document.getElementById("agentPosition").value.trim();
-            const bank = document.getElementById("agentBank").value.trim();
-            const comm = document.getElementById("agentComm").value;
+            const bankName = document.getElementById("agentBankName").value;
+            const bankAcc = document.getElementById("agentBankAcc").value.trim();
 
-            // Generate Kod Ejen Unik: Cth AG-123456
             const shortCode = "AG-" + Math.floor(100000 + Math.random() * 900000);
-
-            // Simpan ke database 'users' tapi sebagai role: aqp_agent (Bukan customer/consultant)
-            // Kita guna custom ID berasaskan masa supaya tak kacau Auth login biasa.
             const docId = `aqpagent_${Date.now()}`;
             
+            // Kadar komisen tidak lagi disimpan dalam profil individu, ia diambil dari globalCommissionRate
             await setDoc(doc(db, "users", docId), {
                 nama: nama,
                 ic: ic,
                 jawatan: jawatan,
-                bankAccount: bank,
-                commissionRate: Number(comm),
+                bankName: bankName,
+                bankAccount: bankAcc,
                 agentCode: shortCode,
-                aqpRef: currentAqpNo,        // Link dengan Institusi
+                aqpRef: currentAqpNo,
                 aqpName: currentAqpName,
                 role: "aqp_agent",
+                totalSales: 0, // Inisialisasi awal nilai jualan ejen ke 0
                 createdAt: new Date()
             });
 
