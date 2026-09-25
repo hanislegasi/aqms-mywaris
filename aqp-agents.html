@@ -29,7 +29,7 @@
             <h1 class="text-2xl font-bold flex items-center gap-2">
                 <i data-lucide="users-2"></i> Pengurusan Ejen Institusi
             </h1>
-            <p class="text-[#d8ae81] text-sm mt-1">Urus wakil jualan, tetapan komisen dan pautan rujukan (Referral Link)</p>
+            <p class="text-[#d8ae81] text-sm mt-1">Urus wakil jualan, tetapan komisen dan rekod pembayaran</p>
         </div>
         <a href="aqp-dashboard.html" class="bg-white/10 hover:bg-white/20 border border-white/20 transition px-5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
             <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali
@@ -44,13 +44,13 @@
         
         <div class="bg-blue-50 border border-blue-200 p-4 rounded-xl text-sm text-blue-800 flex-1 flex items-start gap-3">
             <i data-lucide="info" class="w-5 h-5 text-blue-500 shrink-0 mt-0.5"></i>
-            <p><strong>Nota:</strong> Tetapkan peratusan komisen seragam untuk semua ejen di ruangan sebelah. Jadual di bawah membolehkan anda memantau jualan ejen dan <strong>memproses bayaran komisen</strong> mereka secara terus.</p>
+            <p><strong>Info Pengiraan:</strong> Komisen ejen dikira berdasarkan <strong>potongan daripada Komisen Kasar AQP</strong>, bukannya daripada jualan pelanggan. Pastikan anda merekod pembayaran di ruangan Tindakan.</p>
         </div>
 
         <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
             <!-- TETAPAN KOMISEN KESELURUHAN -->
             <div class="flex items-center bg-white p-2 rounded-xl shadow-sm border border-gray-200 h-full">
-                <label class="text-sm font-bold text-gray-700 ml-2 whitespace-nowrap">Komisen Ejen:</label>
+                <label class="text-sm font-bold text-gray-700 ml-2 whitespace-nowrap">Potongan Komisen AQP:</label>
                 <div class="relative w-24 mx-2">
                     <input type="number" id="globalCommInput" min="0" max="100" placeholder="0" class="w-full border border-gray-300 p-2 pr-6 rounded-lg focus:ring-2 focus:ring-[#d8ae81] outline-none text-center font-bold text-[#153638] bg-gray-50">
                     <span class="absolute right-2 top-2.5 font-bold text-gray-400 text-sm">%</span>
@@ -78,7 +78,7 @@
                     <th class="p-4">Maklumat Ejen & Jawatan</th>
                     <th class="p-4">Maklumat Bank</th>
                     <th class="p-4 text-right">Jualan (RM)</th>
-                    <th class="p-4 text-right border-r border-gray-100">Komisen Boleh Tebus</th>
+                    <th class="p-4 text-right border-r border-gray-100 bg-green-50/30">Komisen & Payout</th>
                     <th class="p-4 text-center">Pautan Rujukan</th>
                     <th class="p-4 text-center">Tindakan</th>
                 </tr>
@@ -91,6 +91,30 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- MODAL PEMBAYARAN KOMISEN (DITIRU DARI MYINTRODUCER) -->
+<div id="paymentModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl transform transition-all modal-enter">
+        <h3 class="text-lg font-bold text-gray-800 mb-1">Pengesahan Bayaran Komisen</h3>
+        <p class="text-sm text-gray-500 mb-5">Sila masukkan butiran bayaran ejen untuk rujukan masa hadapan.</p>
+        <form id="paymentForm" onsubmit="submitPayment(event)">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Tarikh Pemindahan</label>
+                    <input type="date" id="payDate" required class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-[#153638] outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Cara Bayaran / No Rujukan</label>
+                    <input type="text" id="payMethod" required placeholder="Contoh: Transfer Maybank, Tunai, DuitNow" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-[#153638] outline-none">
+                </div>
+            </div>
+            <div class="mt-6 flex gap-3">
+                <button type="button" onclick="closePaymentModal()" class="w-1/2 bg-gray-100 text-gray-700 hover:bg-gray-200 py-2.5 rounded-lg font-semibold transition">Batal</button>
+                <button type="submit" id="confirmPayBtn" class="w-1/2 bg-[#153638] text-white hover:bg-[#1d4a4d] py-2.5 rounded-lg font-semibold transition">Simpan Rekod</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -143,8 +167,7 @@
                         <input type="text" id="agentBankAcc" required placeholder="Contoh: 162022334455" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
                     </div>
                 </div>
-                <p class="text-xs text-gray-400 mt-1">Digunakan untuk urusan pembayaran komisen.</p>
-
+                
                 <div class="pt-4 border-t border-gray-100 flex gap-3">
                     <button type="button" id="cancelBtn" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold p-3 rounded-xl transition">Batal</button>
                     <button type="submit" id="saveBtn" class="flex-1 bg-[#153638] hover:bg-[#1d4a4d] text-white font-semibold p-3 rounded-xl transition flex items-center justify-center gap-2">
@@ -221,26 +244,29 @@
 <script type="module">
     import { db, auth } from './firebase.js';
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { doc, getDoc, collection, query, where, getDocs, setDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { doc, getDoc, collection, query, where, getDocs, setDoc, deleteDoc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     lucide.createIcons();
 
     let currentAqpNo = null;
     let currentAqpName = null;
     let globalCommissionRate = 0;
+    window.aqpBaseCommission = 35; // Kadar asas komisen AQP (Default 35%)
     
-    // PEMBOLEHUBAH UNTUK EDIT
+    // PEMBOLEHUBAH UNTUK EDIT & PAYMENT
     let currentEditAgentId = null;
-    window.agentsData = {}; // Menyimpan data ejen untuk dipanggil ke dalam form edit
+    window.currentPaymentAgentId = null;
+    window.currentPaymentAmount = 0;
+    window.agentsData = {}; 
 
-    // ELEMENT MODAL TAMBAH
+    // MODAL TAMBAH
     const addModal = document.getElementById("addAgentModal");
     const openAddBtn = document.getElementById("openModalBtn");
     const closeAddBtn = document.getElementById("closeModalBtn");
     const cancelAddBtn = document.getElementById("cancelBtn");
     const addForm = document.getElementById("addAgentForm");
     
-    // ELEMENT MODAL EDIT
+    // MODAL EDIT
     const editModal = document.getElementById("editAgentModal");
     const closeEditBtn = document.getElementById("closeEditModalBtn");
     const cancelEditBtn = document.getElementById("cancelEditBtn");
@@ -248,29 +274,18 @@
 
     const tableBody = document.getElementById("agentsTableBody");
 
-    // FUNGSI BUKA/TUTUP MODAL TAMBAH
     const toggleAddModal = (show) => {
-        if (show) {
-            addModal.classList.remove("hidden");
-            addModal.classList.add("flex");
-        } else {
-            addModal.classList.add("hidden");
-            addModal.classList.remove("flex");
-            addForm.reset();
-        }
+        if (show) { addModal.classList.remove("hidden"); addModal.classList.add("flex"); } 
+        else { addModal.classList.add("hidden"); addModal.classList.remove("flex"); addForm.reset(); }
     };
     openAddBtn.addEventListener("click", () => toggleAddModal(true));
     closeAddBtn.addEventListener("click", () => toggleAddModal(false));
     cancelAddBtn.addEventListener("click", () => toggleAddModal(false));
 
-    // FUNGSI BUKA/TUTUP MODAL EDIT
     window.openEditModal = (agentId) => {
         const data = window.agentsData[agentId];
         if (!data) return;
-
         currentEditAgentId = agentId;
-        
-        // Isi form dengan data yang sedia ada
         document.getElementById('editAgentName').value = data.nama || "";
         document.getElementById('editAgentIC').value = data.ic || "";
         document.getElementById('editAgentPosition').value = data.jawatan || "";
@@ -290,12 +305,88 @@
     closeEditBtn.addEventListener("click", closeEditModal);
     cancelEditBtn.addEventListener("click", closeEditModal);
 
+    // KAWALAN MODAL BAYARAN KOMISEN
+    window.payAgent = (agentId, agentName, amount) => {
+        if(amount <= 0) {
+            alert(`Tiada komisen tertunggak untuk ejen ${agentName} pada masa ini.`);
+            return;
+        }
+        
+        window.currentPaymentAgentId = agentId;
+        window.currentPaymentAmount = parseFloat(amount);
+        
+        document.getElementById('payDate').valueAsDate = new Date();
+        document.getElementById('payMethod').value = '';
+        
+        document.getElementById('paymentModal').classList.remove('hidden');
+        document.getElementById('paymentModal').classList.add('flex');
+    };
+
+    window.closePaymentModal = () => {
+        window.currentPaymentAgentId = null;
+        window.currentPaymentAmount = 0;
+        document.getElementById('paymentModal').classList.add('hidden');
+        document.getElementById('paymentModal').classList.remove('flex');
+    };
+
+    window.submitPayment = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('confirmPayBtn');
+        const payDate = document.getElementById('payDate').value;
+        const payMethod = document.getElementById('payMethod').value;
+
+        if (!window.currentPaymentAgentId || !payDate || !payMethod) return;
+
+        btn.disabled = true;
+        btn.innerText = "Menyimpan...";
+
+        try {
+            // 1. Simpan rekod ke dalam dompet ejen (Kemaskini Telah Dibayar)
+            const agentRef = doc(db, "users", window.currentPaymentAgentId);
+            const agentSnap = await getDoc(agentRef);
+            if(agentSnap.exists()){
+                const currentPaid = agentSnap.data().paidCommission || 0;
+                await updateDoc(agentRef, {
+                    paidCommission: currentPaid + window.currentPaymentAmount
+                });
+            }
+
+            // 2. Simpan Rekod Resit/History Payout AQP
+            await addDoc(collection(db, "agentPayouts"), {
+                agentId: window.currentPaymentAgentId,
+                aqpRef: currentAqpNo,
+                amount: window.currentPaymentAmount,
+                paidAt: new Date(payDate), 
+                paymentMethod: payMethod,
+                timestamp: new Date()
+            });
+
+            closePaymentModal();
+            loadAgents();
+            alert("Rekod bayaran berjaya disimpan.");
+        } catch (error) {
+            alert("Ralat kemaskini: " + error.message);
+            console.error(error);
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "Simpan Rekod";
+        }
+    };
+
     // CHECK AUTH
     onAuthStateChanged(auth, async (user) => {
         if (!user) {
             window.location.href = "login.html";
             return;
         }
+
+        try {
+            const compSnap = await getDoc(doc(db, "settings", "compensation"));
+            if(compSnap.exists()){
+                const comp = compSnap.data();
+                window.aqpBaseCommission = Number(comp.commissionAQP || comp.commissionAQC || 35);
+            }
+        } catch(e) { console.error("Gagal dapatkan kadar komisen AQP", e); }
         
         const aqpSnap = await getDoc(doc(db, "consultants", user.uid));
         if (aqpSnap.exists()) {
@@ -351,7 +442,7 @@
             
             let html = "";
             let bil = 1;
-            window.agentsData = {}; // Kosongkan memory rekod lama
+            window.agentsData = {};
 
             if (querySnapshot.empty) {
                 tableBody.innerHTML = `<tr><td colspan="7" class="p-10 text-center text-gray-500">Belum ada ejen yang didaftarkan.</td></tr>`;
@@ -361,13 +452,24 @@
             querySnapshot.forEach((docSnap) => {
                 const data = docSnap.data();
                 const agentId = docSnap.id;
-                
-                // Simpan data ke dalam memory array untuk rujukan butang edit
                 window.agentsData[agentId] = data;
                 
                 const refLink = `${window.location.origin}${window.location.pathname.replace("aqp-agents.html", "register.html")}?ref=${data.agentCode}`;
+                
+                // DATA WALLET
                 const totalSales = data.totalSales || 0; 
-                const commissionAmount = (totalSales * (globalCommissionRate / 100)).toFixed(2);
+                const paidCommission = data.paidCommission || 0; // Komisen yang dah dibayar sebelum ni
+                
+                // --- FORMULA BARU PENGIRAAN KOMISEN ---
+                // 1. Kira nilai komisen yang AQP dapat (Contoh: RM3000 x 35% = RM1050)
+                const aqpCommissionAmount = totalSales * (window.aqpBaseCommission / 100);
+                
+                // 2. Kira komisen TERKUMPUL ejen (% dari Komisen AQP)
+                const totalAgentCommission = aqpCommissionAmount * (globalCommissionRate / 100);
+
+                // 3. Baki komisen yang BELUM dibayar (Boleh Tebus)
+                let unpaidCommission = totalAgentCommission - paidCommission;
+                if(unpaidCommission < 0) unpaidCommission = 0; // Langkah keselamatan elak nombor negatif
 
                 html += `
                 <tr class="hover:bg-gray-50 transition border-b border-gray-50 group">
@@ -391,9 +493,13 @@
                         RM ${totalSales.toFixed(2)}
                     </td>
                     
-                    <td class="p-4 text-right border-r border-gray-100">
-                        <p class="font-bold text-green-600 text-base">RM ${commissionAmount}</p>
-                        <p class="text-[10px] text-gray-400 mt-0.5">Berdasarkan ${globalCommissionRate}%</p>
+                    <td class="p-4 text-right border-r border-gray-100 bg-green-50/30">
+                        <p class="font-bold text-green-600 text-lg">RM ${unpaidCommission.toFixed(2)}</p>
+                        <p class="text-[10px] text-gray-500 mt-0.5 border-b border-gray-200 pb-0.5 mb-0.5 inline-block">Boleh Tebus (Unpaid)</p>
+                        <div class="flex justify-end gap-3 text-[10px] text-gray-400 mt-1">
+                            <span>Terkumpul: RM${totalAgentCommission.toFixed(2)}</span>
+                            <span>Dibayar: RM${paidCommission.toFixed(2)}</span>
+                        </div>
                     </td>
                     
                     <td class="p-4 text-center">
@@ -407,8 +513,8 @@
                     
                     <td class="p-4 text-center">
                         <div class="flex items-center justify-center gap-2 opacity-100 md:opacity-40 group-hover:opacity-100 transition-opacity">
-                            <button onclick="payAgent('${agentId}', '${data.nama}', ${commissionAmount})" class="bg-[#153638] hover:bg-[#1d4a4d] text-white text-xs px-3 py-2 rounded-lg font-semibold transition shadow-sm flex items-center gap-1" title="Proses Bayaran">
-                                Bayar
+                            <button onclick="payAgent('${agentId}', '${data.nama}', ${unpaidCommission.toFixed(2)})" class="bg-orange-500 hover:bg-orange-600 text-white text-xs px-3 py-2 rounded-lg font-bold transition shadow-sm flex items-center gap-1" title="Proses Bayaran">
+                                Bayar Ejen
                             </button>
                             <button onclick="openEditModal('${agentId}')" class="text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 p-2 rounded-lg transition" title="Kemaskini Maklumat Ejen">
                                 <i data-lucide="edit-3" class="w-4 h-4"></i>
@@ -449,18 +555,6 @@
         }
     };
 
-    // FUNGSI BAYAR EJEN
-    window.payAgent = async (agentId, agentName, amount) => {
-        if(amount <= 0) {
-            alert(`Tiada komisen terkumpul untuk ejen ${agentName} pada masa ini.`);
-            return;
-        }
-        
-        if(confirm(`Adakah anda pasti mahu merekodkan pembayaran komisen sebanyak RM ${amount} kepada ${agentName}?`)) {
-            alert(`Rekod pembayaran RM ${amount} untuk ${agentName} sedang diproses...`);
-        }
-    };
-
     // FUNGSI PADAM EJEN
     window.deleteAgent = async (agentId, agentName) => {
         if (confirm(`Adakah anda pasti mahu memadam rekod ejen ${agentName}? Tindakan ini tidak boleh dikembalikan.`)) {
@@ -490,46 +584,36 @@
             const bankName = document.getElementById("agentBankName").value;
             const bankAcc = document.getElementById("agentBankAcc").value.trim();
 
-            // --- BERMULA LOGIK GENERATE KOD AQP000X-00X ---
-            // 1. Dapatkan rekod AQP semasa (untuk ambil counter ejen terkini)
             const aqpRefDoc = doc(db, "consultants", auth.currentUser.uid);
             const aqpSnap = await getDoc(aqpRefDoc);
             let currentCounter = 0;
             
             if (aqpSnap.exists()) {
                 const aqpData = aqpSnap.data();
-                // Jika agentCounter belum wujud, ia akan bermula dari 0
                 currentCounter = aqpData.agentCounter || 0; 
             }
             
-            // 2. Tambah 1 untuk ejen baru
             currentCounter += 1;
-            
-            // 3. Format nombor ejen jadikan 3 digit (contoh: 001, 002, 010)
             const formattedCounter = String(currentCounter).padStart(3, '0');
-            
-            // 4. Gabungkan No AQP + No Ejen (Contoh: AQP0001-001)
             const shortCode = `${currentAqpNo}-${formattedCounter}`;
-            // --- TAMAT LOGIK GENERATE KOD ---
 
             const docId = `aqpagent_${Date.now()}`;
             
-            // 5. Simpan data Ejen ke dalam database
             await setDoc(doc(db, "users", docId), {
                 nama: nama,
                 ic: ic,
                 jawatan: jawatan,
                 bankName: bankName,
                 bankAccount: bankAcc,
-                agentCode: shortCode, // Simpan format baru di sini
+                agentCode: shortCode, 
                 aqpRef: currentAqpNo,
                 aqpName: currentAqpName,
                 role: "aqp_agent",
                 totalSales: 0, 
+                paidCommission: 0, // Set 0 waktu daftar pertama kali
                 createdAt: new Date()
             });
 
-            // 6. Kemaskini (Update) counter dalam profil AQP supaya ejen seterusnya dapat no 002
             await updateDoc(aqpRefDoc, {
                 agentCounter: currentCounter
             });
@@ -572,10 +656,7 @@
             });
 
             closeEditModal();
-            loadAgents(); // Refresh jadual
-            
-            // Alert opsional jika mahu maklumkan berjaya
-            // alert("Maklumat ejen berjaya dikemaskini.");
+            loadAgents(); 
             
         } catch (error) {
             console.error(error);
