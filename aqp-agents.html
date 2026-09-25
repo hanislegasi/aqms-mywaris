@@ -474,7 +474,7 @@
         }
     };
 
-    // SUBMIT BORANG TAMBAH EJEN
+// SUBMIT BORANG TAMBAH EJEN
     addForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         
@@ -490,21 +490,48 @@
             const bankName = document.getElementById("agentBankName").value;
             const bankAcc = document.getElementById("agentBankAcc").value.trim();
 
-            const shortCode = "AG-" + Math.floor(100000 + Math.random() * 900000);
+            // --- BERMULA LOGIK GENERATE KOD AQP000X-00X ---
+            // 1. Dapatkan rekod AQP semasa (untuk ambil counter ejen terkini)
+            const aqpRefDoc = doc(db, "consultants", auth.currentUser.uid);
+            const aqpSnap = await getDoc(aqpRefDoc);
+            let currentCounter = 0;
+            
+            if (aqpSnap.exists()) {
+                const aqpData = aqpSnap.data();
+                // Jika agentCounter belum wujud, ia akan bermula dari 0
+                currentCounter = aqpData.agentCounter || 0; 
+            }
+            
+            // 2. Tambah 1 untuk ejen baru
+            currentCounter += 1;
+            
+            // 3. Format nombor ejen jadikan 3 digit (contoh: 001, 002, 010)
+            const formattedCounter = String(currentCounter).padStart(3, '0');
+            
+            // 4. Gabungkan No AQP + No Ejen (Contoh: AQP0001-001)
+            const shortCode = `${currentAqpNo}-${formattedCounter}`;
+            // --- TAMAT LOGIK GENERATE KOD ---
+
             const docId = `aqpagent_${Date.now()}`;
             
+            // 5. Simpan data Ejen ke dalam database
             await setDoc(doc(db, "users", docId), {
                 nama: nama,
                 ic: ic,
                 jawatan: jawatan,
                 bankName: bankName,
                 bankAccount: bankAcc,
-                agentCode: shortCode,
+                agentCode: shortCode, // Simpan format baru di sini
                 aqpRef: currentAqpNo,
                 aqpName: currentAqpName,
                 role: "aqp_agent",
                 totalSales: 0, 
                 createdAt: new Date()
+            });
+
+            // 6. Kemaskini (Update) counter dalam profil AQP supaya ejen seterusnya dapat no 002
+            await updateDoc(aqpRefDoc, {
+                agentCounter: currentCounter
             });
 
             toggleAddModal(false);
