@@ -50,30 +50,32 @@
         </button>
     </div>
 
-    <!-- JADUAL EJEN -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm">
-                <thead class="bg-gray-50 border-b border-gray-100 text-gray-500 uppercase tracking-wider font-semibold">
-                    <tr>
-                        <th class="p-4 w-12 text-center">Bil</th>
-                        <th class="p-4">Maklumat Ejen</th>
-                        <th class="p-4">Jawatan</th>
-                        <th class="p-4">Akaun Bank</th>
-                        <th class="p-4 text-center">Kongsi Komisen</th>
-                        <th class="p-4">Pautan Rujukan (Link)</th>
-                        <th class="p-4 text-center">Tindakan</th>
-                    </tr>
-                </thead>
-                <tbody id="agentsTableBody" class="divide-y divide-gray-100">
-                    <tr>
-                        <td colspan="7" class="p-8 text-center text-gray-500">
-                            <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2"></i> Memuatkan data...
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<!-- JADUAL EJEN -->
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left text-md">
+            <thead class="bg-gray-50 border-b border-gray-100 text-gray-500 uppercase tracking-wider font-semibold">
+                <tr>
+                    <th class="p-4 w-12 text-center">Bil</th>
+                    <th class="p-4">Maklumat Ejen</th>
+                    <th class="p-4">Jawatan</th>
+                    <!-- LAJUR BANK DIASINGKAN -->
+                    <th class="p-4">Nama Bank</th>
+                    <th class="p-4">No. Akaun Bank</th>
+                    <th class="p-4 text-center">Kongsi Komisen</th>
+                    <th class="p-4">Pautan Rujukan (Link)</th>
+                    <th class="p-4 text-center">Tindakan</th>
+                </tr>
+            </thead>
+            <tbody id="agentsTableBody" class="divide-y divide-gray-100">
+                <tr>
+                    <!-- Tukar colspan 7 jadi 8 sebab dah tambah 1 column -->
+                    <td colspan="8" class="p-8 text-center text-gray-500">
+                        <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2"></i> Memuatkan data...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -106,11 +108,32 @@
                     <input type="text" id="agentPosition" placeholder="Contoh: AJK/Staf/Anggota" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition capitalize">
                 </div>
 
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">No. Akaun Bank & Nama Bank <span class="text-red-500">*</span></label>
-                    <input type="text" id="agentBank" required placeholder="Contoh: Maybank - 162022334455" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
-                    <p class="text-xs text-gray-400 mt-1">Digunakan oleh PIC untuk urusan pembayaran komisen.</p>
+                <!-- INPUT BANK DIASINGKAN MENGGUNAKAN GRID -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Bank <span class="text-red-500">*</span></label>
+                        <select id="agentBankName" required class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition bg-white">
+                            <option value="">Pilih Bank</option>
+                            <option value="Maybank">Maybank</option>
+                            <option value="CIMB Bank">CIMB Bank</option>
+                            <option value="Public Bank">Public Bank</option>
+                            <option value="RHB Bank">RHB Bank</option>
+                            <option value="Bank Islam">Bank Islam</option>
+                            <option value="Bank Muamalat">Bank Muamalat</option>
+                            <option value="Bank Rakyat">Bank Rakyat</option>
+                            <option value="BSN">BSN</option>
+                            <option value="AmBank">AmBank</option>
+                            <option value="Affin Bank">Affin Bank</option>
+                            <option value="Agrobank">Agrobank</option>
+                            <option value="Lain-lain">Lain-lain</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">No. Akaun <span class="text-red-500">*</span></label>
+                        <input type="text" id="agentBankAcc" required placeholder="Contoh: 162022334455" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
+                    </div>
                 </div>
+                <p class="text-xs text-gray-400 mt-1">Digunakan oleh PIC untuk urusan pembayaran komisen.</p>
 
                 <div>
                     <label class="block text-sm font-semibold text-[#153638] mb-1">Peratusan Komisen Ejen (%) <span class="text-red-500">*</span></label>
