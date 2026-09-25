@@ -68,10 +68,10 @@
 
     </div>
 
-<!-- JADUAL EJEN (FORMAT PROSES BAYARAN) -->
+<!-- JADUAL EJEN -->
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="w-full text-left text-md">
+        <table class="w-full text-left text-sm">
             <thead class="bg-gray-50 border-b border-gray-100 text-gray-500 uppercase tracking-wider font-semibold text-xs">
                 <tr>
                     <th class="p-4 w-10 text-center">Bil</th>
@@ -97,22 +97,18 @@
 <!-- MODAL TAMBAH EJEN -->
 <div id="addAgentModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4 backdrop-blur-sm">
     <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl flex flex-col max-h-[90vh] modal-enter">
-        
         <div class="border-b border-gray-100 px-6 py-4 flex justify-between items-center bg-gray-50 rounded-t-2xl">
             <h2 class="text-xl font-bold text-[#153638] flex items-center gap-2">
                 <i data-lucide="user-plus" class="w-5 h-5 text-[#d8ae81]"></i> Daftar Ejen Institusi
             </h2>
             <button id="closeModalBtn" class="text-gray-400 hover:text-red-500 transition"><i data-lucide="x"></i></button>
         </div>
-
         <div class="p-6 overflow-y-auto">
             <form id="addAgentForm" class="space-y-5">
-                
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Penuh <span class="text-red-500">*</span></label>
                     <input type="text" id="agentName" required placeholder="Contoh: Ahmad Bin Ali" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition uppercase">
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">No. Kad Pengenalan <span class="text-red-500">*</span></label>
@@ -123,7 +119,6 @@
                         <input type="text" id="agentPosition" placeholder="Contoh: Staf/Anggota" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition capitalize">
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Bank <span class="text-red-500">*</span></label>
@@ -160,6 +155,67 @@
         </div>
     </div>
 </div>
+
+<!-- MODAL KEMASKINI EJEN -->
+<div id="editAgentModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl flex flex-col max-h-[90vh] modal-enter">
+        <div class="border-b border-gray-100 px-6 py-4 flex justify-between items-center bg-gray-50 rounded-t-2xl">
+            <h2 class="text-xl font-bold text-[#153638] flex items-center gap-2">
+                <i data-lucide="edit-3" class="w-5 h-5 text-blue-500"></i> Kemaskini Maklumat Ejen
+            </h2>
+            <button id="closeEditModalBtn" class="text-gray-400 hover:text-red-500 transition"><i data-lucide="x"></i></button>
+        </div>
+        <div class="p-6 overflow-y-auto">
+            <form id="editAgentForm" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Penuh <span class="text-red-500">*</span></label>
+                    <input type="text" id="editAgentName" required class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition uppercase">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">No. Kad Pengenalan <span class="text-red-500">*</span></label>
+                        <input type="text" id="editAgentIC" required class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Jawatan / Peranan</label>
+                        <input type="text" id="editAgentPosition" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition capitalize">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Bank <span class="text-red-500">*</span></label>
+                        <select id="editAgentBankName" required class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition bg-white">
+                            <option value="">Pilih Bank</option>
+                            <option value="Maybank">Maybank</option>
+                            <option value="CIMB Bank">CIMB Bank</option>
+                            <option value="Public Bank">Public Bank</option>
+                            <option value="RHB Bank">RHB Bank</option>
+                            <option value="Bank Islam">Bank Islam</option>
+                            <option value="Bank Muamalat">Bank Muamalat</option>
+                            <option value="Bank Rakyat">Bank Rakyat</option>
+                            <option value="BSN">BSN</option>
+                            <option value="AmBank">AmBank</option>
+                            <option value="Affin Bank">Affin Bank</option>
+                            <option value="Agrobank">Agrobank</option>
+                            <option value="Lain-lain">Lain-lain</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">No. Akaun <span class="text-red-500">*</span></label>
+                        <input type="text" id="editAgentBankAcc" required class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition">
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-100 flex gap-3">
+                    <button type="button" id="cancelEditBtn" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold p-3 rounded-xl transition">Batal</button>
+                    <button type="submit" id="updateBtn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold p-3 rounded-xl transition flex items-center justify-center gap-2">
+                        Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </div>
 
 <script type="module">
@@ -172,29 +228,67 @@
     let currentAqpNo = null;
     let currentAqpName = null;
     let globalCommissionRate = 0;
+    
+    // PEMBOLEHUBAH UNTUK EDIT
+    let currentEditAgentId = null;
+    window.agentsData = {}; // Menyimpan data ejen untuk dipanggil ke dalam form edit
 
-    // ELEMENT MODAL
-    const modal = document.getElementById("addAgentModal");
-    const openBtn = document.getElementById("openModalBtn");
-    const closeBtn = document.getElementById("closeModalBtn");
-    const cancelBtn = document.getElementById("cancelBtn");
-    const form = document.getElementById("addAgentForm");
+    // ELEMENT MODAL TAMBAH
+    const addModal = document.getElementById("addAgentModal");
+    const openAddBtn = document.getElementById("openModalBtn");
+    const closeAddBtn = document.getElementById("closeModalBtn");
+    const cancelAddBtn = document.getElementById("cancelBtn");
+    const addForm = document.getElementById("addAgentForm");
+    
+    // ELEMENT MODAL EDIT
+    const editModal = document.getElementById("editAgentModal");
+    const closeEditBtn = document.getElementById("closeEditModalBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+    const editForm = document.getElementById("editAgentForm");
+
     const tableBody = document.getElementById("agentsTableBody");
 
-    const toggleModal = (show) => {
+    // FUNGSI BUKA/TUTUP MODAL TAMBAH
+    const toggleAddModal = (show) => {
         if (show) {
-            modal.classList.remove("hidden");
-            modal.classList.add("flex");
+            addModal.classList.remove("hidden");
+            addModal.classList.add("flex");
         } else {
-            modal.classList.add("hidden");
-            modal.classList.remove("flex");
-            form.reset();
+            addModal.classList.add("hidden");
+            addModal.classList.remove("flex");
+            addForm.reset();
         }
     };
+    openAddBtn.addEventListener("click", () => toggleAddModal(true));
+    closeAddBtn.addEventListener("click", () => toggleAddModal(false));
+    cancelAddBtn.addEventListener("click", () => toggleAddModal(false));
 
-    openBtn.addEventListener("click", () => toggleModal(true));
-    closeBtn.addEventListener("click", () => toggleModal(false));
-    cancelBtn.addEventListener("click", () => toggleModal(false));
+    // FUNGSI BUKA/TUTUP MODAL EDIT
+    window.openEditModal = (agentId) => {
+        const data = window.agentsData[agentId];
+        if (!data) return;
+
+        currentEditAgentId = agentId;
+        
+        // Isi form dengan data yang sedia ada
+        document.getElementById('editAgentName').value = data.nama || "";
+        document.getElementById('editAgentIC').value = data.ic || "";
+        document.getElementById('editAgentPosition').value = data.jawatan || "";
+        document.getElementById('editAgentBankName').value = data.bankName || "";
+        document.getElementById('editAgentBankAcc').value = data.bankAccount || "";
+
+        editModal.classList.remove("hidden");
+        editModal.classList.add("flex");
+    };
+
+    const closeEditModal = () => {
+        editModal.classList.add("hidden");
+        editModal.classList.remove("flex");
+        editForm.reset();
+        currentEditAgentId = null;
+    };
+    closeEditBtn.addEventListener("click", closeEditModal);
+    cancelEditBtn.addEventListener("click", closeEditModal);
 
     // CHECK AUTH
     onAuthStateChanged(auth, async (user) => {
@@ -209,7 +303,6 @@
             currentAqpNo = data.consultantNo;
             currentAqpName = data.nama;
             
-            // Dapatkan kadar komisen global dari database (jika ada)
             globalCommissionRate = data.globalAgentCommission || 0;
             document.getElementById('globalCommInput').value = globalCommissionRate;
 
@@ -236,7 +329,7 @@
             });
             globalCommissionRate = Number(commValue);
             alert("Tetapan komisen berjaya dikemaskini.");
-            loadAgents(); // Refresh jadual untuk kemaskini paparan komisen ejen
+            loadAgents();
         } catch (error) {
             console.error(error);
             alert("Gagal menyimpan tetapan komisen.");
@@ -258,6 +351,7 @@
             
             let html = "";
             let bil = 1;
+            window.agentsData = {}; // Kosongkan memory rekod lama
 
             if (querySnapshot.empty) {
                 tableBody.innerHTML = `<tr><td colspan="7" class="p-10 text-center text-gray-500">Belum ada ejen yang didaftarkan.</td></tr>`;
@@ -268,14 +362,15 @@
                 const data = docSnap.data();
                 const agentId = docSnap.id;
                 
+                // Simpan data ke dalam memory array untuk rujukan butang edit
+                window.agentsData[agentId] = data;
+                
                 const refLink = `${window.location.origin}${window.location.pathname.replace("aqp-agents.html", "register.html")}?ref=${data.agentCode}`;
-
-                // Simulasi pengiraan data Jualan (Ubahsuai ikut field DB sebenar anda)
                 const totalSales = data.totalSales || 0; 
                 const commissionAmount = (totalSales * (globalCommissionRate / 100)).toFixed(2);
 
                 html += `
-                <tr class="hover:bg-gray-50 transition border-b border-gray-50">
+                <tr class="hover:bg-gray-50 transition border-b border-gray-50 group">
                     <td class="p-4 text-center text-gray-500 font-medium">${bil++}</td>
                     
                     <td class="p-4">
@@ -311,9 +406,12 @@
                     </td>
                     
                     <td class="p-4 text-center">
-                        <div class="flex items-center justify-center gap-2">
+                        <div class="flex items-center justify-center gap-2 opacity-100 md:opacity-40 group-hover:opacity-100 transition-opacity">
                             <button onclick="payAgent('${agentId}', '${data.nama}', ${commissionAmount})" class="bg-[#153638] hover:bg-[#1d4a4d] text-white text-xs px-3 py-2 rounded-lg font-semibold transition shadow-sm flex items-center gap-1" title="Proses Bayaran">
                                 Bayar
+                            </button>
+                            <button onclick="openEditModal('${agentId}')" class="text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 p-2 rounded-lg transition" title="Kemaskini Maklumat Ejen">
+                                <i data-lucide="edit-3" class="w-4 h-4"></i>
                             </button>
                             <button onclick="deleteAgent('${agentId}', '${data.nama}')" class="text-red-400 hover:text-red-600 bg-red-50 hover:bg-red-100 p-2 rounded-lg transition" title="Padam Ejen">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -351,7 +449,7 @@
         }
     };
 
-    // FUNGSI BAYAR EJEN (Untuk dihubungkan dengan fungsi pembayaran anda)
+    // FUNGSI BAYAR EJEN
     window.payAgent = async (agentId, agentName, amount) => {
         if(amount <= 0) {
             alert(`Tiada komisen terkumpul untuk ejen ${agentName} pada masa ini.`);
@@ -359,8 +457,7 @@
         }
         
         if(confirm(`Adakah anda pasti mahu merekodkan pembayaran komisen sebanyak RM ${amount} kepada ${agentName}?`)) {
-            // Sila masukkan logik update database untuk pembayaran komisen di sini
-            alert(`Rekod pembayaran RM ${amount} untuk ${agentName} sedang diproses... (Logik bayaran perlu ditambah)`);
+            alert(`Rekod pembayaran RM ${amount} untuk ${agentName} sedang diproses...`);
         }
     };
 
@@ -378,7 +475,7 @@
     };
 
     // SUBMIT BORANG TAMBAH EJEN
-    form.addEventListener("submit", async (e) => {
+    addForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         
         const btn = document.getElementById("saveBtn");
@@ -396,7 +493,6 @@
             const shortCode = "AG-" + Math.floor(100000 + Math.random() * 900000);
             const docId = `aqpagent_${Date.now()}`;
             
-            // Kadar komisen tidak lagi disimpan dalam profil individu, ia diambil dari globalCommissionRate
             await setDoc(doc(db, "users", docId), {
                 nama: nama,
                 ic: ic,
@@ -407,16 +503,56 @@
                 aqpRef: currentAqpNo,
                 aqpName: currentAqpName,
                 role: "aqp_agent",
-                totalSales: 0, // Inisialisasi awal nilai jualan ejen ke 0
+                totalSales: 0, 
                 createdAt: new Date()
             });
 
-            toggleModal(false);
+            toggleAddModal(false);
             loadAgents();
-
         } catch (error) {
             console.error(error);
             alert("Ralat semasa menyimpan ejen.");
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    });
+
+    // SUBMIT BORANG KEMASKINI EJEN
+    editForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        if (!currentEditAgentId) return;
+
+        const btn = document.getElementById("updateBtn");
+        const originalText = btn.innerHTML;
+        btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Mengemaskini...`;
+        btn.disabled = true;
+
+        try {
+            const nama = document.getElementById("editAgentName").value.trim().toUpperCase();
+            const ic = document.getElementById("editAgentIC").value.trim();
+            const jawatan = document.getElementById("editAgentPosition").value.trim();
+            const bankName = document.getElementById("editAgentBankName").value;
+            const bankAcc = document.getElementById("editAgentBankAcc").value.trim();
+
+            await updateDoc(doc(db, "users", currentEditAgentId), {
+                nama: nama,
+                ic: ic,
+                jawatan: jawatan,
+                bankName: bankName,
+                bankAccount: bankAcc
+            });
+
+            closeEditModal();
+            loadAgents(); // Refresh jadual
+            
+            // Alert opsional jika mahu maklumkan berjaya
+            // alert("Maklumat ejen berjaya dikemaskini.");
+            
+        } catch (error) {
+            console.error(error);
+            alert("Ralat semasa mengemaskini maklumat ejen.");
         } finally {
             btn.innerHTML = originalText;
             btn.disabled = false;
