@@ -205,11 +205,12 @@ async function loadCustomers() {
             `;
         }
 
-        for(const userDoc of users){
+       for(const userDoc of users){
             const user = userDoc.data();
 
-            // Skip admin & consultant
-            if(user.role==="admin" || user.role==="consultant"){
+            // PENAPISAN KETAT: HANYA tunjukkan pelanggan (customer)
+            // Abaikan admin, consultant, aqp_agent, atau role yang tak berkaitan
+            if(user.role !== "customer"){
                 continue;
             }
 
