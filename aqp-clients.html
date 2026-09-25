@@ -112,8 +112,9 @@ onAuthStateChanged(auth, async(user) => {
         const client = docSnap.data();
         const clientId = docSnap.id;
         
-        // Penapisan: Hanya pelanggan di bawah rujukan AQP ini
-        if(client.role !== "customer" || (client.referral || "").trim() !== consultantNo){
+        // Penapisan: Memastikan pelanggan berada di bawah Institusi AQP ATAU Agen AQP (Contoh: AQP0001 atau AQP0001-001)
+        const refCode = (client.referral || "").trim().toUpperCase();
+        if(client.role !== "customer" || !refCode.startsWith(consultantNo.toUpperCase())){
             continue;
         }
 
