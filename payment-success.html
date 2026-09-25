@@ -196,7 +196,7 @@
                     // ==========================================
                     // LOGIK BAHARU: PEMILIHAN PERATUSAN AQP vs AQC
                     // ==========================================
-                    let isAQP = directConsultant && directConsultant.consultantLevel === "AQP";
+                    let isAQP = (directConsultant && directConsultant.consultantLevel === "AQP") || false;
                     
                     // Tarik peratusan berdasarkan status ejen
                     let pctCompany = isAQP ? (comp.companyPoolAQP || 0) : (comp.companyPool || 0);
