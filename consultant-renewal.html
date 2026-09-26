@@ -114,32 +114,12 @@ onAuthStateChanged(auth, async(user)=>{
         completed += semakLulusTerkini(data?.training?.amla);
     }
 
-    // Tarik harga dari settings (compensation)
+// Tarik harga dari settings (compensation)
     const compSnap = await getDoc(doc(db, "settings", "compensation"));
     const compData = compSnap.exists() ? compSnap.data() : {};
 
     // Tetapkan Nama Pakej & Harga Dinamik
     const packageName = isAQP ? "Pembaharuan AQP (Institusi)" : `Pembaharuan ${level}`;
-    let renewalPrice = 100; // Harga lalai
-
-    // ==========================================
-    // 1. DEFINISI PEMBOLEHUBAH UTAMA
-    // ==========================================
-    const level = data.consultantLevel || "AQC";
-    const isAQP = (level === "AQP");
-    const currentYear = new Date().getFullYear();
-
-    // ==========================================
-    // 2. LOGIK BUTANG KEMBALI
-    // ==========================================
-    const backBtn = document.getElementById("backBtn");
-    if (backBtn) {
-        backBtn.href = isAQP ? "aqp-dashboard.html" : "consultant-dashboard.html";
-    }
-
-    // ==========================================
-    // 3. LOGIK HARGA DINAMIK
-    // ==========================================
     let renewalPrice = 100; // Harga lalai
 
     if (isAQP) {
@@ -148,8 +128,17 @@ onAuthStateChanged(auth, async(user)=>{
         const levelKey = level.replace(/[^a-zA-Z0-9]/g, "");
         renewalPrice = Number(compData[`renewal${levelKey}`] || 100);
     }
-    
     const formattedPrice = "RM " + renewalPrice.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+
+    // ==========================================
+    // LOGIK BUTANG KEMBALI
+    // ==========================================
+    const backBtn = document.getElementById("backBtn");
+    if (backBtn) {
+        backBtn.href = isAQP ? "aqp-dashboard.html" : "consultant-dashboard.html";
+    }
+    // ==========================================
+    
     const renewalStatus = document.getElementById("renewalStatus");
 
     if(completed === 4 && diffDays > 30){
