@@ -224,34 +224,40 @@
                         });
 
                         // ==========================================
-                        // LOGIK BAHARU: REKOD KOMISEN EJEN AQP (Di Luar Lejer)
+                        // LOGIK BAHARU: REKOD KOMISEN EJEN AQP (Historical)
                         // ==========================================
                         if (isAqpAgent && aqpAgentData) {
                             
-                            // --> KOD TAMBAHAN: KEMASKINI TOTAL SALES SUB-EJEN <--
-                            await updateDoc(doc(db, "users", aqpAgentData.id), { 
-                                totalSales: increment(saleAmount) 
-                            });
-                            // ----------------------------------------------------
-
-                            const agentCommPct = Number(aqpAgentData.commissionRate) || 0;
-                            const agentCommAmt = saleAmount * (agentCommPct / 100);
+                            // 1. Tarik kadar komisen yang ditetapkan AQP pada saat ini
+                            const currentAgentPct = Number(directConsultant.globalAgentCommission) || 0;
                             
+                            // 2. Kira komisen AQP (Cth: 35%)
+                            let aqpBaseRate = Number(comp.commissionAQP) || 35;
+                            let aqpCommAmt = saleAmount * (aqpBaseRate / 100);
+
+                            // 3. Kira komisen Sub-Ejen secara tepat 
+                            const agentCommAmt = aqpCommAmt * (currentAgentPct / 100);
+                            
+                            // 4. KUNCI DATA: Tambah komisen & jualan terus ke profil Sub-Ejen
+                            await updateDoc(doc(db, "users", aqpAgentData.id), { 
+                                totalSales: increment(saleAmount),
+                                totalEarnedCommission: increment(agentCommAmt) 
+                            });
+
                             if (agentCommAmt > 0) {
-                                
                                 await addDoc(collection(db, "aqpAgentEarnings"), {
                                     createdAt: txnDate,
                                     agentId: aqpAgentData.id,
                                     agentCode: aqpAgentData.agentCode,
                                     agentName: aqpAgentData.nama,
-                                    aqpNo: directConsultant.consultantNo, // AQP0001
+                                    aqpNo: directConsultant.consultantNo,
                                     customerMemberNo: memberNo,
                                     customerName: customer.nama,
                                     product: namaPakej,
                                     saleAmount: saleAmount,
-                                    commPercent: agentCommPct,
-                                    earnedAmount: agentCommAmt,
-                                    status: "UNPAID" // Untuk diuruskan oleh PIC AQP nanti
+                                    commPercent: currentAgentPct, // Rekod % history
+                                    earnedAmount: agentCommAmt,   // Rekod RM history
+                                    status: "UNPAID"
                                 });
                             }
                         }
