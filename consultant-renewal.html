@@ -55,16 +55,15 @@ Loading...
 </div>
 
 <script type="module">
-
 // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
 import { db, auth } from './firebase.js';
 
-// 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
+// 2. Tarik fungsi Auth yang berkaitan sahaja
 import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// 3. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
+// 3. Tarik fungsi Firestore yang berkaitan sahaja
 import {
     doc,
     getDoc
@@ -72,217 +71,155 @@ import {
 
 onAuthStateChanged(auth, async(user)=>{
 
-if(!user){
-
-window.location.href =
-"login.html";
-
-return;
-
-}
-
-const consultantSnap =
-await getDoc(
-doc(
-db,
-"consultants",
-user.uid
-)
-);
-
-const data =
-consultantSnap.data();
-
-const renewalDate =
-data?.renewalDate?.toDate
-? data.renewalDate.toDate()
-: new Date(data.renewalDate);
-
-const today =
-new Date();
-
-const diffDays =
-Math.ceil(
-(renewalDate - today)
-/
-(1000 * 60 * 60 * 24)
-);  
-
-// Dapatkan tahun semasa
-const currentYear = new Date().getFullYear();
-
-// Fungsi pintar untuk semak lulus dan tahun
-function semakLulusTerkini(modulData) {
-    if (modulData && modulData.status === "passed") {
-        let tahunLulus = 0;
-        
-        if (modulData.updatedAt) {
-            tahunLulus = new Date(modulData.updatedAt).getFullYear();
-        } else if (modulData.timestamp) {
-            tahunLulus = new Date(modulData.timestamp).getFullYear();
-        }
-        
-        // Hanya kira sebagai lengkap JIKA tahun ujian adalah tahun semasa
-        if (tahunLulus === currentYear) {
-            return 1;
-        }
+    if(!user){
+        window.location.href = "login.html";
+        return;
     }
-    return 0; // Jika tiada rekod atau rekod tahun lepas
-}
 
-let completed = 0;
+    const consultantSnap = await getDoc(doc(db, "consultants", user.uid));
+    const data = consultantSnap.data();
 
-completed += semakLulusTerkini(data?.training?.wasiat);
-completed += semakLulusTerkini(data?.training?.hibah);
-completed += semakLulusTerkini(data?.training?.faraid);
-completed += semakLulusTerkini(data?.training?.amla);
+    const renewalDate = data?.renewalDate?.toDate ? data.renewalDate.toDate() : new Date(data.renewalDate);
+    const today = new Date();
+    const diffDays = Math.ceil((renewalDate - today) / (1000 * 60 * 60 * 24));  
 
-const renewalStatus =
-document.getElementById(
-"renewalStatus"
-);
+    const level = data.consultantLevel || "AQC";
+    const isAQP = (level === "AQP");
+    const currentYear = new Date().getFullYear();
 
-if(completed === 4 && diffDays > 30){
+    // Fungsi pintar untuk semak lulus dan tahun
+    function semakLulusTerkini(modulData) {
+        if (modulData && modulData.status === "passed") {
+            let tahunLulus = 0;
+            if (modulData.updatedAt) {
+                tahunLulus = new Date(modulData.updatedAt).getFullYear();
+            } else if (modulData.timestamp) {
+                tahunLulus = new Date(modulData.timestamp).getFullYear();
+            }
+            if (tahunLulus === currentYear) return 1;
+        }
+        return 0; 
+    }
 
-renewalStatus.innerHTML = `
+    let completed = 0;
+    
+    // ==========================================
+    // LOGIK PENGECUALIAN UJIAN UNTUK AQP
+    // ==========================================
+    if (isAQP) {
+        completed = 4; // AQP sentiasa diluluskan (Bypass Exam)
+    } else {
+        completed += semakLulusTerkini(data?.training?.wasiat);
+        completed += semakLulusTerkini(data?.training?.hibah);
+        completed += semakLulusTerkini(data?.training?.faraid);
+        completed += semakLulusTerkini(data?.training?.amla);
+    }
 
-<div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl">
+    // Tarik harga dari settings (compensation)
+    const compSnap = await getDoc(doc(db, "settings", "compensation"));
+    const compData = compSnap.exists() ? compSnap.data() : {};
 
-<h2 class="text-2xl font-bold text-blue-700 mb-3">
+    // Tetapkan Nama Pakej & Harga Dinamik
+    const packageName = isAQP ? "Pembaharuan AQP (Institusi)" : `Pembaharuan ${level}`;
+    let renewalPrice = 100; // Harga lalai
 
-✅ ACTIVE MEMBERSHIP
+    if (isAQP) {
+        renewalPrice = Number(compData.renewalAQP || 1000);
+    } else {
+        const levelKey = level.replace(/[^a-zA-Z0-9]/g, "");
+        renewalPrice = Number(compData[`renewal${levelKey}`] || 100);
+    }
+    const formattedPrice = "RM " + renewalPrice.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+    
+    const renewalStatus = document.getElementById("renewalStatus");
 
-</h2>
+    if(completed === 4 && diffDays > 30){
+        renewalStatus.innerHTML = `
+        <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl">
+            <h2 class="text-2xl font-bold text-blue-700 mb-3">✅ ACTIVE MEMBERSHIP</h2>
+            <p class="mb-2">Akaun anda masih aktif.</p>
+            <p>Tarikh Tamat: <b>${renewalDate.toLocaleDateString("ms-MY")}</b></p>
+            <p class="mt-2 text-gray-600">Renewal hanya dibuka 30 hari sebelum tamat.</p>
+        </div>
+        `;
+    }
+    else if(completed === 4 && diffDays <= 30){
+        
+        // Paparan dinamik untuk status CPD (Bergantung AQP atau AQC)
+        const statusBoxHTML = isAQP ? `
+            <div class="bg-white p-4 rounded-xl border col-span-2 md:col-span-2 text-center">
+                <p class="text-gray-500 text-sm">Status CPD</p>
+                <p class="font-bold text-lg text-emerald-700">Pengecualian Khas (Institusi)</p>
+            </div>
+        ` : `
+            <div class="bg-white p-4 rounded-xl border">
+                <p class="text-gray-500 text-sm">Status CPD</p>
+                <p class="font-bold text-lg">Compliant</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl border">
+                <p class="text-gray-500 text-sm">Modul Lengkap</p>
+                <p class="font-bold text-lg">${completed} / 4</p>
+            </div>
+        `;
 
-<p class="mb-2">
+        const titleText = isAQP ? "STATUS KELAYAKAN LENGKAP" : "CPD COMPLIANT";
+        const descText = isAQP ? "Anda layak untuk membuat pembaharuan tahunan." : "Semua latihan tahunan telah dilengkapkan.";
 
-CPD lengkap dan membership masih aktif.
+        renewalStatus.innerHTML = `
+        <div class="bg-green-50 border border-green-200 p-6 rounded-2xl">
+            <div class="flex justify-between items-center mb-5">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-bold text-green-700">✅ ${titleText}</h2>
+                    <p class="text-gray-600 mt-1">${descText}</p>
+                </div>
+                <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">ACTIVE</span>
+            </div>
 
-</p>
+            <!-- Paparan Pakej dan Harga -->
+            <div class="bg-white p-5 rounded-xl border mb-5 shadow-sm">
+                <p class="text-gray-500 text-sm">Pakej Pembaharuan</p>
+                <p class="font-bold text-lg text-[#153638] mb-3">${packageName}</p>
+                <p class="text-gray-500 text-sm">Yuran Tahunan</p>
+                <p class="font-bold text-3xl text-green-700">${formattedPrice}</p>
+            </div>
 
-<p>
+            <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-5">
+                ${statusBoxHTML}
+            </div>
 
-Tarikh Tamat:
-<b>${renewalDate.toLocaleDateString("ms-MY")}</b>
+            <button id="proceedRenewalBtn" class="bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-6 py-4 rounded-xl font-semibold w-full text-lg shadow-lg flex justify-center items-center gap-2">
+                Proceed Renewal (${formattedPrice})
+            </button>
+        </div>
+        `;
 
-</p>
+        setTimeout(()=>{
+            document.getElementById("proceedRenewalBtn")?.addEventListener("click",()=>{
+                window.location.href = "consultant-renewal-payment.html";
+            });
+        },100);
 
-<p class="mt-2 text-gray-600">
-
-Renewal hanya dibuka 30 hari sebelum tamat.
-
-</p>
-
-</div>
-
-`;
-
-}
-else 
-  
-if(completed === 4 && diffDays <= 30){
-
-renewalStatus.innerHTML = `
-
-<div class="bg-green-50 border border-green-200 p-6 rounded-2xl">
-
-<div class="flex justify-between items-center mb-5">
-
-<div>
-
-<h2 class="text-2xl font-bold text-green-700">
-✅ CPD COMPLIANT
-</h2>
-
-<p class="text-gray-600 mt-1">
-Semua latihan tahunan telah dilengkapkan.
-</p>
-
-</div>
-
-<span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
-ACTIVE
-</span>
-
-</div>
-
-<div class="grid md:grid-cols-2 gap-4 mb-5">
-
-<div class="bg-white p-4 rounded-xl border">
-<p class="text-gray-500 text-sm">Status CPD</p>
-<p class="font-bold text-lg">Compliant</p>
-</div>
-
-<div class="bg-white p-4 rounded-xl border">
-<p class="text-gray-500 text-sm">Modul Lengkap</p>
-<p class="font-bold text-lg">${completed} / 4</p>
-</div>
-
-</div>
-
-<button
-id="proceedRenewalBtn"
-class="bg-[#153638] text-white px-6 py-3 rounded-xl font-semibold">
-
-Proceed Renewal
-
-</button>
-
-</div>
-
-`;
-
-setTimeout(()=>{
-
-document
-.getElementById("proceedRenewalBtn")
-?.addEventListener("click",()=>{
-
-window.location.href =
-"consultant-renewal-payment.html";
-
+    }
+    else {
+        renewalStatus.innerHTML = `
+        <div class="bg-red-50 border border-red-200 p-6 rounded-2xl">
+            <h2 class="text-2xl font-bold text-red-700 mb-3">❌ UJIAN CPD BELUM LENGKAP</h2>
+            <div class="bg-white p-4 rounded-xl border border-red-100 mb-5 text-justify">
+                <p class="text-red-600 font-bold mb-2">⚠️ Perhatian Khusus:</p>
+                <p class="text-gray-700">
+                    Anda <b>diwajibkan menduduki dan lulus</b> kesemua 4 modul ujian (exam) CPD tahunan terlebih dahulu. Butang pembayaran renewal tidak akan dipaparkan selagi ujian ini tidak diselesaikan.
+                </p>
+            </div>
+            <p class="text-gray-600 font-medium mb-5">
+                Status Semasa: <span class="text-red-600 font-bold">${completed} / 4 Modul Lulus</span>
+            </p>
+            <a href="consultant-training.html" class="inline-block bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors shadow-md">
+                Pergi Jawab Exam Sekarang ➔
+            </a>
+        </div>
+        `;
+    }
 });
-
-},100);
-
-}
-else {
-
-renewalStatus.innerHTML = `
-
-<div class="bg-red-50 border border-red-200 p-6 rounded-2xl">
-
-    <h2 class="text-2xl font-bold text-red-700 mb-3">
-        ❌ UJIAN CPD BELUM LENGKAP
-    </h2>
-
-    <div class="bg-white p-4 rounded-xl border border-red-100 mb-5 text-justify">
-        <p class="text-red-600 font-bold mb-2">⚠️ Perhatian Khusus:</p>
-        <p class="text-gray-700">
-            Anda <b>diwajibkan menduduki dan lulus</b> kesemua 4 modul ujian (exam) CPD tahunan terlebih dahulu. Butang pembayaran renewal tidak akan dipaparkan selagi ujian ini tidak diselesaikan.
-        </p>
-    </div>
-
-    <p class="text-gray-600 font-medium mb-5">
-        Status Semasa: <span class="text-red-600 font-bold">${completed} / 4 Modul Lulus</span>
-    </p>
-
-    <a
-        href="consultant-training.html"
-        class="inline-block bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors shadow-md">
-        Pergi Jawab Exam Sekarang ➔
-    </a>
-
-</div>
-
-`;
-
-}
-
-
-
-});
-
 </script>
   
 </body>
