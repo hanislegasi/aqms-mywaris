@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profil AQP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-gray-50 min-h-screen pb-10">
+
+    <!-- HEADER -->
+    <div class="bg-[#153638] text-white p-5 shadow-md sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <button onclick="window.location.href='aqp-dashboard.html'" class="hover:bg-white/10 p-2 rounded-lg transition">
+                    <i data-lucide="arrow-left" class="w-6 h-6 text-[#d8ae81]"></i>
+                </button>
+                <h1 class="text-xl md:text-2xl font-bold">Kemas Kini Profil Institusi</h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN FORM -->
+    <div class="max-w-4xl mx-auto mt-8 px-4">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 md:p-8">
+            
+            <div id="loadingIndicator" class="text-center py-10">
+                <i data-lucide="loader-2" class="w-10 h-10 mx-auto animate-spin text-[#153638] mb-3"></i>
+                <p class="text-gray-500 font-medium">Memuatkan data profil anda...</p>
+            </div>
+
+            <form id="editProfileForm" class="hidden space-y-8">
+                
+                <!-- SEKSYEN 1: MAKLUMAT ASAS -->
+                <div>
+                    <h3 class="text-lg font-bold text-[#153638] mb-4 flex items-center border-b pb-2">
+                        <i data-lucide="building" class="w-5 h-5 mr-2 text-[#d8ae81]"></i> Maklumat Institusi
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Institusi / Syarikat</label>
+                            <input type="text" id="editNama" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">No Pendaftaran (SSM / SKM / ROS)</label>
+                            <input type="text" id="editIc" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">No Rujukan AQP (Tidak Boleh Diubah)</label>
+                            <input type="text" id="editConsultantNo" class="w-full p-3 border border-gray-200 rounded-xl bg-gray-100 text-gray-500 outline-none cursor-not-allowed" readonly>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Penaja / Upline (Tidak Boleh Diubah)</label>
+                            <input type="text" id="editUpline" class="w-full p-3 border border-gray-200 rounded-xl bg-gray-100 text-gray-500 outline-none cursor-not-allowed" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEKSYEN 2: HUBUNGI & ALAMAT -->
+                <div>
+                    <h3 class="text-lg font-bold text-[#153638] mb-4 flex items-center border-b pb-2">
+                        <i data-lucide="map-pin" class="w-5 h-5 mr-2 text-[#d8ae81]"></i> Hubungan & Alamat
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">No Telefon</label>
+                            <input type="text" id="editTelefon" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Emel Rasmi</label>
+                            <input type="email" id="editEmail" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none" required>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Alamat Penuh (No, Jalan, Taman dll)</label>
+                            <textarea id="editAlamat" rows="2" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none" placeholder="Contoh: Lot 3259, Jalan Kenari..." required></textarea>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Poskod</label>
+                                <input type="text" id="editPostcode" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none" placeholder="45800" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Bandar</label>
+                                <input type="text" id="editCity" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none" placeholder="Jeram" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Negeri</label>
+                                <select id="editState" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none text-gray-700" required>
+                                    <option value="">Pilih Negeri</option>
+                                    <option value="Johor">Johor</option>
+                                    <option value="Kedah">Kedah</option>
+                                    <option value="Kelantan">Kelantan</option>
+                                    <option value="Melaka">Melaka</option>
+                                    <option value="Negeri Sembilan">Negeri Sembilan</option>
+                                    <option value="Pahang">Pahang</option>
+                                    <option value="Perak">Perak</option>
+                                    <option value="Perlis">Perlis</option>
+                                    <option value="Pulau Pinang">Pulau Pinang</option>
+                                    <option value="Sabah">Sabah</option>
+                                    <option value="Sarawak">Sarawak</option>
+                                    <option value="Selangor">Selangor</option>
+                                    <option value="Terengganu">Terengganu</option>
+                                    <option value="W.P. Kuala Lumpur">W.P. Kuala Lumpur</option>
+                                    <option value="W.P. Labuan">W.P. Labuan</option>
+                                    <option value="W.P. Putrajaya">W.P. Putrajaya</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEKSYEN 3: MAKLUMAT BANK -->
+                <div>
+                    <h3 class="text-lg font-bold text-[#153638] mb-4 flex items-center border-b pb-2">
+                        <i data-lucide="landmark" class="w-5 h-5 mr-2 text-[#d8ae81]"></i> Maklumat Akaun Bank (Untuk Pembayaran Komisen)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Bank</label>
+                            <select id="editBankName" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none text-gray-700" required>
+                                <option value="">Pilih Bank</option>
+                                <option value="Maybank">Maybank</option>
+                                <option value="CIMB Bank">CIMB Bank</option>
+                                <option value="Public Bank">Public Bank</option>
+                                <option value="RHB Bank">RHB Bank</option>
+                                <option value="Hong Leong Bank">Hong Leong Bank</option>
+                                <option value="AmBank">AmBank</option>
+                                <option value="Bank Islam">Bank Islam</option>
+                                <option value="Bank Muamalat">Bank Muamalat</option>
+                                <option value="Bank Rakyat">Bank Rakyat</option>
+                                <option value="BSN">BSN</option>
+                                <option value="Agrobank">Agrobank</option>
+                                <option value="Affin Bank">Affin Bank</option>
+                                <option value="Alliance Bank">Alliance Bank</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">No Akaun Bank</label>
+                            <input type="text" id="editBankAccount" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BUTANG SIMPAN -->
+                <div class="pt-6 border-t border-gray-100 flex gap-4">
+                    <button type="button" onclick="window.location.href='aqp-dashboard.html'" class="px-6 py-3.5 rounded-xl font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition">
+                        Batal
+                    </button>
+                    <button type="submit" id="saveBtn" class="flex-1 bg-[#153638] text-white py-3.5 rounded-xl font-bold shadow-md hover:bg-[#1e4d50] hover:shadow-lg transition-all hover:-translate-y-0.5 flex justify-center items-center">
+                        <span>Simpan Perubahan</span>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- NOTIFIKASI BERJAYA -->
+    <div id="successToast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-full shadow-2xl font-bold flex items-center transition-all duration-300 translate-y-20 opacity-0 z-50">
+        <i data-lucide="check-circle" class="w-5 h-5 mr-2"></i> Profil Berjaya Dikemas Kini!
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+    <script type="module">
+        import { db, auth } from './firebase.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            try {
+                // 1. TARIK DATA PROFIL DARI FIRESTORE
+                const userRef = doc(db, "consultants", user.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    const data = userSnap.data();
+
+                    // 2. MASUKKAN DATA KE DALAM FORM
+                    document.getElementById('editNama').value = data.nama || "";
+                    document.getElementById('editIc').value = data.ic || data.regNo || "";
+                    document.getElementById('editConsultantNo').value = data.consultantNo || "";
+                    document.getElementById('editUpline').value = data.upline || "-";
+                    document.getElementById('editTelefon').value = data.telefon || "";
+                    document.getElementById('editEmail').value = data.email || "";
+                    
+                    // Alamat 4 pecahan
+                    document.getElementById('editAlamat').value = data.alamat || "";
+                    document.getElementById('editPostcode').value = data.postcode || "";
+                    document.getElementById('editCity').value = data.city || "";
+                    document.getElementById('editState').value = data.state || "";
+
+                    document.getElementById('editBankName').value = data.bankName || "";
+                    document.getElementById('editBankAccount').value = data.bankAccount || "";
+
+                    // Sorok loading, tunjuk form
+                    document.getElementById('loadingIndicator').classList.add('hidden');
+                    document.getElementById('editProfileForm').classList.remove('hidden');
+                } else {
+                    alert("Rekod profil tidak dijumpai.");
+                    window.location.href = "aqp-dashboard.html";
+                }
+
+                // 3. PROSES SIMPAN / KEMAS KINI
+                document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const btn = document.getElementById('saveBtn');
+                    const originalBtnText = btn.innerHTML;
+                    btn.disabled = true;
+                    btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 mr-2 animate-spin"></i> Menyimpan...`;
+                    lucide.createIcons();
+
+                    try {
+                        await updateDoc(userRef, {
+                            nama: document.getElementById('editNama').value.trim(),
+                            ic: document.getElementById('editIc').value.trim(),
+                            telefon: document.getElementById('editTelefon').value.trim(),
+                            email: document.getElementById('editEmail').value.trim(),
+                            
+                            // Simpan Alamat 4 pecahan
+                            alamat: document.getElementById('editAlamat').value.trim(),
+                            postcode: document.getElementById('editPostcode').value.trim(),
+                            city: document.getElementById('editCity').value.trim(),
+                            state: document.getElementById('editState').value,
+
+                            bankName: document.getElementById('editBankName').value,
+                            bankAccount: document.getElementById('editBankAccount').value.trim()
+                        });
+
+                        // Tunjuk Notifikasi Berjaya
+                        const toast = document.getElementById('successToast');
+                        toast.classList.remove('translate-y-20', 'opacity-0');
+                        
+                        setTimeout(() => {
+                            window.location.href = "aqp-dashboard.html";
+                        }, 1500);
+
+                    } catch (error) {
+                        console.error("Ralat menyimpan:", error);
+                        alert("Gagal menyimpan profil. Sila cuba lagi.");
+                        btn.disabled = false;
+                        btn.innerHTML = originalBtnText;
+                    }
+                });
+
+            } catch (error) {
+                console.error("Ralat memuatkan profil:", error);
+                document.getElementById('loadingIndicator').innerHTML = `<p class="text-red-500 font-bold">Ralat memuatkan data. Sila refresh halaman.</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
