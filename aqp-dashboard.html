@@ -153,16 +153,16 @@
         <p id="activeClients" class="text-2xl md:text-3xl font-bold text-[#153638]">0</p>
     </div>
     <div class="bg-white p-5 rounded-xl shadow border-l-4 border-indigo-500">
-        <p class="text-gray-500 font-medium">Rekod Ejen (ALK)</p>
+        <p class="text-gray-500 font-medium">Rekod Ejen</p>
         <p id="totalAlk" class="text-2xl md:text-3xl font-bold text-indigo-600">0</p>
     </div>
     <div class="bg-white p-5 rounded-xl shadow border-l-4 border-[#153638]">
-        <p class="text-gray-500 font-medium">Jumlah Jualan Institusi</p>
+        <p class="text-gray-500 font-medium">Jumlah Jualan</p>
         <p id="totalSales" class="text-2xl md:text-3xl font-bold text-[#153638]">RM0</p>
     </div>
     <div class="bg-white p-5 rounded-xl shadow border-l-4 border-green-500">
         <!-- Label ini akan berubah secara dinamik -->
-        <p id="commissionLabel" class="text-gray-500 font-medium">Komisen Institusi</p>
+        <p id="commissionLabel" class="text-gray-500 font-medium">Komisen</p>
         <p id="totalCommission" class="text-2xl md:text-3xl font-bold text-green-600">RM0</p>
     </div>
 </div>
@@ -368,13 +368,17 @@ onAuthStateChanged(auth, async(user)=>{
     document.getElementById("totalSales").innerHTML = "RM" + totalSales.toLocaleString("ms-MY", {minimumFractionDigits: 2});
     document.getElementById("totalCommission").innerHTML = "RM" + totalCommission.toLocaleString("ms-MY", {minimumFractionDigits: 2});
 
+    // Gabungkan 4 pecahan alamat untuk paparan yang kemas
+    const alamatPenuh = [data.alamat, data.postcode, data.city, data.state].filter(Boolean).join(", ");
+
     document.getElementById("profileContent").innerHTML = `
-        <p><b>Nama Institusi:</b> ${data.nama}</p>
-        <p><b>No Pendaftaran (AQP):</b> ${data.consultantNo}</p>
+        <p><b>Nama Institusi:</b> ${data.nama || "-"}</p>
+        <p><b>No Pendaftaran (AQP):</b> ${data.consultantNo || "-"}</p>
         <p><b>Penaja AQC (Upline):</b> ${data.upline || "-"}</p>
-        <p><b>Telefon:</b> ${data.telefon}</p>
+        <p><b>Telefon:</b> ${data.telefon || "-"}</p>
         <p><b>Email Rasmi:</b> ${data.email || "-"}</p>
         <p><b>No SSM / SKM:</b> ${data.ic || data.regNo || "-"}</p>
+        <p><b>Alamat:</b> ${alamatPenuh || "-"}</p>
         <p><b>Bank:</b> ${data.bankName || "-"}</p>
         <p><b>No Akaun Institusi:</b> ${data.bankAccount || "-"}</p>
     `;
