@@ -253,7 +253,7 @@ onAuthStateChanged(auth, async(user)=>{
         </div>`;
     }
 
-   // 3. KIRA JUALAN & KOMISEN AQP (GUNA AKAUN LEJAR 2010)
+  // 3. KIRA JUALAN & KOMISEN AQP (GUNA AKAUN LEJAR 2010)
     let activeClients = 0;
     let wasiatSales = 0, hibahSales = 0, sepencarianSales = 0, mawarisSales = 0;
     let corpPremiumSales = 0, corpTunggalSales = 0, corpKongsiSales = 0, corpZurriSales = 0;
@@ -263,22 +263,33 @@ onAuthStateChanged(auth, async(user)=>{
     const monthlySales = { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0 };
     const monthlyCommission = [0,0,0,0,0,0,0,0,0,0,0,0];
 
-    // 3A. Tarik Semua Data Lejer
+    // 3A. Tarik Semua Data Ejen (ALK) di bawah Institusi
+    const alkCodes = [];
+    try {
+        const alkQuery = await getDocs(query(collection(db, "users"), where("role", "==", "aqp_agent"), where("aqpRef", "==", data.consultantNo)));
+        alkQuery.forEach(docSnap => {
+            alkCodes.push(docSnap.data().agentCode);
+        });
+    } catch(e) { console.error("Ralat tarik data ALK:", e); }
+    
+    let totalAlk = alkCodes.length;
+
+    // 3B. Tarik Semua Data Lejer
     const ledgerSnap = await getDocs(collection(db, "ledger"));
     const ledgerRecords = [];
     ledgerSnap.forEach(d => ledgerRecords.push({ id: d.id, ...d.data() }));
 
-    // 3B. Proses Klien (Jualan Institusi & Komisen 2010)
+    // 3C. Proses Klien (Klien Direct & Klien ALK)
     const usersSnap = await getDocs(collection(db,"users"));
-    const myClientUids = [];
     
     usersSnap.forEach((d)=>{
         const u = d.data();
         const clientId = d.id;
+        const refNo = (u.referral || "").trim();
         
-        if (u.role === "customer" && (u.referral || "").trim() === data.consultantNo) {
+        // Semak jika ini klien AQP ATAU klien ALK di bawah AQP ini
+        if (u.role === "customer" && (refNo === data.consultantNo || alkCodes.includes(refNo))) {
             activeClients++;
-            myClientUids.push(clientId);
             
             // Kuantiti untuk Pie Chart
             if(u.wasiatPaymentStatus === "paid"){ wasiatSales++; }
@@ -314,7 +325,6 @@ onAuthStateChanged(auth, async(user)=>{
                         clientSales += amt;
                         if (month !== undefined) clientMonths.sales[month] = (clientMonths.sales[month] || 0) + amt;
                     }
-                    // AQP Commission Code is 2010
                     if (acc === "2010") {
                         const amt = Number(rekod.credit || 0);
                         commission += amt;
@@ -323,7 +333,6 @@ onAuthStateChanged(auth, async(user)=>{
                 }
             });
 
-            // Fallback jika belum dijana (Legacy)
             if (commission === 0 && clientSales > 0) {
                 commission = clientSales * (commissionRate / 100);
                 for (const [m, amt] of Object.entries(clientMonths.sales)) {
@@ -340,14 +349,6 @@ onAuthStateChanged(auth, async(user)=>{
             for (const [m, amt] of Object.entries(clientMonths.comm)) { monthlyCommission[Number(m)] += amt; }
         }
     });
-
-    // 4. KIRA ALK / EJEN KOPERASI
-    let totalAlk = 0;
-    try {
-        const alkQuery = await getDocs(query(collection(db, "users"), where("alkRef", "!=", null), where("referral", "==", data.consultantNo)));
-        // Ini adalah cara ringkas, sebaiknya kira dari sub-koleksi introducers institusi
-        // Untuk UI kita setkan sementara 0 (atau count unik ALK ref).
-    } catch(e){}
 
     // 5. PAID & OUTSTANDING
     let paid = 0;
@@ -380,31 +381,55 @@ onAuthStateChanged(auth, async(user)=>{
 
     // 7. LUKIS CARTA (CHARTS)
     Chart.register(ChartDataLabels);
+    
+    // CARTA PIE (PRODUK)
+    const isSalesEmpty = (wasiatSales + hibahSales + sepencarianSales + mawarisSales + corpPremiumSales + corpTunggalSales + corpKongsiSales + corpZurriSales) === 0;
+    
     new Chart(document.getElementById("productChart"), {
         type: "pie",
         data: {
-            labels: ["Wasiat", "Hibah", "Sepencarian", "Mawaris", "Korp-Premium", "Korp-Sole", "Korp-P'ship", "Korp-Zurri"],
+            labels: isSalesEmpty ? ["Tiada Jualan"] : ["Wasiat", "Hibah", "Sepencarian", "Mawaris", "Korp-Premium", "Korp-Sole", "Korp-P'ship", "Korp-Zurri"],
             datasets: [{
-                data: [wasiatSales, hibahSales, sepencarianSales, mawarisSales, corpPremiumSales, corpTunggalSales, corpKongsiSales, corpZurriSales],
-                backgroundColor: ["#3B82F6", "#F43F5E", "#F59E0B", "#FACC15", "#10B981", "#14B8A6", "#8B5CF6", "#84CC16"]
+                data: isSalesEmpty ? [1] : [wasiatSales, hibahSales, sepencarianSales, mawarisSales, corpPremiumSales, corpTunggalSales, corpKongsiSales, corpZurriSales],
+                backgroundColor: isSalesEmpty ? ["#e5e7eb"] : ["#3B82F6", "#F43F5E", "#F59E0B", "#FACC15", "#10B981", "#14B8A6", "#8B5CF6", "#84CC16"]
             }]
         },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { datalabels: { color: "#fff", font: { weight: "bold" }, formatter: (value, context) => { if (value === 0) return ""; const dataSet = context.chart.data.datasets[0].data; const total = dataSet.reduce((a,b)=>a+b,0); return total ? ((value / total) * 100).toFixed(1) + "%" : ""; } } } }
+        options: { 
+            responsive: true, maintainAspectRatio: false, 
+            plugins: { 
+                datalabels: { 
+                    color: isSalesEmpty ? "#6b7280" : "#fff", 
+                    font: { weight: "bold" }, 
+                    formatter: (value, context) => { 
+                        if (isSalesEmpty) return "Tiada Rekod";
+                        if (value === 0) return ""; 
+                        const dataSet = context.chart.data.datasets[0].data; 
+                        const total = dataSet.reduce((a,b)=>a+b,0); 
+                        return total ? ((value / total) * 100).toFixed(1) + "%" : ""; 
+                    } 
+                } 
+            } 
+        }
     });
 
+    // CARTA BAR (TAHUNAN)
     const ctx = document.getElementById("salesChart").getContext("2d");
     new Chart(ctx, {
         type: "bar",
         data: {
             labels: ["Jan", "Feb", "Mac", "Apr", "Mei", "Jun", "Jul", "Ogos", "Sep", "Okt", "Nov", "Dis"],
             datasets: [
-                { label: "Jualan Bersih", data: [monthlySales[1], monthlySales[2], monthlySales[3], monthlySales[4], monthlySales[5], monthlySales[6], monthlySales[7], monthlySales[8], monthlySales[9], monthlySales[10], monthlySales[11], monthlySales[12]], backgroundColor: "rgba(59, 130, 246, 0.85)" },
-                { label: "Komisen AQP", data: monthlyCommission, backgroundColor: "rgba(16, 185, 129, 0.85)" }
+                { label: "Jualan Bersih (RM)", data: [monthlySales[1], monthlySales[2], monthlySales[3], monthlySales[4], monthlySales[5], monthlySales[6], monthlySales[7], monthlySales[8], monthlySales[9], monthlySales[10], monthlySales[11], monthlySales[12]], backgroundColor: "rgba(59, 130, 246, 0.85)" },
+                { label: "Komisen AQP (RM)", data: monthlyCommission, backgroundColor: "rgba(16, 185, 129, 0.85)" }
             ]
         },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false } }, scales: { x: { grid: { display: false } }, y: { beginAtZero: true } } }
-    }); 
-
+        options: { 
+            responsive: true, maintainAspectRatio: false, 
+            plugins: { datalabels: { display: false } }, 
+            scales: { x: { grid: { display: false } }, y: { beginAtZero: true } } 
+        }
+    });
+  
     // 8. BUTANG NAVIGASI AQP
     if (isExpired) {
         const buttonsToDisable = ["clientsBtn", "alkBtn", "copyReferralAqmBtn", "copyReferralAlkBtn"];
