@@ -227,10 +227,18 @@
                         // LOGIK BAHARU: REKOD KOMISEN EJEN AQP (Di Luar Lejer)
                         // ==========================================
                         if (isAqpAgent && aqpAgentData) {
+                            
+                            // --> KOD TAMBAHAN: KEMASKINI TOTAL SALES SUB-EJEN <--
+                            await updateDoc(doc(db, "users", aqpAgentData.id), { 
+                                totalSales: increment(saleAmount) 
+                            });
+                            // ----------------------------------------------------
+
                             const agentCommPct = Number(aqpAgentData.commissionRate) || 0;
                             const agentCommAmt = saleAmount * (agentCommPct / 100);
                             
                             if (agentCommAmt > 0) {
+                                
                                 await addDoc(collection(db, "aqpAgentEarnings"), {
                                     createdAt: txnDate,
                                     agentId: aqpAgentData.id,
