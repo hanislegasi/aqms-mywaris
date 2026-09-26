@@ -1,201 +1,239 @@
 <!DOCTYPE html>
 <html lang="ms">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Consultant Renewal Payment</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-<style>
-body{
-font-family: Inter, sans-serif;
-}
-</style>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran Pembaharuan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: Inter, sans-serif; }
+    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
+<body class="bg-gray-100 min-h-screen">
 
-<body class="bg-gray-100">
+    <!-- Header -->
+    <div class="bg-[#153638] text-white p-5 shadow-md">
+        <div class="max-w-3xl mx-auto">
+            <h1 class="text-xl md:text-2xl font-bold">Pembayaran Pembaharuan (Renewal)</h1>
+            <p class="text-sm text-green-100">AQMS - Pengurusan Rakan Niaga</p>
+        </div>
+    </div>
 
-<div class="bg-[#153638] text-white p-5">
-
-<h1 class="text-2xl font-bold">
-Consultant Renewal Payment
-</h1>
-
-<p>
-Renewal Tahunan Konsultan
-</p>
-
-</div>
-
-<div class="max-w-4xl mx-auto p-5">
-
-<div
-id="paymentCard"
-class="bg-white rounded-2xl border border-gray-200 p-6">
-
-Loading...
-
-</div>
-
-</div>
+    <!-- Main Content -->
+    <div class="max-w-3xl mx-auto p-5 mt-4">
+        <div id="paymentCard" class="bg-white rounded-3xl border border-gray-100 p-6 md:p-8 shadow-xl text-center">
+            <div class="animate-pulse flex flex-col items-center justify-center py-10">
+                <div class="w-12 h-12 border-4 border-t-transparent border-[#153638] rounded-full animate-spin mb-4"></div>
+                <p class="text-gray-500 font-medium">Menyemak maklumat pakej...</p>
+            </div>
+        </div>
+    </div>
 
 <script type="module">
+    // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
+    import { db, auth } from './firebase.js';
 
+    // 2. Tarik fungsi Auth
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // 3. Tarik fungsi Firestore
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // 4. Tarik fungsi Cloud Functions
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+        
+    // Helper format duit
+    const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+  
+    onAuthStateChanged(auth, async (user) => {
+        if(!user){
+            window.location.href = "login.html";
+            return;
+        }
+
+        try {
+            // Tarik data pengguna & komisen
+            const consultantSnap = await getDoc(doc(db, "consultants", user.uid));
+            const data = consultantSnap.data();
+
+            const compensationSnap = await getDoc(doc(db, "settings", "compensation"));
+            const compensation = compensationSnap.exists() ? compensationSnap.data() : {};
+
+            // ==========================================
+            // LOGIK PAKEJ & HARGA DINAMIK (AQC vs AQP)
+            // ==========================================
+            const level = data.consultantLevel || "AQC";
+            const isAQP = (level === "AQP");
+
+            const packageName = isAQP ? "Pembaharuan AQP (Institusi)" : `Pembaharuan ${level}`;
+            let renewalFee = 100; // Harga lalai
+
+            if (isAQP) {
+                renewalFee = Number(compensation.renewalAQP || 1000);
+            } else {
+                const levelKey = level.replace(/[^a-zA-Z0-9]/g, "");
+                renewalFee = Number(compensation[`renewal${levelKey}`] || 100);
+            }
+
+            // ==========================================
+            // PAPARAN KAD (UI)
+            // ==========================================
+            document.getElementById("paymentCard").innerHTML = `
+                <div class="text-left mb-6">
+                    <a href="consultant-renewal.html" class="inline-flex items-center text-sm font-semibold text-gray-500 hover:text-gray-800 transition">
+                        ← Kembali Semakan CPD
+                    </a>
+                </div>
+
+                <div class="bg-gray-50 rounded-2xl p-6 mb-6 border border-gray-100">
+                    <p class="text-gray-500 text-sm font-medium mb-1">Jumlah Perlu Dibayar</p>
+                    <div class="font-extrabold text-4xl text-[#153638] tracking-tight">
+                        RM ${formatRM(renewalFee)}
+                    </div>
+                </div>
+
+                <h2 class="text-lg font-bold text-left text-[#153638] mb-4 border-b border-gray-100 pb-2">
+                    Ringkasan Akaun
+                </h2>
+
+                <div class="space-y-3 text-sm md:text-base text-left mb-8">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-500">Nama Perunding:</span>
+                        <span class="font-bold text-gray-800">${data.nama || "-"}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-500">No. Rujukan:</span>
+                        <span class="font-bold text-gray-800">${data.consultantNo || "-"}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-500">Pangkat (Level):</span>
+                        <span class="font-bold px-3 py-1 bg-[#153638]/10 text-[#153638] rounded-full text-xs">${level}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-500">Pakej:</span>
+                        <span class="font-semibold text-gray-800">${packageName}</span>
+                    </div>
+                </div>
+
+                <button id="payRenewalBtn" class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-6 py-4 rounded-xl font-bold shadow-lg flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2Bagus! Untuk fail `consultant-renewal-payment.html` ini, kita akan buang blok `if` yang panjang untuk semakan setiap pangkat (`AQC`, `AQC-AS`, dll.) dan gantikan dengan logik dinamik yang sama seperti fail sebelum ini. 
+
+Dengan cara ini, nama pakej (`Pembaharuan AQP (Institusi)` atau `Pembaharuan AQC`) dan harga yang betul akan dihantar secara tepat ke ToyyibPay.
+
+Gantikan keseluruhan bahagian skrip di dalam fail anda dengan kod di bawah:
+
+```html
+<script type="module">
 // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
 import { db, auth } from './firebase.js';
 
-// 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
+// 2. Tarik fungsi Auth yang berkaitan sahaja
 import {
     onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+} from "[https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js](https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js)";
 
-// 3. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
+// 3. Tarik fungsi Firestore yang berkaitan sahaja
 import {
     doc,
     getDoc,
     updateDoc,
     addDoc,
     collection
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from "[https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js](https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js)";
 
-import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+import { getFunctions, httpsCallable } from "[https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js](https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js)";
     
-// FIX 1: Tambah helper formatRM supaya tidak ReferenceError
-    const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2 });
+// Helper formatRM
+const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2 });
   
 onAuthStateChanged(auth, async(user)=>{
 
-if(!user){
+    if(!user){
+        window.location.href = "login.html";
+        return;
+    }
 
-window.location.href =
-"login.html";
+    const consultantSnap = await getDoc(doc(db,"consultants",user.uid));
+    const data = consultantSnap.data();
 
-return;
+    // Ambil compensation dari Firestore
+    const compensationSnap = await getDoc(doc(db, "settings", "compensation"));
+    const compensation = compensationSnap.exists() ? compensationSnap.data() : {};
 
-}
+    // ==========================================
+    // LOGIK HARGA & PAKEJ DINAMIK
+    // ==========================================
+    const level = data.consultantLevel || "AQC";
+    const isAQP = (level === "AQP");
 
-const consultantSnap =
-await getDoc(
-doc(db,"consultants",user.uid)
-);
+    const packageName = isAQP ? "Pembaharuan AQP (Institusi)" : `Pembaharuan ${level}`;
+    let renewalFee = 100; // Harga lalai
 
-const data = consultantSnap.data();
-
-
-// Ambil compensation dari Firestore
-const compensationSnap = await getDoc(
-    doc(db, "settings", "compensation")
-);
-
-const compensation = compensationSnap.data();
-
-
-let renewalFee = 0;
-
-
-if (data.consultantLevel === "AQC") {
-    renewalFee = compensation.renewalAQC;
-}
-
-if (data.consultantLevel === "AQC-AS") {
-    renewalFee = compensation.renewalAQCAS;
-}
-
-if (data.consultantLevel === "AQC-UM") {
-    renewalFee = compensation.renewalAQCUM;
-}
-
-if (data.consultantLevel === "MGAM") {
-    renewalFee = compensation.renewalMGAM;
-}
+    if (isAQP) {
+        renewalFee = Number(compensation.renewalAQP || 1000);
+    } else {
+        const levelKey = level.replace(/[^a-zA-Z0-9]/g, "");
+        renewalFee = Number(compensation[`renewal${levelKey}`] || 100);
+    }
+    // ==========================================
   
-document.getElementById("paymentCard").innerHTML = `
+    document.getElementById("paymentCard").innerHTML = `
         <div class="font-bold text-xl text-[#153638] mb-4">
           RM${formatRM(renewalFee)}
         </div>
 
-<h2 class="text-2xl font-bold text-[#153638] mb-5">
+        <h2 class="text-2xl font-bold text-[#153638] mb-5">
+            Renewal Summary
+        </h2>
 
-Renewal Summary
+        <div class="space-y-3 text-gray-700">
+            <p><b>No Rujukan:</b> ${data.consultantNo || "-"}</p>
+            <p><b>Nama:</b> ${data.nama || "-"}</p>
+            <p><b>Pakej:</b> ${packageName}</p>
+            <p><b>Status:</b> <span class="text-green-600 font-bold">ACTIVE</span></p>
+            <p><b>Yuran Tahunan:</b> RM${formatRM(renewalFee)}</p>
+        </div>
 
-</h2>
-
-<div class="space-y-3">
-
-<p>
-<b>Consultant No:</b>
-${data.consultantNo || "-"}
-</p>
-
-<p>
-<b>Level:</b>
-${data.consultantLevel}
-</p>
-
-<p>
-<b>Status:</b>
-ACTIVE
-</p>
-
-<p>
-<b>Renewal Fee:</b>
-RM${renewalFee}
-</p>
-
-</div>
-
-<button
-id="payRenewalBtn"
-class="mt-6 bg-[#153638] text-white px-6 py-3 rounded-xl">
-
-Pay Renewal Fee
-
-</button>
-
-`;  
-
-
+        <button id="payRenewalBtn" class="mt-6 bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-6 py-3.5 rounded-xl w-full font-bold shadow-lg">
+            Pay Renewal Fee
+        </button>
+    `;  
   
-document.getElementById("payRenewalBtn")?.addEventListener("click", async () => {
-    const btn = document.getElementById("payRenewalBtn");
-    btn.disabled = true;
-    btn.innerText = "Menjana Invois ToyyibPay...";
+    document.getElementById("payRenewalBtn")?.addEventListener("click", async () => {
+        const btn = document.getElementById("payRenewalBtn");
+        btn.disabled = true;
+        btn.innerText = "Menjana Invois ToyyibPay...";
 
-    try {
-        // Susun data untuk ToyyibPay
-        const dataPelanggan = {
-            nama: data.nama || "Konsultan AQM",
-            email: data.email || "tiada@email.com",
-            telefon: data.telefon || "0100000000",
-            pakej: "Pembaharuan Konsultan", // Penting: Fail success akan baca nama pakej ini
-            harga: renewalFee,
-            uid: user.uid
-        };
+        try {
+            // Susun data untuk ToyyibPay
+            const dataPelanggan = {
+                nama: data.nama || "Konsultan AQMS",
+                email: data.email || "tiada@email.com",
+                telefon: data.telefon || "0100000000",
+                pakej: packageName, // NAMA PAKEJ DINAMIK
+                harga: renewalFee,  // HARGA DINAMIK
+                uid: user.uid
+            };
 
-        // Panggil fungsi Cloud Function
-        const functions = getFunctions(auth.app);
-        const createToyyibpayBill = httpsCallable(functions, 'createToyyibpayBill');
-        const result = await createToyyibpayBill(dataPelanggan);
+            // Panggil fungsi Cloud Function
+            const functions = getFunctions(auth.app);
+            const createToyyibpayBill = httpsCallable(functions, 'createToyyibpayBill');
+            const result = await createToyyibpayBill(dataPelanggan);
 
-        // Bawa konsultan ke laman pembayaran ToyyibPay
-        window.location.href = result.data.paymentUrl;
+            // Bawa konsultan ke laman pembayaran ToyyibPay
+            window.location.href = result.data.paymentUrl;
 
-    } catch (error) {
-        console.error(error);
-        alert("Gagal menghubungi server pembayaran. Sila cuba lagi.");
-        btn.disabled = false;
-        btn.innerText = "Pay Renewal Fee";
-    }
-});
+        } catch (error) {
+            console.error(error);
+            alert("Gagal menghubungi server pembayaran. Sila cuba lagi.");
+            btn.disabled = false;
+            btn.innerText = "Pay Renewal Fee";
+        }
+    });
 });  
 </script>
-  
 </body>
+
 </html>
