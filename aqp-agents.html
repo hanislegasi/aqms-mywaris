@@ -458,19 +458,17 @@
                 
                 // DATA WALLET
                 const totalSales = data.totalSales || 0; 
-                const paidCommission = data.paidCommission || 0; // Komisen yang dah dibayar sebelum ni
+                const paidCommission = data.paidCommission || 0; 
                 
-                // --- FORMULA BARU PENGIRAAN KOMISEN ---
-                // 1. Kira nilai komisen yang AQP dapat (Contoh: RM3000 x 35% = RM1050)
-                const aqpCommissionAmount = totalSales * (window.aqpBaseCommission / 100);
-                
-                // 2. Kira komisen TERKUMPUL ejen (% dari Komisen AQP)
-                const totalAgentCommission = aqpCommissionAmount * (globalCommissionRate / 100);
+                // --- BACA DATA HISTORY STATIK DARI DATABASE ---
+                // Sistem tidak lagi mendarab jualan dengan % rate semasa.
+                // Ia hanya membaca total komisen yang telah 'dikunci' sewaktu jualan berlaku.
+                const totalAgentCommission = data.totalEarnedCommission || 0;
 
                 // 3. Baki komisen yang BELUM dibayar (Boleh Tebus)
                 let unpaidCommission = totalAgentCommission - paidCommission;
-                if(unpaidCommission < 0) unpaidCommission = 0; // Langkah keselamatan elak nombor negatif
-
+                if(unpaidCommission < 0) unpaidCommission = 0;
+                
                 html += `
                 <tr class="hover:bg-gray-50 transition border-b border-gray-50 group">
                     <td class="p-4 text-center text-gray-500 font-medium">${bil++}</td>
