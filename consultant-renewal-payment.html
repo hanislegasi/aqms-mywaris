@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembayaran Pembaharuan</title>
+    <title>Consultant Renewal Payment</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -16,8 +16,8 @@
     <!-- Header -->
     <div class="bg-[#153638] text-white p-5 shadow-md">
         <div class="max-w-3xl mx-auto">
-            <h1 class="text-xl md:text-2xl font-bold">Pembayaran Pembaharuan (Renewal)</h1>
-            <p class="text-sm text-green-100">AQMS - Pengurusan Rakan Niaga</p>
+            <h1 class="text-xl md:text-2xl font-bold">Consultant Renewal Payment</h1>
+            <p class="text-sm text-green-100">Pembaharuan Lesen Tahunan Rakan Niaga</p>
         </div>
     </div>
 
@@ -46,35 +46,61 @@
         }
 
         try {
+            // Ambil data konsultan
             const consultantSnap = await getDoc(doc(db, "consultants", user.uid));
             const data = consultantSnap.data();
 
+            // Ambil data tetapan yuran dari Firestore
             const compensationSnap = await getDoc(doc(db, "settings", "compensation"));
             const compensation = compensationSnap.exists() ? compensationSnap.data() : {};
 
-            // ==========================================
-            // LOGIK PAKEJ & HARGA DINAMIK (AQC vs AQP)
-            // ==========================================
-            const level = data.consultantLevel || "AQC";
-            const isAQP = (level === "AQP");
+            let renewalFee = 0;
+            let packageNameUI = "";
+            let toyyibpayPackageName = ""; 
 
-            const packageName = isAQP ? "Renewal AQP (Institusi)" : `Renewal ${level}`
-            let renewalFee = 100; // Harga lalai
-
-            if (isAQP) {
-                renewalFee = Number(compensation.renewalAQP || 1000);
-            } else {
-                const levelKey = level.replace(/[^a-zA-Z0-9]/g, "");
-                renewalFee = Number(compensation[`renewal${levelKey}`] || 100);
+            // =========================================================
+            // LOGIK MANUAL IKUT LEVEL (DIKEMBALIKAN SEPERTI KOD ASAL)
+            // =========================================================
+            if (data.consultantLevel === "AQC") {
+                renewalFee = compensation.renewalAQC || 100;
+                packageNameUI = "AQC (Biasa)";
+                toyyibpayPackageName = "Renewal Konsultan";
+            } 
+            else if (data.consultantLevel === "AQC-AS") {
+                renewalFee = compensation.renewalAQCAS || 100;
+                packageNameUI = "AQC-AS";
+                toyyibpayPackageName = "Renewal Konsultan";
+            } 
+            else if (data.consultantLevel === "AQC-UM") {
+                renewalFee = compensation.renewalAQCUM || 100;
+                packageNameUI = "AQC-UM";
+                toyyibpayPackageName = "Renewal Konsultan";
+            } 
+            else if (data.consultantLevel === "MGAM") {
+                renewalFee = compensation.renewalMGAM || 100;
+                packageNameUI = "MGAM";
+                toyyibpayPackageName = "Renewal Konsultan";
+            } 
+            else if (data.consultantLevel === "AQP") {
+                // Tambahan khas untuk Institusi (Partner)
+                renewalFee = compensation.renewalAQP || 1000;
+                packageNameUI = "AQP (Institusi)";
+                toyyibpayPackageName = "Renewal AQP";
+            } 
+            else {
+                // Fallback jika level kosong/tiada
+                renewalFee = 100;
+                packageNameUI = data.consultantLevel || "Konsultan";
+                toyyibpayPackageName = "Renewal Konsultan";
             }
 
-// ==========================================
+            // ==========================================
             // PAPARAN KAD (UI)
             // ==========================================
             document.getElementById("paymentCard").innerHTML = `
                 <div class="text-left mb-6">
-                    <a href="consultant-renewal.html" class="inline-flex items-center text-sm font-semibold text-gray-500 hover:text-gray-800 transition">
-                        ← Kembali Semakan CPD
+                    <a href="consultant-dashboard.html" class="inline-flex items-center text-sm font-semibold text-gray-500 hover:text-gray-800 transition">
+                        ← Kembali ke Dashboard
                     </a>
                 </div>
 
@@ -86,7 +112,7 @@
                 </div>
 
                 <h2 class="text-lg font-bold text-left text-[#153638] mb-4 border-b border-gray-100 pb-2">
-                    Ringkasan Akaun
+                    Ringkasan Renewal
                 </h2>
 
                 <div class="space-y-3 text-sm md:text-base text-left mb-8">
@@ -100,11 +126,11 @@
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-gray-500">Pangkat (Level):</span>
-                        <span class="font-bold px-3 py-1 bg-[#153638]/10 text-[#153638] rounded-full text-xs">${level}</span>
+                        <span class="font-bold px-3 py-1 bg-[#153638]/10 text-[#153638] rounded-full text-xs">${packageNameUI}</span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-gray-500">Pakej:</span>
-                        <span class="font-semibold text-gray-800">${packageName}</span>
+                        <span class="text-gray-500">Status Semasa:</span>
+                        <span class="font-semibold text-emerald-600">ACTIVE</span>
                     </div>
                 </div>
 
@@ -117,14 +143,15 @@
             document.getElementById("payRenewalBtn")?.addEventListener("click", async () => {
                 const btn = document.getElementById("payRenewalBtn");
                 btn.disabled = true;
-                btn.innerHTML = `<svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Menjana Invois...`;
+                btn.innerHTML = `<svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Menjana Invois ToyyibPay...`;
        
                 try {
+                    // Susun data untuk ToyyibPay
                     const dataPelanggan = {
-                        nama: data.nama || "Konsultan AQMS",
+                        nama: data.nama || "Konsultan AQM",
                         email: data.email || "tiada@email.com",
                         telefon: data.telefon || "0100000000",
-                        pakej: packageName,
+                        pakej: toyyibpayPackageName, // Menggunakan perkataan "Renewal" untuk bypass backend
                         harga: renewalFee,
                         uid: user.uid
                     };
