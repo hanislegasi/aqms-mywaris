@@ -32,19 +32,11 @@
     </div>
 
 <script type="module">
-    // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
     import { db, auth } from './firebase.js';
-
-    // 2. Tarik fungsi Auth
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-    // 3. Tarik fungsi Firestore
     import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    // 4. Tarik fungsi Cloud Functions
     import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
         
-    // Helper format duit
     const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2 });
   
     onAuthStateChanged(auth, async (user) => {
@@ -54,7 +46,6 @@
         }
 
         try {
-            // Tarik data pengguna & komisen
             const consultantSnap = await getDoc(doc(db, "consultants", user.uid));
             const data = consultantSnap.data();
 
@@ -118,122 +109,45 @@
                 </div>
 
                 <button id="payRenewalBtn" class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-6 py-4 rounded-xl font-bold shadow-lg flex items-center justify-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2Bagus! Untuk fail `consultant-renewal-payment.html` ini, kita akan buang blok `if` yang panjang untuk semakan setiap pangkat (`AQC`, `AQC-AS`, dll.) dan gantikan dengan logik dinamik yang sama seperti fail sebelum ini. 
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2"></path></svg>
+                    Bayar Yuran Pembaharuan
+                </button>
+            `;
 
-Dengan cara ini, nama pakej (`Pembaharuan AQP (Institusi)` atau `Pembaharuan AQC`) dan harga yang betul akan dihantar secara tepat ke ToyyibPay.
+            document.getElementById("payRenewalBtn")?.addEventListener("click", async () => {
+                const btn = document.getElementById("payRenewalBtn");
+                btn.disabled = true;
+                btn.innerHTML = `<svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Menjana Invois...`;
 
-Gantikan keseluruhan bahagian skrip di dalam fail anda dengan kod di bawah:
+                try {
+                    const dataPelanggan = {
+                        nama: data.nama || "Konsultan AQMS",
+                        email: data.email || "tiada@email.com",
+                        telefon: data.telefon || "0100000000",
+                        pakej: packageName,
+                        harga: renewalFee,
+                        uid: user.uid
+                    };
 
-```html
-<script type="module">
-// 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
-import { db, auth } from './firebase.js';
+                    const functions = getFunctions(auth.app);
+                    const createToyyibpayBill = httpsCallable(functions, 'createToyyibpayBill');
+                    const result = await createToyyibpayBill(dataPelanggan);
 
-// 2. Tarik fungsi Auth yang berkaitan sahaja
-import {
-    onAuthStateChanged
-} from "[https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js](https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js)";
+                    window.location.href = result.data.paymentUrl;
 
-// 3. Tarik fungsi Firestore yang berkaitan sahaja
-import {
-    doc,
-    getDoc,
-    updateDoc,
-    addDoc,
-    collection
-} from "[https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js](https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js)";
-
-import { getFunctions, httpsCallable } from "[https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js](https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js)";
-    
-// Helper formatRM
-const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2 });
-  
-onAuthStateChanged(auth, async(user)=>{
-
-    if(!user){
-        window.location.href = "login.html";
-        return;
-    }
-
-    const consultantSnap = await getDoc(doc(db,"consultants",user.uid));
-    const data = consultantSnap.data();
-
-    // Ambil compensation dari Firestore
-    const compensationSnap = await getDoc(doc(db, "settings", "compensation"));
-    const compensation = compensationSnap.exists() ? compensationSnap.data() : {};
-
-    // ==========================================
-    // LOGIK HARGA & PAKEJ DINAMIK
-    // ==========================================
-    const level = data.consultantLevel || "AQC";
-    const isAQP = (level === "AQP");
-
-    const packageName = isAQP ? "Pembaharuan AQP (Institusi)" : `Pembaharuan ${level}`;
-    let renewalFee = 100; // Harga lalai
-
-    if (isAQP) {
-        renewalFee = Number(compensation.renewalAQP || 1000);
-    } else {
-        const levelKey = level.replace(/[^a-zA-Z0-9]/g, "");
-        renewalFee = Number(compensation[`renewal${levelKey}`] || 100);
-    }
-    // ==========================================
-  
-    document.getElementById("paymentCard").innerHTML = `
-        <div class="font-bold text-xl text-[#153638] mb-4">
-          RM${formatRM(renewalFee)}
-        </div>
-
-        <h2 class="text-2xl font-bold text-[#153638] mb-5">
-            Renewal Summary
-        </h2>
-
-        <div class="space-y-3 text-gray-700">
-            <p><b>No Rujukan:</b> ${data.consultantNo || "-"}</p>
-            <p><b>Nama:</b> ${data.nama || "-"}</p>
-            <p><b>Pakej:</b> ${packageName}</p>
-            <p><b>Status:</b> <span class="text-green-600 font-bold">ACTIVE</span></p>
-            <p><b>Yuran Tahunan:</b> RM${formatRM(renewalFee)}</p>
-        </div>
-
-        <button id="payRenewalBtn" class="mt-6 bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-6 py-3.5 rounded-xl w-full font-bold shadow-lg">
-            Pay Renewal Fee
-        </button>
-    `;  
-  
-    document.getElementById("payRenewalBtn")?.addEventListener("click", async () => {
-        const btn = document.getElementById("payRenewalBtn");
-        btn.disabled = true;
-        btn.innerText = "Menjana Invois ToyyibPay...";
-
-        try {
-            // Susun data untuk ToyyibPay
-            const dataPelanggan = {
-                nama: data.nama || "Konsultan AQMS",
-                email: data.email || "tiada@email.com",
-                telefon: data.telefon || "0100000000",
-                pakej: packageName, // NAMA PAKEJ DINAMIK
-                harga: renewalFee,  // HARGA DINAMIK
-                uid: user.uid
-            };
-
-            // Panggil fungsi Cloud Function
-            const functions = getFunctions(auth.app);
-            const createToyyibpayBill = httpsCallable(functions, 'createToyyibpayBill');
-            const result = await createToyyibpayBill(dataPelanggan);
-
-            // Bawa konsultan ke laman pembayaran ToyyibPay
-            window.location.href = result.data.paymentUrl;
+                } catch (error) {
+                    console.error(error);
+                    alert("Gagal menghubungi server pembayaran. Sila cuba lagi.");
+                    btn.disabled = false;
+                    btn.innerHTML = `Bayar Yuran Pembaharuan`;
+                }
+            });
 
         } catch (error) {
             console.error(error);
-            alert("Gagal menghubungi server pembayaran. Sila cuba lagi.");
-            btn.disabled = false;
-            btn.innerText = "Pay Renewal Fee";
+            document.getElementById("paymentCard").innerHTML = `<div class="text-red-500 p-5 font-bold">Ralat memuatkan profil perunding. Sila log masuk semula.</div>`;
         }
-    });
-});  
+    });  
 </script>
 </body>
-
 </html>
