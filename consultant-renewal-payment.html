@@ -68,7 +68,7 @@
                 renewalFee = Number(compensation[`renewal${levelKey}`] || 100);
             }
 
-            // ==========================================
+// ==========================================
             // PAPARAN KAD (UI)
             // ==========================================
             document.getElementById("paymentCard").innerHTML = `
@@ -109,7 +109,7 @@
                 </div>
 
                 <button id="payRenewalBtn" class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-6 py-4 rounded-xl font-bold shadow-lg flex items-center justify-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2"></path></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
                     Bayar Yuran Pembaharuan
                 </button>
             `;
@@ -118,7 +118,7 @@
                 const btn = document.getElementById("payRenewalBtn");
                 btn.disabled = true;
                 btn.innerHTML = `<svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Menjana Invois...`;
-
+       
                 try {
                     const dataPelanggan = {
                         nama: data.nama || "Konsultan AQMS",
