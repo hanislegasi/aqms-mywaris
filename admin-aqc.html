@@ -190,33 +190,87 @@
             }
         });
 
-        // Fungsi Memuatkan Data Utama
+       // Fungsi Memuatkan Data Utama
         async function loadConsultantsData() {
             try {
+                // 1. Tarik Data Serentak (Consultants, Users, Ledger)
                 const snapshot = await getDocs(collection(db, "consultants"));
-                
+                const usersSnap = await getDocs(collection(db, "users"));
+                const ledgerSnap = await getDocs(collection(db, "ledger"));
+
+                // 2. Petakan Ejen ALK kepada AQP (Institusi)
+                const alkMap = {};
+                const allCustomers = [];
+                usersSnap.forEach((d) => {
+                    const u = d.data();
+                    if (u.role === "aqp_agent" && u.aqpRef) {
+                        if (!alkMap[u.aqpRef]) alkMap[u.aqpRef] = [];
+                        alkMap[u.aqpRef].push(u.agentCode);
+                    }
+                    if (u.role === "customer") {
+                        allCustomers.push({ 
+                            uid: d.id, 
+                            referral: (u.referral || "").trim(), 
+                            memberNo: (u.memberNo || "").toUpperCase() 
+                        });
+                    }
+                });
+
+                const ledgerRecords = [];
+                ledgerSnap.forEach(d => ledgerRecords.push({ id: d.id, ...d.data() }));
+
                 let consultants = [];
                 let totalSales = 0;
                 let cAQC = 0, cAS = 0, cUM = 0, cMGAM = 0, cAQP = 0;
 
                 snapshot.forEach((d) => {
                     const u = d.data();
-                    consultants.push({ id: d.id, ...u });
-                    
-                    totalSales += (u.careerSales || 0);
+                    let displaySales = Number(u.careerSales || 0); // Jualan lalai AQC
 
-                    // Kira Pecahan Pangkat (Ditambah AQP)
+                    // 3. Logik Khas Kiraan Jualan AQP (Dinamik dari Lejer)
+                    if (u.consultantLevel === "AQP") {
+                        let aqpSales = 0;
+                        const myAlks = alkMap[u.consultantNo] || [];
+
+                        // Cari pelanggan AQP direct & ALK sub-ejen
+                        const myClients = allCustomers.filter(c => c.referral === u.consultantNo || myAlks.includes(c.referral));
+
+                        // Padankan dengan Lejer 1000 (Bank Debit)
+                        ledgerRecords.forEach(rekod => {
+                            if (String(rekod.accountCode) === "1000") {
+                                const rUid = rekod.clientUid || rekod.userId || rekod.uid || rekod.customerId || "";
+                                const tGroup = rekod.transactionGroup ? String(rekod.transactionGroup).trim().toUpperCase() : "";
+                                const rMemNo = rekod.memberNo ? String(rekod.memberNo).toUpperCase() : "";
+
+                                const isMatch = myClients.some(c =>
+                                    c.uid === rUid ||
+                                    c.uid.toUpperCase() === tGroup ||
+                                    (c.memberNo && (tGroup === c.memberNo || rMemNo === c.memberNo))
+                                );
+
+                                if (isMatch) {
+                                    aqpSales += Number(rekod.debit || 0);
+                                }
+                            }
+                        });
+                        displaySales = aqpSales;
+                    }
+
+                    consultants.push({ id: d.id, displaySales: displaySales, ...u });
+                    totalSales += displaySales;
+
+                    // Kira Pecahan Pangkat
                     if(u.consultantLevel === "AQC") cAQC++;
                     else if(u.consultantLevel === "AQC-AS") cAS++;
                     else if(u.consultantLevel === "AQC-UM") cUM++;
                     else if(u.consultantLevel === "MGAM") cMGAM++;
                     else if(u.consultantLevel === "AQP") cAQP++;
-                    else cAQC++; // Default jika undefined
+                    else cAQC++; 
                 });
 
                 // Update Stats UI
                 document.getElementById("statTotalConsultants").textContent = consultants.length;
-                document.getElementById("statTotalSales").textContent = "RM" + totalSales.toLocaleString("ms-MY");
+                document.getElementById("statTotalSales").textContent = "RM" + totalSales.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
                 document.getElementById("countAQC").textContent = cAQC;
                 document.getElementById("countAS").textContent = cAS;
                 document.getElementById("countUM").textContent = cUM;
@@ -241,14 +295,13 @@
                     html = `<tr><td colspan="8" class="p-8 text-center text-gray-500 font-medium">Tiada data perunding ditemui.</td></tr>`;
                 } else {
                     consultants.forEach((u) => {
-                        // Guna joinDate. Jika tiada, fallback kepada createdAt
-const rawDate = u.joinDate || u.createdAt; 
-const joinDate = rawDate?.toDate ? rawDate.toDate() : (rawDate instanceof Date ? rawDate : new Date(rawDate));
+                        const rawDate = u.joinDate || u.createdAt; 
+                        const joinDate = rawDate?.toDate ? rawDate.toDate() : (rawDate instanceof Date ? rawDate : new Date(rawDate));
                         const state = u.state || "Tiada Negeri";
                         const upline = u.upline || "Tiada Upline";
                         const lvl = u.consultantLevel || "AQC";
 
-                        // Logik Action Column (Tindakan) - Ditambah AQP
+                        // Logik Action Column (Tindakan)
                         let actionHTML = "";
                         if (u.promotionRequest) {
                             actionHTML = `
@@ -275,29 +328,29 @@ const joinDate = rawDate?.toDate ? rawDate.toDate() : (rawDate instanceof Date ?
                             `;
                         }
 
-                        // Tukar warna lencana bergantung pada jenis (AQP warna Emerald)
                         let badgeColorClass = "bg-gray-100 text-gray-700 border-gray-200";
                         if(lvl === 'AQP') badgeColorClass = "bg-emerald-100 text-emerald-800 border-emerald-200";
 
-                       html += `
-    <tr onclick="window.location.href='admin-consultant-details.html?id=${u.id}'" class="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
-        <td class="p-4 text-lg font-semibold">${bil++}</td>
-        <td class="p-4 text-lg font-medium text-gray-600">${isNaN(joinDate) ? "-" : joinDate.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' })}</td>
-        <td class="p-4 text-lg font-bold text-[#153638]">${u.consultantNo || "-"}</td>
-        <td class="p-4">
-            <div class="text-lg font-bold text-gray-800">${u.nama || "-"}</div>
-            <div class="text-sm text-gray-500 mt-0.5">${u.telefon || "-"} • ${state}</div>
-        </td>
-        <td class="p-4 text-lg font-medium text-blue-600">${upline}</td>
-        <td class="p-4 text-lg">
-            <span class="${badgeColorClass} px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider border">${lvl}</span>
-        </td>
-        <td class="p-4 text-lg font-bold text-green-700">RM${(u.careerSales || 0).toLocaleString()}</td>
-        <td class="p-4 text-center align-middle" onclick="event.stopPropagation()">
-            ${actionHTML}
-        </td>
-    </tr>
-`;
+                        html += `
+                        <tr onclick="window.location.href='admin-consultant-details.html?id=${u.id}'" class="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer">
+                            <td class="p-4 text-lg font-semibold">${bil++}</td>
+                            <td class="p-4 text-lg font-medium text-gray-600">${isNaN(joinDate) ? "-" : joinDate.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' })}</td>
+                            <td class="p-4 text-lg font-bold text-[#153638]">${u.consultantNo || "-"}</td>
+                            <td class="p-4">
+                                <div class="text-lg font-bold text-gray-800">${u.nama || "-"}</div>
+                                <div class="text-sm text-gray-500 mt-0.5">${u.telefon || "-"} • ${state}</div>
+                            </td>
+                            <td class="p-4 text-lg font-medium text-blue-600">${upline}</td>
+                            <td class="p-4 text-lg">
+                                <span class="${badgeColorClass} px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider border">${lvl}</span>
+                            </td>
+                            <!-- MENGGUNAKAN u.displaySales DI SINI -->
+                            <td class="p-4 text-lg font-bold text-green-700">RM${(u.displaySales || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2 })}</td>
+                            <td class="p-4 text-center align-middle" onclick="event.stopPropagation()">
+                                ${actionHTML}
+                            </td>
+                        </tr>
+                        `;
                     });
                 }
 
@@ -308,7 +361,7 @@ const joinDate = rawDate?.toDate ? rawDate.toDate() : (rawDate instanceof Date ?
                 document.getElementById("consultantList").innerHTML = `<tr><td colspan="8" class="p-8 text-center text-red-600">Gagal mendapatkan data. Sila semak sambungan internet.</td></tr>`;
             }
         }
-
+    
         // Carian Masa Nyata (Search)
         document.getElementById("searchInput").addEventListener("keyup", (e) => {
             const keyword = e.target.value.toLowerCase();
