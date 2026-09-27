@@ -8,7 +8,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>body { font-family: 'Inter', sans-serif; }</style>
-     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-gray-50 min-h-screen pb-10">
 
@@ -60,20 +60,35 @@
                     </div>
                 </div>
 
-                <!-- SEKSYEN 2: HUBUNGI & ALAMAT -->
+                <!-- SEKSYEN 2: HUBUNGI, WAKIL & ALAMAT -->
                 <div>
                     <h3 class="text-lg font-bold text-[#153638] mb-4 flex items-center border-b pb-2">
-                        <i data-lucide="map-pin" class="w-5 h-5 mr-2 text-[#d8ae81]"></i> Hubungan & Alamat
+                        <i data-lucide="map-pin" class="w-5 h-5 mr-2 text-[#d8ae81]"></i> Hubungan, Wakil & Alamat
                     </h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">No Telefon</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">No Telefon Pejabat Institusi</label>
                             <input type="text" id="editTelefon" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none" required>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Emel Rasmi</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Emel Rasmi Institusi</label>
                             <input type="email" id="editEmail" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none" required>
+                        </div>
+                    </div>
+
+                    <!-- TAMBAHAN MAKLUMAT WAKIL / EJEN -->
+                    <div class="bg-blue-50 border border-blue-100 p-5 rounded-xl mb-5">
+                        <p class="text-sm font-bold text-blue-900 mb-3">Maklumat Wakil / Ejen (PIC)</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Nama Wakil / PIC</label>
+                                <input type="text" id="editWakilNama" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none bg-white" placeholder="Nama penuh wakil" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">No Telefon Wakil / Ejen</label>
+                                <input type="text" id="editWakilTelefon" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none bg-white" placeholder="Contoh: 0123456789" required>
+                            </div>
                         </div>
                     </div>
 
@@ -197,8 +212,13 @@
                     document.getElementById('editIc').value = data.ic || data.regNo || "";
                     document.getElementById('editConsultantNo').value = data.consultantNo || "";
                     document.getElementById('editUpline').value = data.upline || "-";
+                    
                     document.getElementById('editTelefon').value = data.telefon || "";
                     document.getElementById('editEmail').value = data.email || "";
+                    
+                    // MAKLUMAT WAKIL/EJEN (Data baru & sedia ada)
+                    document.getElementById('editWakilNama').value = data.wakilNama || "";
+                    document.getElementById('editWakilTelefon').value = data.wakilTelefon || ""; 
                     
                     // Alamat 4 pecahan
                     document.getElementById('editAlamat').value = data.alamat || "";
@@ -231,8 +251,13 @@
                         await updateDoc(userRef, {
                             nama: document.getElementById('editNama').value.trim(),
                             ic: document.getElementById('editIc').value.trim(),
+                            
                             telefon: document.getElementById('editTelefon').value.trim(),
                             email: document.getElementById('editEmail').value.trim(),
+                            
+                            // Simpan Maklumat Wakil
+                            wakilNama: document.getElementById('editWakilNama').value.trim(),
+                            wakilTelefon: document.getElementById('editWakilTelefon').value.trim(),
                             
                             // Simpan Alamat 4 pecahan
                             alamat: document.getElementById('editAlamat').value.trim(),
