@@ -559,7 +559,8 @@ const alamatWasi1 = document.getElementById("alamatWasi1");
 const telefonWasi1 = document.getElementById("telefonWasi1");
 
 if (pilihanWasi1) {
-    pilihanWasi1.addEventListener("change", function() {
+    // Tambah huruf 'e' di dalam kurungan function(e)
+    pilihanWasi1.addEventListener("change", function(e) {
         // 1. Reset dan sembunyikan semua kotak
         wasi1RTBSection.classList.add("hidden");
         wasi1ManualSection.classList.add("hidden");
@@ -576,8 +577,11 @@ if (pilihanWasi1) {
             alamatWasi1.value = "";
             telefonWasi1.value = "";
             
-            alert(`NOTIS PELANTIKAN ${syarikatAmanahDetails.nama.toUpperCase()}\n\nHarap maklum dengan terma berikut:\n\n1. Caj pelantikan tambahan sebanyak RM${cajRTBServer} akan dikenakan.\n2. Kos pentadbiran pusaka akan dikenakan oleh pihak Syarikat Amanah berdasarkan peratusan nilai harta pada waktu urusan tuntutan pusaka kelak.`);
-        } 
+            // HANYA keluar pop-up JIKA manusia yang klik (e.isTrusted) DAN status BUKAN PAID
+            if (e.isTrusted && documentStatus !== "PAID") {
+                alert(`NOTIS PELANTIKAN ${syarikatAmanahDetails.nama.toUpperCase()}\n\nHarap maklum dengan terma berikut:\n\n1. Caj pelantikan tambahan sebanyak RM${cajRTBServer} akan dikenakan.\n2. Kos pentadbiran pusaka akan dikenakan oleh pihak Syarikat Amanah berdasarkan peratusan nilai harta pada waktu urusan tuntutan pusaka kelak.`);
+            }
+        }
         // 3. Jika Pasangan ATAU Penama Lain
         else if (this.value === "pasangan" || this.value === "lain") {
             wasi1ManualSection.classList.remove("hidden");
