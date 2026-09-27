@@ -30,7 +30,7 @@
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     const txnDate = new Date();
-                    const isRenewal = namaPakej.includes("Pembaharuan");
+                    const isRenewal = namaPakej.includes("Pembaharuan") || namaPakej.includes("Renewal");
                     
                     try {
                         const consSnap = await getDoc(doc(db, "consultants", user.uid));
@@ -166,6 +166,10 @@
                             
                             await updateDoc(doc(db, "consultants", user.uid), updateData);
 
+                            // Penentuan Kod Lejar Dinamik untuk AQC (4310) & AQP (4320)
+                            const ledgerCodeRenewal = isAQP ? "4320" : "4310";
+                            const ledgerAccountRenewal = isAQP ? "Renewal AQP" : "Renewal AQC";
+
                             await addDoc(collection(db, "ledger"), {
                                 date: txnDate, accountCode: "1000", account: "Bank", category: "asset",
                                 description: `${consData.consultantNo} - ${packageNameText}`, debit: amount, credit: 0,
@@ -174,7 +178,7 @@
                             });
                             
                             await addDoc(collection(db, "ledger"), {
-                                date: txnDate, accountCode: "4310", account: "Renewal AQC", category: "income",
+                                date: txnDate, accountCode: ledgerCodeRenewal, account: ledgerAccountRenewal, category: "income",
                                 description: `${consData.consultantNo} - ${packageNameText}`, debit: 0, credit: amount,
                                 paymentType: "CUSTOMER", transactionGroup: consData.consultantNo,
                                 consultantUid: user.uid, consultantNo: consData.consultantNo
