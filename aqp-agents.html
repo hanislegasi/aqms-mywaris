@@ -94,7 +94,7 @@
     </div>
 </div>
 
-<!-- MODAL PEMBAYARAN KOMISEN (DITIRU DARI MYINTRODUCER) -->
+<!-- MODAL PEMBAYARAN KOMISEN -->
 <div id="paymentModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4 backdrop-blur-sm">
     <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl transform transition-all modal-enter">
         <h3 class="text-lg font-bold text-gray-800 mb-1">Pengesahan Bayaran Komisen</h3>
@@ -133,14 +133,18 @@
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Penuh <span class="text-red-500">*</span></label>
                     <input type="text" id="agentName" required placeholder="Contoh: Ahmad Bin Ali" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition uppercase">
                 </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">No. Kad Pengenalan <span class="text-red-500">*</span></label>
+                    <input type="text" id="agentIC" required placeholder="Contoh: 900101-14-5566" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">No. Kad Pengenalan <span class="text-red-500">*</span></label>
-                        <input type="text" id="agentIC" required placeholder="Contoh: 900101-14-5566" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
-                    </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Jawatan / Peranan</label>
                         <input type="text" id="agentPosition" placeholder="Contoh: Staf/Anggota" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition capitalize">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">No. Telefon <span class="text-red-500">*</span></label>
+                        <input type="text" id="agentPhone" required placeholder="Contoh: 0129443846" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#d8ae81] outline-none transition">
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -194,14 +198,18 @@
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Penuh <span class="text-red-500">*</span></label>
                     <input type="text" id="editAgentName" required class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition uppercase">
                 </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">No. Kad Pengenalan <span class="text-red-500">*</span></label>
+                    <input type="text" id="editAgentIC" required class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition">
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">No. Kad Pengenalan <span class="text-red-500">*</span></label>
-                        <input type="text" id="editAgentIC" required class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition">
-                    </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Jawatan / Peranan</label>
                         <input type="text" id="editAgentPosition" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition capitalize">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">No. Telefon <span class="text-red-500">*</span></label>
+                        <input type="text" id="editAgentPhone" required class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition">
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -289,6 +297,7 @@
         document.getElementById('editAgentName').value = data.nama || "";
         document.getElementById('editAgentIC').value = data.ic || "";
         document.getElementById('editAgentPosition').value = data.jawatan || "";
+        document.getElementById('editAgentPhone').value = data.telefon || "";
         document.getElementById('editAgentBankName').value = data.bankName || "";
         document.getElementById('editAgentBankAcc').value = data.bankAccount || "";
 
@@ -456,13 +465,15 @@
                 
                 const refLink = `${window.location.origin}${window.location.pathname.replace("aqp-agents.html", "register.html")}?ref=${data.agentCode}`;
                 
+                // FORMAT TELEFON UNTUK PAPARAN SAHAJA (Contoh: 012-9443846)
+                let formatTelefon = data.telefon || "-";
+                if (formatTelefon !== "-" && !formatTelefon.includes('-') && formatTelefon.length > 3) {
+                    formatTelefon = formatTelefon.substring(0, 3) + '-' + formatTelefon.substring(3);
+                }
+
                 // DATA WALLET
                 const totalSales = data.totalSales || 0; 
                 const paidCommission = data.paidCommission || 0; 
-                
-                // --- BACA DATA HISTORY STATIK DARI DATABASE ---
-                // Sistem tidak lagi mendarab jualan dengan % rate semasa.
-                // Ia hanya membaca total komisen yang telah 'dikunci' sewaktu jualan berlaku.
                 const totalAgentCommission = data.totalEarnedCommission || 0;
 
                 // 3. Baki komisen yang BELUM dibayar (Boleh Tebus)
@@ -477,6 +488,8 @@
                         <p class="font-bold text-[#153638] uppercase">${data.nama}</p>
                         <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-xs text-gray-500 mt-1">
                             <span class="flex items-center gap-1"><i data-lucide="credit-card" class="w-3.5 h-3.5"></i> ${data.ic}</span>
+                            <span class="hidden sm:inline text-gray-300">|</span>
+                            <span class="flex items-center gap-1"><i data-lucide="phone" class="w-3.5 h-3.5"></i> ${formatTelefon}</span>
                             <span class="hidden sm:inline text-gray-300">|</span>
                             <span class="flex items-center gap-1 capitalize"><i data-lucide="briefcase" class="w-3.5 h-3.5"></i> ${data.jawatan || "-"}</span>
                         </div>
@@ -579,6 +592,8 @@
             const nama = document.getElementById("agentName").value.trim().toUpperCase();
             const ic = document.getElementById("agentIC").value.trim();
             const jawatan = document.getElementById("agentPosition").value.trim();
+            // BERSHKAN NOMBOR TELEFON: Hanya benarkan digit
+            const telefon = document.getElementById("agentPhone").value.replace(/\D/g, ''); 
             const bankName = document.getElementById("agentBankName").value;
             const bankAcc = document.getElementById("agentBankAcc").value.trim();
 
@@ -601,6 +616,7 @@
                 nama: nama,
                 ic: ic,
                 jawatan: jawatan,
+                telefon: telefon, // Nombor bersih tanpa simbol
                 bankName: bankName,
                 bankAccount: bankAcc,
                 agentCode: shortCode, 
@@ -608,7 +624,7 @@
                 aqpName: currentAqpName,
                 role: "aqp_agent",
                 totalSales: 0, 
-                paidCommission: 0, // Set 0 waktu daftar pertama kali
+                paidCommission: 0, 
                 createdAt: new Date()
             });
 
@@ -642,6 +658,8 @@
             const nama = document.getElementById("editAgentName").value.trim().toUpperCase();
             const ic = document.getElementById("editAgentIC").value.trim();
             const jawatan = document.getElementById("editAgentPosition").value.trim();
+            // BERSHKAN NOMBOR TELEFON: Hanya benarkan digit
+            const telefon = document.getElementById("editAgentPhone").value.replace(/\D/g, ''); 
             const bankName = document.getElementById("editAgentBankName").value;
             const bankAcc = document.getElementById("editAgentBankAcc").value.trim();
 
@@ -649,6 +667,7 @@
                 nama: nama,
                 ic: ic,
                 jawatan: jawatan,
+                telefon: telefon, // Nombor bersih tanpa simbol
                 bankName: bankName,
                 bankAccount: bankAcc
             });
