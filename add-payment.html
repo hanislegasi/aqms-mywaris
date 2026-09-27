@@ -231,10 +231,10 @@ agreeBtn.addEventListener("click", async () => {
         const createToyyibpayBill = httpsCallable(functions, 'createToyyibpayBill');
         const result = await createToyyibpayBill(dataPelanggan);
                 
-        // 6. Bawa pelanggan ke ToyyibPay (URL yang dipulangkan cloud function perlu append parameter `&type=...`)
-        // Biasanya sistem akan auto-redirect jika webhook dikonfigurasi dengan betul
-        window.location.href = result.data.paymentUrl + (result.data.paymentUrl.includes('?') ? '&' : '?') + `type=${docType}`;
-
+        // 6. Bawa pelanggan ke ToyyibPay
+        // (Parameter type telah diuruskan oleh backend di dalam billReturnUrl)
+        window.location.href = result.data.paymentUrl;
+        
     } catch (error) {
         agreeBtn.disabled = false;
         agreeBtn.innerHTML = "Saya Faham & Bersetuju dengan Akad";
