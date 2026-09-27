@@ -52,11 +52,12 @@
                     <th class="p-5 text-right">Komisen (Lejer)</th>
                     <th class="p-5 text-center">Status</th>
                     <th class="p-5 text-center">Workflow</th>
+                    <th class="p-5 text-center">Tindakan</th>
                 </tr>
             </thead>
             <tbody id="tableBody" class="divide-y divide-gray-100 text-base">
                 <tr>
-                    <td colspan="9" class="p-8 text-center text-gray-500">Memuat turun data pelanggan...</td>
+                    <td colspan="10" class="p-8 text-center text-gray-500">Memuat turun data pelanggan...</td>
                 </tr>
             </tbody>
         </table>
@@ -217,6 +218,11 @@ onAuthStateChanged(auth, async(user) => {
                     ${workflowStatus}
                 </span>
             </td>
+            <td class="p-5 text-center">
+                <a href="consultant-customer-details.html?id=${docSnap.id}" class="bg-[#153638] hover:bg-[#1d4a4d] text-white px-4 py-2 rounded-lg text-sm font-bold transition shadow-sm inline-block">
+                    View
+                </a>
+            </td>
         </tr>
         `;
     }
@@ -228,7 +234,7 @@ onAuthStateChanged(auth, async(user) => {
   
     document.getElementById("tableBody").innerHTML = html || `
     <tr>
-        <td colspan="9" class="p-10 text-center text-gray-500 text-lg">Tiada pelanggan direkodkan di bawah institusi ini.</td>
+        <td colspan="10" class="p-10 text-center text-gray-500 text-lg">Tiada pelanggan direkodkan di bawah institusi ini.</td>
     </tr>
     `;
 });
