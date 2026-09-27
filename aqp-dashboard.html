@@ -203,7 +203,7 @@
 <script type="module">
 import { db, auth } from './firebase.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { doc, getDoc, getDocs, collection, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { doc, getDoc, getDocs, collection, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 let aqpData = null;
 
@@ -357,6 +357,13 @@ onAuthStateChanged(auth, async(user)=>{
     const earned = totalCommission;
     const outstanding = earned - paid;
 
+    // 5.5 KEMASKINI DATABASE JUALAN TERKINI (SYNC)
+    await updateDoc(doc(db, "consultants", user.uid), {
+        activeClients: activeClients,
+        totalSales: totalSales,
+        totalCommission: totalCommission
+    });
+  
     // 6. PAPARAN UI KAD
     document.getElementById("welcomeText").innerHTML = data.nama;
     document.getElementById("earnedCard").innerHTML = "RM" + earned.toLocaleString("ms-MY", { minimumFractionDigits: 2 });
