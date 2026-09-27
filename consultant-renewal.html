@@ -141,17 +141,23 @@ onAuthStateChanged(auth, async(user)=>{
     
     const renewalStatus = document.getElementById("renewalStatus");
 
-    if(completed === 4 && diffDays > 30){
+    // 1. JIKA AKAUN MASIH AKTIF (Lagi 30 hari atau lebih dari tarikh luput)
+    if(diffDays > 30){
         renewalStatus.innerHTML = `
         <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl">
             <h2 class="text-2xl font-bold text-blue-700 mb-3">✅ ACTIVE MEMBERSHIP</h2>
-            <p class="mb-2">Akaun anda masih aktif.</p>
-            <p>Tarikh Tamat: <b>${renewalDate.toLocaleDateString("ms-MY")}</b></p>
-            <p class="mt-2 text-gray-600">Renewal hanya dibuka 30 hari sebelum tamat.</p>
+            <p class="mb-2 text-lg">Akaun anda masih aktif.</p>
+            <p class="text-lg">Tarikh Tamat: <b>${renewalDate.toLocaleDateString("ms-MY")}</b></p>
+            <p class="mt-4 text-gray-600">Proses Pembaharuan (Renewal) hanya dibuka 30 hari sebelum tarikh tamat.</p>
+            ${(!isAQP && completed < 4) ? `
+            <div class="mt-4 p-4 bg-white rounded-xl border border-blue-100 text-blue-800 text-sm">
+                <b>Peringatan Mesra:</b> Anda masih belum melengkapkan <b>${4 - completed} Modul CPD</b> untuk kitaran tahun ini. Sila pastikan ia diselesaikan sebelum anda membuat pembaharuan kelak.
+            </div>` : ''}
         </div>
         `;
     }
-    else if(completed === 4 && diffDays <= 30){
+    // 2. JIKA DALAM TEMPOH RENEWAL & CPD DAH LENGKAP (Atau jika AQP)
+    else if(diffDays <= 30 && completed === 4){
         
         // Paparan dinamik untuk status CPD (Bergantung AQP atau AQC)
         const statusBoxHTML = isAQP ? `
@@ -208,6 +214,7 @@ onAuthStateChanged(auth, async(user)=>{
         },100);
 
     }
+    // 3. JIKA DALAM TEMPOH RENEWAL TAPI CPD TAK SIAP LAGI
     else {
         renewalStatus.innerHTML = `
         <div class="bg-red-50 border border-red-200 p-6 rounded-2xl">
@@ -215,7 +222,7 @@ onAuthStateChanged(auth, async(user)=>{
             <div class="bg-white p-4 rounded-xl border border-red-100 mb-5 text-justify">
                 <p class="text-red-600 font-bold mb-2">⚠️ Perhatian Khusus:</p>
                 <p class="text-gray-700">
-                    Anda <b>diwajibkan menduduki dan lulus</b> kesemua 4 modul ujian (exam) CPD tahunan terlebih dahulu. Butang pembayaran renewal tidak akan dipaparkan selagi ujian ini tidak diselesaikan.
+                    Anda sudah berada di dalam tempoh pembaharuan akaun. Namun, anda <b>diwajibkan menduduki dan lulus</b> kesemua 4 modul ujian (exam) CPD terlebih dahulu. Butang pembayaran renewal tidak akan dipaparkan selagi ujian ini tidak diselesaikan.
                 </p>
             </div>
             <p class="text-gray-600 font-medium mb-5">
