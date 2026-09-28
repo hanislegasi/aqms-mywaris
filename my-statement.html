@@ -117,7 +117,7 @@
 <div id="letterModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4 backdrop-blur-sm">
     <div class="bg-gray-100 w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden modal-enter">
         
-        <!-- Header Modal (Ditetapkan supaya tak bergerak) -->
+        <!-- Header Modal -->
         <div class="bg-white border-b px-6 py-4 flex justify-between items-center z-10 shadow-sm shrink-0">
             <div>
                 <h2 class="text-xl font-bold text-[#153638]">Preview Dokumen</h2>
@@ -126,23 +126,23 @@
             <button id="closeModalBtnTop" class="text-gray-400 hover:text-red-500 font-bold text-3xl leading-none transition">&times;</button>
         </div>
 
-        <!-- Ruangan Scroll A4 (Diasingkan sepenuhnya dari butang bawah) -->
-        <div id="previewContainer" class="flex-1 overflow-y-auto a4-preview-wrapper shadow-inner relative">
+        <!-- Ruangan Scroll A4 (Background Kelabu) -->
+        <div id="previewContainer" class="flex-1 overflow-y-auto a4-preview-wrapper shadow-inner bg-gray-200 py-8">
             
-            <!-- Wrapper untuk fungsi Auto-Scale -->
-            <div id="scale-wrapper" style="transform-origin: top center; transition: transform 0.2s ease;">
+            <!-- Wrapper untuk Kertas Putih (Web Preview Sahaja) -->
+            <div id="scale-wrapper" class="shadow-lg mx-auto bg-white" style="width: 210mm; padding: 25mm; box-sizing: border-box; transform-origin: top center;">
                 
-                <!-- TEMPLAT SURAT LANTIKAN RASMI -->
-                <div id="aqcLetterTemplate" class="shadow-lg" style="width: 210mm; background: white; font-family: 'Times New Roman', serif; color: #222; line-height: 1.8; box-sizing: border-box; padding: 25mm;">                
+                <!-- TEMPLAT SEBENAR YANG AKAN DI-CONVERT KE PDF (Tiada Padding, Biar JS Urus Margin) -->
+                <div id="aqcLetterTemplate" style="font-family: 'Times New Roman', serif; color: #222; line-height: 1.6; box-sizing: border-box; text-align: justify;">                
         
                     <!-- HEADER SURAT -->
-                    <div style="text-align: center; border-bottom: 3px double #153638; padding-bottom: 15px; margin-bottom: 30px;">
+                    <div style="text-align: center; border-bottom: 3px double #153638; padding-bottom: 15px; margin-bottom: 20px;">
                         <h1 id="letterCompanyName" style="color: #153638; margin: 0; font-size: 22px; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 1px;">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</h1>
                         <p style="margin: 5px 0 0 0; font-size: 12px; color: #555;">No. Pendaftaran: <span id="letterCompanyRegNo">123456-X</span> | E-mel: <span id="letterCompanyEmail">support@mywaris.com</span></p>
                     </div>
 
                     <!-- TARIKH & RUJUKAN -->
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 15px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 15px;">
                         <div>
                             <strong>Rujukan Kami:</strong> AQMS/REF/<span id="letterConsultantNo">-</span><br>
                             <strong>Tarikh:</strong> <span id="letterDate">-</span>
@@ -150,7 +150,7 @@
                     </div>
 
                     <!-- MAKLUMAT PENERIMA -->
-                    <div style="margin-bottom: 25px; font-size: 15px;">
+                    <div style="margin-bottom: 20px; font-size: 15px;">
                         Kepada,<br>
                         <strong><span id="letterName">-</span></strong><br>
                         <span id="letterIcLabel">No. Kad Pengenalan:</span> <span id="letterIc">-</span><br>
@@ -158,73 +158,73 @@
                     </div>
 
                     <!-- TAJUK SURAT -->
-                    <div id="letterDocTitle" style="text-align: left; font-weight: bold; font-size: 16px; margin-bottom: 25px; text-decoration: underline; text-transform: uppercase;">
+                    <div id="letterDocTitle" style="text-align: left; font-weight: bold; font-size: 16px; margin-bottom: 20px; text-decoration: underline; text-transform: uppercase;">
                         SURAT LANTIKAN RASMI
                     </div>
 
                     <!-- ISI KANDUNGAN -->
-                    <div style="font-size: 15px; text-align: justify; margin-bottom: 20px;">
+                    <div style="font-size: 15px; margin-bottom: 15px;">
                         Dengan hormatnya perkara di atas adalah dirujuk.
                     </div>
 
-                    <div id="letterPara2" style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+                    <div id="letterPara2" style="font-size: 15px; margin-bottom: 15px;">
                         2. Sukacita dimaklumkan bahawa pihak pengurusan <strong id="letterCompanyNameBody">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</strong> dengan berbesar hatinya melantik tuan/puan sebagai...
                     </div>
 
-                    <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+                    <div style="font-size: 15px; margin-bottom: 15px;">
                         3. Melalui pelantikan ini, pihak tuan/puan dipertanggungjawabkan untuk memasarkan perkhidmatan perancangan harta pusaka Islam (Wasiat, Hibah, Harta Sepencarian, Mawaris & Korporat) selaras dengan terma, syarat, dan kod etika syarikat yang dilampirkan bersama dokumen ini.
                     </div>
 
-                    <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+                    <div style="font-size: 15px; margin-bottom: 25px;">
                         4. Pihak syarikat amat yakin dan percaya bahawa tuan/puan dapat melaksanakan tanggungjawab ini dengan penuh integriti, dedikasi, serta mencapai sasaran yang ditetapkan demi kemaslahatan ummah.
                     </div>
 
-                    <div style="font-size: 15px; text-align: justify; margin-bottom: 40px;">
+                    <div style="font-size: 15px; margin-bottom: 30px;">
                         Sekian, terima kasih.
                     </div>
 
                     <!-- TANDATANGAN PENGURUSAN -->
-                    <div style="margin-top: 50px; font-size: 15px; page-break-inside: avoid; margin-bottom: 40px;">
-                        <p style="margin: 0 0 50px 0;">Yang benar,</p>
+                    <div class="avoid-break" style="font-size: 15px; page-break-inside: avoid;">
+                        <p style="margin: 0 0 40px 0;">Yang benar,</p>
                         <p style="margin: 0; font-weight: bold; color: #153638;">PENGURUSAN EKSEKUTIF</p>
                         <p style="margin: 0;" id="letterCompanyNameFooter">Al-Qawthar Mawaris Synergy Sdn. Bhd.</p>
                     </div>
 
-<!-- ============================================== -->
-                    <!-- PAGE BREAK CSS KEPADA LAMPIRAN (AUTO SPLIT) -->
                     <!-- ============================================== -->
-                    <div style="page-break-before: always; margin-top: 40px;"></div>
+                    <!-- PAGE BREAK KEPADA LAMPIRAN (AUTO SPLIT) -->
+                    <!-- ============================================== -->
+                    <div style="page-break-before: always;"></div>
 
-                    <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 28px; text-decoration: underline; text-transform: uppercase; color: #153638;">
+                    <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 25px; text-decoration: underline; text-transform: uppercase; color: #153638;">
                         LAMPIRAN A: TERMA & SYARAT KERJASAMA
                     </div>
 
                     <!-- 1. OBJEKTIF -->
-                    <div class="avoid-break" style="font-size: 14px; text-align: justify; margin-bottom: 18px; page-break-inside: avoid;">
+                    <div class="avoid-break" style="font-size: 14px; margin-bottom: 18px; page-break-inside: avoid;">
                         <strong>1. OBJEKTIF</strong><br>
                         <span id="tcObjektif"></span>
                     </div>
 
                     <!-- 2. PERANAN AQMS -->
-                    <div class="avoid-break" style="font-size: 14px; text-align: justify; margin-bottom: 18px; page-break-inside: avoid;">
+                    <div class="avoid-break" style="font-size: 14px; margin-bottom: 18px; page-break-inside: avoid;">
                         <strong>2. PERANAN AL-QAWTHAR MAWARIS SYNERGY SDN. BHD. (AQMS)</strong><br>
                         AQMS bertanggungjawab menyediakan sistem, platform digital, dokumentasi, proses operasi serta sokongan berkaitan perkhidmatan perancangan harta pusaka Islam yang ditawarkan melalui platform AQMS. AQMS juga bertanggungjawab menetapkan prosedur operasi, struktur bayaran dan komisen, keperluan dokumentasi serta piawaian pematuhan yang berkuat kuasa dari semasa ke semasa.
                     </div>
 
                     <!-- 3. PERANAN AQC / AQP -->
-                    <div class="avoid-break" style="font-size: 14px; text-align: justify; margin-bottom: 18px; page-break-inside: avoid;">
+                    <div class="avoid-break" style="font-size: 14px; margin-bottom: 18px; page-break-inside: avoid;">
                         <strong>3. PERANAN <span id="tcRoleTitle"></span></strong><br>
                         <span id="tcPeranan"></span>
                     </div>
 
                     <!-- 4. STATUS KERJASAMA -->
-                    <div class="avoid-break" style="font-size: 14px; text-align: justify; margin-bottom: 18px; page-break-inside: avoid;">
+                    <div class="avoid-break" style="font-size: 14px; margin-bottom: 18px; page-break-inside: avoid;">
                         <strong>4. STATUS KERJASAMA</strong><br>
                         <span id="tcStatus"></span>
                     </div>
 
                     <!-- 5. STRUKTUR KOMISEN -->
-                    <div class="avoid-break" style="font-size: 14px; text-align: justify; margin-bottom: 18px; page-break-inside: avoid;">
+                    <div class="avoid-break" style="font-size: 14px; margin-bottom: 18px; page-break-inside: avoid;">
                         <strong>5. STRUKTUR KOMISEN & INSENTIF</strong><br>
                         Pihak yang dilantik layak menerima komisen atau insentif berdasarkan struktur pampasan yang ditetapkan oleh AQMS dari semasa ke semasa. Kadar semasa yang terpakai adalah sebanyak <strong><span id="tcKomisen">-</span>%</strong> daripada jumlah jualan bersih yang memenuhi syarat pembayaran dan pengiktirafan jualan yang ditetapkan oleh pihak pengurusan.
                         <br><br>
@@ -232,7 +232,7 @@
                     </div>
 
                     <!-- 6. TANGGUNGJAWAB -->
-                    <div class="avoid-break" style="font-size: 14px; text-align: justify; margin-bottom: 18px; page-break-inside: avoid;">
+                    <div class="avoid-break" style="font-size: 14px; margin-bottom: 18px; page-break-inside: avoid;">
                         <strong>6. TANGGUNGJAWAB & TATAKELAKUAN</strong><br>
                         Pihak yang dilantik hendaklah:
                         <ul style="margin-top: 6px; padding-left: 22px; list-style-type: disc;">
@@ -245,7 +245,7 @@
                     </div>
 
                     <!-- 7. LARANGAN -->
-                    <div class="avoid-break" style="font-size: 14px; text-align: justify; margin-bottom: 18px; page-break-inside: avoid;">
+                    <div class="avoid-break" style="font-size: 14px; margin-bottom: 18px; page-break-inside: avoid;">
                         <strong>7. LARANGAN</strong><br>
                         Pihak yang dilantik tidak dibenarkan:
                         <ul style="margin-top: 6px; padding-left: 22px; list-style-type: disc;">
@@ -257,45 +257,45 @@
                     </div>
 
                     <!-- 8. PEMATUHAN -->
-                    <div class="avoid-break" style="font-size: 14px; text-align: justify; margin-bottom: 18px; page-break-inside: avoid;">
+                    <div class="avoid-break" style="font-size: 14px; margin-bottom: 18px; page-break-inside: avoid;">
                         <strong>8. PEMATUHAN UNDANG-UNDANG & SYARIAH</strong><br>
                         Semua pihak hendaklah menjalankan tanggungjawab masing-masing dengan mematuhi undang-undang, peraturan, prinsip Syariah dan keperluan dokumentasi yang berkaitan dengan perkhidmatan perancangan harta pusaka Islam. Sebarang penerangan kepada pelanggan hendaklah dibuat berdasarkan maklumat dan bahan rasmi yang disediakan atau diluluskan oleh AQMS.
                     </div>
 
                     <!-- 9. KERAHSIAAN & DATA -->
-                    <div class="avoid-break" style="font-size: 14px; text-align: justify; margin-bottom: 18px; page-break-inside: avoid;">
+                    <div class="avoid-break" style="font-size: 14px; margin-bottom: 18px; page-break-inside: avoid;">
                         <strong>9. KERAHSIAAN & PERLINDUNGAN DATA</strong><br>
                         Semua maklumat peribadi, dokumen, rekod pelanggan dan maklumat perniagaan yang diperoleh melalui hubungan kerjasama ini hendaklah dikendalikan secara sulit dan hanya digunakan bagi tujuan yang dibenarkan dalam proses perkhidmatan AQMS. Pihak yang dilantik hendaklah mematuhi polisi privasi, perlindungan data dan keperluan pemprosesan maklumat yang ditetapkan oleh AQMS.
                     </div>
 
                     <!-- 10. PINDAAN TERMA -->
-                    <div class="avoid-break" style="font-size: 14px; text-align: justify; margin-bottom: 18px; page-break-inside: avoid;">
+                    <div class="avoid-break" style="font-size: 14px; margin-bottom: 18px; page-break-inside: avoid;">
                         <strong>10. PINDAAN TERMA & SYARAT</strong><br>
                         AQMS berhak membuat pindaan terhadap terma, polisi, struktur pampasan, prosedur operasi atau keperluan pematuhan dari semasa ke semasa bagi menyesuaikan operasi dengan perkembangan perniagaan, keperluan undang-undang, Syariah dan sistem. Sebarang pindaan akan berkuat kuasa mengikut tarikh atau tempoh yang ditetapkan oleh pihak pengurusan.
                     </div>
 
                     <!-- 11. PENAMATAN -->
-                    <div class="avoid-break" style="font-size: 14px; text-align: justify; margin-bottom: 18px; page-break-inside: avoid;">
+                    <div class="avoid-break" style="font-size: 14px; margin-bottom: 18px; page-break-inside: avoid;">
                         <strong>11. PENAMATAN KERJASAMA</strong><br>
                         Hubungan pelantikan atau kerjasama boleh ditamatkan oleh mana-mana pihak tertakluk kepada prosedur, notis dan syarat yang ditetapkan oleh AQMS atau sebagaimana yang dipersetujui secara bertulis. Penamatan tidak menjejaskan kewajipan yang telah wujud sebelum tarikh penamatan, termasuk kewajipan berkaitan kerahsiaan, dokumentasi, pembayaran atau penyelesaian urusan pelanggan.
                     </div>
 
                     <!-- 12. PENGAKUAN -->
-                    <div class="avoid-break" style="font-size: 14px; text-align: justify; margin-bottom: 30px; page-break-inside: avoid;">
+                    <div class="avoid-break" style="font-size: 14px; margin-bottom: 30px; page-break-inside: avoid;">
                         <strong>12. PENGAKUAN</strong><br>
                         Dengan menerima surat pelantikan atau surat kerjasama ini, pihak yang dinamakan mengakui bahawa pihaknya telah diberi peluang untuk membaca, memahami dan mematuhi terma serta syarat yang dinyatakan dalam dokumen ini. Penerimaan pelantikan atau kerjasama juga dianggap sebagai persetujuan untuk mematuhi polisi dan prosedur AQMS yang berkuat kuasa dari semasa ke semasa.
                     </div>
 
                     <!-- NOTA -->
-                    <div class="avoid-break" style="font-size: 12px; text-align: justify; margin-top: 20px; padding-top: 12px; border-top: 1px solid #ccc; font-style: italic; color: #555; page-break-inside: avoid;">
+                    <div class="avoid-break" style="font-size: 12px; margin-top: 20px; padding-top: 12px; border-top: 1px solid #ccc; font-style: italic; color: #555; page-break-inside: avoid;">
                         Nota: Dokumen ini merupakan dokumen pelantikan/kerjasama operasi dan hendaklah dibaca bersama polisi, prosedur, kod etika, struktur pampasan serta dokumen rasmi AQMS yang berkaitan.
                     </div>
 
-                </div> <!-- (1) PENUTUP aqcLetterTemplate -->
-            </div> <!-- (2) PENUTUP scale-wrapper -->
-        </div> <!-- (3) PENUTUP previewContainer -->
+                </div> <!-- PENUTUP aqcLetterTemplate -->
+            </div> <!-- PENUTUP scale-wrapper -->
+        </div> <!-- PENUTUP previewContainer -->
 
-        <!-- Footer Modal (Butang Aksi) - Diletakkan di LUAR scroll area -->
+        <!-- Footer Modal (Butang Aksi) -->
         <div class="bg-white border-t px-6 py-4 flex flex-col-reverse sm:flex-row justify-end gap-3 z-10 shadow-sm shrink-0">
             <button id="closeModalBtnBottom" class="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold transition">
                 Tutup
@@ -305,21 +305,8 @@
             </button>
         </div>
 
-    </div> <!-- (4) PENUTUP kotak putih modal max-w-4xl -->
-</div> <!-- (5) PENUTUP latar belakang hitam letterModal -->
-
-        <!-- Footer Modal (Butang Aksi) - Diletakkan di luar previewContainer tetapi di dalam kotak putih -->
-        <div class="bg-white border-t px-6 py-4 flex flex-col-reverse sm:flex-row justify-end gap-3 z-10 shadow-sm shrink-0">
-            <button id="closeModalBtnBottom" class="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold transition">
-                Tutup
-            </button>
-            <button id="actualDownloadBtn" class="w-full sm:w-auto bg-[#153638] hover:bg-[#1d4a4d] text-white px-6 py-3 rounded-xl font-semibold transition flex items-center justify-center gap-2 shadow-md">
-                <span id="actualDownloadIcon">📥</span> Muat Turun PDF
-            </button>
-        </div>
-
-    </div> <!-- PENUTUP kotak putih max-w-4xl -->
-</div> <!-- PENUTUP latar belakang hitam letterModal -->
+    </div>
+</div>
     
 <script type="module">
     import { db, auth } from './firebase.js';
@@ -506,12 +493,12 @@ document.getElementById("tcStatus").innerText =
         downloadBtn.classList.add("opacity-70", "pointer-events-none");
         
         const templateEl = document.getElementById("aqcLetterTemplate");
-        const options = {
-            margin: [10, 0, 15, 0], // Tambah margin atas 10mm dan bawah 15mm agar ada ruang
+       const options = {
+            margin: 25, // KUNCI UTAMA: Margin 25mm (Atas, Kanan, Bawah, Kiri) untuk SETIAP mukasurat
             filename: generatedFilename,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true, logging: false },
-            pagebreak: { mode: ['css', 'legacy'], avoid: ['.avoid-break', 'li'] }, // INI KUNCI UTAMANYA: Cegah pemotongan pada elemen ini
+            pagebreak: { mode: ['css', 'legacy'], avoid: ['.avoid-break', 'li'] }, // Benarkan potong, tapi elak terbelah ayat
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
