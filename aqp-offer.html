@@ -52,15 +52,9 @@
         </h2>
 
         <form id="offerForm" class="space-y-6">
-            <div class="grid md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Institusi / Organisasi <span class="text-red-500">*</span></label>
-                    <input type="text" id="instName" required placeholder="Contoh: Koperasi Kakitangan Kerajaan Berhad" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none transition uppercase">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">No. Pendaftaran (SSM/ROS/SKM) <span class="text-red-500">*</span></label>
-                    <input type="text" id="instRegNo" required placeholder="Contoh: K9998575" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none transition uppercase">
-                </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Institusi / Organisasi <span class="text-red-500">*</span></label>
+                <input type="text" id="instName" required placeholder="Contoh: Koperasi Kakitangan Kerajaan Berhad" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none transition uppercase">
             </div>
 
             <div>
@@ -91,6 +85,10 @@
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Jawatan Wakil</label>
                         <input type="text" id="repPosition" value="AL-QAWTHAR CONSULTANT" placeholder="Contoh: Pengurus Wilayah" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none transition uppercase">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">No. Telefon Wakil</label>
+                        <input type="text" id="repPhone" placeholder="Contoh: 012-3456789" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none transition">
                     </div>
                 </div>
             </div>
@@ -139,7 +137,6 @@
                     <div style="margin-bottom: 25px; font-size: 15px; max-width: 60%;">
                         Kepada:<br>
                         <strong><span id="docInstName" style="text-transform: uppercase;">-</span></strong><br>
-                        No. Pendaftaran: <span id="docInstRegNo" style="text-transform: uppercase;">-</span><br>
                         <span id="docInstAddress" style="white-space: pre-line; text-transform: uppercase;">-</span>
                     </div>
 
@@ -224,6 +221,7 @@
                         <p style="margin: 0;">........................................................</p>
                         <p style="margin: 5px 0 0 0; font-weight: bold; text-transform: uppercase;" id="docRepName">PENGURUSAN EKSEKUTIF</p>
                         <p style="margin: 0; text-transform: uppercase;" id="docRepPosition">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</p>
+                        <p style="margin: 0; display: none;" id="docRepPhone"></p>
                     </div>
 
                     <!-- PENGESAHAN PENERIMAAN (KOTAK) - DIMUATKAN KE DALAM FLOW BIASA TANPA PAGE-BREAK PAKSA -->
@@ -238,10 +236,6 @@
                             <tr>
                                 <td style="width: 30%; font-weight: bold;">Nama Institusi</td>
                                 <td>: <span id="docConfirmName" style="text-transform: uppercase; font-weight: bold;">-</span></td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: bold;">No. Pendaftaran</td>
-                                <td>: <span id="docConfirmRegNo" style="text-transform: uppercase;">-</span></td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold;">Nama Wakil Penyemak</td>
@@ -324,10 +318,12 @@
         if(user) {
             loadCompanySettings();
             
+            // Auto-isi nama & no. telefon wakil dari rekod consultant (boleh diedit dalam borang)
             const consSnap = await getDoc(doc(db, "consultants", user.uid));
             if (consSnap.exists()) {
                 const data = consSnap.data();
                 if(data.nama) document.getElementById('repName').value = data.nama;
+                if(data.telefon) document.getElementById('repPhone').value = data.telefon;
             }
         }
     });
@@ -342,11 +338,11 @@
         if(!companyInfoFetched) await loadCompanySettings();
         
         const iName = document.getElementById('instName').value;
-        const iReg = document.getElementById('instRegNo').value;
         const iAddr = document.getElementById('instAddress').value;
         const iDate = document.getElementById('offerDate').value;
         const rName = document.getElementById('repName').value || "PENGURUSAN EKSEKUTIF";
         const rPos = document.getElementById('repPosition').value || "AL-QAWTHAR CONSULTANT";
+        const rPhone = document.getElementById('repPhone').value.trim();
 
         const d = new Date(iDate);
         const formattedDate = `${d.getDate()} ${d.toLocaleString('ms-MY', { month: 'long' })} ${d.getFullYear()}`;
@@ -357,11 +353,19 @@
         document.getElementById('docInstName').innerText = iName;
         document.getElementById('docInstNameBody').innerText = iName;
         document.getElementById('docConfirmName').innerText = iName;
-        document.getElementById('docInstRegNo').innerText = iReg;
-        document.getElementById('docConfirmRegNo').innerText = iReg;
         document.getElementById('docInstAddress').innerText = iAddr;
         document.getElementById('docRepName').innerText = rName;
         document.getElementById('docRepPosition').innerText = rPos;
+
+        // No. telefon wakil -- dipaparkan di bawah jawatan; disembunyikan jika kosong
+        const phoneEl = document.getElementById('docRepPhone');
+        if (rPhone) {
+            phoneEl.innerText = `Tel: ${rPhone}`;
+            phoneEl.style.display = 'block';
+        } else {
+            phoneEl.innerText = '';
+            phoneEl.style.display = 'none';
+        }
 
         generatedFilename = `Surat_Tawaran_AQP_${iName.replace(/\s+/g, '_')}.pdf`;
 
