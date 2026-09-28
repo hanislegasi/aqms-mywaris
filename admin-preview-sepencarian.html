@@ -720,34 +720,69 @@ userId,
 
 const groupedSepencarian = groupSepencarianByRecipient(data);
 
-const consultantCode = userData?.referral || data.consultantCode;
+// =====================================
+                        // LOGIK PERUNDING & EJEN AQP (NO TELEFON)
+                        // =====================================
+                        const consultantCode = userData?.referral || data.consultantCode;
+                        let telefonPerundingDisplay = "-";
 
-let consultantData = {};
+                        // Fungsi format nombor telefon jadi 012-3456789
+                        const formatNoTel = (tel) => {
+                            if (!tel || tel === "-") return "-";
+                            let cleanTel = tel.replace(/\D/g, ''); // Buang simbol
+                            return cleanTel.length > 3 ? cleanTel.substring(0, 3) + '-' + cleanTel.substring(3) : cleanTel;
+                        };
 
-if (consultantCode) {
-    try {
-        const cleanCode = consultantCode.trim();
-        console.log("Mencari perunding dengan consultantNo:", cleanCode);
+                        let consultantData = {};
 
-        // 1. Rujuk kepada koleksi "consultants"
-        const consultantsRef = collection(db, "consultants");
-        
-        // 2. Buat query menggunakan field "consultantNo"
-        const q = query(consultantsRef, where("consultantNo", "==", cleanCode)); 
-        
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
-            // 3. Ambil data dari dokumen pertama yang sepadan
-            consultantData = querySnapshot.docs[0].data();
-            console.log("Berjaya jumpa perunding:", consultantData);
-        } else {
-            console.warn(`Perunding dengan consultantNo "${cleanCode}" TIDAK WUJUD dalam koleksi "consultants".`);
-        }
-    } catch (error) {
-        console.error("Ralat Firebase:", error);
-    }
-}
+                        if (consultantCode) {
+                            try {
+                                const cleanCode = consultantCode.trim();
+                                console.log("Mencari perunding dengan consultantNo:", cleanCode);
+                                
+                                // 1. Cari di koleksi 'consultants' (Untuk AQC / MGAM / AQP Utama)
+                                const qConsultant = query(collection(db, "consultants"), where("consultantNo", "==", cleanCode)); 
+                                const snapConsultant = await getDocs(qConsultant);
+                                
+                                if (!snapConsultant.empty) {
+                                    consultantData = snapConsultant.docs[0].data();
+                                    telefonPerundingDisplay = formatNoTel(consultantData.telefon);
+                                    console.log("Berjaya jumpa perunding (Utama):", consultantData);
+                                } else {
+                                    // 2. Jika tiada, cari di koleksi 'users' (Untuk Ejen / Sub-ejen Institusi AQP)
+                                    const qAgent = query(collection(db, "users"), where("agentCode", "==", cleanCode), where("role", "==", "aqp_agent"));
+                                    const snapAgent = await getDocs(qAgent);
+                                    
+                                    if (!snapAgent.empty) {
+                                        const agentData = snapAgent.docs[0].data();
+                                        const agentPhone = formatNoTel(agentData.telefon);
+                                        
+                                        // 3. Tarik nombor telefon Institusi (AQP) yang menaja ejen ini
+                                        if (agentData.aqpRef) {
+                                            const qAqpUtama = query(collection(db, "consultants"), where("consultantNo", "==", agentData.aqpRef));
+                                            const snapAqpUtama = await getDocs(qAqpUtama);
+                                            
+                                            if (!snapAqpUtama.empty) {
+                                                const aqpUtamaData = snapAqpUtama.docs[0].data();
+                                                const aqpPhone = formatNoTel(aqpUtamaData.telefon);
+                                                
+                                                // Gabungkan: No AQP / No Ejen
+                                                telefonPerundingDisplay = `${aqpPhone} / ${agentPhone}`;
+                                            } else {
+                                                telefonPerundingDisplay = agentPhone;
+                                            }
+                                        } else {
+                                            telefonPerundingDisplay = agentPhone;
+                                        }
+                                        console.log("Berjaya jumpa ejen AQP:", agentData);
+                                    } else {
+                                        console.warn(`Perunding dengan kod "${cleanCode}" TIDAK WUJUD.`);
+                                    }
+                                }
+                            } catch (error) {
+                                console.error("Ralat Firebase:", error);
+                            }
+                        }
 
                        
                        
@@ -849,7 +884,7 @@ approvedDate
                         document.getElementById("telefonTable").innerHTML = data.telefon || "-";
                         document.getElementById("alamatTable").innerHTML = alamatPenuh || "-";
                         document.getElementById("kodTable").innerHTML = userData?.referral || "-";
-                       document.getElementById("telefonPerundingTable").innerHTML = consultantData.telefon || "-";
+                       document.getElementById("telefonPerundingTable").innerHTML = telefonPerundingDisplay;
 
                         // ==========================================
                         // LOGIK PECAHAN JADUAL WARIS (PAGINATION)
