@@ -456,25 +456,23 @@
         struktur pampasan serta dokumen rasmi AQMS yang berkaitan.
 
     </div>
+                </div> <!-- PENUTUP PAGE 2 -->
+            </div> <!-- PENUTUP aqcLetterTemplate -->
+        </div> <!-- PENUTUP scale-wrapper -->
+    </div> <!-- PENUTUP previewContainer (Ruangan Scroll A4) -->
 
-</div>
-
-            </div>
-
-        </div>
-
-        <!-- Footer Modal (Butang Aksi) -->
-        <div class="bg-white border-t px-6 py-4 flex flex-col-reverse sm:flex-row justify-end gap-3 z-10 shadow-sm">
-            <button id="closeModalBtnBottom" class="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold transition">
-                Tutup
-            </button>
-            <button id="actualDownloadBtn" class="w-full sm:w-auto bg-[#153638] hover:bg-[#1d4a4d] text-white px-6 py-3 rounded-xl font-semibold transition flex items-center justify-center gap-2 shadow-md">
-                <span id="actualDownloadIcon">📥</span> Muat Turun PDF
-            </button>
-        </div>
-
+    <!-- Footer Modal (Butang Aksi) mesti berada DILUAR previewContainer tetapi DI DALAM kotak modal putih -->
+    <div class="bg-white border-t px-6 py-4 flex flex-col-reverse sm:flex-row justify-end gap-3 z-10 shadow-sm">
+        <button id="closeModalBtnBottom" class="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold transition">
+            Tutup
+        </button>
+        <button id="actualDownloadBtn" class="w-full sm:w-auto bg-[#153638] hover:bg-[#1d4a4d] text-white px-6 py-3 rounded-xl font-semibold transition flex items-center justify-center gap-2 shadow-md">
+            <span id="actualDownloadIcon">📥</span> Muat Turun PDF
+        </button>
     </div>
-</div>
+
+    </div> <!-- PENUTUP kotak putih max-w-4xl -->
+</div> <!-- PENUTUP latar belakang hitam letterModal -->
 
 <script type="module">
     import { db, auth } from './firebase.js';
