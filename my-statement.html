@@ -25,6 +25,12 @@
             padding: 20px;
             overflow-x: auto;
         }
+
+        /* Forcing HTML2PDF Page Break */
+        .html2pdf__page-break {
+            page-break-before: always;
+            break-before: page;
+        }
     </style>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -61,7 +67,7 @@
                 <div class="text-3xl bg-emerald-50 p-3 rounded-lg">📄</div>
                 <div>
                     <h2 id="btnSuratTitle" class="font-bold text-lg text-[#153638]">Surat Lantikan Rasmi</h2>
-                    <p class="text-sm text-gray-500">Papar dan muat turun surat pelantikan rasmi anda</p>
+                    <p class="text-sm text-gray-500">Papar dan muat turun dokumen perjanjian anda</p>
                 </div>
             </div>
             <div class="text-gray-400 font-bold text-xl" id="viewIcon">👁️</div>
@@ -114,7 +120,7 @@
         <!-- Header Modal -->
         <div class="bg-white border-b px-6 py-4 flex justify-between items-center z-10 shadow-sm">
             <div>
-                <h2 class="text-xl font-bold text-[#153638]">Preview Surat Lantikan</h2>
+                <h2 class="text-xl font-bold text-[#153638]">Preview Dokumen</h2>
                 <p class="text-sm text-gray-500" id="modalStatusText">Sila semak maklumat sebelum muat turun.</p>
             </div>
             <button id="closeModalBtnTop" class="text-gray-400 hover:text-red-500 font-bold text-3xl leading-none transition">&times;</button>
@@ -123,62 +129,107 @@
         <!-- Ruangan Scroll A4 -->
         <div class="flex-1 overflow-y-auto a4-preview-wrapper shadow-inner">
             
-            <!-- TEMPLAT SURAT LANTIKAN RASMI -->
-            <div id="aqcLetterTemplate" class="shadow-lg" style="width: 210mm; min-height: 297mm; padding: 25mm; background: white; font-family: 'Times New Roman', serif; color: #222; line-height: 1.8; box-sizing: border-box; position: relative;">
+            <!-- TEMPLAT SURAT LANTIKAN RASMI (2 MUKA SURAT) -->
+            <div id="aqcLetterTemplate" class="shadow-lg" style="width: 210mm; background: white; font-family: 'Times New Roman', serif; color: #222; line-height: 1.8; box-sizing: border-box; position: relative;">
                 
-                <!-- HEADER SURAT -->
-                <div style="text-align: center; border-bottom: 3px double #153638; padding-bottom: 15px; margin-bottom: 30px;">
-                    <h1 id="letterCompanyName" style="color: #153638; margin: 0; font-size: 22px; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 1px;">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</h1>
-                    <p style="margin: 5px 0 0 0; font-size: 12px; color: #555;">No. Pendaftaran: <span id="letterCompanyRegNo">123456-X</span> | E-mel: <span id="letterCompanyEmail">support@mywaris.com</span></p>
-                </div>
+                <!-- PAGE 1: SURAT DEPAN -->
+                <div style="padding: 25mm; min-height: 297mm; box-sizing: border-box;">
+                    <!-- HEADER SURAT -->
+                    <div style="text-align: center; border-bottom: 3px double #153638; padding-bottom: 15px; margin-bottom: 30px;">
+                        <h1 id="letterCompanyName" style="color: #153638; margin: 0; font-size: 22px; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 1px;">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</h1>
+                        <p style="margin: 5px 0 0 0; font-size: 12px; color: #555;">No. Pendaftaran: <span id="letterCompanyRegNo">123456-X</span> | E-mel: <span id="letterCompanyEmail">support@mywaris.com</span></p>
+                    </div>
 
-                <!-- TARIKH & RUJUKAN -->
-                <div style="display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 15px;">
-                    <div>
-                        <strong>Rujukan Kami:</strong> AQMS/REF/<span id="letterConsultantNo">-</span><br>
-                        <strong>Tarikh:</strong> <span id="letterDate">-</span>
+                    <!-- TARIKH & RUJUKAN -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 15px;">
+                        <div>
+                            <strong>Rujukan Kami:</strong> AQMS/REF/<span id="letterConsultantNo">-</span><br>
+                            <strong>Tarikh:</strong> <span id="letterDate">-</span>
+                        </div>
+                    </div>
+
+                    <!-- MAKLUMAT PENERIMA -->
+                    <div style="margin-bottom: 25px; font-size: 15px;">
+                        Kepada,<br>
+                        <strong><span id="letterName">-</span></strong><br>
+                        <span id="letterIcLabel">No. Kad Pengenalan:</span> <span id="letterIc">-</span><br>
+                        <span id="letterNoLabel">No. Rujukan:</span> <span id="letterConsultantNoSub">-</span>
+                    </div>
+
+                    <!-- TAJUK SURAT -->
+                    <div id="letterDocTitle" style="text-align: left; font-weight: bold; font-size: 16px; margin-bottom: 25px; text-decoration: underline; text-transform: uppercase;">
+                        SURAT LANTIKAN RASMI
+                    </div>
+
+                    <!-- ISI KANDUNGAN -->
+                    <div style="font-size: 15px; text-align: justify; margin-bottom: 20px;">
+                        Dengan hormatnya perkara di atas adalah dirujuk.
+                    </div>
+
+                    <div id="letterPara2" style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+                        2. Sukacita dimaklumkan bahawa pihak pengurusan <strong id="letterCompanyNameBody">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</strong> dengan berbesar hatinya melantik tuan/puan sebagai...
+                    </div>
+
+                    <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+                        3. Melalui pelantikan ini, pihak tuan/puan dipertanggungjawabkan untuk memasarkan perkhidmatan perancangan harta pusaka Islam (Wasiat, Hibah, Harta Sepencarian, Mawaris & Korporat) selaras dengan terma, syarat, dan kod etika syarikat yang dilampirkan bersama dokumen ini.
+                    </div>
+
+                    <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+                        4. Pihak syarikat amat yakin dan percaya bahawa tuan/puan dapat melaksanakan tanggungjawab ini dengan penuh integriti, dedikasi, serta mencapai sasaran yang ditetapkan demi kemaslahatan ummah.
+                    </div>
+
+                    <div style="font-size: 15px; text-align: justify; margin-bottom: 40px;">
+                        Sekian, terima kasih.
+                    </div>
+
+                    <!-- TANDATANGAN PENGURUSAN -->
+                    <div style="margin-top: 50px; font-size: 15px; page-break-inside: avoid;">
+                        <p style="margin: 0 0 50px 0;">Yang benar,</p>
+                        <p style="margin: 0; font-weight: bold; color: #153638;">PENGURUSAN EKSEKUTIF</p>
+                        <p style="margin: 0;" id="letterCompanyNameFooter">Al-Qawthar Mawaris Synergy Sdn. Bhd.</p>
                     </div>
                 </div>
 
-                <!-- MAKLUMAT PENERIMA -->
-                <div style="margin-bottom: 25px; font-size: 15px;">
-                    Kepada,<br>
-                    <strong><span id="letterName">-</span></strong><br>
-                    <span id="letterIcLabel">No. Kad Pengenalan:</span> <span id="letterIc">-</span><br>
-                    <span id="letterNoLabel">No. Perunding:</span> <span id="letterConsultantNoSub">-</span>
-                </div>
+                <!-- PAGE BREAK -->
+                <div class="html2pdf__page-break"></div>
 
-                <!-- TAJUK SURAT -->
-                <div id="letterDocTitle" style="text-align: left; font-weight: bold; font-size: 16px; margin-bottom: 25px; text-decoration: underline; text-transform: uppercase;">
-                    SURAT LANTIKAN RASMI
-                </div>
+                <!-- PAGE 2: LAMPIRAN TERMA & SYARAT -->
+                <div style="padding: 25mm; min-height: 297mm; box-sizing: border-box; background: white;">
+                    <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 30px; text-decoration: underline; text-transform: uppercase;">
+                        LAMPIRAN A: TERMA & SYARAT KERJASAMA
+                    </div>
+                    
+                    <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+                        <strong>1. OBJEKTIF</strong><br>
+                        <span id="tcObjektif"></span>
+                    </div>
 
-                <!-- ISI KANDUNGAN -->
-                <div style="font-size: 15px; text-align: justify; margin-bottom: 20px;">
-                    Dengan hormatnya perkara di atas adalah dirujuk.
-                </div>
+                    <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+                        <strong>2. PERANAN AL-QAWTHAR MAWARIS SYNERGY SDN. BHD. (AQMS)</strong><br>
+                        AQMS bertanggungjawab untuk menyediakan infrastruktur sistem, penyediaan dokumen perundangan, pelaksanaan proses perundangan dan sokongan teknikal bagi memastikan kelancaran perkhidmatan perancangan harta pusaka yang didaftarkan melalui pihak tuan/puan.
+                    </div>
 
-                <div id="letterPara2" style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
-                    2. Sukacita dimaklumkan bahawa pihak pengurusan <strong id="letterCompanyNameBody">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</strong> dengan berbesar hatinya melantik tuan/puan sebagai...
-                </div>
+                    <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+                        <strong>3. PERANAN <span id="tcRoleTitle"></span></strong><br>
+                        <span id="tcPeranan"></span>
+                    </div>
 
-                <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
-                    3. Melalui pelantikan ini, pihak tuan/puan dipertanggungjawabkan untuk memasarkan perkhidmatan perancangan harta pusaka Islam (Wasiat, Hibah, Harta Sepencarian, Mawaris & Korporat) serta membimbing rangkaian perunding di bawah seliaan tuan/puan selaras dengan terma, syarat, dan kod etika syarikat.
-                </div>
+                    <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+                        <strong>4. STRUKTUR KOMISEN</strong><br>
+                        Pihak tuan/puan layak menerima komisen asas sebanyak <strong><span id="tcKomisen">-</span>%</strong> daripada jumlah jualan bersih perkhidmatan yang berjaya didaftarkan dan dibayar penuh oleh pelanggan. Sebarang bayaran insentif tambahan bergantung kepada pencapaian petunjuk prestasi utama (KPI) semasa yang ditetapkan oleh syarikat.
+                    </div>
 
-                <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
-                    4. Pihak syarikat amat yakin dan percaya bahawa tuan/puan dapat melaksanakan amanah ini dengan penuh integriti, dedikasi, serta mencapai sasaran yang ditetapkan.
-                </div>
-
-                <div style="font-size: 15px; text-align: justify; margin-bottom: 40px;">
-                    Sekian, terima kasih.
-                </div>
-
-                <!-- TANDATANGAN PENGURUSAN -->
-                <div style="margin-top: 50px; font-size: 15px; page-break-inside: avoid;">
-                    <p style="margin: 0 0 50px 0;">Yang benar,</p>
-                    <p style="margin: 0; font-weight: bold; color: #153638;">PENGURUSAN EKSEKUTIF</p>
-                    <p style="margin: 0;" id="letterCompanyNameFooter">Al-Qawthar Mawaris Synergy Sdn. Bhd.</p>
+                    <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
+                        <strong>5. TATATERTIB (DO'S & DON'TS)</strong><br>
+                        <ul style="margin-top: 5px; padding-left: 20px;">
+                            <li style="margin-bottom: 5px;"><strong>PERLU DILAKUKAN (DO):</strong> Menjaga nama baik dan reputasi AQMS, memberi maklumat dan panduan yang telus dan tepat kepada prospek berlandaskan hukum syarak, serta mematuhi semua pekeliling syarikat dari masa ke semasa.</li>
+                            <li><strong>DILARANG SAMA SEKALI (DON'T):</strong> Mengutip pembayaran tunai atau kemasukan dana ke akaun peribadi/syarikat tanpa melalui sistem bayaran rasmi (ToyyibPay/Gateway Rasmi AQMS), menjanjikan syarat pewarisan yang bertentangan dengan enakmen/syariah, serta memalsukan maklumat atau identiti pihak berkepentingan (waris/penerima).</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="font-size: 15px; text-align: justify; margin-top: 30px; font-style: italic; color: #555;">
+                        * Terma dan syarat ini tertakluk kepada pindaan oleh pihak Pengurusan dari masa ke semasa berdasarkan peruntukan undang-undang dan keperluan semasa syarikat.
+                    </div>
                 </div>
 
             </div>
@@ -225,7 +276,7 @@
                 // Halakan ke dashboard AQP
                 document.getElementById("backToDashBtn").href = "aqp-dashboard.html";
                 // Tajuk Surat
-                document.getElementById("btnSuratTitle").innerText = "Surat Lantikan Rasmi (AQP)";
+                document.getElementById("btnSuratTitle").innerText = "Surat Kerjasama Rasmi (AQP)";
                 // Sembunyikan terus Kotak Tax Summary (CP58) untuk AQP
                 document.getElementById("taxSummaryCard").classList.add("hidden");
                 document.getElementById("taxSummaryCard").classList.remove("flex");
@@ -258,15 +309,17 @@
         viewBtn.classList.add("opacity-70", "pointer-events-none");
 
         try {
-            const [userSnap, consultantSnap, adminSnap] = await Promise.all([
+            const [userSnap, consultantSnap, adminSnap, compSnap] = await Promise.all([
                 getDoc(doc(db, "users", currentUser.uid)),
                 getDoc(doc(db, "consultants", currentUser.uid)),
-                getDoc(doc(db, "settings", "company"))
+                getDoc(doc(db, "settings", "company")),
+                getDoc(doc(db, "settings", "compensation")) // Tarik Tetapan Komisen
             ]);
             
             const userData = userSnap.exists() ? userSnap.data() : {};
             const consultantData = consultantSnap.exists() ? consultantSnap.data() : {};
             const adminData = adminSnap.exists() ? adminSnap.data() : {};
+            const compData = compSnap.exists() ? compSnap.data() : {};
 
             // 1. Masukkan Maklumat Syarikat HQ
             const namaSyarikat = adminData.companyName || "AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.";
@@ -282,17 +335,28 @@
             document.getElementById("letterConsultantNo").innerText = cNo;
             document.getElementById("letterConsultantNoSub").innerText = cNo;
 
-            // 3. LOGIK AQP vs AQC UNTUK PDF SURAT LANTIKAN
+            // 3. LOGIK AQP vs AQC UNTUK PDF SURAT LANTIKAN DAN TERMA & SYARAT
             if (isAQP) {
+                // Maklumat Surat AQP
                 document.getElementById("letterIcLabel").innerText = "No. Pendaftaran (SSM/ROS/SKM):";
                 document.getElementById("letterIc").innerText = consultantData.regNo || "-";
                 document.getElementById("letterNoLabel").innerText = "No. Institusi (AQP):";
                 
-                document.getElementById("letterDocTitle").innerText = "SURAT LANTIKAN RASMI SEBAGAI AL-QAWTHAR PARTNER (AQP)";
-                document.getElementById("letterPara2").innerHTML = `2. Sukacita dimaklumkan bahawa pihak pengurusan <strong id="letterCompanyNameBody">${namaSyarikat}</strong> dengan berbesar hatinya melantik institusi tuan/puan sebagai <strong>Al-Qawthar Partner (AQP)</strong> berkuat kuasa mulai tarikh yang dinyatakan.`;
+                document.getElementById("letterDocTitle").innerText = "SURAT METERAI KERJASAMA RASMI DALAM PROGRAM AL-QAWTHAR PARTNER (AQP)";
+                document.getElementById("letterPara2").innerHTML = `2. Sukacita dimaklumkan bahawa pihak pengurusan <strong id="letterCompanyNameBody">${namaSyarikat}</strong> dengan berbesar hati menjalin kerjasama dengan institusi tuan/puan dalam program <strong>Al-Qawthar Partner (AQP)</strong> berkuat kuasa mulai tarikh yang dinyatakan.`;
                 
-                generatedFilename = `Surat_Lantikan_AQP_${cNo}.pdf`;
+                // Terma & Syarat AQP
+                document.getElementById("tcObjektif").innerText = "Mewujudkan jalinan kerjasama strategik antara pihak AQMS dan institusi bagi memperluaskan kesedaran dan penyediaan perkhidmatan perancangan harta pusaka Islam kepada ahli, kakitangan, dan rangkaian di bawah institusi.";
+                document.getElementById("tcRoleTitle").innerText = "INSTITUSI / AL-QAWTHAR PARTNER (AQP)";
+                document.getElementById("tcPeranan").innerText = "Bertindak sebagai rakan strategik yang mempromosikan, mengedar, dan memudah cara pendaftaran perkhidmatan AQMS kepada klien institusi, serta memastikan ejen/wakil di bawah institusi mematuhi piawaian syarikat.";
+                
+                // Komisen AQP
+                const aqpComm = compData.commissionAQP !== undefined ? compData.commissionAQP : 35;
+                document.getElementById("tcKomisen").innerText = aqpComm;
+
+                generatedFilename = `Surat_Kerjasama_AQP_${cNo}.pdf`;
             } else {
+                // Maklumat Surat AQC
                 document.getElementById("letterIcLabel").innerText = "No. Kad Pengenalan:";
                 document.getElementById("letterIc").innerText = consultantData.ic || userData.ic || "-";
                 document.getElementById("letterNoLabel").innerText = "No. Perunding:";
@@ -300,6 +364,15 @@
                 document.getElementById("letterDocTitle").innerText = "SURAT LANTIKAN RASMI SEBAGAI AL-QAWTHAR CONSULTANT (AQC)";
                 document.getElementById("letterPara2").innerHTML = `2. Sukacita dimaklumkan bahawa pihak pengurusan <strong id="letterCompanyNameBody">${namaSyarikat}</strong> dengan berbesar hatinya melantik tuan/puan sebagai <strong>Al-Qawthar Consultant (AQC)</strong> berkuat kuasa mulai tarikh yang dinyatakan.`;
                 
+                // Terma & Syarat AQC
+                document.getElementById("tcObjektif").innerText = "Melantik perunding yang bertauliah dan berdedikasi untuk memasarkan serta mengedarkan produk perancangan harta pusaka Islam AQMS secara profesional kepada masyarakat.";
+                document.getElementById("tcRoleTitle").innerText = "PERUNDING / AL-QAWTHAR CONSULTANT (AQC)";
+                document.getElementById("tcPeranan").innerText = "Bertanggungjawab secara langsung untuk mencari prospek, memberi penerangan perundangan asas yang tepat, serta mendaftarkan dan memantau status dokumen pelanggan di dalam sistem AQMS.";
+                
+                // Komisen AQC
+                const aqcComm = compData.commissionAQC !== undefined ? compData.commissionAQC : 35;
+                document.getElementById("tcKomisen").innerText = aqcComm;
+
                 generatedFilename = `Surat_Lantikan_AQC_${cNo}.pdf`;
             }
 
@@ -347,6 +420,7 @@
             filename: generatedFilename,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true },
+            pagebreak: { mode: ['css'] }, // Wajib untuk faham class html2pdf__page-break
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
