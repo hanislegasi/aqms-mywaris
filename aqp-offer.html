@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jana Surat Tawaran AQP | MyWaris</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style> 
+        body { font-family: 'Inter', sans-serif; } 
+        /* Modal Animation */
+        .modal-enter { animation: fadeIn 0.2s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        /* Responsive A4 Preview wrapper (Fix Kertas Putih) */
+        .a4-preview-wrapper {
+            background-color: #e5e7eb; 
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Elak background putih terpotong */
+            padding: 20px;
+            overflow-x: auto;
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+
+<!-- HEADER -->
+<div class="bg-[#153638] text-white p-6 shadow-md relative overflow-hidden">
+    <div class="absolute inset-0 bg-cover bg-center opacity-10" style="background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80');"></div>
+    <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            <h1 class="text-2xl font-bold flex items-center gap-2">
+                <i data-lucide="file-signature"></i> Surat Tawaran AQP
+            </h1>
+            <p class="text-[#d8ae81] text-sm mt-1">Jana Surat Tawaran Kerjasama Program Al-Qawthar Partner untuk prospek institusi</p>
+        </div>
+        <a href="consultant-overriding.html" class="bg-white/10 hover:bg-white/20 border border-white/20 transition px-5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali
+        </a>
+    </div>
+</div>
+
+<div class="p-5 max-w-4xl mx-auto mt-4">
+    <!-- BORANG MAKLUMAT INSTITUSI -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2 border-b pb-4">
+            <i data-lucide="building" class="w-5 h-5 text-[#d8ae81]"></i> Maklumat Prospek Institusi (AQP)
+        </h2>
+
+        <form id="offerForm" class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Institusi / Organisasi <span class="text-red-500">*</span></label>
+                    <input type="text" id="instName" required placeholder="Contoh: Koperasi Kakitangan Kerajaan Berhad" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none transition uppercase">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">No. Pendaftaran (SSM/ROS/SKM) <span class="text-red-500">*</span></label>
+                    <input type="text" id="instRegNo" required placeholder="Contoh: K9998575" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none transition uppercase">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Alamat Penuh Institusi <span class="text-red-500">*</span></label>
+                <textarea id="instAddress" required rows="3" placeholder="Masukkan alamat rasmi institusi..." class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none transition uppercase"></textarea>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">E-mel Institusi</label>
+                    <input type="email" id="instEmail" placeholder="Contoh: admin@koperasi.com" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Tarikh Tawaran <span class="text-red-500">*</span></label>
+                    <input type="date" id="offerDate" required class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none transition">
+                </div>
+            </div>
+
+            <div class="border-t pt-6 mt-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i data-lucide="user-check" class="w-5 h-5 text-blue-500"></i> Wakil AQMS (Pegawai Bertanggungjawab)
+                </h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Wakil (AQC / Pengurusan)</label>
+                        <input type="text" id="repName" placeholder="Contoh: Ahmad Bin Ali" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none transition uppercase">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Jawatan Wakil</label>
+                        <input type="text" id="repPosition" value="AL-QAWTHAR CONSULTANT" placeholder="Contoh: Pengurus Wilayah" class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#153638] outline-none transition uppercase">
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-6">
+                <button type="submit" id="generateBtn" class="w-full bg-[#153638] hover:bg-[#1d4a4d] text-white font-bold text-lg py-4 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                    <i data-lucide="file-text"></i> Jana Surat & Preview
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL PREVIEW SURAT TAWARAN -->
+<div id="letterModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4 backdrop-blur-sm">
+    <div class="bg-gray-100 w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[95vh] overflow-hidden modal-enter">
+        
+        <!-- Header Modal -->
+        <div class="bg-white border-b px-6 py-4 flex justify-between items-center z-10 shadow-sm shrink-0">
+            <div>
+                <h2 class="text-xl font-bold text-[#153638]">Preview Surat Tawaran</h2>
+                <p class="text-sm text-gray-500">Sila semak maklumat sebelum muat turun atau e-mel.</p>
+            </div>
+            <button id="closeModalBtn" class="text-gray-400 hover:text-red-500 font-bold text-3xl leading-none transition">&times;</button>
+        </div>
+
+        <!-- Ruangan Scroll A4 -->
+        <div id="previewContainer" class="flex-1 overflow-y-auto a4-preview-wrapper shadow-inner bg-gray-200 py-8">
+            <div id="scale-wrapper" class="shadow-lg mx-auto bg-white h-max" style="width: 210mm; min-height: 297mm; box-sizing: border-box; transform-origin: top center;">
+                
+                <!-- TEMPLAT SEBENAR -->
+                <div id="offerLetterTemplate" style="padding: 25mm; height: max-content; font-family: 'Times New Roman', serif; color: #222; line-height: 1.6; box-sizing: border-box; text-align: justify;">                
+        
+                    <!-- HEADER SURAT -->
+                    <div style="text-align: center; border-bottom: 3px double #153638; padding-bottom: 15px; margin-bottom: 20px;">
+                        <h1 style="color: #153638; margin: 0; font-size: 22px; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 1px;">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</h1>
+                        <p style="margin: 5px 0 0 0; font-size: 12px; color: #555;">No. Pendaftaran: 123456-X | E-mel: support@mywaris.com</p>
+                    </div>
+
+                    <div style="text-align: center; font-weight: bold; font-size: 18px; margin-bottom: 20px; text-decoration: underline; text-transform: uppercase;">
+                        SURAT TAWARAN KERJASAMA<br>PROGRAM AL-QAWTHAR PARTNER (AQP)
+                    </div>
+
+                    <!-- TARIKH & RUJUKAN -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 15px;">
+                        <div>
+                            <strong>Rujukan Kami:</strong> AQMS/AQP/OFR-<span id="refNoId"></span><br>
+                            <strong>Tarikh:</strong> <span id="docDate">-</span>
+                        </div>
+                    </div>
+
+                    <!-- MAKLUMAT PENERIMA -->
+                    <div style="margin-bottom: 20px; font-size: 15px; max-width: 60%;">
+                        Kepada:<br>
+                        <strong><span id="docInstName" style="text-transform: uppercase;">-</span></strong><br>
+                        No. Pendaftaran: <span id="docInstRegNo" style="text-transform: uppercase;">-</span><br>
+                        <span id="docInstAddress" style="white-space: pre-line; text-transform: uppercase;">-</span>
+                    </div>
+
+                    <div style="font-size: 15px; margin-bottom: 15px;">
+                        Tuan/Puan,
+                    </div>
+
+                    <!-- TAJUK -->
+                    <div style="font-weight: bold; font-size: 15px; margin-bottom: 15px; text-transform: uppercase;">
+                        PER: TAWARAN KERJASAMA STRATEGIK DALAM PROGRAM AL-QAWTHAR PARTNER (AQP)
+                    </div>
+
+                    <!-- ISI -->
+                    <div style="font-size: 15px; margin-bottom: 15px;">
+                        Dengan hormatnya perkara di atas adalah dirujuk.
+                    </div>
+
+                    <div style="font-size: 15px; margin-bottom: 20px;">
+                        Pihak Al-Qawthar Mawaris Synergy Sdn. Bhd. (“AQMS”) dengan sukacitanya menawarkan kerjasama kepada <strong><span id="docInstNameBody">-</span></strong> (“Institusi”) untuk menyertai Program Al-Qawthar Partner (AQP) sebagai rakan strategik institusi dalam memperluaskan kesedaran dan akses kepada perkhidmatan perancangan harta pusaka Islam.
+                    </div>
+
+                    <!-- KLAUSA (Gunakan avoid-break) -->
+                    <div class="avoid-break" style="font-size: 15px; margin-bottom: 15px; page-break-inside: avoid;">
+                        <strong>1. TUJUAN KERJASAMA</strong><br>
+                        Program AQP diwujudkan sebagai satu platform kerjasama antara AQMS dengan institusi yang mempunyai rangkaian ahli, pelanggan, kakitangan, komuniti atau jaringan masing-masing.<br>
+                        Melalui kerjasama ini, Institusi boleh membantu memperkenalkan dan memudah cara akses kepada perkhidmatan perancangan harta pusaka Islam yang disediakan melalui AQMS, termasuk perkhidmatan seperti Wasiat, Hibah, Harta Sepencarian, Mawaris, dan perkhidmatan berkaitan perancangan harta pusaka yang ditawarkan oleh AQMS dari semasa ke semasa.
+                    </div>
+
+                    <div class="avoid-break" style="font-size: 15px; margin-bottom: 15px; page-break-inside: avoid;">
+                        <strong>2. SKOP KERJASAMA</strong><br>
+                        Sebagai rakan AQP, Institusi boleh bekerjasama dengan AQMS dalam aktiviti seperti:
+                        <ol style="margin-top: 5px; padding-left: 20px; list-style-type: lower-alpha;">
+                            <li style="margin-bottom: 4px;">memperkenalkan Program AQP kepada ahli, kakitangan atau rangkaian Institusi;</li>
+                            <li style="margin-bottom: 4px;">menyebarkan maklumat dan bahan penerangan rasmi yang disediakan atau diluluskan oleh AQMS;</li>
+                            <li style="margin-bottom: 4px;">membantu menghubungkan individu yang berminat dengan saluran rasmi AQMS;</li>
+                            <li style="margin-bottom: 4px;">menyokong aktiviti kesedaran, pendidikan atau promosi berkaitan perancangan harta pusaka Islam; dan</li>
+                            <li>menjalankan aktiviti kerjasama lain yang dipersetujui secara bertulis oleh kedua-dua pihak.</li>
+                        </ol>
+                    </div>
+
+                    <div class="avoid-break" style="font-size: 15px; margin-bottom: 15px; page-break-inside: avoid;">
+                        <strong>3. STATUS AL-QAWTHAR PARTNER (AQP)</strong><br>
+                        AQP merupakan rakan institusi kepada AQMS. Pelantikan sebagai AQP adalah diberikan kepada institusi yang dinamakan dalam surat ini dan bukan kepada individu secara peribadi. Status AQP tidak dengan sendirinya menjadikan Institusi sebagai pekerja, perunding individu atau ejen peribadi AQMS. Sekiranya Institusi melantik mana-mana pegawai, kakitangan atau wakil untuk menguruskan aktiviti berkaitan Program AQP, individu tersebut hendaklah menjalankan tugas berdasarkan kuasa dan skop yang diberikan oleh Institusi serta mematuhi garis panduan AQMS yang berkaitan.
+                    </div>
+
+                    <div class="avoid-break" style="font-size: 15px; margin-bottom: 15px; page-break-inside: avoid;">
+                        <strong>4. PERANAN AQMS</strong><br>
+                        AQMS akan menyediakan, tertakluk kepada skop perkhidmatan dan polisi semasa: platform dan sistem AQMS; bahan penerangan dan pemasaran; proses pendaftaran pelanggan; dokumentasi dan operasi; serta sokongan dan panduan pelaksanaan Program AQP. AQMS juga berhak menetapkan prosedur operasi, keperluan dokumentasi, struktur bayaran dan struktur insentif yang terpakai dari semasa ke semasa.
+                    </div>
+
+                    <div class="avoid-break" style="font-size: 15px; margin-bottom: 15px; page-break-inside: avoid;">
+                        <strong>5. PERANAN INSTITUSI</strong><br>
+                        Institusi bersetuju untuk memberikan maklumat yang benar; menggunakan bahan rasmi AQMS; tidak membuat janji di luar dokumen rasmi; menjaga kerahsiaan pelanggan; mematuhi prosedur AQMS; dan menjaga reputasi kedua-dua pihak.
+                    </div>
+
+                    <div class="avoid-break" style="font-size: 15px; margin-bottom: 15px; page-break-inside: avoid;">
+                        <strong>6. STRUKTUR IMBUHAN / INSENTIF</strong><br>
+                        Sekiranya Program AQP menyediakan komisen, insentif atau bentuk imbuhan lain, kelayakan dan kadar yang terpakai adalah berdasarkan struktur pampasan AQMS yang diluluskan dan berkuat kuasa pada masa berkenaan. Sebarang bayaran adalah tertakluk kepada pengesahan transaksi dan pemenuhan syarat kelayakan AQMS.
+                    </div>
+
+                    <div class="avoid-break" style="font-size: 15px; margin-bottom: 15px; page-break-inside: avoid;">
+                        <strong>7. PEMBAYARAN PELANGGAN</strong><br>
+                        Semua pembayaran bagi perkhidmatan AQMS hendaklah dibuat melalui saluran pembayaran rasmi yang ditetapkan oleh AQMS. Institusi tidak dibenarkan mengarahkan pelanggan membuat pembayaran ke akaun peribadi atau saluran yang tidak diluluskan.
+                    </div>
+
+                    <div class="avoid-break" style="font-size: 15px; margin-bottom: 15px; page-break-inside: avoid;">
+                        <strong>8. KERAHSIAAN, PEMATUHAN & PENAMATAN</strong><br>
+                        Kedua-dua pihak wajib melindungi data peribadi dan maklumat sulit pelanggan. Kerjasama ini perlu dilaksanakan secara profesional mematuhi prinsip Syariah. Tawaran ini akan terus berkuat kuasa sehingga ditamatkan dengan notis bertulis yang dipersetujui.
+                    </div>
+
+                    <div class="avoid-break" style="font-size: 15px; margin-bottom: 25px; page-break-inside: avoid;">
+                        <strong>9. PENERIMAAN TAWARAN</strong><br>
+                        Sekiranya Institusi bersetuju dengan tawaran ini, pihak Institusi diminta mengesahkan penerimaan dengan menandatangani ruangan penerimaan di bawah. Kami menghargai peluang untuk menjalinkan kerjasama strategik ini.
+                    </div>
+
+                    <div style="font-size: 15px; margin-bottom: 30px;">
+                        Sekian, terima kasih.
+                    </div>
+
+                    <!-- TANDATANGAN PENGURUSAN AQMS -->
+                    <div class="avoid-break" style="font-size: 15px; page-break-inside: avoid; margin-bottom: 40px;">
+                        <p style="margin: 0 0 50px 0;">Yang benar,</p>
+                        <p style="margin: 0;">........................................................</p>
+                        <p style="margin: 5px 0 0 0; font-weight: bold; text-transform: uppercase;" id="docRepName">PENGURUSAN EKSEKUTIF</p>
+                        <p style="margin: 0; text-transform: uppercase;" id="docRepPosition">AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.</p>
+                    </div>
+
+                    <!-- PENGESAHAN PENERIMAAN (KOTAK) -->
+                    <div class="avoid-break" style="font-size: 14px; page-break-inside: avoid; border: 2px dashed #153638; padding: 20px; background-color: #f8fafc;">
+                        <div style="font-weight: bold; font-size: 15px; text-align: center; margin-bottom: 15px; text-decoration: underline;">
+                            PENGESAHAN PENERIMAAN TAWARAN
+                        </div>
+                        <p style="margin-bottom: 20px; text-align: justify;">
+                            Kami dengan ini mengesahkan bahawa pihak kami telah membaca, memahami dan bersetuju untuk menerima tawaran kerjasama Program Al-Qawthar Partner (AQP) tertakluk kepada terma dan syarat yang dinyatakan dalam surat ini.
+                        </p>
+                        <table style="width: 100%; font-size: 14px; line-height: 2;">
+                            <tr>
+                                <td style="width: 30%; font-weight: bold;">Nama Institusi</td>
+                                <td>: <span id="docConfirmName" style="text-transform: uppercase; font-weight: bold;">-</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">No. Pendaftaran</td>
+                                <td>: <span id="docConfirmRegNo" style="text-transform: uppercase;">-</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Nama Wakil Penyemak</td>
+                                <td>: .....................................................................</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Jawatan</td>
+                                <td>: .....................................................................</td>
+                            </tr>
+                        </table>
+                        <div style="margin-top: 30px; display: flex; justify-content: space-between;">
+                            <div>
+                                <p style="margin-bottom: 5px; font-weight: bold;">Tandatangan Wakil:</p>
+                                <p>_________________________</p>
+                            </div>
+                            <div>
+                                <p style="margin-bottom: 5px; font-weight: bold;">Cop Institusi (Wajib):</p>
+                                <p>_________________________</p>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <p style="font-weight: bold; display: inline-block;">Tarikh: </p> _________________________
+                        </div>
+                    </div>
+
+                </div> <!-- PENUTUP offerLetterTemplate -->
+            </div> <!-- PENUTUP scale-wrapper -->
+        </div>
+
+        <!-- Footer Modal (Butang Aksi) -->
+        <div class="bg-white border-t px-6 py-4 flex flex-col sm:flex-row justify-end gap-3 z-10 shadow-sm shrink-0">
+            <button id="closeModalBtnBottom" class="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold transition">
+                Tutup / Edit Semula
+            </button>
+            <button id="emailBtn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition flex items-center justify-center gap-2 shadow-md">
+                <i data-lucide="mail" class="w-4 h-4"></i> Hantar E-mel Draf
+            </button>
+            <button id="downloadBtn" class="w-full sm:w-auto bg-[#153638] hover:bg-[#1d4a4d] text-white px-6 py-3 rounded-xl font-semibold transition flex items-center justify-center gap-2 shadow-md">
+                <i data-lucide="download" class="w-4 h-4" id="downloadIcon"></i> Muat Turun PDF
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script type="module">
+    import { auth, db } from './firebase.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    lucide.createIcons();
+    
+    // Set tarikh harini as default
+    document.getElementById('offerDate').valueAsDate = new Date();
+
+    let generatedFilename = "Tawaran_AQP.pdf";
+
+    // Semak user login untuk auto-fill nama AQC
+    onAuthStateChanged(auth, async (user) => {
+        if(user) {
+            const consSnap = await getDoc(doc(db, "consultants", user.uid));
+            if (consSnap.exists()) {
+                const data = consSnap.data();
+                if(data.nama) document.getElementById('repName').value = data.nama;
+            }
+        }
+    });
+
+    const form = document.getElementById('offerForm');
+    const modal = document.getElementById('letterModal');
+
+    // Tunjuk Preview
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const iName = document.getElementById('instName').value;
+        const iReg = document.getElementById('instRegNo').value;
+        const iAddr = document.getElementById('instAddress').value;
+        const iDate = document.getElementById('offerDate').value;
+        const rName = document.getElementById('repName').value || "PENGURUSAN EKSEKUTIF";
+        const rPos = document.getElementById('repPosition').value || "AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.";
+
+        // Format Tarikh ke DD/MM/YYYY
+        const d = new Date(iDate);
+        const formattedDate = `${d.getDate()} ${d.toLocaleString('ms-MY', { month: 'long' })} ${d.getFullYear()}`;
+        const refNo = Date.now().toString().slice(-6);
+
+        // Map ke Template
+        document.getElementById('refNoId').innerText = refNo;
+        document.getElementById('docDate').innerText = formattedDate;
+        document.getElementById('docInstName').innerText = iName;
+        document.getElementById('docInstNameBody').innerText = iName;
+        document.getElementById('docConfirmName').innerText = iName;
+        document.getElementById('docInstRegNo').innerText = iReg;
+        document.getElementById('docConfirmRegNo').innerText = iReg;
+        document.getElementById('docInstAddress').innerText = iAddr;
+        document.getElementById('docRepName').innerText = rName;
+        document.getElementById('docRepPosition').innerText = rPos;
+
+        generatedFilename = `Surat_Tawaran_AQP_${iName.replace(/\s+/g, '_')}.pdf`;
+
+        // Buka Modal & Scale
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(updateScale, 100);
+    });
+
+    // Tutup Modal
+    const closeModal = () => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    };
+    document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+    document.getElementById('closeModalBtnBottom').addEventListener('click', closeModal);
+
+    // E-mel Button (Hanya jana draft text ke default mail app)
+    document.getElementById('emailBtn').addEventListener('click', () => {
+        const iName = document.getElementById('instName').value;
+        const iEmail = document.getElementById('instEmail').value;
+        
+        if(!iEmail) {
+            alert("Sila masukkan alamat E-mel Institusi di dalam borang terlebih dahulu untuk menggunakan fungsi ini.");
+            closeModal();
+            document.getElementById('instEmail').focus();
+            return;
+        }
+
+        const subject = encodeURIComponent(`Tawaran Kerjasama Strategik Al-Qawthar Partner (AQP) - ${iName}`);
+        const body = encodeURIComponent(`Tuan/Puan,\n\nBersama-sama ini disertakan lampiran Surat Tawaran Kerjasama Program Al-Qawthar Partner (AQP) untuk rujukan dan pertimbangan pihak ${iName}.\n\nSila cetak, tandatangan pada ruangan PENGESAHAN PENERIMAAN dan kembalikan kepada pihak kami bersama cop rasmi institusi sekiranya bersetuju dengan tawaran ini.\n\nSebarang persoalan boleh diajukan dengan membalas e-mel ini.\n\nTerima kasih.`);
+        
+        window.location.href = `mailto:${iEmail}?subject=${subject}&body=${body}`;
+        alert("Aplikasi e-mel anda akan dibuka. Sila muat turun PDF dan lampirkan (*attach*) fail PDF tersebut ke dalam e-mel anda sebelum dihantar.");
+    });
+
+    // Muat Turun PDF
+    document.getElementById('downloadBtn').addEventListener('click', async () => {
+        const btn = document.getElementById('downloadBtn');
+        const icon = document.getElementById('downloadIcon');
+        const originalHtml = btn.innerHTML;
+        
+        btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Menjana PDF...`;
+        btn.classList.add("opacity-70", "pointer-events-none");
+        lucide.createIcons();
+
+        const element = document.getElementById('offerLetterTemplate');
+        
+        // Buang padding sementara untuk html2pdf
+        element.style.padding = '0';
+        
+        const options = {
+            margin: 25,
+            filename: generatedFilename,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, logging: false },
+            pagebreak: { mode: ['css', 'legacy'], avoid: ['.avoid-break'] },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        try {
+            await html2pdf().set(options).from(element).save();
+        } catch (err) {
+            console.error("Gagal menjana PDF", err);
+            alert("Ralat semasa memuat turun PDF.");
+        } finally {
+            element.style.padding = '25mm';
+            btn.innerHTML = originalHtml;
+            btn.classList.remove("opacity-70", "pointer-events-none");
+            lucide.createIcons();
+        }
+    });
+
+    // Auto-scale fungsi
+    function updateScale() {
+        const container = document.getElementById('previewContainer');
+        const wrapper = document.getElementById('scale-wrapper');
+        if (!container || !wrapper) return;
+
+        const targetWidth = 794;
+        const padding = 40;
+        const containerWidth = container.clientWidth;
+
+        if (containerWidth < (targetWidth + padding)) {
+            const scale = (containerWidth - padding) / targetWidth;
+            wrapper.style.transform = `scale(${scale})`;
+            const actualHeight = wrapper.offsetHeight;
+            const scaledHeight = actualHeight * scale;
+            wrapper.style.marginBottom = `-${actualHeight - scaledHeight}px`;
+        } else {
+            wrapper.style.transform = 'scale(1)';
+            wrapper.style.marginBottom = '0px';
+        }
+    }
+    window.addEventListener('resize', updateScale);
+
+</script>
+</body>
+</html>
