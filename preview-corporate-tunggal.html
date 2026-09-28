@@ -612,13 +612,60 @@
                         const userDoc = await getDoc(doc(db, "users", targetUserId));
                         const userData = userDoc.exists() ? userDoc.data() : {};
 
-                        const consultantCode = userData?.referral || data.consultantCode;
-                        let consultantData = {};
-                        if (consultantCode) {
-                            const q = query(collection(db, "consultants"), where("consultantNo", "==", consultantCode.trim())); 
-                            const querySnapshot = await getDocs(q);
-                            if (!querySnapshot.empty) consultantData = querySnapshot.docs[0].data();
-                        }
+
+// =====================================
+// LOGIK PERUNDING & EJEN AQP (NO TELEFON)
+// =====================================
+const consultantCode = userData?.referral || data.consultantCode;
+let telefonPerundingDisplay = "-";
+
+// Fungsi format nombor telefon jadi 012-3456789
+const formatNoTel = (tel) => {
+    if (!tel || tel === "-") return "-";
+    let cleanTel = tel.replace(/\D/g, ''); // Buang simbol
+    return cleanTel.length > 3 ? cleanTel.substring(0, 3) + '-' + cleanTel.substring(3) : cleanTel;
+};
+
+if (consultantCode) {
+    const cleanCode = consultantCode.trim();
+    
+    // 1. Cari di koleksi 'consultants' (Untuk AQC / MGAM / AQP Utama)
+    const qConsultant = query(collection(db, "consultants"), where("consultantNo", "==", cleanCode)); 
+    const snapConsultant = await getDocs(qConsultant);
+    
+    if (!snapConsultant.empty) {
+        const consultantData = snapConsultant.docs[0].data();
+        telefonPerundingDisplay = formatNoTel(consultantData.telefon);
+    } else {
+        // 2. Jika tiada, cari di koleksi 'users' (Untuk Ejen / Sub-ejen Institusi AQP)
+        const qAgent = query(collection(db, "users"), where("agentCode", "==", cleanCode), where("role", "==", "aqp_agent"));
+        const snapAgent = await getDocs(qAgent);
+        
+        if (!snapAgent.empty) {
+            const agentData = snapAgent.docs[0].data();
+            const agentPhone = formatNoTel(agentData.telefon);
+            
+            // 3. Tarik nombor telefon Institusi (AQP) yang menaja ejen ini
+            if (agentData.aqpRef) {
+                const qAqpUtama = query(collection(db, "consultants"), where("consultantNo", "==", agentData.aqpRef));
+                const snapAqpUtama = await getDocs(qAqpUtama);
+                
+                if (!snapAqpUtama.empty) {
+                    const aqpUtamaData = snapAqpUtama.docs[0].data();
+                    const aqpPhone = formatNoTel(aqpUtamaData.telefon);
+                    
+                    // Gabungkan: No AQP / No Ejen
+                    telefonPerundingDisplay = `${aqpPhone} / ${agentPhone}`;
+                } else {
+                    // Fallback jika AQP utama tak wujud
+                    telefonPerundingDisplay = agentPhone;
+                }
+            } else {
+                telefonPerundingDisplay = agentPhone;
+            }
+        }
+    }
+}
 
                         const currentDocRef = data.docRef || data.docRefNo || "-";
 
@@ -637,8 +684,8 @@
                         document.getElementById("telefonTable").innerHTML = data.telefon || "-";
                         document.getElementById("alamatTable").innerHTML = alamatPenuh || "-";
                         document.getElementById("kodTable").innerHTML = userData?.referral || "-";
-                        document.getElementById("telefonPerundingTable").innerHTML = consultantData.telefon || "-";
-
+                        document.getElementById("telefonPerundingTable").innerHTML = telefonPerundingDisplay;
+                        
                         // ==========================================
                         // A. LOGIK WASIAT 1/3
                         // ==========================================
