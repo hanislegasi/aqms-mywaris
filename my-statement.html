@@ -22,6 +22,7 @@
             background-color: #e5e7eb; /* gray-200 */
             display: flex;
             justify-content: center;
+            align-items: flex-start; /* KUNCI UTAMA: Elak background putih terpotong */
             padding: 20px;
             overflow-x: auto;
         }
@@ -130,7 +131,7 @@
         <div id="previewContainer" class="flex-1 overflow-y-auto a4-preview-wrapper shadow-inner bg-gray-200 py-8">
             
             <!-- Wrapper untuk Kertas Putih (Web Preview Sahaja) -->
-            <div id="scale-wrapper" class="shadow-lg mx-auto bg-white" style="width: 210mm; padding: 25mm; box-sizing: border-box; transform-origin: top center;">
+            <div id="scale-wrapper" class="shadow-lg mx-auto bg-white h-max" style="width: 210mm; padding: 25mm; box-sizing: border-box; transform-origin: top center;">
                 
                 <!-- TEMPLAT SEBENAR YANG AKAN DI-CONVERT KE PDF (Tiada Padding, Biar JS Urus Margin) -->
                 <div id="aqcLetterTemplate" style="font-family: 'Times New Roman', serif; color: #222; line-height: 1.6; box-sizing: border-box; text-align: justify;">                
@@ -523,7 +524,7 @@ document.getElementById("tcStatus").innerText =
         }
     });
 
-    // ----------------------------------------------------
+// ----------------------------------------------------
     // FUNGSI AUTO-SCALE UNTUK PREVIEW A4
     // ----------------------------------------------------
     function updateScale() {
@@ -542,8 +543,8 @@ document.getElementById("tcStatus").innerText =
             const scale = (containerWidth - padding) / targetWidth;
             wrapper.style.transform = `scale(${scale})`;
             
-            // Kemas kini ruang bawah supaya tak ada ruang kosong besar
-            const actualHeight = template.offsetHeight;
+            // KUNCI UTAMA 3: Mesti guna wrapper.offsetHeight, BUKAN template.offsetHeight
+            const actualHeight = wrapper.offsetHeight;
             const scaledHeight = actualHeight * scale;
             wrapper.style.marginBottom = `-${actualHeight - scaledHeight}px`;
         } else {
