@@ -126,12 +126,15 @@
             <button id="closeModalBtnTop" class="text-gray-400 hover:text-red-500 font-bold text-3xl leading-none transition">&times;</button>
         </div>
 
-        <!-- Ruangan Scroll A4 -->
-        <div class="flex-1 overflow-y-auto a4-preview-wrapper shadow-inner">
+<!-- Ruangan Scroll A4 -->
+        <div id="previewContainer" class="flex-1 overflow-y-auto a4-preview-wrapper shadow-inner">
             
-            <!-- TEMPLAT SURAT LANTIKAN RASMI (2 MUKA SURAT) -->
-            <div id="aqcLetterTemplate" class="shadow-lg" style="width: 210mm; background: white; font-family: 'Times New Roman', serif; color: #222; line-height: 1.8; box-sizing: border-box; position: relative;">
+            <!-- Wrapper untuk fungsi Auto-Scale -->
+            <div id="scale-wrapper" style="transform-origin: top center; transition: transform 0.2s ease;">
                 
+                <!-- TEMPLAT SURAT LANTIKAN RASMI (2 MUKA SURAT) -->
+                <div id="aqcLetterTemplate" class="shadow-lg" style="width: 210mm; background: white; font-family: 'Times New Roman', serif; color: #222; line-height: 1.8; box-sizing: border-box; position: relative;">                
+      
                 <!-- PAGE 1: SURAT DEPAN -->
                 <div style="padding: 25mm; min-height: 297mm; box-sizing: border-box;">
                     <!-- HEADER SURAT -->
@@ -193,44 +196,268 @@
                 <!-- PAGE BREAK -->
                 <div class="html2pdf__page-break"></div>
 
-                <!-- PAGE 2: LAMPIRAN TERMA & SYARAT -->
-                <div style="padding: 25mm; min-height: 297mm; box-sizing: border-box; background: white;">
-                    <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 30px; text-decoration: underline; text-transform: uppercase;">
-                        LAMPIRAN A: TERMA & SYARAT KERJASAMA
-                    </div>
-                    
-                    <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
-                        <strong>1. OBJEKTIF</strong><br>
-                        <span id="tcObjektif"></span>
-                    </div>
+<!-- PAGE 2: LAMPIRAN TERMA & SYARAT -->
+<div style="padding: 25mm; min-height: 297mm; box-sizing: border-box; background: white;">
 
-                    <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
-                        <strong>2. PERANAN AL-QAWTHAR MAWARIS SYNERGY SDN. BHD. (AQMS)</strong><br>
-                        AQMS bertanggungjawab untuk menyediakan infrastruktur sistem, penyediaan dokumen perundangan, pelaksanaan proses perundangan dan sokongan teknikal bagi memastikan kelancaran perkhidmatan perancangan harta pusaka yang didaftarkan melalui pihak tuan/puan.
-                    </div>
+    <div style="
+        text-align: center;
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 28px;
+        text-decoration: underline;
+        text-transform: uppercase;
+        color: #153638;
+    ">
+        LAMPIRAN A: TERMA & SYARAT KERJASAMA
+    </div>
 
-                    <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
-                        <strong>3. PERANAN <span id="tcRoleTitle"></span></strong><br>
-                        <span id="tcPeranan"></span>
-                    </div>
 
-                    <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
-                        <strong>4. STRUKTUR KOMISEN</strong><br>
-                        Pihak tuan/puan layak menerima komisen asas sebanyak <strong><span id="tcKomisen">-</span>%</strong> daripada jumlah jualan bersih perkhidmatan yang berjaya didaftarkan dan dibayar penuh oleh pelanggan. Sebarang bayaran insentif tambahan bergantung kepada pencapaian petunjuk prestasi utama (KPI) semasa yang ditetapkan oleh syarikat.
-                    </div>
+    <!-- 1. OBJEKTIF -->
+    <div style="font-size: 14px; text-align: justify; margin-bottom: 14px;">
 
-                    <div style="font-size: 15px; text-align: justify; margin-bottom: 15px;">
-                        <strong>5. TATATERTIB (DO'S & DON'TS)</strong><br>
-                        <ul style="margin-top: 5px; padding-left: 20px;">
-                            <li style="margin-bottom: 5px;"><strong>PERLU DILAKUKAN (DO):</strong> Menjaga nama baik dan reputasi AQMS, memberi maklumat dan panduan yang telus dan tepat kepada prospek berlandaskan hukum syarak, serta mematuhi semua pekeliling syarikat dari masa ke semasa.</li>
-                            <li><strong>DILARANG SAMA SEKALI (DON'T):</strong> Mengutip pembayaran tunai atau kemasukan dana ke akaun peribadi/syarikat tanpa melalui sistem bayaran rasmi (ToyyibPay/Gateway Rasmi AQMS), menjanjikan syarat pewarisan yang bertentangan dengan enakmen/syariah, serta memalsukan maklumat atau identiti pihak berkepentingan (waris/penerima).</li>
-                        </ul>
-                    </div>
-                    
-                    <div style="font-size: 15px; text-align: justify; margin-top: 30px; font-style: italic; color: #555;">
-                        * Terma dan syarat ini tertakluk kepada pindaan oleh pihak Pengurusan dari masa ke semasa berdasarkan peruntukan undang-undang dan keperluan semasa syarikat.
-                    </div>
-                </div>
+        <strong>1. OBJEKTIF</strong><br>
+
+        <span id="tcObjektif"></span>
+
+    </div>
+
+
+    <!-- 2. PERANAN AQMS -->
+    <div style="font-size: 14px; text-align: justify; margin-bottom: 14px;">
+
+        <strong>
+            2. PERANAN AL-QAWTHAR MAWARIS SYNERGY SDN. BHD. (AQMS)
+        </strong><br>
+
+        AQMS bertanggungjawab menyediakan sistem, platform digital,
+        dokumentasi, proses operasi serta sokongan berkaitan perkhidmatan
+        perancangan harta pusaka Islam yang ditawarkan melalui platform AQMS.
+        AQMS juga bertanggungjawab menetapkan prosedur operasi, struktur
+        bayaran dan komisen, keperluan dokumentasi serta piawaian pematuhan
+        yang berkuat kuasa dari semasa ke semasa.
+
+    </div>
+
+
+    <!-- 3. PERANAN AQC / AQP -->
+    <div style="font-size: 14px; text-align: justify; margin-bottom: 14px;">
+
+        <strong>
+            3. PERANAN
+            <span id="tcRoleTitle"></span>
+        </strong><br>
+
+        <span id="tcPeranan"></span>
+
+    </div>
+
+
+    <!-- 4. STATUS KERJASAMA -->
+    <div style="font-size: 14px; text-align: justify; margin-bottom: 14px;">
+
+        <strong>4. STATUS KERJASAMA</strong><br>
+
+        <span id="tcStatus"></span>
+
+    </div>
+
+
+    <!-- 5. STRUKTUR KOMISEN -->
+    <div style="font-size: 14px; text-align: justify; margin-bottom: 14px;">
+
+        <strong>5. STRUKTUR KOMISEN & INSENTIF</strong><br>
+
+        Pihak yang dilantik layak menerima komisen atau insentif
+        berdasarkan struktur pampasan yang ditetapkan oleh AQMS dari
+        semasa ke semasa. Kadar semasa yang terpakai adalah sebanyak
+        <strong>
+            <span id="tcKomisen">-</span>%
+        </strong>
+        daripada jumlah jualan bersih yang memenuhi syarat pembayaran
+        dan pengiktirafan jualan yang ditetapkan oleh pihak pengurusan.
+
+        <br><br>
+
+        Sebarang komisen, override, bonus atau insentif tambahan adalah
+        tertakluk kepada syarat kelayakan, status akaun, rekod pembayaran
+        pelanggan dan polisi pampasan AQMS yang sedang berkuat kuasa.
+
+    </div>
+
+
+    <!-- 6. TANGGUNGJAWAB -->
+    <div style="font-size: 14px; text-align: justify; margin-bottom: 14px;">
+
+        <strong>6. TANGGUNGJAWAB & TATAKELAKUAN</strong><br>
+
+        Pihak yang dilantik hendaklah:
+
+        <ol style="margin-top: 6px; padding-left: 22px;">
+
+            <li style="margin-bottom: 5px;">
+                memberikan maklumat yang tepat, jelas dan tidak mengelirukan
+                kepada prospek atau pelanggan;
+            </li>
+
+            <li style="margin-bottom: 5px;">
+                menjaga kerahsiaan maklumat pelanggan serta dokumen yang
+                diperoleh sepanjang menjalankan urusan;
+            </li>
+
+            <li style="margin-bottom: 5px;">
+                mematuhi prosedur, polisi, kod etika dan arahan rasmi
+                AQMS yang berkuat kuasa;
+            </li>
+
+            <li style="margin-bottom: 5px;">
+                menggunakan sistem dan saluran rasmi AQMS bagi urusan
+                pendaftaran, pembayaran dan dokumentasi;
+            </li>
+
+            <li>
+                menjaga reputasi, nama baik dan kepentingan AQMS dalam
+                semua urusan berkaitan perkhidmatan.
+            </li>
+
+        </ol>
+
+    </div>
+
+
+    <!-- 7. LARANGAN -->
+    <div style="font-size: 14px; text-align: justify; margin-bottom: 14px;">
+
+        <strong>7. LARANGAN</strong><br>
+
+        Pihak yang dilantik tidak dibenarkan:
+
+        <ol style="margin-top: 6px; padding-left: 22px;">
+
+            <li style="margin-bottom: 5px;">
+                memberikan jaminan atau janji mengenai hasil pewarisan
+                yang tidak diperuntukkan dalam dokumen atau perkhidmatan rasmi;
+            </li>
+
+            <li style="margin-bottom: 5px;">
+                memalsukan, mengubah atau menyembunyikan maklumat pelanggan
+                atau pihak berkepentingan;
+            </li>
+
+            <li style="margin-bottom: 5px;">
+                menggunakan nama, logo atau bahan rasmi AQMS bagi tujuan
+                yang tidak dibenarkan;
+            </li>
+
+            <li>
+                menerima atau mengarahkan pembayaran pelanggan ke akaun
+                peribadi atau saluran yang tidak diluluskan oleh AQMS.
+            </li>
+
+        </ol>
+
+    </div>
+
+
+    <!-- 8. PEMATUHAN -->
+    <div style="font-size: 14px; text-align: justify; margin-bottom: 14px;">
+
+        <strong>8. PEMATUHAN UNDANG-UNDANG & SYARIAH</strong><br>
+
+        Semua pihak hendaklah menjalankan tanggungjawab masing-masing
+        dengan mematuhi undang-undang, peraturan, prinsip Syariah dan
+        keperluan dokumentasi yang berkaitan dengan perkhidmatan
+        perancangan harta pusaka Islam.
+
+        Sebarang penerangan kepada pelanggan hendaklah dibuat berdasarkan
+        maklumat dan bahan rasmi yang disediakan atau diluluskan oleh AQMS.
+
+    </div>
+
+
+    <!-- 9. KERAHSIAAN & DATA -->
+    <div style="font-size: 14px; text-align: justify; margin-bottom: 14px;">
+
+        <strong>9. KERAHSIAAN & PERLINDUNGAN DATA</strong><br>
+
+        Semua maklumat peribadi, dokumen, rekod pelanggan dan maklumat
+        perniagaan yang diperoleh melalui hubungan kerjasama ini hendaklah
+        dikendalikan secara sulit dan hanya digunakan bagi tujuan yang
+        dibenarkan dalam proses perkhidmatan AQMS.
+
+        Pihak yang dilantik hendaklah mematuhi polisi privasi,
+        perlindungan data dan keperluan pemprosesan maklumat yang
+        ditetapkan oleh AQMS.
+
+    </div>
+
+
+    <!-- 10. PINDAAN TERMA -->
+    <div style="font-size: 14px; text-align: justify; margin-bottom: 14px;">
+
+        <strong>10. PINDAAN TERMA & SYARAT</strong><br>
+
+        AQMS berhak membuat pindaan terhadap terma, polisi, struktur
+        pampasan, prosedur operasi atau keperluan pematuhan dari semasa
+        ke semasa bagi menyesuaikan operasi dengan perkembangan perniagaan,
+        keperluan undang-undang, Syariah dan sistem.
+
+        Sebarang pindaan akan berkuat kuasa mengikut tarikh atau tempoh
+        yang ditetapkan oleh pihak pengurusan.
+
+    </div>
+
+
+    <!-- 11. PENAMATAN -->
+    <div style="font-size: 14px; text-align: justify; margin-bottom: 14px;">
+
+        <strong>11. PENAMATAN KERJASAMA</strong><br>
+
+        Hubungan pelantikan atau kerjasama boleh ditamatkan oleh mana-mana
+        pihak tertakluk kepada prosedur, notis dan syarat yang ditetapkan
+        oleh AQMS atau sebagaimana yang dipersetujui secara bertulis.
+
+        Penamatan tidak menjejaskan kewajipan yang telah wujud sebelum
+        tarikh penamatan, termasuk kewajipan berkaitan kerahsiaan,
+        dokumentasi, pembayaran atau penyelesaian urusan pelanggan.
+
+    </div>
+
+
+    <!-- 12. PENGAKUAN -->
+    <div style="font-size: 14px; text-align: justify; margin-bottom: 14px;">
+
+        <strong>12. PENGAKUAN</strong><br>
+
+        Dengan menerima surat pelantikan atau surat kerjasama ini,
+        pihak yang dinamakan mengakui bahawa pihaknya telah diberi
+        peluang untuk membaca, memahami dan mematuhi terma serta syarat
+        yang dinyatakan dalam dokumen ini.
+
+        Penerimaan pelantikan atau kerjasama juga dianggap sebagai
+        persetujuan untuk mematuhi polisi dan prosedur AQMS yang
+        berkuat kuasa dari semasa ke semasa.
+
+    </div>
+
+
+    <!-- NOTA -->
+    <div style="
+        font-size: 12px;
+        text-align: justify;
+        margin-top: 20px;
+        padding-top: 12px;
+        border-top: 1px solid #ccc;
+        font-style: italic;
+        color: #555;
+    ">
+
+        Nota: Dokumen ini merupakan dokumen pelantikan/kerjasama operasi
+        dan hendaklah dibaca bersama polisi, prosedur, kod etika,
+        struktur pampasan serta dokumen rasmi AQMS yang berkaitan.
+
+    </div>
+
+</div>
 
             </div>
 
@@ -345,11 +572,19 @@
                 document.getElementById("letterDocTitle").innerText = "SURAT METERAI KERJASAMA RASMI DALAM PROGRAM AL-QAWTHAR PARTNER (AQP)";
                 document.getElementById("letterPara2").innerHTML = `2. Sukacita dimaklumkan bahawa pihak pengurusan <strong id="letterCompanyNameBody">${namaSyarikat}</strong> dengan berbesar hati menjalin kerjasama dengan institusi tuan/puan dalam program <strong>Al-Qawthar Partner (AQP)</strong> berkuat kuasa mulai tarikh yang dinyatakan.`;
                 
-                // Terma & Syarat AQP
-                document.getElementById("tcObjektif").innerText = "Mewujudkan jalinan kerjasama strategik antara pihak AQMS dan institusi bagi memperluaskan kesedaran dan penyediaan perkhidmatan perancangan harta pusaka Islam kepada ahli, kakitangan, dan rangkaian di bawah institusi.";
-                document.getElementById("tcRoleTitle").innerText = "INSTITUSI / AL-QAWTHAR PARTNER (AQP)";
-                document.getElementById("tcPeranan").innerText = "Bertindak sebagai rakan strategik yang mempromosikan, mengedar, dan memudah cara pendaftaran perkhidmatan AQMS kepada klien institusi, serta memastikan ejen/wakil di bawah institusi mematuhi piawaian syarikat.";
-                
+// Terma & Syarat AQP
+document.getElementById("tcObjektif").innerText =
+    "Mewujudkan jalinan kerjasama strategik antara pihak AQMS dan institusi bagi memperluaskan kesedaran serta akses kepada perkhidmatan perancangan harta pusaka Islam kepada ahli, kakitangan dan rangkaian di bawah institusi.";
+
+document.getElementById("tcRoleTitle").innerText =
+    "INSTITUSI / AL-QAWTHAR PARTNER (AQP)";
+
+document.getElementById("tcPeranan").innerText =
+    "Bertindak sebagai rakan strategik institusi yang membantu mempromosikan, memperkenalkan dan memudah cara akses kepada perkhidmatan AQMS kepada ahli, kakitangan atau rangkaian institusi. AQP tidak dianggap sebagai perunding individu. Sebarang wakil atau individu yang menjalankan aktiviti penerangan atau pemasaran bagi pihak institusi hendaklah mematuhi keperluan dan prosedur AQMS yang berkuat kuasa.";
+
+document.getElementById("tcStatus").innerText =
+    "AQP merupakan rakan institusi kepada AQMS. Hubungan ini adalah berdasarkan kerjasama antara organisasi dan tidak menjadikan institusi tersebut sebagai pekerja, ejen individu atau perunding peribadi AQMS.";                
+              
                 // Komisen AQP
                 const aqpComm = compData.commissionAQP !== undefined ? compData.commissionAQP : 35;
                 document.getElementById("tcKomisen").innerText = aqpComm;
@@ -364,12 +599,20 @@
                 document.getElementById("letterDocTitle").innerText = "SURAT LANTIKAN RASMI SEBAGAI AL-QAWTHAR CONSULTANT (AQC)";
                 document.getElementById("letterPara2").innerHTML = `2. Sukacita dimaklumkan bahawa pihak pengurusan <strong id="letterCompanyNameBody">${namaSyarikat}</strong> dengan berbesar hatinya melantik tuan/puan sebagai <strong>Al-Qawthar Consultant (AQC)</strong> berkuat kuasa mulai tarikh yang dinyatakan.`;
                 
-                // Terma & Syarat AQC
-                document.getElementById("tcObjektif").innerText = "Melantik perunding yang bertauliah dan berdedikasi untuk memasarkan serta mengedarkan produk perancangan harta pusaka Islam AQMS secara profesional kepada masyarakat.";
-                document.getElementById("tcRoleTitle").innerText = "PERUNDING / AL-QAWTHAR CONSULTANT (AQC)";
-                document.getElementById("tcPeranan").innerText = "Bertanggungjawab secara langsung untuk mencari prospek, memberi penerangan perundangan asas yang tepat, serta mendaftarkan dan memantau status dokumen pelanggan di dalam sistem AQMS.";
-                
+// Terma & Syarat AQC
+document.getElementById("tcObjektif").innerText =
+    "Melantik individu sebagai Al-Qawthar Consultant (AQC) bagi membantu memperkenalkan, memasarkan dan memudah cara pendaftaran perkhidmatan perancangan harta pusaka Islam AQMS kepada masyarakat secara profesional dan beretika.";
+
+document.getElementById("tcRoleTitle").innerText =
+    "INDIVIDU / AL-QAWTHAR CONSULTANT (AQC)";
+
+document.getElementById("tcPeranan").innerText =
+    "Bertanggungjawab secara langsung sebagai perunding individu untuk mencari prospek, memberikan penerangan berdasarkan bahan rasmi AQMS, membantu proses pendaftaran pelanggan serta memantau perkembangan permohonan pelanggan melalui sistem AQMS.";
+
+document.getElementById("tcStatus").innerText =
+    "AQC merupakan individu yang dilantik oleh AQMS sebagai Al-Qawthar Consultant. Pelantikan ini adalah kepada individu yang dinamakan dalam surat lantikan dan tidak mewakili suatu institusi atau organisasi.";                
                 // Komisen AQC
+                
                 const aqcComm = compData.commissionAQC !== undefined ? compData.commissionAQC : 35;
                 document.getElementById("tcKomisen").innerText = aqcComm;
 
@@ -389,6 +632,9 @@
             modal.classList.remove("hidden");
             modal.classList.add("flex");
 
+            // Jalankan auto-scale sebaik sahaja modal dibuka
+            setTimeout(updateScale, 100);
+            
         } catch (err) {
             console.error("Gagal menarik data:", err);
             alert("Ralat semasa menyemak data. Sila cuba lagi.");
@@ -435,6 +681,39 @@
         }
     });
 
+    // ----------------------------------------------------
+    // FUNGSI AUTO-SCALE UNTUK PREVIEW A4
+    // ----------------------------------------------------
+    function updateScale() {
+        const container = document.getElementById('previewContainer');
+        const wrapper = document.getElementById('scale-wrapper');
+        const template = document.getElementById('aqcLetterTemplate');
+        
+        if (!container || !wrapper || !template) return;
+
+        const targetWidth = 794; // Lebar standard A4 (210mm) dalam pixel
+        const padding = 40; // Ruang kosong kiri kanan
+        const containerWidth = container.clientWidth;
+
+        if (containerWidth < (targetWidth + padding)) {
+            // Kecilkan saiz kertas
+            const scale = (containerWidth - padding) / targetWidth;
+            wrapper.style.transform = `scale(${scale})`;
+            
+            // Kemas kini ruang bawah supaya tak ada ruang kosong besar
+            const actualHeight = template.offsetHeight;
+            const scaledHeight = actualHeight * scale;
+            wrapper.style.marginBottom = `-${actualHeight - scaledHeight}px`;
+        } else {
+            // Skrin besar (Reset ke asal)
+            wrapper.style.transform = 'scale(1)';
+            wrapper.style.marginBottom = '0px';
+        }
+    }
+
+    // Jalankan kemas kini skala apabila tingkap di-resize
+    window.addEventListener('resize', updateScale);    
+    
 </script>
 
 </body>
