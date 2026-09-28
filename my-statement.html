@@ -193,8 +193,8 @@
                     <!-- ============================================== -->
                     <!-- PAGE BREAK KEPADA LAMPIRAN (AUTO SPLIT) -->
                     <!-- ============================================== -->
-                    <div style="page-break-before: always; margin-top: 100px;"></div>
-
+                   <div id="lampiranSpacer" style="page-break-before: always; margin-top: 100px;"></div>
+                    
                     <div style="text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 25px; text-decoration: underline; text-transform: uppercase; color: #153638;">
                         LAMPIRAN A: TERMA & SYARAT KERJASAMA
                     </div>
@@ -484,7 +484,7 @@ document.getElementById("tcStatus").innerText =
     closeTop.addEventListener("click", closeModal);
     closeBottom.addEventListener("click", closeModal);
 
-    // FUNGSI MUAT TURUN PDF
+// FUNGSI MUAT TURUN PDF
     downloadBtn.addEventListener("click", async () => {
         const icon = document.getElementById("actualDownloadIcon");
         const originalContent = icon.innerHTML;
@@ -493,7 +493,13 @@ document.getElementById("tcStatus").innerText =
         downloadBtn.classList.add("opacity-70", "pointer-events-none");
         
         const templateEl = document.getElementById("aqcLetterTemplate");
-       const options = {
+        const spacer = document.getElementById("lampiranSpacer");
+        
+        // LANGKAH 2: Buang padding & margin sementara untuk beri laluan pada html2pdf
+        templateEl.style.padding = '0';
+        if (spacer) spacer.style.marginTop = '0';
+        
+        const options = {
             margin: 25, // KUNCI UTAMA: Margin 25mm (Atas, Kanan, Bawah, Kiri) untuk SETIAP mukasurat
             filename: generatedFilename,
             image: { type: 'jpeg', quality: 0.98 },
@@ -508,6 +514,10 @@ document.getElementById("tcStatus").innerText =
             console.error("Gagal muat turun PDF:", err);
             alert("Ralat semasa menjana PDF.");
         } finally {
+            // KEMBALIKAN SEMULA PADDING & MARGIN KE ASAL SELEPAS SIAP
+            templateEl.style.padding = '25mm';
+            if (spacer) spacer.style.marginTop = '100px';
+            
             icon.innerHTML = originalContent;
             downloadBtn.classList.remove("opacity-70", "pointer-events-none");
         }
