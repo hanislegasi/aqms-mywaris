@@ -241,7 +241,7 @@ agreeBtn.addEventListener("click", async () => {
         };
 
         // Panggil fungsi Cloud Function
-        const functions = getFunctions(auth.app);
+        const functions = getFunctions(auth.app, 'asia-southeast1');
         const createToyyibpayBill = httpsCallable(functions, 'createToyyibpayBill');
         const result = await createToyyibpayBill(dataPelanggan);
                 
