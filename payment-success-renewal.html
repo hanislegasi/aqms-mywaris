@@ -94,6 +94,15 @@
                             renewedAt: txnDate.toISOString()
                         });
 
+// =================================================================
+// TAMBAHAN WAJIB: Update Dokumen Utama untuk Memicu E-mail (Cloud Function)
+// =================================================================
+const statusFieldKey = config.key + "RenewalPaymentStatus"; // Menghasilkan: wasiatRenewalPaymentStatus
+await updateDoc(doc(db, "users", user.uid), {
+    [statusFieldKey]: "paid", // Status ini yang dicari oleh Cloud Function
+    expiryDate: currentExpiry.toISOString() // Sinkronkan juga masa kedaluwarsa utama
+});
+                        
                         // 5. Rekod Jurnal Perakaunan (Debit Bank, Kredit Income Produk)
                         await addDoc(collection(db, "ledger"), {
                             date: txnDate, accountCode: "1000", account: "Bank", category: "asset",
