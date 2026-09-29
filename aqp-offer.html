@@ -384,7 +384,7 @@
 // Butang Hantar E-mel (API Panggilan ke Backend)
     document.getElementById('emailBtn').addEventListener('click', async () => {
         const iName = document.getElementById('instName').value;
-        const iEmail = document.getElementById('instEmail').value;
+        const iName = document.getElementById('instName').value.toUpperCase();
         
         if(!iEmail) {
             alert("Sila masukkan alamat E-mel Institusi di dalam borang terlebih dahulu.");
