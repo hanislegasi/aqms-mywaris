@@ -381,22 +381,87 @@
     document.getElementById('closeModalBtn').addEventListener('click', closeModal);
     document.getElementById('closeModalBtnBottom').addEventListener('click', closeModal);
 
-    document.getElementById('emailBtn').addEventListener('click', () => {
+// Butang Hantar E-mel (API Panggilan ke Backend)
+    document.getElementById('emailBtn').addEventListener('click', async () => {
         const iName = document.getElementById('instName').value;
         const iEmail = document.getElementById('instEmail').value;
         
         if(!iEmail) {
-            alert("Sila masukkan alamat E-mel Institusi di dalam borang terlebih dahulu untuk menggunakan fungsi ini.");
-            closeModal();
+            alert("Sila masukkan alamat E-mel Institusi di dalam borang terlebih dahulu.");
             document.getElementById('instEmail').focus();
             return;
         }
 
-        const subject = encodeURIComponent(`Tawaran Kerjasama Strategik Al-Qawthar Partner (AQP) - ${iName}`);
-        const body = encodeURIComponent(`Tuan/Puan,\n\nBersama-sama ini disertakan lampiran Surat Tawaran Kerjasama Program Al-Qawthar Partner (AQP) untuk rujukan dan pertimbangan pihak ${iName}.\n\nSila cetak, tandatangan pada ruangan PENGESAHAN PENERIMAAN dan kembalikan kepada pihak kami bersama cop rasmi institusi sekiranya bersetuju dengan tawaran ini.\n\nSebarang persoalan boleh diajukan dengan membalas e-mel ini.\n\nTerima kasih.`);
+        const btn = document.getElementById('emailBtn');
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Menghantar E-mel...`;
+        btn.classList.add("opacity-70", "pointer-events-none");
+        lucide.createIcons();
+
+        const element = document.getElementById('offerLetterTemplate');
+        element.style.padding = '0'; // Buang padding sementara waktu untuk PDF
         
-        window.location.href = `mailto:${iEmail}?subject=${subject}&body=${body}`;
-        alert("Aplikasi e-mel anda akan dibuka. Sila muat turun PDF dan lampirkan (*attach*) fail PDF tersebut ke dalam e-mel anda sebelum dihantar.");
+        const options = {
+            margin: 25,
+            filename: generatedFilename,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, logging: false },
+            pagebreak: { mode: ['css', 'legacy'], avoid: ['.avoid-break'] },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        try {
+            // 1. Tukar PDF kepada teks Base64
+            const pdfBase64 = await html2pdf().set(options).from(element).outputPdf('datauristring');
+            
+            // Buang awalan "data:application/pdf;base64," untuk dapatkan kod bersih
+            const pureBase64 = pdfBase64.split("base64,")[1];
+
+            // 2. Sediakan data untuk dihantar ke backend
+            const emailData = {
+                to: iEmail,
+                subject: `Tawaran Kerjasama Strategik Al-Qawthar Partner (AQP) - ${iName}`,
+                html: `
+                    <p>Tuan/Puan,</p>
+                    <p>Bersama-sama ini disertakan lampiran Surat Tawaran Kerjasama Program Al-Qawthar Partner (AQP) untuk rujukan dan pertimbangan pihak <strong>${iName}</strong>.</p>
+                    <p>Sila cetak, tandatangan pada ruangan PENGESAHAN PENERIMAAN dan kembalikan kepada pihak kami bersama cop rasmi institusi sekiranya bersetuju dengan tawaran ini.</p>
+                    <p>Sebarang persoalan boleh diajukan dengan membalas e-mel ini.</p>
+                    <br>
+                    <p>Terima kasih,</p>
+                    <p><strong>Pengurusan Eksekutif<br>Al-Qawthar Mawaris Synergy Sdn. Bhd.</strong></p>
+                `,
+                attachments: [
+                    {
+                        filename: generatedFilename,
+                        content: pureBase64,
+                        encoding: 'base64'
+                    }
+                ]
+            };
+
+            // 3. Panggil fungsi Firebase Cloud "sendEmail"
+            const { getFunctions, httpsCallable } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js");
+            const functionsApp = getFunctions();
+            const sendEmailAPI = httpsCallable(functionsApp, 'sendEmail');
+
+            // 4. Hantar data!
+            const result = await sendEmailAPI(emailData);
+            
+            if(result.data.success) {
+                alert(`Berjaya! Surat tawaran telah dihantar terus ke e-mel: ${iEmail}`);
+            } else {
+                throw new Error("Respon server tidak berjaya");
+            }
+
+        } catch (err) {
+            console.error("Gagal hantar e-mel:", err);
+            alert("Ralat semasa menghantar e-mel. Pastikan pelayan telah dikemas kini.");
+        } finally {
+            element.style.padding = '25mm'; // Letak balik padding web
+            btn.innerHTML = originalHtml;
+            btn.classList.remove("opacity-70", "pointer-events-none");
+            lucide.createIcons();
+        }
     });
 
     document.getElementById('downloadBtn').addEventListener('click', async () => {
