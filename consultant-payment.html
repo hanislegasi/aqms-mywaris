@@ -167,7 +167,7 @@
                         uid: user.uid
                     };
 
-                    const functions = getFunctions(auth.app);
+                    const functions = getFunctions(auth.app, 'asia-southeast1');
                     const createToyyibpayBill = httpsCallable(functions, 'createToyyibpayBill');
                     const result = await createToyyibpayBill(dataPelanggan);
 
