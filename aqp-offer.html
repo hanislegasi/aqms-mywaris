@@ -441,7 +441,7 @@
 
             // 3. Panggil fungsi Firebase Cloud "sendEmail"
             const { getFunctions, httpsCallable } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js");
-            const functionsApp = getFunctions();
+            const functionsApp = getFunctions(auth.app, 'asia-southeast1');
             const sendEmailAPI = httpsCallable(functionsApp, 'sendEmail');
 
             // 4. Hantar data!
