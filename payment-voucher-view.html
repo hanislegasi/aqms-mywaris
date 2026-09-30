@@ -392,52 +392,76 @@ benHTML;
 }
   
 // ==============================================
-// LOGIK MEMAPARKAN PAYMENT BREAKDOWN (KEMASKINI)
+// LOGIK MEMAPARKAN PAYMENT BREAKDOWN (KEMASKINI COA TEPAT)
 // ==============================================
 let accountHTML = "";
 
-// 1. Tarik COA (Chart of Accounts) untuk padankan nama kod PV automatik
+// 1. Tarik nama akaun sebenar terus dari pangkalan data COA
 import { collection as c_col, getDocs as g_docs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const coaSnap = await g_docs(c_col(db, "chartOfAccounts"));
 const coaMap = {};
 coaSnap.forEach((d) => {
     const coa = d.data();
-    coaMap[coa.code] = coa; // Cth: { "2000": {accountName: "Commission Payable", ...} }
+    coaMap[coa.code] = coa.accountName; // Simpan terus nama akaun untuk padanan pantas
 });
 
-// 2. Periksa Format PV (Adakah ia Manual atau Automatik?)
+// 2. Semak Format PV (Manual atau Automatik)
 if (pv.accounts && pv.accounts.length > 0) {
-    // A. PV Manual: Loop array 'accounts'
+    // A. PV Manual (Format Berpecah array 'accounts')
     pv.accounts.forEach(item => {
+        // Cuba tarik nama dari dokumen PV atau terus dari COA Map
+        let namaAkaun = item.accountName || item.account || coaMap[item.accountCode];
+        
+        // Jika masih gagal jumpa nama, guna fallback ejaan TEPAT COA bos
+        if (!namaAkaun) {
+            if (item.accountCode === "2010" || pv.type === "AQP") {
+                namaAkaun = "AQP Commission Payable";
+            } else if (item.accountCode === "2000" || pv.type === "CONSULTANT") {
+                namaAkaun = "Commission Payable";
+            } else if (item.accountCode === "5200") {
+                namaAkaun = "Allowance Expense";
+            } else if (item.accountCode === "2200" || pv.type === "ALLOWANCE") {
+                namaAkaun = "Allowance Payable";
+            } else {
+                namaAkaun = "Akaun " + (item.accountCode || pv.type); // Buang 'Payable Account'
+            }
+        }
+
         accountHTML += `
-        <tr>
-            <td class="border p-2">${item.accountName || "-"}</td>
-            <td class="border p-2 text-right">RM${Number(item.amount || 0).toFixed(2)}</td>
+        <tr class="border-b">
+            <td class="p-3 text-gray-800">${namaAkaun}</td>
+            <td class="p-3 text-right">RM${Number(item.amount || 0).toFixed(2)}</td>
         </tr>
         `;
     });
-} else if (pv.accountCode && pv.accountCode !== "MULTI") {
-    // B. PV Automatik: Ambil data dari 'accountCode' tunggal
-    // Cuba dapatkan nama akaun sebenar dari COA. Jika gagal, guna fallback.
-    let targetAccountName = "Consultant Payable"; 
+} else {
+    // B. PV Automatik (Data Tunggal dari accountCode)
+    let namaAkaun = pv.accountName || coaMap[pv.accountCode];
     
-    if (coaMap[pv.accountCode]) {
-        targetAccountName = coaMap[pv.accountCode].accountName;
-    } else if (pv.type === "AQP") {
-        targetAccountName = "AQP Payable";
+    if (!namaAkaun) {
+        if (pv.accountCode === "2010" || pv.type === "AQP") {
+            namaAkaun = "AQP Commission Payable";
+        } else if (pv.accountCode === "2000" || pv.type === "CONSULTANT") {
+            namaAkaun = "Commission Payable";
+        } else if (pv.accountCode === "5200") {
+            namaAkaun = "Allowance Expense";
+        } else if (pv.accountCode === "2200" || pv.type === "ALLOWANCE") {
+            namaAkaun = "Allowance Payable";
+        } else {
+            namaAkaun = "Akaun " + (pv.accountCode || "-");
+        }
     }
 
     accountHTML += `
-    <tr>
-        <td class="border p-2">${targetAccountName}</td>
-        <td class="border p-2 text-right">RM${Number(pv.amount || 0).toFixed(2)}</td>
+    <tr class="border-b">
+        <td class="p-3 text-gray-800">${namaAkaun}</td>
+        <td class="p-3 text-right">RM${Number(pv.amount || 0).toFixed(2)}</td>
     </tr>
     `;
 }
 
-// Paparkan dalam jadual, letak mesej jika PV tiada langsung butiran kewangan
 document.getElementById("accountTable").innerHTML = accountHTML || `
-    <tr><td colspan="2" class="border p-2 text-center text-gray-500 italic">Tiada butiran akaun ditemui.</td></tr>
+    <tr><td colspan="2" class="p-3 text-center text-gray-500 italic">Tiada butiran akaun ditemui.</td></tr>
 `;
 // ==============================================
 
