@@ -28,13 +28,11 @@
     </div>
 
     <div class="p-5">
-
         <!-- Top Bar: Navigasi & Butang Batch PDF -->
         <div class="flex flex-wrap justify-between items-center gap-4 mb-5">
             <a href="accounts-dashboard.html" class="inline-block bg-gray-200 px-5 py-3 rounded-xl text-gray-800 hover:bg-gray-300 transition font-medium">
                 &larr; Akaun
             </a>
-            
             <button onclick="generateBatchPDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-xl shadow-lg transition font-semibold flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                 Cetak PDF Pilihan (Batch)
@@ -53,11 +51,10 @@
                 <table class="w-full min-w-[750px]">
                     <thead class="bg-[#153638] text-white">
                         <tr>
-                            <!-- Checkbox Select All -->
                             <th class="p-3 text-center w-12">
                                 <input type="checkbox" id="selectAll" onclick="toggleAll(this)" class="w-4 h-4 cursor-pointer accent-indigo-500 rounded">
                             </th>
-                            <th class="p-3 text-left">Consultant</th>
+                            <th class="p-3 text-left">AQC / AQP No.</th>
                             <th class="p-3 text-left">Nama</th>
                             <th class="p-3 text-right">Amount (RM)</th>
                             <th class="p-3 text-center">Action</th>
@@ -73,18 +70,10 @@
         </div>
     </div>
 
-<script type="module">
-        // 1. Tarik 'db' dari fail konfigurasi berpusat
+    <script type="module">
         import { db } from './firebase.js';
-
-        // 2. Tarik fungsi Firestore yang berkaitan sahaja
         import {
-            collection, 
-            getDocs, 
-            doc, 
-            getDoc, 
-            addDoc, 
-            updateDoc
+            collection, getDocs, doc, getDoc, addDoc, updateDoc
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -113,11 +102,9 @@
             try {
                 await loadCompanySettings();
 
-                // =========================================================
                 // 1. TARIK KOD DINAMIK DARI CHART OF ACCOUNTS (COA)
-                // =========================================================
-                let coaAQC = "2000"; // Fallback selamat jika COA kosong
-                let coaAQP = "2010"; // Fallback selamat jika COA kosong
+                let coaAQC = "2000";
+                let coaAQP = "2010";
 
                 const coaSnap = await getDocs(collection(db, "chartOfAccounts"));
                 coaSnap.forEach(d => {
@@ -125,19 +112,16 @@
                     const accName = String(acc.accountName || "").toUpperCase();
                     const accCode = String(acc.accountCode);
 
-                    // Sistem akan cari akaun jenis "Payable" (Liabiliti)
                     if (accName.includes("PAYABLE")) {
                         if (accName.includes("AQP") || accName.includes("INSTITUSI")) {
-                            coaAQP = accCode; // Tangkap kod untuk AQP (Cth: 2010)
+                            coaAQP = accCode; 
                         } else if (accName.includes("AQC") || accName.includes("COMMISSION") || accName.includes("CONSULTANT")) {
-                            coaAQC = accCode; // Tangkap kod untuk AQC (Cth: 2000)
+                            coaAQC = accCode; 
                         }
                     }
                 });
 
-                // =========================================================
                 // 2. Tarik maklumat bank konsultan
-                // =========================================================
                 const consultantsSnap = await getDocs(collection(db, "consultants"));
                 const bankDetailsMap = {};
                 consultantsSnap.forEach(d => {
@@ -154,15 +138,12 @@
 
                 const groupedData = {};
 
-                // =========================================================
-                // 3. Tarik KOMISEN dari `ledger` menggunakan KOD DINAMIK
-                // =========================================================
+                // 3. Tarik KOMISEN dari `ledger`
                 const ledgerSnap = await getDocs(collection(db, "ledger"));
                 ledgerSnap.forEach((d) => {
                     const row = d.data();
                     const rowCode = String(row.accountCode);
 
-                    // Tapis (Filter): Hanya benarkan jika kod akaun padan dengan COA AQC atau AQP
                     if (rowCode !== coaAQC && rowCode !== coaAQP) return;
                     if (!row.description || (!row.description.startsWith("AQC") && !row.description.startsWith("AQP"))) return;
 
@@ -178,7 +159,6 @@
                     const cNo = consultantStr.split(" ")[0]; 
                     const cName = consultantStr.substring(cNo.length).trim(); 
 
-                    // Tetapkan parameter berdasarkan AQC atau AQP
                     const isAQP = cNo.startsWith("AQP");
                     const targetCode = isAQP ? coaAQP : coaAQC;
                     const pvType = isAQP ? "AQP" : "CONSULTANT";
@@ -194,8 +174,8 @@
                             commission: 0,
                             override: 0,
                             totalAmount: 0,
-                            targetCode: targetCode, // Simpan kod COA dinamik
-                            pvType: pvType,         // Simpan label jenis PV dinamik
+                            targetCode: targetCode,
+                            pvType: pvType,
                             docIds: [],        
                             overrideDocIds: [] 
                         };
@@ -213,13 +193,10 @@
                     groupedData[cNo].docIds.push(d.id);
                 });
 
-                // =========================================================
                 // 4. Tarik OVERRIDE dari `overrideHistory`
-                // =========================================================
                 const overrideSnap = await getDocs(collection(db, "overrideHistory"));
                 overrideSnap.forEach((d) => {
                     const row = d.data();
-                    
                     const status = String(row.status || "").toUpperCase();
                     if (status === "PV_GENERATED" || status === "PAID") return;
 
@@ -241,8 +218,8 @@
                             commission: 0,
                             override: 0,
                             totalAmount: 0,
-                            targetCode: targetCode, // Simpan kod COA dinamik
-                            pvType: pvType,         // Simpan label jenis PV dinamik
+                            targetCode: targetCode,
+                            pvType: pvType,
                             docIds: [],
                             overrideDocIds: []
                         };
@@ -279,13 +256,12 @@
                                 <button onclick="downloadSinglePDF('${item.consultantNo}')" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg hover:bg-purple-700 transition shadow text-xs md:text-sm mb-1">
                                     PDF Single
                                 </button>
-                                <!-- Parameter Kod Dinamik Dimasukkan Ke Dalam Butang Ini -->
-                                <button onclick="generatePV('${item.consultantNo}', '${item.nama}', ${item.totalAmount}, '${docIdsString}', '${overrideDocIdsString}', '${item.targetCode}', '${item.pvType}', this)" class="bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 transition shadow text-xs md:text-sm mb-1">
+                                <!-- BUTANG INI TELAH DIKEMASKINI DENGAN PARAMETER PECAHAN -->
+                                <button onclick="generatePV('${item.consultantNo}', '${item.nama}', ${item.commission}, ${item.override}, ${item.totalAmount}, '${docIdsString}', '${overrideDocIdsString}', '${item.targetCode}', '${item.pvType}', this)" class="bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 transition shadow text-xs md:text-sm mb-1">
                                     Generate PV
                                 </button>
                             </td>
                         </tr>
-
                         <!-- Sub-Jadual -->
                         <tr id="${item.consultantNo}" class="hidden bg-blue-50 border-b-2 border-blue-200">
                             <td colspan="5" class="p-6">
@@ -320,124 +296,58 @@
 
         window.toggleAll = function(source) {
             const checkboxes = document.querySelectorAll('.batch-checkbox');
-            checkboxes.forEach(cb => {
-                cb.checked = source.checked;
-            });
+            checkboxes.forEach(cb => { cb.checked = source.checked; });
         };
 
-        // Fungsi Penjanaan Batch PDF
         window.generateBatchPDF = function() {
+            // Kod PDF Batch dikekalkan sama...
             const checkboxes = document.querySelectorAll('.batch-checkbox:checked');
-            if (checkboxes.length === 0) {
-                alert("Sila tandakan (tick) sekurang-kurangnya satu nama untuk dicetak.");
-                return;
-            }
-
+            if (checkboxes.length === 0) { alert("Sila tandakan (tick) sekurang-kurangnya satu nama untuk dicetak."); return; }
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-
-            doc.setFontSize(14);
-            doc.setFont("helvetica", "bold");
-            doc.text((companyProfile.companyName || "").toUpperCase(), 14, 15);
-            
-            doc.setFontSize(9);
-            doc.setFont("helvetica", "normal");
-            doc.text(`No. Pendaftaran Syarikat: ${companyProfile.registrationNo || "-"}`, 14, 21);
+            doc.setFontSize(14); doc.setFont("helvetica", "bold"); doc.text((companyProfile.companyName || "").toUpperCase(), 14, 15);
+            doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.text(`No. Pendaftaran Syarikat: ${companyProfile.registrationNo || "-"}`, 14, 21);
             doc.text("SENARAI BAYARAN KOMISEN & OVERRIDE (BERKELOMPOK) UNTUK URUSAN BANK", 14, 26);
+            doc.setLineWidth(0.5); doc.line(14, 29, 196, 29);
+            doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.text(`Tarikh Cetakan : ${new Date().toLocaleDateString('ms-MY')}`, 14, 36);
 
-            doc.setLineWidth(0.5);
-            doc.line(14, 29, 196, 29);
-
-            doc.setFontSize(10);
-            doc.setFont("helvetica", "bold");
-            doc.text(`Tarikh Cetakan : ${new Date().toLocaleDateString('ms-MY')}`, 14, 36);
-
-            let totalKeseluruhan = 0;
-            const tableRows = [];
-
+            let totalKeseluruhan = 0; const tableRows = [];
             checkboxes.forEach((cb, index) => {
-                const cNo = cb.value;
-                const item = globalConsultantData[cNo];
-                
+                const cNo = cb.value; const item = globalConsultantData[cNo];
                 totalKeseluruhan += item.totalAmount;
-                
-                tableRows.push([
-                    index + 1,
-                    item.consultantNo,
-                    item.nama.toUpperCase(),
-                    item.ic,
-                    item.bankName,
-                    item.bankAccount,
-                    formatRM(item.commission),
-                    formatRM(item.override),
-                    formatRM(item.totalAmount)
-                ]);
+                tableRows.push([ index + 1, item.consultantNo, item.nama.toUpperCase(), item.ic, item.bankName, item.bankAccount, formatRM(item.commission), formatRM(item.override), formatRM(item.totalAmount) ]);
             });
 
             doc.autoTable({
                 startY: 42,
                 head: [['Bil', 'No. Rujukan', 'Nama Penerima', 'No. IC', 'Nama Bank', 'No. Akaun', 'Komisen (RM)', 'Override (RM)', 'Jumlah (RM)']],
-                body: tableRows,
-                theme: 'grid',
+                body: tableRows, theme: 'grid',
                 headStyles: { fillColor: [21, 54, 56], textColor: [255, 255, 255], fontStyle: 'bold' },
-                columnStyles: {
-                    0: { halign: 'center', cellWidth: 8 },
-                    1: { cellWidth: 20 },
-                    2: { cellWidth: 38 },
-                    3: { cellWidth: 26 },
-                    4: { cellWidth: 22 },
-                    5: { cellWidth: 24 },
-                    6: { halign: 'right', cellWidth: 20 },
-                    7: { halign: 'right', cellWidth: 20 },
-                    8: { halign: 'right', cellWidth: 22 }
-                },
+                columnStyles: { 0: { halign: 'center', cellWidth: 8 }, 1: { cellWidth: 20 }, 2: { cellWidth: 38 }, 3: { cellWidth: 26 }, 4: { cellWidth: 22 }, 5: { cellWidth: 24 }, 6: { halign: 'right', cellWidth: 20 }, 7: { halign: 'right', cellWidth: 20 }, 8: { halign: 'right', cellWidth: 22 } },
                 styles: { fontSize: 7.5, cellPadding: 2 }
             });
 
             const finalY = doc.lastAutoTable.finalY + 8;
-            doc.setFontSize(10);
-            doc.setFont("helvetica", "bold");
-            doc.text(`JUMLAH KESELURUHAN KELOMPOK: RM ${formatRM(totalKeseluruhan)}`, 196, finalY, { align: "right" });
-
+            doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.text(`JUMLAH KESELURUHAN KELOMPOK: RM ${formatRM(totalKeseluruhan)}`, 196, finalY, { align: "right" });
             const signY = finalY + 20;
             if (signY < 260) {
-                doc.setFontSize(9);
-                doc.setFont("helvetica", "normal");
-                doc.text("Disediakan Oleh:", 14, signY);
-                doc.text("_______________________", 14, signY + 15);
-                doc.text("Bahagian Akaun & Kewangan", 14, signY + 20);
-
-                doc.text("Disahkan Oleh:", 130, signY);
-                doc.text("_______________________", 130, signY + 15);
-                doc.text("Pengarah / Kelulusan", 130, signY + 20);
+                doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.text("Disediakan Oleh:", 14, signY); doc.text("_______________________", 14, signY + 15); doc.text("Bahagian Akaun & Kewangan", 14, signY + 20);
+                doc.text("Disahkan Oleh:", 130, signY); doc.text("_______________________", 130, signY + 15); doc.text("Pengarah / Kelulusan", 130, signY + 20);
             }
-
             doc.save(`Bank_Listing_Batch_${Date.now()}.pdf`);
         };
 
-        // Fungsi Penjanaan PDF Single
         window.downloadSinglePDF = function(cNo) {
+            // Kod PDF Single dikekalkan sama...
             const item = globalConsultantData[cNo];
             if (!item) return;
-
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-
-            doc.setFontSize(14);
-            doc.setFont("helvetica", "bold");
-            doc.text((companyProfile.companyName || "").toUpperCase(), 14, 15);
-            
-            doc.setFontSize(9);
-            doc.setFont("helvetica", "normal");
-            doc.text(`No. Pendaftaran Syarikat: ${companyProfile.registrationNo || "-"}`, 14, 21);
+            doc.setFontSize(14); doc.setFont("helvetica", "bold"); doc.text((companyProfile.companyName || "").toUpperCase(), 14, 15);
+            doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.text(`No. Pendaftaran Syarikat: ${companyProfile.registrationNo || "-"}`, 14, 21);
             doc.text("SENARAI BAYARAN KOMISEN & OVERRIDE KONSULTAN (UNTUK URUSAN BANK)", 14, 26);
-
-            doc.setLineWidth(0.5);
-            doc.line(14, 29, 196, 29);
-
-            doc.setFontSize(10);
-            doc.setFont("helvetica", "bold");
-            doc.text(`Tarikh Cetakan : ${new Date().toLocaleDateString('ms-MY')}`, 14, 36);
+            doc.setLineWidth(0.5); doc.line(14, 29, 196, 29);
+            doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.text(`Tarikh Cetakan : ${new Date().toLocaleDateString('ms-MY')}`, 14, 36);
 
             doc.autoTable({
                 startY: 42,
@@ -445,37 +355,26 @@
                 body: [[1, item.consultantNo, item.nama.toUpperCase(), item.ic, item.bankName, item.bankAccount, formatRM(item.commission), formatRM(item.override), formatRM(item.totalAmount)]],
                 theme: 'grid',
                 headStyles: { fillColor: [21, 54, 56], textColor: [255, 255, 255], fontStyle: 'bold' },
-                columnStyles: {
-                    0: { halign: 'center', cellWidth: 8 }, 1: { cellWidth: 20 }, 2: { cellWidth: 38 }, 3: { cellWidth: 26 },
-                    4: { cellWidth: 22 }, 5: { cellWidth: 24 }, 6: { halign: 'right', cellWidth: 20 }, 7: { halign: 'right', cellWidth: 20 }, 8: { halign: 'right', cellWidth: 22 }
-                },
+                columnStyles: { 0: { halign: 'center', cellWidth: 8 }, 1: { cellWidth: 20 }, 2: { cellWidth: 38 }, 3: { cellWidth: 26 }, 4: { cellWidth: 22 }, 5: { cellWidth: 24 }, 6: { halign: 'right', cellWidth: 20 }, 7: { halign: 'right', cellWidth: 20 }, 8: { halign: 'right', cellWidth: 22 } },
                 styles: { fontSize: 7.5, cellPadding: 2 }
             });
 
             const finalY = doc.lastAutoTable.finalY + 8;
-            doc.setFontSize(10);
-            doc.setFont("helvetica", "bold");
-            doc.text(`JUMLAH KESELURUHAN: RM ${formatRM(item.totalAmount)}`, 196, finalY, { align: "right" });
-
+            doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.text(`JUMLAH KESELURUHAN: RM ${formatRM(item.totalAmount)}`, 196, finalY, { align: "right" });
             const signY = finalY + 20;
             if (signY < 260) {
-                doc.setFontSize(9);
-                doc.setFont("helvetica", "normal");
-                doc.text("Disediakan Oleh:", 14, signY);
-                doc.text("_______________________", 14, signY + 15);
-                doc.text("Disahkan Oleh:", 130, signY);
-                doc.text("_______________________", 130, signY + 15);
+                doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.text("Disediakan Oleh:", 14, signY); doc.text("_______________________", 14, signY + 15);
+                doc.text("Disahkan Oleh:", 130, signY); doc.text("_______________________", 130, signY + 15);
             }
-
             doc.save(`Bank_Listing_${item.consultantNo}.pdf`);
         };
 
         // =========================================================
-        // Fungsi Generate PV (Terima Parameter Dinamik)
+        // FUNGSI GENERATE PV (DENGAN PECAHAN TERPERINCI)
         // =========================================================
-        window.generatePV = async (consultantNo, consultantName, amount, docIdsJson, overrideDocIdsJson, dynamicAccCode, dynamicPvType, button) => {
+        window.generatePV = async (consultantNo, consultantName, commAmount, overrideAmount, totalAmount, docIdsJson, overrideDocIdsJson, dynamicAccCode, dynamicPvType, button) => {
             try {
-                if (!confirm(`Sahkan penjanaan PV untuk ${consultantNo} berjumlah RM${formatRM(amount)}?`)) return;
+                if (!confirm(`Sahkan penjanaan PV untuk ${consultantNo} berjumlah RM${formatRM(totalAmount)}?`)) return;
                 
                 button.disabled = true;
                 button.innerText = "Memproses...";
@@ -484,31 +383,51 @@
                 const overrideDocIds = JSON.parse(overrideDocIdsJson);
                 const pvNo = "PV-" + Date.now();
 
-                // 1. Masukkan rekod ke Payment Vouchers dengan KOD COA DINAMIK
+                // 1. Sediakan Array Pecahan (Payment Breakdown)
+                let splitAccounts = [];
+                
+                if (Number(commAmount) > 0) {
+                    splitAccounts.push({
+                        accountCode: dynamicAccCode, 
+                        accountName: dynamicPvType === "AQP" ? "AQP Commission Payable" : "Commission Payable",
+                        amount: Number(commAmount)
+                    });
+                }
+
+                if (Number(overrideAmount) > 0) {
+                    splitAccounts.push({
+                        accountCode: "2150", 
+                        accountName: "Upline Sponsor Benefit Payable",
+                        amount: Number(overrideAmount)
+                    });
+                }
+
+                // 2. Masukkan rekod ke Payment Vouchers dengan array accounts
                 await addDoc(collection(db, "paymentVouchers"), {
                     pvNo, 
                     consultantNo, 
                     consultantName, 
-                    amount: Number(amount),
+                    amount: Number(totalAmount),
                     status: "PENDING", 
                     createdAt: new Date(), 
-                    accountCode: dynamicAccCode, // Disuap secara automatik dari COA (Cth: 2000/2010)
-                    type: dynamicPvType          // Disuap secara automatik (CONSULTANT / AQP)
+                    accountCode: "MULTI", 
+                    type: dynamicPvType,
+                    accounts: splitAccounts
                 });
 
-                // 2. Update status dalam 'ledger'
+                // 3. Update status dalam 'ledger'
                 for (let i = 0; i < docIds.length; i++) {
                     const docRef = doc(db, "ledger", docIds[i]);
                     await updateDoc(docRef, { status: "PV_GENERATED" });
                 }
 
-                // 3. Update status dalam 'overrideHistory'
+                // 4. Update status dalam 'overrideHistory'
                 for (let i = 0; i < overrideDocIds.length; i++) {
                     const overrideRef = doc(db, "overrideHistory", overrideDocIds[i]);
                     await updateDoc(overrideRef, { status: "PV_GENERATED" });
                 }
 
-                alert(`Berjaya! Payment Voucher (${pvNo}) telah dicipta untuk ${consultantNo}.`);
+                alert(`Berjaya! Payment Voucher (${pvNo}) telah dicipta dengan pecahan terperinci untuk ${consultantNo}.`);
                 location.reload();
                 
             } catch (err) {
