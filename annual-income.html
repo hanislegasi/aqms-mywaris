@@ -105,8 +105,9 @@
             ledgerSnap.forEach(d => {
                 const data = d.data();
                 
-                // FIX 2: Terima code berbentuk Nombor (2000) atau String ("2000")
-                if (String(data.accountCode) === "2000") {
+                // FIX 2: KEMASKINI - Terima code 2000 (Commission), 2010 (AQP Commission), dan 2100 (Override)
+                const accCode = String(data.accountCode);
+                if (accCode === "2000" || accCode === "2010" || accCode === "2100") {
                     
                     // FIX 3: Fleksibiliti tarikh (support Timestamp & String)
                     let rawDate = data.createdAt || data.date; 
