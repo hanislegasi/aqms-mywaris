@@ -183,7 +183,7 @@ onAuthStateChanged(auth, async(user)=>{
             { key:"mawaris", label:"MAWARIS" }
         ];
 
-        let workflowStatus = "PROSPEK";
+        let workflowStatus = "DRAFTING";
 
         for(const module of modules){
             const moduleSnap = await getDoc(doc(db, "users", docSnap.id, module.key, "maklumat"));
@@ -224,7 +224,7 @@ onAuthStateChanged(auth, async(user)=>{
             <td class="p-3">${expiryDate}</td>
             <td class="p-3 text-center">
                 <span class="px-3 py-1 rounded-full text-xs font-bold ${isAhliAktif ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}">
-                    ${isAhliAktif ? "AHLI AKTIF" : "DRAFTING"}
+                    ${isAhliAktif ? "AHLI AKTIF" : "PROSPEK"}
                 </span>
             </td>
             <td class="p-3 text-center">
