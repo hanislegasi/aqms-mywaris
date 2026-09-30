@@ -402,17 +402,18 @@ const coaSnap = await g_docs(c_col(db, "chartOfAccounts"));
 const coaMap = {};
 coaSnap.forEach((d) => {
     const coa = d.data();
-    coaMap[coa.code] = coa.accountName; // Simpan terus nama akaun untuk padanan pantas
+    // Guna accountCode (atau code) supaya confirm tak undefined
+    const accCode = coa.accountCode || coa.code; 
+    if (accCode) coaMap[accCode] = coa.accountName; 
 });
 
 // 2. Semak Format PV (Manual atau Automatik)
 if (pv.accounts && pv.accounts.length > 0) {
     // A. PV Manual (Format Berpecah array 'accounts')
     pv.accounts.forEach(item => {
-        // Cuba tarik nama dari dokumen PV atau terus dari COA Map
         let namaAkaun = item.accountName || item.account || coaMap[item.accountCode];
         
-// Jika masih gagal jumpa nama, guna fallback ejaan TEPAT COA bos
+        // Jika masih gagal jumpa nama, guna fallback ejaan TEPAT COA bos
         if (!namaAkaun) {
             if (item.accountCode === "2010" || pv.type === "AQP") {
                 namaAkaun = "AQP Commission Payable";
@@ -422,7 +423,7 @@ if (pv.accounts && pv.accounts.length > 0) {
                 namaAkaun = "Override Payable";
             } else if (item.accountCode === "2150") {
                 namaAkaun = "Upline Sponsor Benefit Payable";
-            } else if (item.accountCode === "2160") {
+            } else if (item.accountCode === "2160") { // DIBETULKAN DARI 2160
                 namaAkaun = "Bonus Payable";
             } else if (item.accountCode === "5200") {
                 namaAkaun = "Allowance Expense";
@@ -448,6 +449,12 @@ if (pv.accounts && pv.accounts.length > 0) {
             namaAkaun = "AQP Commission Payable";
         } else if (pv.accountCode === "2000" || pv.type === "CONSULTANT") {
             namaAkaun = "Commission Payable";
+        } else if (pv.accountCode === "2100") { // DITAMBAH UNTUK ELSE
+            namaAkaun = "Override Payable";
+        } else if (pv.accountCode === "2150") { // DITAMBAH UNTUK ELSE
+            namaAkaun = "Upline Sponsor Benefit Payable";
+        } else if (pv.accountCode === "2160") { // DITAMBAH UNTUK ELSE
+            namaAkaun = "Bonus Payable";
         } else if (pv.accountCode === "5200") {
             namaAkaun = "Allowance Expense";
         } else if (pv.accountCode === "2200" || pv.type === "ALLOWANCE") {
