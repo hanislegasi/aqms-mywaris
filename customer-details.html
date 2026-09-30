@@ -873,6 +873,48 @@ import {
           user.corporateZurriPaymentStatus === "paid"
         ) ? "AHLI AKTIF" : "PROSPEK";
 
+
+        // ===== FUNGSI PENGHANTARAN E-MEL KURIER (AUTO-CC AQC) =====
+        async function hantarEmailTracking(jenisDokumen, courier, trackingNo) {
+            if (!user.email) return; // Skip kalau pelanggan tiada rekod e-mel
+
+            // Cantum e-mel Pelanggan & E-mel AQC (jika ada)
+            const emelPenerima = consultantData.email ? `${user.email}, ${consultantData.email}` : user.email;
+
+            const emailData = {
+                to: emelPenerima,
+                subject: `Makluman Kurier: Dokumen ${jenisDokumen} Anda Sedang Dihantar!`,
+                html: `
+                    <p>Salam sejahtera <strong>${user.nama || "Pelanggan"}</strong>,</p>
+                    <p>Dokumen <strong>${jenisDokumen}</strong> anda telah siap diproses dan diserahkan kepada pihak pengurusan kurier hari ini.</p>
+                    <div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #e2e8f0;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>Kurier:</strong> ${courier || "Rujuk Admin"}</li>
+                            <li><strong>No. Penjejakan (Tracking):</strong> ${trackingNo || "Rujuk Admin"}</li>
+                        </ul>
+                    </div>
+                    <p>Anda boleh menyemak pergerakan dokumen ini di portal kurier yang berkaitan, atau log masuk ke Dashboard AQMS anda.</p>
+                    <p style="color: #64748b; font-size: 13px;"><em>*Satu salinan e-mel ini turut dipanjangkan kepada Perunding AQC anda (${consultantData.nama || "-"}).</em></p>
+                    <br>
+                    <p>Terima kasih,</p>
+                    <p><strong>Pengurusan Operasi AQMS</strong></p>
+                `
+            };
+
+            try {
+                // Tarik fungsi Firebase Cloud dari pelayan Asia
+                const { getFunctions, httpsCallable } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js");
+                const functionsApp = getFunctions(auth.app, 'asia-southeast1');
+                const sendEmailAPI = httpsCallable(functionsApp, 'sendEmail');
+                
+                await sendEmailAPI(emailData);
+                console.log(`E-mel tracking ${jenisDokumen} berjaya dihantar ke: ${emelPenerima}`);
+            } catch (error) {
+                console.error("Gagal hantar e-mel tracking:", error);
+            }
+        }
+
+        
         // ==================== EVENT LISTENERS (DI DALAM SKOP DOC SNAP) ====================
 
         // 1. WASIAT
@@ -924,6 +966,9 @@ import {
                 receiver: document.getElementById("wasiatReceiver")?.value || "",
                 remarks: document.getElementById("wasiatRemarks")?.value || ""
               });
+              // ======== TAMBAH 1 BARIS INI ========
+              await hantarEmailTracking("Wasiat", document.getElementById("wasiatCourier")?.value, document.getElementById("wasiatTrackingNo")?.value);
+              // ===================================
               alert("Dokumen berjaya dihantar.");
               location.reload();
             };
@@ -1005,6 +1050,9 @@ import {
                 receiver: document.getElementById("hibahReceiver")?.value || "",
                 remarks: document.getElementById("hibahRemarks")?.value || ""
               });
+              // ======== TAMBAH 1 BARIS INI ========
+              await hantarEmailTracking("Hibah", document.getElementById("hibahCourier")?.value, document.getElementById("hibahTrackingNo")?.value);
+              // ===================================
               alert("Dokumen berjaya dihantar.");
               location.reload();
             };
@@ -1086,6 +1134,9 @@ import {
                 receiver: document.getElementById("sepencarianReceiver")?.value || "",
                 remarks: document.getElementById("sepencarianRemarks")?.value || ""
               });
+              // ======== TAMBAH 1 BARIS INI ========
+              await hantarEmailTracking("Sepencarian", document.getElementById("sepencarianCourier")?.value, document.getElementById("sepencarianTrackingNo")?.value);
+              // ===================================
               alert("Dokumen berjaya dihantar.");
               location.reload();
             };
@@ -1167,6 +1218,9 @@ import {
                 receiver: document.getElementById("mawarisReceiver")?.value || "",
                 remarks: document.getElementById("mawarisRemarks")?.value || ""
               });
+              // ======== TAMBAH 1 BARIS INI ========
+              await hantarEmailTracking("Mawaris", document.getElementById("mawarisCourier")?.value, document.getElementById("mawarisTrackingNo")?.value);
+              // ===================================
               alert("Dokumen berjaya dihantar.");
               location.reload();
             };
@@ -1248,6 +1302,9 @@ import {
                 receiver: document.getElementById("corporateReceiver")?.value || "",
                 remarks: document.getElementById("corporateRemarks")?.value || ""
               });
+              // ======== TAMBAH 1 BARIS INI ========
+              await hantarEmailTracking("Mawaris Korporat", document.getElementById("corporateCourier")?.value, document.getElementById("corporateTrackingNo")?.value);
+              // ===================================
               alert("Dokumen berjaya dihantar.");
               location.reload();
             };
@@ -1329,6 +1386,9 @@ import {
                 receiver: document.getElementById("corporateTunggalReceiver")?.value || "",
                 remarks: document.getElementById("corporateTunggalRemarks")?.value || ""
               });
+              // ======== TAMBAH 1 BARIS INI ========
+              await hantarEmailTracking("Mawaris Korporat-Sole", document.getElementById("corporateTunggalCourier")?.value, document.getElementById("corporateTunggalTrackingNo")?.value);
+              // ===================================
               alert("Dokumen berjaya dihantar.");
               location.reload();
             };
@@ -1410,6 +1470,9 @@ import {
                 receiver: document.getElementById("corporateKongsiReceiver")?.value || "",
                 remarks: document.getElementById("corporateKongsiRemarks")?.value || ""
               });
+              // ======== TAMBAH 1 BARIS INI ========
+              await hantarEmailTracking("Mawaris Korporat-P'Ship", document.getElementById("corporateKongsiCourier")?.value, document.getElementById("corporateKongsiTrackingNo")?.value);
+              // ===================================
               alert("Dokumen berjaya dihantar.");
               location.reload();
             };
@@ -1491,6 +1554,10 @@ import {
                 receiver: document.getElementById("corporateZurriReceiver")?.value || "",
                 remarks: document.getElementById("corporateZurriRemarks")?.value || ""
               });
+              // ======== TAMBAH 1 BARIS INI ========
+              await hantarEmailTracking("Mawaris Korporat-Zurri", document.getElementById("corporateZurriCourier")?.value, document.getElementById("corporateZurriTrackingNo")?.value);
+              // ===================================
+
               alert("Dokumen berjaya dihantar.");
               location.reload();
             };
