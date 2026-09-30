@@ -245,82 +245,99 @@ document.querySelectorAll(".deleteBtn").forEach(btn=>{
 });
                
 window.markPaid = async (pvId, type, payee, amount) => {
-            if (!confirm("Confirm payment?")) return;
-            
-            const pvDoc = await getDoc(doc(db, "paymentVouchers", pvId));
-            const pv = pvDoc.data();
+    if (!confirm("Confirm payment?")) return;
+    
+    const pvDoc = await getDoc(doc(db, "paymentVouchers", pvId));
+    const pv = pvDoc.data();
 
-            // 1. Tarik COA macam biasa
-            const coaSnap = await getDocs(collection(db, "chartOfAccounts"));
-            const coaMap = {};
-            coaSnap.forEach((d) => {
-                const coa = d.data();
-                coaMap[coa.code] = coa;
+    // 1. Tarik COA macam biasa
+    const coaSnap = await getDocs(collection(db, "chartOfAccounts"));
+    const coaMap = {};
+    coaSnap.forEach((d) => {
+        const coa = d.data();
+        coaMap[coa.code] = coa;
+    });
+
+    const bank = coaMap["1000"]; // Akaun Bank (Kredit)
+    
+    // ===============================================================
+    // PENAMBAHBAIKAN LOGIK AKAUN DEBIT (Boleh baca PV Manual & Automatik)
+    // ===============================================================
+    let accountsToDebit = [];
+    
+    if (pv.accounts && pv.accounts.length > 0) {
+        // Jika PV datang dari borang "Create PV" manual (ada array 'accounts')
+        accountsToDebit = pv.accounts;
+    } else if (pv.accountCode && pv.accountCode !== "MULTI") {
+        // Jika PV datang dari automasi Consultant Payable (Single accountCode)
+        accountsToDebit = [{
+            accountCode: pv.accountCode,
+            accountName: pv.accountName || payee,
+            amount: pv.amount
+        }];
+    }
+    // ===============================================================
+
+    // 2. Loop DEBIT
+    for(const item of accountsToDebit){
+        const currentCoa = coaMap[item.accountCode] || {};
+
+        await addDoc(collection(db, "ledger"), {
+            date: new Date(),
+            accountCode: item.accountCode || "",
+            account: item.accountName || "",
+            category: currentCoa.category || "",
+            cashFlowType: currentCoa.cashFlowType || "",
+            normalBalance: currentCoa.normalBalance || "",
+            reportGroup: currentCoa.reportGroup || "",
+            consultantNo: pv.consultantNo || "",
+            consultantName: pv.consultantName || "",
+            description: payee,
+            debit: item.amount,
+            credit: 0,
+            paymentType: type,
+            transactionGroup: pv.pvNo
+        });
+    }
+
+    // 3. Masukkan rekod KREDIT (1000 - Bank)
+    if (bank) {
+        await addDoc(collection(db, "ledger"), {
+            date: new Date(),
+            accountCode: bank.code,
+            account: bank.name,
+            category: bank.category || "",
+            cashFlowType: bank.cashFlowType || "",
+            normalBalance: bank.normalBalance || "",
+            reportGroup: bank.reportGroup || "",
+            description: payee,
+            debit: 0,
+            credit: amount,
+            paymentType: type,
+            transactionGroup: pv.pvNo
+        });  
+    }
+
+    // 4. Update Status PV kepada PAID
+    await updateDoc(doc(db, "paymentVouchers", pvId), {
+        status: "PAID",
+        paidAt: new Date()
+    });
+
+    // 5. NOTIFY AQC (UPDATE STATUS KLIEN KEPADA "paid")
+    if (pv.clientId && pv.prodName) {
+        try {
+            await updateDoc(doc(db, "users", pv.clientId, pv.prodName, "maklumat"), {
+                claimStatus: "paid"
             });
+        } catch (error) {
+            console.error("Gagal update status klien:", error);
+        }
+    }
 
-            const bank = coaMap["1000"]; // Akaun Bank (Kredit)
-            const accounts = pv.accounts || [];
-                      
-            // 2. Loop DEBIT (Dinamik tarik dari apa yang tersimpan dalam PV)
-            for(const item of accounts){
-                const currentCoa = coaMap[item.accountCode] || {};
-
-                await addDoc(collection(db, "ledger"), {
-                    date: new Date(),
-                    accountCode: item.accountCode || "",
-                    account: item.accountName || "",
-                    category: currentCoa.category || "",
-                    cashFlowType: currentCoa.cashFlowType || "",
-                    normalBalance: currentCoa.normalBalance || "",
-                    reportGroup: currentCoa.reportGroup || "",
-                    consultantNo: pv.consultantNo || "",
-                    consultantName: pv.consultantName || "",
-                    description: payee,
-                    debit: item.amount,
-                    credit: 0,
-                    paymentType: type,
-                    transactionGroup: pv.pvNo
-                });
-            }
-
-            // 3. Masukkan rekod KREDIT (1000 - Bank)
-            if (bank) {
-                await addDoc(collection(db, "ledger"), {
-                    date: new Date(),
-                    accountCode: bank.code,
-                    account: bank.name,
-                    category: bank.category || "",
-                    cashFlowType: bank.cashFlowType || "",
-                    normalBalance: bank.normalBalance || "",
-                    reportGroup: bank.reportGroup || "",
-                    description: payee,
-                    debit: 0,
-                    credit: amount,
-                    paymentType: type,
-                    transactionGroup: pv.pvNo
-                });  
-            }
-
-            // 4. Update Status PV kepada PAID
-            await updateDoc(doc(db, "paymentVouchers", pvId), {
-                status: "PAID",
-                paidAt: new Date()
-            });
-
-            // 5. NOTIFY AQC (UPDATE STATUS KLIEN KEPADA "paid")
-            if (pv.clientId && pv.prodName) {
-                try {
-                    await updateDoc(doc(db, "users", pv.clientId, pv.prodName, "maklumat"), {
-                        claimStatus: "paid"
-                    });
-                } catch (error) {
-                    console.error("Gagal update status klien:", error);
-                }
-            }
-
-            alert("Payment completed and ledger updated!");
-            location.reload();
-        };
+    alert("Payment completed and ledger updated!");
+    location.reload();
+};
     </script>
 </body>
 </html>
