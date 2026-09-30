@@ -412,21 +412,26 @@ if (pv.accounts && pv.accounts.length > 0) {
         // Cuba tarik nama dari dokumen PV atau terus dari COA Map
         let namaAkaun = item.accountName || item.account || coaMap[item.accountCode];
         
-        // Jika masih gagal jumpa nama, guna fallback ejaan TEPAT COA bos
+// Jika masih gagal jumpa nama, guna fallback ejaan TEPAT COA bos
         if (!namaAkaun) {
             if (item.accountCode === "2010" || pv.type === "AQP") {
                 namaAkaun = "AQP Commission Payable";
             } else if (item.accountCode === "2000" || pv.type === "CONSULTANT") {
                 namaAkaun = "Commission Payable";
+            } else if (item.accountCode === "2100") {
+                namaAkaun = "Override Payable";
+            } else if (item.accountCode === "2150") {
+                namaAkaun = "Upline Sponsor Benefit Payable";
+            } else if (item.accountCode === "2160") {
+                namaAkaun = "Bonus Payable";
             } else if (item.accountCode === "5200") {
                 namaAkaun = "Allowance Expense";
             } else if (item.accountCode === "2200" || pv.type === "ALLOWANCE") {
                 namaAkaun = "Allowance Payable";
             } else {
-                namaAkaun = "Akaun " + (item.accountCode || pv.type); // Buang 'Payable Account'
+                namaAkaun = "Akaun " + (item.accountCode || pv.type);
             }
         }
-
         accountHTML += `
         <tr class="border-b">
             <td class="p-3 text-gray-800">${namaAkaun}</td>
