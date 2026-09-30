@@ -383,8 +383,10 @@
 
 // Butang Hantar E-mel (API Panggilan ke Backend)
     document.getElementById('emailBtn').addEventListener('click', async () => {
-        const iName = document.getElementById('instName').value;
-        const iName = document.getElementById('instName').value.toUpperCase();
+    const iName = document.getElementById('instName').value.toUpperCase();
+    const iEmail = document.getElementById('instEmail').value.trim();
+    
+    if(!iEmail) {
         
         if(!iEmail) {
             alert("Sila masukkan alamat E-mel Institusi di dalam borang terlebih dahulu.");
