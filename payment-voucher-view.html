@@ -391,34 +391,55 @@ benHTML;
 
 }
   
-let accountHTML="";
+// ==============================================
+// LOGIK MEMAPARKAN PAYMENT BREAKDOWN (KEMASKINI)
+// ==============================================
+let accountHTML = "";
 
-(pv.accounts||[]).forEach(item=>{
-
-accountHTML+=`
-
-<tr>
-
-<td class="border p-2">
-
-${item.accountName}
-
-</td>
-
-<td class="border p-2 text-right">
-
-RM${Number(item.amount).toFixed(2)}
-
-</td>
-
-</tr>
-
-`;
-
+// 1. Tarik COA (Chart of Accounts) untuk padankan nama kod PV automatik
+import { collection as c_col, getDocs as g_docs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const coaSnap = await g_docs(c_col(db, "chartOfAccounts"));
+const coaMap = {};
+coaSnap.forEach((d) => {
+    const coa = d.data();
+    coaMap[coa.code] = coa; // Cth: { "2000": {accountName: "Commission Payable", ...} }
 });
 
-document.getElementById("accountTable").innerHTML=
-accountHTML;
+// 2. Periksa Format PV (Adakah ia Manual atau Automatik?)
+if (pv.accounts && pv.accounts.length > 0) {
+    // A. PV Manual: Loop array 'accounts'
+    pv.accounts.forEach(item => {
+        accountHTML += `
+        <tr>
+            <td class="border p-2">${item.accountName || "-"}</td>
+            <td class="border p-2 text-right">RM${Number(item.amount || 0).toFixed(2)}</td>
+        </tr>
+        `;
+    });
+} else if (pv.accountCode && pv.accountCode !== "MULTI") {
+    // B. PV Automatik: Ambil data dari 'accountCode' tunggal
+    // Cuba dapatkan nama akaun sebenar dari COA. Jika gagal, guna fallback.
+    let targetAccountName = "Consultant Payable"; 
+    
+    if (coaMap[pv.accountCode]) {
+        targetAccountName = coaMap[pv.accountCode].accountName;
+    } else if (pv.type === "AQP") {
+        targetAccountName = "AQP Payable";
+    }
+
+    accountHTML += `
+    <tr>
+        <td class="border p-2">${targetAccountName}</td>
+        <td class="border p-2 text-right">RM${Number(pv.amount || 0).toFixed(2)}</td>
+    </tr>
+    `;
+}
+
+// Paparkan dalam jadual, letak mesej jika PV tiada langsung butiran kewangan
+document.getElementById("accountTable").innerHTML = accountHTML || `
+    <tr><td colspan="2" class="border p-2 text-center text-gray-500 italic">Tiada butiran akaun ditemui.</td></tr>
+`;
+// ==============================================
 
 // ==============================================
         // LOGIK MEMAPARKAN RESIT (DITAMBAH DI SINI)
