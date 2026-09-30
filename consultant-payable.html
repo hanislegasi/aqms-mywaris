@@ -73,19 +73,19 @@
         </div>
     </div>
 
-    <script type="module">
+<script type="module">
         // 1. Tarik 'db' dari fail konfigurasi berpusat
-import { db } from './firebase.js';
+        import { db } from './firebase.js';
 
-// 2. Tarik fungsi Firestore yang berkaitan sahaja (buang getFirestore)
-import {
-    collection, 
-    getDocs, 
-    doc, 
-    getDoc, 
-    addDoc, 
-    updateDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        // 2. Tarik fungsi Firestore yang berkaitan sahaja
+        import {
+            collection, 
+            getDocs, 
+            doc, 
+            getDoc, 
+            addDoc, 
+            updateDoc
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const formatRM = (val) => Number(val || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -113,7 +113,31 @@ import {
             try {
                 await loadCompanySettings();
 
-                // 1. Tarik maklumat bank konsultan
+                // =========================================================
+                // 1. TARIK KOD DINAMIK DARI CHART OF ACCOUNTS (COA)
+                // =========================================================
+                let coaAQC = "2000"; // Fallback selamat jika COA kosong
+                let coaAQP = "2010"; // Fallback selamat jika COA kosong
+
+                const coaSnap = await getDocs(collection(db, "chartOfAccounts"));
+                coaSnap.forEach(d => {
+                    const acc = d.data();
+                    const accName = String(acc.accountName || "").toUpperCase();
+                    const accCode = String(acc.accountCode);
+
+                    // Sistem akan cari akaun jenis "Payable" (Liabiliti)
+                    if (accName.includes("PAYABLE")) {
+                        if (accName.includes("AQP") || accName.includes("INSTITUSI")) {
+                            coaAQP = accCode; // Tangkap kod untuk AQP (Cth: 2010)
+                        } else if (accName.includes("AQC") || accName.includes("COMMISSION") || accName.includes("CONSULTANT")) {
+                            coaAQC = accCode; // Tangkap kod untuk AQC (Cth: 2000)
+                        }
+                    }
+                });
+
+                // =========================================================
+                // 2. Tarik maklumat bank konsultan
+                // =========================================================
                 const consultantsSnap = await getDocs(collection(db, "consultants"));
                 const bankDetailsMap = {};
                 consultantsSnap.forEach(d => {
@@ -130,12 +154,17 @@ import {
 
                 const groupedData = {};
 
-                // 2. Tarik KOMISEN dari `ledger`
+                // =========================================================
+                // 3. Tarik KOMISEN dari `ledger` menggunakan KOD DINAMIK
+                // =========================================================
                 const ledgerSnap = await getDocs(collection(db, "ledger"));
                 ledgerSnap.forEach((d) => {
                     const row = d.data();
+                    const rowCode = String(row.accountCode);
 
-                    if(row.accountCode !== "2000" || !row.description || !row.description.startsWith("AQC")) return;
+                    // Tapis (Filter): Hanya benarkan jika kod akaun padan dengan COA AQC atau AQP
+                    if (rowCode !== coaAQC && rowCode !== coaAQP) return;
+                    if (!row.description || (!row.description.startsWith("AQC") && !row.description.startsWith("AQP"))) return;
 
                     const status = String(row.status || "").toUpperCase();
                     if (status === "PV_GENERATED" || status === "PAID") return;
@@ -149,6 +178,11 @@ import {
                     const cNo = consultantStr.split(" ")[0]; 
                     const cName = consultantStr.substring(cNo.length).trim(); 
 
+                    // Tetapkan parameter berdasarkan AQC atau AQP
+                    const isAQP = cNo.startsWith("AQP");
+                    const targetCode = isAQP ? coaAQP : coaAQC;
+                    const pvType = isAQP ? "AQP" : "CONSULTANT";
+
                     if(!groupedData[cNo]){
                         const bankInfo = bankDetailsMap[cNo] || { ic: "-", bankName: "-", bankAccount: "-" };
                         groupedData[cNo] = {
@@ -160,14 +194,15 @@ import {
                             commission: 0,
                             override: 0,
                             totalAmount: 0,
-                            docIds: [],        // ID utk ledger
-                            overrideDocIds: [] // ID utk overrideHistory
+                            targetCode: targetCode, // Simpan kod COA dinamik
+                            pvType: pvType,         // Simpan label jenis PV dinamik
+                            docIds: [],        
+                            overrideDocIds: [] 
                         };
                     }
 
                     const amt = Number(row.credit || 0);
 
-                    // Just in case override masih ada sisa dlm ledger, kita asingkan juga.
                     if (rawType.includes("OVERRIDE") || rawDesc.includes("OVERRIDE")) {
                         groupedData[cNo].override += amt;
                     } else {
@@ -178,17 +213,22 @@ import {
                     groupedData[cNo].docIds.push(d.id);
                 });
 
-                // 3. Tarik OVERRIDE dari `overrideHistory`
+                // =========================================================
+                // 4. Tarik OVERRIDE dari `overrideHistory`
+                // =========================================================
                 const overrideSnap = await getDocs(collection(db, "overrideHistory"));
                 overrideSnap.forEach((d) => {
                     const row = d.data();
                     
-                    // Semak status, jika dah dibayar/generate PV, abaikan
                     const status = String(row.status || "").toUpperCase();
                     if (status === "PV_GENERATED" || status === "PAID") return;
 
-                    const cNo = row.receiver; // Rujuk gambar: field 'receiver' pegang AQC No.
+                    const cNo = row.receiver;
                     if (!cNo) return;
+
+                    const isAQP = cNo.startsWith("AQP");
+                    const targetCode = isAQP ? coaAQP : coaAQC;
+                    const pvType = isAQP ? "AQP" : "CONSULTANT";
 
                     if(!groupedData[cNo]){
                         const bankInfo = bankDetailsMap[cNo] || { ic: "-", bankName: "-", bankAccount: "-" };
@@ -201,12 +241,14 @@ import {
                             commission: 0,
                             override: 0,
                             totalAmount: 0,
+                            targetCode: targetCode, // Simpan kod COA dinamik
+                            pvType: pvType,         // Simpan label jenis PV dinamik
                             docIds: [],
                             overrideDocIds: []
                         };
                     }
 
-                    const amt = Number(row.override || 0); // Rujuk gambar: field 'override' pegang nilai amount
+                    const amt = Number(row.override || 0);
                     groupedData[cNo].override += amt;
                     groupedData[cNo].totalAmount += amt;
                     groupedData[cNo].overrideDocIds.push(d.id);
@@ -237,7 +279,8 @@ import {
                                 <button onclick="downloadSinglePDF('${item.consultantNo}')" class="bg-purple-600 text-white px-3 py-1.5 rounded-lg hover:bg-purple-700 transition shadow text-xs md:text-sm mb-1">
                                     PDF Single
                                 </button>
-                                <button onclick="generatePV('${item.consultantNo}', '${item.nama}', ${item.totalAmount}, '${docIdsString}', '${overrideDocIdsString}', this)" class="bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 transition shadow text-xs md:text-sm mb-1">
+                                <!-- Parameter Kod Dinamik Dimasukkan Ke Dalam Butang Ini -->
+                                <button onclick="generatePV('${item.consultantNo}', '${item.nama}', ${item.totalAmount}, '${docIdsString}', '${overrideDocIdsString}', '${item.targetCode}', '${item.pvType}', this)" class="bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 transition shadow text-xs md:text-sm mb-1">
                                     Generate PV
                                 </button>
                             </td>
@@ -275,7 +318,6 @@ import {
             document.getElementById(id).classList.toggle("hidden");
         };
 
-        // Fungsi Checkbox Select All
         window.toggleAll = function(source) {
             const checkboxes = document.querySelectorAll('.batch-checkbox');
             checkboxes.forEach(cb => {
@@ -283,11 +325,11 @@ import {
             });
         };
 
-        // Fungsi Penjanaan Batch PDF (Gabung berbilang pilihan)
+        // Fungsi Penjanaan Batch PDF
         window.generateBatchPDF = function() {
             const checkboxes = document.querySelectorAll('.batch-checkbox:checked');
             if (checkboxes.length === 0) {
-                alert("Sila tandakan (tick) sekurang-kurangnya satu nama konsultan untuk dicetak.");
+                alert("Sila tandakan (tick) sekurang-kurangnya satu nama untuk dicetak.");
                 return;
             }
 
@@ -334,7 +376,7 @@ import {
 
             doc.autoTable({
                 startY: 42,
-                head: [['Bil', 'No. AQC', 'Nama Penerima', 'No. IC', 'Nama Bank', 'No. Akaun', 'Komisen (RM)', 'Override (RM)', 'Jumlah (RM)']],
+                head: [['Bil', 'No. Rujukan', 'Nama Penerima', 'No. IC', 'Nama Bank', 'No. Akaun', 'Komisen (RM)', 'Override (RM)', 'Jumlah (RM)']],
                 body: tableRows,
                 theme: 'grid',
                 headStyles: { fillColor: [21, 54, 56], textColor: [255, 255, 255], fontStyle: 'bold' },
@@ -373,7 +415,7 @@ import {
             doc.save(`Bank_Listing_Batch_${Date.now()}.pdf`);
         };
 
-        // Fungsi Penjanaan PDF Single (Satu Persatu)
+        // Fungsi Penjanaan PDF Single
         window.downloadSinglePDF = function(cNo) {
             const item = globalConsultantData[cNo];
             if (!item) return;
@@ -399,7 +441,7 @@ import {
 
             doc.autoTable({
                 startY: 42,
-                head: [['Bil', 'No. AQC', 'Nama Penerima', 'No. IC', 'Nama Bank', 'No. Akaun', 'Komisen (RM)', 'Override (RM)', 'Jumlah (RM)']],
+                head: [['Bil', 'No. Rujukan', 'Nama Penerima', 'No. IC', 'Nama Bank', 'No. Akaun', 'Komisen (RM)', 'Override (RM)', 'Jumlah (RM)']],
                 body: [[1, item.consultantNo, item.nama.toUpperCase(), item.ic, item.bankName, item.bankAccount, formatRM(item.commission), formatRM(item.override), formatRM(item.totalAmount)]],
                 theme: 'grid',
                 headStyles: { fillColor: [21, 54, 56], textColor: [255, 255, 255], fontStyle: 'bold' },
@@ -428,8 +470,10 @@ import {
             doc.save(`Bank_Listing_${item.consultantNo}.pdf`);
         };
 
-        // Generate PV
-        window.generatePV = async (consultantNo, consultantName, amount, docIdsJson, overrideDocIdsJson, button) => {
+        // =========================================================
+        // Fungsi Generate PV (Terima Parameter Dinamik)
+        // =========================================================
+        window.generatePV = async (consultantNo, consultantName, amount, docIdsJson, overrideDocIdsJson, dynamicAccCode, dynamicPvType, button) => {
             try {
                 if (!confirm(`Sahkan penjanaan PV untuk ${consultantNo} berjumlah RM${formatRM(amount)}?`)) return;
                 
@@ -440,10 +484,16 @@ import {
                 const overrideDocIds = JSON.parse(overrideDocIdsJson);
                 const pvNo = "PV-" + Date.now();
 
-                // 1. Masukkan rekod ke Payment Vouchers
+                // 1. Masukkan rekod ke Payment Vouchers dengan KOD COA DINAMIK
                 await addDoc(collection(db, "paymentVouchers"), {
-                    pvNo, consultantNo, consultantName, amount: Number(amount),
-                    status: "PENDING", createdAt: new Date(), accountCode: "2000"
+                    pvNo, 
+                    consultantNo, 
+                    consultantName, 
+                    amount: Number(amount),
+                    status: "PENDING", 
+                    createdAt: new Date(), 
+                    accountCode: dynamicAccCode, // Disuap secara automatik dari COA (Cth: 2000/2010)
+                    type: dynamicPvType          // Disuap secara automatik (CONSULTANT / AQP)
                 });
 
                 // 2. Update status dalam 'ledger'
