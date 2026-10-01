@@ -102,24 +102,32 @@
             try {
                 await loadCompanySettings();
 
+// =======================================================
                 // 1. TARIK KOD DINAMIK DARI CHART OF ACCOUNTS (COA)
-                let coaAQC = "2000";
-                let coaAQP = "2010";
+                // =======================================================
+                window.dynamicCOA = {
+                    commission: { code: "2000", name: "Commission Payable" },
+                    aqp: { code: "2010", name: "AQP Commission Payable" },
+                    override: { code: "2100", name: "Override Payable" }
+                };
 
                 const coaSnap = await getDocs(collection(db, "chartOfAccounts"));
                 coaSnap.forEach(d => {
                     const acc = d.data();
                     const accName = String(acc.accountName || "").toUpperCase();
-                    const accCode = String(acc.accountCode);
+                    const accCode = String(acc.accountCode || acc.code);
 
                     if (accName.includes("PAYABLE")) {
-                        if (accName.includes("AQP") || accName.includes("INSTITUSI")) {
-                            coaAQP = accCode; 
+                        if (accName.includes("OVERRIDE")) {
+                            window.dynamicCOA.override = { code: accCode, name: acc.accountName };
+                        } else if (accName.includes("AQP") || accName.includes("INSTITUSI")) {
+                            window.dynamicCOA.aqp = { code: accCode, name: acc.accountName }; 
                         } else if (accName.includes("AQC") || accName.includes("COMMISSION") || accName.includes("CONSULTANT")) {
-                            coaAQC = accCode; 
+                            window.dynamicCOA.commission = { code: accCode, name: acc.accountName }; 
                         }
                     }
                 });
+                // =======================================================
 
                 // 2. Tarik maklumat bank konsultan
                 const consultantsSnap = await getDocs(collection(db, "consultants"));
@@ -383,24 +391,27 @@
                 const overrideDocIds = JSON.parse(overrideDocIdsJson);
                 const pvNo = "PV-" + Date.now();
 
-                // 1. Sediakan Array Pecahan (Payment Breakdown)
+               // =======================================================
+                // 1. Sediakan Array Pecahan (Payment Breakdown) DINAMIK
+                // =======================================================
                 let splitAccounts = [];
                 
                 if (Number(commAmount) > 0) {
                     splitAccounts.push({
-                        accountCode: dynamicAccCode, 
-                        accountName: dynamicPvType === "AQP" ? "AQP Commission Payable" : "Commission Payable",
+                        accountCode: dynamicPvType === "AQP" ? window.dynamicCOA.aqp.code : window.dynamicCOA.commission.code, 
+                        accountName: dynamicPvType === "AQP" ? window.dynamicCOA.aqp.name : window.dynamicCOA.commission.name,
                         amount: Number(commAmount)
                     });
                 }
 
                 if (Number(overrideAmount) > 0) {
                     splitAccounts.push({
-                        accountCode: "2150", 
-                        accountName: "Upline Sponsor Benefit Payable",
+                        accountCode: window.dynamicCOA.override.code, 
+                        accountName: window.dynamicCOA.override.name,
                         amount: Number(overrideAmount)
                     });
                 }
+                // =======================================================
 
                 // 2. Masukkan rekod ke Payment Vouchers dengan array accounts
                 await addDoc(collection(db, "paymentVouchers"), {
