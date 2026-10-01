@@ -102,7 +102,7 @@
             try {
                 await loadCompanySettings();
 
-// =======================================================
+                // =======================================================
                 // 1. TARIK KOD DINAMIK DARI CHART OF ACCOUNTS (COA)
                 // =======================================================
                 window.dynamicCOA = {
@@ -127,6 +127,12 @@
                         }
                     }
                 });
+
+                // 👇👇👇 TAMBAH 4 BARIS PENYELAMAT INI DI SINI 👇👇👇
+                const coaAQC = window.dynamicCOA.commission.code;
+                const coaAQP = window.dynamicCOA.aqp.code;
+                const coaOverride = window.dynamicCOA.override.code;
+                const coaUSB = window.dynamicCOA.override.code; 
                 // =======================================================
 
                 // 2. Tarik maklumat bank konsultan
