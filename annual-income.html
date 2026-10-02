@@ -121,14 +121,20 @@
                         }
                     }
 
-                    if (dateObj && dateObj.getFullYear() == selectedYear) {
+                   if (dateObj && dateObj.getFullYear() == selectedYear) {
                         const monthIndex = dateObj.getMonth(); // 0 = Jan, 11 = Dec
-                        const credit = Number(data.credit || 0);
                         
-                        monthlyIncome[monthIndex] += credit;
-                        totalIncome += credit;
+                        // PERUBAHAN UTAMA DI SINI: 
+                        // Kita tukar dari baca 'credit' (bila komisen wujud) 
+                        // kepada baca 'debit' (bila PV di 'Mark Paid')
+                        const debit = Number(data.debit || 0);
+                        
+                        // Hanya campurkan ke dalam graf JIKA ada bayaran (debit > 0)
+                        if (debit > 0) {
+                            monthlyIncome[monthIndex] += debit;
+                            totalIncome += debit;
+                        }
                     }
-                }
             });
 
             const monthNames = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
