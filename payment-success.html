@@ -184,17 +184,44 @@
                     const sponsor = directConsultant ? findConsultant(directConsultant.upline) : null;
                     if (sponsor) {
                         await addDoc(collection(db, "ledger"), {
-                            date: txnDate, accountCode: "5150", account: "Upline Sponsor Benefit", category: "expense",
-                            consultantNo: sponsor.consultantNo, consultantName: sponsor.nama, description: directConsultant.consultantNo + " USB", 
-                            debit: usbAmount, credit: 0, transactionGroup: memberNo, paymentType: "USB", fromConsultant: directConsultant.consultantNo,
-                            clientUid: currentUser.uid, clientNo: memberNo, consultantUid: sponsor.id, consultantNo: sponsor.consultantNo
+                            date: txnDate, 
+                            accountCode: "5150", 
+                            account: "Upline Sponsor Benefit Expense", // Nama standard perakaunan
+                            category: "expense",
+                            consultantNo: sponsor.consultantNo, 
+                            consultantName: sponsor.nama, 
+                            // UBAH: Jadikan penerangan jelas dan seragam untuk carian
+                            description: sponsor.consultantNo + " " + sponsor.nama + " (Sponsor: " + directConsultant.consultantNo + ")", 
+                            debit: usbAmount, 
+                            credit: 0, 
+                            transactionGroup: memberNo, 
+                            paymentType: "USB", 
+                            // UBAH: fromConsultant sepatutnya kekal sebagai penyumbang USB (Direct)
+                            fromConsultant: directConsultant.consultantNo, 
+                            clientUid: currentUser.uid, 
+                            clientNo: memberNo, 
+                            consultantUid: sponsor.id, 
+                            consultantNo: sponsor.consultantNo
                         });
 
                         await addDoc(collection(db, "ledger"), {
-                            date: txnDate, accountCode: "2150", account: "USB Payable", category: "liability",
-                            consultantNo: sponsor.consultantNo, consultantName: sponsor.nama, description: directConsultant.consultantNo + " USB", 
-                            debit: 0, credit: usbAmount, transactionGroup: memberNo, paymentType: "USB", fromConsultant: directConsultant.consultantNo,
-                            clientUid: currentUser.uid, clientNo: memberNo, consultantUid: sponsor.id, consultantNo: sponsor.consultantNo
+                            date: txnDate, 
+                            accountCode: "2150", 
+                            account: "Upline Sponsor Benefit Payable", // Nama standard perakaunan
+                            category: "liability",
+                            consultantNo: sponsor.consultantNo, 
+                            consultantName: sponsor.nama, 
+                            // UBAH: Sama macam di atas
+                            description: sponsor.consultantNo + " " + sponsor.nama + " (Sponsor: " + directConsultant.consultantNo + ")", 
+                            debit: 0, 
+                            credit: usbAmount, 
+                            transactionGroup: memberNo, 
+                            paymentType: "USB", 
+                            fromConsultant: directConsultant.consultantNo,
+                            clientUid: currentUser.uid, 
+                            clientNo: memberNo, 
+                            consultantUid: sponsor.id, 
+                            consultantNo: sponsor.consultantNo
                         });
                         
                         await updateDoc(doc(db, "consultants", sponsor.id), { totalUSB: increment(usbAmount) });
