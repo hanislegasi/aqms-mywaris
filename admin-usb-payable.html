@@ -93,7 +93,8 @@ import {
                     if (!consultantUsbMap[cNo]) {
                         consultantUsbMap[cNo] = {
                             balance: 0,
-                            firstDate: null
+                            firstDate: null,
+                            latestPayoutDate: null // TAMBAHAN: Pegang tarikh akhir bayar
                         };
                     }
 
@@ -101,11 +102,19 @@ import {
                     const debit = Number(row.debit || 0);
                     consultantUsbMap[cNo].balance += (credit - debit);
 
-                    // Cari tarikh transaksi paling awal (1st receive)
                     if (row.date) {
                         const trxDate = row.date.toDate ? row.date.toDate() : new Date(row.date);
+                        
+                        // Cari tarikh transaksi paling awal (1st receive)
                         if (!consultantUsbMap[cNo].firstDate || trxDate < consultantUsbMap[cNo].firstDate) {
                             consultantUsbMap[cNo].firstDate = trxDate;
+                        }
+                        
+                        // TAMBAHAN: Cari tarikh pengeluaran terkini (debit)
+                        if (debit > 0) {
+                            if (!consultantUsbMap[cNo].latestPayoutDate || trxDate > consultantUsbMap[cNo].latestPayoutDate) {
+                                consultantUsbMap[cNo].latestPayoutDate = trxDate;
+                            }
                         }
                     }
                 });
@@ -124,18 +133,35 @@ import {
                 // Gelung untuk bina jadual konsultan
                 for (const cNo in consultantUsbMap) {
                     const data = consultantUsbMap[cNo];
-                    if (data.balance <= 0) continue;
+                    
+                    // Kita buang "if (data.balance <= 0) continue;" supaya rekod yang dah dibayar tak ghaib
 
                     const firstDate = data.firstDate || now;
-
-                    // Kira tarikh matang tepat mengikut tahun (Guna lockYears yang dah ditarik di atas)
                     let maturityDate = new Date(firstDate);
                     maturityDate.setFullYear(maturityDate.getFullYear() + lockYears); 
-
-                    // Semak status matang
+                    
                     const isMatured = now >= maturityDate;
-
                     const formatDate = (d) => d.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
+
+                    // TAMBAHAN: Logik Butang dan Lencana Status
+                    let statusBadge = "";
+                    let actionBtn = "";
+
+                    if (data.balance <= 0) {
+                        if (data.latestPayoutDate) {
+                            const payoutStr = formatDate(data.latestPayoutDate);
+                            statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">TELAH DIBAYAR: ${payoutStr.toUpperCase()}</span>`;
+                        } else {
+                            statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600">BAKI KOSONG</span>`;
+                        }
+                        actionBtn = `<span class="text-xs text-gray-400 font-medium">Selesai</span>`;
+                    } else if (isMatured) {
+                        statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">MATANG (READY)</span>`;
+                        actionBtn = `<button onclick="generatePV('${cNo}', ${data.balance})" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">Jana PV</button>`;
+                    } else {
+                        statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700">DALAM TEMPOH SIMPANAN</span>`;
+                        actionBtn = `<span class="text-xs text-gray-400">Belum Matang</span>`;
+                    }
 
                     html += `
                     <tr class="border-b hover:bg-gray-50">
@@ -143,14 +169,12 @@ import {
                         <td class="p-4">${nameMap[cNo] || "-"}</td>
                         <td class="p-4 text-center">${formatDate(firstDate)}</td>
                         <td class="p-4 text-center">${formatDate(maturityDate)}</td>
-                        <td class="p-4 text-right font-bold text-green-600">RM${formatRM(data.balance)}</td>
+                        <td class="p-4 text-right font-bold ${data.balance > 0 ? 'text-green-600' : 'text-gray-400'}">RM${formatRM(data.balance)}</td>
                         <td class="p-4 text-center">
-                            <span class="px-3 py-1 rounded-full text-xs font-bold ${isMatured ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">
-                                ${isMatured ? 'MATANG (READY)' : 'DALAM TEMPOH SIMPANAN'}
-                            </span>
+                            ${statusBadge}
                         </td>
                         <td class="p-4 text-center">
-                            ${isMatured ? `<button onclick="generatePV('${cNo}', ${data.balance})" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">Jana PV Bayaran</button>` : `<span class="text-xs text-gray-400">Belum Matang</span>`}
+                            ${actionBtn}
                         </td>
                     </tr>
                     `;
