@@ -62,19 +62,26 @@
                         const compensation = compSnap.exists() ? compSnap.data() : {};
 
                         // ==========================================
-                        // A. LOGIK JIKA PENDAFTARAN BARU (BUKAN RENEWAL)
-                        // ==========================================
-                        if (!isRenewal) {
-                            const counterRef = doc(db, "system", "counter");
-                            const counterSnap = await getDoc(counterRef);
-                            const currentNo = counterSnap.exists() ? (counterSnap.data().consultantCounter || 0) : 0;
-                            const consultantNo = "AQC" + String(currentNo + 1).padStart(4, "0");
-                            
-                            const registrationFee = Number(compensation[`registration${levelKey}`] || compensation.consultantRegistrationFee || 200);
-                            const usbAmount = Number(compensation.usbRegistrationAmount || 50);
-                            const companyRevenue = registrationFee - usbAmount;
-                            const uplineCode = consData.upline ? consData.upline.trim() : "-";
-
+                            // A. LOGIK JIKA PENDAFTARAN BARU (BUKAN RENEWAL)
+                            // ==========================================
+                            if (!isRenewal) {
+                                const counterRef = doc(db, "system", "counter");
+                                const counterSnap = await getDoc(counterRef);
+                                const currentNo = counterSnap.exists() ? (counterSnap.data().consultantCounter || 0) : 0;
+                                const consultantNo = "AQC" + String(currentNo + 1).padStart(4, "0");
+                                
+                                // 1. TENGOK BERAPA YURAN SEBENAR DARI DATABASE
+                                const rawRegistrationFee = Number(compensation[`registration${levelKey}`] || compensation.consultantRegistrationFee || 200);
+                                const rawUsbAmount = Number(compensation.usbRegistrationAmount || 50);
+                                
+                                // 2. LOGIK SELAMATKAN DUIT SYARIKAT (Khusus AQP / Pendaftaran Free)
+                                // Kalau yuran daftar RM0 (atau lebih rendah dari nilai USB), kita matikan USB jadi RM0.
+                                const registrationFee = rawRegistrationFee;
+                                const usbAmount = (registrationFee <= rawUsbAmount) ? 0 : rawUsbAmount;
+                                const companyRevenue = registrationFee - usbAmount;
+                                
+                                const uplineCode = consData.upline ? consData.upline.trim() : "-";
+                                
                             // 1. Kemaskini Profil Sendiri
                             await updateDoc(doc(db, "consultants", user.uid), {
                                 consultantNo: consultantNo, consultantLevel: "AQC", consultantPaymentStatus: "paid",
@@ -86,7 +93,24 @@
                             // 2. Tukar peranan di koleksi 'users'
                             await setDoc(doc(db, "users", user.uid), { role: "consultant" }, { merge: true });
 
-                            // 3. Jurnal Perakaunan (Pendaftaran Baru Split)
+                           // 3 & 4. Jurnal Perakaunan & Proses USB Kepada Upline
+                            let validUplineData = null;
+                            let validUplineDoc = null;
+                            let finalCompanyRevenue = registrationFee; // Jika tiada upline, syarikat dapat penuh
+
+                            // Semak profil Upline dahulu sebelum buat lejar
+                            if (uplineCode !== "-") {
+                                const uplineQuery = query(collection(db, "consultants"), where("consultantNo", "==", uplineCode));
+                                const uplineSnap = await getDocs(uplineQuery);
+                                
+                                if (!uplineSnap.empty) {
+                                    validUplineDoc = uplineSnap.docs[0];
+                                    validUplineData = validUplineDoc.data();
+                                    finalCompanyRevenue = registrationFee - usbAmount; // Tolak bahagian USB
+                                }
+                            }
+
+                            // Lejar 1000 - Duit masuk Bank
                             await addDoc(collection(db, "ledger"), {
                                 date: txnDate, accountCode: "1000", account: "Bank", category: "asset",
                                 description: consultantNo + " Registration", debit: registrationFee, credit: 0,
@@ -94,40 +118,42 @@
                                 consultantUid: user.uid, consultantNo: consultantNo
                             });
                             
+                            // Lejar 4120 - Jualan Pendaftaran Syarikat
                             await addDoc(collection(db, "ledger"), {
                                 date: txnDate, accountCode: "4120", account: "Registration AQC", category: "income",
-                                description: consultantNo + " Registration", debit: 0, credit: companyRevenue,
+                                description: consultantNo + " Registration", debit: 0, credit: finalCompanyRevenue,
                                 paymentType: "CONSULTANT", sourceAccount: "4120", transactionGroup: consultantNo,
                                 consultantUid: user.uid, consultantNo: consultantNo
                             });
-                            
-                            await addDoc(collection(db, "ledger"), {
-                                date: txnDate, accountCode: "2150", account: "USB Payable", category: "liability",
-                                description: consultantNo + " Registration - Upline Supporting Benefit",
-                                debit: 0, credit: usbAmount, paymentType: "CONSULTANT", sourceAccount: "4120",
-                                transactionGroup: consultantNo, consultantNo: uplineCode, fromConsultant: consultantNo,
-                                consultantUid: user.uid, consultantNo: consultantNo
-                            });
 
-                            // 4. Proses USB Kepada Upline
-                            if (uplineCode !== "-") {
-                                const uplineQuery = query(collection(db, "consultants"), where("consultantNo", "==", uplineCode));
-                                const uplineSnap = await getDocs(uplineQuery);
-                                
-                                if (!uplineSnap.empty) {
-                                    const uplineDoc = uplineSnap.docs[0];
-                                    await updateDoc(uplineDoc.ref, {
-                                        totalUSB: increment(usbAmount),
-                                        lifetimeUSB: increment(usbAmount),
-                                        downlineCount: increment(1)
-                                    });
+                            // Jika ada Upline yang sah, masukkan Lejar USB & Update Profil
+                            if (validUplineDoc) {
+                                // Lejar 2150 untuk Upline
+                                await addDoc(collection(db, "ledger"), {
+                                    date: txnDate, accountCode: "2150", account: "Upline Sponsor Benefit Payable", category: "liability",
+                                    // UBAH: Format keterangan seragam macam sistem jualan!
+                                    description: validUplineData.consultantNo + " " + (validUplineData.nama || "") + " (Sponsor: " + consultantNo + ")",
+                                    debit: 0, credit: usbAmount, paymentType: "USB_REGISTRATION", sourceAccount: "4120",
+                                    transactionGroup: consultantNo, 
+                                    consultantNo: validUplineData.consultantNo, // Tepat ke profil Upline
+                                    consultantName: validUplineData.nama || "-", // Nama Upline
+                                    fromConsultant: consultantNo, // Datang dari AQC baru
+                                    clientUid: user.uid, clientNo: consultantNo, consultantUid: validUplineDoc.id
+                                });
 
-                                    await addDoc(collection(db, "overrideHistory"), {
-                                        uplineId: uplineDoc.id, uplineNo: uplineDoc.data().consultantNo,
-                                        downlineId: user.uid, downlineNo: consultantNo, downlineName: consData.nama || "-",
-                                        type: "USB_REGISTRATION", amount: usbAmount, status: "PENDING", date: txnDate
-                                    });
-                                }
+                                // Update Kad Profil Upline
+                                await updateDoc(validUplineDoc.ref, {
+                                    totalUSB: increment(usbAmount),
+                                    lifetimeUSB: increment(usbAmount),
+                                    downlineCount: increment(1)
+                                });
+
+                                // Rekod untuk jadual penyata USB
+                                await addDoc(collection(db, "overrideHistory"), {
+                                    uplineId: validUplineDoc.id, uplineNo: validUplineData.consultantNo,
+                                    downlineId: user.uid, downlineNo: consultantNo, downlineName: consData.nama || "-",
+                                    type: "USB_REGISTRATION", amount: usbAmount, status: "PENDING", date: txnDate
+                                });
                             }
 
                             // 5. Update Kaunter & Resit
