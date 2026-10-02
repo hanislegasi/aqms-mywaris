@@ -118,6 +118,7 @@ import {
                 let html = "";
                 let totalUsbBalance = 0;
                 let firstReceiveDate = null;
+                let latestPayoutDate = null; // TAMBAHAN: Tangkap tarikh akhir dibayar
                 const now = new Date();
 
                 if (querySnapshot.empty) {
@@ -183,6 +184,14 @@ import {
 
                     totalUsbBalance += netAmount;
 
+                    // TAMBAHAN: Semak jika ada pengeluaran (debit) dan simpan tarikh terkini
+                    if (debit > 0 && row.date) {
+                        const d = row.date.toDate ? row.date.toDate() : new Date(row.date);
+                        if (!latestPayoutDate || d > latestPayoutDate) {
+                            latestPayoutDate = d;
+                        }
+                    }
+
                     html += `
                     <tr class="border-b hover:bg-gray-50 transition">
                         <td class="p-4 text-gray-700">${dateStr}</td>
@@ -212,7 +221,14 @@ import {
                 document.getElementById("summaryMaturityDate").textContent = maturityDateText;
                 
                 if (totalUsbBalance <= 0) {
-                    document.getElementById("summaryStatus").innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600">Baki Kosong</span>`;
+                    if (latestPayoutDate) {
+                        // Jika baki 0 dan pernah ada rekod pengeluaran
+                        const payoutStr = latestPayoutDate.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
+                        document.getElementById("summaryStatus").innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">Telah Dibayar Pada ${payoutStr}</span>`;
+                    } else {
+                        // Jika baki 0 tapi memang dari awal tak pernah ada simpanan
+                        document.getElementById("summaryStatus").innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600">Baki Kosong</span>`;
+                    }
                 } else if (isMatured) {
                     document.getElementById("summaryStatus").innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">MATANG (LAYAK DITUNTUT)</span>`;
                 } else {
