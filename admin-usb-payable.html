@@ -156,8 +156,9 @@ import {
                         }
                         actionBtn = `<span class="text-xs text-gray-400 font-medium">Selesai</span>`;
                     } else if (isMatured) {
+                        const safeName = (nameMap[cNo] || "-").replace(/'/g, "\\'"); // Elak ralat jika nama ada tanda koma atas
                         statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">MATANG (READY)</span>`;
-                        actionBtn = `<button onclick="generatePV('${cNo}', ${data.balance})" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">Jana PV</button>`;
+                        actionBtn = `<button onclick="generatePV('${cNo}', '${safeName}', ${data.balance})" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">Jana PV</button>`;
                     } else {
                         statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700">DALAM TEMPOH SIMPANAN</span>`;
                         actionBtn = `<span class="text-xs text-gray-400">Belum Matang</span>`;
@@ -192,12 +193,18 @@ import {
         });
 
         // Fungsi global untuk jana Payment Voucher (PV) apabila matang
-        window.generatePV = async function(consultantNo, amount) {
+        window.generatePV = async function(consultantNo, consultantName, amount) {
             if (!confirm(`Sahkan untuk menjana Payment Voucher (PV) bagi USB matang untuk ${consultantNo} sebanyak RM${formatRM(amount)}?`)) return;
 
             try {
+                // Jana Nombor PV unik
+                const pvId = "PV-" + Date.now() + Math.floor(Math.random()*100);
+
                 await addDoc(collection(db, "paymentVouchers"), {
+                    pvNo: pvId,
                     consultantNo: consultantNo,
+                    consultantName: consultantName,
+                    payee: consultantName, // Backup untuk serasi dengan jadual PV
                     amount: amount,
                     type: "USB_MATURITY_PAYOUT",
                     status: "PENDING",
@@ -211,6 +218,7 @@ import {
                 alert("Ralat: " + err.message);
             }
         };
+        
     </script>
 </body>
 </html>
