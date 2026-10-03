@@ -74,7 +74,7 @@ import {
                 // 1. Ambil Setting Tempoh Matang (Default 3 tahun)
                 const compSnap = await getDoc(doc(db, "settings", "compensation"));
                 const compData = compSnap.exists() ? compSnap.data() : {};
-                const lockYears = Number(compData.usbLockPeriod || 3);
+               const lockYears = compData.usbLockPeriod !== undefined ? Number(compData.usbLockPeriod) : 3;
                 
                 // Kemaskini paparan teks tajuk atas
                 const lockYearsEl = document.getElementById("lockYears");
