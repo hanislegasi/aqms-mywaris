@@ -232,7 +232,7 @@
             renderSenaraiAQC(namaNegeri);
         };
 
-        // 4. MUAT TURUN DATA DARI FIREBASE
+// 4. MUAT TURUN DATA DARI FIREBASE
         async function fetchAQCDatabase() {
             try {
                 const senaraiContainer = document.getElementById("senaraiAQC");
@@ -250,22 +250,42 @@
                 qSnap.forEach(docSnap => {
                     const data = docSnap.data();
                     
-                    const negeriAsal = data.state || "";
-                    const telefonAsal = data.telefon || "";
-                    const namaAsal = data.nama || "Perunding AQMS";
-                    const bandarAsal = data.city || ""; 
-                    // Tentukan level perunding (AQC, AQP, RTB, dll)
+                    // 1. TANGKAP NAMA (Sokong field 'namaInstitusi' untuk AQP dan 'nama' untuk AQC)
+                    const namaAsal = data.namaInstitusi || data.nama || "Rakan Niaga AQMS";
+                    
+                    // 2. TANGKAP NEGERI (Pintar membaca state, negeri, atau dari string alamat penuh)
+                    let rawLocation = (data.state || data.negeri || data.alamat || "").toLowerCase();
+                    let negeriAsal = "";
+
+                    // Logik penyeragaman ejaan (Standardization)
+                    if (rawLocation.includes("kuala lumpur") || rawLocation.includes("w.p. kuala lumpur")) negeriAsal = "kuala lumpur";
+                    else if (rawLocation.includes("selangor")) negeriAsal = "selangor";
+                    else if (rawLocation.includes("putrajaya")) negeriAsal = "putrajaya";
+                    else if (rawLocation.includes("johor")) negeriAsal = "johor";
+                    else if (rawLocation.includes("melaka")) negeriAsal = "melaka";
+                    else if (rawLocation.includes("negeri sembilan") || rawLocation.includes("n. sembilan")) negeriAsal = "negeri sembilan";
+                    else if (rawLocation.includes("pahang")) negeriAsal = "pahang";
+                    else if (rawLocation.includes("terengganu")) negeriAsal = "terengganu";
+                    else if (rawLocation.includes("kelantan")) negeriAsal = "kelantan";
+                    else if (rawLocation.includes("perak")) negeriAsal = "perak";
+                    else if (rawLocation.includes("pinang") || rawLocation.includes("penang")) negeriAsal = "pulau pinang";
+                    else if (rawLocation.includes("kedah")) negeriAsal = "kedah";
+                    else if (rawLocation.includes("perlis")) negeriAsal = "perlis";
+                    else if (rawLocation.includes("sabah")) negeriAsal = "sabah";
+                    else if (rawLocation.includes("sarawak")) negeriAsal = "sarawak";
+                    else if (rawLocation.includes("labuan")) negeriAsal = "labuan";
+                    else negeriAsal = rawLocation.trim(); // Fallback akhir
+
+                    const telefonAsal = data.telefon || data.noTel || "";
+                    const bandarAsal = data.city || data.bandar || ""; 
                     const levelAsal = data.consultantLevel || data.level || "AQC"; 
                     
                     if (negeriAsal && telefonAsal) {
-                        const namaNegeriKunci = negeriAsal.trim().toLowerCase();
-                        
-                        if (!dataAQC[namaNegeriKunci]) {
-                            dataAQC[namaNegeriKunci] = [];
+                        if (!dataAQC[negeriAsal]) {
+                            dataAQC[negeriAsal] = [];
                         }
                         
-                        // Masukkan ke array berserta info level
-                        dataAQC[namaNegeriKunci].push({
+                        dataAQC[negeriAsal].push({
                             nama: namaAsal,
                             telefon: telefonAsal,
                             bandar: bandarAsal,
@@ -286,11 +306,10 @@
                 }
 
             } catch (error) {
-                console.error("Ralat memuat turun AQC:", error);
+                console.error("Ralat memuat turun data:", error);
                 document.getElementById("senaraiAQC").innerHTML = `
                     <div class="text-center py-10 text-red-500">
                         <p class="font-bold">Gagal memuat turun data.</p>
-                        <p class="text-sm mt-1">Sila pastikan rules Firestore membenarkan carian (read).</p>
                     </div>
                 `;
             }
