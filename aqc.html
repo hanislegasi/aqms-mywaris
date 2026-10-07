@@ -317,17 +317,15 @@
         
         fetchAQCDatabase();
 
+/* DITUTUP SEMENTARA UNTUK LIVE
         document.getElementById('mapContainer').addEventListener('click', function(e) {
-            // Jangan bertindak kalau terklik pin sedia ada
             if(e.target.classList.contains('map-pin') || e.target.classList.contains('tooltip')) return;
-
             const rect = this.getBoundingClientRect();
             const x = ((e.clientX - rect.left) / rect.width) * 100;
             const y = ((e.clientY - rect.top) / rect.height) * 100;
-            
-            // Keluar popup supaya anda boleh terus copy
             prompt("Copy koordinat ini dan letak pada style pin:", `top: ${y.toFixed(1)}%; left: ${x.toFixed(1)}%;`);
         });
+        */
 
         
     </script>
