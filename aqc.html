@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Direktori AQC | MyWaris</title>
+    <title>Direktori AQC & AQP | MyWaris</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome untuk ikon WhatsApp -->
@@ -73,8 +73,8 @@
     <div class="bg-[#153638] text-white p-4 md:p-6 shadow-md">
          <div class="flex justify-between items-center px-2 md:px-5">
             <div class="pr-3">
-                <h1 class="text-xl md:text-2xl font-bold leading-tight">Direktori AQC MyWaris</h1>
-                <p class="text-gray-300 text-xs md:text-sm mt-1">Cari pusat agensi (AQC) yang berdekatan dengan anda di seluruh Malaysia.</p>
+                <h1 class="text-xl md:text-2xl font-bold leading-tight">Direktori Rakan Niaga (AQC & AQP)</h1>
+                <p class="text-gray-300 text-xs md:text-sm mt-1">Cari pusat agensi (AQC) dan rakan profesional institusi (AQP) di seluruh Malaysia.</p>
             </div>         
         </div>
     </div>
@@ -124,13 +124,13 @@
                 </div>
                 </div>
                 
-                <p class="text-xs text-center text-gray-400 mt-4 italic">Tekan pada pin merah di atas peta untuk melihat maklumat AQC bagi negeri tersebut.</p>
+                <p class="text-xs text-center text-gray-400 mt-4 italic">Tekan pada pin merah di atas peta untuk melihat senarai AQC & AQP bagi negeri tersebut.</p>
             </div>
 
-            <!-- BAHAGIAN SENARAI AQC (KANAN - 1 Column) -->
+            <!-- BAHAGIAN SENARAI AQC/AQP (KANAN - 1 Column) -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full overflow-hidden">
                 <div class="bg-gradient-to-r from-[#153638] to-[#24575a] p-5 text-white">
-                    <h3 class="font-bold text-lg">Senarai AQC</h3>
+                    <h3 class="font-bold text-lg">Senarai AQC & AQP</h3>
                     <p class="text-sm text-green-100 font-medium mt-1 flex items-center gap-2">
                         <i class="fa-solid fa-location-dot"></i> 
                         <span id="paparNamaNegeri">Sila pilih negeri</span>
@@ -142,7 +142,7 @@
                     <!-- Placeholder sebelum klik -->
                     <div class="text-center py-10 text-gray-400 flex flex-col items-center">
                         <i class="fa-solid fa-map-location-dot text-4xl mb-3 opacity-50"></i>
-                        <p>Sila klik pada mana-mana negeri di peta untuk melihat senarai AQC.</p>
+                        <p>Sila klik pada mana-mana negeri di peta untuk melihat senarai rakan niaga.</p>
                     </div>
                 </div>
             </div>
@@ -150,7 +150,7 @@
         </div>
     </div>
 
-   <!-- JAVASCRIPT & DATABASE AQC FIREBASE -->
+   <!-- JAVASCRIPT & DATABASE FIREBASE -->
     <script type="module">
         import { db } from './firebase.js';
         import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -163,11 +163,11 @@
             if (!phone) return "#";
             let cleanPhone = phone.replace(/\D/g, '');
             if (!cleanPhone.startsWith('6')) cleanPhone = '6' + cleanPhone;
-            let message = encodeURIComponent(`Assalamualaikum ${name}, saya ingin bertanya mengenai perkhidmatan Mawaris.`);
+            let message = encodeURIComponent(`Assalamualaikum ${name}, saya ingin bertanya mengenai perkhidmatan AQMS.`);
             return `https://wa.me/${cleanPhone}?text=${message}`;
         }
 
-        // 2. FUNGSI RENDER KAD AQC
+        // 2. FUNGSI RENDER KAD AQC & AQP
         function renderSenaraiAQC(namaNegeri) {
             const senaraiContainer = document.getElementById("senaraiAQC");
             senaraiContainer.innerHTML = ""; 
@@ -179,15 +179,19 @@
             if (aqcList.length > 0) {
                 aqcList.forEach(aqc => {
                     const waLink = getWhatsAppLink(aqc.telefon, aqc.nama);
-                    
-                    // --- LOGIK BARU: PAPARKAN BANDAR JIKA ADA ---
                     const paparanLokasi = aqc.bandar ? `SELURUH NEGERI / ${aqc.bandar.toUpperCase()}` : `SELURUH NEGERI`;
+                    
+                    // Bezakan warna tag AQC dan AQP
+                    const warnaTag = aqc.level === 'AQP' ? 'bg-blue-100 text-blue-700' : 'bg-emerald-100 text-emerald-700';
                     
                     const kadHTML = `
                     <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition group">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1"><i class="fa-solid fa-map-pin mr-1"></i> ${paparanLokasi}</p>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+                                    <span class="px-2 py-0.5 rounded-md ${warnaTag}">${aqc.level}</span>
+                                    <span><i class="fa-solid fa-map-pin mr-1"></i> ${paparanLokasi}</span>
+                                </p>
                                 <a href="${waLink}" target="_blank" class="text-lg font-bold text-[#153638] group-hover:text-green-600 transition block mb-1">
                                     ${aqc.nama}
                                 </a>
@@ -211,7 +215,7 @@
                         <i class="fa-solid fa-user-xmark"></i>
                     </div>
                     <p class="font-semibold text-gray-700">Tiada Maklumat</p>
-                    <p class="text-sm text-gray-500 mt-1">Belum ada perunding berdaftar direkodkan untuk ${namaNegeri}.</p>
+                    <p class="text-sm text-gray-500 mt-1">Belum ada rakan niaga berdaftar direkodkan untuk ${namaNegeri}.</p>
                 </div>`;
             }
         }
@@ -235,7 +239,7 @@
                 senaraiContainer.innerHTML = `
                     <div class="flex justify-center items-center py-10">
                         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#153638]"></div>
-                        <span class="ml-3 font-semibold text-gray-500">Memuat turun data perunding...</span>
+                        <span class="ml-3 font-semibold text-gray-500">Memuat turun data rakan niaga...</span>
                     </div>
                 `;
 
@@ -249,8 +253,9 @@
                     const negeriAsal = data.state || "";
                     const telefonAsal = data.telefon || "";
                     const namaAsal = data.nama || "Perunding AQMS";
-                    // --- KOD BARU: Tarik field city dari Firebase ---
                     const bandarAsal = data.city || ""; 
+                    // Tentukan level perunding (AQC, AQP, RTB, dll)
+                    const levelAsal = data.consultantLevel || data.level || "AQC"; 
                     
                     if (negeriAsal && telefonAsal) {
                         const namaNegeriKunci = negeriAsal.trim().toLowerCase();
@@ -259,10 +264,12 @@
                             dataAQC[namaNegeriKunci] = [];
                         }
                         
+                        // Masukkan ke array berserta info level
                         dataAQC[namaNegeriKunci].push({
                             nama: namaAsal,
                             telefon: telefonAsal,
-                            bandar: bandarAsal // --- Simpan bandar ke dalam memori
+                            bandar: bandarAsal,
+                            level: levelAsal.toUpperCase()
                         });
                     }
                 });
@@ -271,7 +278,7 @@
                     senaraiContainer.innerHTML = `
                         <div class="text-center py-10 text-gray-400 flex flex-col items-center">
                             <i class="fa-solid fa-map-location-dot text-4xl mb-3 opacity-50"></i>
-                            <p>Sila klik pada mana-mana negeri di peta untuk melihat senarai AQC.</p>
+                            <p>Sila klik pada mana-mana negeri di peta untuk melihat senarai rakan niaga.</p>
                         </div>
                     `;
                 } else {
@@ -291,17 +298,17 @@
         
         fetchAQCDatabase();
 
-document.getElementById('mapContainer').addEventListener('click', function(e) {
-        // Jangan bertindak kalau terklik pin sedia ada
-        if(e.target.classList.contains('map-pin') || e.target.classList.contains('tooltip')) return;
+        document.getElementById('mapContainer').addEventListener('click', function(e) {
+            // Jangan bertindak kalau terklik pin sedia ada
+            if(e.target.classList.contains('map-pin') || e.target.classList.contains('tooltip')) return;
 
-        const rect = this.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        
-        // Keluar popup supaya anda boleh terus copy
-        prompt("Copy koordinat ini dan letak pada style pin:", `top: ${y.toFixed(1)}%; left: ${x.toFixed(1)}%;`);
-    });
+            const rect = this.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            
+            // Keluar popup supaya anda boleh terus copy
+            prompt("Copy koordinat ini dan letak pada style pin:", `top: ${y.toFixed(1)}%; left: ${x.toFixed(1)}%;`);
+        });
 
         
     </script>
