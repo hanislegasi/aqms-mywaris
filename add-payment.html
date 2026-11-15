@@ -43,7 +43,7 @@
     <button id="payBtn" class="w-full bg-[#153638] hover:bg-[#1d4a4d] transition text-white py-4 rounded-2xl font-bold text-lg disabled:opacity-50 shadow-lg shadow-[#153638]/20">
         Bayar Sekarang
     </button>
-    <p class="text-center text-xs text-gray-400 mt-4">Transaksi diproses secara selamat melalui ToyyibPay.</p>
+    <p class="text-center text-xs text-gray-400 mt-4">Transaksi diproses secara selamat melalui Billplz.</p>
 </div>
 
 <!-- POP-UP MODAL TERMA & SYARAT (T&C) / AKAD -->
@@ -193,7 +193,7 @@ cancelTncBtn.addEventListener("click", () => {
 // LOGIK HANTAR DATA KE TOYYIBPAY
 agreeBtn.addEventListener("click", async () => {
     agreeBtn.disabled = true;
-    agreeBtn.innerHTML = "Menjana Invois ToyyibPay...";
+    agreeBtn.innerHTML = "Menjana Invois Pembayaran...";
     cancelTncBtn.disabled = true;
 
     try {

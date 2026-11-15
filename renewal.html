@@ -202,7 +202,7 @@ payBtn.addEventListener("click", async () => {
 
     try {
         payBtn.disabled = true;
-        payBtn.textContent = "Menjana Invois ToyyibPay...";
+        payBtn.textContent = "Menjana Invois Pembayaran...";
 
         const userSnap = await getDoc(doc(db, "users", currentUser.uid));
         const userData = userSnap.exists() ? userSnap.data() : {};
