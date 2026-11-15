@@ -23,7 +23,7 @@
         import { doc, getDoc, updateDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const urlParams = new URLSearchParams(window.location.search);
-        const status_id = urlParams.get('status_id');
+        const status_id = (urlParams.get('billplz[paid]') === 'true' ? "1" : "0");
         const namaPakej = urlParams.get('pakej') || ""; 
 
         // 1. KEMAS KINI: Tambah 'settingField' untuk pautkan dengan nama field dalam Firestore anda
@@ -128,7 +128,7 @@ await updateDoc(doc(db, "users", user.uid), {
                         await addDoc(collection(db, "receipts"), {
                             receiptNo: `${config.prefix}-REN-${Date.now()}`, uid: user.uid, payerName: userData.nama || "-",
                             customerPhone: userData.telefon || "", serviceCode: config.code, serviceName: namaPakej,
-                            amount: amountPaid, paymentMethod: "ToyyibPay", status: "PAID", paymentDate: txnDate, referenceNo: user.uid
+                            amount: amountPaid, paymentMethod: "Billplz", status: "PAID", paymentDate: txnDate, referenceNo: user.uid
                         });
 
                         // 7. Kemaskini UI Selesai
