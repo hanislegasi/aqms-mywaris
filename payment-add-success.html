@@ -26,9 +26,9 @@
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { doc, getDoc, updateDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // Tangkap jawapan dari URL ToyyibPay
+    // Tangkap jawapan dari URL Billplz
     const urlParams = new URLSearchParams(window.location.search);
-    const status_id = urlParams.get('status_id'); 
+    const status_id = (urlParams.get('billplz[paid]') === 'true' ? "1" : "0"); 
     const docType = urlParams.get('type') || "corporate"; // corporate, corporate_tunggal, corporate_kongsi, corporate_zurri
     
     // Tetapkan Redirect Page & Prefix Berdasarkan Pakej
@@ -115,7 +115,7 @@
                             description: `Caj Pelantikan ${namaAmanahServer} - ${corporateFormData.nama}`,
                             debit: saleAmount,
                             credit: 0,
-                            paymentType: "ToyyibPay",
+                            paymentType: "Billplz",
                             transactionGroup: refNo
                         });
 
@@ -128,7 +128,7 @@
                             description: `Caj Pelantikan ${namaAmanahServer} - ${corporateFormData.nama}`,
                             debit: 0,
                             credit: saleAmount,
-                            paymentType: "ToyyibPay",
+                            paymentType: "Billplz",
                             transactionGroup: refNo
                         });
 
@@ -140,7 +140,7 @@
                             serviceCode: "TRUSTEE_FEE",
                             serviceName: `Caj Pelantikan ${namaAmanahServer}`,
                             amount: saleAmount,
-                            paymentMethod: "ToyyibPay",
+                            paymentMethod: "Billplz",
                             status: "PAID",
                             paymentDate: txnDate
                         });
