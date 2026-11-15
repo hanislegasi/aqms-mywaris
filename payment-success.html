@@ -17,9 +17,9 @@
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { doc, getDoc, updateDoc, increment, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // Tangkap jawapan dari URL ToyyibPay
+    // Tangkap jawapan dari URL Billplz
     const urlParams = new URLSearchParams(window.location.search);
-    const status_id = urlParams.get('status_id'); 
+    const status_id = (urlParams.get('billplz[paid]') === 'true' ? "1" : "0"); 
     const namaPakej = urlParams.get('pakej');
 
     // 1. Sediakan pembolehubah dinamik
@@ -379,7 +379,7 @@
 
                     // CREATE RECEIPT
                     await addDoc(collection(db, "receipts"), {
-                        receiptNo: receiptPrefix + "-" + Date.now(), uid: currentUser.uid, memberNo: memberNo, payerName: customer.nama, serviceCode: namaPakej.toUpperCase(), serviceName: "Pendaftaran " + namaPakej, amount: saleAmount, paymentMethod: "ToyyibPay", status: "PAID", paymentDate: txnDate
+                        receiptNo: receiptPrefix + "-" + Date.now(), uid: currentUser.uid, memberNo: memberNo, payerName: customer.nama, serviceCode: namaPakej.toUpperCase(), serviceName: "Pendaftaran " + namaPakej, amount: saleAmount, paymentMethod: "Billplz", status: "PAID", paymentDate: txnDate
                     });
                     
                     document.getElementById('statusMesej').innerText = "Selesai! Anda akan dibawa ke dashboard.";
