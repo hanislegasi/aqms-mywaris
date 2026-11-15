@@ -23,7 +23,7 @@
         import { doc, getDoc, updateDoc, setDoc, increment, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const urlParams = new URLSearchParams(window.location.search);
-        const status_id = urlParams.get('status_id');
+        const status_id = (urlParams.get('billplz[paid]') === 'true' ? "1" : "0");
         const namaPakej = urlParams.get('pakej') || "";
 
         if (status_id === "1") {
@@ -161,7 +161,7 @@
                             await addDoc(collection(db, "receipts"), {
                                 receiptNo: "REG-" + Date.now(), uid: user.uid, consultantNo, payerName: consData.nama || "-",
                                 serviceCode: "REGISTRATION", serviceName: "Consultant Registration Fee", amount: registrationFee,
-                                paymentMethod: "ToyyibPay", status: "PAID", paymentDate: txnDate, referenceNo: consultantNo
+                                paymentMethod: "Billplz", status: "PAID", paymentDate: txnDate, referenceNo: consultantNo
                             });
 
                         } 
@@ -213,7 +213,7 @@
                             await addDoc(collection(db, "receipts"), {
                                 receiptNo: "REN-" + Date.now(), uid: user.uid, consultantNo: consData.consultantNo, payerName: consData.nama || "-",
                                 serviceCode: "RENEWAL", serviceName: packageNameText, amount: amount,
-                                paymentMethod: "ToyyibPay", status: "PAID", paymentDate: txnDate, referenceNo: consData.consultantNo
+                                paymentMethod: "Billplz", status: "PAID", paymentDate: txnDate, referenceNo: consData.consultantNo
                             });
                         }
 
