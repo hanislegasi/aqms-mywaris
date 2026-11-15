@@ -24,11 +24,26 @@
 <script type="module">
     import { db, auth } from './firebase.js';
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
     import { doc, getDoc, updateDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     // Tangkap jawapan dari URL Billplz
     const urlParams = new URLSearchParams(window.location.search);
-    const status_id = (urlParams.get('billplz[paid]') === 'true' ? "1" : "0"); 
+
+    // PENGESAHAN BAYARAN DI SERVER (bukan percaya URL semata-mata)
+    const billId = urlParams.get('billplz[id]');
+    const pakejSah = urlParams.get('pakej') || "";
+    let status_id = "0";
+    if (urlParams.get('billplz[paid]') === 'true' && billId) {
+        try {
+            const verUser = await new Promise(res => { const un = onAuthStateChanged(auth, u => { un(); res(u); }); });
+            if (verUser) {
+                const verifyFn = httpsCallable(getFunctions(auth.app, 'asia-southeast1'), 'verifyBillplzPayment');
+                const verRes = await verifyFn({ billId: billId, pakej: pakejSah });
+                if (verRes.data && verRes.data.paid === true) status_id = "1";
+            }
+        } catch (e) { console.error("Pengesahan bayaran gagal:", e); }
+    }
     const docType = urlParams.get('type') || "corporate"; // corporate, corporate_tunggal, corporate_kongsi, corporate_zurri
     
     // Tetapkan Redirect Page & Prefix Berdasarkan Pakej
