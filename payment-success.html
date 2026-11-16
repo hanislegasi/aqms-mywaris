@@ -254,8 +254,10 @@
                             clientUid: currentUser.uid, clientNo: memberNo, consultantUid: directConsultant.id, consultantNo: directConsultant.consultantNo
                         });
 
+                        // AQP direkod ke 2010 (AQP Commission Payable) supaya selari dengan consultant-payable & dashboard AQP
+                        const komisenAQP = directConsultant.consultantLevel === "AQP";
                         await addDoc(collection(db, "ledger"), {
-                            date: txnDate, accountCode: "2000", account: "Commission Payable", consultantNo: directConsultant.consultantNo,
+                            date: txnDate, accountCode: komisenAQP ? "2010" : "2000", account: komisenAQP ? "AQP Commission Payable" : "Commission Payable", consultantNo: directConsultant.consultantNo,
                             consultantName: directConsultant.nama, category: "liability", description: directConsultant.consultantNo + " " + directConsultant.nama,
                             debit: 0, credit: commissionAmount,
                             clientUid: currentUser.uid, clientNo: memberNo, consultantUid: directConsultant.id, consultantNo: directConsultant.consultantNo
