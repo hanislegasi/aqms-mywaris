@@ -278,6 +278,13 @@ window.markPaid = async (pvId, type, payee, amount) => {
     }
     // ===============================================================
 
+    // PENGAMAN: jangan rekod Bank sahaja jika tiada akaun debit atau jumlah tak sama
+    const jumlahDebit = accountsToDebit.reduce((t, a) => t + Number(a.amount || 0), 0);
+    if (accountsToDebit.length === 0 || Math.abs(jumlahDebit - Number(amount)) > 0.01) {
+        alert("PV ini tiada akaun debit yang sah (atau jumlah debit tidak sama dengan jumlah PV). Bayaran TIDAK direkod. Sila semak PV atau hubungi admin sistem.");
+        return;
+    }
+
     // 2. Loop DEBIT
     for(const item of accountsToDebit){
         const currentCoa = coaMap[item.accountCode] || {};
