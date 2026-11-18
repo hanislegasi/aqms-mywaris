@@ -74,6 +74,9 @@
             </div>
         </div>
 
+        <!-- SENARAI ISU AUDIT -->
+        <div id="auditIssues" class="hidden bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8"></div>
+
         <!-- ============================================ -->
         <!-- GITHUB-STYLE HISTORY LOG TIMELINE            -->
         <!-- ============================================ -->
@@ -130,36 +133,124 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     
-// 1. FUNGSI SEMAKAN KEWANGAN (Sedia ada)
+// 1. FUNGSI SEMAKAN KEWANGAN (semakan sebenar, bukan "Verified" tetap)
+function rm(v){ return "RM" + Number(v||0).toLocaleString("en-US",{minimumFractionDigits:2, maximumFractionDigits:2}); }
+
 async function runAudit(){
+    // Carta akaun: kod -> { type, name }
+    const coaSnap = await getDocs(collection(db,"chartOfAccounts"));
+    const coa = {};
+    coaSnap.forEach(d => { const a = d.data(); if (a.code !== undefined) coa[String(a.code)] = a; });
+
     const snap = await getDocs(collection(db,"ledger"));
-    let debit=0;
-    let credit=0;
+    let debit = 0, credit = 0;
+    const akaun = {};          // baki bersih ikut kod akaun
+    const tiadaCOA = {};       // kod akaun yang tiada dalam carta akaun
+    const kumpulanPV = {};     // setiap PV mesti seimbang sendiri
 
-    snap.forEach(d=>{
-        const row=d.data();
-        debit+=Number(row.debit||0);
-        credit+=Number(row.credit||0);
+    snap.forEach(d => {
+        const row = d.data();
+        const dr = Number(row.debit||0), cr = Number(row.credit||0);
+        debit += dr; credit += cr;
+
+        const code = String(row.accountCode ?? "");
+        if (!coa[code]) {
+            tiadaCOA[code] = (tiadaCOA[code] || 0) + 1;
+        } else {
+            if (!akaun[code]) akaun[code] = { dr:0, cr:0 };
+            akaun[code].dr += dr; akaun[code].cr += cr;
+        }
+
+        const grp = String(row.transactionGroup || "");
+        if (grp.startsWith("PV-")) {
+            if (!kumpulanPV[grp]) kumpulanPV[grp] = 0;
+            kumpulanPV[grp] += dr - cr;
+        }
     });
 
-    document.getElementById("tbStatus").innerHTML = Math.abs(debit-credit)<0.01 ? "✅ Balanced" : "❌ Not Balanced";
+    const isu = [];   // { tahap: "merah"|"kuning", teks }
+    let score = 100;
 
+    // A. Trial Balance
+    const tbOk = Math.abs(debit - credit) < 0.01;
+    document.getElementById("tbStatus").innerHTML = tbOk ? "✅ Balanced" : "❌ Not Balanced";
+    if (!tbOk) { score -= 40; isu.push({ tahap:"merah", teks:`Trial Balance tak seimbang: debit ${rm(debit)} vs kredit ${rm(credit)} (beza ${rm(debit-credit)}).` }); }
+
+    // B. Entri lejer dengan kod akaun yang tiada dalam Chart of Accounts (laporan akan abaikan entri ini)
+    const kodHilang = Object.keys(tiadaCOA);
+    if (kodHilang.length) {
+        score -= 15;
+        isu.push({ tahap:"merah", teks:`${kodHilang.reduce((t,k)=>t+tiadaCOA[k],0)} entri lejer guna kod akaun yang tiada dalam Chart of Accounts: ${kodHilang.map(k => (k||"(kosong)") + " ×" + tiadaCOA[k]).join(", ")}. Entri ini tidak dikira dalam P&L dan Balance Sheet.` });
+    }
+
+    // C. Kira kategori ikut jenis akaun
+    let aset = 0, liabiliti = 0, ekuiti = 0, pendapatan = 0, belanja = 0;
+    const plIsu = [], bsIsu = [];
+    for (const [code, b] of Object.entries(akaun)) {
+        const info = coa[code];
+        const type = String(info.type || "").toLowerCase();
+        const nama = `${code} ${info.name || ""}`.trim();
+        if (type === "asset" || type === "contra asset") {
+            aset += b.dr - b.cr;
+            if (type === "asset" && b.dr - b.cr < -0.01) bsIsu.push(`Aset ${nama} negatif (${rm(b.dr - b.cr)}).`);
+        } else if (type === "liability") {
+            liabiliti += b.cr - b.dr;
+            if (b.cr - b.dr < -0.01) bsIsu.push(`Liabiliti ${nama} negatif (${rm(b.cr - b.dr)}). Biasanya bayaran keluar tanpa akruan, atau akaun tersilap.`);
+        } else if (type === "equity") {
+            ekuiti += b.cr - b.dr;
+        } else if (type === "income" || type === "revenue") {
+            pendapatan += b.cr - b.dr;
+            if (b.cr - b.dr < -0.01) plIsu.push(`Pendapatan ${nama} negatif (${rm(b.cr - b.dr)}).`);
+        } else if (type === "expense" || type === "expenses") {
+            belanja += b.dr - b.cr;
+            if (b.dr - b.cr < -0.01) plIsu.push(`Perbelanjaan ${nama} negatif (${rm(b.dr - b.cr)}).`);
+        } else {
+            bsIsu.push(`Akaun ${nama} ada jenis tidak dikenali dalam Chart of Accounts: "${info.type || "(kosong)"}".`);
+        }
+    }
+    const untung = pendapatan - belanja;
+
+    // D. Profit & Loss
+    const plOk = plIsu.length === 0 && kodHilang.length === 0;
+    document.getElementById("plStatus").innerHTML = plOk ? "✅ Verified" : "⚠️ Perlu Semakan";
+    if (plIsu.length) { score -= 15; plIsu.forEach(t => isu.push({ tahap:"kuning", teks:"P&L: " + t })); }
+
+    // E. Balance Sheet: Aset = Liabiliti + Ekuiti + Untung semasa
+    const bezaBS = aset - (liabiliti + ekuiti + untung);
+    if (Math.abs(bezaBS) >= 0.01) bsIsu.unshift(`Aset (${rm(aset)}) tidak sama dengan Liabiliti + Ekuiti + Untung (${rm(liabiliti + ekuiti + untung)}). Beza ${rm(bezaBS)}.`);
+    const bsOk = bsIsu.length === 0 && kodHilang.length === 0;
+    document.getElementById("bsStatus").innerHTML = bsOk ? "✅ Verified" : "⚠️ Perlu Semakan";
+    if (bsIsu.length) { score -= 15; bsIsu.forEach(t => isu.push({ tahap:"kuning", teks:"Balance Sheet: " + t })); }
+
+    // F. Setiap bayaran PV mesti seimbang sendiri (kesan entri sebelah kaki)
+    const pvTakSeimbang = Object.entries(kumpulanPV).filter(([,v]) => Math.abs(v) >= 0.01);
+    if (pvTakSeimbang.length) {
+        score -= 15;
+        pvTakSeimbang.forEach(([g,v]) => isu.push({ tahap:"merah", teks:`Bayaran ${g} tak seimbang (beza ${rm(v)}). Satu kaki entri mungkin hilang.` }));
+    }
+
+    // G. Payment Voucher pending
     const pv = await getDocs(collection(db,"paymentVouchers"));
-    let pending=0;
+    let pending = 0;
+    pv.forEach(d => { if (d.data().status == "PENDING") pending++; });
+    document.getElementById("pvStatus").innerHTML = pending == 0 ? "✅ No Pending" : pending + " Pending";
+    if (pending > 0) { score -= 10; isu.push({ tahap:"kuning", teks:`${pending} Payment Voucher masih PENDING.` }); }
 
-    pv.forEach(d=>{
-        if(d.data().status=="PENDING") pending++;
-    });
+    score = Math.max(0, score);
+    const scoreEl = document.getElementById("auditScore");
+    scoreEl.innerHTML = score + "%";
+    scoreEl.className = "mt-2 text-4xl font-bold " + (score >= 90 ? "text-green-600" : score >= 70 ? "text-amber-500" : "text-red-600");
 
-    document.getElementById("pvStatus").innerHTML = pending==0 ? "✅ No Pending" : pending+" Pending";
-    document.getElementById("plStatus").innerHTML = "✅ Verified";
-    document.getElementById("bsStatus").innerHTML = "✅ Verified";
-
-    let score=100;
-    if(Math.abs(debit-credit)>0.01) score-=40;
-    if(pending>0) score-=10;
-
-    document.getElementById("auditScore").innerHTML= score+"%";
+    // Papar senarai isu
+    const box = document.getElementById("auditIssues");
+    if (isu.length === 0) {
+        box.className = "bg-emerald-50 rounded-2xl border border-emerald-200 p-6 mb-8";
+        box.innerHTML = `<p class="font-semibold text-emerald-800">✅ Tiada isu dijumpai. Semua semakan lulus.</p>`;
+    } else {
+        box.className = "bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8";
+        box.innerHTML = `<h2 class="text-lg font-bold text-gray-800 mb-3">Isu Dijumpai (${isu.length})</h2>
+            <ul class="space-y-2">${isu.map(i => `<li class="flex gap-2 text-sm ${i.tahap === "merah" ? "text-red-700" : "text-amber-700"}"><span>${i.tahap === "merah" ? "❌" : "⚠️"}</span><span>${i.teks}</span></li>`).join("")}</ul>`;
+    }
 }
 
 // 2. FUNGSI TARIK TIMELINE LOG (Baru - GitHub Style)
