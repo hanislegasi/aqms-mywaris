@@ -139,7 +139,7 @@ const filterStatus = params.get("status");
 onAuthStateChanged(auth, async (user) => {
     // Pastikan user wujud (sudah login) sebelum panggil database
     if (user) {
-        const adminSnap = await getDoc(doc(db, "users", user.uid));
+        const adminSnap = await getDoc(doc(db, "admins", user.uid)); // role admin disimpan dalam koleksi admins
         
         // Pastikan dokumen admin wujud dalam database
         if (adminSnap.exists()) {
