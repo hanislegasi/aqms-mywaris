@@ -36,7 +36,7 @@
         <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
             <h2 class="text-xl font-bold text-gray-800 mb-6 border-b pb-4">Maklumat Pentadbir Baharu</h2>
             
-            <form id="addAdminForm" class="space-y-5">
+            <form id="addAdminForm" class="space-y-5 hidden">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <!-- Nama Penuh -->
                     <div class="col-span-2">
@@ -99,10 +99,10 @@
         import { db, auth } from './firebase.js';
         
         // Guna setDoc sebab kita nak tetapkan ID dokumen sama dengan UID Authentication
-        import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
         // Fungsi daftar pengguna baru
-        import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
         // Aplikasi sekunder: cipta akaun admin baharu tanpa menukar sesi admin yang sedang log masuk
@@ -110,6 +110,23 @@
         const secondaryAuth = getAuth(secondaryApp);
 
         const form = document.getElementById('addAdminForm');
+
+        // Hanya superadmin boleh buka halaman ini (borang disembunyikan sehingga disahkan)
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) { window.location.href = "login.html"; return; }
+            try {
+                const snap = await getDoc(doc(db, "admins", user.uid));
+                if (!snap.exists() || snap.data().role !== "superadmin") {
+                    alert("Akses ditolak. Hanya Superadmin boleh menambah admin.");
+                    window.location.href = "admin-dashboard.html";
+                    return;
+                }
+                form.classList.remove('hidden');
+            } catch (err) {
+                console.error("Semakan akses gagal:", err);
+                window.location.href = "admin-dashboard.html";
+            }
+        });
         const btnSubmit = document.getElementById('btnSubmit');
         const statusMessage = document.getElementById('statusMessage');
 
