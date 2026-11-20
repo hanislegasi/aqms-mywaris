@@ -91,7 +91,12 @@
         import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         
         // Fungsi daftar pengguna baru
-        import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+        // Aplikasi sekunder: cipta akaun admin baharu tanpa menukar sesi admin yang sedang log masuk
+        const secondaryApp = getApps().find(a => a.name === "secondary") || initializeApp(auth.app.options, "secondary");
+        const secondaryAuth = getAuth(secondaryApp);
 
         const form = document.getElementById('addAdminForm');
         const btnSubmit = document.getElementById('btnSubmit');
@@ -114,8 +119,9 @@
 
             try {
                 // 2. Daftar emel dan password ke Firebase Authentication
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const userCredential = await createUserWithEmailAndPassword(secondaryAuth, email, password);
                 const user = userCredential.user;
+                await signOut(secondaryAuth); // sesi admin semasa (auth utama) kekal
 
                 // 3. Simpan maklumat profil ke Firestore (Koleksi 'users')
                 await setDoc(doc(db, "admins", user.uid), {
