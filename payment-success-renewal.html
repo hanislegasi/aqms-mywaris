@@ -112,7 +112,8 @@
 // =================================================================
 // TAMBAHAN WAJIB: Update Dokumen Utama untuk Memicu E-mail (Cloud Function)
 // =================================================================
-const statusFieldKey = config.key + "RenewalPaymentStatus"; // Menghasilkan: wasiatRenewalPaymentStatus
+// corporate_tunggal -> corporateTunggal (sepadan dengan medan yang dicari Cloud Function)
+const statusFieldKey = config.key.replace(/_([a-z])/g, (m, c) => c.toUpperCase()) + "RenewalPaymentStatus"; // Menghasilkan: wasiatRenewalPaymentStatus / corporateTunggalRenewalPaymentStatus
 await updateDoc(doc(db, "users", user.uid), {
     [statusFieldKey]: "paid", // Status ini yang dicari oleh Cloud Function
     expiryDate: currentExpiry.toISOString() // Sinkronkan juga masa kedaluwarsa utama
