@@ -22,165 +22,56 @@
     </div>
 
 <script type="module">
-    import { db, auth } from './firebase.js';
+    import { auth } from './firebase.js';
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
-    import { doc, getDoc, updateDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // Tangkap jawapan dari URL Billplz
     const urlParams = new URLSearchParams(window.location.search);
-
-    // PENGESAHAN BAYARAN DI SERVER (bukan percaya URL semata-mata)
     const billId = urlParams.get('billplz[id]');
-    const pakejSah = urlParams.get('pakej') || "";
-    let status_id = "0";
-    if (urlParams.get('billplz[paid]') === 'true' && billId) {
-        try {
-            const verUser = await new Promise(res => { const un = onAuthStateChanged(auth, u => { un(); res(u); }); });
-            if (verUser) {
-                const verifyFn = httpsCallable(getFunctions(auth.app, 'asia-southeast1'), 'verifyBillplzPayment');
-                const verRes = await verifyFn({ billId: billId, pakej: pakejSah });
-                if (verRes.data && verRes.data.paid === true) status_id = "1";
-            }
-        } catch (e) { console.error("Pengesahan bayaran gagal:", e); }
-    }
     const docType = urlParams.get('type') || "corporate"; // corporate, corporate_tunggal, corporate_kongsi, corporate_zurri
-    
-    // Tetapkan Redirect Page & Prefix Berdasarkan Pakej
-    let redirectPage = "corporate-page.html";
-    let failPage = "corporate.html";
-    let prefixResit = "MCO";
 
-    if (docType === "corporate_tunggal") {
-        redirectPage = "corporate-tunggal-page.html";
-        failPage = "corporate-tunggal.html";
-        prefixResit = "MCT";
-    } else if (docType === "corporate_kongsi") {
-        redirectPage = "corporate-kongsi-page.html";
-        failPage = "corporate-kongsi.html";
-        prefixResit = "MCK";
-    } else if (docType === "corporate_zurri") {
-        redirectPage = "corporate-zurri-page.html";
-        failPage = "corporate-zurri.html";
-        prefixResit = "MCZ";
+    // Halaman pulang ikut pakej
+    const halaman = {
+        corporate:         { ok: "corporate-page.html",         gagal: "corporate.html" },
+        corporate_tunggal: { ok: "corporate-tunggal-page.html", gagal: "corporate-tunggal.html" },
+        corporate_kongsi:  { ok: "corporate-kongsi-page.html",  gagal: "corporate-kongsi.html" },
+        corporate_zurri:   { ok: "corporate-zurri-page.html",   gagal: "corporate-zurri.html" }
+    }[docType] || { ok: "corporate-page.html", gagal: "corporate.html" };
+
+    const tajuk = document.getElementById('statusTajuk');
+    const mesej = document.getElementById('statusMesej');
+
+    function gagal(teks) {
+        tajuk.innerText = "Pembayaran Gagal/Batal";
+        tajuk.classList.add("text-red-600");
+        mesej.innerText = teks;
+        setTimeout(() => { window.location.href = halaman.gagal; }, 3000);
     }
 
-    // Toyyibpay Code: 1 = Berjaya
-    if (status_id === "1") {
-        document.getElementById('statusTajuk').innerText = "Pembayaran Berjaya!";
-        
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const currentUser = user;
-                const userId = currentUser.uid;
-                const txnDate = new Date(); 
-                
-                try {
-                    // Tarik Tetapan Harga & Nama Syarikat Amanah dari Admin Setting
-                    let saleAmount = 100;
-                    let namaAmanahServer = "Syarikat Amanah";
-                    const settingsSnap = await getDoc(doc(db, "settings", "compensation"));
-                    if (settingsSnap.exists()) {
-                        const sData = settingsSnap.data();
-                        if (sData.cajRTB) saleAmount = parseFloat(sData.cajRTB);
-                        if (sData.namaSyarikatAmanah) namaAmanahServer = sData.namaSyarikatAmanah;
-                    }
+    if (urlParams.get('billplz[paid]') !== 'true' || !billId) {
+        gagal("Sila cuba sebentar lagi.");
+    } else {
+        const unsub = onAuthStateChanged(auth, async (user) => {
+            unsub();
+            if (!user) { window.location.href = "login.html"; return; }
+            try {
+                // Semua pengesahan & rekod (status borang, submissions, lejer, resit) dibuat di server
+                const proses = httpsCallable(getFunctions(auth.app, 'asia-southeast1'), 'prosesLantikanRTB');
+                const res = await proses({ billId: billId, type: docType });
 
-                    // Tarik Data Borang Klien
-                    const formRef = doc(db, "users", userId, docType, "maklumat");
-                    const formSnap = await getDoc(formRef);
-                    let corporateFormData = {};
-
-                    if (formSnap.exists()) {
-                        corporateFormData = formSnap.data();
-                        
-                        // Elak rekod dua kali
-                        if (corporateFormData.status === "PAID" || corporateFormData.status === "PENDING_APPROVAL") {
-                            window.location.href = redirectPage;
-                            return;
-                        }
-
-                        const refNo = corporateFormData.docRef || prefixResit + "-" + Date.now().toString().slice(-6);
-
-                        // 1. UPDATE STATUS DI USERS
-                        await updateDoc(formRef, {
-                            status: "PAID",
-                            jumlahBayaran: saleAmount,
-                            tarikhBayaran: txnDate.toISOString()
-                        });
-
-                        // 2. DOUBLE ENTRY KE SUBMISSIONS (UNTUK ADMIN)
-                        const submissionRef = doc(db, "submissions", `${userId}_${docType}`);
-                        await setDoc(submissionRef, {
-                            ...corporateFormData,
-                            status: "PAID",
-                            jumlahBayaran: saleAmount,
-                            userId: userId,
-                            jenisDokumen: docType,
-                            tarikhBayaran: txnDate.toISOString()
-                        }, { merge: true });
-
-                        // 3. REKOD JURNAL PERAKAUNAN
-                        // Debit 1000 Bank
-                        await addDoc(collection(db, "ledger"), {
-                            date: txnDate,
-                            accountCode: "1000",
-                            account: "Bank",
-                            category: "asset",
-                            description: `Caj Pelantikan ${namaAmanahServer} - ${corporateFormData.nama}`,
-                            debit: saleAmount,
-                            credit: 0,
-                            paymentType: "Billplz",
-                            transactionGroup: refNo
-                        });
-
-                        // Kredit 4140 Profesional Fee
-                        await addDoc(collection(db, "ledger"), {
-                            date: txnDate,
-                            accountCode: "4140",
-                            account: "Profesional Fee",
-                            category: "income",
-                            description: `Caj Pelantikan ${namaAmanahServer} - ${corporateFormData.nama}`,
-                            debit: 0,
-                            credit: saleAmount,
-                            paymentType: "Billplz",
-                            transactionGroup: refNo
-                        });
-
-                        // 4. CIPTA RESIT PEMBAYARAN TOYYIBPAY
-                        await addDoc(collection(db, "receipts"), {
-                            receiptNo: prefixResit + "-" + Date.now(), 
-                            uid: userId,
-                            payerName: corporateFormData.nama,
-                            serviceCode: "TRUSTEE_FEE",
-                            serviceName: `Caj Pelantikan ${namaAmanahServer}`,
-                            amount: saleAmount,
-                            paymentMethod: "Billplz",
-                            status: "PAID",
-                            paymentDate: txnDate
-                        });
-                        
-                        document.getElementById('statusMesej').innerText = "Selesai! Anda akan dibawa ke dashboard.";
-                        setTimeout(() => { window.location.href = redirectPage; }, 2000);
-
-                    } else {
-                        throw new Error("Data pelanggan tidak dijumpai di pangkalan data.");
-                    }
-
-                } catch (error) {
-                    console.error("Ralat merekod data korporat:", error);
-                    document.getElementById('statusMesej').innerText = "Ralat merekod data. Sila hubungi admin.";
-                    document.getElementById('statusMesej').classList.add("text-red-600");
+                if (!res.data || res.data.ok !== true) {
+                    gagal("Pembayaran tidak dapat disahkan. Sila hubungi admin jika akaun anda telah dicaj.");
+                    return;
                 }
+                tajuk.innerText = "Pembayaran Berjaya!";
+                mesej.innerText = "Selesai! Anda akan dibawa ke dashboard.";
+                setTimeout(() => { window.location.href = halaman.ok; }, 2000);
+            } catch (error) {
+                console.error("Ralat merekod data korporat:", error);
+                mesej.innerText = "Ralat merekod data. Sila hubungi admin.";
+                mesej.classList.add("text-red-600");
             }
         });
-
-    } else {
-        document.getElementById('statusTajuk').innerText = "Pembayaran Gagal/Batal";
-        document.getElementById('statusMesej').innerText = "Sila cuba sebentar lagi.";
-        document.getElementById('statusTajuk').classList.add("text-red-600");
-        
-        setTimeout(() => { window.location.href = failPage; }, 3000);
     }
 </script>
 </body>
