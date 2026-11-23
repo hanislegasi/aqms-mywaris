@@ -538,7 +538,7 @@
         addWarisToDOM(); 
         addWasiatToDOM();
         addSyarikatToDOM();
-        toggleWasi1(); 
+        document.getElementById("pilihanWasi1")?.dispatchEvent(new Event("change")); // ganti toggleWasi1() yang tidak wujud 
       }
     }); 
 
