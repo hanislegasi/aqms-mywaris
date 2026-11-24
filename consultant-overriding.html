@@ -308,27 +308,38 @@ import {
             const items = (data.items || []).slice().sort((a, b) => masa(b.createdAt) - masa(a.createdAt));
             const rowId = "butiran-" + (idx++);
 
+            const sumJualan = items.reduce((t, h) => t + Number(h.sales || 0), 0);
+            const sumOverride = items.reduce((t, h) => t + Number(h.override || 0), 0);
+            const th = "px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500";
+            const td = "px-3 py-2";
             const butiran = items.length === 0
-                ? `<p class="text-gray-500 text-sm">Tiada rekod override.</p>`
-                : `<table class="w-full text-sm">
-                    <thead><tr class="text-gray-500 text-left">
-                        <th class="py-2 pr-3">Tarikh</th><th class="py-2 pr-3">Pelanggan</th><th class="py-2 pr-3">Produk</th>
-                        <th class="py-2 pr-3">Jualan Oleh</th><th class="py-2 pr-3 text-right">Jualan</th>
-                        <th class="py-2 pr-3 text-right">Beza %</th><th class="py-2 text-right">Override</th>
+                ? `<p class="text-gray-500 text-sm px-2">Tiada rekod override.</p>`
+                : `<div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <table class="w-full text-sm tabular-nums">
+                    <colgroup><col style="width:12%"><col style="width:28%"><col style="width:16%"><col style="width:16%"><col style="width:10%"><col style="width:8%"><col style="width:10%"></colgroup>
+                    <thead class="bg-gray-100"><tr>
+                        <th class="${th} text-left">Tarikh</th><th class="${th} text-left">Pelanggan</th><th class="${th} text-left">Produk</th>
+                        <th class="${th} text-left">Jualan Oleh</th><th class="${th} text-right">Jualan</th>
+                        <th class="${th} text-center">Beza</th><th class="${th} text-right">Override</th>
                     </tr></thead>
-                    <tbody>${items.map(h => `
-                        <tr class="border-t">
-                            <td class="py-2 pr-3">${tarikh(h.createdAt)}</td>
-                            <td class="py-2 pr-3">${esc(h.customerNo || "-")} ${esc(h.customerName || "")}</td>
-                            <td class="py-2 pr-3">${esc(h.product || "-")}</td>
-                            <td class="py-2 pr-3">${h.penjual && h.penjual !== h.fromConsultant
-                                ? `${esc(h.penjual)} ${esc(h.penjualNama || "")} <span class="text-gray-400">(melalui ${esc(h.fromConsultant)})</span>`
+                    <tbody class="divide-y divide-gray-100">${items.map(h => `
+                        <tr class="hover:bg-gray-50">
+                            <td class="${td} text-gray-600 whitespace-nowrap">${tarikh(h.createdAt)}</td>
+                            <td class="${td}"><span class="text-gray-400 text-xs mr-1">${esc(h.customerNo || "-")}</span>${esc(h.customerName || "")}</td>
+                            <td class="${td} ${h.product ? "" : "text-gray-300"}">${esc(h.product || "—")}</td>
+                            <td class="${td}">${h.penjual && h.penjual !== h.fromConsultant
+                                ? `${esc(h.penjual)} <span class="text-gray-400 text-xs">via ${esc(h.fromConsultant)}</span>`
                                 : esc(h.fromConsultant || "-")}</td>
-                            <td class="py-2 pr-3 text-right">${rm(h.sales)}</td>
-                            <td class="py-2 pr-3 text-right">${Number(h.diffRate || 0)}%</td>
-                            <td class="py-2 text-right font-semibold text-green-600">${rm(h.override)}</td>
+                            <td class="${td} text-right">${rm(h.sales)}</td>
+                            <td class="${td} text-center"><span class="inline-block bg-gray-100 text-gray-600 rounded-full px-2 text-xs">${Number(h.diffRate || 0)}%</span></td>
+                            <td class="${td} text-right font-semibold text-green-600">${rm(h.override)}</td>
                         </tr>`).join("")}
-                    </tbody></table>`;
+                    </tbody>
+                    <tfoot class="bg-gray-50 border-t border-gray-200 font-semibold"><tr>
+                        <td class="${td}" colspan="4">Jumlah (${items.length} transaksi)</td>
+                        <td class="${td} text-right">${rm(sumJualan)}</td><td></td>
+                        <td class="${td} text-right text-green-600">${rm(sumOverride)}</td>
+                    </tr></tfoot></table></div>`;
 
             html += `
             <tr class="border-b hover:bg-gray-50 cursor-pointer" onclick="document.getElementById('${rowId}').classList.toggle('hidden')" title="Klik untuk lihat butiran">
@@ -340,7 +351,7 @@ import {
                 <td class="p-4 text-center text-blue-600">${bonusPct.toFixed(2)}%</td>
             </tr>
             <tr id="${rowId}" class="hidden bg-gray-50 border-b">
-                <td colspan="6" class="p-4">${butiran}</td>
+                <td colspan="6" class="px-6 pt-2 pb-5">${butiran}</td>
             </tr>
             `;
         }

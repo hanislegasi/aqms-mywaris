@@ -226,21 +226,32 @@ onAuthStateChanged(auth, async(user)=>{
         const senaraiBelian = Object.values(belian).filter(b => b.jualan > 0 || b.komisen > 0)
             .sort((a, b) => (b.tarikh ? b.tarikh.getTime() : 0) - (a.tarikh ? a.tarikh.getTime() : 0));
         const rowId = "belian-" + clientId;
+        const th = "px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500";
+        const td = "px-3 py-2";
+        const sumJ = senaraiBelian.reduce((t, b) => t + b.jualan, 0);
+        const sumK = senaraiBelian.reduce((t, b) => t + b.komisen, 0);
         const butiran = senaraiBelian.length === 0
-            ? `<p class="text-gray-500 text-sm">Tiada rekod belian.</p>`
-            : `<table class="w-full text-sm">
-                <thead><tr class="text-gray-500 text-left">
-                    <th class="py-2 pr-3">Tarikh</th><th class="py-2 pr-3">Produk / Perkhidmatan</th>
-                    <th class="py-2 pr-3 text-right">Jualan</th><th class="py-2 text-right">Komisen</th>
+            ? `<p class="text-gray-500 text-sm px-2">Tiada rekod belian.</p>`
+            : `<div class="max-w-3xl bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                <table class="w-full text-sm tabular-nums">
+                <colgroup><col style="width:18%"><col style="width:46%"><col style="width:18%"><col style="width:18%"></colgroup>
+                <thead class="bg-gray-100"><tr>
+                    <th class="${th} text-left">Tarikh</th><th class="${th} text-left">Produk / Perkhidmatan</th>
+                    <th class="${th} text-right">Jualan</th><th class="${th} text-right">Komisen</th>
                 </tr></thead>
-                <tbody>${senaraiBelian.map(b => `
-                    <tr class="border-t">
-                        <td class="py-2 pr-3">${b.tarikh ? b.tarikh.toLocaleDateString("ms-MY") : "-"}</td>
-                        <td class="py-2 pr-3">${esc(b.produk || "-")}</td>
-                        <td class="py-2 pr-3 text-right text-green-600">${rm(b.jualan)}</td>
-                        <td class="py-2 text-right text-blue-600">${b.komisen > 0 ? rm(b.komisen) : "-"}</td>
+                <tbody class="divide-y divide-gray-100">${senaraiBelian.map(b => `
+                    <tr class="hover:bg-gray-50">
+                        <td class="${td} text-gray-600 whitespace-nowrap">${b.tarikh ? b.tarikh.toLocaleDateString("ms-MY") : "-"}</td>
+                        <td class="${td} ${b.produk ? "" : "text-gray-300"}">${esc(b.produk || "—")}</td>
+                        <td class="${td} text-right text-green-600">${rm(b.jualan)}</td>
+                        <td class="${td} text-right ${b.komisen > 0 ? "text-blue-600" : "text-gray-300"}">${b.komisen > 0 ? rm(b.komisen) : "—"}</td>
                     </tr>`).join("")}
-                </tbody></table>`;
+                </tbody>
+                <tfoot class="bg-gray-50 border-t border-gray-200 font-semibold"><tr>
+                    <td class="${td}" colspan="2">Jumlah (${senaraiBelian.length} transaksi)</td>
+                    <td class="${td} text-right text-green-600">${rm(sumJ)}</td>
+                    <td class="${td} text-right text-blue-600">${rm(sumK)}</td>
+                </tr></tfoot></table></div>`;
 
         html += `
         <tr class="border-b hover:bg-gray-50">
@@ -282,7 +293,7 @@ onAuthStateChanged(auth, async(user)=>{
             </td>
         </tr>
         <tr id="${rowId}" class="hidden bg-gray-50 border-b">
-            <td colspan="11" class="p-4">${butiran}</td>
+            <td colspan="11" class="px-6 pt-2 pb-5">${butiran}</td>
         </tr>
         `;
     }
