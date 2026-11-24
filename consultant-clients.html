@@ -232,9 +232,9 @@ onAuthStateChanged(auth, async(user)=>{
         const sumK = senaraiBelian.reduce((t, b) => t + b.komisen, 0);
         const butiran = senaraiBelian.length === 0
             ? `<p class="text-gray-500 text-sm px-2">Tiada rekod belian.</p>`
-            : `<div class="max-w-3xl bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+            : `<div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
                 <table class="w-full text-sm tabular-nums">
-                <colgroup><col style="width:18%"><col style="width:46%"><col style="width:18%"><col style="width:18%"></colgroup>
+                <colgroup><col style="width:15%"><col style="width:55%"><col style="width:15%"><col style="width:15%"></colgroup>
                 <thead class="bg-gray-100"><tr>
                     <th class="${th} text-left">Tarikh</th><th class="${th} text-left">Produk / Perkhidmatan</th>
                     <th class="${th} text-right">Jualan</th><th class="${th} text-right">Komisen</th>
