@@ -225,7 +225,7 @@ import {
                 teamData[dl.consultantNo] = {
                     nama: dl.nama || "-",
                     level: dl.consultantLevel || "AQC",
-                    sales: 0, override: 0
+                    sales: 0, override: 0, items: []
                 };
             }
         });
@@ -247,11 +247,12 @@ import {
                 teamData[aqcNo] = { 
                     nama: h.fromName || "-", 
                     level: h.fromLevel || "AQC", 
-                    sales: 0, override: 0 
+                    sales: 0, override: 0, items: []
                 };
             }
             teamData[aqcNo].sales += Number(h.sales || 0);
             teamData[aqcNo].override += Number(h.override || 0);
+            teamData[aqcNo].items.push(h); // butiran untuk paparan klik
         });
 
         // --- 6. KIRA JUMLAH KESELURUHAN (GRAND TOTAL) ---
@@ -294,19 +295,52 @@ import {
         setTimeout(() => { kpiBar.style.width = `${percentProgress}%`; }, 300);
 
         // 8. Update Jadual (Tanpa Kolum USB)
+        const esc = (t) => String(t ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+        const rm = (n) => "RM" + Number(n || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const tarikh = (v) => { const d = v && v.toDate ? v.toDate() : (v ? new Date(v) : null); return d && !isNaN(d) ? d.toLocaleDateString("ms-MY") : "-"; };
+        const masa = (v) => { const d = v && v.toDate ? v.toDate() : (v ? new Date(v) : null); return d && !isNaN(d) ? d.getTime() : 0; };
+
         let html = "";
+        let idx = 0;
         for (const aqcNo in teamData) {
             const data = teamData[aqcNo];
             const bonusPct = grandTotalSales > 0 ? (data.sales / grandTotalSales) * 100 : 0;
+            const items = (data.items || []).slice().sort((a, b) => masa(b.createdAt) - masa(a.createdAt));
+            const rowId = "butiran-" + (idx++);
+
+            const butiran = items.length === 0
+                ? `<p class="text-gray-500 text-sm">Tiada rekod override.</p>`
+                : `<table class="w-full text-sm">
+                    <thead><tr class="text-gray-500 text-left">
+                        <th class="py-2 pr-3">Tarikh</th><th class="py-2 pr-3">Pelanggan</th><th class="py-2 pr-3">Produk</th>
+                        <th class="py-2 pr-3">Jualan Oleh</th><th class="py-2 pr-3 text-right">Jualan</th>
+                        <th class="py-2 pr-3 text-right">Beza %</th><th class="py-2 text-right">Override</th>
+                    </tr></thead>
+                    <tbody>${items.map(h => `
+                        <tr class="border-t">
+                            <td class="py-2 pr-3">${tarikh(h.createdAt)}</td>
+                            <td class="py-2 pr-3">${esc(h.customerNo || "-")} ${esc(h.customerName || "")}</td>
+                            <td class="py-2 pr-3">${esc(h.product || "-")}</td>
+                            <td class="py-2 pr-3">${h.penjual && h.penjual !== h.fromConsultant
+                                ? `${esc(h.penjual)} ${esc(h.penjualNama || "")} <span class="text-gray-400">(melalui ${esc(h.fromConsultant)})</span>`
+                                : esc(h.fromConsultant || "-")}</td>
+                            <td class="py-2 pr-3 text-right">${rm(h.sales)}</td>
+                            <td class="py-2 pr-3 text-right">${Number(h.diffRate || 0)}%</td>
+                            <td class="py-2 text-right font-semibold text-green-600">${rm(h.override)}</td>
+                        </tr>`).join("")}
+                    </tbody></table>`;
 
             html += `
-            <tr class="border-b hover:bg-gray-50">
+            <tr class="border-b hover:bg-gray-50 cursor-pointer" onclick="document.getElementById('${rowId}').classList.toggle('hidden')" title="Klik untuk lihat butiran">
                 <td class="p-4">${aqcNo}</td>
-                <td class="p-4">${data.nama}</td>
+                <td class="p-4 text-blue-700 underline">${data.nama} <span class="text-xs text-gray-400 no-underline">(${items.length})</span></td>
                 <td class="p-4">${data.level}</td>
                 <td class="p-4 text-center">RM${(data.sales || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
                 <td class="p-4 text-center font-bold text-green-600">RM${(data.override || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
                 <td class="p-4 text-center text-blue-600">${bonusPct.toFixed(2)}%</td>
+            </tr>
+            <tr id="${rowId}" class="hidden bg-gray-50 border-b">
+                <td colspan="6" class="p-4">${butiran}</td>
             </tr>
             `;
         }
