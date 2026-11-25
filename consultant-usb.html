@@ -25,8 +25,9 @@
                 <p id="summaryBalance" class="text-3xl font-bold text-[#153638] mt-2">RM0.00</p>
             </div>
             <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <p class="text-sm text-gray-500 font-medium">Anggaran Tarikh Matang (<span id="lockYearLabel">3</span> Tahun)</p>
+                <p class="text-sm text-gray-500 font-medium">Matang Seterusnya (kunci <span id="lockYearLabel">3</span> tahun setiap USB)</p>
                 <p id="summaryMaturityDate" class="text-xl font-bold text-blue-600 mt-2">-</p>
+                <p id="summaryMaturityAmt" class="text-sm text-gray-500 mt-1"></p>
             </div>
             <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                 <p class="text-sm text-gray-500 font-medium">Status Akaun USB</p>
@@ -45,17 +46,19 @@
                             <th class="p-4 text-left">Tarikh</th>
                             <th class="p-4 text-left">Terima Dari AQC</th>
                             <th class="p-4 text-left">Keterangan</th>
+                            <th class="p-4 text-left">Tarikh Matang</th>
+                            <th class="p-4 text-center">Status</th>
                             <th class="p-4 text-right">Jumlah (RM)</th>
                         </tr>
                     </thead>
                     <tbody id="usbTableBody">
                         <tr>
-                            <td colspan="4" class="p-6 text-center text-gray-500">Memuatkan penyata USB...</td>
+                            <td colspan="6" class="p-6 text-center text-gray-500">Memuatkan penyata USB...</td>
                         </tr>
                     </tbody>
                     <tfoot id="usbTableFoot" class="bg-gray-50 border-t-2 border-gray-200 font-bold hidden">
                         <tr>
-                            <td colspan="3" class="p-4 text-right">JUMLAH KESELURUHAN BAKI USB:</td>
+                            <td colspan="5" class="p-4 text-right">JUMLAH KESELURUHAN BAKI USB:</td>
                             <td id="totalUsbFooter" class="p-4 text-right text-blue-600">RM0.00</td>
                         </tr>
                     </tfoot>
@@ -122,7 +125,7 @@ import {
                 const now = new Date();
 
                 if (querySnapshot.empty) {
-                    document.getElementById("usbTableBody").innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-500">Tiada rekod transaksi USB dijumpai.</td></tr>`;
+                    document.getElementById("usbTableBody").innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-500">Tiada rekod transaksi USB dijumpai.</td></tr>`;
                     document.getElementById("summaryBalance").textContent = "RM0.00";
                     document.getElementById("summaryMaturityDate").textContent = "-";
                     document.getElementById("summaryStatus").innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600">Tiada Simpanan</span>`;
@@ -142,98 +145,84 @@ import {
                     }
                 });
 
-                // 4. Gelung untuk proses data lejer
+                // 4. Gelung untuk proses data lejer (setiap USB dikunci ikut tarikhnya sendiri)
+                const fmt = (d) => d.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
+                const baris = [];
+                let jumlahTerkunci = 0, jumlahMatang = 0, jumlahPV = 0;
+                let matangSeterusnya = null, jumlahSeterusnya = 0;
+
                 querySnapshot.forEach((docSnap) => {
                     const row = docSnap.data();
-                    
-                    let dateStr = "-";
-                    if (row.date) {
-                        const d = row.date.toDate ? row.date.toDate() : new Date(row.date);
-                        dateStr = d.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
-                        
-                        if (!firstReceiveDate || d < firstReceiveDate) {
-                            firstReceiveDate = d;
-                        }
-                    }
+                    const d = row.date ? (row.date.toDate ? row.date.toDate() : new Date(row.date)) : null;
 
-                    // CARIAN PINTAR SUMBER PENGIRIM
+                    // CARIAN SUMBER PENGIRIM (logik asal)
                     let fromAqc = "";
-
-                    // A. Padanan Silang Utama: transactionGroup (Lejer) == customerNo (OverrideHistory)
-                    if (row.transactionGroup && groupToConsultantMap[row.transactionGroup]) {
-                        fromAqc = groupToConsultantMap[row.transactionGroup];
-                    }
-
-                    // B. Jika tiada di atas, semak field rasmi
-                    if (!fromAqc && row.fromConsultant) {
-                        fromAqc = row.fromConsultant;
-                    }
-
-                    // C. Jika masih tiada, ekstrak dari Keterangan (sebagai langkah akhir)
+                    if (row.transactionGroup && groupToConsultantMap[row.transactionGroup]) fromAqc = groupToConsultantMap[row.transactionGroup];
+                    if (!fromAqc && row.fromConsultant) fromAqc = row.fromConsultant;
                     if (!fromAqc && row.description) {
-                        const match = row.description.match(/(AQC\d{4,5})/);
+                        const match = row.description.match(/(AQ[CP]\d{4,5})/);
                         if (match) fromAqc = match[0];
                     }
-
                     if (!fromAqc) fromAqc = "-";
 
-                    const desc = row.description || "USB Transaction";
                     const credit = Number(row.credit || 0);
                     const debit = Number(row.debit || 0);
                     const netAmount = credit - debit;
-
                     totalUsbBalance += netAmount;
 
-                    // TAMBAHAN: Semak jika ada pengeluaran (debit) dan simpan tarikh terkini
-                    if (debit > 0 && row.date) {
-                        const d = row.date.toDate ? row.date.toDate() : new Date(row.date);
-                        if (!latestPayoutDate || d > latestPayoutDate) {
-                            latestPayoutDate = d;
+                    if (debit > 0 && d && (!latestPayoutDate || d > latestPayoutDate)) latestPayoutDate = d;
+
+                    let matang = null, status = "", matangTxt = "-";
+                    if (credit > 0 && d) {
+                        matang = new Date(d); matang.setFullYear(matang.getFullYear() + lockYears);
+                        matangTxt = fmt(matang);
+                        if (row.usbPvId) {
+                            status = `<span class="px-2 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">PV Dijana</span>`;
+                            jumlahPV += credit;
+                        } else if (now >= matang) {
+                            status = `<span class="px-2 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">Matang</span>`;
+                            jumlahMatang += credit;
+                        } else {
+                            status = `<span class="px-2 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700">Terkunci</span>`;
+                            jumlahTerkunci += credit;
+                            if (!matangSeterusnya || matang < matangSeterusnya) { matangSeterusnya = matang; jumlahSeterusnya = credit; }
+                            else if (matang.getTime() === matangSeterusnya.getTime()) jumlahSeterusnya += credit;
                         }
+                    } else if (debit > 0) {
+                        status = `<span class="px-2 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600">Dibayar</span>`;
                     }
 
-                    html += `
+                    baris.push({ t: d ? d.getTime() : 0, html: `
                     <tr class="border-b hover:bg-gray-50 transition">
-                        <td class="p-4 text-gray-700">${dateStr}</td>
+                        <td class="p-4 text-gray-700 whitespace-nowrap">${d ? fmt(d) : "-"}</td>
                         <td class="p-4 font-semibold text-[#153638]">${fromAqc}</td>
-                        <td class="p-4 text-gray-800">${desc}</td>
+                        <td class="p-4 text-gray-800">${row.description || "USB Transaction"}</td>
+                        <td class="p-4 text-gray-700 whitespace-nowrap">${matangTxt}</td>
+                        <td class="p-4 text-center">${status}</td>
                         <td class="p-4 text-right font-bold ${netAmount >= 0 ? 'text-green-600' : 'text-red-600'}">
                             ${netAmount >= 0 ? '+' : ''}RM${formatRM(netAmount)}
                         </td>
-                    </tr>
-                    `;
+                    </tr>` });
                 });
 
-                // 5. Kira Tarikh Matang Berdasarkan Setting Admin
-                let maturityDateText = "-";
-                let isMatured = false;
+                baris.sort((x, y) => y.t - x.t); // terbaru di atas
+                html = baris.map(b => b.html).join("");
 
-                if (firstReceiveDate) {
-                    let maturityDate = new Date(firstReceiveDate);
-                    maturityDate.setFullYear(maturityDate.getFullYear() + lockYears);
-                    maturityDateText = maturityDate.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
-                    
-                    isMatured = now >= maturityDate;
-                }
-
-                // 6. Update Kad Ringkasan di Atas
+                // 6. Kad Ringkasan
                 document.getElementById("summaryBalance").textContent = "RM" + formatRM(totalUsbBalance);
-                document.getElementById("summaryMaturityDate").textContent = maturityDateText;
-                
-                if (totalUsbBalance <= 0) {
-                    if (latestPayoutDate) {
-                        // Jika baki 0 dan pernah ada rekod pengeluaran
-                        const payoutStr = latestPayoutDate.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
-                        document.getElementById("summaryStatus").innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">Telah Dibayar Pada ${payoutStr}</span>`;
-                    } else {
-                        // Jika baki 0 tapi memang dari awal tak pernah ada simpanan
-                        document.getElementById("summaryStatus").innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600">Baki Kosong</span>`;
-                    }
-                } else if (isMatured) {
-                    document.getElementById("summaryStatus").innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">MATANG (LAYAK DITUNTUT)</span>`;
-                } else {
-                    document.getElementById("summaryStatus").innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700">DALAM TEMPOH SIMPANAN</span>`;
+                document.getElementById("summaryMaturityDate").textContent = matangSeterusnya ? fmt(matangSeterusnya) : "-";
+                document.getElementById("summaryMaturityAmt").textContent = matangSeterusnya ? `RM${formatRM(jumlahSeterusnya)} akan matang` : "";
+
+                const lencana = [];
+                if (jumlahTerkunci > 0) lencana.push(`<span class="px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700">Terkunci RM${formatRM(jumlahTerkunci)}</span>`);
+                if (jumlahMatang > 0) lencana.push(`<span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">Matang RM${formatRM(jumlahMatang)}</span>`);
+                if (jumlahPV > 0 && totalUsbBalance > 0) lencana.push(`<span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">Dalam Proses PV</span>`);
+                if (lencana.length === 0) {
+                    lencana.push(latestPayoutDate
+                        ? `<span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">Telah Dibayar Pada ${fmt(latestPayoutDate)}</span>`
+                        : `<span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600">Baki Kosong</span>`);
                 }
+                document.getElementById("summaryStatus").innerHTML = `<div class="flex flex-wrap gap-2">${lencana.join("")}</div>`;
 
                 document.getElementById("usbTableBody").innerHTML = html;
                 document.getElementById("totalUsbFooter").textContent = "RM" + formatRM(totalUsbBalance);
@@ -241,7 +230,7 @@ import {
 
             } catch (err) {
                 console.error("Ralat memuatkan penyata USB:", err);
-                document.getElementById("usbTableBody").innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Ralat memuatkan data dari pangkalan data.</td></tr>`;
+                document.getElementById("usbTableBody").innerHTML = `<tr><td colspan="6" class="p-4 text-center text-red-500">Ralat memuatkan data dari pangkalan data.</td></tr>`;
             }
         });
     </script>

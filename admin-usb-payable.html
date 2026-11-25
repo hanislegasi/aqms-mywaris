@@ -24,10 +24,11 @@
                         <tr>
                             <th class="p-4 text-left">No. Konsultan</th>
                             <th class="p-4 text-left">Nama Konsultan</th>
-                            <th class="p-4 text-center">Tarikh 1st Receive</th>
-                            <th class="p-4 text-center">Tempoh Pegangan</th>
-                            <th class="p-4 text-right">Jumlah USB (RM)</th>
-                            <th class="p-4 text-center">Status Matang</th>
+                            <th class="p-4 text-right">Baki USB (RM)</th>
+                            <th class="p-4 text-right">Terkunci (RM)</th>
+                            <th class="p-4 text-center">Matang Seterusnya</th>
+                            <th class="p-4 text-right">Matang Belum PV (RM)</th>
+                            <th class="p-4 text-center">Status</th>
                             <th class="p-4 text-center">Tindakan</th>
                         </tr>
                     </thead>
@@ -44,6 +45,7 @@
     <script type="module">
        // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
 import { db, auth } from './firebase.js';
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
 
 // 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
 import { 
@@ -83,38 +85,32 @@ import {
                 // 2. Tarik semua data dari lejer akaun 2150
                 const ledgerSnap = await getDocs(query(collection(db, "ledger"), where("accountCode", "==", "2150")));
                 
+                // Setiap entri USB (kredit) dikunci ikut tarikhnya sendiri
                 let consultantUsbMap = {};
+                const now = new Date();
 
                 ledgerSnap.forEach(d => {
                     const row = d.data();
                     const cNo = row.consultantNo;
                     if (!cNo) return;
-
                     if (!consultantUsbMap[cNo]) {
-                        consultantUsbMap[cNo] = {
-                            balance: 0,
-                            firstDate: null,
-                            latestPayoutDate: null // TAMBAHAN: Pegang tarikh akhir bayar
-                        };
+                        consultantUsbMap[cNo] = { balance: 0, terkunci: 0, matang: 0, nextDate: null, latestPayoutDate: null, adaPV: false };
                     }
-
+                    const c = consultantUsbMap[cNo];
                     const credit = Number(row.credit || 0);
                     const debit = Number(row.debit || 0);
-                    consultantUsbMap[cNo].balance += (credit - debit);
+                    c.balance += (credit - debit);
+                    const trxDate = row.date ? (row.date.toDate ? row.date.toDate() : new Date(row.date)) : null;
 
-                    if (row.date) {
-                        const trxDate = row.date.toDate ? row.date.toDate() : new Date(row.date);
-                        
-                        // Cari tarikh transaksi paling awal (1st receive)
-                        if (!consultantUsbMap[cNo].firstDate || trxDate < consultantUsbMap[cNo].firstDate) {
-                            consultantUsbMap[cNo].firstDate = trxDate;
-                        }
-                        
-                        // TAMBAHAN: Cari tarikh pengeluaran terkini (debit)
-                        if (debit > 0) {
-                            if (!consultantUsbMap[cNo].latestPayoutDate || trxDate > consultantUsbMap[cNo].latestPayoutDate) {
-                                consultantUsbMap[cNo].latestPayoutDate = trxDate;
-                            }
+                    if (debit > 0 && trxDate && (!c.latestPayoutDate || trxDate > c.latestPayoutDate)) c.latestPayoutDate = trxDate;
+
+                    if (credit > 0 && trxDate) {
+                        if (row.usbPvId) { c.adaPV = true; return; }
+                        const matang = new Date(trxDate); matang.setFullYear(matang.getFullYear() + lockYears);
+                        if (now >= matang) c.matang += credit;
+                        else {
+                            c.terkunci += credit;
+                            if (!c.nextDate || matang < c.nextDate) c.nextDate = matang;
                         }
                     }
                 });
@@ -128,61 +124,41 @@ import {
                 });
 
                 let html = "";
-                const now = new Date();
+                const formatDate = (d) => d.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
 
-                // Gelung untuk bina jadual konsultan
                 for (const cNo in consultantUsbMap) {
                     const data = consultantUsbMap[cNo];
-                    
-                    // Kita buang "if (data.balance <= 0) continue;" supaya rekod yang dah dibayar tak ghaib
+                    let statusBadge = "", actionBtn = `<span class="text-xs text-gray-400">-</span>`;
 
-                    const firstDate = data.firstDate || now;
-                    let maturityDate = new Date(firstDate);
-                    maturityDate.setFullYear(maturityDate.getFullYear() + lockYears); 
-                    
-                    const isMatured = now >= maturityDate;
-                    const formatDate = (d) => d.toLocaleDateString("ms-MY", { year: 'numeric', month: 'short', day: 'numeric' });
-
-                    // TAMBAHAN: Logik Butang dan Lencana Status
-                    let statusBadge = "";
-                    let actionBtn = "";
-
-                    if (data.balance <= 0) {
-                        if (data.latestPayoutDate) {
-                            const payoutStr = formatDate(data.latestPayoutDate);
-                            statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">TELAH DIBAYAR: ${payoutStr.toUpperCase()}</span>`;
-                        } else {
-                            statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600">BAKI KOSONG</span>`;
-                        }
-                        actionBtn = `<span class="text-xs text-gray-400 font-medium">Selesai</span>`;
-                    } else if (isMatured) {
-                        const safeName = (nameMap[cNo] || "-").replace(/'/g, "\\'"); // Elak ralat jika nama ada tanda koma atas
+                    if (data.matang > 0) {
                         statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">MATANG (READY)</span>`;
-                        actionBtn = `<button onclick="generatePV('${cNo}', '${safeName}', ${data.balance})" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">Jana PV</button>`;
-                    } else {
+                        actionBtn = `<button onclick="generatePV('${cNo}')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">Jana PV</button>`;
+                    } else if (data.terkunci > 0) {
                         statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700">DALAM TEMPOH SIMPANAN</span>`;
-                        actionBtn = `<span class="text-xs text-gray-400">Belum Matang</span>`;
+                    } else if (data.balance > 0 && data.adaPV) {
+                        statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">PV DIJANA (MENUNGGU BAYARAN)</span>`;
+                    } else if (data.latestPayoutDate) {
+                        statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">TELAH DIBAYAR: ${formatDate(data.latestPayoutDate).toUpperCase()}</span>`;
+                    } else {
+                        statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600">BAKI KOSONG</span>`;
                     }
 
                     html += `
                     <tr class="border-b hover:bg-gray-50">
                         <td class="p-4 font-bold text-[#153638]">${cNo}</td>
                         <td class="p-4">${nameMap[cNo] || "-"}</td>
-                        <td class="p-4 text-center">${formatDate(firstDate)}</td>
-                        <td class="p-4 text-center">${formatDate(maturityDate)}</td>
                         <td class="p-4 text-right font-bold ${data.balance > 0 ? 'text-green-600' : 'text-gray-400'}">RM${formatRM(data.balance)}</td>
-                        <td class="p-4 text-center">
-                            ${statusBadge}
-                        </td>
-                        <td class="p-4 text-center">
-                            ${actionBtn}
-                        </td>
+                        <td class="p-4 text-right">RM${formatRM(data.terkunci)}</td>
+                        <td class="p-4 text-center">${data.nextDate ? formatDate(data.nextDate) : "-"}</td>
+                        <td class="p-4 text-right font-bold ${data.matang > 0 ? 'text-green-600' : 'text-gray-400'}">RM${formatRM(data.matang)}</td>
+                        <td class="p-4 text-center">${statusBadge}</td>
+                        <td class="p-4 text-center">${actionBtn}</td>
                     </tr>
                     `;
                 }
 
                 if (html === "") {
-                    html = `<tr><td colspan="7" class="p-6 text-center text-gray-500">Tiada rekod baki USB aktif dijumpai.</td></tr>`;
+                    html = `<tr><td colspan="8" class="p-6 text-center text-gray-500">Tiada rekod baki USB aktif dijumpai.</td></tr>`;
                 }
 
                 document.getElementById("adminUsbTableBody").innerHTML = html;
@@ -193,28 +169,14 @@ import {
         });
 
         // Fungsi global untuk jana Payment Voucher (PV) apabila matang
-        window.generatePV = async function(consultantNo, consultantName, amount) {
-            if (!confirm(`Sahkan untuk menjana Payment Voucher (PV) bagi USB matang untuk ${consultantNo} sebanyak RM${formatRM(amount)}?`)) return;
-
+        window.generatePV = async function(consultantNo) {
+            if (!confirm(`Jana Payment Voucher untuk USB MATANG ${consultantNo}? (Hanya entri yang telah melepasi tempoh kunci.)`)) return;
             try {
-                // Jana Nombor PV unik
-                const pvId = "PV-" + Date.now() + Math.floor(Math.random()*100);
-
-                await addDoc(collection(db, "paymentVouchers"), {
-                    pvNo: pvId,
-                    consultantNo: consultantNo,
-                    consultantName: consultantName,
-                    payee: consultantName, // Backup untuk serasi dengan jadual PV
-                    amount: amount,
-                    type: "USB_MATURITY_PAYOUT",
-                    accountCode: "2150", // Debit Upline Sponsor Benefit Payable semasa Mark Paid
-                    accountName: "Upline Sponsor Benefit Payable",
-                    status: "PENDING",
-                    createdAt: new Date(),
-                    description: `Pembayaran USB Matang (Lock-in Payout)`
-                });
-
-                alert("Payment Voucher berjaya dijana! Sila semak di modul pengurusan Payment Voucher.");
+                // Dijana di server: hanya entri matang, dan entri ditanda supaya tidak dilepaskan dua kali
+                const fn = httpsCallable(getFunctions(auth.app, 'asia-southeast1'), 'janaPVUSB');
+                const res = await fn({ consultantNo });
+                const h = (res.data && res.data.hasil) || [];
+                alert(h.length ? `PV ${h[0].pvId} dijana: RM${formatRM(h[0].jumlah)} (${h[0].bilangan} entri).` : "Tiada entri matang untuk dijana.");
                 window.location.reload();
             } catch (err) {
                 alert("Ralat: " + err.message);
