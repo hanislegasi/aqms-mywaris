@@ -105,6 +105,7 @@
         import { db, auth } from './firebase.js';
         import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { doc, getDoc, setDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
 
         lucide.createIcons();
 
@@ -159,19 +160,9 @@
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
-                // 2. JANA AUTO-COUNTER AQP
-                const newAqpNo = await runTransaction(db, async (transaction) => {
-                    const counterDocRef = doc(db, "system", "counter");
-                    const counterDoc = await transaction.get(counterDocRef);
-                    
-                    let newCount = 1;
-                    if (counterDoc.exists() && counterDoc.data().aqpCounter) {
-                        newCount = counterDoc.data().aqpCounter + 1;
-                    }
-                    
-                    transaction.set(counterDocRef, { aqpCounter: newCount }, { merge: true });
-                    return "AQP" + String(newCount).padStart(4, '0');
-                });
+                // 2. NOMBOR AQP DARI SERVER (kaunter tidak lagi ditulis dari pelayar)
+                const ambilNoAQP = httpsCallable(getFunctions(auth.app, 'asia-southeast1'), 'ambilNoAQP');
+                const newAqpNo = (await ambilNoAQP({})).data.aqpNo;
 
                 // Set 1 Tahun Expired Date
                 const expiryDate = new Date();

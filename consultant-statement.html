@@ -302,7 +302,7 @@ window.location.href =
                 
 const ledgerSnap =
 await getDocs(
-collection(db,"ledger")
+query(collection(db,"ledger"), where("consultantNo","==",consultantNo))
 );
 
 const paymentSnap =

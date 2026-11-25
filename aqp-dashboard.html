@@ -259,13 +259,24 @@ onAuthStateChanged(auth, async(user)=>{
     
     let totalAlk = alkCodes.length;
 
-    // 3B. Tarik Semua Data Lejer
-    const ledgerSnap = await getDocs(collection(db, "ledger"));
+
+    async function pelangganIkutRujukan(kodList) {
+        const kod = [...new Set(kodList.filter(Boolean))];
+        const docs = [];
+        for (let i = 0; i < kod.length; i += 30) {
+            const s = await getDocs(query(collection(db, "users"), where("referral", "in", kod.slice(i, i + 30))));
+            s.forEach(d => docs.push(d));
+        }
+        return { docs, forEach: (fn) => docs.forEach(fn) };
+    }
+
+    // 3B. Lejer milik institusi AQP ini sahaja (6B)
+    const ledgerSnap = await getDocs(query(collection(db, "ledger"), where("consultantNo", "==", data.consultantNo)));
     const ledgerRecords = [];
     ledgerSnap.forEach(d => ledgerRecords.push({ id: d.id, ...d.data() }));
 
     // 3C. Proses Klien (Klien Direct & Klien ALK)
-    const usersSnap = await getDocs(collection(db,"users"));
+    const usersSnap = await pelangganIkutRujukan([data.consultantNo, ...alkCodes]);
     
     usersSnap.forEach((d)=>{
         const u = d.data();

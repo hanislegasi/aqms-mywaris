@@ -361,7 +361,7 @@ onAuthStateChanged(auth, async(user)=>{
     const monthlyOverride = [0,0,0,0,0,0,0,0,0,0,0,0];
 
     // 3A. Tarik Semua Data Lejer
-    const ledgerSnap = await getDocs(collection(db, "ledger"));
+    const ledgerSnap = await getDocs(query(collection(db, "ledger"), where("consultantNo", "==", data.consultantNo)));
     const ledgerRecords = [];
     ledgerSnap.forEach(d => ledgerRecords.push({ id: d.id, ...d.data() }));
 
@@ -382,7 +382,7 @@ onAuthStateChanged(auth, async(user)=>{
     });
 
     // 3C. Proses Klien (Jualan Peribadi & Komisen)
-    const usersSnap = await getDocs(collection(db,"users"));
+    const usersSnap = await getDocs(query(collection(db,"users"), where("referral", "==", data.consultantNo)));
     const myClientUids = [];
     
     usersSnap.forEach((d)=>{

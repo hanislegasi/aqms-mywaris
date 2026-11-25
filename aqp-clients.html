@@ -97,8 +97,19 @@ onAuthStateChanged(auth, async(user) => {
         agentMap[ag.agentCode] = ag.nama; // Cth: { "AQP0001-001" : "KHAIRUL AMING" }
     });
 
-    // --- 2. TARIK SEMUA DATA LEJER KE DALAM MEMORI ---
-    const ledgerSnap = await getDocs(collection(db, "ledger"));
+
+    async function pelangganIkutRujukan(kodList) {
+        const kod = [...new Set(kodList.filter(Boolean))];
+        const docs = [];
+        for (let i = 0; i < kod.length; i += 30) {
+            const s = await getDocs(query(collection(db, "users"), where("referral", "in", kod.slice(i, i + 30))));
+            s.forEach(d => docs.push(d));
+        }
+        return { docs, forEach: (fn) => docs.forEach(fn) };
+    }
+
+    // --- 2. LEJER MILIK INSTITUSI AQP INI SAHAJA (6B) ---
+    const ledgerSnap = await getDocs(query(collection(db, "ledger"), where("consultantNo", "==", consultantNo)));
     const ledgerRecords = [];
     
     ledgerSnap.forEach(d => {
@@ -106,7 +117,7 @@ onAuthStateChanged(auth, async(user) => {
     });
 
     // --- 3. BINA JADUAL PELANGGAN ---
-    const snap = await getDocs(collection(db,"users"));
+    const snap = await pelangganIkutRujukan([consultantNo, ...Object.keys(agentMap)]);
     let html = "";
     let bil = 1;
 

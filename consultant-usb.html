@@ -135,7 +135,7 @@ import {
                 // =========================================================================
                 // KOD YANG DIBETULKAN: Guna h.customerNo untuk padankan AQM0010
                 // =========================================================================
-                const overrideSnap = await getDocs(collection(db, "overrideHistory"));
+                const overrideSnap = await getDocs(query(collection(db, "overrideHistory"), where("receiver", "==", myConsultantNo)));
                 let groupToConsultantMap = {};
                 overrideSnap.forEach(docSnap => {
                     const h = docSnap.data();
@@ -156,9 +156,8 @@ import {
                     const d = row.date ? (row.date.toDate ? row.date.toDate() : new Date(row.date)) : null;
 
                     // CARIAN SUMBER PENGIRIM (logik asal)
-                    let fromAqc = "";
-                    if (row.transactionGroup && groupToConsultantMap[row.transactionGroup]) fromAqc = groupToConsultantMap[row.transactionGroup];
-                    if (!fromAqc && row.fromConsultant) fromAqc = row.fromConsultant;
+                    let fromAqc = row.fromConsultant || "";
+                    if (!fromAqc && row.transactionGroup && groupToConsultantMap[row.transactionGroup]) fromAqc = groupToConsultantMap[row.transactionGroup];
                     if (!fromAqc && row.description) {
                         const match = row.description.match(/(AQ[CP]\d{4,5})/);
                         if (match) fromAqc = match[0];

@@ -64,7 +64,7 @@
   
 <script type="module">
 import { db, auth } from './firebase.js';
-import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { collection, getDocs, doc, getDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 onAuthStateChanged(auth, async(user)=>{
@@ -91,7 +91,8 @@ onAuthStateChanged(auth, async(user)=>{
     else if(lvl === "MGAM") commissionRate = Number(comp.commissionMGAM || 45);
 
     // --- 2. TARIK SEMUA DATA LEJER KE DALAM MEMORI ---
-    const ledgerSnap = await getDocs(collection(db, "ledger"));
+    // Hanya lejer milik konsultan ini (6B: tidak lagi baca seluruh lejer)
+    const ledgerSnap = await getDocs(query(collection(db, "ledger"), where("consultantNo", "==", consultantNo)));
     const ledgerRecords = [];
     
     ledgerSnap.forEach(d => {
@@ -99,7 +100,8 @@ onAuthStateChanged(auth, async(user)=>{
     });
 
     // --- 3. BINA JADUAL PELANGGAN ---
-    const snap = await getDocs(collection(db,"users"));
+    // Hanya pelanggan yang dirujuk oleh konsultan ini
+    const snap = await getDocs(query(collection(db,"users"), where("referral", "==", consultantNo)));
     let html = "";
     let bil = 1;
     
