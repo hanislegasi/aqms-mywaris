@@ -635,13 +635,8 @@ onAuthStateChanged(auth, async(user)=>{
     const earned = totalCommission + totalOverriding + totalMyUsb;
     const outstanding = earned - paid;
 
-    // 9. KEMASKINI DATABASE JUALAN SEMASA
-    await updateDoc(doc(db,"consultants",user.uid), {
-        careerSales: totalSales,
-        totalSales,
-        totalCommission,
-        totalOverriding
-    });
+    // 9. (Dibuang 6C) Statistik jualan/komisen kini dikemas kini oleh server sahaja.
+    //    Halaman ini hanya memaparkan angka; ia tidak lagi menulis semula careerSales/totalSales.
 
     // 10. AUTO-REQUEST PROMOTION KE DB JIKA LULUS
     const isSalesPassed = currentSalesForPromote >= targetSales;

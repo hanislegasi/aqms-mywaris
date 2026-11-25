@@ -353,12 +353,7 @@ onAuthStateChanged(auth, async(user)=>{
     const earned = totalCommission;
     const outstanding = earned - paid;
 
-    // 5.5 KEMASKINI DATABASE JUALAN TERKINI (SYNC)
-    await updateDoc(doc(db, "consultants", user.uid), {
-        activeClients: activeClients,
-        totalSales: totalSales,
-        totalCommission: totalCommission
-    });
+    // 5.5 (Dibuang 6C) Statistik kini dikemas kini oleh server sahaja; halaman hanya memaparkan.
   
     // 6. PAPARAN UI KAD
     document.getElementById("welcomeText").innerHTML = data.nama;
