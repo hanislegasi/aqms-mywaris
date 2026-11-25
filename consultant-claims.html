@@ -36,7 +36,13 @@
             </a>
         </div>
 
-        <div class="bg-white rounded-xl shadow p-6">
+        <!-- myClaims DINYAHAKTIFKAN SEMENTARA (tukar CLAIMS_AKTIF = true untuk buka semula) -->
+        <div id="claimsTutup" class="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-xl p-6 mb-6">
+            <p class="font-bold">Tuntutan kos stamping tidak aktif buat masa ini.</p>
+            <p class="text-sm mt-1">Sila hubungi HQ jika ada pertanyaan.</p>
+        </div>
+
+        <div id="claimsKandungan" class="bg-white rounded-xl shadow p-6 hidden">
             <h2 class="text-lg font-bold text-[#153638] mb-4">Senarai Dokumen Selesai (Boleh Dituntut)</h2>
             
             <div class="overflow-x-auto">
@@ -130,7 +136,14 @@
         let currentConsultant = null;
         
        
+        const CLAIMS_AKTIF = false; // myClaims dinyahaktifkan sementara (keputusan HQ)
+        if (CLAIMS_AKTIF) {
+            document.getElementById("claimsTutup").classList.add("hidden");
+            document.getElementById("claimsKandungan").classList.remove("hidden");
+        }
+
         onAuthStateChanged(auth, async (user) => {
+            if (!CLAIMS_AKTIF) return;
             if (!user) {
                 window.location.href = "login.html";
                 return;

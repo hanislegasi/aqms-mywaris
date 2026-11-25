@@ -101,6 +101,7 @@
   <script type="module">
     // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
 import { db, auth } from './firebase.js';
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
 
 // 2. Tarik fungsi Auth yang berkaitan sahaja (buang getAuth)
 import { 
@@ -213,6 +214,7 @@ import {
         let teamData = {};
         let grandTotalSales = 0;
         let grandTotalOverride = 0;
+        let periodSales = 0; // jualan pasukan dalam tempoh KPI semasa
 
         const myAqcNo = data.consultantNo; 
 
@@ -253,6 +255,10 @@ import {
             teamData[aqcNo].sales += Number(h.sales || 0);
             teamData[aqcNo].override += Number(h.override || 0);
             teamData[aqcNo].items.push(h); // butiran untuk paparan klik
+
+            // KPI dikira dalam tempoh semasa sahaja
+            const tKpi = h.createdAt && h.createdAt.toDate ? h.createdAt.toDate() : (h.createdAt ? new Date(h.createdAt) : null);
+            if (tKpi && tKpi >= startDate && tKpi <= endDate) periodSales += Number(h.sales || 0);
         });
 
         // --- 6. KIRA JUMLAH KESELURUHAN (GRAND TOTAL) ---
@@ -270,7 +276,7 @@ import {
         const claimsSnap = await getDocs(claimsQ);
         const claimedCount = claimsSnap.size;
 
-        const applicableSales = grandTotalSales - (claimedCount * targetSalesBonus);
+        const applicableSales = periodSales - (claimedCount * targetSalesBonus);
 
         // 7. Update UI KPI Bar
         document.getElementById("kpiCurrent").textContent = `Kumpulan Terkini: RM${formatRM(applicableSales)}`;
@@ -379,50 +385,16 @@ import {
             this.textContent = "Sedang Memproses...";
             
             try {
-                const bonusPool = targetSalesBonus * (rewardBonusRate / 100); 
-
-                await addDoc(collection(db, "ledger"), {
-                    date: new Date(),
-                    accountCode: "6100", 
-                    account: "KPI Bonus Expense",
-                    category: "expense",
-                    description: `Bonus KPI Pasukan ${myConsultantNo} (${periodName})`,
-                    debit: bonusPool,
-                    credit: 0,
-                    paymentType: "CONSULTANT",
-                    transactionGroup: "KPI-" + myConsultantNo
-                });
-
-                await addDoc(collection(db, "ledger"), {
-                    date: new Date(),
-                    accountCode: "2160",
-                    account: "KPI Bonus Payable",
-                    category: "liability",
-                    description: `Bonus KPI Pasukan ${myConsultantNo} (${periodName})`,
-                    debit: 0,
-                    credit: bonusPool,
-                    paymentType: "CONSULTANT",
-                    transactionGroup: "KPI-" + myConsultantNo
-                });
-
-                await addDoc(collection(db, "bonusPayable"), {
-                    team: myConsultantNo,
-                    period: periodName, 
-                    targetAchieved: targetSalesBonus,
-                    bonusPercent: rewardBonusRate,
-                    bonusAmount: bonusPool, 
-                    status: "PENDING_PAYMENT",
-                    createdAt: new Date(),
-                    members: Object.keys(teamData).map(aqcNo => ({
-                        aqcNo: aqcNo,
-                        nama: teamData[aqcNo].nama,
-                        totalSales: teamData[aqcNo].sales,
-                        bonusPercent: (teamData[aqcNo].sales / grandTotalSales) * 100,
-                        bonusAmount: bonusPool * (teamData[aqcNo].sales / grandTotalSales)
-                    }))
-                });
-                
-                alert("Berjaya! Tuntutan Bonus KPI telah masuk ke Lejer HQ.");
+                // Server kira semula & sahkan KPI sebelum merekod lejer / bonusPayable
+                const fn = httpsCallable(getFunctions(auth.app, 'asia-southeast1'), 'tuntutBonusKPI');
+                const res = await fn({});
+                if (!res.data || res.data.ok !== true) {
+                    alert("KPI belum tercapai untuk tempoh ini. Tuntutan tidak dihantar.");
+                    this.disabled = false;
+                    this.textContent = "Tuntut Bonus";
+                    return;
+                }
+                alert(res.data.sudahDiproses ? "Tuntutan ini telah pun direkodkan." : "Berjaya! Tuntutan Bonus KPI telah masuk ke Lejer HQ.");
                 window.location.reload();
 
             } catch (err) {
