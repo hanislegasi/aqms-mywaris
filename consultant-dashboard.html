@@ -249,13 +249,16 @@
  
 <!-- MENU -->
 <div class="flex flex-col gap-4">
-    <!-- Baris 1 & 2 (Grid 4 Kotak) -->
-    <div class="grid md:grid-cols-4 gap-4">
+    <!-- Baris 1 (Grid 3 Kotak: utama) -->
+    <div class="grid md:grid-cols-3 gap-4">
         <button id="clientsBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">myClients</button>
         <button id="overridingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">myTeam</button>
         <button onclick="window.location.href='consultant-usb.html'" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">myUSB</button>
         <button onclick="window.location.href='consultant-claims.html'" style="display:none" title="myClaims dinyahaktifkan sementara" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">myClaims</button>
-        
+    </div>
+
+    <!-- Baris 2 (Grid 4 Kotak) -->
+    <div class="grid md:grid-cols-4 gap-4">
         <button id="careerBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">Career Path</button>
         <button id="trainingBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md text-sm">Continuous Professional Development</button>
         <button id="renewalBtn" class="bg-[#153638] text-white p-5 rounded-xl font-semibold hover:bg-[#1e4d50] transition shadow-md">Annual Consultant Renewal</button>  
