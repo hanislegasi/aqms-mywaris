@@ -2601,8 +2601,8 @@ document.getElementById("uploadBtn").addEventListener("click", async()=>{
     alert("Jenis fail tidak diterima. Sila muat naik PDF, JPG atau PNG sahaja.");
     return;
   }
-  if(file.size > 10 * 1024 * 1024){
-    alert("Saiz fail melebihi 10 MB. Sila kecilkan fail dan cuba lagi.");
+  if(file.size > 50 * 1024 * 1024){
+    alert("Saiz fail melebihi 50 MB. Sila kecilkan fail dan cuba lagi.");
     return;
   }
   const namaStorage = Date.now() + "_" + file.name.replace(/[\/#?]/g, "_");
