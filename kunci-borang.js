@@ -18,7 +18,7 @@ const BOLEH_HANTAR = ["", "DRAFT", "DRAFTING", "REJECTED"];
 
 function mesejStatus(status) {
     if (["UNDER_REVIEW", "PENDING_APPROVAL", "PAID"].includes(status))
-        return "Permohonan anda sedang disemak oleh admin. Borang tidak boleh diubah atau dihantar semula buat masa ini.";
+        return "Permohonan anda sedang disemak oleh admin. Borang tidak boleh diubah atau dihantar semula buat masa ini. Anda boleh menyemak dan mengemas kini borang selepas ia diluluskan, sebelum anda mengesahkan dokumen.";
     if (status === "APPROVED")
         return "Dokumen anda telah diluluskan. Sila semak dan sahkan dokumen di halaman dokumen anda (tidak perlu hantar semula).";
     if (["HANDOVER", "RECEIVED"].includes(status))
