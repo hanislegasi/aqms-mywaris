@@ -1109,7 +1109,7 @@ placeholder="Contoh: Salinan Geran Rumah">
   
   <input
     type="file"
-    id="fileInput"
+    id="fileInput" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
     class="w-full border rounded-lg p-3">
 
   <button
@@ -2597,7 +2597,7 @@ async function loadFiles(){
       </div>
 
       ${
-        data.fileName.endsWith(".pdf")
+        data.fileName.toLowerCase().endsWith(".pdf")
         ? `<iframe src="${data.fileURL}" class="w-full h-96 rounded-lg border"></iframe>`
         : `<img src="${data.fileURL}" class="w-full rounded-lg border">`
       }
@@ -2626,10 +2626,29 @@ document.getElementById("uploadBtn").addEventListener("click", async()=>{
     return;
   }
 
+  // Semak jenis & saiz fail
+  const JENIS_OK = ["application/pdf","image/jpeg","image/png"];
+  const sambungan = file.name.split(".").pop().toLowerCase();
+  if(!JENIS_OK.includes(file.type) && !["pdf","jpg","jpeg","png"].includes(sambungan)){
+    alert("Jenis fail tidak diterima. Sila muat naik PDF, JPG atau PNG sahaja.");
+    return;
+  }
+  if(file.size > 10 * 1024 * 1024){
+    alert("Saiz fail melebihi 10 MB. Sila kecilkan fail dan cuba lagi.");
+    return;
+  }
+  const namaStorage = Date.now() + "_" + file.name.replace(/[\/#?]/g, "_");
+  const btnUpload = document.getElementById("uploadBtn");
+  const teksAsalBtn = btnUpload.textContent;
+  btnUpload.disabled = true;
+  btnUpload.textContent = "Memuat naik...";
+  btnUpload.classList.add("opacity-60","cursor-wait");
+
+
   try{
     const storageRef = ref(
       storage,
-      "sepencarian/" + currentUser.uid + "/" + file.name
+      "sepencarian/" + currentUser.uid + "/" + namaStorage
     );
 
     await uploadBytes(storageRef, file);
@@ -2644,7 +2663,7 @@ document.getElementById("uploadBtn").addEventListener("click", async()=>{
         "sepencarianDocuments"
       ),
       {
-        fileName: file.name,
+        fileName: namaStorage, namaAsal: file.name,
         namaLampiran: namaLampiran || file.name,
         fileURL: downloadURL,
         createdAt: new Date()
@@ -2660,6 +2679,10 @@ document.getElementById("uploadBtn").addEventListener("click", async()=>{
   } catch(error){
     console.log(error);
     alert("Gagal muat naik: " + error.message);
+  } finally{
+    btnUpload.disabled = false;
+    btnUpload.textContent = teksAsalBtn;
+    btnUpload.classList.remove("opacity-60","cursor-wait");
   }
 });
 

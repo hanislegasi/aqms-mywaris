@@ -179,7 +179,7 @@
           <label class="block font-medium mb-1">Nama Lampiran</label>
           <input type="text" id="namaLampiran" class="w-full border rounded-lg p-2 mb-3" placeholder="Contoh: Sijil SSM / Geran">
         </div>
-        <input type="file" id="fileInput" class="w-full border rounded-lg p-3 bg-gray-50">
+        <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" class="w-full border rounded-lg p-3 bg-gray-50">
         <button type="button" id="uploadBtn" class="bg-[#153638] hover:bg-[#1d4a4d] transition text-white px-5 py-3 rounded-lg">Muat Naik Lampiran</button>
         <div id="fileList" class="space-y-2 mt-4"></div>
       </div>
@@ -841,7 +841,7 @@ if (pilihanWasi1) {
               <button type="button" class="deleteFileBtn bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1 rounded-lg" data-id="${docSnap.id}" data-filename="${data.fileName}">Padam</button>
             </div>
           </div>
-          ${data.fileName.endsWith(".pdf") ? `<iframe src="${data.fileURL}" class="w-full h-96 rounded-lg border"></iframe>` : `<img src="${data.fileURL}" class="w-full rounded-lg border">`}
+          ${data.fileName.toLowerCase().endsWith(".pdf") ? `<iframe src="${data.fileURL}" class="w-full h-96 rounded-lg border"></iframe>` : `<img src="${data.fileURL}" class="w-full rounded-lg border">`}
         </div>`;
       });
       document.getElementById("fileList").innerHTML = html || `<p class="text-xs text-gray-400">Tiada lampiran dimuat naik.</p>`;
@@ -854,18 +854,41 @@ if (pilihanWasi1) {
       const namaLampiran = namaLampiranInput.value.trim();
       if(!namaLampiran) return alert("Sila masukkan Nama Lampiran.");
       if(!file) return alert("Sila pilih fail.");
+
+  // Semak jenis & saiz fail
+  const JENIS_OK = ["application/pdf","image/jpeg","image/png"];
+  const sambungan = file.name.split(".").pop().toLowerCase();
+  if(!JENIS_OK.includes(file.type) && !["pdf","jpg","jpeg","png"].includes(sambungan)){
+    alert("Jenis fail tidak diterima. Sila muat naik PDF, JPG atau PNG sahaja.");
+    return;
+  }
+  if(file.size > 10 * 1024 * 1024){
+    alert("Saiz fail melebihi 10 MB. Sila kecilkan fail dan cuba lagi.");
+    return;
+  }
+  const namaStorage = Date.now() + "_" + file.name.replace(/[\/#?]/g, "_");
+  const btnUpload = document.getElementById("uploadBtn");
+  const teksAsalBtn = btnUpload.textContent;
+  btnUpload.disabled = true;
+  btnUpload.textContent = "Memuat naik...";
+  btnUpload.classList.add("opacity-60","cursor-wait");
+
       try{
-        const storageRef = ref(storage, "corporate_tunggal/" + currentUser.uid + "/" + file.name);
+        const storageRef = ref(storage, "corporate_tunggal/" + currentUser.uid + "/" + namaStorage);
         await uploadBytes(storageRef, file);
         const downloadURL = await getDownloadURL(storageRef);
         await addDoc(collection(db, "users", currentUser.uid, "corporate_tunggalDocuments"), {
-            fileName: file.name, namaLampiran: namaLampiran || file.name, fileURL: downloadURL, createdAt: new Date()
+            fileName: namaStorage, namaAsal: file.name, namaLampiran: namaLampiran || file.name, fileURL: downloadURL, createdAt: new Date()
         });
         namaLampiranInput.value = ""; fileInput.value = "";
         await loadFiles();
       } catch(error){
         alert("Gagal muat naik: " + error.message);
-      }
+      } finally{
+    btnUpload.disabled = false;
+    btnUpload.textContent = teksAsalBtn;
+    btnUpload.classList.remove("opacity-60","cursor-wait");
+  }
     });
 
     document.getElementById("fileList").addEventListener("click", async (e) => {

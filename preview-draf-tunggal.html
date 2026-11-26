@@ -299,7 +299,7 @@
                 <p class="text-sm font-medium text-gray-700">${file.namaLampiran || file.fileName}</p>
                 <a href="${file.fileURL}" target="_blank" class="text-[#153638] font-semibold hover:underline">Buka</a>
               </div>
-              ${file.fileName.endsWith(".pdf") ? `<iframe src="${file.fileURL}" class="w-full h-96 rounded-lg border"></iframe>` : `<img src="${file.fileURL}" class="w-full rounded-lg border">`}
+              ${file.fileName.toLowerCase().endsWith(".pdf") ? `<iframe src="${file.fileURL}" class="w-full h-96 rounded-lg border"></iframe>` : `<img src="${file.fileURL}" class="w-full rounded-lg border">`}
             </div>
           `;
         });
