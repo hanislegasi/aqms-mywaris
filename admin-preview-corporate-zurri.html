@@ -218,7 +218,33 @@
         window.addEventListener('resize', updateScale);
         window.addEventListener('DOMContentLoaded', () => setTimeout(updateScale, 100));
 
-        async function imageToBase64(url){
+        // Lampiran → senarai gambar (PDF dipecah ikut muka surat guna pdf.js)
+async function lampiranKeImej(file){
+  const res = await fetch(file.fileURL);
+  if(!res.ok) throw new Error("Lampiran gagal dimuatkan");
+  const blob = await res.blob();
+  const isPdf = blob.type === "application/pdf" || (file.fileName || "").toLowerCase().endsWith(".pdf");
+  if(!isPdf){
+    return [await new Promise((resolve)=>{ const fr = new FileReader(); fr.onloadend = ()=>resolve(fr.result); fr.readAsDataURL(blob); })];
+  }
+  const pdfjs = await import("https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/legacy/build/pdf.min.mjs");
+  pdfjs.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/legacy/build/pdf.worker.min.mjs";
+  const pdf = await pdfjs.getDocument({ data: await blob.arrayBuffer() }).promise;
+  const imej = [];
+  for(let i = 1; i <= pdf.numPages; i++){
+    const page = await pdf.getPage(i);
+    const vp = page.getViewport({ scale: 2 });
+    const canvas = document.createElement("canvas");
+    canvas.width = vp.width; canvas.height = vp.height;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    await page.render({ canvasContext: ctx, viewport: vp }).promise;
+    imej.push(canvas.toDataURL("image/jpeg", 0.85));
+  }
+  return imej;
+}
+
+async function imageToBase64(url){
             const response = await fetch(url);
             if(!response.ok) throw new Error("Image gagal dimuatkan");
             const blob = await response.blob();
@@ -759,18 +785,21 @@ document.getElementById("sectionMekanisme").innerHTML = mekanismeHTML;
 
                         for(const doc of lampiranSnap.docs){
                             const file = doc.data();
-                            const base64Image = await imageToBase64(file.fileURL);
+const senaraiImej = await lampiranKeImej(file);
+for(let pg = 0; pg < senaraiImej.length; pg++){
+const base64Image = senaraiImej[pg];
 
                             lampiranHTML += `
                             <div class="a4-page p-[18mm]">
                                 <h2 style="font-family:'Times New Roman', serif; font-size:28px; font-weight:400; margin-top:30px; margin-bottom:20px; color:#153638; text-transform:uppercase;">
-                                    LAMPIRAN ${String.fromCharCode(hurufLampiran)}: ${(file.namaLampiran || file.fileName).toUpperCase()}
+                                    LAMPIRAN ${String.fromCharCode(hurufLampiran)}: ${(file.namaLampiran || file.fileName).toUpperCase()}${pg > 0 ? " (SAMBUNGAN)" : ""}
                                 </h2>
                                 <img src="${base64Image}" style="display:block; max-width:170mm; max-height:220mm; width:auto; height:auto; margin:20px auto; border:1px solid #ccc; object-fit:contain;">
                                 <div class="pdf-footer"></div>
                             </div>
                             `;
 
+}
                             hurufLampiran++;
                         }
                         
