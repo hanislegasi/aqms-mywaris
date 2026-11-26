@@ -830,7 +830,7 @@ if (pilihanWasi1) {
         if (!confirm("Padam lampiran ini?")) return;
         try {
           await deleteDoc(doc(db, "users", currentUser.uid, "corporate_zurriDocuments", docId));
-          await deleteObject(ref(storage, "corporate_zurri/" + currentUser.uid + "/" + fileName));
+          await deleteObject(ref(storage, "corporate_zurri/" + currentUser.uid + "/" + fileName)).catch(e => { if (e.code !== "storage/object-not-found") throw e; });
           document.getElementById(`doc-${docId}`)?.remove();
         } catch (error) {
           alert("Gagal memadam fail: " + error.message);

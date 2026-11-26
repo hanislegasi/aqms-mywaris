@@ -2710,7 +2710,7 @@ document.getElementById("fileList").addEventListener("click", async (e) => {
 
       // 2. Padam fail dari Storage
       const storageRef = ref(storage, "mawaris/" + currentUser.uid + "/" + fileName);
-      await deleteObject(storageRef);
+      await deleteObject(storageRef).catch(e => { if (e.code !== "storage/object-not-found") throw e; });
 
       // 3. Buang elemen UI secara langsung
       const targetCard = document.getElementById(`doc-${docId}`);
