@@ -693,7 +693,7 @@ if (consultantCode) {
         telefonPerundingDisplay = formatNoTel(consultantData.telefon);
     } else {
         // 2. Jika tiada, cari di koleksi 'users' (Untuk Ejen / Sub-ejen Institusi AQP)
-        const qAgent = query(collection(db, "users"), where("agentCode", "==", cleanCode), where("role", "==", "aqp_agent"));
+        const qAgent = query(collection(db, "aqpAgentPublic"), where("agentCode", "==", cleanCode));
         const snapAgent = await getDocs(qAgent);
         
         if (!snapAgent.empty) {

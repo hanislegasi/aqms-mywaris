@@ -134,7 +134,7 @@ async function checkReferralValidity(referralCode) {
         }
 
         // 2. Semak dalam koleksi 'users' untuk Ejen AQP (Format AQP0001-001)
-        const qAgent = query(collection(db, "users"), where("agentCode", "==", referralCode), where("role", "==", "aqp_agent"));
+        const qAgent = query(collection(db, "aqpAgentPublic"), where("agentCode", "==", referralCode));
         const snapAgent = await getDocs(qAgent);
 
         if (!snapAgent.empty) {
@@ -183,10 +183,10 @@ if(ref){
 if (introUid) {
     (async () => {
         try {
-            const introDoc = await getDoc(doc(db, "users", introUid));
+            const introDoc = await getDoc(doc(db, "introducerPublic", introUid));
             if (introDoc.exists()) {
                 const introData = introDoc.data();
-                if (introData.isIntroducer) {
+                {
                     validIntroducer = true;
                     introducerCommPercent = introData.introducerComm || 3;
                     
