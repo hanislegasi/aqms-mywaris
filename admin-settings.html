@@ -92,6 +92,18 @@ font-family: Inter, sans-serif;
             </div>
         </div>
 
+        <!-- ================= PENGESAHAN MAHKAMAH ================= -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+            <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Pengesahan Mahkamah</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div>
+                    <label class="font-medium text-sm text-gray-600 block mb-1">Yuran Pengesahan Mahkamah (RM)</label>
+                    <input id="courtValidationFee" type="number" class="w-full border-gray-300 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none transition-all text-red-600 font-bold bg-red-50" placeholder="Contoh: 5000">
+                    <p class="text-xs text-gray-400 mt-1">Harga sama untuk semua produk. Akaun 4150 Profesional Fee (Legal).</p>
+                </div>
+            </div>
+        </div>
+
       <!-- ================= PRODUCT ================= -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
             <h2 class="text-xl font-bold mb-5 text-[#153638] border-b pb-3">Harga Produk (RM)</h2>
@@ -674,7 +686,7 @@ font-family: Inter, sans-serif;
         const defaultCompensationSettings = {
             wasiatPrice: 350, hibahPrice: 2500, sepencarianPrice: 800, mawarisPrice: 3000, 
             corporatePrice: 6000, corporateTunggalPrice: 1500, corporateKongsiPrice: 3000, corporateZurriPrice: 1000,
-            cajRTB: 100, 
+            cajRTB: 100, courtValidationFee: 5000,
             namaSyarikatAmanah: "Rakyat Trustee Berhad", noSyarikatAmanah: "1462142-U", telefonSyarikatAmanah: "+603 2602 2722", alamatSyarikatAmanah: "Suite 1, Tingkat 24, Menara TH Selborn, 153 Jln Tun Razak, 50400 Kuala Lumpur",
             wasiatRenewal: 50, hibahRenewal: 50, sepencarianRenewal: 50, mawarisRenewal: 80, 
             corporateRenewal: 200, corporateTunggalRenewal: 100, corporateKongsiRenewal: 150, corporateZurriRenewal: 50,
@@ -703,7 +715,7 @@ font-family: Inter, sans-serif;
         const companyFields = ["companyName", "registrationNo", "employerNo", "companyEmail", "companyAddress"];
         
         const compensationFields = [
-            "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice", "corporatePrice", "cajRTB", 
+            "wasiatPrice", "hibahPrice", "sepencarianPrice", "mawarisPrice", "corporatePrice", "cajRTB", "courtValidationFee",
             "corporateTunggalPrice", "corporateKongsiPrice", "corporateZurriPrice",
             "wasiatRenewal", "hibahRenewal", "sepencarianRenewal", "mawarisRenewal", "corporateRenewal", 
             "corporateTunggalRenewal", "corporateKongsiRenewal", "corporateZurriRenewal",
@@ -754,6 +766,8 @@ font-family: Inter, sans-serif;
             trusteeFieldsString.forEach(field => {
                 if (el(field)) el(field).value = compensationData[field] ?? "";
             });
+            // Medan baru: guna nilai lalai jika belum pernah disimpan
+            if (el("courtValidationFee") && el("courtValidationFee").value === "") el("courtValidationFee").value = defaultCompensationSettings.courtValidationFee;
 
             checkRevenue();
             calculateSimulation();

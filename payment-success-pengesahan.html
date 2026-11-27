@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Bayaran Pengesahan Mahkamah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: Inter, sans-serif; }</style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-5">
+
+    <div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl text-center">
+        <div id="loadingIcon" class="mb-4 text-[#153638]">
+            <svg class="w-16 h-16 mx-auto animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        </div>
+        <h1 id="statusTajuk" class="text-2xl font-bold text-[#153638] mb-4">Mengesahkan Pembayaran...</h1>
+        <p id="statusMesej" class="text-gray-500">Sila tunggu. Sistem sedang mengesahkan bayaran pengesahan mahkamah anda.</p>
+    </div>
+
+    <script type="module">
+        import { auth } from './firebase.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const billId = urlParams.get('billplz[id]');
+        const namaPakej = urlParams.get('pakej') || "";
+        const tajuk = document.getElementById('statusTajuk');
+        const mesej = document.getElementById('statusMesej');
+
+        function gagal(teks) {
+            tajuk.innerText = "Pembayaran Gagal";
+            tajuk.classList.add("text-red-600");
+            mesej.innerText = teks;
+            document.getElementById('loadingIcon').innerHTML = "";
+            setTimeout(() => { window.location.href = "dashboard.html"; }, 4000);
+        }
+
+        if (urlParams.get('billplz[paid]') !== 'true' || !billId || !namaPakej.startsWith("Pengesahan Mahkamah - ")) {
+            gagal("Transaksi dibatalkan atau tidak sah. Mengembalikan anda ke dashboard...");
+        } else {
+            const unsub = onAuthStateChanged(auth, async (user) => {
+                unsub();
+                if (!user) { window.location.href = "login.html"; return; }
+                try {
+                    // Pengesahan bil, status "Telah Dibayar", lejer & resit semuanya dibuat di server
+                    const proses = httpsCallable(getFunctions(auth.app, 'asia-southeast1'), 'prosesPengesahanMahkamah');
+                    const res = await proses({ billId: billId, pakej: namaPakej });
+
+                    if (!res.data || res.data.ok !== true) {
+                        gagal("Pembayaran tidak dapat disahkan. Sila hubungi admin jika akaun anda telah dicaj.");
+                        return;
+                    }
+                    tajuk.innerText = "Bayaran Berjaya";
+                    mesej.innerText = "Bayaran pengesahan mahkamah telah diterima. AQC anda akan menyerahkan dokumen kepada peguam. Mengembalikan anda...";
+                    document.getElementById('loadingIcon').innerHTML = `<svg class="w-16 h-16 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+                    setTimeout(() => { window.location.href = res.data.redirectPage || "dashboard.html"; }, 3000);
+                } catch (error) {
+                    console.error(error);
+                    mesej.innerText = "Ralat memproses bayaran. Sila hubungi admin jika akaun anda telah dicaj.";
+                    mesej.classList.add("text-red-600");
+                }
+            });
+        }
+    </script>
+</body>
+</html>

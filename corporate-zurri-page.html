@@ -71,6 +71,17 @@ import {
     query, 
     where 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+
+// Label status dokumen (Bahasa Melayu)
+const LABEL_STATUS = {
+  DRAFT: "Draf", DRAFTING: "Draf", UNDER_REVIEW: "Dalam Semakan", PENDING_APPROVAL: "Menunggu Kelulusan",
+  PAID: "Telah Dibayar", REJECTED: "Ditolak", APPROVED: "Diluluskan", VERIFIED: "Disahkan Pelanggan",
+  PRINTED: "Dicetak", SENT: "Dihantar Kurier", AKAD: "Selesai Akad", STAMPING: "Dalam Pengesahan Mahkamah",
+  HANDOVER: "Diserah kepada AQM", RECEIVED: "Selesai (AQM Terima)", COMPLETED: "Selesai"
+};
+const labelStatus = (s) => LABEL_STATUS[s] || s;
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
 onAuthStateChanged(auth, async(user) => {
   if(!user){
@@ -80,11 +91,13 @@ onAuthStateChanged(auth, async(user) => {
 
   // Harga Default Wakaf Zurri
   let corporateZurriPrice = 1000;
+  let yuranPengesahan = 5000;
 
   try {
     const compensationSnap = await getDoc(doc(db, "settings", "compensation"));
     if (compensationSnap.exists()) {
       const compensationData = compensationSnap.data();
+      if (compensationData.courtValidationFee !== undefined) yuranPengesahan = Number(compensationData.courtValidationFee) || 5000;
       if (compensationData.corporateZurriPrice !== undefined) {
         corporateZurriPrice = compensationData.corporateZurriPrice;
       }
@@ -215,7 +228,7 @@ onAuthStateChanged(auth, async(user) => {
                 </div>
                 <div class="flex justify-between border-b border-white/10 pb-2">
                   <span class="text-white/70">Status Dokumen</span>
-                  <b>${currentStatus}</b>
+                  <b>${labelStatus(currentStatus)}</b>
                 </div>
               </div>
             </div>
@@ -255,9 +268,46 @@ onAuthStateChanged(auth, async(user) => {
 
     // Render Timeline Status
     const done = (status) => {
-      const order = ["APPROVED", "VERIFIED", "PRINTED", "SENT", "AKAD", "STAMPING", "HANDOVER", "RECEIVED"];
+      const order = ["APPROVED", "VERIFIED", "PRINTED", "SENT", "AKAD", "STAMPING", "HANDOVER", "RECEIVED", "COMPLETED"];
       return order.indexOf(currentStatus) >= order.indexOf(status);
     };
+
+    // Kurier diterima & Pengesahan Mahkamah
+    const fmtRM = (n) => "RM" + Number(n || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const kurierDone = !!corporateData.kurierDiterimaDate || done("AKAD");
+    const kurierKawalan = (currentStatus === "SENT" && !corporateData.kurierDiterimaDate) ? `
+        <input type="date" id="kurierDiterimaDate" class="border rounded-lg p-2 mt-2 w-full bg-white/80">
+        <button id="btnKurierDiterima" class="bg-green-600 hover:bg-green-700 text-white rounded-lg mt-2 w-full py-2 font-medium transition">Sah Terima Kurier</button>` : "";
+
+    const pm = corporateData.pengesahanMahkamah || "";
+    const pmDibayar = corporateData.pengesahanStatus === "PAID";
+    const pmBolehPilih = !pmDibayar && ["AKAD", "STAMPING", "HANDOVER", "RECEIVED", "COMPLETED"].includes(currentStatus);
+    const pmDone = pm === "TIDAK" || pmDibayar || !!corporateData.stampingDate;
+    let pmTarikh = "-";
+    let pmKawalan = "";
+    if (pmDibayar) {
+      pmTarikh = "Telah Dibayar";
+      pmKawalan = `${fmtRM(corporateData.pengesahanJumlah)}${corporateData.pengesahanBayaranAt ? " • " + new Date(corporateData.pengesahanBayaranAt).toLocaleDateString("ms-MY") : ""}`
+        + (corporateData.stampingDate
+            ? `<br>Diserah kepada peguam: ${esc(corporateData.firmaGuaman || corporateData.stampingRef || "-")} (${esc(corporateData.stampingDate)})`
+            : `<br>Menunggu AQC menyerahkan dokumen kepada peguam.`);
+    } else if (corporateData.stampingDate) {
+      // Rekod lama (aliran Stamping)
+      pmTarikh = corporateData.stampingDate;
+      pmKawalan = esc(corporateData.firmaGuaman || corporateData.stampingRef || "");
+    } else if (pmBolehPilih) {
+      pmTarikh = pm === "TIDAK" ? "Tidak Diperlukan" : (pm === "YA" ? "Menunggu Bayaran" : "Sila buat pilihan");
+      pmKawalan = `
+        <select id="pilihanPengesahan" class="border rounded-lg p-2 mt-2 w-full bg-white/80">
+          <option value="">-- Perlu pengesahan mahkamah? --</option>
+          <option value="YA" ${pm === "YA" ? "selected" : ""}>Ya, saya mahu pengesahan mahkamah</option>
+          <option value="TIDAK" ${pm === "TIDAK" ? "selected" : ""}>Tidak perlu</option>
+        </select>
+        <button id="btnSimpanPengesahan" class="bg-[#153638] hover:bg-[#1d4a4d] text-white rounded-lg mt-2 w-full py-2 font-medium transition">Simpan Pilihan</button>
+        ${pm === "YA" ? `<button id="btnBayarPengesahan" class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg mt-2 w-full py-2 font-semibold transition">Bayar ${fmtRM(yuranPengesahan)}</button>
+        <p class="text-xs text-gray-500 mt-1">Selepas bayaran, AQC anda akan menyerahkan dokumen kepada peguam untuk pengesahan mahkamah.</p>` : ""}
+        ${pm === "TIDAK" ? `<p class="text-xs text-gray-500 mt-1">Anda boleh menukar kepada "Ya" bila-bila masa sebelum membuat bayaran.</p>` : ""}`;
+    }
 
     function timelineItem(doneStatus, title, date, extra = "") {
       return `
@@ -288,13 +338,15 @@ onAuthStateChanged(auth, async(user) => {
     <!-- 3. KANDUNGAN TIMELINE -->
     <div class="relative z-10">
       <h3 class="font-bold text-lg mb-5 text-[#153638]">Status Timeline</h3>
-      ${timelineItem(done("APPROVED"), "Approved", corporateData.approvedAt ? new Date(corporateData.approvedAt).toLocaleDateString("ms-MY") : "-")}
-      ${timelineItem(done("PRINTED"), "Printed", corporateData.printedAt ? new Date(corporateData.printedAt).toLocaleDateString("ms-MY") : "-")}
-      ${timelineItem(done("SENT"), "Sent", corporateData.sentAt ? new Date(corporateData.sentAt).toLocaleDateString("ms-MY") : "-", `Courier : ${corporateData.courier || "-"}<br>Tracking : ${corporateData.trackingNo || "-"}`)}
-      ${timelineItem(done("AKAD"), "Akad", corporateData.akadDate || "-", corporateData.akadTime || "")}
-      ${timelineItem(done("STAMPING"), "Stamping", corporateData.stampingDate || "-", corporateData.stampingRef || "")}
-      ${timelineItem(done("HANDOVER"), "Diserahkan Kepada AQM", corporateData.handoverDate || "-", corporateData.handoverRemarks || "")}
-      ${timelineItem(done("RECEIVED"), "AQM Terima Dokumen", corporateData.receivedDate || "-", !corporateData.receivedDate ? `
+      ${timelineItem(done("APPROVED"), "Diluluskan", corporateData.approvedAt ? new Date(corporateData.approvedAt).toLocaleDateString("ms-MY") : "-")}
+      ${timelineItem(done("VERIFIED"), "Disahkan Pelanggan", corporateData.verifiedAt ? new Date(corporateData.verifiedAt).toLocaleDateString("ms-MY") : "-")}
+      ${timelineItem(done("PRINTED"), "Dicetak", corporateData.printedAt ? new Date(corporateData.printedAt).toLocaleDateString("ms-MY") : "-")}
+      ${timelineItem(done("SENT"), "Dihantar Kurier", corporateData.sentAt ? new Date(corporateData.sentAt).toLocaleDateString("ms-MY") : "-", `Kurier : ${esc(corporateData.courier || "-")}<br>No. Tracking : ${esc(corporateData.trackingNo || "-")}`)}
+      ${timelineItem(kurierDone, "Kurier Diterima", corporateData.kurierDiterimaDate || "-", kurierKawalan)}
+      ${timelineItem(done("AKAD"), "Selesai Akad", corporateData.akadDate || "-", corporateData.akadTime || "")}
+      ${timelineItem(pmDone, "Pengesahan Mahkamah", pmTarikh, pmKawalan)}
+      ${timelineItem(done("HANDOVER"), "Diserah kepada AQM", corporateData.handoverDate || "-", esc(corporateData.handoverRemarks || ""))}
+      ${timelineItem(done("RECEIVED"), "Selesai (AQM Terima)", corporateData.receivedDate || "-", currentStatus === "HANDOVER" ? `
         <input type="date" id="receivedDate" class="border rounded-lg p-2 mt-2 w-full bg-white/80">
         <button id="confirmReceived" class="bg-green-600 hover:bg-green-700 text-white rounded-lg mt-2 w-full py-2 font-medium transition">Sah Terima</button>
       ` : "")}
@@ -388,6 +440,71 @@ onAuthStateChanged(auth, async(user) => {
 
         alert("Dokumen berjaya disahkan diterima.");
         location.reload();
+      };
+    }
+
+
+    // Sah terima kurier
+    const btnKurier = document.getElementById("btnKurierDiterima");
+    if (btnKurier) {
+      btnKurier.onclick = async () => {
+        const tarikh = document.getElementById("kurierDiterimaDate").value;
+        if (!tarikh) { alert("Sila pilih tarikh."); return; }
+        btnKurier.disabled = true;
+        try {
+          await updateDoc(doc(db, "users", user.uid, "corporate_zurri", "maklumat"), { kurierDiterimaDate: tarikh, kurierDiterimaAt: serverTimestamp() });
+          alert("Penerimaan kurier berjaya disahkan.");
+          location.reload();
+        } catch (e) {
+          console.error(e);
+          alert("Gagal menyimpan: " + e.message);
+          btnKurier.disabled = false;
+        }
+      };
+    }
+
+    // Pilihan pengesahan mahkamah (pelanggan)
+    const btnSimpanPM = document.getElementById("btnSimpanPengesahan");
+    if (btnSimpanPM) {
+      btnSimpanPM.onclick = async () => {
+        const pilihan = document.getElementById("pilihanPengesahan").value;
+        if (!pilihan) { alert("Sila pilih Ya atau Tidak."); return; }
+        btnSimpanPM.disabled = true;
+        try {
+          await updateDoc(doc(db, "users", user.uid, "corporate_zurri", "maklumat"), { pengesahanMahkamah: pilihan, pengesahanDipilihAt: serverTimestamp() });
+          location.reload();
+        } catch (e) {
+          console.error(e);
+          alert("Gagal menyimpan pilihan: " + e.message);
+          btnSimpanPM.disabled = false;
+        }
+      };
+    }
+
+    // Bayar pengesahan mahkamah (harga sebenar dikira di server)
+    const btnBayarPM = document.getElementById("btnBayarPengesahan");
+    if (btnBayarPM) {
+      btnBayarPM.onclick = async () => {
+        if (!confirm(`Teruskan bayaran pengesahan mahkamah ${fmtRM(yuranPengesahan)}?`)) return;
+        btnBayarPM.disabled = true;
+        btnBayarPM.textContent = "Menghubungi sistem pembayaran...";
+        try {
+          const ciptaBil = httpsCallable(getFunctions(auth.app, "asia-southeast1"), "createToyyibpayBill");
+          const res = await ciptaBil({
+            nama: userData.nama || "Pelanggan AQM",
+            email: userData.email || "tiada@email.com",
+            telefon: userData.telefon || "0100000000",
+            pakej: "Pengesahan Mahkamah - Mawaris Korporat (Wakaf Zurri)",
+            harga: yuranPengesahan,
+            uid: user.uid
+          });
+          window.location.href = res.data.paymentUrl;
+        } catch (e) {
+          console.error(e);
+          alert("Gagal menghubungi sistem pembayaran. Sila cuba lagi.");
+          btnBayarPM.disabled = false;
+          btnBayarPM.textContent = `Bayar ${fmtRM(yuranPengesahan)}`;
+        }
       };
     }
 

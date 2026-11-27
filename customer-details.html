@@ -100,6 +100,32 @@ import {
           }
         }
 
+// ===== LABEL STATUS & PENGESAHAN MAHKAMAH =====
+      const LABEL_STATUS = {
+        DRAFT: "Draf", DRAFTING: "Draf", UNDER_REVIEW: "Dalam Semakan", PENDING_APPROVAL: "Menunggu Kelulusan",
+        PAID: "Telah Dibayar", REJECTED: "Ditolak", APPROVED: "Diluluskan", VERIFIED: "Disahkan Pelanggan",
+        PRINTED: "Dicetak", SENT: "Dihantar Kurier", AKAD: "Selesai Akad", STAMPING: "Dalam Pengesahan Mahkamah",
+        HANDOVER: "Diserah kepada AQM", RECEIVED: "Selesai (AQM Terima)", COMPLETED: "Selesai"
+      };
+      const labelStatus = (s) => LABEL_STATUS[s] || s;
+      const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+      function blokPengesahan(d) {
+        d = d || {};
+        const pm = d.pengesahanMahkamah || "";
+        const firma = d.firmaGuaman || d.stampingRef || "";
+        if (d.pengesahanStatus === "PAID") {
+          const jumlah = d.pengesahanJumlah ? "RM" + Number(d.pengesahanJumlah).toLocaleString("ms-MY", { minimumFractionDigits: 2 }) : "";
+          return `<p class="font-semibold text-green-700">Telah Dibayar ${jumlah}</p>
+                  <p class="text-sm">Tarikh serah peguam: ${esc(d.stampingDate || "-")}</p>
+                  <p class="text-sm">${firma ? esc(firma) : "Belum diserah kepada peguam"}</p>`;
+        }
+        if (pm === "TIDAK") return `<p class="font-semibold text-gray-400">Tidak Diperlukan</p>`;
+        if (pm === "YA") return `<p class="font-semibold text-orange-600">Menunggu Bayaran</p>`;
+        if (d.stampingDate) return `<p class="font-semibold">${esc(d.stampingDate)}</p><p class="text-sm">${esc(firma)}</p>`;
+        return `<p class="font-semibold text-gray-400">Belum Dipilih</p>`;
+      }
+
 // ===== DELIVERY ALERT (FUNGSI BARU) =====
       function getDeliveryAlert(data) {
         if (!data.deliveryChoice) return ""; // Jika pelanggan belum buat pilihan
@@ -437,19 +463,19 @@ import {
                     <p class="text-sm text-gray-500">No Dokumen</p>
                     <p class="font-semibold mb-3">${wasiatDocRef}</p>
                     <p class="text-sm text-gray-500">Status</p>
-                    <p class="font-semibold mb-6">${wasiatStatus}</p>
+                    <p class="font-semibold mb-6">${labelStatus(wasiatStatus)}</p>
                     <a href="admin-preview-wasiat.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">CETAK</h3>
                     <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
                     <input type="datetime-local" id="wasiatPrintedAt" value="${wasiatPrintedAt ? wasiatPrintedAt.substring(0, 16) : ""}" ${wasiatStatus === "PRINTED" || wasiatStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
                     <button id="btnPrintWasiat" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">HANTAR</h3>
                     ${getDeliveryAlert(wasiatData)}
                     <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
                     <input type="datetime-local" id="wasiatSentAt" value="${wasiatSentAt ? wasiatSentAt.substring(0, 16) : ""}" ${wasiatStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
@@ -461,19 +487,21 @@ import {
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
-                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <h3 class="text-xl font-bold text-green-700 mb-4">SELESAI</h3>
+                    <p class="text-sm text-gray-500">Kurier Diterima</p>
+                    <p class="font-semibold">${esc(wasiatData.kurierDiterimaDate || "-")}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Selesai Akad</p>
                     <p class="font-semibold">${wasiatAkadDate || "-"} ${wasiatAkadTime || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Stamping</p>
-                    <p class="font-semibold">${wasiatStampDate || "-"}</p>
-                    <p class="text-sm">${wasiatStampRef || ""}</p>
+                    <p class="text-sm text-gray-500">Pengesahan Mahkamah</p>
+                    ${blokPengesahan(wasiatData)}
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="text-sm text-gray-500">Diserah kepada AQM</p>
                     <p class="font-semibold">${wasiatHandoverDate || "-"}</p>
                     <p class="text-sm">${wasiatHandoverRemarks || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
                     <p class="font-semibold text-green-700">${wasiatReceivedDate || "-"}</p>
                     <hr class="my-3">
                     <button id="btnCompleteWasiat" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
@@ -489,19 +517,19 @@ import {
                     <p class="text-sm text-gray-500">No Dokumen</p>
                     <p class="font-semibold mb-3">${hibahDocRef}</p>
                     <p class="text-sm text-gray-500">Status</p>
-                    <p class="font-semibold mb-6">${hibahStatus}</p>
+                    <p class="font-semibold mb-6">${labelStatus(hibahStatus)}</p>
                     <a href="admin-preview-hibah.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">CETAK</h3>
                     <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
                     <input type="datetime-local" id="hibahPrintedAt" value="${hibahPrintedAt ? hibahPrintedAt.substring(0, 16) : ""}" ${hibahStatus === "PRINTED" || hibahStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
                     <button id="btnPrintHibah" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">HANTAR</h3>
                     ${getDeliveryAlert(hibahData)}
                     <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
                     <input type="datetime-local" id="hibahSentAt" value="${hibahSentAt ? hibahSentAt.substring(0, 16) : ""}" ${hibahStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
@@ -513,19 +541,21 @@ import {
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
-                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <h3 class="text-xl font-bold text-green-700 mb-4">SELESAI</h3>
+                    <p class="text-sm text-gray-500">Kurier Diterima</p>
+                    <p class="font-semibold">${esc(hibahData.kurierDiterimaDate || "-")}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Selesai Akad</p>
                     <p class="font-semibold">${hibahAkadDate || "-"} ${hibahAkadTime || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Stamping</p>
-                    <p class="font-semibold">${hibahStampDate || "-"}</p>
-                    <p class="text-sm">${hibahStampRef || ""}</p>
+                    <p class="text-sm text-gray-500">Pengesahan Mahkamah</p>
+                    ${blokPengesahan(hibahData)}
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="text-sm text-gray-500">Diserah kepada AQM</p>
                     <p class="font-semibold">${hibahHandoverDate || "-"}</p>
                     <p class="text-sm">${hibahHandoverRemarks || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
                     <p class="font-semibold text-green-700">${hibahReceivedDate || "-"}</p>
                     <hr class="my-3">
                     <button id="btnCompleteHibah" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
@@ -541,19 +571,19 @@ import {
                     <p class="text-sm text-gray-500">No Dokumen</p>
                     <p class="font-semibold mb-3">${sepencarianDocRef}</p>
                     <p class="text-sm text-gray-500">Status</p>
-                    <p class="font-semibold mb-6">${sepencarianStatus}</p>
+                    <p class="font-semibold mb-6">${labelStatus(sepencarianStatus)}</p>
                     <a href="admin-preview-sepencarian.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">CETAK</h3>
                     <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
                     <input type="datetime-local" id="sepencarianPrintedAt" value="${sepencarianPrintedAt ? sepencarianPrintedAt.substring(0, 16) : ""}" ${sepencarianStatus === "PRINTED" || sepencarianStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
                     <button id="btnPrintSepencarian" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">HANTAR</h3>
                     ${getDeliveryAlert(sepencarianData)}
                     <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
                     <input type="datetime-local" id="sepencarianSentAt" value="${sepencarianSentAt ? sepencarianSentAt.substring(0, 16) : ""}" ${sepencarianStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
@@ -565,19 +595,21 @@ import {
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
-                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <h3 class="text-xl font-bold text-green-700 mb-4">SELESAI</h3>
+                    <p class="text-sm text-gray-500">Kurier Diterima</p>
+                    <p class="font-semibold">${esc(sepencarianData.kurierDiterimaDate || "-")}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Selesai Akad</p>
                     <p class="font-semibold">${sepencarianAkadDate || "-"} ${sepencarianAkadTime || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Stamping</p>
-                    <p class="font-semibold">${sepencarianStampDate || "-"}</p>
-                    <p class="text-sm">${sepencarianStampRef || ""}</p>
+                    <p class="text-sm text-gray-500">Pengesahan Mahkamah</p>
+                    ${blokPengesahan(sepencarianData)}
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="text-sm text-gray-500">Diserah kepada AQM</p>
                     <p class="font-semibold">${sepencarianHandoverDate || "-"}</p>
                     <p class="text-sm">${sepencarianHandoverRemarks || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
                     <p class="font-semibold text-green-700">${sepencarianReceivedDate || "-"}</p>
                     <hr class="my-3">
                     <button id="btnCompleteSepencarian" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
@@ -593,19 +625,19 @@ import {
                     <p class="text-sm text-gray-500">No Dokumen</p>
                     <p class="font-semibold mb-3">${mawarisDocRef}</p>
                     <p class="text-sm text-gray-500">Status</p>
-                    <p class="font-semibold mb-6">${mawarisStatus}</p>
+                    <p class="font-semibold mb-6">${labelStatus(mawarisStatus)}</p>
                     <a href="admin-preview-mawaris.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">CETAK</h3>
                     <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
                     <input type="datetime-local" id="mawarisPrintedAt" value="${mawarisPrintedAt ? mawarisPrintedAt.substring(0, 16) : ""}" ${mawarisStatus === "PRINTED" || mawarisStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
                     <button id="btnPrintMawaris" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">HANTAR</h3>
                     ${getDeliveryAlert(mawarisData)}
                     <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
                     <input type="datetime-local" id="mawarisSentAt" value="${mawarisSentAt ? mawarisSentAt.substring(0, 16) : ""}" ${mawarisStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
@@ -617,19 +649,21 @@ import {
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
-                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <h3 class="text-xl font-bold text-green-700 mb-4">SELESAI</h3>
+                    <p class="text-sm text-gray-500">Kurier Diterima</p>
+                    <p class="font-semibold">${esc(mawarisData.kurierDiterimaDate || "-")}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Selesai Akad</p>
                     <p class="font-semibold">${mawarisAkadDate || "-"} ${mawarisAkadTime || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Stamping</p>
-                    <p class="font-semibold">${mawarisStampDate || "-"}</p>
-                    <p class="text-sm">${mawarisStampRef || ""}</p>
+                    <p class="text-sm text-gray-500">Pengesahan Mahkamah</p>
+                    ${blokPengesahan(mawarisData)}
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="text-sm text-gray-500">Diserah kepada AQM</p>
                     <p class="font-semibold">${mawarisHandoverDate || "-"}</p>
                     <p class="text-sm">${mawarisHandoverRemarks || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
                     <p class="font-semibold text-green-700">${mawarisReceivedDate || "-"}</p>
                     <hr class="my-3">
                     <button id="btnCompleteMawaris" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
@@ -645,19 +679,19 @@ import {
                     <p class="text-sm text-gray-500">No Dokumen</p>
                     <p class="font-semibold mb-3">${corporateDocRef}</p>
                     <p class="text-sm text-gray-500">Status</p>
-                    <p class="font-semibold mb-6">${corporateStatus}</p>
+                    <p class="font-semibold mb-6">${labelStatus(corporateStatus)}</p>
                     <a href="admin-preview-corporate.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">CETAK</h3>
                     <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
                     <input type="datetime-local" id="corporatePrintedAt" value="${corporatePrintedAt ? corporatePrintedAt.substring(0, 16) : ""}" ${corporateStatus === "PRINTED" || corporateStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
                     <button id="btnPrintCorporate" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">HANTAR</h3>
                     ${getDeliveryAlert(corporateData)}
                     <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
                     <input type="datetime-local" id="corporateSentAt" value="${corporateSentAt ? corporateSentAt.substring(0, 16) : ""}" ${corporateStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
@@ -669,19 +703,21 @@ import {
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
-                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <h3 class="text-xl font-bold text-green-700 mb-4">SELESAI</h3>
+                    <p class="text-sm text-gray-500">Kurier Diterima</p>
+                    <p class="font-semibold">${esc(corporateData.kurierDiterimaDate || "-")}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Selesai Akad</p>
                     <p class="font-semibold">${corporateAkadDate || "-"} ${corporateAkadTime || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Stamping</p>
-                    <p class="font-semibold">${corporateStampDate || "-"}</p>
-                    <p class="text-sm">${corporateStampRef || ""}</p>
+                    <p class="text-sm text-gray-500">Pengesahan Mahkamah</p>
+                    ${blokPengesahan(corporateData)}
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="text-sm text-gray-500">Diserah kepada AQM</p>
                     <p class="font-semibold">${corporateHandoverDate || "-"}</p>
                     <p class="text-sm">${corporateHandoverRemarks || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
                     <p class="font-semibold text-green-700">${corporateReceivedDate || "-"}</p>
                     <hr class="my-3">
                     <button id="btnCompleteCorporate" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
@@ -697,19 +733,19 @@ import {
                     <p class="text-sm text-gray-500">No Dokumen</p>
                     <p class="font-semibold mb-3">${corporateTunggalDocRef}</p>
                     <p class="text-sm text-gray-500">Status</p>
-                    <p class="font-semibold mb-6">${corporateTunggalStatus}</p>
+                    <p class="font-semibold mb-6">${labelStatus(corporateTunggalStatus)}</p>
                     <a href="admin-preview-corporate-tunggal.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">CETAK</h3>
                     <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
                     <input type="datetime-local" id="corporateTunggalPrintedAt" value="${corporateTunggalPrintedAt ? corporateTunggalPrintedAt.substring(0, 16) : ""}" ${corporateTunggalStatus === "PRINTED" || corporateTunggalStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
                     <button id="btnPrintCorporateTunggal" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">HANTAR</h3>
                     ${getDeliveryAlert(corporateTunggalData)}
                     <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
                     <input type="datetime-local" id="corporateTunggalSentAt" value="${corporateTunggalSentAt ? corporateTunggalSentAt.substring(0, 16) : ""}" ${corporateTunggalStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
@@ -721,19 +757,21 @@ import {
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
-                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <h3 class="text-xl font-bold text-green-700 mb-4">SELESAI</h3>
+                    <p class="text-sm text-gray-500">Kurier Diterima</p>
+                    <p class="font-semibold">${esc(corporateTunggalData.kurierDiterimaDate || "-")}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Selesai Akad</p>
                     <p class="font-semibold">${corporateTunggalAkadDate || "-"} ${corporateTunggalAkadTime || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Stamping</p>
-                    <p class="font-semibold">${corporateTunggalStampDate || "-"}</p>
-                    <p class="text-sm">${corporateTunggalStampRef || ""}</p>
+                    <p class="text-sm text-gray-500">Pengesahan Mahkamah</p>
+                    ${blokPengesahan(corporateTunggalData)}
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="text-sm text-gray-500">Diserah kepada AQM</p>
                     <p class="font-semibold">${corporateTunggalHandoverDate || "-"}</p>
                     <p class="text-sm">${corporateTunggalHandoverRemarks || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
                     <p class="font-semibold text-green-700">${corporateTunggalReceivedDate || "-"}</p>
                     <hr class="my-3">
                     <button id="btnCompleteCorporateTunggal" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
@@ -749,19 +787,19 @@ import {
                     <p class="text-sm text-gray-500">No Dokumen</p>
                     <p class="font-semibold mb-3">${corporateKongsiDocRef}</p>
                     <p class="text-sm text-gray-500">Status</p>
-                    <p class="font-semibold mb-6">${corporateKongsiStatus}</p>
+                    <p class="font-semibold mb-6">${labelStatus(corporateKongsiStatus)}</p>
                     <a href="admin-preview-corporate-kongsi.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">CETAK</h3>
                     <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
                     <input type="datetime-local" id="corporateKongsiPrintedAt" value="${corporateKongsiPrintedAt ? corporateKongsiPrintedAt.substring(0, 16) : ""}" ${corporateKongsiStatus === "PRINTED" || corporateKongsiStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
                     <button id="btnPrintCorporateKongsi" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">HANTAR</h3>
                     ${getDeliveryAlert(corporateKongsiData)}
                     <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
                     <input type="datetime-local" id="corporateKongsiSentAt" value="${corporateKongsiSentAt ? corporateKongsiSentAt.substring(0, 16) : ""}" ${corporateKongsiStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
@@ -773,19 +811,21 @@ import {
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
-                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <h3 class="text-xl font-bold text-green-700 mb-4">SELESAI</h3>
+                    <p class="text-sm text-gray-500">Kurier Diterima</p>
+                    <p class="font-semibold">${esc(corporateKongsiData.kurierDiterimaDate || "-")}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Selesai Akad</p>
                     <p class="font-semibold">${corporateKongsiAkadDate || "-"} ${corporateKongsiAkadTime || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Stamping</p>
-                    <p class="font-semibold">${corporateKongsiStampDate || "-"}</p>
-                    <p class="text-sm">${corporateKongsiStampRef || ""}</p>
+                    <p class="text-sm text-gray-500">Pengesahan Mahkamah</p>
+                    ${blokPengesahan(corporateKongsiData)}
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="text-sm text-gray-500">Diserah kepada AQM</p>
                     <p class="font-semibold">${corporateKongsiHandoverDate || "-"}</p>
                     <p class="text-sm">${corporateKongsiHandoverRemarks || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
                     <p class="font-semibold text-green-700">${corporateKongsiReceivedDate || "-"}</p>
                     <hr class="my-3">
                     <button id="btnCompleteCorporateKongsi" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
@@ -801,19 +841,19 @@ import {
                     <p class="text-sm text-gray-500">No Dokumen</p>
                     <p class="font-semibold mb-3">${corporateZurriDocRef}</p>
                     <p class="text-sm text-gray-500">Status</p>
-                    <p class="font-semibold mb-6">${corporateZurriStatus}</p>
+                    <p class="font-semibold mb-6">${labelStatus(corporateZurriStatus)}</p>
                     <a href="admin-preview-corporate-zurri.html?id=${userId}" target="_blank" class="mt-auto block text-center bg-[#153638] hover:bg-[#1d4a4d] text-white py-3 rounded-xl font-semibold">👁 View Dokumen</a>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-blue-700 mb-4">PRINT</h3>
+                    <h3 class="text-xl font-bold text-blue-700 mb-4">CETAK</h3>
                     <label class="block text-sm mb-2">Tarikh & Masa Cetak</label>
                     <input type="datetime-local" id="corporateZurriPrintedAt" value="${corporateZurriPrintedAt ? corporateZurriPrintedAt.substring(0, 16) : ""}" ${corporateZurriStatus === "PRINTED" || corporateZurriStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2">
                     <button id="btnPrintCorporateZurri" class="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl">✔ Tandakan Dicetak</button>
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-orange-600 mb-4">SEND</h3>
+                    <h3 class="text-xl font-bold text-orange-600 mb-4">HANTAR</h3>
                     ${getDeliveryAlert(corporateZurriData)}
                     <label class="block text-sm mb-2">Tarikh & Masa Hantar</label>
                     <input type="datetime-local" id="corporateZurriSentAt" value="${corporateZurriSentAt ? corporateZurriSentAt.substring(0, 16) : ""}" ${corporateZurriStatus === "SENT" ? "disabled" : ""} class="w-full border rounded-lg p-2 mb-2">
@@ -825,19 +865,21 @@ import {
                   </div>
 
                   <div class="bg-white border rounded-xl p-5 flex flex-col">
-                    <h3 class="text-xl font-bold text-green-700 mb-4">COMPLETE</h3>
-                    <p class="text-sm text-gray-500">Tarikh Akad</p>
+                    <h3 class="text-xl font-bold text-green-700 mb-4">SELESAI</h3>
+                    <p class="text-sm text-gray-500">Kurier Diterima</p>
+                    <p class="font-semibold">${esc(corporateZurriData.kurierDiterimaDate || "-")}</p>
+                    <hr class="my-3">
+                    <p class="text-sm text-gray-500">Selesai Akad</p>
                     <p class="font-semibold">${corporateZurriAkadDate || "-"} ${corporateZurriAkadTime || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Stamping</p>
-                    <p class="font-semibold">${corporateZurriStampDate || "-"}</p>
-                    <p class="text-sm">${corporateZurriStampRef || ""}</p>
+                    <p class="text-sm text-gray-500">Pengesahan Mahkamah</p>
+                    ${blokPengesahan(corporateZurriData)}
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">Diserahkan Kepada AQM</p>
+                    <p class="text-sm text-gray-500">Diserah kepada AQM</p>
                     <p class="font-semibold">${corporateZurriHandoverDate || "-"}</p>
                     <p class="text-sm">${corporateZurriHandoverRemarks || ""}</p>
                     <hr class="my-3">
-                    <p class="text-sm text-gray-500">AQM Terima Dokumen</p>
+                    <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
                     <p class="font-semibold text-green-700">${corporateZurriReceivedDate || "-"}</p>
                     <hr class="my-3">
                     <button id="btnCompleteCorporateZurri" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>

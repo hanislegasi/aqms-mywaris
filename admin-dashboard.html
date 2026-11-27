@@ -109,7 +109,7 @@
                 <div id="cardApproved" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-md hover:shadow-lg transition cursor-pointer flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">1. Approved</span>
+                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">1. Lulus</span>
                             <div class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">✓</div>
                         </div>
                         <h4 class="font-bold text-gray-800 text-xs">Diluluskan</h4>
@@ -130,7 +130,7 @@
                 <div id="cardPrinted" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-md hover:shadow-lg transition cursor-pointer flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">2. Printed</span>
+                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">2. Cetak</span>
                             <div class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">✓</div>
                         </div>
                         <h4 class="font-bold text-gray-800 text-xs">Dicetak</h4>
@@ -151,7 +151,7 @@
                 <div id="cardSent" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-md hover:shadow-lg transition cursor-pointer flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">3. Sent</span>
+                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">3. Hantar</span>
                             <div class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">✓</div>
                         </div>
                         <h4 class="font-bold text-gray-800 text-xs">Dihantar Kurier</h4>
@@ -183,7 +183,7 @@
                             <span id="cntAkad" class="text-sm font-bold text-gray-800">0</span>
                         </div>
                         <div class="flex justify-between items-center bg-[#d8ae81]/20 px-1.5 py-0.5 rounded border border-[#d8ae81]/40">
-                            <span class="text-[10px] font-bold text-[#153638]">Belum Stamping:</span>
+                            <span class="text-[10px] font-bold text-[#153638]">Belum Pengesahan:</span>
                             <span id="balAkad" class="text-sm font-extrabold text-[#153638]">0</span>
                         </div>
                     </div>
@@ -193,10 +193,10 @@
                 <div id="cardStamping" class="bg-white border border-emerald-200 rounded-xl p-3 shadow-md hover:shadow-lg transition cursor-pointer flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">5. Stamping</span>
+                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">5. Mahkamah</span>
                             <div class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">✓</div>
                         </div>
-                        <h4 class="font-bold text-gray-800 text-xs">Duti Setem LHDN</h4>
+                        <h4 class="font-bold text-gray-800 text-xs">Pengesahan Mahkamah</h4>
                     </div>
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
@@ -217,7 +217,7 @@
                             <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">6. Serah AQM</span>
                             <div class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">✓</div>
                         </div>
-                        <h4 class="font-bold text-gray-800 text-xs">Diserahkan AQM</h4>
+                        <h4 class="font-bold text-gray-800 text-xs">Diserah kepada AQM</h4>
                     </div>
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
@@ -238,7 +238,7 @@
                             <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">7. Terima AQM</span>
                             <div class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">✓</div>
                         </div>
-                        <h4 class="font-bold text-gray-800 text-xs">AQM Terima (Tamat)</h4>
+                        <h4 class="font-bold text-gray-800 text-xs">Selesai (AQM Terima)</h4>
                     </div>
                     <div class="mt-3 border-t border-gray-100 pt-2 space-y-1">
                         <div class="flex justify-between items-center">
@@ -380,7 +380,7 @@ const processDocData = (data, type) => {
     const hasPrinted = !!(data.printedAt || data.printedBy || s === "PRINTED");
     const hasSent = !!(data.sentAt || data.trackingNo || data.sentBy || s === "SENT");
     const hasAkad = !!(data.akadDate || s === "AKAD");
-    const hasStamping = !!(data.stampingDate || data.stampingRef || s === "STAMPING");
+    const hasStamping = !!(data.stampingDate || data.stampingRef || s === "STAMPING" || data.pengesahanMahkamah === "TIDAK");
     const hasHandover = !!(data.handoverDate || data.handoverRemarks || ["DISERAHKAN_AQM", "SERAH_AQM"].includes(s));
     const hasReceived = !!(data.receivedDate || data.receiver || ["RECEIVED", "COMPLETED"].includes(s));
 

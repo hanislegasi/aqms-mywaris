@@ -42,6 +42,16 @@ import { db, auth } from './firebase.js';
 import { doc, getDoc, updateDoc, serverTimestamp, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+// Label status dokumen (Bahasa Melayu)
+const LABEL_STATUS = {
+  DRAFT: "Draf", DRAFTING: "Draf", UNDER_REVIEW: "Dalam Semakan", PENDING_APPROVAL: "Menunggu Kelulusan",
+  PAID: "Telah Dibayar", REJECTED: "Ditolak", APPROVED: "Diluluskan", VERIFIED: "Disahkan Pelanggan",
+  PRINTED: "Dicetak", SENT: "Dihantar Kurier", AKAD: "Selesai Akad", STAMPING: "Dalam Pengesahan Mahkamah",
+  HANDOVER: "Diserah kepada AQM", RECEIVED: "Selesai (AQM Terima)", COMPLETED: "Selesai"
+};
+const labelStatus = (s) => LABEL_STATUS[s] || s;
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
 // ==========================================
 // 1. PENGAWALAN AUTH & ROLE DULU
 // ==========================================
@@ -245,42 +255,72 @@ async function loadCustomerDetails(isAQP) {
         ) : {};
 
         
+        // Pengesahan Mahkamah: pilihan & bayaran dibuat oleh pelanggan
+        const pmPilihan = currentData.pengesahanMahkamah || "";
+        const pmDibayar = currentData.pengesahanStatus === "PAID";
+        const firmaSemasa = currentData.firmaGuaman || currentData.stampingRef || "";
+        const bolehIsiPeguam = pmDibayar && !currentData.stampingDate;
+        const bolehSerah = currentStatus === "STAMPING"
+            || (pmPilihan === "TIDAK" && !!currentData.akadDate && !["HANDOVER", "RECEIVED", "COMPLETED"].includes(currentStatus));
+        const statusPM = pmPilihan === "TIDAK" ? "Tidak Diperlukan (pilihan pelanggan)"
+            : pmDibayar ? (currentData.stampingDate ? "Telah Dibayar • Diserah kepada peguam" : "Telah Dibayar • Sila serah dokumen kepada peguam")
+            : pmPilihan === "YA" ? "Menunggu bayaran pelanggan"
+            : currentData.stampingDate ? "Rekod lama (Stamping)"
+            : "Menunggu pilihan pelanggan (selepas Akad)";
+
+        const rankStatus = { UNDER_REVIEW: 0, PENDING_APPROVAL: 0, PAID: 0, APPROVED: 1, VERIFIED: 2, PRINTED: 3, SENT: 4, AKAD: 5, STAMPING: 6, HANDOVER: 7, RECEIVED: 8, COMPLETED: 8 };
         const workflowSteps = [
-        { key:"UNDER_REVIEW", label:"Drafting" },
-        { key:"APPROVED", label:"Approved" },
-        { key:"VERIFIED", label:"Verified" },
-        { key:"PRINTED", label:"Printed" },
-        { key:"SENT", label:"Sent" },
-        { key:"AKAD", label:"Akad" },
-        { key:"STAMPING", label:"Stamping" },
-        { key:"HANDOVER", label:"Diserahkan Kepada AQM" },
-        { key:"COMPLETED", label:"Diterima AQM - Completed" }
+        { key:"UNDER_REVIEW", label:"Dalam Semakan" },
+        { key:"APPROVED", label:"Diluluskan" },
+        { key:"VERIFIED", label:"Disahkan Pelanggan" },
+        { key:"PRINTED", label:"Dicetak" },
+        { key:"SENT", label:"Dihantar Kurier" },
+        { key:"KURIER", label:"Kurier Diterima" },
+        { key:"AKAD", label:"Selesai Akad" },
+        { key:"STAMPING", label:"Pengesahan Mahkamah" },
+        { key:"HANDOVER", label:"Diserah kepada AQM" },
+        { key:"COMPLETED", label:"Selesai (AQM Terima)" }
         ];
+        function langkahSelesai(key, r) {
+            if (key === "KURIER") return !!currentData.kurierDiterimaDate || r >= 5;
+            if (key === "STAMPING") return pmPilihan === "TIDAK" || !!currentData.stampingDate;
+            const sasaran = { UNDER_REVIEW: 0, APPROVED: 1, VERIFIED: 2, PRINTED: 3, SENT: 4, AKAD: 5, HANDOVER: 7, COMPLETED: 8 }[key];
+            return r >= sasaran;
+        }
 
         function renderTimeline(currentStatus){
-            const currentIndex = workflowSteps.findIndex(s => s.key === currentStatus);
+            const r = rankStatus[currentStatus] ?? -1;
             const timelineDates = {
                 UNDER_REVIEW: user.memberSince,
                 APPROVED: currentData.approvedAt || "",
                 VERIFIED: currentData.verifiedAt || "",
                 PRINTED: currentData.printedAt || "",
                 SENT: currentData.sentAt || "",
+                KURIER: currentData.kurierDiterimaDate || "",
                 AKAD: currentData.akadDate || "",
                 STAMPING: currentData.stampingDate || "",
                 HANDOVER: currentData.handoverDate || "",
                 COMPLETED: currentData.receivedDate || ""
             };
         
-            document.getElementById("timelineContainer").innerHTML = workflowSteps.map((step,index)=>`
+            const catatanLangkah = {
+                STAMPING: pmPilihan === "TIDAK" ? "Tidak Diperlukan"
+                    : pmDibayar ? "Telah Dibayar" + (firmaSemasa ? " • " + esc(firmaSemasa) : "")
+                    : pmPilihan === "YA" ? "Menunggu Bayaran" : ""
+            };
+            document.getElementById("timelineContainer").innerHTML = workflowSteps.map((step,index)=>{
+            const selesai = langkahSelesai(step.key, r);
+            return `
             <div class="flex items-center gap-4 mb-4">
-                <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold ${index<=currentIndex ?"bg-green-600 text-white" :"bg-gray-200 text-gray-500"}">
-                    ${index<=currentIndex?"✓":index+1}
+                <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold ${selesai ?"bg-green-600 text-white" :"bg-gray-200 text-gray-500"}">
+                    ${selesai?"✓":index+1}
                 </div>
                 <div>
-                    <span class="${index<=currentIndex ?"font-semibold text-green-700" :"text-gray-500"}">${step.label}</span>
+                    <span class="${selesai ?"font-semibold text-green-700" :"text-gray-500"}">${step.label}</span>
                     <p class="text-xs text-gray-400 mt-1">${timelineDates[step.key] ? new Date(timelineDates[step.key]).toLocaleDateString("ms-MY") : "-"}</p>
+                    ${catatanLangkah[step.key] ? `<p class="text-xs text-gray-500">${catatanLangkah[step.key]}</p>` : ""}
                 </div>
-            </div>`).join("");
+            </div>`;}).join("");
         }
 
         // LOGIK PINTAR: Sembunyikan myIntroducer jika AQP
@@ -366,7 +406,7 @@ async function loadCustomerDetails(isAQP) {
             <div>
                 <h3 class="font-bold text-green-700 text-lg">${product.name}</h3>
                 <p class="text-sm mt-4">No Dokumen : <strong>${product.docRef}</strong></p>
-                <p class="text-sm mt-1">Status : <strong>${product.status}</strong></p>
+                <p class="text-sm mt-1">Status : <strong>${labelStatus(product.status)}</strong></p>
             </div>
             <div class="mt-auto pt-5">
                 <a href="${product.preview}?uid=${userId}" target="_blank" class="block w-full bg-[#153638] hover:bg-[#1d4a4d] text-white text-center py-3 rounded-xl font-semibold">
@@ -377,7 +417,7 @@ async function loadCustomerDetails(isAQP) {
         `).join("")}
 
         <div class="bg-white border rounded-xl p-5 flex flex-col h-full">
-            <h3 class="font-bold text-blue-700">Akad</h3>
+            <h3 class="font-bold text-blue-700">Selesai Akad</h3>
             <label>Tarikh</label>
             <input type="date" id="akadDate" value="${currentData.akadDate || ""}" class="w-full border rounded-lg p-2 mt-2 mb-3">
             <label class="mt-3 block">Masa</label>
@@ -387,21 +427,25 @@ async function loadCustomerDetails(isAQP) {
             </div>
         </div>
 
-        <div class="bg-white border rounded-xl p-5 flex flex-col h-full">
-            <h3 class="font-bold text-orange-700">Stamping</h3>
-            <input type="date" id="stampDate" value="${currentData.stampingDate || ""}" class="w-full border rounded-lg p-2 mt-2 mb-3">
-            <input id="stampRef" value="${currentData.stampingRef || ""}" placeholder="No Rujukan" class="w-full border rounded-lg p-2 mt-3">
+        <div class="bg-white border rounded-xl p-5 flex flex-col h-full ${pmPilihan === "TIDAK" ? "opacity-60 bg-gray-50" : ""}">
+            <h3 class="font-bold text-orange-700">Pengesahan Mahkamah</h3>
+            <p class="text-xs font-semibold mt-1 mb-3 ${pmDibayar ? "text-green-700" : "text-gray-500"}">${statusPM}</p>
+            <label class="text-sm">Tarikh Serah Peguam</label>
+            <input type="date" id="stampDate" value="${esc(currentData.stampingDate || "")}" ${bolehIsiPeguam ? "" : "disabled"} class="w-full border rounded-lg p-2 mt-1 mb-3 disabled:bg-gray-100">
+            <label class="text-sm">Nama Firma Guaman</label>
+            <input id="firmaGuaman" value="${esc(firmaSemasa)}" ${bolehIsiPeguam ? "" : "disabled"} placeholder="Contoh: Tetuan Ahmad & Rakan" class="w-full border rounded-lg p-2 mt-1 disabled:bg-gray-100">
             <div class="mt-auto pt-5">
-                <button id="saveStamping" ${currentData.stampingDate ? "disabled" : ""} class="w-full mt-4 bg-orange-600 text-white py-2 rounded-lg disabled:bg-gray-400">Update</button>
+                <button id="saveStamping" ${bolehIsiPeguam ? "" : "disabled"} class="w-full mt-4 bg-orange-600 text-white py-2 rounded-lg disabled:bg-gray-400">Simpan</button>
             </div>
         </div>
 
         <div class="bg-white border rounded-xl p-5 flex flex-col h-full">
-            <h3 class="font-bold text-green-700">Handover - Complete</h3>
-            <input type="date" id="completeDate" value="${currentData.handoverDate || ""}" class="w-full border rounded-lg p-2 mt-2 mb-3">
-            <textarea id="completeRemarks" class="w-full border rounded-lg p-2 mt-3 mb-3" placeholder="Remarks">${currentData.handoverRemarks || ""}</textarea>
+            <h3 class="font-bold text-green-700">Serah kepada AQM</h3>
+            ${!bolehSerah && !["HANDOVER", "RECEIVED", "COMPLETED"].includes(currentStatus) ? `<p class="text-xs text-gray-500 mt-1">Boleh diserah selepas Akad dan pengesahan mahkamah selesai (atau pelanggan pilih "Tidak").</p>` : ""}
+            <input type="date" id="completeDate" value="${bolehSerah ? "" : esc(currentData.handoverDate || "")}" ${bolehSerah ? "" : "disabled"} class="w-full border rounded-lg p-2 mt-2 mb-3 disabled:bg-gray-100">
+            <textarea id="completeRemarks" ${bolehSerah ? "" : "disabled"} class="w-full border rounded-lg p-2 mt-3 mb-3 disabled:bg-gray-100" placeholder="Catatan">${bolehSerah ? "" : esc(currentData.handoverRemarks || "")}</textarea>
             <div class="mt-auto pt-5">
-                <button id="saveComplete" ${currentData.handoverDate ? "disabled" : ""} class="w-full mt-4 bg-green-700 text-white py-2 rounded-lg disabled:bg-gray-400">Complete</button>
+                <button id="saveComplete" ${bolehSerah ? "" : "disabled"} class="w-full mt-4 bg-green-700 text-white py-2 rounded-lg disabled:bg-gray-400">Serah</button>
             </div>  
         </div>
 
@@ -476,35 +520,43 @@ async function loadCustomerDetails(isAQP) {
                 return;
             }
 
-            await updateDoc(doc(db,"users",userId,currentCollection,"maklumat"), {
-                akadDate,
-                akadTime,
-                status:"AKAD",
-                akadUpdatedAt:serverTimestamp()
-            });
-
-            alert("Tarikh akad berjaya disimpan.");
-            location.reload();
+            try {
+                await updateDoc(doc(db,"users",userId,currentCollection,"maklumat"), {
+                    akadDate,
+                    akadTime,
+                    status:"AKAD",
+                    akadUpdatedAt:serverTimestamp()
+                });
+                alert("Tarikh akad berjaya disimpan.");
+                location.reload();
+            } catch (e) {
+                console.error(e);
+                alert("Gagal menyimpan akad: " + e.message);
+            }
         };
         
         document.getElementById("saveStamping").onclick = async()=>{
             const stampDate = document.getElementById("stampDate").value;
-            const stampRef = document.getElementById("stampRef").value;
+            const firma = document.getElementById("firmaGuaman").value.trim();
 
-            if(!stampDate){
-                alert("Sila pilih tarikh stamping.");
+            if(!stampDate || !firma){
+                alert("Sila isi tarikh serah dan nama firma guaman.");
                 return;
             }
 
-            await updateDoc(doc(db,"users",userId,currentCollection,"maklumat"), {
-                stampingDate:stampDate,
-                stampingRef:stampRef,
-                status:"STAMPING",
-                stampingUpdatedAt:serverTimestamp()
-            });
-
-            alert("Stamping berjaya dikemaskini.");
-            location.reload();
+            try {
+                await updateDoc(doc(db,"users",userId,currentCollection,"maklumat"), {
+                    stampingDate:stampDate,
+                    firmaGuaman:firma,
+                    status:"STAMPING",
+                    stampingUpdatedAt:serverTimestamp()
+                });
+                alert("Penyerahan dokumen kepada peguam berjaya direkodkan.");
+                location.reload();
+            } catch (e) {
+                console.error(e);
+                alert("Gagal menyimpan: " + e.message);
+            }
         };
 
         document.getElementById("saveComplete").onclick = async()=>{
@@ -516,15 +568,19 @@ async function loadCustomerDetails(isAQP) {
                 return;
             }
 
-            await updateDoc(doc(db,"users",userId,currentCollection,"maklumat"), {
-                handoverDate:completeDate,
-                handoverRemarks:remarks,
-                status:"HANDOVER",
-                handoverUpdatedAt:serverTimestamp()
-            });
-
-            alert("Dokumen telah diserahkan kepada AQM.");
-            location.reload();
+            try {
+                await updateDoc(doc(db,"users",userId,currentCollection,"maklumat"), {
+                    handoverDate:completeDate,
+                    handoverRemarks:remarks,
+                    status:"HANDOVER",
+                    handoverUpdatedAt:serverTimestamp()
+                });
+                alert("Dokumen telah diserahkan kepada AQM.");
+                location.reload();
+            } catch (e) {
+                console.error(e);
+                alert("Gagal menyimpan: " + e.message);
+            }
         };
         
     } 
