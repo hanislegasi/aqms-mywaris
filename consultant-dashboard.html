@@ -554,7 +554,7 @@ onAuthStateChanged(auth, async(user)=>{
   
     // 4. KIRA REKRUT & OVERRIDING (TEAM SALES)
     let totalRecruits = 0;
-    const agentsQuery = await getDocs(query(collection(db, "consultants"), where("upline", "==", data.consultantNo)));
+    const agentsQuery = await getDocs(query(collection(db, "consultantPublic"), where("upline", "==", data.consultantNo)));
     totalRecruits = agentsQuery.size;
 
     let overridingSales = 0; // Jualan Kumpulan

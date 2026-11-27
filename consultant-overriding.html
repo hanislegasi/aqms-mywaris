@@ -180,7 +180,7 @@ import {
         }
         
         // 4. Tarik Salasilah Semua Consultant & Kumpul Direct Downline
-        const allConsultantsSnap = await getDocs(collection(db, "consultants"));
+        const allConsultantsSnap = await getDocs(collection(db, "consultantPublic"));
         const uplineMap = {};
         const levelMap = {};
         const nameMap = {};
@@ -219,7 +219,7 @@ import {
         const myAqcNo = data.consultantNo; 
 
         // --- LANGKAH 5A: Tarik Direct Downline ---
-        const downlineQ = query(collection(db, "consultants"), where("upline", "==", myAqcNo));
+        const downlineQ = query(collection(db, "consultantPublic"), where("upline", "==", myAqcNo));
         const downlineSnap = await getDocs(downlineQ);
         downlineSnap.forEach(d => {
             const dl = d.data();

@@ -243,7 +243,7 @@ document.getElementById("consultantForm").addEventListener("submit", async(e)=>{
         finalUpline = uplineInput.toUpperCase();
         
         const uplineQ = query(
-            collection(db, "consultants"), 
+            collection(db, "consultantPublic"), 
             where("consultantNo", "==", finalUpline)
         );
         const uplineSnap = await getDocs(uplineQ);

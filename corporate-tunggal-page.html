@@ -99,7 +99,7 @@ onAuthStateChanged(auth, async(user) => {
 
     // Dapatkan data konsultan
     const consultantQuery = query(
-      collection(db, "consultants"),
+      collection(db, "consultantPublic"),
       where("consultantNo", "==", userData.referral)
     );
     const consultantSnap = await getDocs(consultantQuery);

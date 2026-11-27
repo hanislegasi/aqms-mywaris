@@ -97,7 +97,7 @@ onAuthStateChanged(auth, async(user) => {
     const userData = docSnap.data();
 
     const consultantQuery = query(
-      collection(db, "consultants"),
+      collection(db, "consultantPublic"),
       where("consultantNo", "==", userData.referral)
     );
     const consultantSnap = await getDocs(consultantQuery);

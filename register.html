@@ -122,7 +122,7 @@ async function checkReferralValidity(referralCode) {
 
     try {
         // 1. Semak dalam koleksi 'consultants' (AQC Utama)
-        const qConsultant = query(collection(db, "consultants"), where("consultantNo", "==", referralCode));
+        const qConsultant = query(collection(db, "consultantPublic"), where("consultantNo", "==", referralCode));
         const snapConsultant = await getDocs(qConsultant);
         
         if (!snapConsultant.empty) {

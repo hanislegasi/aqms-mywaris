@@ -969,7 +969,7 @@ const groupedSepencarian = groupSepencarianByRecipient(data);
                                 console.log("Mencari perunding dengan consultantNo:", cleanCode);
                                 
                                 // 1. Cari di koleksi 'consultants' (Untuk AQC / MGAM / AQP Utama)
-                                const qConsultant = query(collection(db, "consultants"), where("consultantNo", "==", cleanCode)); 
+                                const qConsultant = query(collection(db, "consultantPublic"), where("consultantNo", "==", cleanCode)); 
                                 const snapConsultant = await getDocs(qConsultant);
                                 
                                 if (!snapConsultant.empty) {
@@ -987,7 +987,7 @@ const groupedSepencarian = groupSepencarianByRecipient(data);
                                         
                                         // 3. Tarik nombor telefon Institusi (AQP) yang menaja ejen ini
                                         if (agentData.aqpRef) {
-                                            const qAqpUtama = query(collection(db, "consultants"), where("consultantNo", "==", agentData.aqpRef));
+                                            const qAqpUtama = query(collection(db, "consultantPublic"), where("consultantNo", "==", agentData.aqpRef));
                                             const snapAqpUtama = await getDocs(qAqpUtama);
                                             
                                             if (!snapAqpUtama.empty) {
