@@ -186,6 +186,14 @@ async function loadCustomers() {
           
         let bil = 1;
 
+        // Label status dokumen (Bahasa Melayu)
+        const LABEL_STATUS = {
+            DRAFT: "Draf", DRAFTING: "Draf", UNDER_REVIEW: "Dalam Semakan", PENDING_APPROVAL: "Menunggu Kelulusan",
+            PAID: "Telah Dibayar", REJECTED: "Ditolak", APPROVED: "Diluluskan", VERIFIED: "Disahkan Pelanggan",
+            PRINTED: "Dicetak", SENT: "Dihantar Kurier", AKAD: "Selesai Akad", STAMPING: "Dalam Pengesahan Mahkamah",
+            HANDOVER: "Diserah kepada AQM", RECEIVED: "Selesai (AQM Terima)", COMPLETED: "Selesai", PROSPEK: "Prospek"
+        };
+        const labelStatus = (s) => LABEL_STATUS[s] || s;
         // ===== STATUS BADGE =====
         function getStatusBadge(status){
             const color = {
@@ -195,12 +203,17 @@ async function loadCustomers() {
                 VERIFIED:"bg-green-100 text-green-700",
                 PRINTED:"bg-indigo-100 text-indigo-700",
                 SENT:"bg-orange-100 text-orange-700",
+                AKAD:"bg-purple-100 text-purple-700",
+                STAMPING:"bg-amber-100 text-amber-700",
+                HANDOVER:"bg-teal-100 text-teal-700",
+                RECEIVED:"bg-emerald-100 text-emerald-700",
+                REJECTED:"bg-red-100 text-red-700",
                 COMPLETED:"bg-emerald-100 text-emerald-700"
             };
 
             return `
             <span class="inline-block mt-1 px-2 py-1 rounded-full text-[10px] font-semibold ${color[status] || color.DRAFT}">
-            ${status || "DRAFT"}
+            ${labelStatus(status || "DRAFT")}
             </span>
             `;
         }

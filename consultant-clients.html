@@ -65,6 +65,14 @@
 <script type="module">
 import { db, auth } from './firebase.js';
 import { collection, getDocs, doc, getDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        // Label status dokumen (Bahasa Melayu)
+        const LABEL_STATUS = {
+            DRAFT: "Draf", DRAFTING: "Draf", UNDER_REVIEW: "Dalam Semakan", PENDING_APPROVAL: "Menunggu Kelulusan",
+            PAID: "Telah Dibayar", REJECTED: "Ditolak", APPROVED: "Diluluskan", VERIFIED: "Disahkan Pelanggan",
+            PRINTED: "Dicetak", SENT: "Dihantar Kurier", AKAD: "Selesai Akad", STAMPING: "Dalam Pengesahan Mahkamah",
+            HANDOVER: "Diserah kepada AQM", RECEIVED: "Selesai (AQM Terima)", COMPLETED: "Selesai", PROSPEK: "Prospek"
+        };
+        const labelStatus = (s) => LABEL_STATUS[s] || s;
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 onAuthStateChanged(auth, async(user)=>{
@@ -285,7 +293,7 @@ onAuthStateChanged(auth, async(user)=>{
                 : workflowStatus==="UNDER_REVIEW" ? "bg-yellow-100 text-yellow-700"
                 : "bg-gray-100 text-gray-600"
                 }">
-                ${workflowStatus}
+                ${labelStatus(workflowStatus)}
                 </span>
             </td>
             <td class="p-3 text-center">
