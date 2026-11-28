@@ -298,12 +298,14 @@ onAuthStateChanged(auth, async(user) => {
     } else if (pmBolehPilih) {
       pmTarikh = pm === "TIDAK" ? "Tidak Diperlukan" : (pm === "YA" ? "Menunggu Bayaran" : "Sila buat pilihan");
       pmKawalan = `
-        <select id="pilihanPengesahan" class="border rounded-lg p-2 mt-2 w-full bg-white/80">
-          <option value="">-- Perlu pengesahan mahkamah? --</option>
-          <option value="YA" ${pm === "YA" ? "selected" : ""}>Ya, saya mahu pengesahan mahkamah</option>
-          <option value="TIDAK" ${pm === "TIDAK" ? "selected" : ""}>Tidak perlu</option>
-        </select>
-        <button id="btnSimpanPengesahan" class="bg-[#153638] hover:bg-[#1d4a4d] text-white rounded-lg mt-2 w-full py-2 font-medium transition">Simpan Pilihan</button>
+        <div class="flex gap-2 mt-2">
+          <select id="pilihanPengesahan" class="border rounded-lg p-2 flex-1 min-w-0 bg-white/80">
+            <option value="">-- Perlu pengesahan mahkamah? --</option>
+            <option value="YA" ${pm === "YA" ? "selected" : ""}>Ya, saya mahu pengesahan mahkamah</option>
+            <option value="TIDAK" ${pm === "TIDAK" ? "selected" : ""}>Tidak perlu</option>
+          </select>
+          <button id="btnSimpanPengesahan" class="bg-[#153638] hover:bg-[#1d4a4d] text-white rounded-lg px-4 py-2 font-medium transition whitespace-nowrap">Simpan Pilihan</button>
+        </div>
         ${pm === "YA" ? `<button id="btnBayarPengesahan" class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg mt-2 w-full py-2 font-semibold transition">Bayar ${fmtRM(yuranPengesahan)}</button>
         <p class="text-xs text-gray-500 mt-1">Selepas bayaran, AQC anda akan menyerahkan dokumen kepada peguam untuk pengesahan mahkamah.</p>` : ""}
         ${pm === "TIDAK" ? `<p class="text-xs text-gray-500 mt-1">Anda boleh menukar kepada "Ya" bila-bila masa sebelum membuat bayaran.</p>` : ""}`;
