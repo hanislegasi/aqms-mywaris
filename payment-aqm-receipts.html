@@ -23,15 +23,15 @@
     <p class="text-gray-500 mt-2 mb-6">Resit Pendaftaran, Pembaharuan & Produk</p>
 
     <div class="bg-white rounded-2xl shadow p-5 mb-6">
-        <div class="grid md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-4">
             
-            <select id="yearFilter" class="border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none">
+            <select id="yearFilter" class="w-full min-w-0 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none">
                 <option>2026</option>
                 <option>2027</option>
                 <option>2028</option>
             </select>
 
-            <select id="monthFilter" class="border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none">
+            <select id="monthFilter" class="w-full min-w-0 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none">
                 <option value="">Semua Bulan</option>
                 <option value="0">Januari</option>
                 <option value="1">Februari</option>
@@ -48,7 +48,7 @@
             </select>
 
             <!-- TUKAR VALUE DI SINI SUPAYA SAMA DENGAN DATABASE -->
-            <select id="typeFilter" class="border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none">
+            <select id="typeFilter" class="w-full min-w-0 border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none">
                 <option value="">Semua Kategori</option>
                 <option value="REGISTRATION">Yuran Pendaftaran</option>
                 <option value="RENEWAL">Pembaharuan Tahunan</option>
@@ -81,14 +81,16 @@
                 <option value="LEGAL_FEE">Pengesahan Mahkamah</option>
             </select>
 
-            <button id="searchBtn" class="bg-[#153638] hover:bg-[#1d4a4d] transition text-white rounded-xl font-semibold">
+            <button id="searchBtn" class="min-h-[48px] bg-[#153638] hover:bg-[#1d4a4d] transition text-white rounded-xl font-semibold">
                 Cari
             </button>
 
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl shadow overflow-hidden">
+    <div id="receiptCards" class="md:hidden flex flex-col gap-3"></div>
+
+    <div class="hidden md:block bg-white rounded-2xl shadow overflow-hidden">
         <table class="w-full">
             <thead class="bg-gray-50 border-b">
                 <tr>
@@ -123,6 +125,7 @@ let currentUser = null;
         
 async function loadReceipts(user) {
     document.getElementById("receiptTable").innerHTML = `<tr><td colspan="6" class="text-center py-10 text-gray-400">Memuatkan resit...</td></tr>`;
+    document.getElementById("receiptCards").innerHTML = `<p class="text-center py-10 text-gray-500">Memuatkan resit...</p>`;
     
     const year = Number(document.getElementById("yearFilter").value);
     const month = document.getElementById("monthFilter").value;
@@ -139,6 +142,7 @@ async function loadReceipts(user) {
         receiptsArray.sort((a, b) => b.paymentDate.toDate() - a.paymentDate.toDate());
 
         let html = "";
+        let kad = "";
 
         receiptsArray.forEach((r) => {
             const payDate = r.paymentDate.toDate();
@@ -163,6 +167,18 @@ async function loadReceipts(user) {
                     </button>
                 </td>
             </tr>`;
+
+            kad += `
+            <a href="receipt-aqm-view.html?id=${r.id}" class="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-2">
+                <div class="flex justify-between items-start gap-3">
+                    <span class="text-sm font-semibold text-gray-800">${r.serviceName}</span>
+                    <span class="font-bold text-[#153638] whitespace-nowrap">RM${Number(r.amount).toFixed(2)}</span>
+                </div>
+                <div class="flex justify-between items-center gap-3 text-xs text-gray-600">
+                    <span class="break-all">${r.receiptNo} · ${payDate.toLocaleDateString("ms-MY")}</span>
+                    <span class="bg-green-100 text-green-700 px-2.5 py-0.5 rounded-full font-bold">${r.status === "PAID" ? "DIBAYAR" : r.status}</span>
+                </div>
+            </a>`;
         });
 
         if (html === "") {
@@ -170,10 +186,12 @@ async function loadReceipts(user) {
         }
 
         document.getElementById("receiptTable").innerHTML = html;
+        document.getElementById("receiptCards").innerHTML = kad || `<p class="text-center py-10 text-gray-500">Tiada resit dijumpai.</p>`;
         
     } catch (error) {
         console.error("Gagal menarik rekod resit:", error);
         document.getElementById("receiptTable").innerHTML = `<tr><td colspan="6" class="text-center py-10 text-red-500">Gagal memuatkan data.</td></tr>`;
+        document.getElementById("receiptCards").innerHTML = `<p class="text-center py-10 text-red-600">Gagal memuatkan data.</p>`;
     }
 }
 

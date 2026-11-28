@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="style.css">  
 </head>
 
-<body class="bg-gray-100 min-h-screen" style="font-family: 'Inter', sans-serif;">
+<body class="bg-gray-100 min-h-screen pb-28 md:pb-0" style="font-family: 'Inter', sans-serif;">
 
 <div class="bg-[#153638] text-white px-5 py-6 shadow">
   <div class="flex justify-between items-center">
@@ -30,13 +30,13 @@
   <h2 class="font-bold text-xl mb-4 text-[#153638]">Pakej Korporat (Wakaf Zurri)</h2>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-    <div id="profileCard" class="h-full">Memuatkan...</div>
+    <div id="profileCard" class="hidden md:block h-full">Memuatkan...</div>
     <div id="corporateZurriTimeline" class="h-full"></div>
   </div>
 
-  <hr class="my-8">
+  <hr class="my-8 hidden md:block">
 
-  <div class="flex justify-end gap-3">
+  <div class="hidden md:flex justify-end gap-3">
     <a href="payment-aqm-receipts.html" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 flex-shrink-0">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6M7 4h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/>
@@ -50,6 +50,7 @@
   </div>
 </div>
 
+<div id="mNav"></div>
 <script type="module">
 // 1. Tarik 'db' dan 'auth' dari fail konfigurasi berpusat
 import { db, auth } from './firebase.js';
@@ -72,6 +73,7 @@ import {
     where 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+import { navMobile } from './aqm-mobile.js';
 
 // Label status dokumen (Bahasa Melayu)
 const LABEL_STATUS = {
@@ -278,7 +280,7 @@ onAuthStateChanged(auth, async(user) => {
     const kurierKawalan = (currentStatus === "SENT" && !corporateData.kurierDiterimaDate) ? `
         <div class="flex gap-2 mt-2">
           <input type="date" id="kurierDiterimaDate" class="border rounded-lg p-2 flex-1 min-w-0 bg-white/80">
-          <button id="btnKurierDiterima" class="bg-green-600 hover:bg-green-700 text-white rounded-lg px-4 py-2 font-medium transition whitespace-nowrap">Sah Terima Kurier</button>
+          <button id="btnKurierDiterima" class="bg-green-600 hover:bg-green-700 text-white rounded-lg px-4 py-2 font-medium transition leading-tight text-center flex-1">Sah Terima Kurier</button>
         </div>` : "";
 
     // Tarikh serah & terima pertama disimpan sebagai rekod; tarikh baru (selepas pengesahan mahkamah) di sebelahnya
@@ -311,7 +313,7 @@ onAuthStateChanged(auth, async(user) => {
             <option value="YA" ${pm === "YA" ? "selected" : ""}>Ya, saya mahu pengesahan mahkamah</option>
             <option value="TIDAK" ${pm === "TIDAK" ? "selected" : ""}>Tidak perlu</option>
           </select>
-          <button id="btnSimpanPengesahan" class="bg-[#153638] hover:bg-[#1d4a4d] text-white rounded-lg px-4 py-2 font-medium transition whitespace-nowrap">Simpan Pilihan</button>
+          <button id="btnSimpanPengesahan" class="bg-[#153638] hover:bg-[#1d4a4d] text-white rounded-lg px-4 py-2 font-medium transition leading-tight text-center">Simpan Pilihan</button>
         </div>
         ${pm === "YA" ? `<button id="btnBayarPengesahan" class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg mt-2 w-full py-2 font-semibold transition">Bayar ${fmtRM(yuranPengesahan)}</button>
         <p class="text-xs text-gray-500 mt-1">Selepas bayaran, AQC anda akan menyerahkan dokumen kepada peguam untuk pengesahan mahkamah.</p>` : ""}
@@ -320,9 +322,9 @@ onAuthStateChanged(auth, async(user) => {
 
     function timelineItem(doneStatus, title, date, extra = "") {
       return `
-        <div class="flex gap-4 mb-6">
+        <div class="flex gap-3 md:gap-4 mb-6">
           <div class="flex flex-col items-center">
-            <div class="${doneStatus ? "bg-green-600 text-white" : "bg-gray-200 text-gray-500"} w-10 h-10 rounded-full flex items-center justify-center font-bold">✓</div>
+            <div class="${doneStatus ? "bg-green-600 text-white" : "bg-gray-200 text-gray-500"} w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-bold">✓</div>
           </div>
           <div class="flex-1">
             <h4 class="font-semibold ${doneStatus ? "text-green-700" : "text-gray-500"}">${title}</h4>
@@ -334,7 +336,7 @@ onAuthStateChanged(auth, async(user) => {
     }
 
     document.getElementById("corporateZurriTimeline").innerHTML = `
-  <div class="relative overflow-hidden bg-white rounded-2xl shadow p-6 border border-gray-100">
+  <div class="relative overflow-hidden bg-white rounded-2xl shadow p-4 md:p-6 border border-gray-100">
     
     <!-- 1. GAMBAR LATAR BELAKANG -->
     <div class="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none" 
@@ -358,7 +360,7 @@ onAuthStateChanged(auth, async(user) => {
       ${timelineItem(done("RECEIVED"), "Selesai (AQM Terima)", duaTarikh(corporateData.terimaPertamaDate, corporateData.receivedDate, done("RECEIVED")), currentStatus === "HANDOVER" ? `
         <div class="flex gap-2 mt-2">
           <input type="date" id="receivedDate" class="border rounded-lg p-2 flex-1 min-w-0 bg-white/80">
-          <button id="confirmReceived" class="bg-green-600 hover:bg-green-700 text-white rounded-lg px-4 py-2 font-medium transition whitespace-nowrap">Sah Terima</button>
+          <button id="confirmReceived" class="bg-green-600 hover:bg-green-700 text-white rounded-lg px-4 py-2 font-medium transition leading-tight text-center flex-1">Sah Terima</button>
         </div>
       ` : "")}
     </div>
@@ -454,6 +456,14 @@ onAuthStateChanged(auth, async(user) => {
       };
     }
 
+
+    // Navigasi bawah (mobile): Borang & Dokumen untuk produk ini
+    const dibayarM = userData.corporateZurriPaymentStatus === "paid";
+    const tamatM = bakiHari !== "-" && bakiHari <= 0;
+    document.getElementById("mNav").innerHTML = navMobile("", {
+      borang: dibayarM ? (tamatM ? "renewal.html" : "corporate-zurri.html") : null,
+      dokumen: dibayarM && !tamatM && done("APPROVED") ? "preview-corporate-zurri.html" : null
+    });
 
     // Sah terima kurier
     const btnKurier = document.getElementById("btnKurierDiterima");
