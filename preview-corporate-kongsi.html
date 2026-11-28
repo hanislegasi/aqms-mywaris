@@ -86,12 +86,13 @@
         }
     </style>
     <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="mobile.css">
 </head>
 
 <body class="min-h-screen flex flex-col font-sans">
 
     <!-- HEADER -->
-    <div class="bg-[#153638] text-white p-5 shadow-md sticky top-0 z-50">
+    <div class="m-kemas bg-[#153638] text-white p-5 shadow-md sticky top-0 z-50">
         <h1 class="text-2xl font-bold font-inter">Preview Corp. Kongsi</h1>
         <p class="text-gray-300 text-sm">Semakan Dokumen Wasiat Korporat (Rakan Kongsi)</p>
     </div>
@@ -177,7 +178,7 @@
         </div>                
     </main>
 
-<div class="w-full max-w-3xl mx-auto p-4 mb-8 space-y-4 no-print">
+<div class="m-kemas w-full max-w-3xl mx-auto p-4 mb-8 space-y-4 no-print">
 
         <!-- Customer Verification -->
        <div id="verificationSection" class="bg-amber-50 border border-amber-300 rounded-xl p-6 shadow-sm" style="font-family: 'Inter', sans-serif;">
@@ -249,50 +250,24 @@
 
         // Konfigurasi Skala Responsif
         function updateScale() {
-             const wrapper = document.getElementById('scale-wrapper');
-             const pdfContent = document.getElementById('pdfContent');
-            if (!wrapper || !pdfContent) return;
-             const containerWidth = window.innerWidth;
-             const targetWidth = 794; 
-             const padding = 32;
-            if (containerWidth < targetWidth + padding) {
-                const scale = (containerWidth - padding) / targetWidth;
-                wrapper.style.transform = `scale(${scale})`;
-                 const actualHeight = pdfContent.offsetHeight;
-                 const scaledHeight = actualHeight * scale;
-                wrapper.style.marginBottom = `-${actualHeight - scaledHeight}px`;
-            } else {
-                wrapper.style.transform = 'scale(1)';
-                wrapper.style.marginBottom = '0px';
-            }
-        }
-        window.addEventListener('resize', updateScale);
-        window.addEventListener('DOMContentLoaded', () => setTimeout(updateScale, 100));
-
-        // Lampiran → senarai gambar (PDF dipecah ikut muka surat guna pdf.js)
-async function lampiranKeImej(file){
-  const res = await fetch(file.fileURL);
-  if(!res.ok) throw new Error("Lampiran gagal dimuatkan");
-  const blob = await res.blob();
-  const isPdf = blob.type === "application/pdf" || (file.fileName || "").toLowerCase().endsWith(".pdf");
-  if(!isPdf){
-    return [await new Promise((resolve)=>{ const fr = new FileReader(); fr.onloadend = ()=>resolve(fr.result); fr.readAsDataURL(blob); })];
-  }
-  const pdfjs = await import("https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/legacy/build/pdf.min.mjs");
-  pdfjs.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/legacy/build/pdf.worker.min.mjs";
-  const pdf = await pdfjs.getDocument({ data: await blob.arrayBuffer() }).promise;
-  const imej = [];
-  for(let i = 1; i <= pdf.numPages; i++){
-    const page = await pdf.getPage(i);
-    const vp = page.getViewport({ scale: 2 });
-    const canvas = document.createElement("canvas");
-    canvas.width = vp.width; canvas.height = vp.height;
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
-    await page.render({ canvasContext: ctx, viewport: vp }).promise;
-    imej.push(canvas.toDataURL("image/jpeg", 0.85));
-  }
-  return imej;
+    const wrapper = document.getElementById('scale-wrapper');
+    const pdfContent = document.getElementById('pdfContent');
+    if (!wrapper || !pdfContent) return;
+    const targetWidth = 794; // Lebar A4 (~210mm dalam piksel)
+    const padding = 24;
+    const containerWidth = document.documentElement.clientWidth;
+    // Mobile: kecilkan dari bucu kiri atas, kemudian kurangkan ruang yang diambil
+    // (margin negatif) supaya dokumen muat skrin tanpa tatal ke tepi
+    const scale = containerWidth < targetWidth + padding ? (containerWidth - padding) / targetWidth : 1;
+    wrapper.style.transformOrigin = 'top left';
+    wrapper.style.transform = `scale(${scale})`;
+    const tinggi = pdfContent.offsetHeight;
+    wrapper.style.marginRight = `-${targetWidth - targetWidth * scale}px`;
+    wrapper.style.marginBottom = `-${tinggi - tinggi * scale}px`;
+}
+// Kira semula bila kandungan dokumen siap dijana (ketinggian berubah)
+if (window.ResizeObserver && document.getElementById('pdfContent')) {
+    new ResizeObserver(() => updateScale()).observe(document.getElementById('pdfContent'));
 }
 
 async function imageToBase64(url){
@@ -346,7 +321,7 @@ async function imageToBase64(url){
             html2pdf().set(options).from(element).save().then(() => {
                 wrapper.style.transform = originalTransform;
                 wrapper.style.marginBottom = originalMarginBottom;
-                wrapper.style.transformOrigin = 'top center';
+                wrapper.style.transformOrigin = 'top left';
                 element.style.margin = originalMargin || '0 auto';
             });
         });
@@ -1286,7 +1261,7 @@ const base64Image = senaraiImej[pg];
             html2pdf().set(options).from(element).save().then(() => {
                 wrapper.style.transform = originalTransform;
                 wrapper.style.marginBottom = originalMarginBottom;
-                wrapper.style.transformOrigin = 'top center';
+                wrapper.style.transformOrigin = 'top left';
                 element.style.margin = originalMargin || '0 auto';
             });
         });

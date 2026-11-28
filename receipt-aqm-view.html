@@ -34,7 +34,7 @@
                     AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.
                 </h1>
                 <p id="registrationNo" class="text-gray-500 mt-2">
-                    Registration No : -
+                    No. Pendaftaran : -
                 </p>
                 <h2 class="text-3xl font-bold mt-6 text-gray-800">
                     RESIT RASMI PEMBAYARAN
@@ -59,11 +59,11 @@
                 <div id="receiptDate" class="font-semibold mt-1 text-gray-800">-</div>
             </div>
             <div>
-                <div class="text-sm text-gray-500">Received From</div>
+                <div class="text-sm text-gray-500">Diterima Daripada</div>
                 <div id="payerName" class="font-semibold mt-1 text-gray-800">-</div>
             </div>
             <div>
-                <div class="text-sm text-gray-500">Reference</div>
+                <div class="text-sm text-gray-500">Rujukan</div>
                 <div id="referenceNo" class="font-semibold mt-1 text-gray-800">-</div>
             </div>
             <div>
@@ -156,7 +156,7 @@ import {
                         settings?.companyName || "AL-QAWTHAR MAWARIS SYNERGY SDN. BHD.";
                     
                     document.getElementById("registrationNo").textContent = 
-                        "Registration No : " + (settings?.registrationNo || "-");
+                        "No. Pendaftaran : " + (settings?.registrationNo || "-");
                 }
             } catch (error) {
                 console.error("Ralat menarik data syarikat: ", error);

@@ -172,12 +172,13 @@ margin:0 !important;
 }
     </style>
     <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="mobile.css">
 </head>
 
 <body class="min-h-screen flex flex-col font-sans">
 
     <!-- HEADER -->
-    <div class="bg-[#153638] text-white p-5 shadow-md sticky top-0 z-50">
+    <div class="m-kemas bg-[#153638] text-white p-5 shadow-md sticky top-0 z-50">
         <h1 class="text-2xl font-bold font-inter">Preview Hibah</h1>
         <p class="text-gray-300 text-sm">Dokumen Hibah Saya</p>
     </div>
@@ -334,7 +335,7 @@ margin:0 !important;
                 
  </main>
         
-    <div class="w-full max-w-3xl mx-auto p-4 mb-8 space-y-4 no-print">
+    <div class="m-kemas w-full max-w-3xl mx-auto p-4 mb-8 space-y-4 no-print">
 
         <!-- Customer Verification -->
     <div id="verificationSection" class="bg-amber-50 border border-amber-300 rounded-xl p-6 font-[Inter] shadow-sm">
@@ -432,24 +433,22 @@ import {
 function updateScale() {
     const wrapper = document.getElementById('scale-wrapper');
     const pdfContent = document.getElementById('pdfContent');
-    const containerWidth = window.innerWidth;
-    const targetWidth = 794; // Lebar A4 (~210mm dalam piksel pada resolusi piawai)
-    const padding = 32;
-
-    if (containerWidth < targetWidth + padding) {
-        // Kecilkan paparan untuk skrin mobile
-        const scale = (containerWidth - padding) / targetWidth;
-        wrapper.style.transform = `scale(${scale})`;
-        
-        // Baiki ketinggian bekas supaya tiada ruang kosong di bawah elemen
-        const actualHeight = pdfContent.offsetHeight;
-        const scaledHeight = actualHeight * scale;
-        wrapper.style.marginBottom = `-${actualHeight - scaledHeight}px`;
-    } else {
-        // Paparan desktop normal
-        wrapper.style.transform = 'scale(1)';
-        wrapper.style.marginBottom = '0px';
-    }
+    if (!wrapper || !pdfContent) return;
+    const targetWidth = 794; // Lebar A4 (~210mm dalam piksel)
+    const padding = 24;
+    const containerWidth = document.documentElement.clientWidth;
+    // Mobile: kecilkan dari bucu kiri atas, kemudian kurangkan ruang yang diambil
+    // (margin negatif) supaya dokumen muat skrin tanpa tatal ke tepi
+    const scale = containerWidth < targetWidth + padding ? (containerWidth - padding) / targetWidth : 1;
+    wrapper.style.transformOrigin = 'top left';
+    wrapper.style.transform = `scale(${scale})`;
+    const tinggi = pdfContent.offsetHeight;
+    wrapper.style.marginRight = `-${targetWidth - targetWidth * scale}px`;
+    wrapper.style.marginBottom = `-${tinggi - tinggi * scale}px`;
+}
+// Kira semula bila kandungan dokumen siap dijana (ketinggian berubah)
+if (window.ResizeObserver && document.getElementById('pdfContent')) {
+    new ResizeObserver(() => updateScale()).observe(document.getElementById('pdfContent'));
 }
 
 // Kemaskini skala ketika resize
@@ -544,7 +543,7 @@ document.getElementById("downloadBtn").addEventListener("click", async () => {
         // 5. Kembalikan semua tetapan asal
         wrapper.style.transform = originalTransform;
         wrapper.style.marginBottom = originalMarginBottom;
-        wrapper.style.transformOrigin = 'top center';
+        wrapper.style.transformOrigin = 'top left';
         element.style.margin = originalMargin || '0 auto';
     });
 });

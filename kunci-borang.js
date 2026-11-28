@@ -23,7 +23,9 @@ function mesejStatus(status) {
         return "Dokumen anda telah diluluskan. Sila semak dan sahkan dokumen di halaman dokumen anda (tidak perlu hantar semula).";
     if (["HANDOVER", "RECEIVED"].includes(status))
         return "Dokumen telah diserahkan kepada anda. Anda boleh kemas kini borang dan mencetak sendiri; tidak perlu hantar semula.";
-    return `Dokumen anda sedang diproses (status: ${status}). Borang dikunci sehingga proses selesai.`;
+    const LABEL = { VERIFIED: "Disahkan Pelanggan", PRINTED: "Dicetak", SENT: "Dihantar Kurier", AKAD: "Selesai Akad",
+        STAMPING: "Dalam Pengesahan Mahkamah", COMPLETED: "Selesai" };
+    return `Dokumen anda sedang diproses (status: ${LABEL[status] || status}). Borang dikunci sehingga proses selesai.`;
 }
 
 function papar(teks, sebelumEl) {

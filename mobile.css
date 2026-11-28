@@ -1,0 +1,19 @@
+/* =====================================================================
+   Saiz teks & ruang yang lebih kemas untuk telefon (< 768px).
+   Hanya elemen di dalam .m-kemas terjejas. Kandungan dokumen A4
+   (#pdfContent) tidak disentuh, supaya PDF & cetakan kekal sama.
+   ===================================================================== */
+@media (max-width: 767px) {
+  .m-kemas .text-4xl { font-size: 1.75rem; line-height: 2.15rem; }
+  .m-kemas .text-3xl { font-size: 1.5rem; line-height: 1.9rem; }
+  .m-kemas .text-2xl { font-size: 1.25rem; line-height: 1.7rem; }
+  .m-kemas .text-xl  { font-size: 1.125rem; line-height: 1.55rem; }
+  .m-kemas .text-lg  { font-size: 1rem; line-height: 1.5rem; }
+  .m-kemas .text-\[15px\] { font-size: 14px; }
+  .m-kemas .leading-7 { line-height: 1.6rem; }
+  .m-kemas .leading-8 { line-height: 1.75rem; }
+  .m-kemas .p-8 { padding: 1.25rem; }
+  .m-kemas .p-6 { padding: 1rem; }
+  .m-kemas .py-4 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+  .m-kemas .px-8 { padding-left: 1.25rem; padding-right: 1.25rem; }
+}
