@@ -110,6 +110,12 @@ import {
       const labelStatus = (s) => LABEL_STATUS[s] || s;
       const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
+      // Tarikh pertama (rekod) dan tarikh baru selepas pengesahan mahkamah, sebelah-menyebelah
+      function duaTarikh(pertama, baru, siap) {
+        if (!pertama) return esc(baru || "-");
+        return `${esc(pertama)} <span class="text-xs text-gray-400 font-normal">(pertama)</span> → ${siap && baru ? esc(baru) : "-"} <span class="text-xs text-gray-400 font-normal">(selepas pengesahan)</span>`;
+      }
+
       function blokPengesahan(d) {
         d = d || {};
         const pm = d.pengesahanMahkamah || "";
@@ -498,11 +504,11 @@ import {
                     ${blokPengesahan(wasiatData)}
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Diserah kepada AQM</p>
-                    <p class="font-semibold">${wasiatHandoverDate || "-"}</p>
-                    <p class="text-sm">${wasiatHandoverRemarks || ""}</p>
+                    <p class="font-semibold">${duaTarikh(wasiatData.serahPertamaDate, wasiatHandoverDate, ["HANDOVER","RECEIVED","COMPLETED"].includes(wasiatStatus))}</p>
+                    <p class="text-sm">${(wasiatData.serahPertamaDate && !["HANDOVER","RECEIVED","COMPLETED"].includes(wasiatStatus)) ? "" : esc(wasiatHandoverRemarks || "")}</p>
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
-                    <p class="font-semibold text-green-700">${wasiatReceivedDate || "-"}</p>
+                    <p class="font-semibold text-green-700">${duaTarikh(wasiatData.terimaPertamaDate, wasiatReceivedDate, ["RECEIVED","COMPLETED"].includes(wasiatStatus))}</p>
                     <hr class="my-3">
                     <button id="btnCompleteWasiat" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
                   </div>
@@ -552,11 +558,11 @@ import {
                     ${blokPengesahan(hibahData)}
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Diserah kepada AQM</p>
-                    <p class="font-semibold">${hibahHandoverDate || "-"}</p>
-                    <p class="text-sm">${hibahHandoverRemarks || ""}</p>
+                    <p class="font-semibold">${duaTarikh(hibahData.serahPertamaDate, hibahHandoverDate, ["HANDOVER","RECEIVED","COMPLETED"].includes(hibahStatus))}</p>
+                    <p class="text-sm">${(hibahData.serahPertamaDate && !["HANDOVER","RECEIVED","COMPLETED"].includes(hibahStatus)) ? "" : esc(hibahHandoverRemarks || "")}</p>
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
-                    <p class="font-semibold text-green-700">${hibahReceivedDate || "-"}</p>
+                    <p class="font-semibold text-green-700">${duaTarikh(hibahData.terimaPertamaDate, hibahReceivedDate, ["RECEIVED","COMPLETED"].includes(hibahStatus))}</p>
                     <hr class="my-3">
                     <button id="btnCompleteHibah" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
                   </div>
@@ -606,11 +612,11 @@ import {
                     ${blokPengesahan(sepencarianData)}
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Diserah kepada AQM</p>
-                    <p class="font-semibold">${sepencarianHandoverDate || "-"}</p>
-                    <p class="text-sm">${sepencarianHandoverRemarks || ""}</p>
+                    <p class="font-semibold">${duaTarikh(sepencarianData.serahPertamaDate, sepencarianHandoverDate, ["HANDOVER","RECEIVED","COMPLETED"].includes(sepencarianStatus))}</p>
+                    <p class="text-sm">${(sepencarianData.serahPertamaDate && !["HANDOVER","RECEIVED","COMPLETED"].includes(sepencarianStatus)) ? "" : esc(sepencarianHandoverRemarks || "")}</p>
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
-                    <p class="font-semibold text-green-700">${sepencarianReceivedDate || "-"}</p>
+                    <p class="font-semibold text-green-700">${duaTarikh(sepencarianData.terimaPertamaDate, sepencarianReceivedDate, ["RECEIVED","COMPLETED"].includes(sepencarianStatus))}</p>
                     <hr class="my-3">
                     <button id="btnCompleteSepencarian" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
                   </div>
@@ -660,11 +666,11 @@ import {
                     ${blokPengesahan(mawarisData)}
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Diserah kepada AQM</p>
-                    <p class="font-semibold">${mawarisHandoverDate || "-"}</p>
-                    <p class="text-sm">${mawarisHandoverRemarks || ""}</p>
+                    <p class="font-semibold">${duaTarikh(mawarisData.serahPertamaDate, mawarisHandoverDate, ["HANDOVER","RECEIVED","COMPLETED"].includes(mawarisStatus))}</p>
+                    <p class="text-sm">${(mawarisData.serahPertamaDate && !["HANDOVER","RECEIVED","COMPLETED"].includes(mawarisStatus)) ? "" : esc(mawarisHandoverRemarks || "")}</p>
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
-                    <p class="font-semibold text-green-700">${mawarisReceivedDate || "-"}</p>
+                    <p class="font-semibold text-green-700">${duaTarikh(mawarisData.terimaPertamaDate, mawarisReceivedDate, ["RECEIVED","COMPLETED"].includes(mawarisStatus))}</p>
                     <hr class="my-3">
                     <button id="btnCompleteMawaris" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
                   </div>
@@ -714,11 +720,11 @@ import {
                     ${blokPengesahan(corporateData)}
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Diserah kepada AQM</p>
-                    <p class="font-semibold">${corporateHandoverDate || "-"}</p>
-                    <p class="text-sm">${corporateHandoverRemarks || ""}</p>
+                    <p class="font-semibold">${duaTarikh(corporateData.serahPertamaDate, corporateHandoverDate, ["HANDOVER","RECEIVED","COMPLETED"].includes(corporateStatus))}</p>
+                    <p class="text-sm">${(corporateData.serahPertamaDate && !["HANDOVER","RECEIVED","COMPLETED"].includes(corporateStatus)) ? "" : esc(corporateHandoverRemarks || "")}</p>
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
-                    <p class="font-semibold text-green-700">${corporateReceivedDate || "-"}</p>
+                    <p class="font-semibold text-green-700">${duaTarikh(corporateData.terimaPertamaDate, corporateReceivedDate, ["RECEIVED","COMPLETED"].includes(corporateStatus))}</p>
                     <hr class="my-3">
                     <button id="btnCompleteCorporate" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
                   </div>
@@ -768,11 +774,11 @@ import {
                     ${blokPengesahan(corporateTunggalData)}
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Diserah kepada AQM</p>
-                    <p class="font-semibold">${corporateTunggalHandoverDate || "-"}</p>
-                    <p class="text-sm">${corporateTunggalHandoverRemarks || ""}</p>
+                    <p class="font-semibold">${duaTarikh(corporateTunggalData.serahPertamaDate, corporateTunggalHandoverDate, ["HANDOVER","RECEIVED","COMPLETED"].includes(corporateTunggalStatus))}</p>
+                    <p class="text-sm">${(corporateTunggalData.serahPertamaDate && !["HANDOVER","RECEIVED","COMPLETED"].includes(corporateTunggalStatus)) ? "" : esc(corporateTunggalHandoverRemarks || "")}</p>
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
-                    <p class="font-semibold text-green-700">${corporateTunggalReceivedDate || "-"}</p>
+                    <p class="font-semibold text-green-700">${duaTarikh(corporateTunggalData.terimaPertamaDate, corporateTunggalReceivedDate, ["RECEIVED","COMPLETED"].includes(corporateTunggalStatus))}</p>
                     <hr class="my-3">
                     <button id="btnCompleteCorporateTunggal" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
                   </div>
@@ -822,11 +828,11 @@ import {
                     ${blokPengesahan(corporateKongsiData)}
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Diserah kepada AQM</p>
-                    <p class="font-semibold">${corporateKongsiHandoverDate || "-"}</p>
-                    <p class="text-sm">${corporateKongsiHandoverRemarks || ""}</p>
+                    <p class="font-semibold">${duaTarikh(corporateKongsiData.serahPertamaDate, corporateKongsiHandoverDate, ["HANDOVER","RECEIVED","COMPLETED"].includes(corporateKongsiStatus))}</p>
+                    <p class="text-sm">${(corporateKongsiData.serahPertamaDate && !["HANDOVER","RECEIVED","COMPLETED"].includes(corporateKongsiStatus)) ? "" : esc(corporateKongsiHandoverRemarks || "")}</p>
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
-                    <p class="font-semibold text-green-700">${corporateKongsiReceivedDate || "-"}</p>
+                    <p class="font-semibold text-green-700">${duaTarikh(corporateKongsiData.terimaPertamaDate, corporateKongsiReceivedDate, ["RECEIVED","COMPLETED"].includes(corporateKongsiStatus))}</p>
                     <hr class="my-3">
                     <button id="btnCompleteCorporateKongsi" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
                   </div>
@@ -876,11 +882,11 @@ import {
                     ${blokPengesahan(corporateZurriData)}
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Diserah kepada AQM</p>
-                    <p class="font-semibold">${corporateZurriHandoverDate || "-"}</p>
-                    <p class="text-sm">${corporateZurriHandoverRemarks || ""}</p>
+                    <p class="font-semibold">${duaTarikh(corporateZurriData.serahPertamaDate, corporateZurriHandoverDate, ["HANDOVER","RECEIVED","COMPLETED"].includes(corporateZurriStatus))}</p>
+                    <p class="text-sm">${(corporateZurriData.serahPertamaDate && !["HANDOVER","RECEIVED","COMPLETED"].includes(corporateZurriStatus)) ? "" : esc(corporateZurriHandoverRemarks || "")}</p>
                     <hr class="my-3">
                     <p class="text-sm text-gray-500">Selesai (AQM Terima)</p>
-                    <p class="font-semibold text-green-700">${corporateZurriReceivedDate || "-"}</p>
+                    <p class="font-semibold text-green-700">${duaTarikh(corporateZurriData.terimaPertamaDate, corporateZurriReceivedDate, ["RECEIVED","COMPLETED"].includes(corporateZurriStatus))}</p>
                     <hr class="my-3">
                     <button id="btnCompleteCorporateZurri" class="mt-auto w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl">✔ Lengkapkan</button>
                   </div>

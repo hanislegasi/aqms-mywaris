@@ -302,6 +302,15 @@ async function loadCustomerDetails(isAQP) {
                 HANDOVER: currentData.handoverDate || "",
                 COMPLETED: currentData.receivedDate || ""
             };
+            // Tarikh pertama disimpan sebagai rekod; tarikh baru dipapar di sebelahnya
+            const fmtT = (t) => t ? new Date(t).toLocaleDateString("ms-MY") : "-";
+            const tarikhPertama = { HANDOVER: currentData.serahPertamaDate, COMPLETED: currentData.terimaPertamaDate };
+            function tarikhLangkah(key, selesai) {
+                if (tarikhPertama[key]) {
+                    return `${fmtT(tarikhPertama[key])} (pertama) → ${selesai ? fmtT(timelineDates[key]) : "-"} (selepas pengesahan)`;
+                }
+                return fmtT(timelineDates[key]);
+            }
         
             const catatanLangkah = {
                 STAMPING: pmPilihan === "TIDAK" ? "Tidak Diperlukan"
@@ -317,7 +326,7 @@ async function loadCustomerDetails(isAQP) {
                 </div>
                 <div>
                     <span class="${selesai ?"font-semibold text-green-700" :"text-gray-500"}">${step.label}</span>
-                    <p class="text-xs text-gray-400 mt-1">${timelineDates[step.key] ? new Date(timelineDates[step.key]).toLocaleDateString("ms-MY") : "-"}</p>
+                    <p class="text-xs text-gray-400 mt-1">${tarikhLangkah(step.key, selesai)}</p>
                     ${catatanLangkah[step.key] ? `<p class="text-xs text-gray-500">${catatanLangkah[step.key]}</p>` : ""}
                 </div>
             </div>`;}).join("");
@@ -544,12 +553,18 @@ async function loadCustomerDetails(isAQP) {
                 return;
             }
 
+            // Dokumen pernah diserah & diterima sebelum ini: simpan tarikh pertama sebagai rekod
+            const rekodPertama = (currentData.handoverDate && !currentData.serahPertamaDate)
+                ? { serahPertamaDate: currentData.handoverDate, terimaPertamaDate: currentData.receivedDate || "" }
+                : {};
+
             try {
                 await updateDoc(doc(db,"users",userId,currentCollection,"maklumat"), {
                     stampingDate:stampDate,
                     firmaGuaman:firma,
                     status:"STAMPING",
-                    stampingUpdatedAt:serverTimestamp()
+                    stampingUpdatedAt:serverTimestamp(),
+                    ...rekodPertama
                 });
                 alert("Penyerahan dokumen kepada peguam berjaya direkodkan.");
                 location.reload();

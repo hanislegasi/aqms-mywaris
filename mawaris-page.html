@@ -279,6 +279,11 @@ onAuthStateChanged(auth, async(user) => {
           <button id="btnKurierDiterima" class="bg-green-600 hover:bg-green-700 text-white rounded-lg px-4 py-2 font-medium transition whitespace-nowrap">Sah Terima Kurier</button>
         </div>` : "";
 
+    // Tarikh serah & terima pertama disimpan sebagai rekod; tarikh baru (selepas pengesahan mahkamah) di sebelahnya
+    const duaTarikh = (pertama, baru, siap) => pertama
+      ? `${esc(pertama)} <span class="text-xs text-gray-400">(pertama)</span> &nbsp;→&nbsp; ${siap && baru ? esc(baru) : "-"} <span class="text-xs text-gray-400">(selepas pengesahan)</span>`
+      : esc(baru || "-");
+
     const pm = mawarisData.pengesahanMahkamah || "";
     const pmDibayar = mawarisData.pengesahanStatus === "PAID";
     const pmBolehPilih = !pmDibayar && ["AKAD", "STAMPING", "HANDOVER", "RECEIVED", "COMPLETED"].includes(currentStatus);
@@ -348,8 +353,8 @@ onAuthStateChanged(auth, async(user) => {
       ${timelineItem(kurierDone, "Kurier Diterima", mawarisData.kurierDiterimaDate || "-", kurierKawalan)}
       ${timelineItem(done("AKAD"), "Selesai Akad", mawarisData.akadDate || "-", mawarisData.akadTime || "")}
       ${timelineItem(pmDone, "Pengesahan Mahkamah", pmTarikh, pmKawalan)}
-      ${timelineItem(done("HANDOVER"), "Diserah kepada AQM", mawarisData.handoverDate || "-", esc(mawarisData.handoverRemarks || ""))}
-      ${timelineItem(done("RECEIVED"), "Selesai (AQM Terima)", mawarisData.receivedDate || "-", currentStatus === "HANDOVER" ? `
+      ${timelineItem(done("HANDOVER"), "Diserah kepada AQM", duaTarikh(mawarisData.serahPertamaDate, mawarisData.handoverDate, done("HANDOVER")), (mawarisData.serahPertamaDate && !done("HANDOVER")) ? "" : esc(mawarisData.handoverRemarks || ""))}
+      ${timelineItem(done("RECEIVED"), "Selesai (AQM Terima)", duaTarikh(mawarisData.terimaPertamaDate, mawarisData.receivedDate, done("RECEIVED")), currentStatus === "HANDOVER" ? `
         <div class="flex gap-2 mt-2">
           <input type="date" id="receivedDate" class="border rounded-lg p-2 flex-1 min-w-0 bg-white/80">
           <button id="confirmReceived" class="bg-green-600 hover:bg-green-700 text-white rounded-lg px-4 py-2 font-medium transition whitespace-nowrap">Sah Terima</button>
