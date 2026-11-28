@@ -121,7 +121,7 @@ function getProductFee(key) {
 function updateDisplay(key) {
     const selected = productConfig[key];
     const fee = getProductFee(key);
-    displayProductName.textContent = `${selected.name} Renewal`;
+    displayProductName.textContent = `Pembaharuan ${selected.name}`;
     displayProductFee.textContent = `RM${fee}`;
 }
 

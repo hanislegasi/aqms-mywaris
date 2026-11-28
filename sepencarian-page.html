@@ -30,7 +30,7 @@
   <h2 class="font-bold text-xl mb-4">Sepencarian</h2>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-    <div id="profileCard" class="h-full">Loading...</div>
+    <div id="profileCard" class="h-full">Memuatkan...</div>
     <div id="sepencarianTimeline" class="h-full"></div>
   </div>
 
@@ -45,7 +45,7 @@
     </a>
 
     <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold">
-      Logout
+      Log Keluar
     </button>
   </div>
 </div>
@@ -340,7 +340,7 @@ onAuthStateChanged(auth, async(user) => {
 
     <!-- 3. KANDUNGAN TIMELINE (Guna relative z-10 supaya teks & butang berada di atas gambar) -->
     <div class="relative z-10">
-      <h3 class="font-bold text-lg mb-5 text-[#153638]">Status Timeline</h3>
+      <h3 class="font-bold text-lg mb-5 text-[#153638]">Garis Masa Status</h3>
       ${timelineItem(done("APPROVED"), "Diluluskan", sepencarianData.approvedAt ? new Date(sepencarianData.approvedAt).toLocaleDateString("ms-MY") : "-")}
       ${timelineItem(done("VERIFIED"), "Disahkan Pelanggan", sepencarianData.verifiedAt ? new Date(sepencarianData.verifiedAt).toLocaleDateString("ms-MY") : "-")}
       ${timelineItem(done("PRINTED"), "Dicetak", sepencarianData.printedAt ? new Date(sepencarianData.printedAt).toLocaleDateString("ms-MY") : "-")}
@@ -368,7 +368,7 @@ onAuthStateChanged(auth, async(user) => {
       if (bakiHari <= 0) {
         // JIKA KEAHLIAN TAMAT
         document.getElementById("sepencarianButton").href = "renewal.html";
-        document.getElementById("sepencarianTitle").innerText = "Renew Sepencarian";
+        document.getElementById("sepencarianTitle").innerText = "Perbaharui Sepencarian";
         
         const statusEl = document.getElementById("sepencarianStatus");
         statusEl.innerHTML = `
@@ -387,7 +387,7 @@ onAuthStateChanged(auth, async(user) => {
       } else {
         // JIKA SUDAH BAYAR DAN AKTIF
         document.getElementById("sepencarianButton").href = "sepencarian.html";
-         document.getElementById("sepencarianTitle").innerText = "Isi / Edit Borang"; 
+         document.getElementById("sepencarianTitle").innerText = "Isi / Kemas Kini Borang"; 
         
         // --- KOD TUKAR WARNA BUTANG & IKON ---
         document.getElementById("sepencarianButton").className = "bg-white text-green-700 hover:bg-gray-50 rounded-2xl p-4 flex items-center gap-4 transition shadow-md border border-gray-100";

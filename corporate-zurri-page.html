@@ -30,7 +30,7 @@
   <h2 class="font-bold text-xl mb-4 text-[#153638]">Pakej Korporat (Wakaf Zurri)</h2>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-    <div id="profileCard" class="h-full">Loading...</div>
+    <div id="profileCard" class="h-full">Memuatkan...</div>
     <div id="corporateZurriTimeline" class="h-full"></div>
   </div>
 
@@ -45,7 +45,7 @@
     </a>
 
     <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition">
-      Logout
+      Log Keluar
     </button>
   </div>
 </div>
@@ -341,7 +341,7 @@ onAuthStateChanged(auth, async(user) => {
 
     <!-- 3. KANDUNGAN TIMELINE -->
     <div class="relative z-10">
-      <h3 class="font-bold text-lg mb-5 text-[#153638]">Status Timeline</h3>
+      <h3 class="font-bold text-lg mb-5 text-[#153638]">Garis Masa Status</h3>
       ${timelineItem(done("APPROVED"), "Diluluskan", corporateData.approvedAt ? new Date(corporateData.approvedAt).toLocaleDateString("ms-MY") : "-")}
       ${timelineItem(done("VERIFIED"), "Disahkan Pelanggan", corporateData.verifiedAt ? new Date(corporateData.verifiedAt).toLocaleDateString("ms-MY") : "-")}
       ${timelineItem(done("PRINTED"), "Dicetak", corporateData.printedAt ? new Date(corporateData.printedAt).toLocaleDateString("ms-MY") : "-")}
@@ -369,7 +369,7 @@ onAuthStateChanged(auth, async(user) => {
       if (bakiHari <= 0) {
         // JIKA KEAHLIAN TAMAT
         document.getElementById("corporateZurriButton").href = "renewal.html";
-        document.getElementById("corporateZurriTitle").innerText = "Renew Mawaris Korporat-Wakaf Zurri";
+        document.getElementById("corporateZurriTitle").innerText = "Perbaharui Mawaris Korporat-Wakaf Zurri";
         
         const statusEl = document.getElementById("corporateZurriStatus");
         statusEl.innerHTML = `
@@ -387,7 +387,7 @@ onAuthStateChanged(auth, async(user) => {
       } else {
         // JIKA SUDAH BAYAR DAN AKTIF
         document.getElementById("corporateZurriButton").href = "corporate-zurri.html";
-        document.getElementById("corporateZurriTitle").innerText = "Isi / Edit Borang"; 
+        document.getElementById("corporateZurriTitle").innerText = "Isi / Kemas Kini Borang"; 
         
         // --- TAMBAH 2 BARIS INI UNTUK TUKAR WARNA BUTANG & IKON ---
         document.getElementById("corporateZurriButton").className = "bg-white text-green-700 hover:bg-gray-50 rounded-2xl p-4 flex items-center gap-4 transition shadow-md";

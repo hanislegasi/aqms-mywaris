@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Payment Receipts</title>
+    <title>Resit Pembayaran</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -19,8 +19,8 @@
         ← Dashboard
     </a>
 
-    <h1 class="text-3xl font-bold text-[#153638]">Payment Receipts</h1>
-    <p class="text-gray-500 mt-2 mb-6">Registration, Renewal & Product Payment Receipt</p>
+    <h1 class="text-3xl font-bold text-[#153638]">Resit Pembayaran</h1>
+    <p class="text-gray-500 mt-2 mb-6">Resit Pendaftaran, Pembaharuan & Produk</p>
 
     <div class="bg-white rounded-2xl shadow p-5 mb-6">
         <div class="grid md:grid-cols-4 gap-4">
@@ -32,55 +32,57 @@
             </select>
 
             <select id="monthFilter" class="border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none">
-                <option value="">All Month</option>
-                <option value="0">January</option>
-                <option value="1">February</option>
-                <option value="2">March</option>
+                <option value="">Semua Bulan</option>
+                <option value="0">Januari</option>
+                <option value="1">Februari</option>
+                <option value="2">Mac</option>
                 <option value="3">April</option>
-                <option value="4">May</option>
-                <option value="5">June</option>
-                <option value="6">July</option>
-                <option value="7">August</option>
+                <option value="4">Mei</option>
+                <option value="5">Jun</option>
+                <option value="6">Julai</option>
+                <option value="7">Ogos</option>
                 <option value="8">September</option>
-                <option value="9">October</option>
+                <option value="9">Oktober</option>
                 <option value="10">November</option>
-                <option value="11">December</option>
+                <option value="11">Disember</option>
             </select>
 
             <!-- TUKAR VALUE DI SINI SUPAYA SAMA DENGAN DATABASE -->
             <select id="typeFilter" class="border rounded-xl p-3 focus:ring-2 focus:ring-[#153638] outline-none">
-                <option value="">All Category</option>
-                <option value="REGISTRATION">Registration Fee</option>
-                <option value="RENEWAL">Annual Renewal</option>
+                <option value="">Semua Kategori</option>
+                <option value="REGISTRATION">Yuran Pendaftaran</option>
+                <option value="RENEWAL">Pembaharuan Tahunan</option>
                 <option value="WASIAT">Wasiat</option>
-                <option value="WASIAT_RENEWAL">Wasiat Renewal</option>
+                <option value="WASIAT_RENEWAL">Pembaharuan Wasiat</option>
                 <option value="HIBAH">Hibah</option>
-                <option value="HIBAH_RENEWAL">Hibah Renewal</option>
+                <option value="HIBAH_RENEWAL">Pembaharuan Hibah</option>
                 
                 <option value="SEPENCARIAN">Harta Sepencarian</option>
-                <option value="SEPENCARIAN_RENEWAL">Harta Sepencarian Renewal</option>
+                <option value="SEPENCARIAN_RENEWAL">Pembaharuan Harta Sepencarian</option>
                 
                 <option value="MAWARIS">Mawaris</option>
-                <option value="MAWARIS_RENEWAL">Mawaris Renewal</option>
+                <option value="MAWARIS_RENEWAL">Pembaharuan Mawaris</option>
                 
                 <!-- PAKEJ CORPORATE LAMA/PREMIUM -->
                 <option value="MAWARIS KORPORAT">Mawaris Korporat (Legacy)</option>
-                <option value="KORPORAT">Corp. Premium</option>
-                <option value="CORPORATE_RENEWAL">Corp. Premium Renewal</option>
+                <option value="KORPORAT">Mawaris Korporat</option>
+                <option value="CORPORATE_RENEWAL">Pembaharuan Mawaris Korporat</option>
                 
                 <!-- 3 PAKEJ CORPORATE BAHARU -->
-                <option value="KORPORAT TUNGGAL">Corp. Tunggal</option>
-                <option value="CORPORATE_TUNGGAL_RENEWAL">Corp. Tunggal Renewal</option>
+                <option value="KORPORAT TUNGGAL">Mawaris Korporat (Tunggal)</option>
+                <option value="CORPORATE_TUNGGAL_RENEWAL">Pembaharuan Mawaris Korporat (Tunggal)</option>
                 
-                <option value="KORPORAT KONGSI">Corp. Kongsi</option>
-                <option value="CORPORATE_KONGSI_RENEWAL">Corp. Kongsi Renewal</option>
+                <option value="KORPORAT KONGSI">Mawaris Korporat (Kongsi)</option>
+                <option value="CORPORATE_KONGSI_RENEWAL">Pembaharuan Mawaris Korporat (Kongsi)</option>
                 
-                <option value="KORPORAT ZURRI">Corp. Wakaf Zurri</option>
-                <option value="CORPORATE_ZURRI_RENEWAL">Corp. Wakaf Zurri Renewal</option>
+                <option value="KORPORAT ZURRI">Mawaris Korporat (Wakaf Zurri)</option>
+                <option value="CORPORATE_ZURRI_RENEWAL">Pembaharuan Mawaris Korporat (Wakaf Zurri)</option>
+                <option value="TRUSTEE_FEE">Lantikan RTB</option>
+                <option value="LEGAL_FEE">Pengesahan Mahkamah</option>
             </select>
 
             <button id="searchBtn" class="bg-[#153638] hover:bg-[#1d4a4d] transition text-white rounded-xl font-semibold">
-                Search
+                Cari
             </button>
 
         </div>
@@ -90,17 +92,17 @@
         <table class="w-full">
             <thead class="bg-gray-50 border-b">
                 <tr>
-                    <th class="p-4 text-left">Receipt No</th>
-                    <th class="p-4 text-left">Date</th>
-                    <th class="p-4 text-left">Description</th>
-                    <th class="p-4 text-right">Amount</th>
+                    <th class="p-4 text-left">No. Resit</th>
+                    <th class="p-4 text-left">Tarikh</th>
+                    <th class="p-4 text-left">Keterangan</th>
+                    <th class="p-4 text-right">Jumlah</th>
                     <th class="p-4 text-center">Status</th>
-                    <th class="p-4 text-center">Action</th>
+                    <th class="p-4 text-center">Tindakan</th>
                 </tr>
             </thead>
             <tbody id="receiptTable">
                 <tr>
-                    <td colspan="6" class="text-center py-10 text-gray-400">Loading...</td>
+                    <td colspan="6" class="text-center py-10 text-gray-400">Memuatkan...</td>
                 </tr>
             </tbody>
         </table>
@@ -117,7 +119,7 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/f
 let currentUser = null;
         
 async function loadReceipts(user) {
-    document.getElementById("receiptTable").innerHTML = `<tr><td colspan="6" class="text-center py-10 text-gray-400">Loading receipts...</td></tr>`;
+    document.getElementById("receiptTable").innerHTML = `<tr><td colspan="6" class="text-center py-10 text-gray-400">Memuatkan resit...</td></tr>`;
     
     const year = Number(document.getElementById("yearFilter").value);
     const month = document.getElementById("monthFilter").value;
@@ -150,25 +152,25 @@ async function loadReceipts(user) {
                 <td class="p-4 text-gray-600">${r.serviceName}</td>
                 <td class="p-4 text-right font-semibold text-[#153638]">RM${Number(r.amount).toFixed(2)}</td>
                 <td class="p-4 text-center">
-                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold uppercase">${r.status}</span>
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold uppercase">${r.status === "PAID" ? "DIBAYAR" : r.status}</span>
                 </td>
                 <td class="p-4 text-center">
                     <button onclick="window.location.href='receipt-aqm-view.html?id=${r.id}'" class="bg-gray-100 hover:bg-gray-200 text-[#153638] px-4 py-2 rounded-lg text-sm font-semibold transition">
-                        View
+                        Lihat
                     </button>
                 </td>
             </tr>`;
         });
 
         if (html === "") {
-            html = `<tr><td colspan="6" class="text-center py-10 text-gray-400">No receipt found matching your criteria.</td></tr>`;
+            html = `<tr><td colspan="6" class="text-center py-10 text-gray-400">Tiada resit dijumpai.</td></tr>`;
         }
 
         document.getElementById("receiptTable").innerHTML = html;
         
     } catch (error) {
         console.error("Gagal menarik rekod resit:", error);
-        document.getElementById("receiptTable").innerHTML = `<tr><td colspan="6" class="text-center py-10 text-red-500">Failed to load data.</td></tr>`;
+        document.getElementById("receiptTable").innerHTML = `<tr><td colspan="6" class="text-center py-10 text-red-500">Gagal memuatkan data.</td></tr>`;
     }
 }
 
