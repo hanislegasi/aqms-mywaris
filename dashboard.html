@@ -13,6 +13,39 @@
 
 <body class="bg-gray-100 min-h-screen" style="font-family: 'Inter', sans-serif;">
 
+<!-- ================= PAPARAN MOBILE (< 768px) ================= -->
+<div id="mobileApp" class="md:hidden pb-28">
+  <header class="bg-[#153638] text-white px-5 pt-5 pb-5">
+    <div class="flex justify-between items-center">
+      <span class="text-[13px] font-semibold tracking-wider text-[#e4c19d]">AL-QAWTHAR MAWARIS</span>
+      <a href="profil.html" id="mAvatar" aria-label="Profil" class="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center font-bold">-</a>
+    </div>
+    <h1 id="mNama" class="text-xl font-bold mt-3">Assalamualaikum</h1>
+    <div id="mInfo" class="flex flex-wrap gap-2 items-center text-xs text-white/85 mt-1.5">Memuatkan...</div>
+  </header>
+
+  <main class="px-4 pt-4 flex flex-col gap-4">
+    <section aria-label="Pilih produk" id="mIkon" class="bg-white rounded-2xl px-2.5 py-3.5 grid grid-cols-4 gap-y-3 gap-x-1 shadow-sm"></section>
+    <div id="mHook" class="hidden bg-[#07363c] rounded-2xl p-5 text-center">
+      <p class="text-base font-bold text-[#e4c19d]">Lindungi Masa Depan Orang Tersayang Hari Ini</p>
+      <p class="text-[13px] leading-relaxed text-[#e4c19d]/90 mt-1">Pilih produk di atas untuk lihat butiran dan mulakan perancangan rasmi anda.</p>
+    </div>
+    <section id="mTindakan" class="hidden bg-orange-50 border border-orange-200 rounded-2xl p-4 flex-col gap-2.5"></section>
+    <a href="introducer.html" id="mIntroducer" class="hidden items-center justify-center gap-2 min-h-[52px] rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+      myIntroducer
+    </a>
+    <section class="flex flex-col gap-2.5">
+      <h2 id="mTajukKad" class="text-xs font-bold tracking-wider text-gray-600">PRODUK SAYA</h2>
+      <div id="mKad"></div>
+    </section>
+  </main>
+  <div id="mNav"></div>
+</div>
+
+<!-- ================= PAPARAN DESKTOP ================= -->
+<div class="hidden md:block">
+
 <div class="bg-[#153638] text-white px-5 py-6 shadow">
   <div class="flex justify-between items-center">
     <div>
@@ -341,6 +374,9 @@
 
 </div>
 
+</div>
+<!-- /PAPARAN DESKTOP -->
+
 <!-- SCRIPT UNTUK PENUKARAN AYAT APABILA PENGGUNA MEMBELI -->
 <script>
   function prosesPembelian() {
@@ -384,6 +420,14 @@ import {
     doc, 
     getDoc 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { PRODUK_M, labelStatus, esc, tindakanUntuk, bakiHari, dokumenBoleh, navMobile, simpanPautanDipilih } from './aqm-mobile.js';
+
+  // Mobile: salin ikon produk dari kad desktop (sebelum kad desktop ditukar selepas bayar)
+  const IKON_M = {};
+  PRODUK_M.forEach(p => {
+    const svg = document.querySelector("#" + p.icon + " svg");
+    IKON_M[p.kod] = svg ? svg.outerHTML.replace(/class="[^"]*"/, 'width="24" height="24" aria-hidden="true"') : "";
+  });
 
   const compensationSnap = await getDoc(doc(db, "settings", "compensation"));
 
@@ -441,6 +485,139 @@ import {
     `;
 }
 
+  // ================= PAPARAN MOBILE =================
+  async function binaMobile(user, userData, comp) {
+    // Faedah setiap produk: diambil terus dari kad desktop (satu sumber)
+    const faedah = {};
+    PRODUK_M.forEach(p => {
+      faedah[p.kod] = [...document.querySelectorAll("#" + p.card + " li")]
+        .map(li => li.textContent.replace(/^\s*•\s*/, "").trim()).filter(Boolean);
+    });
+
+    // Data dokumen bagi produk yang dah dibayar
+    const senarai = await Promise.all(PRODUK_M.map(async p => {
+      const dibayar = userData[p.bayarField] === "paid";
+      let d = {};
+      if (dibayar) {
+        const snap = await getDoc(doc(db, "users", user.uid, p.sub, "maklumat"));
+        d = snap.exists() ? snap.data() : {};
+      }
+      const status = (d.status || "DRAFT").toUpperCase();
+      const baki = bakiHari(d);
+      const tamat = baki !== null && baki <= 0;
+      return {
+        ...p, d, dibayar, status, baki, tamat,
+        tindakan: tindakanUntuk(d, dibayar),
+        harga: comp[p.hargaField],
+        pautanBorang: dibayar ? (tamat ? "renewal.html" : p.borang) : null,
+        pautanDokumen: dibayar && !tamat && dokumenBoleh(status) ? p.dokumen : null
+      };
+    }));
+
+    const adaProduk = senarai.some(p => p.dibayar);
+    const nama = userData.nama || "";
+    document.getElementById("mAvatar").textContent = (nama.trim()[0] || "A").toUpperCase();
+    document.getElementById("mNama").textContent = "Assalamualaikum, " + nama;
+    document.getElementById("mInfo").innerHTML = `<span>${esc(userData.memberNo || "-")}</span>` + (adaProduk
+      ? `<span class="bg-white/15 px-2 py-0.5 rounded-full font-semibold text-[11px]">AHLI AKTIF</span>`
+      : `<span>Belum ada produk</span>`);
+    document.getElementById("mHook").classList.toggle("hidden", adaProduk);
+    if (userData.isIntroducer === true) {
+      const b = document.getElementById("mIntroducer");
+      b.classList.remove("hidden"); b.classList.add("flex");
+    }
+    document.getElementById("mTajukKad").textContent = adaProduk ? "PRODUK SAYA" : "BUTIRAN PRODUK";
+
+    // Produk dipilih: pilihan terakhir, atau produk pertama yang ada tindakan / dibayar
+    let dipilih = null;
+    try { dipilih = localStorage.getItem("aqmProdukDipilih"); } catch (e) {}
+    if (!senarai.some(p => p.kod === dipilih)) {
+      dipilih = (senarai.find(p => p.tindakan) || senarai.find(p => p.dibayar) || senarai[0]).kod;
+    }
+
+    function pilih(kod) {
+      dipilih = kod;
+      try { localStorage.setItem("aqmProdukDipilih", kod); } catch (e) {}
+      lukis();
+    }
+
+    function lukis() {
+      const sel = senarai.find(p => p.kod === dipilih);
+
+      // 8 ikon produk
+      document.getElementById("mIkon").innerHTML = senarai.map(p => {
+        const aktif = p.kod === dipilih;
+        const bg = aktif ? "bg-[#153638] text-white" : (p.dibayar ? "bg-[#153638]/10 text-[#153638]" : "bg-gray-100 text-gray-500");
+        return `<button type="button" data-kod="${p.kod}" aria-pressed="${aktif}" aria-label="${esc(p.nama)}" class="flex flex-col items-center gap-1.5 py-1 min-h-[64px]">
+          <span class="relative w-12 h-12 rounded-2xl flex items-center justify-center ${bg}">${IKON_M[p.kod]}
+            ${p.tindakan ? '<span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-orange-600 border-2 border-white"></span>' : ""}
+          </span>
+          <span class="text-xs font-bold ${aktif ? "text-[#153638]" : "text-gray-600"}">${p.kod}</span>
+        </button>`;
+      }).join("");
+      document.querySelectorAll("#mIkon button").forEach(b => b.onclick = () => pilih(b.dataset.kod));
+
+      // Tindakan diperlukan (semua produk)
+      const tind = senarai.filter(p => p.tindakan);
+      const tEl = document.getElementById("mTindakan");
+      tEl.classList.toggle("hidden", tind.length === 0);
+      tEl.classList.toggle("flex", tind.length > 0);
+      tEl.innerHTML = `<h2 class="text-xs font-bold tracking-wider text-orange-800">TINDAKAN DIPERLUKAN</h2>` + tind.map(p => `
+        <a href="${p.page}" class="bg-white rounded-xl p-3 flex items-center justify-between gap-3 min-h-[48px]">
+          <span class="flex flex-col">
+            <span class="text-[11px] font-bold text-orange-800">${p.kod} · ${esc(p.nama)}</span>
+            <span class="text-sm font-semibold text-gray-800">${esc(p.tindakan)}</span>
+          </span>
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9a3412" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg>
+        </a>`).join("");
+
+      // Kad produk yang dipilih
+      const kad = document.getElementById("mKad");
+      if (sel.dibayar) {
+        const tamatTeks = sel.d.expiryDate ? new Date(sel.d.expiryDate).toLocaleDateString("ms-MY") : "-";
+        const bakiTeks = sel.baki === null ? "" : (sel.tamat ? "Tamat" : sel.baki + " hari lagi");
+        kad.innerHTML = `
+        <article class="bg-white rounded-2xl p-4 flex flex-col gap-3.5 shadow-sm">
+          <div class="flex justify-between items-start gap-2">
+            <div class="flex flex-col">
+              <span class="text-xs font-bold text-gray-500">${sel.kod}</span>
+              <span class="text-lg font-bold text-[#153638]">${esc(sel.nama)}</span>
+            </div>
+            <span class="${sel.tamat ? "bg-amber-100 text-amber-800" : "bg-green-100 text-green-800"} text-[11px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap">${sel.tamat ? "Keahlian Tamat" : esc(labelStatus(sel.status))}</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2.5">
+            <div class="bg-gray-50 rounded-xl p-2.5"><div class="text-[11px] text-gray-600">No. Dokumen</div><div class="text-[13px] font-semibold text-gray-800 break-all">${esc(sel.d.docRef || "-")}</div></div>
+            <div class="bg-gray-50 rounded-xl p-2.5"><div class="text-[11px] text-gray-600">Tamat Keahlian</div><div class="text-[13px] font-semibold text-gray-800">${tamatTeks}</div><div class="text-[11px] text-gray-500">${bakiTeks}</div></div>
+          </div>
+          ${sel.tamat
+            ? `<a href="renewal.html" class="flex items-center justify-center min-h-[48px] rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold">Perbaharui Keahlian</a>`
+            : `<a href="${sel.page}" class="flex items-center justify-center min-h-[48px] rounded-xl bg-[#153638] hover:bg-[#1d4a4d] text-white font-semibold">Lihat Garis Masa Status</a>`}
+        </article>`;
+      } else {
+        const harga = sel.harga !== undefined ? "RM" + Number(sel.harga).toLocaleString("en-MY") : "";
+        kad.innerHTML = `
+        <article class="bg-white rounded-2xl p-4 flex flex-col gap-3 shadow-sm">
+          <div class="flex flex-col">
+            <span class="text-xs font-bold text-gray-500">${sel.kod}</span>
+            <span class="text-lg font-bold text-[#153638]">${esc(sel.nama)} ${harga ? `<span class="text-orange-600">${harga}</span>` : ""}</span>
+          </div>
+          <p class="text-[13px] text-gray-600">Apa yang anda akan terima:</p>
+          <ul class="list-disc pl-5 flex flex-col gap-1.5 text-sm leading-snug text-gray-700">
+            ${(faedah[sel.kod] || []).map(f => `<li>${esc(f)}</li>`).join("")}
+          </ul>
+          <a href="${sel.bayar}" class="flex items-center justify-center min-h-[48px] rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold">Beli Sekarang${harga ? " · " + harga : ""}</a>
+        </article>`;
+      }
+
+      // Navigasi bawah: Borang & Dokumen ikut produk yang dipilih
+      const pautan = { borang: sel.pautanBorang, dokumen: sel.pautanDokumen };
+      simpanPautanDipilih(pautan);
+      document.getElementById("mNav").innerHTML = navMobile("utama", pautan);
+    }
+
+    lukis();
+  }
+
   onAuthStateChanged(auth, async(user)=>{
     if(!user){
       window.location.href="login.html";
@@ -488,6 +665,13 @@ import {
       
       if (hasPaidProduct && typeof prosesPembelian === "function") {
         prosesPembelian();
+      }
+
+      // ===== PAPARAN MOBILE =====
+      try {
+        await binaMobile(user, userData, compensationSnap.exists() ? compensationSnap.data() : {});
+      } catch (e) {
+        console.error("Paparan mobile gagal:", e);
       }
 
       document.getElementById("logoutBtn").addEventListener("click", async()=>{
