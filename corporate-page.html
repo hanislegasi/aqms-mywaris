@@ -274,8 +274,10 @@ onAuthStateChanged(auth, async(user) => {
     const fmtRM = (n) => "RM" + Number(n || 0).toLocaleString("ms-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const kurierDone = !!corporateData.kurierDiterimaDate || done("AKAD");
     const kurierKawalan = (currentStatus === "SENT" && !corporateData.kurierDiterimaDate) ? `
-        <input type="date" id="kurierDiterimaDate" class="border rounded-lg p-2 mt-2 w-full bg-white/80">
-        <button id="btnKurierDiterima" class="bg-green-600 hover:bg-green-700 text-white rounded-lg mt-2 w-full py-2 font-medium transition">Sah Terima Kurier</button>` : "";
+        <div class="flex gap-2 mt-2">
+          <input type="date" id="kurierDiterimaDate" class="border rounded-lg p-2 flex-1 min-w-0 bg-white/80">
+          <button id="btnKurierDiterima" class="bg-green-600 hover:bg-green-700 text-white rounded-lg px-4 py-2 font-medium transition whitespace-nowrap">Sah Terima Kurier</button>
+        </div>` : "";
 
     const pm = corporateData.pengesahanMahkamah || "";
     const pmDibayar = corporateData.pengesahanStatus === "PAID";
@@ -346,8 +348,10 @@ onAuthStateChanged(auth, async(user) => {
       ${timelineItem(pmDone, "Pengesahan Mahkamah", pmTarikh, pmKawalan)}
       ${timelineItem(done("HANDOVER"), "Diserah kepada AQM", corporateData.handoverDate || "-", esc(corporateData.handoverRemarks || ""))}
       ${timelineItem(done("RECEIVED"), "Selesai (AQM Terima)", corporateData.receivedDate || "-", currentStatus === "HANDOVER" ? `
-        <input type="date" id="receivedDate" class="border rounded-lg p-2 mt-2 w-full bg-white/80">
-        <button id="confirmReceived" class="bg-green-600 hover:bg-green-700 text-white rounded-lg mt-2 w-full py-2 font-medium transition">Sah Terima</button>
+        <div class="flex gap-2 mt-2">
+          <input type="date" id="receivedDate" class="border rounded-lg p-2 flex-1 min-w-0 bg-white/80">
+          <button id="confirmReceived" class="bg-green-600 hover:bg-green-700 text-white rounded-lg px-4 py-2 font-medium transition whitespace-nowrap">Sah Terima</button>
+        </div>
       ` : "")}
     </div>
 
